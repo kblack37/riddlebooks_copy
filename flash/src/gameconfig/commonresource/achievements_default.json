@@ -1,0 +1,76 @@
+{
+    "achievements":[
+        {
+            "id":"1",
+            "name":"Problem Solver 1",
+            "description":"Complete 5 Levels.",
+            "function":"nLevelsCompleted",
+            "params":[5],
+            "color":"Green"
+        },
+        {
+            "id":"2",
+            "name":"Problem Solver 2",
+            "description":"Complete 10 Levels.",
+            "function":"nLevelsCompleted",
+            "params":[10],
+            "color":"Green"
+        },
+        {
+            "id":"3",
+            "name":"Problem Solver 3",
+            "description":"Complete 15 Levels.",
+            "function":"nLevelsCompleted",
+            "params":[15],
+            "color":"Green"
+        },
+        {
+            "id":"10",
+            "name":"Problem Solver 4",
+            "description":"Complete 20 Levels.",
+            "function":"nLevelsCompleted",
+            "params":[20],
+            "color":"Blue"
+        },
+        {
+            "id":"11",
+            "name":"Problem Solver 5",
+            "description":"Complete 25 Levels.",
+            "function":"nLevelsCompleted",
+            "params":[25],
+            "color":"Blue"
+        },
+        {
+            "id":"12",
+            "name":"Problem Solver 6",
+            "description":"Complete 30 Levels.",
+            "function":"nLevelsCompleted",
+            "params":[30],
+            "color":"Orange"
+        },
+        {
+            "id":"4",
+            "name":"Brain Power 1",
+            "description":"Reach Brain Level 2.",
+            "function":"reachPlayerLevelN",
+            "params":[2],
+            "color":"Green"
+        },
+        {
+            "id":"5",
+            "name":"Brain Power 2",
+            "description":"Reach Brain Level 5.",
+            "function":"reachPlayerLevelN",
+            "params":[5],
+            "color":"Green"
+        },
+        {
+            "id":"6",
+            "name":"Brain Power 3",
+            "description":"Reach Brain Level 10.",
+            "function":"reachPlayerLevelN",
+            "params":[10],
+            "color":"Orange"
+        }
+    ]
+}

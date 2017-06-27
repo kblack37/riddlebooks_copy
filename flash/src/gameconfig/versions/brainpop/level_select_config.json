@@ -1,0 +1,82 @@
+{
+    "sections":
+    [
+        {
+            "title":"Fantasy",
+            "flavorText":"If you like stories full of powerful potions, strange creatures, and magic spells then this book is for you!",
+            "textStyle":{"color":"0x000000", "font":"Immortal"},
+            "hitArea":{"x":55, "y":217, "width":411, "height":171},
+            "levelUnlockedTexture":"fantasy_button",
+            "levelLockedTexture":"locked_button",
+            "levelSelectBackgroundTexture":"level_select_bg_fantasy",
+            "hoverBackgroundTexture":"library_bg_purple",
+            "hoverTextArea":{"x":0, "y":0, "width":200, "height":60},
+            "bgMusic":"bg_level_fantasy",
+            "linkToId": "fantasy"
+        },
+        {
+            "title":"Mystery",
+            "flavorText":"Unravel mysteries like a seasoned detective!",
+            "textStyle":{"color":"0xFFFFFF", "font":"Monofonto"},
+            "hitArea":{"x":298, "y":402, "width":450, "height":190},
+            "levelUnlockedTexture":"fantasy_button",
+            "levelLockedTexture":"locked_button",
+            "levelSelectBackgroundTexture":"level_select_bg_mystery",
+            "hoverBackgroundTexture":"library_bg_yellow",
+            "hoverTextArea":{"x":0, "y":0, "width":200, "height":60},
+            "bgMusic":"bg_level_mystery",
+            "linkToId": "mystery"
+        },
+        {
+            "title":"Science Fiction",
+            "flavorText":"Aliens, space, technology, and more can be found here!",
+            "textStyle":{"color":"0xFFFFFF", "font":"Calibri"},
+            "hitArea":{"x":70, "y":43, "width":393, "height":155},
+            "levelUnlockedTexture":"fantasy_button",
+            "levelLockedTexture":"locked_button",
+            "levelSelectBackgroundTexture":"level_select_bg_scifi",
+            "hoverBackgroundTexture":"library_bg_blue",
+            "hoverTextArea":{"x":0, "y":0, "width":300, "height":60},
+            "bgMusic":"bg_level_science_fiction",
+            "linkToId": "scifi"
+        },
+        {
+            "title":"Introduction",
+            "flavorText":"Welcome to Riddle Books!",
+            "textStyle":{"color":"0x000000", "font":"Verdana"},
+            "hitArea":{"x":488, "y":216, "width":254, "height":168},
+            "levelUnlockedTexture":"fantasy_button",
+            "levelLockedTexture":"locked_button",
+            "levelSelectBackgroundTexture":"level_select_bg_other",
+            "hoverBackgroundTexture":"library_bg_green",
+            "hoverTextArea":{"x":0, "y":0, "width":200, "height":60},
+            "linkToId": "intro"
+        },
+        {
+            "title":"My Collection",
+            "flavorText":"Player collections",
+            "textStyle":{"color":"0x000000", "font":"Verdana"},
+            "hitArea":{"x":58, "y":405, "width":222, "height":182},
+            "levelUnlockedTexture":"fantasy_button",
+            "levelLockedTexture":"locked_button",
+            "levelSelectBackgroundTexture":"level_select_bg_other",
+            "hoverBackgroundTexture":"library_bg_orange",
+            "hoverTextArea":{"x":0, "y":0, "width":220, "height":80},
+            "linkToId": "player_collections"
+        },
+        {
+            "title":"Bonus",
+            "flavorText":"More challenging levels!",
+            "textStyle":{"color":"0x000000", "font":"Verdana"},
+            "hitArea":{"x":488, "y":40, "width":255, "height":160},
+            "levelUnlockedTexture":"fantasy_button",
+            "levelLockedTexture":"locked_button",
+            "levelSelectBackgroundTexture":"level_select_bg_other",
+            "hoverBackgroundTexture":"library_bg_teal",
+            "hoverBackgroundLockedTexture":"library_bg_db_hover_locked",
+            "hoverTextArea":{"x":-10, "y":40, "width":255, "height":80, "fontSize":28},
+            "bgMusic":"bg_level_mystery",
+            "linkToId": "bonus"
+        }
+    ]
+}

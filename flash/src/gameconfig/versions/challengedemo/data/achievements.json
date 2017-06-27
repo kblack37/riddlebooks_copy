@@ -1,0 +1,160 @@
+{
+    "achievements": [
+        {
+            "id": "1",
+            "description": "Mastered 1st topic.",
+            "color": "Green",
+            "params": [
+                "1"
+            ],
+            "name": "Mastery I",
+            "function": "masteryAchieved"
+        },
+        {
+            "id": "2",
+            "description": "Mastered 2nd topic.",
+            "color": "Green",
+            "params": [
+                "2"
+            ],
+            "name": "Mastery II",
+            "function": "masteryAchieved"
+        },
+        {
+            "id": "3",
+            "description": "Mastered 3rd topic.",
+            "color": "Green",
+            "params": [
+                "3"
+            ],
+            "name": "Mastery III",
+            "function": "masteryAchieved"
+        },
+        {
+            "id": "4",
+            "description": "Mastered 4th topic.",
+            "color": "Blue",
+            "params": [
+                "4"
+            ],
+            "name": "Mastery IV",
+            "function": "masteryAchieved"
+        },
+        {
+            "id": "5",
+            "description": "Mastered 5th topic.",
+            "color": "Blue",
+            "params": [
+                "5"
+            ],
+            "name": "Mastery V",
+            "function": "masteryAchieved"
+        },
+        {
+            "id": "6",
+            "description": "Mastered 6th topic.",
+            "color": "Blue",
+            "params": [
+                "6"
+            ],
+            "name": "Mastery VI",
+            "function": "masteryAchieved"
+        },
+        {
+            "id": "7",
+            "description": "Mastered 7th topic.",
+            "color": "Blue",
+            "params": [
+                "7"
+            ],
+            "name": "Mastery VII",
+            "function": "masteryAchieved"
+        },
+        {
+            "id": "9",
+            "description": "Reached the end of the game!",
+            "color": "Orange",
+            "params": [
+                "advanced_fractions_d"
+            ],
+            "name": "Master Solver",
+            "function": "levelNodeCompleted"
+        },
+        {
+            "id": "10",
+            "description": "Reach Brain Level 2",
+            "color": "Green",
+            "params": [
+                2
+            ],
+            "name": "Brain Power 1",
+            "function": "reachPlayerLevelN"
+        },
+        {
+            "id": "11",
+            "description": "Reach Brain Level 5",
+            "color": "Green",
+            "params": [
+                5
+            ],
+            "name": "Brain Power 2",
+            "function": "reachPlayerLevelN"
+        },
+        {
+            "id": "12",
+            "description": "Reach Brain Level 10",
+            "color": "Green",
+            "params": [
+                10
+            ],
+            "name": "Brain Power 3",
+            "function": "reachPlayerLevelN"
+        },
+        {
+            "id": "13",
+            "description": "Reach Brain Level 15",
+            "color": "Blue",
+            "params": [
+                15
+            ],
+            "name": "Brain Power 4",
+            "function": "reachPlayerLevelN"
+        },
+        {
+            "id": "14",
+            "description": "Reach Brain Level 20",
+            "color": "Blue",
+            "params": [
+                20
+            ],
+            "name": "Brain Power 5",
+            "function": "reachPlayerLevelN"
+        },
+        {
+            "id": "15",
+            "description": "Reach Brain Level 30",
+            "color": "Orange",
+            "params": [
+                30
+            ],
+            "name": "Super Brain Strength!",
+            "function": "reachPlayerLevelN"
+        },
+        {
+            "id": "16",
+            "description": "Get all the collectables!",
+            "color": "Orange",
+            "params": [],
+            "name": "Collector",
+            "function": "allCollectablesEarned"
+        },
+        {
+            "id": "17",
+            "description": "Finished every problem!",
+            "color": "Orange",
+            "params": [],
+            "name": "Completionist",
+            "function": "allLevelsCompleted"
+        }
+    ]
+}

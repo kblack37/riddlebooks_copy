@@ -1,0 +1,3049 @@
+{
+    "children": [
+        {
+            "children": [
+                {
+                    "addChildSequenceLocks": "completed",
+                    "children": [
+                        {
+                            "fileName": "../assets/levels/bar_model/tutorials_v2/intro_pick_text.xml",
+                            "skippable": "false",
+                            "name": 1564,
+                            "tags": [
+                                "tutorial"
+                            ]
+                        },
+                        {
+                            "fileName": "../assets/levels/bar_model/tutorials_v2/intro_add_label.xml",
+                            "skippable": "false",
+                            "name": 1565,
+                            "tags": [
+                                "tutorial"
+                            ]
+                        }
+                    ],
+                    "type": "ChapterLevelPack",
+                    "name": "intro_ch1"
+                }
+            ],
+            "type": "GenreLevelPack",
+            "name": "intro"
+        },
+        {
+            "children": [
+                {
+                    "children": [
+                        {
+                            "rules": {
+                                "maxBarRowsAllowed": "2",
+                                "allowAddVerticalLabels": "true",
+                                "allowAddBarComparison": "false"
+                            },
+                            "children": [
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1580.xml",
+                                    "skippable": "false",
+                                    "name": 1580
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1582.xml",
+                                    "skippable": "false",
+                                    "name": 1582
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/974.xml",
+                                    "name": 974
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/980.xml",
+                                    "name": 980
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/976.xml",
+                                    "name": 976
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/973.xml",
+                                    "name": 973
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/969.xml",
+                                    "name": 969
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/965.xml",
+                                    "name": 965
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/963.xml",
+                                    "name": 963
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/962.xml",
+                                    "name": 962
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/986.xml",
+                                    "name": 986
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/983.xml",
+                                    "name": 983
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/981.xml",
+                                    "name": 981
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/536.xml",
+                                    "name": 536
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/535.xml",
+                                    "name": 535
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/533.xml",
+                                    "name": 533
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/521.xml",
+                                    "name": 521
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/515.xml",
+                                    "name": 515
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/512.xml",
+                                    "name": 512
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/510.xml",
+                                    "name": 510
+                                }
+                            ],
+                            "name": "addition_unknown_total",
+                            "objectiveClass": "add_objective",
+                            "difficulty": "1",
+                            "levelselect": true
+                        }
+                    ],
+                    "type": "ChapterLevelPack",
+                    "name": "add_subtract_ch1"
+                },
+                {
+                    "children": [
+                        {
+                            "fileName": "../assets/levels/bar_model/tutorials_v2/intro_subtraction.xml",
+                            "skippable": "false",
+                            "tags": [
+                                "tutorial"
+                            ],
+                            "name": 1567,
+                            "locks": [
+                                {
+                                    "unlockStatus": "completed",
+                                    "type": "NodeStatus",
+                                    "name": "addition_unknown_total"
+                                }
+                            ]
+                        },
+                        {
+                            "rules": {
+                                "maxBarRowsAllowed": "2",
+                                "allowAddVerticalLabels": "false",
+                                "allowAddNewSegments": "true",
+                                "allowAddHorizontalLabels": "true",
+                                "allowAddBarComparison": "true"
+                            },
+                            "children": [
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1523.xml",
+                                    "condkey": "pol",
+                                    "skippable": "false",
+                                    "name": 1523,
+                                    "condvalue": "a"
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1524.xml",
+                                    "condkey": "pol",
+                                    "skippable": "false",
+                                    "name": 1524,
+                                    "condvalue": "b"
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1230.xml",
+                                    "name": 1230
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/855.xml",
+                                    "name": 855
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/848.xml",
+                                    "name": 848
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/846.xml",
+                                    "name": 846
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/842.xml",
+                                    "name": 842
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/834.xml",
+                                    "name": 834
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/833.xml",
+                                    "name": 833
+                                }
+                            ],
+                            "name": "subtraction_unknown_diff",
+                            "objectiveClass": "add_subtract_objective",
+                            "difficulty": "1",
+                            "levelselect": true,
+                            "locks": [
+                                {
+                                    "unlockStatus": "completed",
+                                    "type": "NodeStatus",
+                                    "name": "1567"
+                                }
+                            ]
+                        },
+                        {
+                            "rules": {
+                                "maxBarRowsAllowed": "2",
+                                "allowAddVerticalLabels": "true",
+                                "allowAddNewSegments": "true",
+                                "allowAddHorizontalLabels": "true",
+                                "allowAddBarComparison": "true"
+                            },
+                            "children": [
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1550.xml",
+                                    "condkey": "dongsheng",
+                                    "skippable": "false",
+                                    "name": 1550,
+                                    "condvalue": "a"
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1551.xml",
+                                    "condkey": "dongsheng",
+                                    "skippable": "false",
+                                    "name": 1551,
+                                    "condvalue": "b"
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/844.xml",
+                                    "skippable": "false",
+                                    "name": 844
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1050.xml",
+                                    "name": 1050
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1046.xml",
+                                    "name": 1046
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1044.xml",
+                                    "name": 1044
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1043.xml",
+                                    "name": 1043
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1040.xml",
+                                    "name": 1040
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1037.xml",
+                                    "name": 1037
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1035.xml",
+                                    "name": 1035
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1028.xml",
+                                    "name": 1028
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1010.xml",
+                                    "name": 1010
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1009.xml",
+                                    "name": 1009
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1008.xml",
+                                    "name": 1008
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1003.xml",
+                                    "name": 1003
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1000.xml",
+                                    "name": 1000
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/994.xml",
+                                    "name": 994
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/731.xml",
+                                    "name": 731
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/728.xml",
+                                    "name": 728
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/727.xml",
+                                    "name": 727
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/725.xml",
+                                    "name": 725
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/724.xml",
+                                    "name": 724
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/722.xml",
+                                    "name": 722
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/721.xml",
+                                    "name": 721
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/718.xml",
+                                    "name": 718
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/713.xml",
+                                    "name": 713
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/710.xml",
+                                    "name": 710
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/708.xml",
+                                    "name": 708
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/706.xml",
+                                    "name": 706
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/703.xml",
+                                    "name": 703
+                                }
+                            ],
+                            "name": "addition_subtraction_mix",
+                            "objectiveClass": "add_subtract_objective",
+                            "difficulty": "1",
+                            "levelselect": true,
+                            "locks": [
+                                {
+                                    "unlockStatus": "completed",
+                                    "type": "NodeStatus",
+                                    "name": "subtraction_unknown_diff"
+                                }
+                            ]
+                        },
+                        {
+                            "rules": {
+                                "maxBarRowsAllowed": "2",
+                                "restrictCardsInBarModel": "false",
+                                "allowAddNewSegments": "true",
+                                "allowAddHorizontalLabels": "true",
+                                "allowAddVerticalLabels": "true",
+                                "allowAddBarComparison": "true"
+                            },
+                            "children": [
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1581.xml",
+                                    "rules": {
+                                        "maxBarRowsAllowed": "2",
+                                        "restrictCardsInBarModel": "false",
+                                        "allowAddNewSegments": "true",
+                                        "allowAddHorizontalLabels": "true",
+                                        "allowAddVerticalLabels": "true",
+                                        "allowAddBarComparison": "false"
+                                    },
+                                    "skippable": "false",
+                                    "name": 1581
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1562.xml",
+                                    "condkey": "dongsheng",
+                                    "skippable": "false",
+                                    "name": 1562,
+                                    "condvalue": "a"
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1563.xml",
+                                    "condkey": "dongsheng",
+                                    "skippable": "false",
+                                    "name": 1563,
+                                    "condvalue": "b"
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1552.xml",
+                                    "condkey": "dongsheng",
+                                    "skippable": "false",
+                                    "name": 1552,
+                                    "condvalue": "a"
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1553.xml",
+                                    "condkey": "dongsheng",
+                                    "skippable": "false",
+                                    "name": 1553,
+                                    "condvalue": "b"
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1545.xml",
+                                    "condkey": "dongsheng",
+                                    "skippable": "false",
+                                    "name": 1545,
+                                    "condvalue": "a"
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1546.xml",
+                                    "condkey": "dongsheng",
+                                    "skippable": "false",
+                                    "name": 1546,
+                                    "condvalue": "b"
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/711.xml",
+                                    "condkey": "dongsheng",
+                                    "skippable": "false",
+                                    "name": 711,
+                                    "condvalue": "a"
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1549.xml",
+                                    "condkey": "dongsheng",
+                                    "skippable": "false",
+                                    "name": 1549,
+                                    "condvalue": "b"
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1521.xml",
+                                    "condkey": "pol",
+                                    "skippable": "false",
+                                    "name": 1521,
+                                    "condvalue": "a"
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1522.xml",
+                                    "condkey": "pol",
+                                    "skippable": "false",
+                                    "name": 1522,
+                                    "condvalue": "b"
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1533.xml",
+                                    "condkey": "pol",
+                                    "skippable": "false",
+                                    "name": 1533,
+                                    "condvalue": "a"
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1534.xml",
+                                    "condkey": "pol",
+                                    "skippable": "false",
+                                    "name": 1534,
+                                    "condvalue": "b"
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1535.xml",
+                                    "condkey": "pol",
+                                    "skippable": "false",
+                                    "name": 1535,
+                                    "condvalue": "a"
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1536.xml",
+                                    "condkey": "pol",
+                                    "skippable": "false",
+                                    "name": 1536,
+                                    "condvalue": "b"
+                                }
+                            ],
+                            "name": "multipart_subtraction",
+                            "objectiveClass": "add_subtract_objective",
+                            "difficulty": "2",
+                            "levelselect": true,
+                            "locks": [
+                                {
+                                    "unlockStatus": "completed",
+                                    "type": "NodeStatus",
+                                    "name": "addition_subtraction_mix"
+                                }
+                            ]
+                        }
+                    ],
+                    "type": "ChapterLevelPack",
+                    "name": "add_subtract_ch2"
+                }
+            ],
+            "type": "GenreLevelPack",
+            "name": "addition_subtraction",
+            "locks": [
+                {
+                    "unlockStatus": "completed",
+                    "type": "NodeStatus",
+                    "name": "1565"
+                }
+            ]
+        },
+        {
+            "children": [
+                {
+                    "children": [
+                        {
+                            "fileName": "../assets/levels/bar_model/tutorials_v2/intro_multiplication.xml",
+                            "skippable": "false",
+                            "name": 1568,
+                            "tags": [
+                                "tutorial"
+                            ]
+                        },
+                        {
+                            "rules": {
+                                "allowDivide": "false",
+                                "allowCopyBar": "false",
+                                "allowAddBarComparison": "false",
+                                "allowSplitBar": "false"
+                            },
+                            "children": [
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1558.xml",
+                                    "skippable": "false",
+                                    "name": 1558
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1525.xml",
+                                    "condkey": "pol",
+                                    "skippable": "false",
+                                    "name": 1525,
+                                    "condvalue": "a"
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1526.xml",
+                                    "condkey": "pol",
+                                    "skippable": "false",
+                                    "name": 1526,
+                                    "condvalue": "b"
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1527.xml",
+                                    "condkey": "pol",
+                                    "skippable": "false",
+                                    "name": 1527,
+                                    "condvalue": "a"
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1528.xml",
+                                    "condkey": "pol",
+                                    "skippable": "false",
+                                    "name": 1528,
+                                    "condvalue": "b"
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1078.xml",
+                                    "name": 1078
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/575.xml",
+                                    "name": 575
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1068.xml",
+                                    "name": 1068
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/574.xml",
+                                    "name": 574
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1059.xml",
+                                    "name": 1059
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/553.xml",
+                                    "name": 553
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1058.xml",
+                                    "name": 1058
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/550.xml",
+                                    "name": 550
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1090.xml",
+                                    "name": 1090
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/571.xml",
+                                    "name": 571
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1089.xml",
+                                    "name": 1089
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/568.xml",
+                                    "name": 568
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1088.xml",
+                                    "name": 1088
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/566.xml",
+                                    "name": 566
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1086.xml",
+                                    "name": 1086
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/563.xml",
+                                    "name": 563
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1085.xml",
+                                    "name": 1085
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/559.xml",
+                                    "name": 559
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1084.xml",
+                                    "name": 1084
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/556.xml",
+                                    "name": 556
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1083.xml",
+                                    "name": 1083
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/555.xml",
+                                    "name": 555
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1082.xml",
+                                    "name": 1082
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/554.xml",
+                                    "name": 554
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1080.xml",
+                                    "name": 1080
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/549.xml",
+                                    "name": 549
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1079.xml",
+                                    "name": 1079
+                                }
+                            ],
+                            "name": "multiply_unknown_total",
+                            "objectiveClass": "multiply_objective",
+                            "difficulty": "2",
+                            "levelselect": true,
+                            "locks": [
+                                {
+                                    "unlockStatus": "completed",
+                                    "type": "NodeStatus",
+                                    "name": "1568"
+                                }
+                            ]
+                        }
+                    ],
+                    "type": "ChapterLevelPack",
+                    "name": "multiply_divide_ch1"
+                },
+                {
+                    "children": [
+                        {
+                            "fileName": "../assets/levels/bar_model/tutorials_v2/intro_division.xml",
+                            "skippable": "false",
+                            "tags": [
+                                "tutorial"
+                            ],
+                            "name": 1569,
+                            "locks": [
+                                {
+                                    "unlockStatus": "completed",
+                                    "type": "NodeStatus",
+                                    "name": "multiply_unknown_total"
+                                }
+                            ]
+                        },
+                        {
+                            "rules": {
+                                "allowCopyBar": "false",
+                                "allowAddBarComparison": "false"
+                            },
+                            "children": [
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1537.xml",
+                                    "condkey": "pol",
+                                    "skippable": "false",
+                                    "name": 1537,
+                                    "condvalue": "a"
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1538.xml",
+                                    "condkey": "pol",
+                                    "skippable": "false",
+                                    "name": 1538,
+                                    "condvalue": "b"
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1531.xml",
+                                    "condkey": "pol",
+                                    "skippable": "false",
+                                    "name": 1531,
+                                    "condvalue": "a"
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1532.xml",
+                                    "condkey": "pol",
+                                    "skippable": "false",
+                                    "name": 1532,
+                                    "condvalue": "b"
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1112.xml",
+                                    "name": 1112
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/597.xml",
+                                    "name": 597
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1109.xml",
+                                    "name": 1109
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/596.xml",
+                                    "name": 596
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1107.xml",
+                                    "name": 1107
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/595.xml",
+                                    "name": 595
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1104.xml",
+                                    "name": 1104
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/587.xml",
+                                    "name": 587
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1103.xml",
+                                    "name": 1103
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/582.xml",
+                                    "name": 582
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1100.xml",
+                                    "name": 1100
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/581.xml",
+                                    "name": 581
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1095.xml",
+                                    "name": 1095
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/578.xml",
+                                    "name": 578
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1094.xml",
+                                    "name": 1094
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1092.xml",
+                                    "name": 1092
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1091.xml",
+                                    "name": 1091
+                                }
+                            ],
+                            "name": "multiply_unknown_group",
+                            "objectiveClass": "multiply_objective",
+                            "difficulty": "2",
+                            "levelselect": true,
+                            "locks": [
+                                {
+                                    "unlockStatus": "completed",
+                                    "type": "NodeStatus",
+                                    "name": "1569"
+                                }
+                            ]
+                        }
+                    ],
+                    "type": "ChapterLevelPack",
+                    "name": "multiply_divide_ch2"
+                },
+                {
+                    "children": [
+                        {
+                            "fileName": "../assets/levels/bar_model/tutorials_v2/intro_advanced_mult_div.xml",
+                            "skippable": "false",
+                            "tags": [
+                                "tutorial"
+                            ],
+                            "name": 1572,
+                            "locks": [
+                                {
+                                    "unlockStatus": "completed",
+                                    "type": "NodeStatus",
+                                    "name": "multiply_unknown_group"
+                                }
+                            ]
+                        },
+                        {
+                            "children": [
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/611.xml",
+                                    "tags": [
+                                        "difference"
+                                    ],
+                                    "name": 611
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1470.xml",
+                                    "tags": [
+                                        "sum"
+                                    ],
+                                    "name": 1470
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/647.xml",
+                                    "tags": [
+                                        "difference"
+                                    ],
+                                    "name": 647
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1480.xml",
+                                    "tags": [
+                                        "sum"
+                                    ],
+                                    "name": 1480
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/645.xml",
+                                    "tags": [
+                                        "difference"
+                                    ],
+                                    "name": 645
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1472.xml",
+                                    "tags": [
+                                        "sum"
+                                    ],
+                                    "name": 1472
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/644.xml",
+                                    "tags": [
+                                        "difference"
+                                    ],
+                                    "name": 644
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/630.xml",
+                                    "tags": [
+                                        "sum"
+                                    ],
+                                    "name": 630
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/643.xml",
+                                    "tags": [
+                                        "difference"
+                                    ],
+                                    "name": 643
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/626.xml",
+                                    "tags": [
+                                        "sum"
+                                    ],
+                                    "name": 626
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/636.xml",
+                                    "tags": [
+                                        "difference"
+                                    ],
+                                    "name": 636
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/625.xml",
+                                    "tags": [
+                                        "sum"
+                                    ],
+                                    "name": 625
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/635.xml",
+                                    "tags": [
+                                        "difference"
+                                    ],
+                                    "name": 635
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/664.xml",
+                                    "tags": [
+                                        "sum"
+                                    ],
+                                    "name": 664
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/633.xml",
+                                    "tags": [
+                                        "difference"
+                                    ],
+                                    "name": 633
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/659.xml",
+                                    "tags": [
+                                        "sum"
+                                    ],
+                                    "name": 659
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/619.xml",
+                                    "tags": [
+                                        "difference"
+                                    ],
+                                    "name": 619
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/653.xml",
+                                    "tags": [
+                                        "sum"
+                                    ],
+                                    "name": 653
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/618.xml",
+                                    "tags": [
+                                        "difference"
+                                    ],
+                                    "name": 618
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/652.xml",
+                                    "tags": [
+                                        "sum"
+                                    ],
+                                    "name": 652
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/615.xml",
+                                    "tags": [
+                                        "difference"
+                                    ],
+                                    "name": 615
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/651.xml",
+                                    "tags": [
+                                        "sum"
+                                    ],
+                                    "name": 651
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/613.xml",
+                                    "tags": [
+                                        "difference"
+                                    ],
+                                    "name": 613
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/650.xml",
+                                    "tags": [
+                                        "sum"
+                                    ],
+                                    "name": 650
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1487.xml",
+                                    "tags": [
+                                        "difference"
+                                    ],
+                                    "name": 1487
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/649.xml",
+                                    "tags": [
+                                        "sum"
+                                    ],
+                                    "name": 649
+                                }
+                            ],
+                            "name": "multiply_multi_operator",
+                            "objectiveClass": "multiop_multiply_objective",
+                            "difficulty": "3",
+                            "levelselect": true,
+                            "locks": [
+                                {
+                                    "unlockStatus": "completed",
+                                    "type": "NodeStatus",
+                                    "name": "1572"
+                                }
+                            ]
+                        }
+                    ],
+                    "type": "ChapterLevelPack",
+                    "name": "multiply_divide_ch3"
+                }
+            ],
+            "type": "GenreLevelPack",
+            "name": "multiply_divide",
+            "locks": [
+                {
+                    "unlockStatus": "completed",
+                    "type": "NodeStatus",
+                    "name": "multipart_subtraction"
+                }
+            ]
+        },
+        {
+            "children": [
+                {
+                    "children": [
+                        {
+                            "fileName": "../assets/levels/bar_model/tutorials_v2/intro_two_step_no_groups.xml",
+                            "skippable": "false",
+                            "name": 1570,
+                            "tags": [
+                                "tutorial"
+                            ]
+                        },
+                        {
+                            "children": [
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1560.xml",
+                                    "skippable": "false",
+                                    "name": 1560
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1561.xml",
+                                    "skippable": "false",
+                                    "name": 1561
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1502.xml",
+                                    "name": 1502
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/681.xml",
+                                    "name": 681
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1492.xml",
+                                    "name": 1492
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/679.xml",
+                                    "name": 679
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1469.xml",
+                                    "name": 1469
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/678.xml",
+                                    "name": 678
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1459.xml",
+                                    "name": 1459
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/677.xml",
+                                    "name": 677
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1448.xml",
+                                    "name": 1448
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/676.xml",
+                                    "name": 676
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/672.xml",
+                                    "name": 672
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/671.xml",
+                                    "name": 671
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/667.xml",
+                                    "name": 667
+                                }
+                            ],
+                            "name": "two_step_addition_a",
+                            "objectiveClass": "two_step_add_objective",
+                            "difficulty": "3",
+                            "levelselect": true,
+                            "locks": [
+                                {
+                                    "unlockStatus": "completed",
+                                    "type": "NodeStatus",
+                                    "name": "1570"
+                                }
+                            ]
+                        },
+                        {
+                            "children": [
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1520.xml",
+                                    "condkey": "dongsheng",
+                                    "skippable": "false",
+                                    "name": 1520,
+                                    "condvalue": "a"
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1556.xml",
+                                    "condkey": "dongsheng",
+                                    "skippable": "false",
+                                    "name": 1556,
+                                    "condvalue": "b"
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1557.xml",
+                                    "condkey": "dongsheng",
+                                    "skippable": "false",
+                                    "name": 1557,
+                                    "condvalue": "a"
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1466.xml",
+                                    "condkey": "dongsheng",
+                                    "skippable": "false",
+                                    "name": 1466,
+                                    "condvalue": "b"
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1415.xml",
+                                    "name": 1415
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1462.xml",
+                                    "name": 1462
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1513.xml",
+                                    "name": 1513
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1509.xml",
+                                    "name": 1509
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1493.xml",
+                                    "name": 1493
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1466.xml",
+                                    "name": 1466
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1508.xml",
+                                    "name": 1508
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1486.xml",
+                                    "name": 1486
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1465.xml",
+                                    "name": 1465
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1435.xml",
+                                    "name": 1435
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1397.xml",
+                                    "name": 1397
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/693.xml",
+                                    "name": 693
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/694.xml",
+                                    "name": 694
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1396.xml",
+                                    "name": 1396
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/692.xml",
+                                    "name": 692
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/691.xml",
+                                    "name": 691
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/690.xml",
+                                    "name": 690
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/689.xml",
+                                    "name": 689
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/688.xml",
+                                    "name": 688
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/687.xml",
+                                    "name": 687
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/686.xml",
+                                    "name": 686
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/685.xml",
+                                    "name": 685
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/683.xml",
+                                    "name": 683
+                                }
+                            ],
+                            "name": "two_step_addition_b",
+                            "objectiveClass": "two_step_add_objective",
+                            "difficulty": "3",
+                            "levelselect": true,
+                            "locks": [
+                                {
+                                    "unlockStatus": "completed",
+                                    "type": "NodeStatus",
+                                    "name": "two_step_addition_a"
+                                }
+                            ]
+                        },
+                        {
+                            "children": [
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1554.xml",
+                                    "condkey": "dongsheng",
+                                    "skippable": "false",
+                                    "name": 1554,
+                                    "condvalue": "a"
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1555.xml",
+                                    "condkey": "dongsheng",
+                                    "skippable": "false",
+                                    "name": 1555,
+                                    "condvalue": "b"
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/742.xml",
+                                    "name": 742
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1510.xml",
+                                    "name": 1510
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1507.xml",
+                                    "name": 1507
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1488.xml",
+                                    "name": 1488
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1497.xml",
+                                    "name": 1497
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1394.xml",
+                                    "name": 1394
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1420.xml",
+                                    "name": 1420
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1391.xml",
+                                    "name": 1391
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/750.xml",
+                                    "name": 750
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/743.xml",
+                                    "name": 743
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/749.xml",
+                                    "name": 749
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/739.xml",
+                                    "name": 739
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1515.xml",
+                                    "name": 1515
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1498.xml",
+                                    "name": 1498
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1483.xml",
+                                    "name": 1483
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1478.xml",
+                                    "name": 1478
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1476.xml",
+                                    "name": 1476
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1463.xml",
+                                    "name": 1463
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1453.xml",
+                                    "name": 1453
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1444.xml",
+                                    "name": 1444
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1410.xml",
+                                    "name": 1410
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1439.xml",
+                                    "name": 1439
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1406.xml",
+                                    "name": 1406
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1414.xml",
+                                    "name": 1414
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1400.xml",
+                                    "name": 1400
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1405.xml",
+                                    "name": 1405
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1388.xml",
+                                    "name": 1388
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1403.xml",
+                                    "name": 1403
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1398.xml",
+                                    "name": 1398
+                                }
+                            ],
+                            "name": "two_step_groups_total",
+                            "objectiveClass": "two_step_groups_objective",
+                            "difficulty": "4",
+                            "levelselect": true,
+                            "locks": [
+                                {
+                                    "unlockStatus": "completed",
+                                    "type": "NodeStatus",
+                                    "name": "two_step_addition_b"
+                                }
+                            ]
+                        },
+                        {
+                            "children": [
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1495.xml",
+                                    "name": 1495
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1404.xml",
+                                    "name": 1404
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1456.xml",
+                                    "name": 1456
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1514.xml",
+                                    "name": 1514
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1392.xml",
+                                    "name": 1392
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1461.xml",
+                                    "name": 1461
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1389.xml",
+                                    "name": 1389
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1460.xml",
+                                    "name": 1460
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1386.xml",
+                                    "name": 1386
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1431.xml",
+                                    "name": 1431
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1511.xml",
+                                    "name": 1511
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1417.xml",
+                                    "name": 1417
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1475.xml",
+                                    "name": 1475
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1413.xml",
+                                    "name": 1413
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1411.xml",
+                                    "name": 1411
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1399.xml",
+                                    "name": 1399
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1409.xml",
+                                    "name": 1409
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1383.xml",
+                                    "name": 1383
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1379.xml",
+                                    "name": 1379
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/746.xml",
+                                    "name": 746
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/737.xml",
+                                    "name": 737
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/744.xml",
+                                    "name": 744
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/736.xml",
+                                    "name": 736
+                                }
+                            ],
+                            "name": "two_step_groups_diff",
+                            "objectiveClass": "two_step_groups_objective",
+                            "difficulty": "4",
+                            "levelselect": true,
+                            "locks": [
+                                {
+                                    "unlockStatus": "completed",
+                                    "type": "NodeStatus",
+                                    "name": "two_step_groups_total"
+                                }
+                            ]
+                        },
+                        {
+                            "children": [
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1505.xml",
+                                    "name": 1505
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1499.xml",
+                                    "name": 1499
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1485.xml",
+                                    "name": 1485
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1494.xml",
+                                    "name": 1494
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1464.xml",
+                                    "name": 1464
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1455.xml",
+                                    "name": 1455
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1443.xml",
+                                    "name": 1443
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1436.xml",
+                                    "name": 1436
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1432.xml",
+                                    "name": 1432
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1390.xml",
+                                    "name": 1390
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1426.xml",
+                                    "name": 1426
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1385.xml",
+                                    "name": 1385
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1408.xml",
+                                    "name": 1408
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1380.xml",
+                                    "name": 1380
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1407.xml",
+                                    "name": 1407
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1373.xml",
+                                    "name": 1373
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1402.xml",
+                                    "name": 1402
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1393.xml",
+                                    "name": 1393
+                                }
+                            ],
+                            "name": "two_step_groups_mixed",
+                            "objectiveClass": "two_step_groups_objective",
+                            "difficulty": "4",
+                            "levelselect": true,
+                            "locks": [
+                                {
+                                    "unlockStatus": "completed",
+                                    "type": "NodeStatus",
+                                    "name": "two_step_groups_diff"
+                                }
+                            ]
+                        }
+                    ],
+                    "type": "ChapterLevelPack",
+                    "name": "advanced_ch1"
+                },
+                {
+                    "children": [
+                        {
+                            "fileName": "../assets/levels/bar_model/tutorials_v2/intro_fractions_simple.xml",
+                            "skippable": "false",
+                            "tags": [
+                                "tutorial"
+                            ],
+                            "name": 1571,
+                            "locks": [
+                                {
+                                    "unlockStatus": "completed",
+                                    "type": "NodeStatus",
+                                    "name": "two_step_groups_mixed"
+                                }
+                            ]
+                        },
+                        {
+                            "children": [
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/768.xml",
+                                    "name": 768
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/767.xml",
+                                    "name": 767
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/766.xml",
+                                    "name": 766
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/764.xml",
+                                    "name": 764
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/759.xml",
+                                    "name": 759
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/754.xml",
+                                    "name": 754
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/779.xml",
+                                    "name": 779
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/777.xml",
+                                    "name": 777
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/775.xml",
+                                    "name": 775
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/774.xml",
+                                    "name": 774
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/772.xml",
+                                    "name": 772
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/770.xml",
+                                    "name": 770
+                                }
+                            ],
+                            "name": "basic_fractions_a",
+                            "objectiveClass": "fraction_of_whole_objective",
+                            "difficulty": "3",
+                            "levelselect": true,
+                            "locks": [
+                                {
+                                    "unlockStatus": "completed",
+                                    "type": "NodeStatus",
+                                    "name": "1571"
+                                }
+                            ]
+                        },
+                        {
+                            "children": [
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1559.xml",
+                                    "skippable": "false",
+                                    "name": 1559
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/801.xml",
+                                    "name": 801
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/808.xml",
+                                    "name": 808
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/800.xml",
+                                    "name": 800
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/804.xml",
+                                    "name": 804
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/799.xml",
+                                    "name": 799
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/814.xml",
+                                    "name": 814
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/798.xml",
+                                    "name": 798
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/812.xml",
+                                    "name": 812
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/796.xml",
+                                    "name": 796
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/811.xml",
+                                    "name": 811
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/795.xml",
+                                    "name": 795
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/810.xml",
+                                    "name": 810
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/786.xml",
+                                    "name": 786
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/809.xml",
+                                    "name": 809
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/780.xml",
+                                    "name": 780
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/807.xml",
+                                    "name": 807
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/778.xml",
+                                    "name": 778
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/805.xml",
+                                    "name": 805
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/776.xml",
+                                    "name": 776
+                                }
+                            ],
+                            "name": "basic_fractions_b",
+                            "objectiveClass": "fraction_of_whole_objective",
+                            "difficulty": "3",
+                            "levelselect": true,
+                            "locks": [
+                                {
+                                    "unlockStatus": "completed",
+                                    "type": "NodeStatus",
+                                    "name": "basic_fractions_a"
+                                }
+                            ]
+                        },
+                        {
+                            "children": [
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/832.xml",
+                                    "name": 832
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/831.xml",
+                                    "name": 831
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/830.xml",
+                                    "name": 830
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/829.xml",
+                                    "name": 829
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/823.xml",
+                                    "name": 823
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/818.xml",
+                                    "name": 818
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/828.xml",
+                                    "name": 828
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/827.xml",
+                                    "name": 827
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/824.xml",
+                                    "name": 824
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/822.xml",
+                                    "name": 822
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/819.xml",
+                                    "name": 819
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/817.xml",
+                                    "name": 817
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/816.xml",
+                                    "name": 816
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/815.xml",
+                                    "name": 815
+                                }
+                            ],
+                            "name": "basic_fractions_c",
+                            "objectiveClass": "fraction_of_whole_objective",
+                            "difficulty": "3",
+                            "levelselect": true,
+                            "locks": [
+                                {
+                                    "unlockStatus": "completed",
+                                    "type": "NodeStatus",
+                                    "name": "basic_fractions_b"
+                                }
+                            ]
+                        }
+                    ],
+                    "type": "ChapterLevelPack",
+                    "name": "advanced_ch2"
+                },
+                {
+                    "children": [
+                        {
+                            "children": [
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/867.xml",
+                                    "name": 867
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/863.xml",
+                                    "name": 863
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/862.xml",
+                                    "name": 862
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/861.xml",
+                                    "name": 861
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/859.xml",
+                                    "name": 859
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/868.xml",
+                                    "name": 868
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/866.xml",
+                                    "name": 866
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/865.xml",
+                                    "name": 865
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/864.xml",
+                                    "name": 864
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/860.xml",
+                                    "name": 860
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/857.xml",
+                                    "name": 857
+                                }
+                            ],
+                            "name": "advanced_fractions_a",
+                            "objectiveClass": "fraction_of_larger_objective",
+                            "difficulty": "4",
+                            "levelselect": true,
+                            "locks": [
+                                {
+                                    "unlockStatus": "completed",
+                                    "type": "NodeStatus",
+                                    "name": "basic_fractions_c"
+                                }
+                            ]
+                        },
+                        {
+                            "children": [
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/901.xml",
+                                    "name": 901
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/947.xml",
+                                    "name": 947
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/899.xml",
+                                    "name": 899
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/946.xml",
+                                    "name": 946
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/887.xml",
+                                    "name": 887
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/945.xml",
+                                    "name": 945
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/884.xml",
+                                    "name": 884
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/939.xml",
+                                    "name": 939
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/883.xml",
+                                    "name": 883
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/936.xml",
+                                    "name": 936
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/882.xml",
+                                    "name": 882
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/935.xml",
+                                    "name": 935
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/878.xml",
+                                    "name": 878
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/934.xml",
+                                    "name": 934
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/877.xml",
+                                    "name": 877
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/933.xml",
+                                    "name": 933
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/874.xml",
+                                    "name": 874
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/870.xml",
+                                    "name": 870
+                                }
+                            ],
+                            "name": "advanced_fractions_b",
+                            "objectiveClass": "fraction_of_larger_objective",
+                            "difficulty": "4",
+                            "levelselect": true,
+                            "locks": [
+                                {
+                                    "unlockStatus": "completed",
+                                    "type": "NodeStatus",
+                                    "name": "advanced_fractions_a"
+                                }
+                            ]
+                        },
+                        {
+                            "children": [
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1481.xml",
+                                    "name": 1481
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/957.xml",
+                                    "name": 957
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1449.xml",
+                                    "name": 1449
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/954.xml",
+                                    "name": 954
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/897.xml",
+                                    "name": 897
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/953.xml",
+                                    "name": 953
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/894.xml",
+                                    "name": 894
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/959.xml",
+                                    "name": 959
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/890.xml",
+                                    "name": 890
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1458.xml",
+                                    "name": 1458
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/958.xml",
+                                    "name": 958
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1441.xml",
+                                    "name": 1441
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/956.xml",
+                                    "name": 956
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/1427.xml",
+                                    "name": 1427
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/955.xml",
+                                    "name": 955
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/896.xml",
+                                    "name": 896
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/952.xml",
+                                    "name": 952
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/895.xml",
+                                    "name": 895
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/950.xml",
+                                    "name": 950
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/893.xml",
+                                    "name": 893
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/949.xml",
+                                    "name": 949
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/889.xml",
+                                    "name": 889
+                                }
+                            ],
+                            "name": "advanced_fractions_c",
+                            "objectiveClass": "fraction_of_larger_objective",
+                            "difficulty": "4",
+                            "levelselect": true,
+                            "locks": [
+                                {
+                                    "unlockStatus": "completed",
+                                    "type": "NodeStatus",
+                                    "name": "advanced_fractions_b"
+                                }
+                            ]
+                        },
+                        {
+                            "children": [
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/920.xml",
+                                    "name": 920
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/928.xml",
+                                    "name": 928
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/918.xml",
+                                    "name": 918
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/927.xml",
+                                    "name": 927
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/917.xml",
+                                    "name": 917
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/926.xml",
+                                    "name": 926
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/916.xml",
+                                    "name": 916
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/925.xml",
+                                    "name": 925
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/915.xml",
+                                    "name": 915
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/924.xml",
+                                    "name": 924
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/913.xml",
+                                    "name": 913
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/923.xml",
+                                    "name": 923
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/911.xml",
+                                    "name": 911
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/907.xml",
+                                    "name": 907
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/906.xml",
+                                    "name": 906
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/905.xml",
+                                    "name": 905
+                                },
+                                {
+                                    "fileName": "../assets/levels/bar_model/turk_v5/904.xml",
+                                    "name": 904
+                                }
+                            ],
+                            "name": "advanced_fractions_d",
+                            "objectiveClass": "fraction_of_larger_objective",
+                            "difficulty": "4",
+                            "levelselect": true,
+                            "locks": [
+                                {
+                                    "unlockStatus": "completed",
+                                    "type": "NodeStatus",
+                                    "name": "advanced_fractions_c"
+                                }
+                            ]
+                        }
+                    ],
+                    "type": "ChapterLevelPack",
+                    "name": null
+                }
+            ],
+            "type": "GenreLevelPack",
+            "name": "advanced",
+            "locks": [
+                {
+                    "unlockStatus": "completed",
+                    "type": "NodeStatus",
+                    "name": "multiply_multi_operator"
+                }
+            ]
+        },
+        {
+            "children": [],
+            "type": "GenreLevelPack",
+            "name": "extra"
+        }
+    ],
+    "objectiveClasses": [
+        {
+            "id": "add_objective",
+            "objectives": [
+                {
+                    "value": "0",
+                    "type": "HintsUsed",
+                    "useInSummary": "true"
+                },
+                {
+                    "value": "1",
+                    "type": "MaxMistakes",
+                    "useInSummary": "true"
+                }
+            ]
+        },
+        {
+            "id": "add_subtract_objective",
+            "objectives": [
+                {
+                    "value": "0",
+                    "type": "HintsUsed",
+                    "useInSummary": "true"
+                },
+                {
+                    "value": "1",
+                    "type": "MaxMistakes",
+                    "useInSummary": "true"
+                }
+            ]
+        },
+        {
+            "id": "multiply_objective",
+            "objectives": [
+                {
+                    "value": "0",
+                    "type": "HintsUsed",
+                    "useInSummary": "true"
+                },
+                {
+                    "value": "2",
+                    "type": "MaxMistakes",
+                    "useInSummary": "true"
+                }
+            ]
+        },
+        {
+            "id": "multiop_multiply_objective",
+            "objectives": [
+                {
+                    "value": "1",
+                    "type": "HintsUsed",
+                    "useInSummary": "true"
+                },
+                {
+                    "value": "5",
+                    "type": "MaxMistakes",
+                    "useInSummary": "true"
+                }
+            ]
+        },
+        {
+            "id": "two_step_add_objective",
+            "objectives": [
+                {
+                    "value": "3",
+                    "type": "HintsUsed",
+                    "useInSummary": "true"
+                },
+                {
+                    "value": "4",
+                    "type": "MaxMistakes",
+                    "useInSummary": "true"
+                }
+            ]
+        },
+        {
+            "id": "two_step_groups_objective",
+            "objectives": [
+                {
+                    "value": "3",
+                    "type": "HintsUsed",
+                    "useInSummary": "true"
+                },
+                {
+                    "value": "5",
+                    "type": "MaxMistakes",
+                    "useInSummary": "true"
+                }
+            ]
+        },
+        {
+            "id": "fraction_of_whole_objective",
+            "objectives": [
+                {
+                    "value": "3",
+                    "type": "HintsUsed",
+                    "useInSummary": "true"
+                },
+                {
+                    "value": "5",
+                    "type": "MaxMistakes",
+                    "useInSummary": "true"
+                }
+            ]
+        },
+        {
+            "id": "fraction_of_larger_objective",
+            "objectives": [
+                {
+                    "value": "3",
+                    "type": "HintsUsed",
+                    "useInSummary": "true"
+                },
+                {
+                    "value": "5",
+                    "type": "MaxMistakes",
+                    "useInSummary": "true"
+                }
+            ]
+        }
+    ],
+    "name": "Root",
+    "nodeType": "LevelPack",
+    "startNodeName": "1564",
+    "edges": [
+        {
+            "id": "1",
+            "startId": "1565",
+            "actions": [
+                {
+                    "type": "PickFirstLevel"
+                }
+            ],
+            "endId": "addition_unknown_total"
+        },
+        {
+            "id": "2",
+            "conditions": [
+                {
+                    "k": "2",
+                    "n": "0",
+                    "type": "KOutOfNProficient",
+                    "objectiveClass": "add_objective"
+                },
+                {
+                    "status": "uncompleted",
+                    "type": "NodeStatus",
+                    "name": "addition_unknown_total"
+                }
+            ],
+            "startId": "addition_unknown_total",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "addition_unknown_total"
+                },
+                {
+                    "masteryId": "1",
+                    "type": "SetMastery"
+                }
+            ],
+            "endId": "1567"
+        },
+        {
+            "id": "3",
+            "conditions": [
+                {
+                    "k": "1",
+                    "n": "0",
+                    "type": "KOutOfNProficient",
+                    "objectiveClass": "add_subtract_objective"
+                },
+                {
+                    "status": "uncompleted",
+                    "type": "NodeStatus",
+                    "name": "subtraction_unknown_diff"
+                }
+            ],
+            "startId": "subtraction_unknown_diff",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "subtraction_unknown_diff"
+                }
+            ],
+            "endId": "addition_subtraction_mix"
+        },
+        {
+            "id": "4",
+            "conditions": [
+                {
+                    "k": "2",
+                    "n": "0",
+                    "type": "KOutOfNProficient",
+                    "objectiveClass": "add_subtract_objective"
+                },
+                {
+                    "status": "uncompleted",
+                    "type": "NodeStatus",
+                    "name": "addition_subtraction_mix"
+                }
+            ],
+            "startId": "addition_subtraction_mix",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "addition_subtraction_mix"
+                }
+            ],
+            "endId": "multipart_subtraction"
+        },
+        {
+            "id": "5",
+            "conditions": [
+                {
+                    "n": "8",
+                    "type": "NLevelsCompleted",
+                    "objectiveClass": "add_subtract_objective"
+                },
+                {
+                    "status": "uncompleted",
+                    "type": "NodeStatus",
+                    "name": "multipart_subtraction"
+                }
+            ],
+            "startId": "multipart_subtraction",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "multipart_subtraction"
+                },
+                {
+                    "masteryId": "2",
+                    "type": "SetMastery"
+                }
+            ],
+            "endId": "1568"
+        },
+        {
+            "id": "6",
+            "conditions": [
+                {
+                    "k": "3",
+                    "n": "0",
+                    "type": "KOutOfNProficient",
+                    "objectiveClass": "multiply_objective"
+                },
+                {
+                    "status": "uncompleted",
+                    "type": "NodeStatus",
+                    "name": "multiply_unknown_total"
+                }
+            ],
+            "startId": "multiply_unknown_total",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "multiply_unknown_total"
+                }
+            ],
+            "endId": "1569"
+        },
+        {
+            "id": "7",
+            "conditions": [
+                {
+                    "k": "2",
+                    "n": "0",
+                    "type": "KOutOfNProficient",
+                    "objectiveClass": "multiply_objective"
+                },
+                {
+                    "status": "uncompleted",
+                    "type": "NodeStatus",
+                    "name": "multiply_unknown_group"
+                }
+            ],
+            "startId": "multiply_unknown_group",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "multiply_unknown_group"
+                },
+                {
+                    "masteryId": "3",
+                    "type": "SetMastery"
+                }
+            ],
+            "endId": "1572"
+        },
+        {
+            "id": "8",
+            "conditions": [
+                {
+                    "k": "2",
+                    "n": "0",
+                    "type": "KOutOfNProficient",
+                    "tagName": "sum",
+                    "objectiveClass": "multiop_multiply_objective"
+                },
+                {
+                    "k": "2",
+                    "n": "0",
+                    "type": "KOutOfNProficient",
+                    "tagName": "difference",
+                    "objectiveClass": "multiop_multiply_objective"
+                },
+                {
+                    "status": "uncompleted",
+                    "type": "NodeStatus",
+                    "name": "multiply_multi_operator"
+                }
+            ],
+            "startId": "multiply_multi_operator",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "multiply_multi_operator"
+                },
+                {
+                    "masteryId": "4",
+                    "type": "SetMastery"
+                }
+            ],
+            "endId": "1570"
+        },
+        {
+            "id": "9",
+            "conditions": [
+                {
+                    "k": "2",
+                    "n": "3",
+                    "type": "KOutOfNProficient",
+                    "objectiveClass": "two_step_add_objective"
+                },
+                {
+                    "status": "uncompleted",
+                    "type": "NodeStatus",
+                    "name": "two_step_addition_a"
+                }
+            ],
+            "startId": "two_step_addition_a",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "two_step_addition_a"
+                }
+            ],
+            "endId": "two_step_addition_b"
+        },
+        {
+            "id": "10",
+            "conditions": [
+                {
+                    "k": "2",
+                    "n": "3",
+                    "type": "KOutOfNProficient",
+                    "objectiveClass": "two_step_add_objective"
+                },
+                {
+                    "status": "uncompleted",
+                    "type": "NodeStatus",
+                    "name": "two_step_addition_b"
+                }
+            ],
+            "startId": "two_step_addition_b",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "two_step_addition_b"
+                }
+            ],
+            "endId": "two_step_groups_total"
+        },
+        {
+            "id": "11",
+            "conditions": [
+                {
+                    "k": "2",
+                    "n": "3",
+                    "type": "KOutOfNProficient",
+                    "objectiveClass": "two_step_groups_objective"
+                },
+                {
+                    "status": "uncompleted",
+                    "type": "NodeStatus",
+                    "name": "two_step_groups_total"
+                }
+            ],
+            "startId": "two_step_groups_total",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "two_step_groups_total"
+                }
+            ],
+            "endId": "two_step_groups_diff"
+        },
+        {
+            "id": "12",
+            "conditions": [
+                {
+                    "k": "2",
+                    "n": "3",
+                    "type": "KOutOfNProficient",
+                    "objectiveClass": "two_step_groups_objective"
+                },
+                {
+                    "status": "uncompleted",
+                    "type": "NodeStatus",
+                    "name": "two_step_groups_diff"
+                }
+            ],
+            "startId": "two_step_groups_diff",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "two_step_groups_diff"
+                }
+            ],
+            "endId": "two_step_groups_mixed"
+        },
+        {
+            "id": "13",
+            "conditions": [
+                {
+                    "k": "2",
+                    "n": "3",
+                    "type": "KOutOfNProficient",
+                    "objectiveClass": "two_step_groups_objective"
+                },
+                {
+                    "status": "uncompleted",
+                    "type": "NodeStatus",
+                    "name": "two_step_groups_mixed"
+                }
+            ],
+            "startId": "two_step_groups_mixed",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "two_step_groups_mixed"
+                },
+                {
+                    "masteryId": "5",
+                    "type": "SetMastery"
+                }
+            ],
+            "endId": "1571"
+        },
+        {
+            "id": "14",
+            "conditions": [
+                {
+                    "k": "2",
+                    "n": "3",
+                    "type": "KOutOfNProficient",
+                    "objectiveClass": "fraction_of_whole_objective"
+                },
+                {
+                    "status": "uncompleted",
+                    "type": "NodeStatus",
+                    "name": "basic_fractions_a"
+                }
+            ],
+            "startId": "basic_fractions_a",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "basic_fractions_a"
+                }
+            ],
+            "endId": "basic_fractions_b"
+        },
+        {
+            "id": "15",
+            "conditions": [
+                {
+                    "k": "2",
+                    "n": "3",
+                    "type": "KOutOfNProficient",
+                    "objectiveClass": "fraction_of_whole_objective"
+                },
+                {
+                    "status": "uncompleted",
+                    "type": "NodeStatus",
+                    "name": "basic_fractions_b"
+                }
+            ],
+            "startId": "basic_fractions_b",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "basic_fractions_b"
+                }
+            ],
+            "endId": "basic_fractions_c"
+        },
+        {
+            "id": "16",
+            "conditions": [
+                {
+                    "k": "2",
+                    "n": "3",
+                    "type": "KOutOfNProficient",
+                    "objectiveClass": "fraction_of_whole_objective"
+                },
+                {
+                    "status": "uncompleted",
+                    "type": "NodeStatus",
+                    "name": "basic_fractions_c"
+                }
+            ],
+            "startId": "basic_fractions_c",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "basic_fractions_c"
+                },
+                {
+                    "masteryId": "6",
+                    "type": "SetMastery"
+                }
+            ],
+            "endId": "advanced_fractions_a"
+        },
+        {
+            "id": "17",
+            "conditions": [
+                {
+                    "k": "2",
+                    "n": "3",
+                    "type": "KOutOfNProficient",
+                    "objectiveClass": "fraction_of_larger_objective"
+                },
+                {
+                    "status": "uncompleted",
+                    "type": "NodeStatus",
+                    "name": "advanced_fractions_a"
+                }
+            ],
+            "startId": "advanced_fractions_a",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "advanced_fractions_a"
+                }
+            ],
+            "endId": "advanced_fractions_b"
+        },
+        {
+            "id": "18",
+            "conditions": [
+                {
+                    "k": "2",
+                    "n": "3",
+                    "type": "KOutOfNProficient",
+                    "objectiveClass": "fraction_of_larger_objective"
+                },
+                {
+                    "status": "uncompleted",
+                    "type": "NodeStatus",
+                    "name": "advanced_fractions_b"
+                }
+            ],
+            "startId": "advanced_fractions_b",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "advanced_fractions_b"
+                }
+            ],
+            "endId": "advanced_fractions_c"
+        },
+        {
+            "id": "19",
+            "conditions": [
+                {
+                    "k": "2",
+                    "n": "3",
+                    "type": "KOutOfNProficient",
+                    "objectiveClass": "fraction_of_larger_objective"
+                },
+                {
+                    "status": "uncompleted",
+                    "type": "NodeStatus",
+                    "name": "advanced_fractions_c"
+                }
+            ],
+            "startId": "advanced_fractions_c",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "advanced_fractions_c"
+                }
+            ],
+            "endId": "advanced_fractions_d"
+        },
+        {
+            "id": "20",
+            "conditions": [
+                {
+                    "k": "2",
+                    "n": "3",
+                    "type": "KOutOfNProficient",
+                    "objectiveClass": "fraction_of_larger_objective"
+                },
+                {
+                    "status": "uncompleted",
+                    "type": "NodeStatus",
+                    "name": "advanced_fractions_d"
+                }
+            ],
+            "startId": "advanced_fractions_d",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "advanced_fractions_d"
+                },
+                {
+                    "masteryId": "7",
+                    "type": "SetMastery"
+                }
+            ],
+            "endId": ""
+        },
+        {
+            "id": "21",
+            "startId": "addition_unknown_total",
+            "actions": [
+                {
+                    "type": "PickNextInSet"
+                }
+            ],
+            "endId": "addition_unknown_total"
+        },
+        {
+            "id": "22",
+            "startId": "subtraction_unknown_diff",
+            "actions": [
+                {
+                    "type": "PickNextInSet"
+                }
+            ],
+            "endId": "subtraction_unknown_diff"
+        },
+        {
+            "id": "23",
+            "startId": "addition_subtraction_mix",
+            "actions": [
+                {
+                    "type": "PickNextInSet"
+                }
+            ],
+            "endId": "addition_subtraction_mix"
+        },
+        {
+            "id": "24",
+            "startId": "multipart_subtraction",
+            "actions": [
+                {
+                    "type": "PickNextInSet"
+                }
+            ],
+            "endId": "multipart_subtraction"
+        },
+        {
+            "id": "25",
+            "startId": "multiply_unknown_total",
+            "actions": [
+                {
+                    "type": "PickNextInSet"
+                }
+            ],
+            "endId": "multiply_unknown_total"
+        },
+        {
+            "id": "26",
+            "startId": "multiply_unknown_group",
+            "actions": [
+                {
+                    "type": "PickNextInSet"
+                }
+            ],
+            "endId": "multiply_unknown_group"
+        },
+        {
+            "id": "27",
+            "startId": "multiply_multi_operator",
+            "actions": [
+                {
+                    "type": "PickNextInSet"
+                }
+            ],
+            "endId": "multiply_multi_operator"
+        },
+        {
+            "id": "28",
+            "startId": "two_step_addition_a",
+            "actions": [
+                {
+                    "type": "PickNextInSet"
+                }
+            ],
+            "endId": "two_step_addition_a"
+        },
+        {
+            "id": "29",
+            "startId": "two_step_addition_b",
+            "actions": [
+                {
+                    "type": "PickNextInSet"
+                }
+            ],
+            "endId": "two_step_addition_b"
+        },
+        {
+            "id": "30",
+            "startId": "two_step_groups_total",
+            "actions": [
+                {
+                    "type": "PickNextInSet"
+                }
+            ],
+            "endId": "two_step_groups_total"
+        },
+        {
+            "id": "31",
+            "startId": "two_step_groups_diff",
+            "actions": [
+                {
+                    "type": "PickNextInSet"
+                }
+            ],
+            "endId": "two_step_groups_diff"
+        },
+        {
+            "id": "32",
+            "startId": "two_step_groups_mixed",
+            "actions": [
+                {
+                    "type": "PickNextInSet"
+                }
+            ],
+            "endId": "two_step_groups_mixed"
+        },
+        {
+            "id": "33",
+            "startId": "basic_fractions_a",
+            "actions": [
+                {
+                    "type": "PickNextInSet"
+                }
+            ],
+            "endId": "basic_fractions_a"
+        },
+        {
+            "id": "34",
+            "startId": "basic_fractions_b",
+            "actions": [
+                {
+                    "type": "PickNextInSet"
+                }
+            ],
+            "endId": "basic_fractions_b"
+        },
+        {
+            "id": "35",
+            "startId": "basic_fractions_c",
+            "actions": [
+                {
+                    "type": "PickNextInSet"
+                }
+            ],
+            "endId": "basic_fractions_c"
+        },
+        {
+            "id": "36",
+            "startId": "advanced_fractions_a",
+            "actions": [
+                {
+                    "type": "PickNextInSet"
+                }
+            ],
+            "endId": "advanced_fractions_a"
+        },
+        {
+            "id": "37",
+            "startId": "advanced_fractions_b",
+            "actions": [
+                {
+                    "type": "PickNextInSet"
+                }
+            ],
+            "endId": "advanced_fractions_b"
+        },
+        {
+            "id": "38",
+            "startId": "advanced_fractions_c",
+            "actions": [
+                {
+                    "type": "PickNextInSet"
+                }
+            ],
+            "endId": "advanced_fractions_c"
+        },
+        {
+            "id": "39",
+            "startId": "advanced_fractions_d",
+            "actions": [
+                {
+                    "type": "PickNextInSet"
+                }
+            ],
+            "endId": "advanced_fractions_d"
+        }
+    ],
+    "locks": []
+}

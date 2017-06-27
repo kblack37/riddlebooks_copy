@@ -1,0 +1,32 @@
+<level barModelType="" name=""> 
+
+<symbols/>
+
+<overrideLayoutAttributes name="barEquationModel"/>
+
+<rules/>
+
+<script>
+    <scriptedActions>
+        <code id="wordproblem.scripts.level.GenericBarModelLevelScript">
+        </code>
+    </scriptedActions>
+</script>
+
+<style>{
+    "p":{
+        "color":"0x3D1E07",
+        "fontName":"Immortal",
+        "fontSize":24
+    }
+}
+</style>
+
+<wordproblem>
+<page paddingLeft="110" paddingTop="50">
+<div layout="relative" width="580">
+</div>
+</page>
+</wordproblem>
+
+</level>

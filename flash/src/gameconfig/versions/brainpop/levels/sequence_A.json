@@ -1,0 +1,3062 @@
+{
+    "children": [
+        {
+            "children": [
+                {
+                    "children": [
+                        {
+                            "fileName": "../assets/levels/brainpop/brainpop_intro.xml",
+                            "name": "1231",
+                            "skippable": "false"
+                        },
+                        {
+                            "fileName": "../assets/levels/bar_model/tutorials/add_label_A.xml",
+                            "name": "3",
+                            "skippable": "false"
+                        },
+                        {
+                            "fileName": "../assets/levels/bar_model/tutorials/add_segments_A.xml",
+                            "name": "4",
+                            "skippable": "false"
+                        },
+                        {
+                            "fileName": "../assets/levels/bar_model/tutorials/equation_from_bar_A.xml",
+                            "name": "6",
+                            "skippable": "false"
+                        },
+                        {
+                            "fileName": "../assets/levels/bar_model/tutorials/text_discover_A.xml",
+                            "name": "10",
+                            "skippable": "false"
+                        }
+                    ],
+                    "addChildSequenceLocks": "completed",
+                    "descriptionData": {
+                        "description": "Learn the basics",
+                        "name": ""
+                    },
+                    "type": "ChapterLevelPack",
+                    "name": "intro_tutorials"
+                },
+                {
+                    "children": [
+                        {
+                            "children": [
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_10.xml",
+                                    "name": "511"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_1.xml",
+                                    "name": "510"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_11.xml",
+                                    "name": "512"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_12.xml",
+                                    "name": "513"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_13.xml",
+                                    "name": "514"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_14.xml",
+                                    "name": "515"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_15.xml",
+                                    "name": "516"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_16.xml",
+                                    "name": "517"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_17.xml",
+                                    "name": "518"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_18.xml",
+                                    "name": "519"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_19.xml",
+                                    "name": "520"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_2.xml",
+                                    "name": "521"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_20.xml",
+                                    "name": "522"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_21.xml",
+                                    "name": "523"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_22.xml",
+                                    "name": "524"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_23.xml",
+                                    "name": "525"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_24.xml",
+                                    "name": "526"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_25.xml",
+                                    "name": "527"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_26.xml",
+                                    "name": "528"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_27.xml",
+                                    "name": "529"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_28.xml",
+                                    "name": "530"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_29.xml",
+                                    "name": "531"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_3.xml",
+                                    "name": "532"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_30.xml",
+                                    "name": "533"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_31.xml",
+                                    "name": "534"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_32.xml",
+                                    "name": "535"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_33.xml",
+                                    "name": "536"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_34.xml",
+                                    "name": "537"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_35.xml",
+                                    "name": "538"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_36.xml",
+                                    "name": "539"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_37.xml",
+                                    "name": "540"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_38.xml",
+                                    "name": "541"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_39.xml",
+                                    "name": "542"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_4.xml",
+                                    "name": "543"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_5.xml",
+                                    "name": "544"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_6.xml",
+                                    "name": "545"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_7.xml",
+                                    "name": "546"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_8.xml",
+                                    "name": "547"
+                                }
+                            ],
+                            "tags": [
+                                "practice"
+                            ],
+                            "locks": [
+                                {
+                                    "type": "NodeStatus",
+                                    "unlockStatus": "completed",
+                                    "name": "intro_tutorials"
+                                }
+                            ],
+                            "policy": "PickRandomUncompletedLevel",
+                            "name": "addition_bar_model"
+                        },
+                        {
+                            "children": [
+                                {
+                                    "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_4D.xml",
+                                    "name": "165",
+                                    "skippable": "false"
+                                },
+                                {
+                                    "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_4D.xml",
+                                    "name": "497",
+                                    "skippable": "false"
+                                },
+                                {
+                                    "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_4D.xml",
+                                    "name": "331",
+                                    "skippable": "false"
+                                }
+                            ],
+                            "policy": "PickRandomUncompletedLevel",
+                            "name": "addition_a"
+                        },
+                        {
+                            "children": [
+                                {
+                                    "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_18B.xml",
+                                    "name": "41",
+                                    "skippable": "false"
+                                },
+                                {
+                                    "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_18B.xml",
+                                    "name": "373",
+                                    "skippable": "false"
+                                },
+                                {
+                                    "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_18B.xml",
+                                    "name": "207",
+                                    "skippable": "false"
+                                }
+                            ],
+                            "policy": "PickRandomUncompletedLevel",
+                            "name": "addition_b"
+                        }
+                    ],
+                    "addChildSequenceLocks": "completed",
+                    "descriptionData": {
+                        "description": "Starting with Addition",
+                        "name": ""
+                    },
+                    "type": "ChapterLevelPack",
+                    "name": "intro_addition"
+                },
+                {
+                    "children": [
+                        {
+                            "fileName": "../assets/levels/bar_model/tutorials/add_comparison_A.xml",
+                            "locks": [
+                                {
+                                    "type": "NodeStatus",
+                                    "unlockStatus": "completed",
+                                    "name": "intro_addition"
+                                }
+                            ],
+                            "name": "2",
+                            "skippable": "false"
+                        },
+                        {
+                            "children": [
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_1.xml",
+                                    "name": "833"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_10.xml",
+                                    "name": "834"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_11.xml",
+                                    "name": "835"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_12.xml",
+                                    "name": "836"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_13.xml",
+                                    "name": "837"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_14.xml",
+                                    "name": "838"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_15.xml",
+                                    "name": "839"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_16.xml",
+                                    "name": "840"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_17.xml",
+                                    "name": "841"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_18.xml",
+                                    "name": "842"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_19.xml",
+                                    "name": "843"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_2.xml",
+                                    "name": "844"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_20.xml",
+                                    "name": "845"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_21.xml",
+                                    "name": "846"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_22.xml",
+                                    "name": "847"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_23.xml",
+                                    "name": "848"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_24.xml",
+                                    "name": "1230"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_3.xml",
+                                    "name": "849"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_4.xml",
+                                    "name": "850"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_5.xml",
+                                    "name": "851"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_6.xml",
+                                    "name": "852"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_7.xml",
+                                    "name": "853"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_8.xml",
+                                    "name": "854"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_9.xml",
+                                    "name": "855"
+                                }
+                            ],
+                            "tags": [
+                                "practice"
+                            ],
+                            "policy": "PickRandomUncompletedLevel",
+                            "name": "subtraction_bar_model"
+                        },
+                        {
+                            "children": [
+                                {
+                                    "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_5A.xml",
+                                    "name": "166",
+                                    "skippable": "false"
+                                },
+                                {
+                                    "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_5A.xml",
+                                    "name": "498",
+                                    "skippable": "false"
+                                },
+                                {
+                                    "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_5A.xml",
+                                    "name": "332",
+                                    "skippable": "false"
+                                }
+                            ],
+                            "policy": "PickRandomUncompletedLevel",
+                            "name": "subtraction_a"
+                        },
+                        {
+                            "children": [
+                                {
+                                    "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_7C.xml",
+                                    "name": "173",
+                                    "skippable": "false"
+                                },
+                                {
+                                    "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_7C.xml",
+                                    "name": "505",
+                                    "skippable": "false"
+                                },
+                                {
+                                    "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_7C.xml",
+                                    "name": "339",
+                                    "skippable": "false"
+                                }
+                            ],
+                            "policy": "PickRandomUncompletedLevel",
+                            "name": "subtraction_b"
+                        }
+                    ],
+                    "addChildSequenceLocks": "completed",
+                    "descriptionData": {
+                        "description": "Starting with Subtraction",
+                        "name": ""
+                    },
+                    "type": "ChapterLevelPack",
+                    "name": "intro_subtraction"
+                },
+                {
+                    "children": [
+                        {
+                            "fileName": "../assets/levels/bar_model/tutorials/multiply_bar_A.xml",
+                            "locks": [
+                                {
+                                    "type": "NodeStatus",
+                                    "unlockStatus": "completed",
+                                    "name": "intro_subtraction"
+                                }
+                            ],
+                            "name": "8",
+                            "skippable": "false"
+                        },
+                        {
+                            "children": [
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.8/problem_SM.8_22.xml",
+                                    "name": "1072"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.8/problem_SM.8_23.xml",
+                                    "name": "1073"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.8/problem_SM.8_24.xml",
+                                    "name": "1074"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.8/problem_SM.8_25.xml",
+                                    "name": "1075"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.8/problem_SM.8_26.xml",
+                                    "name": "1076"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.8/problem_SM.8_27.xml",
+                                    "name": "1077"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.8/problem_SM.8_28.xml",
+                                    "name": "1078"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.8/problem_SM.8_29.xml",
+                                    "name": "1079"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.8/problem_SM.8_3.xml",
+                                    "name": "1080"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.8/problem_SM.8_30.xml",
+                                    "name": "1081"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.8/problem_SM.8_31.xml",
+                                    "name": "1082"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.8/problem_SM.8_32.xml",
+                                    "name": "1083"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.8/problem_SM.8_33.xml",
+                                    "name": "1084"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.8/problem_SM.8_4.xml",
+                                    "name": "1085"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.8/problem_SM.8_5.xml",
+                                    "name": "1086"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.8/problem_SM.8_8.xml",
+                                    "name": "1089"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.8/problem_SM.8_9.xml",
+                                    "name": "1090"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.9/problem_SM.9_1.xml",
+                                    "name": "1091"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.9/problem_SM.9_10.xml",
+                                    "name": "1092"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.9/problem_SM.9_11.xml",
+                                    "name": "1093"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.9/problem_SM.9_12.xml",
+                                    "name": "1094"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.9/problem_SM.9_13.xml",
+                                    "name": "1095"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.9/problem_SM.9_14.xml",
+                                    "name": "1096"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.9/problem_SM.9_15.xml",
+                                    "name": "1097"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.9/problem_SM.9_16.xml",
+                                    "name": "1098"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.9/problem_SM.9_17.xml",
+                                    "name": "1099"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.9/problem_SM.9_18.xml",
+                                    "name": "1100"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.9/problem_SM.9_19.xml",
+                                    "name": "1101"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.9/problem_SM.9_2.xml",
+                                    "name": "1102"
+                                }
+                            ],
+                            "tags": [
+                                "practice"
+                            ],
+                            "policy": "PickRandomUncompletedLevel",
+                            "name": "multiplication_bar_model"
+                        },
+                        {
+                            "children": [
+                                {
+                                    "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_22B.xml",
+                                    "name": "61",
+                                    "skippable": "false"
+                                },
+                                {
+                                    "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_22B.xml",
+                                    "name": "393",
+                                    "skippable": "false"
+                                },
+                                {
+                                    "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_22B.xml",
+                                    "name": "227",
+                                    "skippable": "false"
+                                }
+                            ],
+                            "policy": "PickRandomUncompletedLevel",
+                            "name": "multiplication_a"
+                        },
+                        {
+                            "children": [
+                                {
+                                    "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_26B.xml",
+                                    "name": "77",
+                                    "skippable": "false"
+                                },
+                                {
+                                    "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_26B.xml",
+                                    "name": "409",
+                                    "skippable": "false"
+                                },
+                                {
+                                    "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_26B.xml",
+                                    "name": "243",
+                                    "skippable": "false"
+                                }
+                            ],
+                            "policy": "PickRandomUncompletedLevel",
+                            "name": "multiplication_b"
+                        }
+                    ],
+                    "addChildSequenceLocks": "completed",
+                    "descriptionData": {
+                        "description": "Starting with Multiplication",
+                        "name": ""
+                    },
+                    "type": "ChapterLevelPack",
+                    "name": "intro_multiplication"
+                },
+                {
+                    "children": [
+                        {
+                            "fileName": "../assets/levels/bar_model/tutorials/split_copy_A.xml",
+                            "locks": [
+                                {
+                                    "type": "NodeStatus",
+                                    "unlockStatus": "completed",
+                                    "name": "intro_multiplication"
+                                }
+                            ],
+                            "name": "9"
+                        },
+                        {
+                            "children": [
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_19.xml",
+                                    "name": "559"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_2.xml",
+                                    "name": "560"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_20.xml",
+                                    "name": "561"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_21.xml",
+                                    "name": "562"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_22.xml",
+                                    "name": "563"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_23.xml",
+                                    "name": "564"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_24.xml",
+                                    "name": "565"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_25.xml",
+                                    "name": "566"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_26.xml",
+                                    "name": "567"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_27.xml",
+                                    "name": "568"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_28.xml",
+                                    "name": "569"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_29.xml",
+                                    "name": "570"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_3.xml",
+                                    "name": "571"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_4.xml",
+                                    "name": "572"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_5.xml",
+                                    "name": "573"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_6.xml",
+                                    "name": "574"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_7.xml",
+                                    "name": "575"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_8.xml",
+                                    "name": "576"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_9.xml",
+                                    "name": "577"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.11/problem_SM.11_1.xml",
+                                    "name": "578"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.11/problem_SM.11_10.xml",
+                                    "name": "579"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.11/problem_SM.11_11.xml",
+                                    "name": "580"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.11/problem_SM.11_12.xml",
+                                    "name": "581"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.11/problem_SM.11_13.xml",
+                                    "name": "582"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.11/problem_SM.11_14.xml",
+                                    "name": "583"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.11/problem_SM.11_15.xml",
+                                    "name": "584"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.11/problem_SM.11_16.xml",
+                                    "name": "585"
+                                }
+                            ],
+                            "tags": [
+                                "practice"
+                            ],
+                            "policy": "PickRandomUncompletedLevel",
+                            "name": "division_bar_model"
+                        },
+                        {
+                            "children": [
+                                {
+                                    "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_21A.xml",
+                                    "name": "56",
+                                    "skippable": "false"
+                                },
+                                {
+                                    "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_21A.xml",
+                                    "name": "388",
+                                    "skippable": "false"
+                                },
+                                {
+                                    "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_21A.xml",
+                                    "name": "222",
+                                    "skippable": "false"
+                                }
+                            ],
+                            "policy": "PickRandomUncompletedLevel",
+                            "name": "division_a"
+                        },
+                        {
+                            "children": [
+                                {
+                                    "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_12A.xml",
+                                    "name": "18",
+                                    "skippable": "false"
+                                },
+                                {
+                                    "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_12A.xml",
+                                    "name": "350",
+                                    "skippable": "false"
+                                },
+                                {
+                                    "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_12A.xml",
+                                    "name": "184",
+                                    "skippable": "false"
+                                }
+                            ],
+                            "policy": "PickRandomUncompletedLevel",
+                            "name": "division_b"
+                        }
+                    ],
+                    "addChildSequenceLocks": "completed",
+                    "descriptionData": {
+                        "description": "Starting with Division",
+                        "name": ""
+                    },
+                    "type": "ChapterLevelPack",
+                    "name": "intro_division"
+                }
+            ],
+            "type": "GenreLevelPack",
+            "name": "intro"
+        },
+        {
+            "children": [
+                {
+                    "children": [
+                        {
+                            "saveName": "level0",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_1A.xml",
+                            "name": "48"
+                        },
+                        {
+                            "saveName": "level1",
+                            "tags": [
+                                "mult"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_11C.xml",
+                            "name": "16"
+                        },
+                        {
+                            "saveName": "level2",
+                            "tags": [
+                                "mult"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_20C.xml",
+                            "name": "54"
+                        },
+                        {
+                            "saveName": "level3",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_15D.xml",
+                            "name": "31"
+                        },
+                        {
+                            "saveName": "level4",
+                            "tags": [
+                                "sub"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_6C.xml",
+                            "name": "171"
+                        },
+                        {
+                            "saveName": "level5",
+                            "tags": [
+                                "mult"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_25A.xml",
+                            "name": "72"
+                        },
+                        {
+                            "saveName": "level6",
+                            "tags": [
+                                "sub",
+                                "mult",
+                                "paren"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_43C.xml",
+                            "name": "144"
+                        },
+                        {
+                            "saveName": "level7",
+                            "tags": [
+                                "div"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_8C.xml",
+                            "name": "175"
+                        },
+                        {
+                            "saveName": "level8",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_17B.xml",
+                            "name": "37"
+                        },
+                        {
+                            "saveName": "level9",
+                            "tags": [
+                                "sub",
+                                "mult"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_38D.xml",
+                            "name": "125"
+                        },
+                        {
+                            "saveName": "level10",
+                            "tags": [
+                                "mult",
+                                "div"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_23C.xml",
+                            "name": "66"
+                        },
+                        {
+                            "saveName": "level11",
+                            "tags": [
+                                "mult"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_11D.xml",
+                            "name": "17"
+                        },
+                        {
+                            "saveName": "level12",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_1B.xml",
+                            "name": "49"
+                        },
+                        {
+                            "saveName": "level13",
+                            "tags": [
+                                "mult"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_31C.xml",
+                            "name": "99"
+                        },
+                        {
+                            "saveName": "level14",
+                            "tags": [
+                                "sub"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_6A.xml",
+                            "name": "170"
+                        },
+                        {
+                            "saveName": "level15",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_17A.xml",
+                            "name": "36"
+                        },
+                        {
+                            "saveName": "level16",
+                            "tags": [
+                                "div"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_8A.xml",
+                            "name": "174"
+                        },
+                        {
+                            "saveName": "level17",
+                            "tags": [
+                                "mult",
+                                "div"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_23D.xml",
+                            "name": "67"
+                        },
+                        {
+                            "saveName": "level18",
+                            "tags": [
+                                "mult"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_20A.xml",
+                            "name": "52"
+                        },
+                        {
+                            "saveName": "level19",
+                            "tags": [
+                                "sub",
+                                "mult"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_38D.xml",
+                            "name": "125"
+                        },
+                        {
+                            "saveName": "level20",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_15B.xml",
+                            "name": "29"
+                        },
+                        {
+                            "saveName": "level21",
+                            "tags": [
+                                "mult"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_25B.xml",
+                            "name": "73"
+                        },
+                        {
+                            "saveName": "level22",
+                            "tags": [
+                                "sub",
+                                "mult",
+                                "paren"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_43A.xml",
+                            "name": "142"
+                        },
+                        {
+                            "saveName": "level23",
+                            "tags": [
+                                "mult"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_31A.xml",
+                            "name": "98"
+                        }
+                    ],
+                    "addChildSequenceLocks": "completed",
+                    "type": "ChapterLevelPack",
+                    "name": "fantasy_one"
+                },
+                {
+                    "children": [
+                        {
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_2B.xml",
+                            "locks": [
+                                {
+                                    "type": "NodeStatus",
+                                    "unlockStatus": "completed",
+                                    "name": "fantasy_one"
+                                }
+                            ],
+                            "name": "91"
+                        },
+                        {
+                            "saveName": "level24",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_34C.xml",
+                            "name": "108"
+                        },
+                        {
+                            "saveName": "level25",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_14B.xml",
+                            "name": "25"
+                        },
+                        {
+                            "saveName": "level26",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_45D.xml",
+                            "name": "153"
+                        },
+                        {
+                            "saveName": "level27",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_16D.xml",
+                            "name": "35"
+                        },
+                        {
+                            "saveName": "level28",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_33C.xml",
+                            "name": "104"
+                        },
+                        {
+                            "saveName": "level29",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_35D.xml",
+                            "name": "113"
+                        },
+                        {
+                            "saveName": "level30",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_24C.xml",
+                            "name": "70"
+                        },
+                        {
+                            "saveName": "level31",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_9C.xml",
+                            "name": "177"
+                        },
+                        {
+                            "saveName": "level32",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_37B.xml",
+                            "name": "119"
+                        },
+                        {
+                            "saveName": "level33",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_39D.xml",
+                            "name": "129"
+                        },
+                        {
+                            "saveName": "level34",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_42A.xml",
+                            "name": "140"
+                        },
+                        {
+                            "saveName": "level35",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_13A.xml",
+                            "name": "20"
+                        },
+                        {
+                            "saveName": "level36",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_44C.xml",
+                            "name": "148"
+                        },
+                        {
+                            "saveName": "level37",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_27B.xml",
+                            "name": "80"
+                        },
+                        {
+                            "saveName": "level38",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_36A.xml",
+                            "name": "114"
+                        },
+                        {
+                            "saveName": "level39",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_28C.xml",
+                            "name": "84"
+                        },
+                        {
+                            "saveName": "level40",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_46A.xml",
+                            "name": "154"
+                        },
+                        {
+                            "saveName": "level41",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_29D.xml",
+                            "name": "89"
+                        },
+                        {
+                            "saveName": "level42",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_30A.xml",
+                            "name": "94"
+                        },
+                        {
+                            "saveName": "level43",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_32A.xml",
+                            "name": "100"
+                        },
+                        {
+                            "saveName": "level44",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_40A.xml",
+                            "name": "134"
+                        },
+                        {
+                            "saveName": "level45",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_41C.xml",
+                            "name": "139"
+                        },
+                        {
+                            "saveName": "level46",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_47B.xml",
+                            "name": "159"
+                        }
+                    ],
+                    "addChildSequenceLocks": "completed",
+                    "type": "ChapterLevelPack",
+                    "name": "fantasy_two"
+                }
+            ],
+            "type": "GenreLevelPack",
+            "locks": [
+                {
+                    "type": "NodeStatus",
+                    "unlockStatus": "completed",
+                    "name": "intro"
+                }
+            ],
+            "name": "fantasy"
+        },
+        {
+            "children": [
+                {
+                    "children": [
+                        {
+                            "saveName": "level0",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_1A.xml",
+                            "name": "214"
+                        },
+                        {
+                            "saveName": "level1",
+                            "tags": [
+                                "mult"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_11C.xml",
+                            "name": "182"
+                        },
+                        {
+                            "saveName": "level2",
+                            "tags": [
+                                "mult"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_20C.xml",
+                            "name": "220"
+                        },
+                        {
+                            "saveName": "level3",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_15D.xml",
+                            "name": "197"
+                        },
+                        {
+                            "saveName": "level4",
+                            "tags": [
+                                "sub"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_6C.xml",
+                            "name": "337"
+                        },
+                        {
+                            "saveName": "level5",
+                            "tags": [
+                                "mult"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_25A.xml",
+                            "name": "238"
+                        },
+                        {
+                            "saveName": "level6",
+                            "tags": [
+                                "sub",
+                                "mult",
+                                "paren"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_43C.xml",
+                            "name": "310"
+                        },
+                        {
+                            "saveName": "level7",
+                            "tags": [
+                                "div"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_8C.xml",
+                            "name": "341"
+                        },
+                        {
+                            "saveName": "level8",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_17B.xml",
+                            "name": "203"
+                        },
+                        {
+                            "saveName": "level9",
+                            "tags": [
+                                "sub",
+                                "mult"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_38D.xml",
+                            "name": "291"
+                        },
+                        {
+                            "saveName": "level10",
+                            "tags": [
+                                "mult",
+                                "div"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_23C.xml",
+                            "name": "232"
+                        },
+                        {
+                            "saveName": "level11",
+                            "tags": [
+                                "mult"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_11D.xml",
+                            "name": "183"
+                        },
+                        {
+                            "saveName": "level12",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_1B.xml",
+                            "name": "215"
+                        },
+                        {
+                            "saveName": "level13",
+                            "tags": [
+                                "mult"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_31C.xml",
+                            "name": "265"
+                        },
+                        {
+                            "saveName": "level14",
+                            "tags": [
+                                "sub"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_6A.xml",
+                            "name": "336"
+                        },
+                        {
+                            "saveName": "level15",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_17A.xml",
+                            "name": "202"
+                        },
+                        {
+                            "saveName": "level16",
+                            "tags": [
+                                "div"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_8A.xml",
+                            "name": "340"
+                        },
+                        {
+                            "saveName": "level17",
+                            "tags": [
+                                "mult",
+                                "div"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_23D.xml",
+                            "name": "233"
+                        },
+                        {
+                            "saveName": "level18",
+                            "tags": [
+                                "mult"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_20A.xml",
+                            "name": "218"
+                        },
+                        {
+                            "saveName": "level19",
+                            "tags": [
+                                "sub",
+                                "mult"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_38D.xml",
+                            "name": "291"
+                        },
+                        {
+                            "saveName": "level20",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_15B.xml",
+                            "name": "195"
+                        },
+                        {
+                            "saveName": "level21",
+                            "tags": [
+                                "mult"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_25B.xml",
+                            "name": "239"
+                        },
+                        {
+                            "saveName": "level22",
+                            "tags": [
+                                "sub",
+                                "mult",
+                                "paren"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_43A.xml",
+                            "name": "308"
+                        },
+                        {
+                            "saveName": "level23",
+                            "tags": [
+                                "mult"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_31A.xml",
+                            "name": "264"
+                        }
+                    ],
+                    "addChildSequenceLocks": "completed",
+                    "type": "ChapterLevelPack",
+                    "name": "mystery_one"
+                },
+                {
+                    "children": [
+                        {
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_2B.xml",
+                            "locks": [
+                                {
+                                    "type": "NodeStatus",
+                                    "unlockStatus": "completed",
+                                    "name": "mystery_one"
+                                }
+                            ],
+                            "name": "257"
+                        },
+                        {
+                            "saveName": "level24",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_34C.xml",
+                            "name": "274"
+                        },
+                        {
+                            "saveName": "level25",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_14B.xml",
+                            "name": "191"
+                        },
+                        {
+                            "saveName": "level26",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_45D.xml",
+                            "name": "319"
+                        },
+                        {
+                            "saveName": "level27",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_16D.xml",
+                            "name": "201"
+                        },
+                        {
+                            "saveName": "level28",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_33C.xml",
+                            "name": "270"
+                        },
+                        {
+                            "saveName": "level29",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_35D.xml",
+                            "name": "279"
+                        },
+                        {
+                            "saveName": "level30",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_24C.xml",
+                            "name": "236"
+                        },
+                        {
+                            "saveName": "level31",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_9C.xml",
+                            "name": "343"
+                        },
+                        {
+                            "saveName": "level32",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_37B.xml",
+                            "name": "285"
+                        },
+                        {
+                            "saveName": "level33",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_39D.xml",
+                            "name": "295"
+                        },
+                        {
+                            "saveName": "level34",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_42A.xml",
+                            "name": "306"
+                        },
+                        {
+                            "saveName": "level35",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_13A.xml",
+                            "name": "186"
+                        },
+                        {
+                            "saveName": "level36",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_44C.xml",
+                            "name": "314"
+                        },
+                        {
+                            "saveName": "level37",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_27B.xml",
+                            "name": "246"
+                        },
+                        {
+                            "saveName": "level38",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_36A.xml",
+                            "name": "280"
+                        },
+                        {
+                            "saveName": "level39",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_28C.xml",
+                            "name": "250"
+                        },
+                        {
+                            "saveName": "level40",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_46A.xml",
+                            "name": "320"
+                        },
+                        {
+                            "saveName": "level41",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_29D.xml",
+                            "name": "255"
+                        },
+                        {
+                            "saveName": "level42",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_30A.xml",
+                            "name": "260"
+                        },
+                        {
+                            "saveName": "level43",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_32A.xml",
+                            "name": "266"
+                        },
+                        {
+                            "saveName": "level44",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_40A.xml",
+                            "name": "300"
+                        },
+                        {
+                            "saveName": "level45",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_41C.xml",
+                            "name": "305"
+                        },
+                        {
+                            "saveName": "level46",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_47B.xml",
+                            "name": "325"
+                        }
+                    ],
+                    "addChildSequenceLocks": "completed",
+                    "type": "ChapterLevelPack",
+                    "name": "mystery_two"
+                }
+            ],
+            "type": "GenreLevelPack",
+            "locks": [
+                {
+                    "type": "NodeStatus",
+                    "unlockStatus": "completed",
+                    "name": "intro"
+                }
+            ],
+            "name": "mystery"
+        },
+        {
+            "children": [
+                {
+                    "children": [
+                        {
+                            "saveName": "level0",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_1A.xml",
+                            "name": "380"
+                        },
+                        {
+                            "saveName": "level1",
+                            "tags": [
+                                "mult"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_11C.xml",
+                            "name": "348"
+                        },
+                        {
+                            "saveName": "level2",
+                            "tags": [
+                                "mult"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_20C.xml",
+                            "name": "386"
+                        },
+                        {
+                            "saveName": "level3",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_15D.xml",
+                            "name": "363"
+                        },
+                        {
+                            "saveName": "level4",
+                            "tags": [
+                                "sub"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_6C.xml",
+                            "name": "503"
+                        },
+                        {
+                            "saveName": "level5",
+                            "tags": [
+                                "mult"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_25A.xml",
+                            "name": "404"
+                        },
+                        {
+                            "saveName": "level6",
+                            "tags": [
+                                "sub",
+                                "mult",
+                                "paren"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_43C.xml",
+                            "name": "476"
+                        },
+                        {
+                            "saveName": "level7",
+                            "tags": [
+                                "div"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_8C.xml",
+                            "name": "507"
+                        },
+                        {
+                            "saveName": "level8",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_17B.xml",
+                            "name": "369"
+                        },
+                        {
+                            "saveName": "level9",
+                            "tags": [
+                                "sub",
+                                "mult"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_38D.xml",
+                            "name": "457"
+                        },
+                        {
+                            "saveName": "level10",
+                            "tags": [
+                                "mult",
+                                "div"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_23C.xml",
+                            "name": "398"
+                        },
+                        {
+                            "saveName": "level11",
+                            "tags": [
+                                "mult"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_11D.xml",
+                            "name": "349"
+                        },
+                        {
+                            "saveName": "level12",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_1B.xml",
+                            "name": "381"
+                        },
+                        {
+                            "saveName": "level13",
+                            "tags": [
+                                "mult"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_31C.xml",
+                            "name": "431"
+                        },
+                        {
+                            "saveName": "level14",
+                            "tags": [
+                                "sub"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_6A.xml",
+                            "name": "502"
+                        },
+                        {
+                            "saveName": "level15",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_17A.xml",
+                            "name": "368"
+                        },
+                        {
+                            "saveName": "level16",
+                            "tags": [
+                                "div"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_8A.xml",
+                            "name": "506"
+                        },
+                        {
+                            "saveName": "level17",
+                            "tags": [
+                                "mult",
+                                "div"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_23D.xml",
+                            "name": "399"
+                        },
+                        {
+                            "saveName": "level18",
+                            "tags": [
+                                "mult"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_20A.xml",
+                            "name": "384"
+                        },
+                        {
+                            "saveName": "level19",
+                            "tags": [
+                                "sub",
+                                "mult"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_38D.xml",
+                            "name": "457"
+                        },
+                        {
+                            "saveName": "level20",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_15B.xml",
+                            "name": "361"
+                        },
+                        {
+                            "saveName": "level21",
+                            "tags": [
+                                "mult"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_25B.xml",
+                            "name": "405"
+                        },
+                        {
+                            "saveName": "level22",
+                            "tags": [
+                                "sub",
+                                "mult",
+                                "paren"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_43A.xml",
+                            "name": "474"
+                        },
+                        {
+                            "saveName": "level23",
+                            "tags": [
+                                "mult"
+                            ],
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_31A.xml",
+                            "name": "430"
+                        }
+                    ],
+                    "addChildSequenceLocks": "completed",
+                    "type": "ChapterLevelPack",
+                    "name": "scifi_one"
+                },
+                {
+                    "children": [
+                        {
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_2B.xml",
+                            "locks": [
+                                {
+                                    "type": "NodeStatus",
+                                    "unlockStatus": "completed",
+                                    "name": "scifi_one"
+                                }
+                            ],
+                            "name": "423"
+                        },
+                        {
+                            "saveName": "level24",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_34C.xml",
+                            "name": "440"
+                        },
+                        {
+                            "saveName": "level25",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_14B.xml",
+                            "name": "357"
+                        },
+                        {
+                            "saveName": "level26",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_45D.xml",
+                            "name": "485"
+                        },
+                        {
+                            "saveName": "level27",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_16D.xml",
+                            "name": "367"
+                        },
+                        {
+                            "saveName": "level28",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_33C.xml",
+                            "name": "436"
+                        },
+                        {
+                            "saveName": "level29",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_35D.xml",
+                            "name": "445"
+                        },
+                        {
+                            "saveName": "level30",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_24C.xml",
+                            "name": "402"
+                        },
+                        {
+                            "saveName": "level31",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_9C.xml",
+                            "name": "509"
+                        },
+                        {
+                            "saveName": "level32",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_37B.xml",
+                            "name": "451"
+                        },
+                        {
+                            "saveName": "level33",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_39D.xml",
+                            "name": "461"
+                        },
+                        {
+                            "saveName": "level34",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_42A.xml",
+                            "name": "472"
+                        },
+                        {
+                            "saveName": "level35",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_13A.xml",
+                            "name": "352"
+                        },
+                        {
+                            "saveName": "level36",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_44C.xml",
+                            "name": "480"
+                        },
+                        {
+                            "saveName": "level37",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_27B.xml",
+                            "name": "412"
+                        },
+                        {
+                            "saveName": "level38",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_36A.xml",
+                            "name": "446"
+                        },
+                        {
+                            "saveName": "level39",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_28C.xml",
+                            "name": "416"
+                        },
+                        {
+                            "saveName": "level40",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_46A.xml",
+                            "name": "486"
+                        },
+                        {
+                            "saveName": "level41",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_29D.xml",
+                            "name": "421"
+                        },
+                        {
+                            "saveName": "level42",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_30A.xml",
+                            "name": "426"
+                        },
+                        {
+                            "saveName": "level43",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_32A.xml",
+                            "name": "432"
+                        },
+                        {
+                            "saveName": "level44",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_40A.xml",
+                            "name": "466"
+                        },
+                        {
+                            "saveName": "level45",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_41C.xml",
+                            "name": "471"
+                        },
+                        {
+                            "saveName": "level46",
+                            "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_47B.xml",
+                            "name": "491"
+                        }
+                    ],
+                    "addChildSequenceLocks": "completed",
+                    "type": "ChapterLevelPack",
+                    "name": "scifi_two"
+                }
+            ],
+            "type": "GenreLevelPack",
+            "locks": [
+                {
+                    "type": "NodeStatus",
+                    "unlockStatus": "completed",
+                    "name": "intro"
+                }
+            ],
+            "name": "scifi"
+        },
+        {
+            "children": [
+                {
+                    "children": [
+                        {
+                            "fileName": "../assets/levels/bar_model/tutorials/fraction_enter_card_A.xml",
+                            "name": "7",
+                            "skippable": "false"
+                        },
+                        {
+                            "children": [
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.26/problem_SM.26_1.xml",
+                                    "name": "754"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.26/problem_SM.26_10.xml",
+                                    "name": "755"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.26/problem_SM.26_11.xml",
+                                    "name": "756"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.26/problem_SM.26_12.xml",
+                                    "name": "757"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.26/problem_SM.26_13.xml",
+                                    "name": "758"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.26/problem_SM.26_14.xml",
+                                    "name": "759"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.26/problem_SM.26_15.xml",
+                                    "name": "760"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.26/problem_SM.26_16.xml",
+                                    "name": "761"
+                                }
+                            ],
+                            "name": "fraction_bar_model"
+                        }
+                    ],
+                    "type": "ChapterLevelPack",
+                    "name": "bonus_one"
+                },
+                {
+                    "children": [
+                        {
+                            "fileName": "../assets/levels/bar_model/tutorials/two_step_A.xml",
+                            "name": "11",
+                            "skippable": "false"
+                        },
+                        {
+                            "children": [
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.16/problem_SM.16_1.xml",
+                                    "name": "667"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.16/problem_SM.16_2.xml",
+                                    "name": "668"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.16/problem_SM.16_3.xml",
+                                    "name": "669"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.16/problem_SM.16_4.xml",
+                                    "name": "670"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.16/problem_SM.16_5.xml",
+                                    "name": "671"
+                                },
+                                {
+                                    "fileName": "../assets/levels/generatedFreeSM/SM.16/problem_SM.16_6.xml",
+                                    "name": "672"
+                                }
+                            ],
+                            "name": "two_step_bar_model"
+                        }
+                    ],
+                    "type": "ChapterLevelPack",
+                    "name": "bonus_two"
+                }
+            ],
+            "type": "GenreLevelPack",
+            "locks": [
+                {
+                    "type": "NodeStatus",
+                    "unlockStatus": "unlocked",
+                    "name": "bonus"
+                }
+            ],
+            "name": "bonus"
+        },
+        {
+            "children": [
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_10.xml",
+                    "name": "511"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_1.xml",
+                    "name": "510"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_11.xml",
+                    "name": "512"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_12.xml",
+                    "name": "513"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_13.xml",
+                    "name": "514"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_14.xml",
+                    "name": "515"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_15.xml",
+                    "name": "516"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_16.xml",
+                    "name": "517"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_17.xml",
+                    "name": "518"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_18.xml",
+                    "name": "519"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_19.xml",
+                    "name": "520"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_2.xml",
+                    "name": "521"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_20.xml",
+                    "name": "522"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_21.xml",
+                    "name": "523"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_22.xml",
+                    "name": "524"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_23.xml",
+                    "name": "525"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_24.xml",
+                    "name": "526"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_25.xml",
+                    "name": "527"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_26.xml",
+                    "name": "528"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_27.xml",
+                    "name": "529"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_28.xml",
+                    "name": "530"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_29.xml",
+                    "name": "531"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_3.xml",
+                    "name": "532"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_30.xml",
+                    "name": "533"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_31.xml",
+                    "name": "534"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_32.xml",
+                    "name": "535"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_33.xml",
+                    "name": "536"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_34.xml",
+                    "name": "537"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_35.xml",
+                    "name": "538"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_36.xml",
+                    "name": "539"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_37.xml",
+                    "name": "540"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_38.xml",
+                    "name": "541"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_39.xml",
+                    "name": "542"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_4.xml",
+                    "name": "543"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_5.xml",
+                    "name": "544"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_6.xml",
+                    "name": "545"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_7.xml",
+                    "name": "546"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.1/problem_SM.1_8.xml",
+                    "name": "547"
+                }
+            ],
+            "tags": [
+                "practice"
+            ],
+            "locks": [
+                {
+                    "type": "NodeStatus",
+                    "unlockStatus": "completed",
+                    "name": "intro_tutorials"
+                }
+            ],
+            "policy": "PickRandomUncompletedLevel",
+            "name": "addition_bar_model"
+        },
+        {
+            "children": [
+                {
+                    "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_4D.xml",
+                    "name": "165",
+                    "skippable": "false"
+                },
+                {
+                    "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_4D.xml",
+                    "name": "497",
+                    "skippable": "false"
+                },
+                {
+                    "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_4D.xml",
+                    "name": "331",
+                    "skippable": "false"
+                }
+            ],
+            "policy": "PickRandomUncompletedLevel",
+            "name": "addition_a"
+        },
+        {
+            "children": [
+                {
+                    "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_18B.xml",
+                    "name": "41",
+                    "skippable": "false"
+                },
+                {
+                    "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_18B.xml",
+                    "name": "373",
+                    "skippable": "false"
+                },
+                {
+                    "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_18B.xml",
+                    "name": "207",
+                    "skippable": "false"
+                }
+            ],
+            "policy": "PickRandomUncompletedLevel",
+            "name": "addition_b"
+        },
+        {
+            "children": [
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_1.xml",
+                    "name": "833"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_10.xml",
+                    "name": "834"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_11.xml",
+                    "name": "835"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_12.xml",
+                    "name": "836"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_13.xml",
+                    "name": "837"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_14.xml",
+                    "name": "838"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_15.xml",
+                    "name": "839"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_16.xml",
+                    "name": "840"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_17.xml",
+                    "name": "841"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_18.xml",
+                    "name": "842"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_19.xml",
+                    "name": "843"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_2.xml",
+                    "name": "844"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_20.xml",
+                    "name": "845"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_21.xml",
+                    "name": "846"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_22.xml",
+                    "name": "847"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_23.xml",
+                    "name": "848"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_24.xml",
+                    "name": "1230"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_3.xml",
+                    "name": "849"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_4.xml",
+                    "name": "850"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_5.xml",
+                    "name": "851"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_6.xml",
+                    "name": "852"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_7.xml",
+                    "name": "853"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_8.xml",
+                    "name": "854"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.3/problem_SM.3_9.xml",
+                    "name": "855"
+                }
+            ],
+            "tags": [
+                "practice"
+            ],
+            "policy": "PickRandomUncompletedLevel",
+            "name": "subtraction_bar_model"
+        },
+        {
+            "children": [
+                {
+                    "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_5A.xml",
+                    "name": "166",
+                    "skippable": "false"
+                },
+                {
+                    "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_5A.xml",
+                    "name": "498",
+                    "skippable": "false"
+                },
+                {
+                    "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_5A.xml",
+                    "name": "332",
+                    "skippable": "false"
+                }
+            ],
+            "policy": "PickRandomUncompletedLevel",
+            "name": "subtraction_a"
+        },
+        {
+            "children": [
+                {
+                    "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_7C.xml",
+                    "name": "173",
+                    "skippable": "false"
+                },
+                {
+                    "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_7C.xml",
+                    "name": "505",
+                    "skippable": "false"
+                },
+                {
+                    "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_7C.xml",
+                    "name": "339",
+                    "skippable": "false"
+                }
+            ],
+            "policy": "PickRandomUncompletedLevel",
+            "name": "subtraction_b"
+        },
+        {
+            "children": [
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.8/problem_SM.8_22.xml",
+                    "name": "1072"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.8/problem_SM.8_23.xml",
+                    "name": "1073"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.8/problem_SM.8_24.xml",
+                    "name": "1074"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.8/problem_SM.8_25.xml",
+                    "name": "1075"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.8/problem_SM.8_26.xml",
+                    "name": "1076"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.8/problem_SM.8_27.xml",
+                    "name": "1077"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.8/problem_SM.8_28.xml",
+                    "name": "1078"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.8/problem_SM.8_29.xml",
+                    "name": "1079"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.8/problem_SM.8_3.xml",
+                    "name": "1080"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.8/problem_SM.8_30.xml",
+                    "name": "1081"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.8/problem_SM.8_31.xml",
+                    "name": "1082"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.8/problem_SM.8_32.xml",
+                    "name": "1083"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.8/problem_SM.8_33.xml",
+                    "name": "1084"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.8/problem_SM.8_4.xml",
+                    "name": "1085"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.8/problem_SM.8_5.xml",
+                    "name": "1086"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.8/problem_SM.8_8.xml",
+                    "name": "1089"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.8/problem_SM.8_9.xml",
+                    "name": "1090"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.9/problem_SM.9_1.xml",
+                    "name": "1091"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.9/problem_SM.9_10.xml",
+                    "name": "1092"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.9/problem_SM.9_11.xml",
+                    "name": "1093"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.9/problem_SM.9_12.xml",
+                    "name": "1094"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.9/problem_SM.9_13.xml",
+                    "name": "1095"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.9/problem_SM.9_14.xml",
+                    "name": "1096"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.9/problem_SM.9_15.xml",
+                    "name": "1097"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.9/problem_SM.9_16.xml",
+                    "name": "1098"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.9/problem_SM.9_17.xml",
+                    "name": "1099"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.9/problem_SM.9_18.xml",
+                    "name": "1100"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.9/problem_SM.9_19.xml",
+                    "name": "1101"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.9/problem_SM.9_2.xml",
+                    "name": "1102"
+                }
+            ],
+            "tags": [
+                "practice"
+            ],
+            "policy": "PickRandomUncompletedLevel",
+            "name": "multiplication_bar_model"
+        },
+        {
+            "children": [
+                {
+                    "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_22B.xml",
+                    "name": "61",
+                    "skippable": "false"
+                },
+                {
+                    "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_22B.xml",
+                    "name": "393",
+                    "skippable": "false"
+                },
+                {
+                    "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_22B.xml",
+                    "name": "227",
+                    "skippable": "false"
+                }
+            ],
+            "policy": "PickRandomUncompletedLevel",
+            "name": "multiplication_a"
+        },
+        {
+            "children": [
+                {
+                    "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_26B.xml",
+                    "name": "77",
+                    "skippable": "false"
+                },
+                {
+                    "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_26B.xml",
+                    "name": "409",
+                    "skippable": "false"
+                },
+                {
+                    "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_26B.xml",
+                    "name": "243",
+                    "skippable": "false"
+                }
+            ],
+            "policy": "PickRandomUncompletedLevel",
+            "name": "multiplication_b"
+        },
+        {
+            "children": [
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_19.xml",
+                    "name": "559"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_2.xml",
+                    "name": "560"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_20.xml",
+                    "name": "561"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_21.xml",
+                    "name": "562"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_22.xml",
+                    "name": "563"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_23.xml",
+                    "name": "564"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_24.xml",
+                    "name": "565"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_25.xml",
+                    "name": "566"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_26.xml",
+                    "name": "567"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_27.xml",
+                    "name": "568"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_28.xml",
+                    "name": "569"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_29.xml",
+                    "name": "570"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_3.xml",
+                    "name": "571"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_4.xml",
+                    "name": "572"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_5.xml",
+                    "name": "573"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_6.xml",
+                    "name": "574"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_7.xml",
+                    "name": "575"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_8.xml",
+                    "name": "576"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.10/problem_SM.10_9.xml",
+                    "name": "577"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.11/problem_SM.11_1.xml",
+                    "name": "578"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.11/problem_SM.11_10.xml",
+                    "name": "579"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.11/problem_SM.11_11.xml",
+                    "name": "580"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.11/problem_SM.11_12.xml",
+                    "name": "581"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.11/problem_SM.11_13.xml",
+                    "name": "582"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.11/problem_SM.11_14.xml",
+                    "name": "583"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.11/problem_SM.11_15.xml",
+                    "name": "584"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.11/problem_SM.11_16.xml",
+                    "name": "585"
+                }
+            ],
+            "tags": [
+                "practice"
+            ],
+            "policy": "PickRandomUncompletedLevel",
+            "name": "division_bar_model"
+        },
+        {
+            "children": [
+                {
+                    "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_21A.xml",
+                    "name": "56",
+                    "skippable": "false"
+                },
+                {
+                    "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_21A.xml",
+                    "name": "388",
+                    "skippable": "false"
+                },
+                {
+                    "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_21A.xml",
+                    "name": "222",
+                    "skippable": "false"
+                }
+            ],
+            "policy": "PickRandomUncompletedLevel",
+            "name": "division_a"
+        },
+        {
+            "children": [
+                {
+                    "fileName": "../assets/levels/concept_explicitness_experiment/fantasy/fantasy_12A.xml",
+                    "name": "18",
+                    "skippable": "false"
+                },
+                {
+                    "fileName": "../assets/levels/concept_explicitness_experiment/scifi/scifi_12A.xml",
+                    "name": "350",
+                    "skippable": "false"
+                },
+                {
+                    "fileName": "../assets/levels/concept_explicitness_experiment/mystery/mystery_12A.xml",
+                    "name": "184",
+                    "skippable": "false"
+                }
+            ],
+            "policy": "PickRandomUncompletedLevel",
+            "name": "division_b"
+        },
+        {
+            "children": [
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.26/problem_SM.26_1.xml",
+                    "name": "754"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.26/problem_SM.26_10.xml",
+                    "name": "755"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.26/problem_SM.26_11.xml",
+                    "name": "756"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.26/problem_SM.26_12.xml",
+                    "name": "757"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.26/problem_SM.26_13.xml",
+                    "name": "758"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.26/problem_SM.26_14.xml",
+                    "name": "759"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.26/problem_SM.26_15.xml",
+                    "name": "760"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.26/problem_SM.26_16.xml",
+                    "name": "761"
+                }
+            ],
+            "name": "fraction_bar_model"
+        },
+        {
+            "children": [
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.16/problem_SM.16_1.xml",
+                    "name": "667"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.16/problem_SM.16_2.xml",
+                    "name": "668"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.16/problem_SM.16_3.xml",
+                    "name": "669"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.16/problem_SM.16_4.xml",
+                    "name": "670"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.16/problem_SM.16_5.xml",
+                    "name": "671"
+                },
+                {
+                    "fileName": "../assets/levels/generatedFreeSM/SM.16/problem_SM.16_6.xml",
+                    "name": "672"
+                }
+            ],
+            "name": "two_step_bar_model"
+        },
+        {
+            "children": [
+                {
+                    "tags": [
+                        "sub"
+                    ],
+                    "fileName": "../assets/levels/tutorials/subtract_fantasy.xml",
+                    "name": "1234",
+                    "skippable": "false"
+                },
+                {
+                    "tags": [
+                        "mult"
+                    ],
+                    "fileName": "../assets/levels/tutorials/multiply_fantasy.xml",
+                    "name": "1237",
+                    "skippable": "false"
+                },
+                {
+                    "tags": [
+                        "div"
+                    ],
+                    "fileName": "../assets/levels/tutorials/divide_fantasy.xml",
+                    "name": "1240",
+                    "skippable": "false"
+                },
+                {
+                    "tags": [
+                        "paren"
+                    ],
+                    "fileName": "../assets/levels/tutorials/parenthesis_fantasy.xml",
+                    "name": "1243",
+                    "skippable": "false"
+                }
+            ],
+            "name": "fantasy_tutorials"
+        },
+        {
+            "children": [
+                {
+                    "tags": [
+                        "sub"
+                    ],
+                    "fileName": "../assets/levels/tutorials/subtract_mystery.xml",
+                    "name": "1235",
+                    "skippable": "false"
+                },
+                {
+                    "tags": [
+                        "mult"
+                    ],
+                    "fileName": "../assets/levels/tutorials/multiply_mystery.xml",
+                    "name": "1238",
+                    "skippable": "false"
+                },
+                {
+                    "tags": [
+                        "div"
+                    ],
+                    "fileName": "../assets/levels/tutorials/divide_mystery.xml",
+                    "name": "1241",
+                    "skippable": "false"
+                },
+                {
+                    "tags": [
+                        "paren"
+                    ],
+                    "fileName": "../assets/levels/tutorials/parenthesis_mystery.xml",
+                    "name": "1244",
+                    "skippable": "false"
+                }
+            ],
+            "name": "mystery_tutorials"
+        },
+        {
+            "children": [
+                {
+                    "tags": [
+                        "sub"
+                    ],
+                    "fileName": "../assets/levels/tutorials/subtract_scifi.xml",
+                    "name": "1236",
+                    "skippable": "false"
+                },
+                {
+                    "tags": [
+                        "mult"
+                    ],
+                    "fileName": "../assets/levels/tutorials/multiply_scifi.xml",
+                    "name": "1239",
+                    "skippable": "false"
+                },
+                {
+                    "tags": [
+                        "div"
+                    ],
+                    "fileName": "../assets/levels/tutorials/divide_scifi.xml",
+                    "name": "1242",
+                    "skippable": "false"
+                },
+                {
+                    "tags": [
+                        "paren"
+                    ],
+                    "fileName": "../assets/levels/tutorials/parenthesis_scifi.xml",
+                    "name": "1245",
+                    "skippable": "false"
+                }
+            ],
+            "name": "scifi_tutorials"
+        }
+    ],
+    "name": "Root",
+    "locks": [],
+    "nodeType": "LevelPack",
+    "objectiveClasses": [
+        {
+            "objectives": [
+                {
+                    "value": "60",
+                    "type": "MaxTime"
+                },
+                {
+                    "value": "2",
+                    "type": "MaxMistakes"
+                }
+            ],
+            "id": "addition_objective"
+        },
+        {
+            "objectives": [
+                {
+                    "value": "60",
+                    "type": "MaxTime"
+                },
+                {
+                    "value": "3",
+                    "type": "MaxMistakes"
+                }
+            ],
+            "id": "subtraction_objective"
+        },
+        {
+            "objectives": [
+                {
+                    "value": "120",
+                    "type": "MaxTime"
+                },
+                {
+                    "value": "5",
+                    "type": "MaxMistakes"
+                }
+            ],
+            "id": "multiplication_objective"
+        },
+        {
+            "objectives": [
+                {
+                    "value": "120",
+                    "type": "MaxTime"
+                },
+                {
+                    "value": "5",
+                    "type": "MaxMistakes"
+                }
+            ],
+            "id": "division_objective"
+        }
+    ],
+    "edges": [
+        {
+            "endId": "addition_bar_model",
+            "id": 1,
+            "startId": "10",
+            "actions": [
+                {
+                    "type": "PickFirstLevel"
+                }
+            ]
+        },
+        {
+            "endId": "addition_a",
+            "conditions": [
+                {
+                    "objectiveClass": "addition_objective",
+                    "k": "2",
+                    "type": "KOutOfNProficient",
+                    "n": "3"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "addition_bar_model",
+                    "status": "uncompleted"
+                }
+            ],
+            "id": 2,
+            "startId": "addition_bar_model",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "addition_bar_model"
+                }
+            ]
+        },
+        {
+            "endId": "subtraction_a",
+            "conditions": [
+                {
+                    "objectiveClass": "subtraction_objective",
+                    "k": "2",
+                    "type": "KOutOfNProficient",
+                    "n": "3"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "addition_bar_model",
+                    "status": "uncompleted"
+                }
+            ],
+            "id": 3,
+            "startId": "subtraction_bar_model",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "subtraction_bar_model"
+                }
+            ]
+        },
+        {
+            "endId": "multiplication_a",
+            "conditions": [
+                {
+                    "objectiveClass": "multiplication_objective",
+                    "k": "2",
+                    "type": "KOutOfNProficient",
+                    "n": "3"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "multiplication_bar_model",
+                    "status": "uncompleted"
+                }
+            ],
+            "id": 4,
+            "startId": "multiplication_bar_model",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "multiplication_bar_model"
+                }
+            ]
+        },
+        {
+            "endId": "division_a",
+            "conditions": [
+                {
+                    "objectiveClass": "division_objective",
+                    "k": "2",
+                    "type": "KOutOfNProficient",
+                    "n": "3"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "division_bar_model",
+                    "status": "uncompleted"
+                }
+            ],
+            "id": 5,
+            "startId": "division_bar_model",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "division_bar_model"
+                }
+            ]
+        },
+        {
+            "endId": "addition_bar_model",
+            "conditions": [
+                {
+                    "type": "NodeStatus",
+                    "name": "addition_bar_model",
+                    "status": "completed"
+                }
+            ],
+            "id": 6,
+            "startId": "addition_bar_model"
+        },
+        {
+            "endId": "subtraction_bar_model",
+            "conditions": [
+                {
+                    "type": "NodeStatus",
+                    "name": "subtraction_bar_model",
+                    "status": "completed"
+                }
+            ],
+            "id": 7,
+            "startId": "subtraction_bar_model"
+        },
+        {
+            "endId": "multiplication_bar_model",
+            "conditions": [
+                {
+                    "type": "NodeStatus",
+                    "name": "multiplication_bar_model",
+                    "status": "completed"
+                }
+            ],
+            "id": 8,
+            "startId": "multiplication_bar_model"
+        },
+        {
+            "endId": "division_bar_model",
+            "conditions": [
+                {
+                    "type": "NodeStatus",
+                    "name": "division_bar_model",
+                    "status": "completed"
+                }
+            ],
+            "id": 9,
+            "startId": "division_bar_model"
+        },
+        {
+            "endId": "addition_b",
+            "id": 10,
+            "startId": "addition_a"
+        },
+        {
+            "endId": "subtraction_b",
+            "id": 11,
+            "startId": "subtraction_a"
+        },
+        {
+            "endId": "multiplication_b",
+            "id": 12,
+            "startId": "multiplication_a"
+        },
+        {
+            "endId": "division_b",
+            "id": 13,
+            "startId": "division_a"
+        },
+        {
+            "endId": "intro_subtraction",
+            "conditions": [
+                {
+                    "type": "NodeStatus",
+                    "name": "division_bar_model",
+                    "status": "uncompleted"
+                }
+            ],
+            "id": 14,
+            "startId": "addition_b"
+        },
+        {
+            "endId": "intro_multiplication",
+            "conditions": [
+                {
+                    "type": "NodeStatus",
+                    "name": "division_bar_model",
+                    "status": "uncompleted"
+                }
+            ],
+            "id": 15,
+            "startId": "subtraction_b"
+        },
+        {
+            "endId": "intro_division",
+            "conditions": [
+                {
+                    "type": "NodeStatus",
+                    "name": "division_bar_model",
+                    "status": "uncompleted"
+                }
+            ],
+            "id": 16,
+            "startId": "multiplication_b"
+        },
+        {
+            "endId": "",
+            "conditions": [
+                {
+                    "type": "NodeStatus",
+                    "name": "division_b",
+                    "status": "uncompleted"
+                }
+            ],
+            "id": 17,
+            "startId": "division_b",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "division_bar_model"
+                }
+            ]
+        }
+    ],
+    "startNodeName": "1231"
+}

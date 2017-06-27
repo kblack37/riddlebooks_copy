@@ -1,0 +1,79 @@
+<!--
+Config provides bootstrap like data to properly start up the game
+includes:
+Logging information
+Level sequence information
+-->
+<config>
+    <logging>
+        <deployment value="development"/>
+        <versionId value="1"/>
+        <categoryId value="21"/>
+        <challengeId value="-1"/>
+        <experimentId value="-1"/>
+        <doLogQuests value="false"/>
+        <useHttps value="false"/>
+        <enableABTesting value="true"/>
+    </logging>
+    
+    <!-- Default text styling information -->
+    <style>
+	{
+	    "p":{
+	        "fontName":"Times New Roman",
+	        "color":"0",
+	        "fontSize":24
+	    },
+	    "#segment":{
+	        "color":"0x000000"
+	    }
+	}
+	</style>
+    
+    <!-- 
+    Settings for the game, includes debugging options
+     -->
+     <settings>
+        <width value="800"/>
+        <height value="600"/>
+        <fps value="30"/>
+        
+        <!-- THIS MUST BE SET TO FALSE IF USING TEACHER CODE, otherwise authentication always returns signup locked -->
+        <usernameAsPassword value="false"/>
+        <enableConsole value="true"/>
+        <enableUnlockLevelsShortcut value="false"/>
+        <lockAnonymousThreshold value="-1"/>
+        <!--
+        Uncomment if we want to use a teacher code or bind players to a fake teacher
+        dev: fddbf07c-4fb1-11e3-a069-22000af865a6
+        prd: 5d1d59ec-1b0d-11e3-b40f-22000aeb07ab
+        -->
+        <!-- <fakeTeacherUid value="fddbf07c-4fb1-11e3-a069-22000af865a6"/> -->
+        <!-- Dev teacher code to test<teacherCode value="fWV"/>-->
+        <!-- Prd teacher code to test<teacherCode value="ffA"/>-->
+        <teacherCode value="fWV"/>
+        <debugNoServerLogin value="true"/>
+        <debugUnlockAllLevels value="true"/>
+        <allowLevelSelect value="true"/>
+        <overrideLevelSkippable value="true"/>
+        <overrideLevelSkippableValue value="true"/>
+        <defaultFontFamily value="Bookworm"/>
+        <saveDataToServer value="true"/>
+        <saveDataKey value="rb-21-test"/>
+        <allowResetData value="false"/>
+     </settings>
+    
+    <!--
+    For documentation purposes every single rule must be specified
+    in this file. 
+     -->
+    <defaultRules>
+        <allowSubtract value="true"/>
+        <allowMultiply value="true"/>
+        <allowDivide value="true"/>
+        <allowCardFlip value="false"/>
+        <autoSimplifyNumbers value="false"/>
+        <allowImbalance value="true"/>
+        <allowParenthesis value="false"/>
+    </defaultRules>
+</config>

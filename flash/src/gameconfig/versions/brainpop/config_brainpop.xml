@@ -1,0 +1,79 @@
+<!--
+Config provides bootstrap like data to properly start up the game
+includes:
+Logging information
+ResourceBundle class names
+Level sequence information
+-->
+<config>
+    <logging>
+        <deployment value="dev"/>
+        <versionId value="1"/>
+        <categoryId value="12"/>
+        <challengeId value="-1"/>
+        <experimentId value="12"/>
+        <doLogQuests value="true"/>
+        <useHttps value="false"/>
+        <enableABTesting value="false"/>
+    </logging>
+    
+    <!-- Default text styling information -->
+    <style>
+	{
+	    "p":{
+	        "fontName":"Times New Roman",
+	        "color":"0",
+	        "fontSize":24
+	    },
+	    "#segment":{
+	        "color":"0x000000"
+	    }
+	}
+	</style>
+    
+    <!-- 
+    Settings for the game, includes debugging options
+     -->
+     <settings>
+        <width value="800"/>
+        <height value="600"/>
+        <fps value="30"/>
+        <usernameAsPassword value="false"/>
+        <enableConsole value="true"/>
+        <lockAnonymousThreshold value="-1"/>
+        <!--
+        Uncomment if we want to use a bind players to a fake teacher after the fact (this was a hack
+        to record grade and gender with a non student account
+        dev: fddbf07c-4fb1-11e3-a069-22000af865a6
+        prd: 5d1d59ec-1b0d-11e3-b40f-22000aeb07ab
+        -->
+        <!-- <fakeTeacherUid value="fddbf07c-4fb1-11e3-a069-22000af865a6"/> -->
+        
+        <!-- 
+        Uncomment if we want to use a teacher code (use this to treat all player's as a student)
+        local:fMq
+        dev:fWV
+        prd:fUu
+         -->
+        <teacherCode value="fMq"/>
+        
+        <!-- For debug purposes, can just automatically set the values in the config actionscript class -->
+        <debugNoServerLogin value="true"/>
+        <debugUnlockAllLevels value="true"/>
+        <resourcePathBase value=""/>
+     </settings>
+    
+    <!--
+    For documentation purposes every single rule must be specified
+    in this file. 
+     -->
+    <defaultRules>
+        <allowSubtract value="true"/>
+        <allowMultiply value="true"/>
+        <allowDivide value="true"/>
+        <allowCardFlip value="false"/>
+        <autoSimplifyNumbers value="false"/>
+        <allowImbalance value="true"/>
+        <allowModifyParenthesis value="true"/>
+    </defaultRules>
+</config>

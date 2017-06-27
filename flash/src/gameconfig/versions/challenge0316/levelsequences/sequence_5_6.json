@@ -1,0 +1,2859 @@
+{
+    "nodeType": "LevelPack",
+    "locks": [],
+    "startNodeName": "1",
+    "name": "Root",
+    "objectiveClasses": [
+        {
+            "id": "add_objective",
+            "objectives": [
+                {
+                    "type": "MaxTime",
+                    "value": "60"
+                },
+                {
+                    "type": "MaxMistakes",
+                    "value": "2"
+                }
+            ]
+        },
+        {
+            "id": "multiply_objective",
+            "objectives": [
+                {
+                    "type": "MaxTime",
+                    "value": "120"
+                },
+                {
+                    "type": "MaxMistakes",
+                    "value": "5"
+                }
+            ]
+        },
+        {
+            "id": "two_step_objective",
+            "objectives": [
+                {
+                    "type": "MaxTime",
+                    "value": "180"
+                },
+                {
+                    "type": "MaxMistakes",
+                    "value": "8"
+                }
+            ]
+        },
+        {
+            "id": "fraction_of_whole_objective",
+            "objectives": [
+                {
+                    "type": "MaxTime",
+                    "value": "200"
+                },
+                {
+                    "type": "MaxMistakes",
+                    "value": "8"
+                }
+            ]
+        },
+        {
+            "id": "fraction_of_larger_objective",
+            "objectives": [
+                {
+                    "type": "MaxTime",
+                    "value": "200"
+                },
+                {
+                    "type": "MaxMistakes",
+                    "value": "8"
+                }
+            ]
+        }
+    ],
+    "children": [
+        {
+            "type": "GenreLevelPack",
+            "name": "intro",
+            "children": [
+                {
+                    "type": "ChapterLevelPack",
+                    "name": "intro_ch1",
+                    "addChildSequenceLocks": "completed",
+                    "children": [
+                        {
+                            "name": "1",
+                            "skippable": "false",
+                            "tags": [
+                                "tutorial"
+                            ],
+                            "fileName": "../assets/levels/bar_model/tutorials/add_bar_A.xml"
+                        },
+                        {
+                            "name": "3",
+                            "skippable": "false",
+                            "tags": [
+                                "tutorial"
+                            ],
+                            "fileName": "../assets/levels/bar_model/tutorials/add_label_A.xml"
+                        },
+                        {
+                            "name": "4",
+                            "skippable": "false",
+                            "tags": [
+                                "tutorial"
+                            ],
+                            "fileName": "../assets/levels/bar_model/tutorials/add_segments_A.xml"
+                        },
+                        {
+                            "name": "6",
+                            "skippable": "false",
+                            "tags": [
+                                "tutorial"
+                            ],
+                            "fileName": "../assets/levels/bar_model/tutorials/equation_from_bar_A.xml"
+                        },
+                        {
+                            "name": "10",
+                            "skippable": "false",
+                            "tags": [
+                                "tutorial"
+                            ],
+                            "fileName": "../assets/levels/bar_model/tutorials/text_discover_A.xml"
+                        },
+                        {
+                            "name": "addition_extra_tut",
+                            "policy": "PickRandomUncompletedLevel",
+                            "children": [
+                                {
+                                    "name": "510",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/510.xml"
+                                },
+                                {
+                                    "name": "512",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/512.xml"
+                                },
+                                {
+                                    "name": "515",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/515.xml"
+                                },
+                                {
+                                    "name": "521",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/521.xml"
+                                }
+                            ],
+                            "levelselect": true
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "GenreLevelPack",
+            "locks": [
+                {
+                    "type": "NodeStatus",
+                    "name": "addition_extra_tut",
+                    "unlockStatus": "completed"
+                }
+            ],
+            "name": "addition_subtraction",
+            "children": [
+                {
+                    "type": "ChapterLevelPack",
+                    "name": "add_subtract_ch1",
+                    "children": [
+                        {
+                            "name": "2",
+                            "skippable": "false",
+                            "tags": [
+                                "tutorial"
+                            ],
+                            "fileName": "../assets/levels/bar_model/tutorials/add_comparison_A.xml"
+                        },
+                        {
+                            "name": "subtract_mastery",
+                            "children": [
+                                {
+                                    "name": "subtract_mastery_required",
+                                    "addChildSequenceLocks": "played",
+                                    "children": [
+                                        {
+                                            "rules": {
+                                                "allowAddVerticalLabels": "false"
+                                            },
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1523.xml",
+                                            "locks": [
+                                                {
+                                                    "type": "NodeStatus",
+                                                    "name": "2",
+                                                    "unlockStatus": "completed"
+                                                }
+                                            ],
+                                            "name": "1523",
+                                            "condkey": "pol",
+                                            "condvalue": "a"
+                                        },
+                                        {
+                                            "rules": {
+                                                "allowAddVerticalLabels": "false"
+                                            },
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1524.xml",
+                                            "locks": [
+                                                {
+                                                    "type": "NodeStatus",
+                                                    "name": "2",
+                                                    "unlockStatus": "completed"
+                                                }
+                                            ],
+                                            "name": "1524",
+                                            "condkey": "pol",
+                                            "condvalue": "b"
+                                        },
+                                        {
+                                            "rules": {
+                                                "allowAddVerticalLabels": "false"
+                                            },
+                                            "name": "1552",
+                                            "condkey": "dongsheng",
+                                            "condvalue": "a",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1552.xml"
+                                        },
+                                        {
+                                            "rules": {
+                                                "allowAddVerticalLabels": "false"
+                                            },
+                                            "name": "1553",
+                                            "condkey": "dongsheng",
+                                            "condvalue": "b",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1553.xml"
+                                        },
+                                        {
+                                            "rules": {
+                                                "allowAddVerticalLabels": "false"
+                                            },
+                                            "name": "1550",
+                                            "condkey": "dongsheng",
+                                            "condvalue": "a",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1550.xml"
+                                        },
+                                        {
+                                            "rules": {
+                                                "allowAddVerticalLabels": "false"
+                                            },
+                                            "name": "1551",
+                                            "condkey": "dongsheng",
+                                            "condvalue": "b",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1551.xml"
+                                        },
+                                        {
+                                            "rules": {
+                                                "allowAddVerticalLabels": "false"
+                                            },
+                                            "name": "1521",
+                                            "condkey": "pol",
+                                            "condvalue": "a",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1521.xml"
+                                        },
+                                        {
+                                            "rules": {
+                                                "allowAddVerticalLabels": "false"
+                                            },
+                                            "name": "1522",
+                                            "condkey": "pol",
+                                            "condvalue": "b",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1522.xml"
+                                        },
+                                        {
+                                            "rules": {
+                                                "allowAddVerticalLabels": "false"
+                                            },
+                                            "name": "1545",
+                                            "condkey": "dongsheng",
+                                            "condvalue": "a",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1545.xml"
+                                        },
+                                        {
+                                            "rules": {
+                                                "allowAddVerticalLabels": "false"
+                                            },
+                                            "name": "1546",
+                                            "condkey": "dongsheng",
+                                            "condvalue": "b",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1546.xml"
+                                        },
+                                        {
+                                            "rules": {
+                                                "allowAddVerticalLabels": "false"
+                                            },
+                                            "name": "711",
+                                            "condkey": "dongsheng",
+                                            "condvalue": "a",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/711.xml"
+                                        },
+                                        {
+                                            "rules": {
+                                                "allowAddVerticalLabels": "false"
+                                            },
+                                            "name": "1549",
+                                            "condkey": "dongsheng",
+                                            "condvalue": "b",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1549.xml"
+                                        }
+                                    ],
+                                    "levelselect": false
+                                },
+                                {
+                                    "locks": [
+                                        {
+                                            "type": "NodeChildrenStatus",
+                                            "name": "subtract_mastery_required",
+                                            "unlockStatus": "played"
+                                        }
+                                    ],
+                                    "name": "subtract_mastery_extra",
+                                    "policy": "PickRandomUncompletedLevel",
+                                    "children": [
+                                        {
+                                            "name": "835",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/835.xml"
+                                        },
+                                        {
+                                            "name": "836",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/836.xml"
+                                        },
+                                        {
+                                            "name": "838",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/838.xml"
+                                        },
+                                        {
+                                            "name": "839",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/839.xml"
+                                        },
+                                        {
+                                            "name": "840",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/840.xml"
+                                        },
+                                        {
+                                            "name": "841",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/841.xml"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "levelselect": false
+                        }
+                    ]
+                },
+                {
+                    "type": "ChapterLevelPack",
+                    "name": "add_subtract_ch2",
+                    "children": [
+                        {
+                            "locks": [
+                                {
+                                    "type": "NodeStatus",
+                                    "name": "add_subtract_ch2",
+                                    "unlockStatus": "played"
+                                }
+                            ],
+                            "name": "5",
+                            "skippable": "false",
+                            "tags": [
+                                "tutorial"
+                            ],
+                            "fileName": "../assets/levels/bar_model/tutorials/add_vertical_label_A.xml"
+                        },
+                        {
+                            "name": "add_subtract_advanced_mastery",
+                            "children": [
+                                {
+                                    "name": "add_subtract_advanced_mastery_required",
+                                    "addChildSequenceLocks": "played",
+                                    "children": [
+                                        {
+                                            "locks": [
+                                                {
+                                                    "type": "NodeStatus",
+                                                    "name": "5",
+                                                    "unlockStatus": "completed"
+                                                }
+                                            ],
+                                            "name": "1533",
+                                            "condkey": "pol",
+                                            "condvalue": "a",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1533.xml"
+                                        },
+                                        {
+                                            "locks": [
+                                                {
+                                                    "type": "NodeStatus",
+                                                    "name": "5",
+                                                    "unlockStatus": "completed"
+                                                }
+                                            ],
+                                            "name": "1534",
+                                            "condkey": "pol",
+                                            "condvalue": "b",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1534.xml"
+                                        },
+                                        {
+                                            "name": "1535",
+                                            "condkey": "pol",
+                                            "condvalue": "a",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1535.xml"
+                                        },
+                                        {
+                                            "name": "1536",
+                                            "condkey": "pol",
+                                            "condvalue": "b",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1536.xml"
+                                        }
+                                    ],
+                                    "levelselect": false
+                                },
+                                {
+                                    "locks": [
+                                        {
+                                            "type": "NodeChildrenStatus",
+                                            "name": "add_subtract_advanced_mastery_required",
+                                            "unlockStatus": "played"
+                                        }
+                                    ],
+                                    "name": "add_subtract_advanced_mastery_extra",
+                                    "policy": "PickRandomUncompletedLevel",
+                                    "children": [
+                                        {
+                                            "name": "514",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/514.xml"
+                                        },
+                                        {
+                                            "name": "517",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/517.xml"
+                                        },
+                                        {
+                                            "name": "518",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/518.xml"
+                                        },
+                                        {
+                                            "name": "701",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/701.xml"
+                                        },
+                                        {
+                                            "name": "702",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/702.xml"
+                                        },
+                                        {
+                                            "name": "705",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/705.xml"
+                                        },
+                                        {
+                                            "name": "709",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/709.xml"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "levelselect": false
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "GenreLevelPack",
+            "locks": [
+                {
+                    "type": "NodeStatus",
+                    "name": "multiply_divide",
+                    "unlockStatus": "played"
+                }
+            ],
+            "name": "multiply_divide",
+            "children": [
+                {
+                    "type": "ChapterLevelPack",
+                    "name": "multiply_divide_ch1",
+                    "children": [
+                        {
+                            "name": "8",
+                            "skippable": "false",
+                            "tags": [
+                                "tutorial"
+                            ],
+                            "fileName": "../assets/levels/bar_model/tutorials/multiply_bar_A.xml"
+                        },
+                        {
+                            "rules": {
+                                "allowSplitBar": "false",
+                                "allowCopyBar": "false"
+                            },
+                            "name": "multiply_divide_simple_mastery",
+                            "addChildSequenceLocks": "played",
+                            "children": [
+                                {
+                                    "locks": [
+                                        {
+                                            "type": "NodeStatus",
+                                            "name": "8",
+                                            "unlockStatus": "completed"
+                                        }
+                                    ],
+                                    "name": "1529",
+                                    "condkey": "pol",
+                                    "condvalue": "a",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/1529.xml"
+                                },
+                                {
+                                    "locks": [
+                                        {
+                                            "type": "NodeStatus",
+                                            "name": "8",
+                                            "unlockStatus": "completed"
+                                        }
+                                    ],
+                                    "name": "1530",
+                                    "condkey": "pol",
+                                    "condvalue": "b",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/1530.xml"
+                                },
+                                {
+                                    "name": "1525",
+                                    "condkey": "pol",
+                                    "condvalue": "a",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/1525.xml"
+                                },
+                                {
+                                    "name": "1526",
+                                    "condkey": "pol",
+                                    "condvalue": "b",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/1526.xml"
+                                },
+                                {
+                                    "name": "1527",
+                                    "condkey": "pol",
+                                    "condvalue": "a",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/1527.xml"
+                                },
+                                {
+                                    "name": "1528",
+                                    "condkey": "pol",
+                                    "condvalue": "b",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/1528.xml"
+                                },
+                                {
+                                    "name": "multiply_divide_simple_extra",
+                                    "children": [
+                                        {
+                                            "name": "1058",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1058.xml"
+                                        },
+                                        {
+                                            "name": "1059",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1059.xml"
+                                        },
+                                        {
+                                            "name": "1068",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1068.xml"
+                                        },
+                                        {
+                                            "name": "1078",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1078.xml"
+                                        },
+                                        {
+                                            "name": "1091",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1091.xml"
+                                        },
+                                        {
+                                            "name": "1092",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1092.xml"
+                                        },
+                                        {
+                                            "name": "1094",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1094.xml"
+                                        },
+                                        {
+                                            "name": "1095",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1095.xml"
+                                        },
+                                        {
+                                            "name": "1100",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1100.xml"
+                                        },
+                                        {
+                                            "name": "1103",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1103.xml"
+                                        },
+                                        {
+                                            "name": "1104",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1104.xml"
+                                        },
+                                        {
+                                            "name": "1107",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1107.xml"
+                                        },
+                                        {
+                                            "name": "1109",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1109.xml"
+                                        },
+                                        {
+                                            "name": "1112",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1112.xml"
+                                        },
+                                        {
+                                            "name": "550",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/550.xml"
+                                        },
+                                        {
+                                            "name": "553",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/553.xml"
+                                        },
+                                        {
+                                            "name": "574",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/574.xml"
+                                        },
+                                        {
+                                            "name": "575",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/575.xml"
+                                        },
+                                        {
+                                            "name": "578",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/578.xml"
+                                        },
+                                        {
+                                            "name": "581",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/581.xml"
+                                        },
+                                        {
+                                            "name": "582",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/582.xml"
+                                        },
+                                        {
+                                            "name": "587",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/587.xml"
+                                        },
+                                        {
+                                            "name": "595",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/595.xml"
+                                        },
+                                        {
+                                            "name": "596",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/596.xml"
+                                        },
+                                        {
+                                            "name": "597",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/597.xml"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "levelselect": false
+                        }
+                    ]
+                },
+                {
+                    "type": "ChapterLevelPack",
+                    "name": "multiply_divide_ch2",
+                    "children": [
+                        {
+                            "locks": [
+                                {
+                                    "type": "NodeStatus",
+                                    "name": "multiply_divide_ch2",
+                                    "unlockStatus": "played"
+                                }
+                            ],
+                            "name": "9",
+                            "skippable": "false",
+                            "tags": [
+                                "tutorial"
+                            ],
+                            "fileName": "../assets/levels/bar_model/tutorials/split_copy_A.xml"
+                        },
+                        {
+                            "name": "multiply_divide_advanced_mastery",
+                            "children": [
+                                {
+                                    "name": "multiply_divide_advanced_mastery_required",
+                                    "addChildSequenceLocks": "played",
+                                    "children": [
+                                        {
+                                            "locks": [
+                                                {
+                                                    "type": "NodeStatus",
+                                                    "name": "9",
+                                                    "unlockStatus": "completed"
+                                                }
+                                            ],
+                                            "name": "1537",
+                                            "condkey": "pol",
+                                            "condvalue": "a",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1537.xml"
+                                        },
+                                        {
+                                            "locks": [
+                                                {
+                                                    "type": "NodeStatus",
+                                                    "name": "9",
+                                                    "unlockStatus": "completed"
+                                                }
+                                            ],
+                                            "name": "1538",
+                                            "condkey": "pol",
+                                            "condvalue": "b",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1538.xml"
+                                        },
+                                        {
+                                            "name": "1531",
+                                            "condkey": "pol",
+                                            "condvalue": "a",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1531.xml"
+                                        },
+                                        {
+                                            "name": "1532",
+                                            "condkey": "pol",
+                                            "condvalue": "b",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1532.xml"
+                                        },
+                                        {
+                                            "name": "1547",
+                                            "condkey": "dongsheng",
+                                            "condvalue": "a",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1547.xml"
+                                        },
+                                        {
+                                            "name": "1548",
+                                            "condkey": "dongsheng",
+                                            "condvalue": "b",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1548.xml"
+                                        },
+                                        {
+                                            "name": "1543",
+                                            "condkey": "pol",
+                                            "condvalue": "a",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1543.xml"
+                                        },
+                                        {
+                                            "name": "1544",
+                                            "condkey": "pol",
+                                            "condvalue": "b",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1544.xml"
+                                        },
+                                        {
+                                            "name": "1539",
+                                            "condkey": "pol",
+                                            "condvalue": "a",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1539.xml"
+                                        },
+                                        {
+                                            "name": "1540",
+                                            "condkey": "pol",
+                                            "condvalue": "b",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1540.xml"
+                                        },
+                                        {
+                                            "name": "1541",
+                                            "condkey": "pol",
+                                            "condvalue": "a",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1541.xml"
+                                        },
+                                        {
+                                            "name": "1542",
+                                            "condkey": "pol",
+                                            "condvalue": "b",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1542.xml"
+                                        }
+                                    ],
+                                    "levelselect": false
+                                },
+                                {
+                                    "locks": [
+                                        {
+                                            "type": "NodeChildrenStatus",
+                                            "name": "multiply_divide_advanced_mastery_required",
+                                            "unlockStatus": "played"
+                                        }
+                                    ],
+                                    "name": "multiply_divide_advanced_mastery_extra",
+                                    "policy": "PickRandomUncompletedLevel",
+                                    "children": [
+                                        {
+                                            "name": "613",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/613.xml"
+                                        },
+                                        {
+                                            "name": "615",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/615.xml"
+                                        },
+                                        {
+                                            "name": "618",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/618.xml"
+                                        },
+                                        {
+                                            "name": "619",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/619.xml"
+                                        },
+                                        {
+                                            "name": "633",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/633.xml"
+                                        },
+                                        {
+                                            "name": "635",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/635.xml"
+                                        },
+                                        {
+                                            "name": "636",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/636.xml"
+                                        },
+                                        {
+                                            "name": "643",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/643.xml"
+                                        },
+                                        {
+                                            "name": "644",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/644.xml"
+                                        },
+                                        {
+                                            "name": "645",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/645.xml"
+                                        },
+                                        {
+                                            "name": "647",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/647.xml"
+                                        },
+                                        {
+                                            "name": "1487",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1487.xml"
+                                        },
+                                        {
+                                            "name": "625",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/625.xml"
+                                        },
+                                        {
+                                            "name": "626",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/626.xml"
+                                        },
+                                        {
+                                            "name": "630",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/630.xml"
+                                        },
+                                        {
+                                            "name": "1472",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1472.xml"
+                                        },
+                                        {
+                                            "name": "1480",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1480.xml"
+                                        },
+                                        {
+                                            "name": "1490",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1490.xml"
+                                        },
+                                        {
+                                            "name": "649",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/649.xml"
+                                        },
+                                        {
+                                            "name": "650",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/650.xml"
+                                        },
+                                        {
+                                            "name": "651",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/651.xml"
+                                        },
+                                        {
+                                            "name": "652",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/652.xml"
+                                        },
+                                        {
+                                            "name": "653",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/653.xml"
+                                        },
+                                        {
+                                            "name": "659",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/659.xml"
+                                        },
+                                        {
+                                            "name": "664",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/664.xml"
+                                        }
+                                    ],
+                                    "levelselect": true
+                                }
+                            ],
+                            "levelselect": false
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "GenreLevelPack",
+            "locks": [
+                {
+                    "type": "NodeStatus",
+                    "name": "advanced",
+                    "unlockStatus": "played"
+                }
+            ],
+            "name": "advanced",
+            "children": [
+                {
+                    "type": "ChapterLevelPack",
+                    "name": "advanced_ch1",
+                    "children": [
+                        {
+                            "name": "11",
+                            "skippable": "false",
+                            "tags": [
+                                "tutorial"
+                            ],
+                            "fileName": "../assets/levels/bar_model/tutorials/two_step_A.xml"
+                        },
+                        {
+                            "name": "two_step_mastery",
+                            "children": [
+                                {
+                                    "name": "two_step_mastery_required",
+                                    "addChildSequenceLocks": "played",
+                                    "children": [
+                                        {
+                                            "locks": [
+                                                {
+                                                    "type": "NodeStatus",
+                                                    "name": "11",
+                                                    "unlockStatus": "completed"
+                                                }
+                                            ],
+                                            "name": "1520",
+                                            "condkey": "dongsheng",
+                                            "condvalue": "a",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1520.xml"
+                                        },
+                                        {
+                                            "locks": [
+                                                {
+                                                    "type": "NodeStatus",
+                                                    "name": "11",
+                                                    "unlockStatus": "completed"
+                                                }
+                                            ],
+                                            "name": "1556",
+                                            "condkey": "dongsheng",
+                                            "condvalue": "b",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1556.xml"
+                                        },
+                                        {
+                                            "name": "1557",
+                                            "condkey": "dongsheng",
+                                            "condvalue": "a",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1557.xml"
+                                        },
+                                        {
+                                            "name": "1466",
+                                            "condkey": "dongsheng",
+                                            "condvalue": "b",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1466.xml"
+                                        },
+                                        {
+                                            "name": "1554",
+                                            "condkey": "dongsheng",
+                                            "condvalue": "a",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1554.xml"
+                                        },
+                                        {
+                                            "name": "1555",
+                                            "condkey": "dongsheng",
+                                            "condvalue": "b",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1555.xml"
+                                        }
+                                    ],
+                                    "levelselect": false
+                                },
+                                {
+                                    "locks": [
+                                        {
+                                            "type": "NodeChildrenStatus",
+                                            "name": "two_step_mastery_required",
+                                            "unlockStatus": "played"
+                                        }
+                                    ],
+                                    "name": "two_step_add_subtract_a",
+                                    "policy": "PickRandomUncompletedLevel",
+                                    "children": [
+                                        {
+                                            "name": "667",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/667.xml"
+                                        },
+                                        {
+                                            "name": "671",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/671.xml"
+                                        },
+                                        {
+                                            "name": "672",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/672.xml"
+                                        },
+                                        {
+                                            "name": "1448",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1448.xml"
+                                        },
+                                        {
+                                            "name": "1459",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1459.xml"
+                                        },
+                                        {
+                                            "name": "1469",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1469.xml"
+                                        },
+                                        {
+                                            "name": "1502",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1502.xml"
+                                        },
+                                        {
+                                            "name": "676",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/676.xml"
+                                        },
+                                        {
+                                            "name": "677",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/677.xml"
+                                        },
+                                        {
+                                            "name": "678",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/678.xml"
+                                        },
+                                        {
+                                            "name": "679",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/679.xml"
+                                        },
+                                        {
+                                            "name": "681",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/681.xml"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "locks": [
+                                        {
+                                            "type": "NodeStatus",
+                                            "name": "two_step_add_subtract_a",
+                                            "unlockStatus": "completed"
+                                        }
+                                    ],
+                                    "name": "two_step_add_subtract_b",
+                                    "policy": "PickRandomUncompletedLevel",
+                                    "children": [
+                                        {
+                                            "name": "683",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/683.xml"
+                                        },
+                                        {
+                                            "name": "685",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/685.xml"
+                                        },
+                                        {
+                                            "name": "686",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/686.xml"
+                                        },
+                                        {
+                                            "name": "687",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/687.xml"
+                                        },
+                                        {
+                                            "name": "688",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/688.xml"
+                                        },
+                                        {
+                                            "name": "689",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/689.xml"
+                                        },
+                                        {
+                                            "name": "690",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/690.xml"
+                                        },
+                                        {
+                                            "name": "691",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/691.xml"
+                                        },
+                                        {
+                                            "name": "692",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/692.xml"
+                                        },
+                                        {
+                                            "name": "693",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/693.xml"
+                                        },
+                                        {
+                                            "name": "1465",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1465.xml"
+                                        },
+                                        {
+                                            "name": "1466",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1466.xml"
+                                        },
+                                        {
+                                            "name": "1513",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1513.xml"
+                                        },
+                                        {
+                                            "name": "694",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/694.xml"
+                                        },
+                                        {
+                                            "name": "1435",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1435.xml"
+                                        },
+                                        {
+                                            "name": "1508",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1508.xml"
+                                        },
+                                        {
+                                            "name": "1509",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1509.xml"
+                                        },
+                                        {
+                                            "name": "1396",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1396.xml"
+                                        },
+                                        {
+                                            "name": "1397",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1397.xml"
+                                        },
+                                        {
+                                            "name": "1486",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1486.xml"
+                                        },
+                                        {
+                                            "name": "1493",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1493.xml"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "locks": [
+                                        {
+                                            "type": "NodeStatus",
+                                            "name": "two_step_add_subtract_b",
+                                            "unlockStatus": "completed"
+                                        }
+                                    ],
+                                    "name": "two_step_groups_sum",
+                                    "policy": "PickRandomUncompletedLevel",
+                                    "children": [
+                                        {
+                                            "name": "739",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/739.xml"
+                                        },
+                                        {
+                                            "name": "743",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/743.xml"
+                                        },
+                                        {
+                                            "name": "1391",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1391.xml"
+                                        },
+                                        {
+                                            "name": "1394",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1394.xml"
+                                        },
+                                        {
+                                            "name": "1488",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1488.xml"
+                                        },
+                                        {
+                                            "name": "1510",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1510.xml"
+                                        },
+                                        {
+                                            "name": "749",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/749.xml"
+                                        },
+                                        {
+                                            "name": "750",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/750.xml"
+                                        },
+                                        {
+                                            "name": "1420",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1420.xml"
+                                        },
+                                        {
+                                            "name": "1497",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1497.xml"
+                                        },
+                                        {
+                                            "name": "1507",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1507.xml"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "locks": [
+                                        {
+                                            "type": "NodeStatus",
+                                            "name": "two_step_groups_sum",
+                                            "unlockStatus": "completed"
+                                        }
+                                    ],
+                                    "name": "two_step_groups_difference",
+                                    "policy": "PickRandomUncompletedLevel",
+                                    "children": [
+                                        {
+                                            "name": "1386",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1386.xml"
+                                        },
+                                        {
+                                            "name": "1389",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1389.xml"
+                                        },
+                                        {
+                                            "name": "1392",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1392.xml"
+                                        },
+                                        {
+                                            "name": "1456",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1456.xml"
+                                        },
+                                        {
+                                            "name": "1495",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1495.xml"
+                                        },
+                                        {
+                                            "name": "1404",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1404.xml"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "locks": [
+                                        {
+                                            "type": "NodeStatus",
+                                            "name": "two_step_groups_difference",
+                                            "unlockStatus": "completed"
+                                        }
+                                    ],
+                                    "name": "two_step_groups_sum_difference",
+                                    "policy": "PickRandomUncompletedLevel",
+                                    "children": [
+                                        {
+                                            "name": "1373",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1373.xml"
+                                        },
+                                        {
+                                            "name": "1380",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1380.xml"
+                                        },
+                                        {
+                                            "name": "1385",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1385.xml"
+                                        },
+                                        {
+                                            "name": "1390",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1390.xml"
+                                        },
+                                        {
+                                            "name": "1436",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1436.xml"
+                                        },
+                                        {
+                                            "name": "1455",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1455.xml"
+                                        },
+                                        {
+                                            "name": "1494",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1494.xml"
+                                        },
+                                        {
+                                            "name": "1499",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1499.xml"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "levelselect": false
+                        }
+                    ]
+                },
+                {
+                    "type": "ChapterLevelPack",
+                    "name": "advanced_ch2",
+                    "children": [
+                        {
+                            "locks": [
+                                {
+                                    "type": "NodeStatus",
+                                    "name": "two_step_groups_sum_difference",
+                                    "unlockStatus": "completed"
+                                }
+                            ],
+                            "name": "7",
+                            "skippable": "false",
+                            "tags": [
+                                "tutorial"
+                            ],
+                            "fileName": "../assets/levels/bar_model/tutorials/fraction_enter_card_A.xml"
+                        },
+                        {
+                            "name": "fraction_of_whole_mastery",
+                            "children": [
+                                {
+                                    "locks": [
+                                        {
+                                            "type": "NodeStatus",
+                                            "name": "7",
+                                            "unlockStatus": "completed"
+                                        }
+                                    ],
+                                    "name": "fraction_of_whole_a",
+                                    "policy": "PickRandomUncompletedLevel",
+                                    "children": [
+                                        {
+                                            "name": "754",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/754.xml"
+                                        },
+                                        {
+                                            "name": "759",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/759.xml"
+                                        },
+                                        {
+                                            "name": "764",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/764.xml"
+                                        },
+                                        {
+                                            "name": "766",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/766.xml"
+                                        },
+                                        {
+                                            "name": "767",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/767.xml"
+                                        },
+                                        {
+                                            "name": "768",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/768.xml"
+                                        },
+                                        {
+                                            "name": "776",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/776.xml"
+                                        },
+                                        {
+                                            "name": "778",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/778.xml"
+                                        },
+                                        {
+                                            "name": "780",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/780.xml"
+                                        },
+                                        {
+                                            "name": "786",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/786.xml"
+                                        },
+                                        {
+                                            "name": "795",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/795.xml"
+                                        },
+                                        {
+                                            "name": "796",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/796.xml"
+                                        },
+                                        {
+                                            "name": "798",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/798.xml"
+                                        },
+                                        {
+                                            "name": "799",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/799.xml"
+                                        },
+                                        {
+                                            "name": "800",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/800.xml"
+                                        },
+                                        {
+                                            "name": "801",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/801.xml"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "locks": [
+                                        {
+                                            "type": "NodeStatus",
+                                            "name": "fraction_of_whole_a",
+                                            "unlockStatus": "completed"
+                                        }
+                                    ],
+                                    "name": "fraction_of_whole_b",
+                                    "policy": "PickRandomUncompletedLevel",
+                                    "children": [
+                                        {
+                                            "name": "804",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/804.xml"
+                                        },
+                                        {
+                                            "name": "808",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/808.xml"
+                                        },
+                                        {
+                                            "name": "782",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/782.xml"
+                                        },
+                                        {
+                                            "name": "783",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/783.xml"
+                                        },
+                                        {
+                                            "name": "784",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/784.xml"
+                                        },
+                                        {
+                                            "name": "787",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/787.xml"
+                                        },
+                                        {
+                                            "name": "788",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/788.xml"
+                                        },
+                                        {
+                                            "name": "789",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/789.xml"
+                                        },
+                                        {
+                                            "name": "791",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/791.xml"
+                                        },
+                                        {
+                                            "name": "792",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/792.xml"
+                                        },
+                                        {
+                                            "name": "793",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/793.xml"
+                                        },
+                                        {
+                                            "name": "794",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/794.xml"
+                                        },
+                                        {
+                                            "name": "797",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/797.xml"
+                                        },
+                                        {
+                                            "name": "802",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/802.xml"
+                                        },
+                                        {
+                                            "name": "805",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/805.xml"
+                                        },
+                                        {
+                                            "name": "807",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/807.xml"
+                                        },
+                                        {
+                                            "name": "809",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/809.xml"
+                                        },
+                                        {
+                                            "name": "810",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/810.xml"
+                                        },
+                                        {
+                                            "name": "811",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/811.xml"
+                                        },
+                                        {
+                                            "name": "812",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/812.xml"
+                                        },
+                                        {
+                                            "name": "814",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/814.xml"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "locks": [
+                                        {
+                                            "type": "NodeStatus",
+                                            "name": "fraction_of_whole_b",
+                                            "unlockStatus": "completed"
+                                        }
+                                    ],
+                                    "name": "fraction_of_whole_shaded_unshaded",
+                                    "policy": "PickRandomUncompletedLevel",
+                                    "children": [
+                                        {
+                                            "name": "818",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/818.xml"
+                                        },
+                                        {
+                                            "name": "823",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/823.xml"
+                                        },
+                                        {
+                                            "name": "829",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/829.xml"
+                                        },
+                                        {
+                                            "name": "830",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/830.xml"
+                                        },
+                                        {
+                                            "name": "831",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/831.xml"
+                                        },
+                                        {
+                                            "name": "832",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/832.xml"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "levelselect": false
+                        }
+                    ]
+                },
+                {
+                    "type": "ChapterLevelPack",
+                    "name": null,
+                    "children": [
+                        {
+                            "name": "fraction_of_larger_mastery",
+                            "children": [
+                                {
+                                    "locks": [
+                                        {
+                                            "type": "NodeStatus",
+                                            "name": "fraction_of_whole_mastery",
+                                            "unlockStatus": "completed"
+                                        }
+                                    ],
+                                    "name": "fraction_of_larger_basic",
+                                    "policy": "PickRandomUncompletedLevel",
+                                    "children": [
+                                        {
+                                            "name": "859",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/859.xml"
+                                        },
+                                        {
+                                            "name": "861",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/861.xml"
+                                        },
+                                        {
+                                            "name": "862",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/862.xml"
+                                        },
+                                        {
+                                            "name": "863",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/863.xml"
+                                        },
+                                        {
+                                            "name": "867",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/867.xml"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "locks": [
+                                        {
+                                            "type": "NodeStatus",
+                                            "name": "fraction_of_larger_basic",
+                                            "unlockStatus": "completed"
+                                        }
+                                    ],
+                                    "name": "fraction_of_larger_sum",
+                                    "policy": "PickRandomUncompletedLevel",
+                                    "children": [
+                                        {
+                                            "name": "870",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/870.xml"
+                                        },
+                                        {
+                                            "name": "874",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/874.xml"
+                                        },
+                                        {
+                                            "name": "877",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/877.xml"
+                                        },
+                                        {
+                                            "name": "878",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/878.xml"
+                                        },
+                                        {
+                                            "name": "882",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/882.xml"
+                                        },
+                                        {
+                                            "name": "883",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/883.xml"
+                                        },
+                                        {
+                                            "name": "884",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/884.xml"
+                                        },
+                                        {
+                                            "name": "887",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/887.xml"
+                                        },
+                                        {
+                                            "name": "899",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/899.xml"
+                                        },
+                                        {
+                                            "name": "901",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/901.xml"
+                                        },
+                                        {
+                                            "name": "933",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/933.xml"
+                                        },
+                                        {
+                                            "name": "934",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/934.xml"
+                                        },
+                                        {
+                                            "name": "935",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/935.xml"
+                                        },
+                                        {
+                                            "name": "936",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/936.xml"
+                                        },
+                                        {
+                                            "name": "939",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/939.xml"
+                                        },
+                                        {
+                                            "name": "945",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/945.xml"
+                                        },
+                                        {
+                                            "name": "946",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/946.xml"
+                                        },
+                                        {
+                                            "name": "947",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/947.xml"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "locks": [
+                                        {
+                                            "type": "NodeStatus",
+                                            "name": "fraction_of_larger_sum",
+                                            "unlockStatus": "completed"
+                                        }
+                                    ],
+                                    "name": "fraction_of_larger_difference",
+                                    "policy": "PickRandomUncompletedLevel",
+                                    "children": [
+                                        {
+                                            "name": "890",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/890.xml"
+                                        },
+                                        {
+                                            "name": "894",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/894.xml"
+                                        },
+                                        {
+                                            "name": "897",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/897.xml"
+                                        },
+                                        {
+                                            "name": "1449",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1449.xml"
+                                        },
+                                        {
+                                            "name": "1481",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/1481.xml"
+                                        },
+                                        {
+                                            "name": "953",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/953.xml"
+                                        },
+                                        {
+                                            "name": "954",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/954.xml"
+                                        },
+                                        {
+                                            "name": "957",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/957.xml"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "locks": [
+                                        {
+                                            "type": "NodeStatus",
+                                            "name": "fraction_of_larger_difference",
+                                            "unlockStatus": "completed"
+                                        }
+                                    ],
+                                    "name": "fraction_of_larger_sum_difference",
+                                    "policy": "PickRandomUncompletedLevel",
+                                    "children": [
+                                        {
+                                            "name": "904",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/904.xml"
+                                        },
+                                        {
+                                            "name": "905",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/905.xml"
+                                        },
+                                        {
+                                            "name": "906",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/906.xml"
+                                        },
+                                        {
+                                            "name": "907",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/907.xml"
+                                        },
+                                        {
+                                            "name": "911",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/911.xml"
+                                        },
+                                        {
+                                            "name": "913",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/913.xml"
+                                        },
+                                        {
+                                            "name": "915",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/915.xml"
+                                        },
+                                        {
+                                            "name": "916",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/916.xml"
+                                        },
+                                        {
+                                            "name": "917",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/917.xml"
+                                        },
+                                        {
+                                            "name": "918",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/918.xml"
+                                        },
+                                        {
+                                            "name": "920",
+                                            "fileName": "../assets/levels/bar_model/challenge0316/920.xml"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "levelselect": false
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "GenreLevelPack",
+            "name": "practice",
+            "children": [
+                {
+                    "type": "ChapterLevelPack",
+                    "name": "practice_one",
+                    "children": [
+                        {
+                            "locks": [
+                                {
+                                    "type": "NodeStatus",
+                                    "name": "10",
+                                    "unlockStatus": "completed"
+                                }
+                            ],
+                            "name": "addition_practice",
+                            "policy": "PickRandomUncompletedLevel",
+                            "children": [
+                                {
+                                    "name": "511",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/511.xml"
+                                },
+                                {
+                                    "name": "513",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/513.xml"
+                                },
+                                {
+                                    "name": "514",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/514.xml"
+                                },
+                                {
+                                    "name": "517",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/517.xml"
+                                },
+                                {
+                                    "name": "518",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/518.xml"
+                                },
+                                {
+                                    "name": "519",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/519.xml"
+                                },
+                                {
+                                    "name": "522",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/522.xml"
+                                },
+                                {
+                                    "name": "525",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/525.xml"
+                                },
+                                {
+                                    "name": "526",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/526.xml"
+                                },
+                                {
+                                    "name": "529",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/529.xml"
+                                },
+                                {
+                                    "name": "531",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/531.xml"
+                                },
+                                {
+                                    "name": "532",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/532.xml"
+                                },
+                                {
+                                    "name": "534",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/534.xml"
+                                },
+                                {
+                                    "name": "538",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/538.xml"
+                                },
+                                {
+                                    "name": "540",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/540.xml"
+                                },
+                                {
+                                    "name": "541",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/541.xml"
+                                },
+                                {
+                                    "name": "542",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/542.xml"
+                                },
+                                {
+                                    "name": "961",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/961.xml"
+                                },
+                                {
+                                    "name": "972",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/972.xml"
+                                },
+                                {
+                                    "name": "982",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/982.xml"
+                                },
+                                {
+                                    "name": "984",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/984.xml"
+                                },
+                                {
+                                    "name": "987",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/987.xml"
+                                },
+                                {
+                                    "name": "964",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/964.xml"
+                                },
+                                {
+                                    "name": "967",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/967.xml"
+                                },
+                                {
+                                    "name": "970",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/970.xml"
+                                },
+                                {
+                                    "name": "975",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/975.xml"
+                                },
+                                {
+                                    "name": "977",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/977.xml"
+                                },
+                                {
+                                    "name": "978",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/978.xml"
+                                },
+                                {
+                                    "name": "979",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/979.xml"
+                                }
+                            ]
+                        },
+                        {
+                            "locks": [
+                                {
+                                    "type": "NodeStatus",
+                                    "name": "2",
+                                    "unlockStatus": "completed"
+                                }
+                            ],
+                            "name": "subtraction_practice",
+                            "policy": "PickRandomUncompletedLevel",
+                            "children": [
+                                {
+                                    "name": "701",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/701.xml"
+                                },
+                                {
+                                    "name": "702",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/702.xml"
+                                },
+                                {
+                                    "name": "705",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/705.xml"
+                                },
+                                {
+                                    "name": "709",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/709.xml"
+                                },
+                                {
+                                    "name": "712",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/712.xml"
+                                },
+                                {
+                                    "name": "716",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/716.xml"
+                                },
+                                {
+                                    "name": "717",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/717.xml"
+                                },
+                                {
+                                    "name": "719",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/719.xml"
+                                },
+                                {
+                                    "name": "723",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/723.xml"
+                                },
+                                {
+                                    "name": "726",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/726.xml"
+                                },
+                                {
+                                    "name": "729",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/729.xml"
+                                },
+                                {
+                                    "name": "730",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/730.xml"
+                                }
+                            ]
+                        },
+                        {
+                            "locks": [
+                                {
+                                    "type": "NodeStatus",
+                                    "name": "8",
+                                    "unlockStatus": "completed"
+                                }
+                            ],
+                            "name": "multiply_simple_practice",
+                            "policy": "PickRandomUncompletedLevel",
+                            "children": [
+                                {
+                                    "name": "1060",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/1060.xml"
+                                },
+                                {
+                                    "name": "1061",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/1061.xml"
+                                },
+                                {
+                                    "name": "1062",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/1062.xml"
+                                },
+                                {
+                                    "name": "1069",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/1069.xml"
+                                },
+                                {
+                                    "name": "1075",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/1075.xml"
+                                },
+                                {
+                                    "name": "1081",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/1081.xml"
+                                },
+                                {
+                                    "name": "1087",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/1087.xml"
+                                },
+                                {
+                                    "name": "1089",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/1089.xml"
+                                },
+                                {
+                                    "name": "552",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/552.xml"
+                                },
+                                {
+                                    "name": "557",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/557.xml"
+                                },
+                                {
+                                    "name": "558",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/558.xml"
+                                },
+                                {
+                                    "name": "560",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/560.xml"
+                                },
+                                {
+                                    "name": "561",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/561.xml"
+                                },
+                                {
+                                    "name": "562",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/562.xml"
+                                },
+                                {
+                                    "name": "564",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/564.xml"
+                                },
+                                {
+                                    "name": "565",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/565.xml"
+                                },
+                                {
+                                    "name": "567",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/567.xml"
+                                },
+                                {
+                                    "name": "569",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/569.xml"
+                                },
+                                {
+                                    "name": "570",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/570.xml"
+                                },
+                                {
+                                    "name": "572",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/572.xml"
+                                },
+                                {
+                                    "name": "576",
+                                    "fileName": "../assets/levels/bar_model/challenge0316/576.xml"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "edges": [
+        {
+            "conditions": [
+                {
+                    "type": "NodeStatus",
+                    "name": "2",
+                    "status": "uncompleted"
+                }
+            ],
+            "id": 1,
+            "startId": "addition_extra_tut",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "addition_extra_tut"
+                }
+            ],
+            "endId": "2"
+        },
+        {
+            "conditions": [
+                {
+                    "type": "NodeStatus",
+                    "name": "1523",
+                    "status": "played"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "1552",
+                    "status": "played"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "1550",
+                    "status": "played"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "1521",
+                    "status": "played"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "1545",
+                    "status": "played"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "711",
+                    "status": "played"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "1524",
+                    "status": "played"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "1553",
+                    "status": "played"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "1551",
+                    "status": "played"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "1522",
+                    "status": "played"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "1546",
+                    "status": "played"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "1549",
+                    "status": "played"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "subtract_mastery",
+                    "status": "uncompleted"
+                }
+            ],
+            "id": 2,
+            "startId": "subtract_mastery",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "subtract_mastery"
+                },
+                {
+                    "type": "SetNodeAvailable",
+                    "name": "add_subtract_ch2"
+                },
+                {
+                    "type": "SetMastery",
+                    "masteryId": "2"
+                }
+            ],
+            "endId": "5"
+        },
+        {
+            "conditions": [
+                {
+                    "type": "NodeStatus",
+                    "name": "1533",
+                    "status": "played"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "1535",
+                    "status": "played"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "1534",
+                    "status": "played"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "1536",
+                    "status": "played"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "add_subtract_advanced_mastery",
+                    "status": "uncompleted"
+                }
+            ],
+            "id": 3,
+            "startId": "add_subtract_advanced_mastery",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "add_subtract_advanced_mastery"
+                },
+                {
+                    "type": "SetNodeAvailable",
+                    "name": "multiply_divide"
+                },
+                {
+                    "type": "SetMastery",
+                    "masteryId": "1"
+                }
+            ],
+            "endId": "8"
+        },
+        {
+            "conditions": [
+                {
+                    "type": "NodeStatus",
+                    "name": "1529",
+                    "status": "played"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "1530",
+                    "status": "played"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "1525",
+                    "status": "played"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "1526",
+                    "status": "played"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "1527",
+                    "status": "played"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "1528",
+                    "status": "played"
+                },
+                {
+                    "type": "KOutOfNProficient",
+                    "objectiveClass": "multiply_objective",
+                    "k": "1",
+                    "n": "3"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "multiply_divide_simple_mastery",
+                    "status": "uncompleted"
+                }
+            ],
+            "id": 4,
+            "startId": "multiply_divide_simple_mastery",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "multiply_divide_simple_mastery"
+                },
+                {
+                    "type": "SetNodeAvailable",
+                    "name": "multiply_divide_ch2"
+                },
+                {
+                    "type": "SetMastery",
+                    "masteryId": "3"
+                }
+            ],
+            "endId": "9"
+        },
+        {
+            "conditions": [
+                {
+                    "type": "NodeStatus",
+                    "name": "1537",
+                    "status": "played"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "1538",
+                    "status": "played"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "1531",
+                    "status": "played"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "1532",
+                    "status": "played"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "1547",
+                    "status": "played"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "1548",
+                    "status": "played"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "1543",
+                    "status": "played"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "1544",
+                    "status": "played"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "1539",
+                    "status": "played"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "1540",
+                    "status": "played"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "1541",
+                    "status": "played"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "1542",
+                    "status": "played"
+                },
+                {
+                    "type": "KOutOfNProficient",
+                    "objectiveClass": "multiply_objective",
+                    "k": "1",
+                    "n": "3"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "multiply_divide_advanced_mastery",
+                    "status": "uncompleted"
+                }
+            ],
+            "id": 5,
+            "startId": "multiply_divide_advanced_mastery",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "multiply_divide_advanced_mastery"
+                },
+                {
+                    "type": "SetNodeAvailable",
+                    "name": "advanced"
+                },
+                {
+                    "type": "SetMastery",
+                    "masteryId": "4"
+                }
+            ],
+            "endId": "11"
+        },
+        {
+            "conditions": [
+                {
+                    "type": "KOutOfNProficient",
+                    "objectiveClass": "two_step_objective",
+                    "k": "1",
+                    "n": "1"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "two_step_add_subtract_a",
+                    "status": "uncompleted"
+                }
+            ],
+            "id": 6,
+            "startId": "two_step_add_subtract_a",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "two_step_add_subtract_a"
+                }
+            ],
+            "endId": "two_step_add_subtract_b"
+        },
+        {
+            "conditions": [
+                {
+                    "type": "KOutOfNProficient",
+                    "objectiveClass": "two_step_objective",
+                    "k": "1",
+                    "n": "1"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "two_step_add_subtract_b",
+                    "status": "uncompleted"
+                }
+            ],
+            "id": 7,
+            "startId": "two_step_add_subtract_b",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "two_step_add_subtract_b"
+                }
+            ],
+            "endId": "two_step_groups_sum"
+        },
+        {
+            "conditions": [
+                {
+                    "type": "KOutOfNProficient",
+                    "objectiveClass": "two_step_objective",
+                    "k": "1",
+                    "n": "1"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "two_step_groups_sum",
+                    "status": "uncompleted"
+                }
+            ],
+            "id": 8,
+            "startId": "two_step_groups_sum",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "two_step_groups_sum"
+                }
+            ],
+            "endId": "two_step_groups_difference"
+        },
+        {
+            "conditions": [
+                {
+                    "type": "NodeStatus",
+                    "name": "1520",
+                    "status": "played"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "1556",
+                    "status": "played"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "1557",
+                    "status": "played"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "1466",
+                    "status": "played"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "1555",
+                    "status": "played"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "1554",
+                    "status": "played"
+                },
+                {
+                    "type": "KOutOfNProficient",
+                    "objectiveClass": "two_step_objective",
+                    "k": "1",
+                    "n": "1"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "two_step_groups_difference",
+                    "status": "uncompleted"
+                }
+            ],
+            "id": 9,
+            "startId": "two_step_groups_difference",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "two_step_groups_difference"
+                }
+            ],
+            "endId": "two_step_groups_sum_difference"
+        },
+        {
+            "conditions": [
+                {
+                    "type": "KOutOfNProficient",
+                    "objectiveClass": "two_step_objective",
+                    "k": "1",
+                    "n": "1"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "two_step_groups_sum_difference",
+                    "status": "uncompleted"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "two_step_mastery",
+                    "status": "uncompleted"
+                }
+            ],
+            "id": 10,
+            "startId": "two_step_groups_sum_difference",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "two_step_groups_sum_difference"
+                },
+                {
+                    "type": "SetNodeComplete",
+                    "name": "two_step_mastery"
+                },
+                {
+                    "type": "SetMastery",
+                    "masteryId": "5"
+                }
+            ],
+            "endId": "7"
+        },
+        {
+            "conditions": [
+                {
+                    "type": "KOutOfNProficient",
+                    "objectiveClass": "fraction_of_whole_objective",
+                    "k": "1",
+                    "n": "1"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "fraction_of_whole_a",
+                    "status": "uncompleted"
+                }
+            ],
+            "id": 11,
+            "startId": "fraction_of_whole_a",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "fraction_of_whole_a"
+                }
+            ],
+            "endId": "fraction_of_whole_b"
+        },
+        {
+            "conditions": [
+                {
+                    "type": "KOutOfNProficient",
+                    "objectiveClass": "fraction_of_whole_objective",
+                    "k": "1",
+                    "n": "1"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "fraction_of_whole_b",
+                    "status": "uncompleted"
+                }
+            ],
+            "id": 12,
+            "startId": "fraction_of_whole_b",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "fraction_of_whole_b"
+                }
+            ],
+            "endId": "fraction_of_whole_shaded_unshaded"
+        },
+        {
+            "conditions": [
+                {
+                    "type": "KOutOfNProficient",
+                    "objectiveClass": "fraction_of_whole_objective",
+                    "k": "1",
+                    "n": "1"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "fraction_of_larger_basic",
+                    "status": "uncompleted"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "fraction_of_whole_mastery",
+                    "status": "uncompleted"
+                }
+            ],
+            "id": 13,
+            "startId": "fraction_of_whole_shaded_unshaded",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "fraction_of_larger_basic"
+                },
+                {
+                    "type": "SetNodeComplete",
+                    "name": "fraction_of_whole_mastery"
+                },
+                {
+                    "type": "SetMastery",
+                    "masteryId": "6"
+                }
+            ],
+            "endId": "fraction_of_larger_basic"
+        },
+        {
+            "conditions": [
+                {
+                    "type": "KOutOfNProficient",
+                    "objectiveClass": "fraction_of_larger_objective",
+                    "k": "1",
+                    "n": "1"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "fraction_of_larger_basic",
+                    "status": "uncompleted"
+                }
+            ],
+            "id": 14,
+            "startId": "fraction_of_larger_basic",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "fraction_of_larger_basic"
+                }
+            ],
+            "endId": "fraction_of_larger_sum"
+        },
+        {
+            "conditions": [
+                {
+                    "type": "KOutOfNProficient",
+                    "objectiveClass": "fraction_of_larger_objective",
+                    "k": "1",
+                    "n": "1"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "fraction_of_larger_sum",
+                    "status": "uncompleted"
+                }
+            ],
+            "id": 15,
+            "startId": "fraction_of_larger_sum",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "fraction_of_larger_sum"
+                }
+            ],
+            "endId": "fraction_of_larger_difference"
+        },
+        {
+            "conditions": [
+                {
+                    "type": "KOutOfNProficient",
+                    "objectiveClass": "fraction_of_larger_objective",
+                    "k": "1",
+                    "n": "1"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "fraction_of_larger_difference",
+                    "status": "uncompleted"
+                }
+            ],
+            "id": 16,
+            "startId": "fraction_of_larger_difference",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "fraction_of_larger_difference"
+                }
+            ],
+            "endId": "fraction_of_larger_sum_difference"
+        },
+        {
+            "conditions": [
+                {
+                    "type": "KOutOfNProficient",
+                    "objectiveClass": "fraction_of_larger_objective",
+                    "k": "1",
+                    "n": "1"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "fraction_of_larger_sum_difference",
+                    "status": "uncompleted"
+                },
+                {
+                    "type": "NodeStatus",
+                    "name": "fraction_of_larger_mastery",
+                    "status": "uncompleted"
+                }
+            ],
+            "id": 17,
+            "startId": "fraction_of_larger_sum_difference",
+            "actions": [
+                {
+                    "type": "SetNodeComplete",
+                    "name": "fraction_of_larger_sum_difference"
+                },
+                {
+                    "type": "SetNodeComplete",
+                    "name": "fraction_of_larger_mastery"
+                },
+                {
+                    "type": "SetMastery",
+                    "masteryId": "7"
+                }
+            ],
+            "endId": ""
+        },
+        {
+            "id": 18,
+            "startId": "addition_practice",
+            "actions": [
+                {
+                    "type": "PickRandomUncompletedLevel"
+                }
+            ],
+            "endId": "addition_practice"
+        },
+        {
+            "id": 19,
+            "startId": "subtraction_practice",
+            "actions": [
+                {
+                    "type": "PickRandomUncompletedLevel"
+                }
+            ],
+            "endId": "subtraction_practice"
+        },
+        {
+            "id": 20,
+            "startId": "multiply_simple_practice",
+            "actions": [
+                {
+                    "type": "PickRandomUncompletedLevel"
+                }
+            ],
+            "endId": "multiply_simple_practice"
+        },
+        {
+            "id": 21,
+            "startId": "two_step_add_subtract_a",
+            "actions": [
+                {
+                    "type": "PickRandomUncompletedLevel"
+                }
+            ],
+            "endId": "two_step_add_subtract_a"
+        },
+        {
+            "id": 22,
+            "startId": "two_step_add_subtract_b",
+            "actions": [
+                {
+                    "type": "PickRandomUncompletedLevel"
+                }
+            ],
+            "endId": "two_step_add_subtract_b"
+        },
+        {
+            "id": 23,
+            "startId": "two_step_groups_sum",
+            "actions": [
+                {
+                    "type": "PickRandomUncompletedLevel"
+                }
+            ],
+            "endId": "two_step_groups_sum"
+        },
+        {
+            "id": 24,
+            "startId": "two_step_groups_difference",
+            "actions": [
+                {
+                    "type": "PickRandomUncompletedLevel"
+                }
+            ],
+            "endId": "two_step_groups_difference"
+        },
+        {
+            "id": 25,
+            "startId": "two_step_groups_sum_difference",
+            "actions": [
+                {
+                    "type": "PickRandomUncompletedLevel"
+                }
+            ],
+            "endId": "two_step_groups_sum_difference"
+        },
+        {
+            "id": 26,
+            "startId": "fraction_of_whole_a",
+            "actions": [
+                {
+                    "type": "PickRandomUncompletedLevel"
+                }
+            ],
+            "endId": "fraction_of_whole_a"
+        },
+        {
+            "id": 27,
+            "startId": "fraction_of_whole_b",
+            "actions": [
+                {
+                    "type": "PickRandomUncompletedLevel"
+                }
+            ],
+            "endId": "fraction_of_whole_b"
+        },
+        {
+            "id": 28,
+            "startId": "fraction_of_whole_shaded_unshaded",
+            "actions": [
+                {
+                    "type": "PickRandomUncompletedLevel"
+                }
+            ],
+            "endId": "fraction_of_whole_shaded_unshaded"
+        },
+        {
+            "id": 29,
+            "startId": "fraction_of_larger_basic",
+            "actions": [
+                {
+                    "type": "PickRandomUncompletedLevel"
+                }
+            ],
+            "endId": "fraction_of_larger_basic"
+        },
+        {
+            "id": 30,
+            "startId": "fraction_of_larger_sum",
+            "actions": [
+                {
+                    "type": "PickRandomUncompletedLevel"
+                }
+            ],
+            "endId": "fraction_of_larger_sum"
+        },
+        {
+            "id": 31,
+            "startId": "fraction_of_larger_difference",
+            "actions": [
+                {
+                    "type": "PickRandomUncompletedLevel"
+                }
+            ],
+            "endId": "fraction_of_larger_difference"
+        },
+        {
+            "id": 32,
+            "startId": "fraction_of_larger_sum_difference",
+            "actions": [
+                {
+                    "type": "PickRandomUncompletedLevel"
+                }
+            ],
+            "endId": "fraction_of_larger_sum_difference"
+        }
+    ]
+}

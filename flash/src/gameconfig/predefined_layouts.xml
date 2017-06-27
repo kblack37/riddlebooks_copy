@@ -1,0 +1,134 @@
+<layouts>
+    <!--
+    Note that if the embed tag is set to true it means the texture should be immediately available at runtime.
+    The src value should be the exact name of the texture to be fetched from the resource manager. Otherwise the
+    src is the file path.
+    
+    Attributes for x, y, width, and height are defined in terms of expressions
+    The format for a dynamic value is id_attribute
+     -->
+    <layout id="root" width="800" height="600" name="default">
+        <!-- Dialog acts like the background of the level -->
+        <group id="dialogLayer">
+            <textArea id="textArea" width="root_width" height="root_height" viewportWidth="800" viewportHeight="300" src="url(../assets/level_images/detective_book.jpg)" allowScroll="false"/>
+        </group>
+        
+        <!-- Holds all of the equation manipulation items -->
+        <group id="equationLayer">
+            <!-- Wrapper around the deck and term areas so its easier to move them up and down together -->
+            <group id="deckAndTermContainer" src="embed(ui_background_wood)" y="350" height="300">
+                <deckArea id="deckArea" width="540" height="56" y="15" x="130"/>
+                <termArea id="leftTermArea" width="330" height="120" x="modelEquationButton_x - leftTermArea_width" y="modelEquationButton_y" src="embed(term_area_left_wood)"/>
+                <termArea id="rightTermArea" width="330" height="120" x="modelEquationButton_x + modelEquationButton_width" y="leftTermArea_y" src="embed(term_area_left_wood)"/>
+                <button id="modelEquationButton" width="90" height="90" x="(root_width - modelEquationButton_width) / 2" y="deckArea_y+deckArea_height" src="embed(button_equals),embed(button_equals_click),embed(button_equals_mouseover),embed(button_equals_locked)"/>
+                <equationToText id="equationToText" width="600" height="50" x="80" y="leftTermArea_y + leftTermArea_height"/>
+            </group>
+            <group>
+                <button id="hintButton" x="20" y="deckAndTermContainer_y + 10" src="embed(button_hint_blue), embed(button_hint_orange), embed(button_hint_blue)"/>
+                <group id="parenthesisButton" x="80" y="deckAndTermContainer_y + 10"/>
+                <button id="undoButton" x="670" y="deckAndTermContainer_y + 6" src="embed(button_undo), embed(button_undo_click), embed(button_undo_mouseover), embed(button_undo)"/>
+                <button id="resetButton" x="740" y="deckAndTermContainer_y + 10" src="embed(button_reset), embed(button_reset_click)"/>
+            </group>
+        </group>
+    </layout>
+    
+    <!-- This ui is for levels where the player picks from just one list of options -->
+    <layout id="root" width="800" height="600" name="singlePicker">
+        <group id="dialogLayer">
+            <textArea id="textArea" width="root_width" height="root_height" viewportWidth="800" viewportHeight="350" src="url(../assets/level_images/book_mystery_faded.jpg)" backgroundRepeat="no-repeat" autoCenterPages="false" allowScroll="false"/>
+        </group>
+        <group id="equationLayer">
+            <!-- Wrapper around the deck and term areas so its easier to move them up and down together -->
+            <group id="deckAndTermContainer" src="embed(ui_background)" y="root_height - deckAndTermContainer_height" height="270">
+                <equationToText id="equationToText" width="800" height="50" y="root_height - 70"/>
+                <termArea id="leftTermArea" width="310" height="160" x="20" y="(deckAndTermContainer_height - leftTermArea_height) / 2" src="embed(term_area_left)"/>
+                <expressionPicker id="expressionPickerRight" width="300" height="180" x="480" y="30"/>
+                <button id="modelEquationButton" x="354" y="(deckAndTermContainer_height - modelEquationButton_height) / 2" src="embed(button_turqoise_up), embed(button_turqoise_click), embed(button_turqoise_over)" width="100" height="100" label="" fontColor="0xFFFFFF" fontSize="24" fontName="Bookworm" nineSlice="8, 8, 16, 16"/>
+            </group>
+        </group>
+    </layout>
+    
+    <!-- This is a trimmed down version of the normal model equation layout with fewer buttons-->
+    <layout id="root" width="800" height="600" name="doubleTermAreaSimple">
+	    <group id="dialogLayer">
+	        <textArea id="textArea" width="root_width" height="root_height" viewportWidth="800" viewportHeight="300" src="url(../assets/level_images/book_mystery_faded.jpg)" backgroundRepeat="no-repeat" autoCenterPages="false" allowScroll="false" backgroundAttachement="fixed"/>
+	    </group>
+	    <group id="equationLayer">
+	        <!-- Wrapper around the deck and term areas so its easier to move them up and down together -->
+	        <group id="deckAndTermContainer" src="embed(ui_background)" y="root_height - deckAndTermContainer_height" height="240">
+	            <deckArea id="deckArea" width="800" height="56" y="15"/>
+	            <equationToText id="equationToText" width="800" height="50" y="root_height - 70"/>
+	            <termArea id="leftTermArea" width="310" height="130" x="20" y="(deckAndTermContainer_height - leftTermArea_height) / 2 + 12" src="embed(term_area_left)"/>
+	            <termArea id="rightTermArea" width="310" height="130" x="800-rightTermArea_width-20" y="(deckAndTermContainer_height - leftTermArea_height) / 2 + 12" src="embed(term_area_left)"/>
+	            <button id="modelEquationButton" x="345" y="(deckAndTermContainer_height - modelEquationButton_height) / 2 + 10" src="embed(button_turqoise_up), embed(button_turqoise_click), embed(button_turqoise_over)" width="90" height="90" label="" fontColor="0xFFFFFF" fontSize="24" fontName="Bookworm" nineSlice="8, 8, 16, 16"/>
+	        </group>
+	    </group>
+	</layout>
+	
+	<!-- This is the layout used for levels without any equation modeling -->
+	<layout id="root" width="800" height="600" name="barModelNoHelp">
+	    <group id="dialogLayer">
+	        <textArea id="textArea" width="root_width" height="root_height" viewportWidth="800" viewportHeight="370" src="url(../assets/level_images/book_crystal_cave.jpg)" backgroundRepeat="no-repeat" autoCenterPages="false" allowScroll="false" backgroundAttachement="fixed"/>
+	    </group>
+	    <group id="equationLayer">
+	        <!-- Wrapper around the deck and term areas so its easier to move them up and down together -->
+	        <group id="deckAndTermContainer" src="embed(ui_background)" y="root_height - deckAndTermContainer_height" height="280">
+	            <deckArea id="deckArea" width="500" height="56" y="15" x="120"/>
+	            <barModelArea id="barModelArea" width="700" height="160" x="50" y="80"/>
+	            <button id="undoButton" x="670" y="7" src="embed(button_undo), embed(button_undo_click), embed(button_undo_mouseover), embed(button_undo)"/>
+	            <button id="resetButton" x="740" y="7" src="embed(button_reset), embed(button_reset_click)"/>
+	            <button id="validateButton" x="620" y="150" src="embed(button_check_bar_model_up), embed(button_check_bar_model_down), embed(button_check_bar_model_over)"/>
+	        </group>
+	    </group>
+    </layout>
+	
+	<!-- This is the default layout for levels that combine bar modeling with equation modeling -->
+    <layout id="root" width="800" height="600" name="barEquationModelNoHelp">
+        <group id="dialogLayer">
+            <textArea id="textArea" width="root_width" height="root_height" viewportWidth="800" viewportHeight="270" src="url(../assets/level_images/book_fantasy_v1.jpg)" backgroundRepeat="no-repeat" autoCenterPages="false" allowScroll="false" backgroundAttachement="fixed"/>
+        </group>
+        <group id="equationLayer">
+            <!-- Wrapper around the deck and term areas so its easier to move them up and down together -->
+            <group id="deckAndTermContainer" src="embed(ui_background)" y="270" height="600">
+                <deckArea id="deckArea" width="500" x="160" height="56" y="15"/>
+                <barModelArea id="barModelArea" width="700" height="230" x="50" y="80" unitHeight="50" barGap="60"/>
+                <button id="undoButton" x="670" y="7" src="embed(button_undo), embed(button_undo_click), embed(button_undo_mouseover), embed(button_undo)"/>
+                <button id="resetButton" x="740" y="7" src="embed(button_reset), embed(button_reset_click)"/>
+                <button id="validateButton" x="670" y="215" src="embed(button_check_bar_model_up), embed(button_check_bar_model_down), embed(button_check_bar_model_over)"/>
+                <group id="switchModelButton" x="10" y="10"/>
+                <group id="barModelCopy" x="65" y="10" />
+                <group id="barModelSplit" x="121" y="10" />
+
+                <group id="parenthesisButton" x="10" y="320"/>
+                <termArea id="leftTermArea" width="310" height="130" x="20" y="370" src="embed(term_area_left)"/>
+                <termArea id="rightTermArea" width="310" height="130" x="800-rightTermArea_width-20" y="leftTermArea_y" src="embed(term_area_left)"/>
+                <button id="modelEquationButton" x="355" y="380" src="embed(button_equals),embed(button_equals_click),embed(button_equals_mouseover),embed(button_equals_locked)"/>
+            </group>
+        </group>
+    </layout>
+	
+	<!-- This is the default layout for levels that combine bar modeling with equation modeling -->
+	<layout id="root" width="800" height="600" name="barEquationModel">
+	    <group id="dialogLayer">
+	        <textArea id="textArea" width="root_width" height="root_height" viewportWidth="800" viewportHeight="270" src="url(../assets/level_images/book_fantasy_v1.jpg)" backgroundRepeat="no-repeat" autoCenterPages="false" allowScroll="false" backgroundAttachement="fixed"/>
+	    </group>
+	    <group id="equationLayer">
+	        <!-- Wrapper around the deck and term areas so its easier to move them up and down together -->
+	        <group id="deckAndTermContainer" src="embed(ui_background)" y="270" height="600">
+	            <deckArea id="deckArea" width="500" x="160" height="56" y="15"/>
+	            <barModelArea id="barModelArea" width="740" height="235" x="30" y="75" unitHeight="50" barGap="60"/>
+	            <button id="undoButton" x="670" y="7" src="embed(button_undo), embed(button_undo_click), embed(button_undo_mouseover), embed(button_undo)"/>
+	            <button id="resetButton" x="740" y="7" src="embed(button_reset), embed(button_reset_click)"/>
+	            <button id="validateButton" x="670" y="215" src="embed(button_check_bar_model_up), embed(button_check_bar_model_down), embed(button_check_bar_model_over)"/>
+	            <group id="switchModelButton" x="10" y="10"/>
+	            <button id="hintButton" x="75" y="10" src="embed(button_hint_blue), embed(button_hint_orange), embed(button_hint_blue)"/>
+
+                <group id="parenthesisButton" x="10" y="320"/>
+	            <termArea id="leftTermArea" width="310" height="130" x="20" y="385" src="embed(term_area_left)"/>
+	            <termArea id="rightTermArea" width="310" height="130" x="800-rightTermArea_width-20" y="leftTermArea_y" src="embed(term_area_left)"/>
+	            <button id="modelEquationButton" x="355" y="390" src="embed(button_equals),embed(button_equals_click),embed(button_equals_mouseover),embed(button_equals_locked)"/>
+	            <equationToText id="equationToText" width="600" height="50" x="80" y="leftTermArea_y + leftTermArea_height"/>
+	        </group>
+	    </group>
+    </layout>
+</layouts>

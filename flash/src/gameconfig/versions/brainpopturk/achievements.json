@@ -1,0 +1,154 @@
+{
+    "achievements": [
+        {
+            "id": "1",
+            "description": "Finished 1st Set.",
+            "color": "Green",
+            "params": [
+                "1565"
+            ],
+            "name": "Starting Solver",
+            "function": "levelNodeCompleted"
+        },
+        {
+            "id": "2",
+            "description": "Finished 2nd Set.",
+            "color": "Green",
+            "params": [
+                "addition_mastery"
+            ],
+            "name": "Addition Solver",
+            "function": "levelNodeCompleted"
+        },
+        {
+            "id": "3",
+            "description": "Finished 3rd Set.",
+            "color": "Green",
+            "params": [
+                "subtract_mastery"
+            ],
+            "name": "Subtraction Solver",
+            "function": "levelNodeCompleted"
+        },
+        {
+            "id": "4",
+            "description": "Finished 4th Set.",
+            "color": "Blue",
+            "params": [
+                "multiply_simple_mastery"
+            ],
+            "name": "Multiply Solver",
+            "function": "levelNodeCompleted"
+        },
+        {
+            "id": "5",
+            "description": "Finished 5th Set.",
+            "color": "Blue",
+            "params": [
+                "multiply_divide_simple_mastery"
+            ],
+            "name": "Division Solver",
+            "function": "levelNodeCompleted"
+        },
+        {
+            "id": "6",
+            "description": "Finished 6th Set",
+            "color": "Blue",
+            "params": [
+                "multiply_divide_advanced_mastery"
+            ],
+            "name": "Intermediate Solver",
+            "function": "levelNodeCompleted"
+        },
+        {
+            "id": "7",
+            "description": "Finished 7th Set",
+            "color": "Blue",
+            "params": [
+                "two_step_mastery"
+            ],
+            "name": "Advanced Solver I",
+            "function": "levelNodeCompleted"
+        },
+        {
+            "id": "8",
+            "description": "Finished 8th Set",
+            "color": "Blue",
+            "params": [
+                "fraction_of_whole_mastery"
+            ],
+            "name": "Advanced Solver II",
+            "function": "levelNodeCompleted"
+        },
+        {
+            "id": "9",
+            "description": "Finish the Game",
+            "color": "Orange",
+            "params": [
+                "fraction_of_larger_sum_difference"
+            ],
+            "name": "Master Solver",
+            "function": "levelNodeCompleted"
+        },
+        {
+            "id": "10",
+            "description": "Reach Brain Level 2",
+            "color": "Green",
+            "params": [
+                2
+            ],
+            "name": "Brain Power 1",
+            "function": "reachPlayerLevelN"
+        },
+        {
+            "id": "11",
+            "description": "Reach Brain Level 5",
+            "color": "Green",
+            "params": [
+                5
+            ],
+            "name": "Brain Power 2",
+            "function": "reachPlayerLevelN"
+        },
+        {
+            "id": "12",
+            "description": "Reach Brain Level 10",
+            "color": "Green",
+            "params": [
+                10
+            ],
+            "name": "Brain Power 3",
+            "function": "reachPlayerLevelN"
+        },
+        {
+            "id": "13",
+            "description": "Reach Brain Level 15",
+            "color": "Blue",
+            "params": [
+                15
+            ],
+            "name": "Brain Power 4",
+            "function": "reachPlayerLevelN"
+        },
+        {
+            "id": "14",
+            "description": "Reach Brain Level 20",
+            "color": "Blue",
+            "params": [
+                20
+            ],
+            "name": "Brain Power 5",
+            "function": "reachPlayerLevelN"
+        },
+        {
+            "id": "15",
+            "description": "Reach Brain Level 30",
+            "color": "Orange",
+            "params": [
+                30
+            ],
+            "name": "Super Brain Strength!",
+            "function": "reachPlayerLevelN"
+        }
+    ]
+}

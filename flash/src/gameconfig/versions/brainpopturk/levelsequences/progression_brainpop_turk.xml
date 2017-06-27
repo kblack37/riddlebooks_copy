@@ -1,0 +1,702 @@
+<!-- Copied from the grade 3-4 levels -->
+<progression>
+    <world name="intro">
+        <chapter name="intro_ch1" addChildSequenceLocks="completed">
+            <level id="start" name="1564" tags="tutorial" skippable="false"/>
+            <level id="create_equation" name="1565" tags="tutorial" skippable="false"/>
+        </chapter>
+    </world>
+
+    <world name="addition_subtraction">
+        <!-- Unlock world only after the last tutorial is completed -->
+        <lock type="NodeStatus" name="create_equation" unlockStatus="completed"/>
+
+        <!-- Allow them to build models with the vertical label -->
+        <chapter name="add_subtract_ch1">
+            <levels id="addition_mastery" levelselect="false" objectiveClass="add_objective">
+                <rules>
+                    <rule name="maxBarRowsAllowed" value="2"/>
+                    <rule name="allowAddBarComparison" value="false"/>
+                    <rule name="allowAddVerticalLabels" value="true"/>
+                </rules>
+
+                <level name="531"/>
+                <level name="532"/>
+                <level name="533"/>
+                <level name="534"/>
+                <level name="535"/>
+                <level name="536"/>
+            </levels>
+        </chapter>
+
+        <chapter name="add_subtract_ch2">
+            <!-- Subtraction unlocked only when add bucket finished-->
+            <level id="compare_tut" name="1567" tags="tutorial" skippable="false"/>
+
+            <!-- Batch should alternate between between addition and subtraction -->
+            <levels id="subtract_mastery" levelselect="false" objectiveClass="add_subtract_objective">
+                <!-- Unlocked after required levels completed -->
+                <lock type="NodeChildrenStatus" name="compare_tut" unlockStatus="completed"/>
+                <rules>
+                    <rule name="allowAddNewSegments" value="true"/>
+                    <rule name="allowAddHorizontalLabels" value="true"/>
+                    <rule name="allowAddVerticalLabels" value="true"/>
+                    <rule name="allowAddBarComparison" value="true"/>
+                    <rule name="maxBarRowsAllowed" value="2"/>
+                </rules>
+
+                <level name="701" tags="subtract"/>
+                <level name="961" tags="add"/>
+                <level name="702" tags="subtract"/>
+                <level name="972" tags="add"/>
+                <level name="705" tags="subtract"/>
+                <level name="982" tags="add"/>
+                <level name="709" tags="subtract"/>
+                <level name="984" tags="add"/>
+            </levels>
+        </chapter>
+    </world>
+
+    <world name="multiply_divide">
+        <!-- An external action needs to unlock this world -->
+        <lock type="SelfNodeStatus" unlockStatus="played"/>
+
+        <chapter name="multiply_divide_ch1">
+            <!-- Introduce creating many equal sized bars and how to use multiply in an expression -->
+            <level id="multiply_bar_tut" name="1568" tags="tutorial" skippable="false"></level>
+
+            <levels id="multiply_simple_mastery" levelselect="false" objectiveClass="multiply_objective">
+            <rules><rule name="allowCopyBar" value="false"/><rule name="allowSplitBar" value="false"/></rules>
+                <!-- 3a, 4a-->
+                <level name="1063"/>
+                <level name="1064"/>
+                <level name="1065"/>
+                <level name="1066"/>
+                <level name="1067"/>
+                <level name="1070"/>
+                <level name="1071"/>
+                <level name="1072"/>
+                <level name="1073"/>
+                <level name="1074"/>
+                <level name="1076"/>
+                <level name="1077"/>
+                <level name="1079"/>
+                <level name="1080"/>
+                <level name="1082"/>
+                <level name="1083"/>
+                <level name="1084"/>
+                <level name="1085"/>
+                <level name="1086"/>
+                <level name="1088"/>
+                <level name="1089"/>
+                <level name="1090"/>
+
+                <level name="549"/>
+                <level name="554"/>
+                <level name="555"/>
+                <level name="556"/>
+                <level name="559"/>
+                <level name="563"/>
+                <level name="566"/>
+                <level name="568"/>
+                <level name="571"/>
+            </levels>
+        </chapter>
+
+        <chapter name="multiply_divide_ch2">
+            <!-- Introduce spliting tool and how to use division in an expression -->
+            <level id="split_copy_tut" tags="tutorial" skippable="false" name="1569">
+                <!-- The chapter must be unlocked to start this -->
+                <lock type="NodeStatus" name="multiply_divide_ch2" unlockStatus="played"/>
+            </level>
+            <levels id="multiply_divide_simple_mastery" levelselect="false" objectiveClass="multiply_objective">
+            <rules><rule name="allowCopyBar" value="false"/></rules>
+                <!-- 3b, 4b-->
+                <level name="1058"/>
+                <level name="1059"/>
+                <level name="1068"/>
+                <level name="1078"/>
+                <level name="1091"/>
+                <level name="1092"/>
+                <level name="1094"/>
+                <level name="1095"/>
+                <level name="1100"/>
+
+                <level name="552"/>
+                <level name="557"/>
+                <level name="558"/>
+                <level name="560"/>
+                <level name="561"/>
+                <level name="562"/>
+                <level name="564"/>
+                <level name="565"/>
+                <level name="567"/>
+            </levels>
+        </chapter>
+        <chapter name="multiply_divide_ch3">
+            <level id="adv_mult_div" tags="tutorial" skippable="false" name="1572">
+                <!-- The chapter must be unlocked to start this -->
+                <lock type="NodeStatus" name="multiply_divide_ch3" unlockStatus="played"/>
+            </level>
+
+            <!-- The advanced set of problems has these categories
+                - combined with addition operator
+                - combined with subtraction operator
+            -->
+            <levels id="multiply_divide_advanced_mastery" levelselect="false" objectiveClass="multiply_objective">
+
+                <!-- Extra practice if player struggling with the more advanced multiply and divide problem, in particular
+                the problems that combine multiple operators should be emphasized here. 4c, 4e
+                -->
+                <level name="600"/>
+                <level name="601"/>
+                <level name="602"/>
+                <level name="603"/>
+                <level name="607"/>
+                <level name="610"/>
+                <level name="612"/>
+                <level name="614"/>
+                <level name="617"/>
+                <level name="631"/>
+                <level name="632"/>
+                <level name="634"/>
+                <level name="637"/>
+                <level name="639"/>
+                <level name="640"/>
+                <level name="641"/>
+                <level name="642"/>
+                <level name="646"/>
+
+                <level name="648"/>
+                <level name="1504"/>
+
+                <!-- 4d, 4f-->
+                <level name="620"/>
+                <level name="621"/>
+                <level name="622"/>
+                <level name="623"/>
+                <level name="627"/>
+                <level name="628"/>
+                <level name="629"/>
+                <level name="1503"/>
+                <level name="1517"/>
+                <level name="654"/>
+                <level name="655"/>
+                <level name="656"/>
+                <level name="657"/>
+                <level name="658"/>
+                <level name="660"/>
+                <level name="661"/>
+                <level name="663"/>
+                <level name="665"/>
+            </levels>
+        </chapter>
+    </world>
+
+    <world name="advanced">
+        <!-- An external action needs to unlock this world -->
+        <lock type="SelfNodeStatus" unlockStatus="played"/>
+
+        <chapter name="advanced_ch1">
+            <!-- Introduce two step problems here, first problem in world always unlocked -->
+            <level id="two_step_tut" name="1570" tags="tutorial" skippable="false"/>
+
+            <levels id="two_step_mastery" levelselect="false">
+
+                <levels id="two_step_add_subtract_a" policy="PickRandomUncompletedLevel" objectiveClass="two_step_objective">
+                    <!-- 5a, 5b-->
+                    <level name="668"/>
+                    <level name="669"/>
+                    <level name="670"/>
+                    <level name="1423"/>
+                    <level name="1433"/>
+                    <level name="1479"/>
+                    <level name="1482"/>
+                    <level name="673"/>
+                    <level name="674"/>
+                    <level name="675"/>
+                    <level name="680"/>
+                    <level name="682"/>
+                </levels>
+
+                <levels id="two_step_add_subtract_b" policy="PickRandomUncompletedLevel" objectiveClass="two_step_objective">
+                    <lock type="NodeStatus" name="two_step_add_subtract_a" unlockStatus="completed"/>
+                    <!-- 5c,5d,5e-->
+                    <level name="684"/>
+                    <level name="1424"/>
+                    <level name="1429"/>
+                    <level name="1438"/>
+                    <level name="1520"/>
+                    <level name="695"/>
+                    <level name="696"/>
+                    <level name="697"/>
+                    <level name="698"/>
+                    <level name="699"/>
+                    <level name="1425"/>
+                    <level name="1440"/>
+                    <level name="1454"/>
+                    <level name="1468"/>
+                    <level name="734"/>
+                    <level name="735"/>
+                    <level name="1381"/>
+                    <level name="1395"/>
+                    <level name="1401"/>
+                    <level name="1421"/>
+                    <level name="1446"/>
+                    <level name="1450"/>
+                    <level name="1457"/>
+                    <level name="1471"/>
+                </levels>
+
+                <levels id="two_step_groups_sum" policy="PickRandomUncompletedLevel" objectiveClass="two_step_objective">
+                    <lock type="NodeStatus" name="two_step_add_subtract_b" unlockStatus="completed"/>
+
+                    <!-- 5g,5j -->
+                    <level name="738"/>
+                    <level name="1388"/>
+                    <level name="1400"/>
+                    <level name="1406"/>
+                    <level name="1410"/>
+                    <level name="1453"/>
+                    <level name="1476"/>
+                    <level name="1483"/>
+                    <level name="1515"/>
+                    <level name="748"/>
+                    <level name="751"/>
+                    <level name="752"/>
+                    <level name="1382"/>
+                    <level name="1384"/>
+                    <level name="1398"/>
+                    <level name="1403"/>
+                    <level name="1405"/>
+                    <level name="1414"/>
+                    <level name="1439"/>
+                    <level name="1444"/>
+                    <level name="1463"/>
+                    <level name="1478"/>
+                    <level name="1498"/>
+                </levels>
+
+                <levels id="two_step_groups_difference" policy="PickRandomUncompletedLevel" objectiveClass="two_step_objective">
+                    <lock type="NodeStatus" name="two_step_groups_sum" unlockStatus="completed"/>
+
+                    <!-- 5f,5h -->
+                    <level name="736"/>
+                    <level name="737"/>
+                    <level name="1379"/>
+                    <level name="1409"/>
+                    <level name="1411"/>
+                    <level name="1475"/>
+                    <level name="1511"/>
+                    <level name="744"/>
+                    <level name="746"/>
+                    <level name="1383"/>
+                    <level name="1399"/>
+                    <level name="1413"/>
+                    <level name="1417"/>
+                    <level name="1431"/>
+                    <level name="1460"/>
+                    <level name="1461"/>
+                    <level name="1514"/>
+                </levels>
+
+                <levels id="two_step_groups_sum_difference" policy="PickRandomUncompletedLevel" objectiveClass="two_step_objective">
+                    <lock type="NodeStatus" name="two_step_groups_difference" unlockStatus="completed"/>
+
+                    <!-- 5i,5k -->
+                    <level name="1374"/>
+                    <level name="1375"/>
+                    <level name="1418"/>
+                    <level name="1434"/>
+                    <level name="1447"/>
+                    <level name="1474"/>
+                </levels>
+            </levels>
+        </chapter>
+
+        <chapter name="advanced_ch2">
+
+            <!-- Introduce fraction types here -->
+            <level id="fraction_enter_card_tut" name="1571" tags="tutorial" skippable="false">
+                <!-- Unlocked only if chapter unlocked -->
+                <lock type="NodeStatus" name="two_step_groups_sum_difference" unlockStatus="completed"/>
+            </level>
+
+            <levels id="fraction_of_whole_mastery" levelselect="false">
+
+                <!-- 6a -->
+                <levels id="fraction_of_whole_a" policy="PickRandomUncompletedLevel" objectiveClass="fraction_of_whole_objective">
+                    <lock type="NodeStatus" name="fraction_enter_card_tut" unlockStatus="completed"/>
+
+                    <level name="755"/>
+                    <level name="756"/>
+                    <level name="757"/>
+                    <level name="760"/>
+                    <level name="761"/>
+                    <level name="762"/>
+                    <level name="763"/>
+                    <level name="765"/>
+                    <level name="769"/>
+                    <level name="770"/>
+                    <level name="772"/>
+                    <level name="774"/>
+                    <level name="775"/>
+                    <level name="777"/>
+                    <level name="779"/>
+                </levels>
+
+                <!-- 6b, 6c -->
+                <levels id="fraction_of_whole_b" policy="PickRandomUncompletedLevel" objectiveClass="fraction_of_whole_objective">
+                    <lock type="NodeStatus" name="fraction_of_whole_a" unlockStatus="completed"/>
+
+                    <level name="782"/>
+                    <level name="783"/>
+                    <level name="784"/>
+                    <level name="787"/>
+                    <level name="788"/>
+                    <level name="789"/>
+                    <level name="791"/>
+                    <level name="792"/>
+                    <level name="793"/>
+                    <level name="794"/>
+                    <level name="797"/>
+                    <level name="802"/>
+
+                    <level name="805"/>
+                    <level name="807"/>
+                    <level name="809"/>
+                    <level name="810"/>
+                    <level name="811"/>
+                    <level name="812"/>
+                    <level name="814"/>
+                </levels>
+
+                <!-- 6d -->
+                <levels id="fraction_of_whole_shaded_unshaded" policy="PickRandomUncompletedLevel" objectiveClass="fraction_of_whole_objective">
+                    <lock type="NodeStatus" name="fraction_of_whole_b" unlockStatus="completed"/>
+
+                    <level name="815"/>
+                    <level name="816"/>
+                    <level name="817"/>
+                    <level name="819"/>
+                    <level name="822"/>
+                    <level name="824"/>
+                    <level name="827"/>
+                    <level name="828"/>
+                </levels>
+            </levels>
+        </chapter>
+
+        <chapter id="advanced_ch3">
+            <levels id="fraction_of_larger_mastery" levelselect="false">
+
+                <!-- 7a -->
+                <levels id="fraction_of_larger_basic" policy="PickRandomUncompletedLevel" objectiveClass="fraction_of_larger_objective">
+                    <lock type="NodeStatus" name="fraction_of_whole_mastery" unlockStatus="completed"/>
+
+                    <level name="857"/>
+                    <level name="860"/>
+                    <level name="864"/>
+                    <level name="865"/>
+                    <level name="866"/>
+                    <level name="868"/>
+                </levels>
+
+                <!-- 7b,7d -->
+                <levels id="fraction_of_larger_sum" policy="PickRandomUncompletedLevel" objectiveClass="fraction_of_larger_objective">
+                    <lock type="NodeStatus" name="fraction_of_larger_basic" unlockStatus="completed"/>
+
+                    <level name="869"/>
+                    <level name="871"/>
+                    <level name="872"/>
+                    <level name="876"/>
+                    <level name="880"/>
+                    <level name="881"/>
+                    <level name="885"/>
+                    <level name="886"/>
+                    <level name="888"/>
+                    <level name="929"/>
+                    <level name="930"/>
+                    <level name="931"/>
+                    <level name="932"/>
+                    <level name="937"/>
+                    <level name="938"/>
+                    <level name="940"/>
+                    <level name="941"/>
+                    <level name="942"/>
+                    <level name="943"/>
+                    <level name="944"/>
+                    <level name="948"/>
+                </levels>
+
+                <!-- 7c,7f -->
+                <levels id="fraction_of_larger_difference" policy="PickRandomUncompletedLevel" objectiveClass="fraction_of_larger_objective">
+                    <lock type="NodeStatus" name="fraction_of_larger_sum" unlockStatus="completed"/>
+
+                    <level name="889"/>
+                    <level name="893"/>
+                    <level name="895"/>
+                    <level name="896"/>
+                    <level name="1427"/>
+                    <level name="1441"/>
+                    <level name="1458"/>
+                    <level name="949"/>
+                    <level name="950"/>
+                    <level name="952"/>
+                    <level name="955"/>
+                    <level name="956"/>
+                    <level name="958"/>
+                    <level name="959"/>
+                </levels>
+
+                <!-- 7e -->
+                <levels id="fraction_of_larger_sum_difference" policy="PickRandomUncompletedLevel" objectiveClass="fraction_of_larger_objective">
+                    <lock type="NodeStatus" name="fraction_of_larger_difference" unlockStatus="completed"/>
+
+                    <level name="903"/>
+                    <level name="908"/>
+                    <level name="909"/>
+                    <level name="912"/>
+                    <level name="914"/>
+                    <level name="919"/>
+                </levels>
+            </levels>
+        </chapter>
+    </world>
+
+    <startNodeName value="start"/>
+
+    <objectivesClass id="add_objective">
+        <objective type="HintsUsed" value="0" useInSummary="true"/>
+        <objective type="MaxMistakes" value="2"  useInSummary="true"/>
+    </objectivesClass>
+    <objectivesClass id="add_subtract_objective">
+        <objective type="HintsUsed" value="0" useInSummary="true"/>
+        <objective type="MaxMistakes" value="0"  useInSummary="true"/>
+    </objectivesClass>
+    <objectivesClass id="multiply_objective">
+        <objective type="HintsUsed" value="0" useInSummary="true"/>
+        <objective type="MaxMistakes" value="5" useInSummary="true"/>
+    </objectivesClass>
+    <objectivesClass id="two_step_objective">
+        <objective type="HintsUsed" value="0" useInSummary="true"/>
+        <objective type="MaxMistakes" value="8" useInSummary="true"/>
+    </objectivesClass>
+    <objectivesClass id="fraction_of_whole_objective">
+        <objective type="HintsUsed" value="0" useInSummary="true"/>
+        <objective type="MaxMistakes" value="8" useInSummary="true"/>
+    </objectivesClass>
+    <objectivesClass id="fraction_of_larger_objective">
+        <objective type="HintsUsed" value="0" useInSummary="true"/>
+        <objective type="MaxMistakes" value="8" useInSummary="true"/>
+    </objectivesClass>
+
+    <!-- Ordering of edges matter here. -->
+    <edges>
+        <!-- After finishing last fundamentals tutorial, go to the additon mastery-->
+        <edge startId="create_equation" endId="addition_mastery">
+        </edge>
+
+        <!-- Finish at least one level within the proficiency metrics to finish the addition batch-->
+        <edge startId="addition_mastery" endId="compare_tut" id="add_mastered">
+            <condition type="KOutOfNProficient" k="2" n="3" objectiveClass="add_objective"/>
+            <condition type="NodeStatus" name="compare_tut" status="uncompleted"/>
+            <action type="SetNodeComplete" name="addition_mastery"/>
+
+            <!-- Mark mastery completed -->
+            <action type="SetMastery" masteryId="1"/>
+        </edge>
+
+        <!-- Need to finish at least one problem tagged 'add' and one tagged 'subtract' within the
+        proficiency metrics to finish batch-->
+        <edge startId="subtract_mastery" endId="multiply_bar_tut" id="add_subtract_mastered">
+
+            <!-- Only mark mastery once and make sure this set is complete -->
+            <condition type="KOutOfNProficient" k="1" n="0" tagName="add" objectiveClass="add_subtract_objective"/>
+            <condition type="KOutOfNProficient" k="1" n="0" tagName="subtract" objectiveClass="add_subtract_objective"/>
+            <condition type="NodeStatus" name="subtract_mastery" status="uncompleted"/>
+            <action type="SetNodeComplete" name="subtract_mastery"/>
+
+            <!-- Make multiply world available-->
+            <action type="SetNodeAvailable" name="multiply_divide"/>
+
+            <!-- Mark mastery completed -->
+            <action type="SetMastery" masteryId="2"/>
+        </edge>
+
+        <!-- Finishing the simple multiply levels, go to the split/copy/divide tutorial -->
+        <edge startId="multiply_simple_mastery" endId="split_copy_tut">
+            <condition type="KOutOfNProficient" k="2" n="3" objectiveClass="multiply_objective"/>
+            <condition type="NodeStatus" name="multiply_simple_mastery" status="uncompleted"/>
+            <action type="SetNodeComplete" name="multiply_simple_mastery"/>
+
+            <!-- Make next multiply divide chapter available-->
+            <action type="SetNodeAvailable" name="multiply_divide_ch2"/>
+        </edge>
+
+        <!-- Finishing simple multiply+divide levels-->
+        <edge startId="multiply_divide_simple_mastery" endId="adv_mult_div">
+            <condition type="KOutOfNProficient" k="2" n="3" objectiveClass="multiply_objective"/>
+            <condition type="NodeStatus" name="multiply_divide_simple_mastery" status="uncompleted"/>
+            <action type="SetNodeComplete" name="multiply_divide_simple_mastery"/>
+
+            <!-- Make next multiply divide chapter available-->
+            <action type="SetNodeAvailable" name="multiply_divide_ch3"/>
+
+            <!-- Mark mastery completed -->
+            <action type="SetMastery" masteryId="3"/>
+        </edge>
+
+        <!-- Finishing the advanced multiply/divide levels, go to the multiple operators+unknowns tutorial -->
+        <edge startId="multiply_divide_advanced_mastery" endId="two_step_tut">
+            <condition type="KOutOfNProficient" k="2" n="3" objectiveClass="multiply_objective"/>
+            <condition type="NodeStatus" name="multiply_divide_advanced_mastery" status="uncompleted"/>
+            <action type="SetNodeComplete" name="multiply_divide_advanced_mastery"/>
+
+            <!-- Make advanced world available-->
+            <action type="SetNodeAvailable" name="advanced"/>
+
+            <!-- Mark mastery completed -->
+            <action type="SetMastery" masteryId="4"/>
+        </edge>
+
+        <!-- two step problems and fractions have sub groups of problems,
+        player just needs finish N number to complete the subgroup -->
+        <edge startId="two_step_add_subtract_a" endId="two_step_add_subtract_b">
+            <condition type="KOutOfNProficient" k="1" n="1" objectiveClass="two_step_objective"/>
+            <condition type="NodeStatus" name="two_step_add_subtract_a" status="uncompleted"/>
+            <action type="SetNodeComplete" name="two_step_add_subtract_a"/>
+        </edge>
+        <edge startId="two_step_add_subtract_b" endId="two_step_groups_sum">
+            <condition type="KOutOfNProficient" k="1" n="1" objectiveClass="two_step_objective"/>
+            <condition type="NodeStatus" name="two_step_add_subtract_b" status="uncompleted"/>
+            <action type="SetNodeComplete" name="two_step_add_subtract_b"/>
+        </edge>
+        <edge startId="two_step_groups_sum" endId="two_step_groups_difference">
+            <condition type="KOutOfNProficient" k="1" n="1" objectiveClass="two_step_objective"/>
+            <condition type="NodeStatus" name="two_step_groups_sum" status="uncompleted"/>
+            <action type="SetNodeComplete" name="two_step_groups_sum"/>
+        </edge>
+        <!-- Finishing the advanced multiple operator+unknown, go to fraction tutorial-->
+        <edge startId="two_step_groups_difference" endId="two_step_groups_sum_difference">
+            <condition type="KOutOfNProficient" k="1" n="1" objectiveClass="two_step_objective"/>
+            <condition type="NodeStatus" name="two_step_groups_difference" status="uncompleted"/>
+            <action type="SetNodeComplete" name="two_step_groups_difference"/>
+        </edge>
+        <edge startId="two_step_groups_sum_difference" endId="fraction_enter_card_tut">
+            <condition type="KOutOfNProficient" k="1" n="1" objectiveClass="two_step_objective"/>
+            <condition type="NodeStatus" name="two_step_groups_sum_difference" status="uncompleted"/>
+            <action type="SetNodeComplete" name="two_step_groups_sum_difference"/>
+
+            <!-- Two step mastery marked as completed-->
+            <condition type="NodeStatus" name="two_step_mastery" status="uncompleted"/>
+            <action type="SetNodeComplete" name="two_step_mastery"/>
+            <action type="SetMastery" masteryId="5"/>
+        </edge>
+
+        <!-- Mastery for fraction problems involving a whole-->
+        <edge startId="fraction_of_whole_a" endId="fraction_of_whole_b">
+            <condition type="KOutOfNProficient" k="1" n="1" objectiveClass="fraction_of_whole_objective"/>
+            <condition type="NodeStatus" name="fraction_of_whole_a" status="uncompleted"/>
+            <action type="SetNodeComplete" name="fraction_of_whole_a"/>
+        </edge>
+        <edge startId="fraction_of_whole_b" endId="fraction_of_whole_shaded_unshaded">
+            <condition type="KOutOfNProficient" k="1" n="1" objectiveClass="fraction_of_whole_objective"/>
+            <condition type="NodeStatus" name="fraction_of_whole_b" status="uncompleted"/>
+            <action type="SetNodeComplete" name="fraction_of_whole_b"/>
+        </edge>
+        <edge startId="fraction_of_whole_shaded_unshaded" endId="fraction_of_larger_basic">
+            <condition type="KOutOfNProficient" k="1" n="1" objectiveClass="fraction_of_whole_objective"/>
+            <condition type="NodeStatus" name="fraction_of_larger_basic" status="uncompleted"/>
+            <action type="SetNodeComplete" name="fraction_of_larger_basic"/>
+
+            <condition type="NodeStatus" name="fraction_of_whole_mastery" status="uncompleted"/>
+            <action type="SetNodeComplete" name="fraction_of_whole_mastery"/>
+            <action type="SetMastery" masteryId="6"/>
+        </edge>
+
+        <!-- Mastery for fraction problems where the fraction of a whole is a separate bar-->
+        <edge startId="fraction_of_larger_basic" endId="fraction_of_larger_sum">
+            <condition type="KOutOfNProficient" k="1" n="1" objectiveClass="fraction_of_larger_objective"/>
+            <condition type="NodeStatus" name="fraction_of_larger_basic" status="uncompleted"/>
+            <action type="SetNodeComplete" name="fraction_of_larger_basic"/>
+        </edge>
+        <edge startId="fraction_of_larger_sum" endId="fraction_of_larger_difference">
+            <condition type="KOutOfNProficient" k="1" n="1" objectiveClass="fraction_of_larger_objective"/>
+            <condition type="NodeStatus" name="fraction_of_larger_sum" status="uncompleted"/>
+            <action type="SetNodeComplete" name="fraction_of_larger_sum"/>
+        </edge>
+        <edge startId="fraction_of_larger_difference" endId="fraction_of_larger_sum_difference">
+            <condition type="KOutOfNProficient" k="1" n="1" objectiveClass="fraction_of_larger_objective"/>
+            <condition type="NodeStatus" name="fraction_of_larger_difference" status="uncompleted"/>
+            <action type="SetNodeComplete" name="fraction_of_larger_difference"/>
+        </edge>
+        <edge startId="fraction_of_larger_sum_difference" endId="">
+            <condition type="KOutOfNProficient" k="1" n="1" objectiveClass="fraction_of_larger_objective"/>
+            <condition type="NodeStatus" name="fraction_of_larger_sum_difference" status="uncompleted"/>
+            <action type="SetNodeComplete" name="fraction_of_larger_sum_difference"/>
+
+            <condition type="NodeStatus" name="fraction_of_larger_mastery" status="uncompleted"/>
+            <action type="SetNodeComplete" name="fraction_of_larger_mastery"/>
+            <action type="SetMastery" masteryId="7"/>
+        </edge>
+
+        <!-- If at the last level at some of the nodes, we should loop back to the beginning.
+         Occurs only if the user is struggling with the problem-->
+        <edge startId="536" endId="531">
+            <action type="ClearConditionsForEdge" edgeId="add_mastered"/>
+        </edge>
+        <edge startId="984" endId="701">
+            <action type="ClearConditionsForEdge" edgeId="add_subtract_mastered"/>
+        </edge>
+
+        <!-- Add self loops here -->
+        <edge startId="two_step_add_subtract_a" endId="two_step_add_subtract_a">
+            <action type="PickRandomUncompletedLevel"/>
+        </edge>
+
+        <edge startId="two_step_add_subtract_b" endId="two_step_add_subtract_b">
+            <action type="PickRandomUncompletedLevel"/>
+        </edge>
+
+        <edge startId="two_step_groups_sum" endId="two_step_groups_sum">
+            <action type="PickRandomUncompletedLevel"/>
+        </edge>
+
+        <edge startId="two_step_groups_difference" endId="two_step_groups_difference">
+            <action type="PickRandomUncompletedLevel"/>
+        </edge>
+
+        <edge startId="two_step_groups_sum_difference" endId="two_step_groups_sum_difference">
+            <action type="PickRandomUncompletedLevel"/>
+        </edge>
+
+        <edge startId="fraction_of_whole_a" endId="fraction_of_whole_a">
+            <action type="PickRandomUncompletedLevel"/>
+        </edge>
+
+        <edge startId="fraction_of_whole_b" endId="fraction_of_whole_b">
+            <action type="PickRandomUncompletedLevel"/>
+        </edge>
+
+        <edge startId="fraction_of_whole_shaded_unshaded" endId="fraction_of_whole_shaded_unshaded">
+            <action type="PickRandomUncompletedLevel"/>
+        </edge>
+
+        <edge startId="fraction_of_larger_basic" endId="fraction_of_larger_basic">
+            <action type="PickRandomUncompletedLevel"/>
+        </edge>
+
+        <edge startId="fraction_of_larger_sum" endId="fraction_of_larger_sum">
+            <action type="PickRandomUncompletedLevel"/>
+        </edge>
+
+        <edge startId="fraction_of_larger_difference" endId="fraction_of_larger_difference">
+            <action type="PickRandomUncompletedLevel"/>
+        </edge>
+
+        <edge startId="fraction_of_larger_sum_difference" endId="fraction_of_larger_sum_difference">
+            <action type="PickRandomUncompletedLevel"/>
+        </edge>
+    </edges>
+</progression>

@@ -1,0 +1,472 @@
+{
+    "items":[
+        {"entityId":"1", "components":[
+            {"typeId":"NameComponent", "data":{"name":"Strange Purple Egg"}},
+            {"typeId":"TextureCollectionComponent", "data":{"objects":[
+                {"type":"ImageStatic", "textureName":"egg_white_still", "crop":{"x":19, "y":18, "width":133, "height":160}}, 
+                {"type":"ImageStatic", "textureName":"egg_purple_still_1", "crop":{"x":27, "y":13, "width":137, "height":164}}, 
+                {"type":"ImageStatic", "textureName":"egg_purple_still_2"}, 
+                {"type":"ImageStatic", "textureName":"egg_purple_still_3"},
+                {"type":"ImageStatic", "textureName":"egg_purple_still_4"}, 
+                {"type":"ImageStatic", "textureName":"egg_purple_still_5"}, 
+                {"type":"ImageStatic", "textureName":"egg_purple_still_6", "crop":{"x":104, "y":59, "width":130, "height":164}}, 
+                {"type":"ImageStatic", "textureName":"egg_purple_still_7", "crop":{"x":127, "y":93, "width":89, "height":130}}
+                ]}},
+            {"typeId":"GenreIdComponent", "data":{"genreId":"fantasy"}},
+            {"typeId":"RigidBodyComponent", "data":{"x":245, "y":65, "width":0, "height":105}},
+            {"typeId":"RewardIconComponent", "data":{"textureName":"ped_1S"}},
+            {"typeId":"LevelsCompletedPerStageComponent", "data":{"stageToLevelsCompleted":[2, 5, 7, 11, 17, 20, 24]}},
+            {"typeId":"ItemBlueprintComponent", "data":{"components":[
+                {"typeId":"ItemIdComponent", "data":{"id":"1"}},
+                {"typeId":"CurrentGrowInStageComponent", "data":{"currentStage":0}},
+                {"typeId":"RenderableComponent", "data":{}}
+            ]}}
+        ]},
+        {"entityId":"2", "components":[
+            {"typeId":"NameComponent", "data":{"name":"Strange Yellow Egg"}},
+            {"typeId":"TextureCollectionComponent", "data":{"objects":[
+                {"type":"ImageStatic", "textureName":"egg_white_still", "crop":{"x":19, "y":18, "width":133, "height":160}}, 
+                {"type":"ImageStatic", "textureName":"egg_yellow_still_1", "crop":{"x":33, "y":17, "width":121, "height":160}}, 
+                {"type":"ImageStatic", "textureName":"egg_yellow_still_2", "crop":{"x":11, "y":13, "width":121, "height":160}}, 
+                {"type":"ImageStatic", "textureName":"egg_yellow_still_3"},
+                {"type":"ImageStatic", "textureName":"egg_yellow_still_4"}, 
+                {"type":"ImageStatic", "textureName":"egg_yellow_still_5"}, 
+                {"type":"ImageStatic", "textureName":"egg_yellow_still_6", "crop":{"x":104, "y":59, "width":130, "height":164}}, 
+                {"type":"ImageStatic", "textureName":"egg_yellow_still_7", "crop":{"x":127, "y":93, "width":89, "height":130}}
+                ]}},
+            {"typeId":"GenreIdComponent", "data":{"genreId":"mystery"}},
+            {"typeId":"RigidBodyComponent", "data":{"x":252, "y":85, "width":0, "height":105}},
+            {"typeId":"RewardIconComponent", "data":{"textureName":"eyc_1S"}},
+            {"typeId":"LevelsCompletedPerStageComponent", "data":{"stageToLevelsCompleted":[2, 5, 7, 11, 17, 20, 24]}},
+            {"typeId":"ItemBlueprintComponent", "data":{"components":[
+                {"typeId":"ItemIdComponent", "data":{"id":"2"}},
+                {"typeId":"CurrentGrowInStageComponent", "data":{"currentStage":0}},
+                {"typeId":"RenderableComponent", "data":{}}
+            ]}}
+        ]},
+        {"entityId":"3", "components":[
+            {"typeId":"NameComponent", "data":{"name":"Strange Blue Egg"}},
+            {"typeId":"TextureCollectionComponent", "data":{"objects":[
+                {"type":"ImageStatic", "textureName":"egg_white_still", "crop":{"x":19, "y":18, "width":133, "height":160}}, 
+                {"type":"ImageStatic", "textureName":"egg_blue_still_1", "crop":{"x":42, "y":42, "width":137, "height":164}}, 
+                {"type":"ImageStatic", "textureName":"egg_blue_still_2", "crop":{"x":30, "y":21, "width":121, "height":160}}, 
+                {"type":"ImageStatic", "textureName":"egg_blue_still_3", "crop":{"x":54, "y":46, "width":121, "height":160}},
+                {"type":"ImageStatic", "textureName":"egg_blue_still_4", "crop":{"x":44, "y":45, "width":121, "height":160}}, 
+                {"type":"ImageStatic", "textureName":"egg_blue_still_5", "crop":{"x":53, "y":46, "width":121, "height":160}}, 
+                {"type":"ImageStatic", "textureName":"egg_blue_still_6", "crop":{"x":25, "y":20, "width":131, "height":163}}, 
+                {"type":"ImageStatic", "textureName":"egg_blue_still_7", "crop":{"x":143, "y":116, "width":130, "height":160}}
+                ]}},
+            {"typeId":"GenreIdComponent", "data":{"genreId":"scifi"}},
+            {"typeId":"RigidBodyComponent", "data":{"x":110, "y":50, "width":0, "height":105}},
+            {"typeId":"RewardIconComponent", "data":{"textureName":"blue_egg_1S"}},
+            {"typeId":"LevelsCompletedPerStageComponent", "data":{"stageToLevelsCompleted":[2, 5, 7, 11, 17, 20, 24]}},
+            {"typeId":"ItemBlueprintComponent", "data":{"components":[
+                {"typeId":"ItemIdComponent", "data":{"id":"3"}},
+                {"typeId":"CurrentGrowInStageComponent", "data":{"currentStage":0}},
+                {"typeId":"RenderableComponent", "data":{}}
+            ]}}
+        ]},
+        {"entityId":"4", "components":[
+            {"typeId":"NameComponent", "data":{"name":"Fish Bowl"}},
+            {"typeId":"GenreIdComponent", "data":{"genreId":"intro"}},
+            {"typeId":"TextureCollectionComponent", "data":{"objects":[{"type":"SpriteSheetAnimated", "textureName":"fish_bowl_spritesheet", "subtexturePrefix":"FishBowl", "totalFrames":65, "delay":0}]}},
+            {"typeId":"RigidBodyComponent", "data":{"x":24, "y":104, "width":0, "height":0}},
+            {"typeId":"RewardIconComponent", "data":{"textureName":"fish_bowl_icon"}},
+            {"typeId":"ItemBlueprintComponent", "data":{"components":[
+                {"typeId":"ItemIdComponent", "data":{"id":"4"}},
+                {"typeId":"AnimatedTextureAtlasStateComponent", "data":{}},
+                {"typeId":"RenderableComponent", "data":{}}
+            ]}}
+        ]},
+        {"entityId":"5", "components":[
+            {"typeId":"NameComponent", "data":{"name":"Strange Box"}},
+            {"typeId":"GenreIdComponent", "data":{"genreId":"intro"}},
+            {"typeId":"TextureCollectionComponent", "data":{"objects":[{"type":"SpriteSheetAnimated", "textureName":"box_spritesheet", "subtexturePrefix":"BoxOpening", "totalFrames":52, "delay":90}]}},
+            {"typeId":"RigidBodyComponent", "data":{"x":110, "y":85, "width":0, "height":0}},
+            {"typeId":"RewardIconComponent", "data":{"textureName":"box_still"}},
+            {"typeId":"ItemBlueprintComponent", "data":{"components":[
+                {"typeId":"ItemIdComponent", "data":{"id":"5"}},
+                {"typeId":"RenderableComponent", "data":{}},
+                {"typeId":"AnimatedTextureAtlasStateComponent", "data":{}}
+            ]}}
+        ]},
+        {"entityId":"6", "components":[
+            {"typeId":"NameComponent", "data":{"name":"Detective Glass"}},
+            {"typeId":"GenreIdComponent", "data":{"genreId":"mystery"}},
+            {"typeId":"TextureCollectionComponent", "data":{"objects":[{"type":"ImageStatic", "textureName":"item_glass_hidden"}, {"type":"ImageStatic", "textureName":"item_glass"}]}},
+            {"typeId":"RigidBodyComponent", "data":{"x":56, "y":160, "width":0, "height":0}},
+            {"typeId":"RewardIconComponent", "data":{"textureName":"item_glass"}},
+            {"typeId":"LevelSelectIconComponent", "data":{"hiddenTextureName":"item_glass_level_select_hidden", "shownTextureName":"item_glass_level_select"}},
+            {"typeId":"ItemBlueprintComponent", "data":{"components":[
+                {"typeId":"ItemIdComponent", "data":{"id":"6"}},
+                {"typeId":"RenderableComponent", "data":{}},
+                {"typeId":"HiddenItemComponent", "data":{}},
+                {"typeId":"LevelComponent", "data":{"genre":"mystery", "chapterIndex":0, "levelIndex":0}}
+            ]}}
+        ]},
+        {"entityId":"7", "components":[
+            {"typeId":"NameComponent", "data":{"name":"Magical Potions"}},
+            {"typeId":"GenreIdComponent", "data":{"genreId":"fantasy"}},
+            {"typeId":"TextureCollectionComponent", "data":{"objects":[{"type":"ImageStatic", "textureName":"item_potions_hidden"}, {"type":"ImageStatic", "textureName":"item_potions"}]}},
+            {"typeId":"RigidBodyComponent", "data":{"x":24, "y":102, "width":0, "height":0}},
+            {"typeId":"RewardIconComponent", "data":{"textureName":"item_potions"}},
+            {"typeId":"LevelSelectIconComponent", "data":{"hiddenTextureName":"item_potions_level_select_hidden", "shownTextureName":"item_potions_level_select"}},
+            {"typeId":"ItemBlueprintComponent", "data":{"components":[
+                {"typeId":"ItemIdComponent", "data":{"id":"7"}},
+                {"typeId":"RenderableComponent", "data":{}},
+                {"typeId":"HiddenItemComponent", "data":{}},
+                {"typeId":"LevelComponent", "data":{"genre":"fantasy", "chapterIndex":0, "levelIndex":0}}
+            ]}}
+        ]},
+        {"entityId":"8", "components":[
+            {"typeId":"NameComponent", "data":{"name":"Space Rocket"}},
+            {"typeId":"GenreIdComponent", "data":{"genreId":"scifi"}},
+            {"typeId":"TextureCollectionComponent", "data":{"objects":[{"type":"ImageStatic", "textureName":"item_rocket_hidden"}, {"type":"ImageStatic", "textureName":"item_rocket"}]}},
+            {"typeId":"RigidBodyComponent", "data":{"x":290, "y":16, "width":0, "height":0}},
+            {"typeId":"RewardIconComponent", "data":{"textureName":"item_rocket"}},
+            {"typeId":"LevelSelectIconComponent", "data":{"hiddenTextureName":"item_rocket_level_select_hidden", "shownTextureName":"item_rocket_level_select"}},
+            {"typeId":"ItemBlueprintComponent", "data":{"components":[
+                {"typeId":"ItemIdComponent", "data":{"id":"8"}},
+                {"typeId":"RenderableComponent", "data":{}},
+                {"typeId":"HiddenItemComponent", "data":{}},
+                {"typeId":"LevelComponent", "data":{"genre":"scifi", "chapterIndex":0, "levelIndex":1}}
+            ]}}
+        ]},
+        {"entityId":"9", "components":[
+            {"typeId":"NameComponent", "data":{"name":"Camera"}},
+            {"typeId":"GenreIdComponent", "data":{"genreId":"mystery"}},
+            {"typeId":"TextureCollectionComponent", "data":{"objects":[{"type":"ImageStatic", "textureName":"item_camera_hidden"}, {"type":"ImageStatic", "textureName":"item_camera"}]}},
+            {"typeId":"RigidBodyComponent", "data":{"x":49, "y":5, "width":0, "height":0}},
+            {"typeId":"RewardIconComponent", "data":{"textureName":"item_camera"}},
+            {"typeId":"LevelSelectIconComponent", "data":{"hiddenTextureName":"item_camera_level_select_hidden", "shownTextureName":"item_camera_level_select"}},
+            {"typeId":"ItemBlueprintComponent", "data":{"components":[
+                {"typeId":"ItemIdComponent", "data":{"id":"9"}},
+                {"typeId":"RenderableComponent", "data":{}},
+                {"typeId":"HiddenItemComponent", "data":{}},
+                {"typeId":"LevelComponent", "data":{"genre":"mystery", "chapterIndex":0, "levelIndex":1}}
+            ]}}
+        ]},
+        {"entityId":"10", "components":[
+            {"typeId":"NameComponent", "data":{"name":"Detective's Hat"}},
+            {"typeId":"GenreIdComponent", "data":{"genreId":"mystery"}},
+            {"typeId":"TextureCollectionComponent", "data":{"objects":[{"type":"ImageStatic", "textureName":"item_detectivehat_hidden"}, {"type":"ImageStatic", "textureName":"item_detectivehat"}]}},
+            {"typeId":"RigidBodyComponent", "data":{"x":178, "y":41, "width":0, "height":0}},
+            {"typeId":"RewardIconComponent", "data":{"textureName":"item_detectivehat"}},
+            {"typeId":"LevelSelectIconComponent", "data":{"hiddenTextureName":"item_detectivehat_level_select_hidden", "shownTextureName":"item_detectivehat_level_select"}},
+            {"typeId":"ItemBlueprintComponent", "data":{"components":[
+                {"typeId":"ItemIdComponent", "data":{"id":"10"}},
+                {"typeId":"RenderableComponent", "data":{}},
+                {"typeId":"HiddenItemComponent", "data":{}},
+                {"typeId":"LevelComponent", "data":{"genre":"mystery", "chapterIndex":1, "levelIndex":1}}
+            ]}}
+        ]},
+        {"entityId":"11", "components":[
+            {"typeId":"NameComponent", "data":{"name":"Crown"}},
+            {"typeId":"GenreIdComponent", "data":{"genreId":"fantasy"}},
+            {"typeId":"TextureCollectionComponent", "data":{"objects":[{"type":"ImageStatic", "textureName":"item_crown_hidden"}, {"type":"ImageStatic", "textureName":"item_crown"}]}},
+            {"typeId":"RigidBodyComponent", "data":{"x":177, "y":14, "width":0, "height":0}},
+            {"typeId":"RewardIconComponent", "data":{"textureName":"item_crown"}},
+            {"typeId":"LevelSelectIconComponent", "data":{"hiddenTextureName":"item_crown_level_select_hidden", "shownTextureName":"item_crown_level_select"}},
+            {"typeId":"ItemBlueprintComponent", "data":{"components":[
+                {"typeId":"ItemIdComponent", "data":{"id":"11"}},
+                {"typeId":"RenderableComponent", "data":{}},
+                {"typeId":"HiddenItemComponent", "data":{}},
+                {"typeId":"LevelComponent", "data":{"genre":"fantasy", "chapterIndex":1, "levelIndex":0}}
+            ]}}
+        ]},
+        {"entityId":"12", "components":[
+            {"typeId":"NameComponent", "data":{"name":"Wizard's Hat"}},
+            {"typeId":"GenreIdComponent", "data":{"genreId":"fantasy"}},
+            {"typeId":"TextureCollectionComponent", "data":{"objects":[{"type":"ImageStatic", "textureName":"item_wizardhat_hidden"}, {"type":"ImageStatic", "textureName":"item_wizardhat"}]}},
+            {"typeId":"RigidBodyComponent", "data":{"x":76, "y":13, "width":0, "height":0}},
+            {"typeId":"RewardIconComponent", "data":{"textureName":"item_wizardhat"}},
+            {"typeId":"LevelSelectIconComponent", "data":{"hiddenTextureName":"item_wizardhat_level_select_hidden", "shownTextureName":"item_wizardhat_level_select"}},
+            {"typeId":"ItemBlueprintComponent", "data":{"components":[
+                {"typeId":"ItemIdComponent", "data":{"id":"12"}},
+                {"typeId":"RenderableComponent", "data":{}},
+                {"typeId":"HiddenItemComponent", "data":{}},
+                {"typeId":"LevelComponent", "data":{"genre":"fantasy", "chapterIndex":1, "levelIndex":1}}
+            ]}}
+        ]},
+        {"entityId":"13", "components":[
+            {"typeId":"NameComponent", "data":{"name":"Robot"}},
+            {"typeId":"GenreIdComponent", "data":{"genreId":"scifi"}},
+            {"typeId":"TextureCollectionComponent", "data":{"objects":[{"type":"ImageStatic", "textureName":"item_robot_hidden"}, {"type":"ImageStatic", "textureName":"item_robot"}]}},
+            {"typeId":"RigidBodyComponent", "data":{"x":209, "y":73, "width":0, "height":0}},
+            {"typeId":"RewardIconComponent", "data":{"textureName":"item_robot"}},
+            {"typeId":"LevelSelectIconComponent", "data":{"hiddenTextureName":"item_robot_level_select_hidden", "shownTextureName":"item_robot_level_select"}},
+            {"typeId":"ItemBlueprintComponent", "data":{"components":[
+                {"typeId":"ItemIdComponent", "data":{"id":"13"}},
+                {"typeId":"RenderableComponent", "data":{}},
+                {"typeId":"HiddenItemComponent", "data":{}},
+                {"typeId":"LevelComponent", "data":{"genre":"scifi", "chapterIndex":1, "levelIndex":0}}
+            ]}}
+        ]},
+        {"entityId":"14", "components":[
+            {"typeId":"NameComponent", "data":{"name":"Saturn"}},
+            {"typeId":"GenreIdComponent", "data":{"genreId":"scifi"}},
+            {"typeId":"TextureCollectionComponent", "data":{"objects":[{"type":"ImageStatic", "textureName":"item_planet_hidden"}, {"type":"ImageStatic", "textureName":"item_planet"}]}},
+            {"typeId":"RigidBodyComponent", "data":{"x":209, "y":0, "width":0, "height":0}},
+            {"typeId":"RewardIconComponent", "data":{"textureName":"item_planet"}},
+            {"typeId":"LevelSelectIconComponent", "data":{"hiddenTextureName":"item_planet_level_select_hidden", "shownTextureName":"item_planet_level_select"}},
+            {"typeId":"ItemBlueprintComponent", "data":{"components":[
+                {"typeId":"ItemIdComponent", "data":{"id":"14"}},
+                {"typeId":"RenderableComponent", "data":{}},
+                {"typeId":"HiddenItemComponent", "data":{}},
+                {"typeId":"LevelComponent", "data":{"genre":"scifi", "chapterIndex":0, "levelIndex":0}}
+            ]}}
+        ]},
+        {"entityId":"15", "components":[
+            {"typeId":"NameComponent", "data":{"name":"Stuffed Taco"}},
+            {"typeId":"GenreIdComponent", "data":{"genreId":"other"}},
+            {"typeId":"TextureCollectionComponent", "data":{"objects":[{"type":"ImageStatic", "textureName":"item_stuffed_animal"}]}},
+            {"typeId":"RigidBodyComponent", "data":{"x":22, "y":83, "width":0, "height":0}},
+            {"typeId":"RewardIconComponent", "data":{"textureName":"item_stuffed_animal"}},
+            {"typeId":"ItemBlueprintComponent", "data":{"components":[
+                {"typeId":"ItemIdComponent", "data":{"id":"2"}},
+                {"typeId":"CurrentGrowInStageComponent", "data":{"currentStage":0}},
+                {"typeId":"RenderableComponent", "data":{}}
+            ]}}
+        ]},
+        {"entityId":"501", "components":[
+            {"typeId":"NameComponent", "data":{"name":"Robot A"}},
+            {"typeId":"DescriptionComponent", "data":{"desc":"The light on this one's head flashes when danger is near."}},
+            {"typeId":"TextureCollectionComponent", "data":{"objects":[{"type":"FlashMovieClip", "flashId":"cgs.display.engine.avatar.Robot", "textureName":"robot_a", "params":{"frame":1}}]}},
+            {"typeId":"RigidBodyComponent", "data":{"x":60, "y":270, "width":120, "height":290}},
+            {"typeId":"ItemBlueprintComponent", "data":{"components":[
+                {"typeId":"ItemIdComponent", "data":{"id":"501"}},
+                {"typeId":"RenderableComponent", "data":{}}
+            ]}}
+        ]},
+        {"entityId":"502", "components":[
+            {"typeId":"NameComponent", "data":{"name":"Robot B"}},
+            {"typeId":"DescriptionComponent", "data":{"desc":"This robot was made with a special fem-chip."}},
+            {"typeId":"TextureCollectionComponent", "data":{"objects":[{"type":"FlashMovieClip", "flashId":"cgs.display.engine.avatar.Robot", "textureName":"robot_b", "params":{"frame":7}}]}},
+            {"typeId":"RigidBodyComponent", "data":{"x":85, "y":245, "width":160, "height":290}},
+            {"typeId":"ItemBlueprintComponent", "data":{"components":[
+                {"typeId":"ItemIdComponent", "data":{"id":"502"}},
+                {"typeId":"RenderableComponent", "data":{}}
+            ]}}
+        ]},
+        {"entityId":"503", "components":[
+            {"typeId":"NameComponent", "data":{"name":"Robot C"}},
+            {"typeId":"DescriptionComponent", "data":{"desc":"This little guy doubles as a trash can."}},
+            {"typeId":"TextureCollectionComponent", "data":{"objects":[{"type":"FlashMovieClip", "flashId":"cgs.display.engine.avatar.Robot", "textureName":"robot_c", "params":{"frame":13}}]}},
+            {"typeId":"RigidBodyComponent", "data":{"x":115, "y":220, "width":220, "height":250}},
+            {"typeId":"ItemBlueprintComponent", "data":{"components":[
+                {"typeId":"ItemIdComponent", "data":{"id":"503"}},
+                {"typeId":"RenderableComponent", "data":{}}
+            ]}}
+        ]},
+        {"entityId":"504", "components":[
+            {"typeId":"NameComponent", "data":{"name":"Robot D"}},
+            {"typeId":"DescriptionComponent", "data":{"desc":"This robot tells the news non-stop with the help of his K9 model dog-bot."}},
+            {"typeId":"TextureCollectionComponent", "data":{"objects":[{"type":"FlashMovieClip", "flashId":"cgs.display.engine.avatar.Robot", "textureName":"robot_d", "params":{"frame":19}}]}},
+            {"typeId":"RigidBodyComponent", "data":{"x":100, "y":290, "width":320, "height":350}},
+            {"typeId":"ItemBlueprintComponent", "data":{"components":[
+                {"typeId":"ItemIdComponent", "data":{"id":"504"}},
+                {"typeId":"RenderableComponent", "data":{}}
+            ]}}
+        ]},
+        {"entityId": "20", "components": [{"typeId": "NameComponent", "data": {"name": "Arctria"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "arctria"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "arctria", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "20"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "21", "components": [{"typeId": "NameComponent", "data": {"name": "Boofly"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "boofly"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "boofly", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "21"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "22", "components": [{"typeId": "NameComponent", "data": {"name": "Cawwie"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "cawwie"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "cawwie", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "22"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "23", "components": [{"typeId": "NameComponent", "data": {"name": "Copper"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "copper"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "copper", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "23"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "24", "components": [{"typeId": "NameComponent", "data": {"name": "Cyry"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "cyry"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "cyry", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "24"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "25", "components": [{"typeId": "NameComponent", "data": {"name": "Dripple"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "dripple"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "dripple", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "25"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "26", "components": [{"typeId": "NameComponent", "data": {"name": "Eecka"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "eecka"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "eecka", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "26"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "27", "components": [{"typeId": "NameComponent", "data": {"name": "Flarn"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "flarn"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "flarn", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "27"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "28", "components": [{"typeId": "NameComponent", "data": {"name": "Flobi"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "flobi"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "flobi", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "28"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "29", "components": [{"typeId": "NameComponent", "data": {"name": "Galeta"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "galeta"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "galeta", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "29"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "30", "components": [{"typeId": "NameComponent", "data": {"name": "Goo"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "goo"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "goo", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "30"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "31", "components": [{"typeId": "NameComponent", "data": {"name": "Jellioops"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "jellioops"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "jellioops", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "31"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "32", "components": [{"typeId": "NameComponent", "data": {"name": "Kerdoo"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "kerdoo"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "kerdoo", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "32"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "33", "components": [{"typeId": "NameComponent", "data": {"name": "Kisley"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "kisley"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "kisley", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "33"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "34", "components": [{"typeId": "NameComponent", "data": {"name": "Rawrgon"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "rawrgon"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "rawrgon", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "34"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "35", "components": [{"typeId": "NameComponent", "data": {"name": "Sleesh"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "sleesh"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "sleesh", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "35"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "36", "components": [{"typeId": "NameComponent", "data": {"name": "Sponky"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "sponky"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "sponky", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "36"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "37", "components": [{"typeId": "NameComponent", "data": {"name": "Spugsy"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "spugsy"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "spugsy", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "37"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "38", "components": [{"typeId": "NameComponent", "data": {"name": "Thort"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "thort"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "thort", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "38"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "39", "components": [{"typeId": "NameComponent", "data": {"name": "Voya"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "voya"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "voya", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "39"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "40", "components": [{"typeId": "NameComponent", "data": {"name": "Wippo"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "wippo"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "wippo", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "40"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "41", "components": [{"typeId": "NameComponent", "data": {"name": "Zuzu"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "zuzu"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "zuzu", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "41"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "42", "components": [{"typeId": "NameComponent", "data": {"name": "Alligator"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "alligator"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "alligator", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "42"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "43", "components": [{"typeId": "NameComponent", "data": {"name": "Bear"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "bear"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "bear", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "43"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "44", "components": [{"typeId": "NameComponent", "data": {"name": "Bird Blue"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "bird_blue"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "bird_blue", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "44"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "45", "components": [{"typeId": "NameComponent", "data": {"name": "Bird Brown"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "bird_brown"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "bird_brown", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "45"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "46", "components": [{"typeId": "NameComponent", "data": {"name": "Buffalo"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "buffalo"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "buffalo", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "46"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "47", "components": [{"typeId": "NameComponent", "data": {"name": "Bunny"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "bunny"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "bunny", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "47"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "48", "components": [{"typeId": "NameComponent", "data": {"name": "Butterfly"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "butterfly"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "butterfly", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "48"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "49", "components": [{"typeId": "NameComponent", "data": {"name": "Cat"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "cat"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "cat", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "49"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "50", "components": [{"typeId": "NameComponent", "data": {"name": "Caterpillar"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "caterpillar"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "caterpillar", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "50"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "51", "components": [{"typeId": "NameComponent", "data": {"name": "Cow"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "cow"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "cow", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "51"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "52", "components": [{"typeId": "NameComponent", "data": {"name": "Dinosaur"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "dinosaur"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "dinosaur", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "52"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "53", "components": [{"typeId": "NameComponent", "data": {"name": "Dove"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "dove"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "dove", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "53"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "54", "components": [{"typeId": "NameComponent", "data": {"name": "Duck"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "duck"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "duck", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "54"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "55", "components": [{"typeId": "NameComponent", "data": {"name": "Eagle"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "eagle"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "eagle", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "55"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "56", "components": [{"typeId": "NameComponent", "data": {"name": "Elephant"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "elephant"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "elephant", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "56"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "57", "components": [{"typeId": "NameComponent", "data": {"name": "Fish"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "fish"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "fish", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "57"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "58", "components": [{"typeId": "NameComponent", "data": {"name": "Frog"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "frog"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "frog", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "58"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "59", "components": [{"typeId": "NameComponent", "data": {"name": "Giraffe"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "giraffe"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "giraffe", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "59"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "60", "components": [{"typeId": "NameComponent", "data": {"name": "Gorilla"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "gorilla"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "gorilla", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "60"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "61", "components": [{"typeId": "NameComponent", "data": {"name": "Hamster"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "hamster"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "hamster", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "61"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "62", "components": [{"typeId": "NameComponent", "data": {"name": "Hawk"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "hawk"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "hawk", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "62"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "63", "components": [{"typeId": "NameComponent", "data": {"name": "Hedgehog"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "hedgehog"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "hedgehog", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "63"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "64", "components": [{"typeId": "NameComponent", "data": {"name": "Jellyfish"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "jellyfish"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "jellyfish", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "64"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "65", "components": [{"typeId": "NameComponent", "data": {"name": "Koala"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "koala"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "koala", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "65"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "66", "components": [{"typeId": "NameComponent", "data": {"name": "Lemur"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "lemur"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "lemur", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "66"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "67", "components": [{"typeId": "NameComponent", "data": {"name": "Lion"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "lion"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "lion", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "67"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "68", "components": [{"typeId": "NameComponent", "data": {"name": "Lion Cub"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "lion_cub"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "lion_cub", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "68"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "69", "components": [{"typeId": "NameComponent", "data": {"name": "Lizard"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "lizard"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "lizard", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "69"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "70", "components": [{"typeId": "NameComponent", "data": {"name": "Lizard Spotted"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "lizard_spotted"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "lizard_spotted", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "70"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "71", "components": [{"typeId": "NameComponent", "data": {"name": "Mammoth"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "mammoth"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "mammoth", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "71"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "72", "components": [{"typeId": "NameComponent", "data": {"name": "Monkey"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "monkey"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "monkey", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "72"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "73", "components": [{"typeId": "NameComponent", "data": {"name": "Mouse"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "mouse"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "mouse", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "73"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "74", "components": [{"typeId": "NameComponent", "data": {"name": "Peacock"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "peacock"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "peacock", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "74"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "75", "components": [{"typeId": "NameComponent", "data": {"name": "Penguin"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "penguin"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "penguin", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "75"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "76", "components": [{"typeId": "NameComponent", "data": {"name": "Puppy"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "puppy"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "puppy", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "76"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "77", "components": [{"typeId": "NameComponent", "data": {"name": "Red Panda"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "red_panda"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "red_panda", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "77"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "78", "components": [{"typeId": "NameComponent", "data": {"name": "Snail"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "snail"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "snail", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "78"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "79", "components": [{"typeId": "NameComponent", "data": {"name": "Snake"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "snake"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "snake", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "79"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "80", "components": [{"typeId": "NameComponent", "data": {"name": "Spider"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "spider"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "spider", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "80"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "81", "components": [{"typeId": "NameComponent", "data": {"name": "Tiger"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "tiger"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "tiger", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "81"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "82", "components": [{"typeId": "NameComponent", "data": {"name": "Turtle"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "turtle"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "turtle", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "82"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "83", "components": [{"typeId": "NameComponent", "data": {"name": "Vulture"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "vulture"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "vulture", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "83"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "84", "components": [{"typeId": "NameComponent", "data": {"name": "Wolf"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "wolf"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "wolf", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "84"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"entityId": "85", "components": [{"typeId": "NameComponent", "data": {"name": "Zebra"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "zebra"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "zebra", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "85"}}, {"typeId": "RenderableComponent", "data": {}}]}}]},
+{"components": [{"typeId": "NameComponent", "data": {"name": "Apple"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "apple"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"type": "ImageStatic", "textureName": "apple"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "86"}}, {"typeId": "RenderableComponent", "data": {}}]}}], "entityId": "86"},
+{"components": [{"typeId": "NameComponent", "data": {"name": "Banana"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "banana"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"type": "ImageStatic", "textureName": "banana"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "87"}}, {"typeId": "RenderableComponent", "data": {}}]}}], "entityId": "87"},
+{"components": [{"typeId": "NameComponent", "data": {"name": "Birthday Cake"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "birthday_cake"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"type": "ImageStatic", "textureName": "birthday_cake"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "88"}}, {"typeId": "RenderableComponent", "data": {}}]}}], "entityId": "88"},
+{"components": [{"typeId": "NameComponent", "data": {"name": "Broccoli"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "broccoli"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"type": "ImageStatic", "textureName": "broccoli"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "89"}}, {"typeId": "RenderableComponent", "data": {}}]}}], "entityId": "89"},
+{"components": [{"typeId": "NameComponent", "data": {"name": "Candy"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "candy"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"type": "ImageStatic", "textureName": "candy"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "90"}}, {"typeId": "RenderableComponent", "data": {}}]}}], "entityId": "90"},
+{"components": [{"typeId": "NameComponent", "data": {"name": "Cheese"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "cheese"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"type": "ImageStatic", "textureName": "cheese"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "91"}}, {"typeId": "RenderableComponent", "data": {}}]}}], "entityId": "91"},
+{"components": [{"typeId": "NameComponent", "data": {"name": "Cookie"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "cookie"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"type": "ImageStatic", "textureName": "cookie"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "92"}}, {"typeId": "RenderableComponent", "data": {}}]}}], "entityId": "92"},
+{"components": [{"typeId": "NameComponent", "data": {"name": "Cotton Candy"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "cotton_candy"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"type": "ImageStatic", "textureName": "cotton_candy"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "93"}}, {"typeId": "RenderableComponent", "data": {}}]}}], "entityId": "93"},
+{"components": [{"typeId": "NameComponent", "data": {"name": "Cupcake"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "cupcake"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"type": "ImageStatic", "textureName": "cupcake"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "94"}}, {"typeId": "RenderableComponent", "data": {}}]}}], "entityId": "94"},
+{"components": [{"typeId": "NameComponent", "data": {"name": "Dog Biscuit"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "dog_biscuit"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"type": "ImageStatic", "textureName": "dog_biscuit"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "95"}}, {"typeId": "RenderableComponent", "data": {}}]}}], "entityId": "95"},
+{"components": [{"typeId": "NameComponent", "data": {"name": "Mushroom"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "mushroom"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"type": "ImageStatic", "textureName": "mushroom"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "96"}}, {"typeId": "RenderableComponent", "data": {}}]}}], "entityId": "96"},
+{"components": [{"typeId": "NameComponent", "data": {"name": "Popcorn"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "popcorn"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"type": "ImageStatic", "textureName": "popcorn"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "97"}}, {"typeId": "RenderableComponent", "data": {}}]}}], "entityId": "97"},
+{"components": [{"typeId": "NameComponent", "data": {"name": "Pretzel"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "pretzel"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"type": "ImageStatic", "textureName": "pretzel"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "98"}}, {"typeId": "RenderableComponent", "data": {}}]}}], "entityId": "98"},
+{"components": [{"typeId": "NameComponent", "data": {"name": "Pumpkin"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "pumpkin"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"type": "ImageStatic", "textureName": "pumpkin"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "99"}}, {"typeId": "RenderableComponent", "data": {}}]}}], "entityId": "99"},
+{"components": [{"typeId": "NameComponent", "data": {"name": "Steak"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "steak"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"type": "ImageStatic", "textureName": "steak"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "100"}}, {"typeId": "RenderableComponent", "data": {}}]}}], "entityId": "100"},
+{"components": [{"typeId": "NameComponent", "data": {"name": "Watermelon"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "watermelon"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"type": "ImageStatic", "textureName": "watermelon"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "101"}}, {"typeId": "RenderableComponent", "data": {}}]}}], "entityId": "101"},
+{"entityId": "102", "components": [{"data": {"name": "Adventurer"}, "typeId": "NameComponent"}, {"data": {"desc": ""}, "typeId": "DescriptionComponent"}, {"data": {"textureName": "adventurer"}, "typeId": "RewardIconComponent"}, {"data": {"objects": [{"textureName": "adventurer", "type": "ImageStatic"}]}, "typeId": "TextureCollectionComponent"}, {"data": {"components": [{"data": {"id": "102"}, "typeId": "ItemIdComponent"}, {"data": {}, "typeId": "RenderableComponent"}]}, "typeId": "ItemBlueprintComponent"}]},
+{"entityId": "103", "components": [{"data": {"name": "Drawing Castle Night"}, "typeId": "NameComponent"}, {"data": {"desc": ""}, "typeId": "DescriptionComponent"}, {"data": {"textureName": "drawing_castle_night"}, "typeId": "RewardIconComponent"}, {"data": {"objects": [{"textureName": "drawing_castle_night", "type": "ImageStatic"}]}, "typeId": "TextureCollectionComponent"}, {"data": {"components": [{"data": {"id": "103"}, "typeId": "ItemIdComponent"}, {"data": {}, "typeId": "RenderableComponent"}]}, "typeId": "ItemBlueprintComponent"}]},
+{"entityId": "104", "components": [{"data": {"name": "Drawing Medieval Forest"}, "typeId": "NameComponent"}, {"data": {"desc": ""}, "typeId": "DescriptionComponent"}, {"data": {"textureName": "drawing_medieval_forest"}, "typeId": "RewardIconComponent"}, {"data": {"objects": [{"textureName": "drawing_medieval_forest", "type": "ImageStatic"}]}, "typeId": "TextureCollectionComponent"}, {"data": {"components": [{"data": {"id": "104"}, "typeId": "ItemIdComponent"}, {"data": {}, "typeId": "RenderableComponent"}]}, "typeId": "ItemBlueprintComponent"}]},
+{"entityId": "105", "components": [{"data": {"name": "Drawing Medieval Treasure"}, "typeId": "NameComponent"}, {"data": {"desc": ""}, "typeId": "DescriptionComponent"}, {"data": {"textureName": "drawing_medieval_treasure"}, "typeId": "RewardIconComponent"}, {"data": {"objects": [{"textureName": "drawing_medieval_treasure", "type": "ImageStatic"}]}, "typeId": "TextureCollectionComponent"}, {"data": {"components": [{"data": {"id": "105"}, "typeId": "ItemIdComponent"}, {"data": {}, "typeId": "RenderableComponent"}]}, "typeId": "ItemBlueprintComponent"}]},
+{"entityId": "106", "components": [{"data": {"name": "Drawing Tomes"}, "typeId": "NameComponent"}, {"data": {"desc": ""}, "typeId": "DescriptionComponent"}, {"data": {"textureName": "drawing_tomes"}, "typeId": "RewardIconComponent"}, {"data": {"objects": [{"textureName": "drawing_tomes", "type": "ImageStatic"}]}, "typeId": "TextureCollectionComponent"}, {"data": {"components": [{"data": {"id": "106"}, "typeId": "ItemIdComponent"}, {"data": {}, "typeId": "RenderableComponent"}]}, "typeId": "ItemBlueprintComponent"}]},
+{"entityId": "107", "components": [{"data": {"name": "Knight"}, "typeId": "NameComponent"}, {"data": {"desc": ""}, "typeId": "DescriptionComponent"}, {"data": {"textureName": "knight"}, "typeId": "RewardIconComponent"}, {"data": {"objects": [{"textureName": "knight", "type": "ImageStatic"}]}, "typeId": "TextureCollectionComponent"}, {"data": {"components": [{"data": {"id": "107"}, "typeId": "ItemIdComponent"}, {"data": {}, "typeId": "RenderableComponent"}]}, "typeId": "ItemBlueprintComponent"}]},
+{"entityId": "108", "components": [{"data": {"name": "Princess"}, "typeId": "NameComponent"}, {"data": {"desc": ""}, "typeId": "DescriptionComponent"}, {"data": {"textureName": "princess"}, "typeId": "RewardIconComponent"}, {"data": {"objects": [{"textureName": "princess", "type": "ImageStatic"}]}, "typeId": "TextureCollectionComponent"}, {"data": {"components": [{"data": {"id": "108"}, "typeId": "ItemIdComponent"}, {"data": {}, "typeId": "RenderableComponent"}]}, "typeId": "ItemBlueprintComponent"}]},
+{"entityId": "109", "components": [{"data": {"name": "Sword"}, "typeId": "NameComponent"}, {"data": {"desc": ""}, "typeId": "DescriptionComponent"}, {"data": {"textureName": "sword"}, "typeId": "RewardIconComponent"}, {"data": {"objects": [{"textureName": "sword", "type": "ImageStatic"}]}, "typeId": "TextureCollectionComponent"}, {"data": {"components": [{"data": {"id": "109"}, "typeId": "ItemIdComponent"}, {"data": {}, "typeId": "RenderableComponent"}]}, "typeId": "ItemBlueprintComponent"}]},
+{"components": [{"data": {"name": "Bush"}, "typeId": "NameComponent"}, {"data": {"desc": ""}, "typeId": "DescriptionComponent"}, {"data": {"textureName": "bush"}, "typeId": "RewardIconComponent"}, {"data": {"objects": [{"type": "ImageStatic", "textureName": "bush"}]}, "typeId": "TextureCollectionComponent"}, {"data": {"components": [{"data": {"id": "110"}, "typeId": "ItemIdComponent"}, {"data": {}, "typeId": "RenderableComponent"}]}, "typeId": "ItemBlueprintComponent"}], "entityId": "110"},
+{"components": [{"data": {"name": "Dog Toy"}, "typeId": "NameComponent"}, {"data": {"desc": ""}, "typeId": "DescriptionComponent"}, {"data": {"textureName": "dog_toy"}, "typeId": "RewardIconComponent"}, {"data": {"objects": [{"type": "ImageStatic", "textureName": "dog_toy"}]}, "typeId": "TextureCollectionComponent"}, {"data": {"components": [{"data": {"id": "111"}, "typeId": "ItemIdComponent"}, {"data": {}, "typeId": "RenderableComponent"}]}, "typeId": "ItemBlueprintComponent"}], "entityId": "111"},
+{"components": [{"data": {"name": "Feather"}, "typeId": "NameComponent"}, {"data": {"desc": ""}, "typeId": "DescriptionComponent"}, {"data": {"textureName": "feather"}, "typeId": "RewardIconComponent"}, {"data": {"objects": [{"type": "ImageStatic", "textureName": "feather"}]}, "typeId": "TextureCollectionComponent"}, {"data": {"components": [{"data": {"id": "112"}, "typeId": "ItemIdComponent"}, {"data": {}, "typeId": "RenderableComponent"}]}, "typeId": "ItemBlueprintComponent"}], "entityId": "112"},
+{"components": [{"data": {"name": "Locket"}, "typeId": "NameComponent"}, {"data": {"desc": ""}, "typeId": "DescriptionComponent"}, {"data": {"textureName": "locket"}, "typeId": "RewardIconComponent"}, {"data": {"objects": [{"type": "ImageStatic", "textureName": "locket"}]}, "typeId": "TextureCollectionComponent"}, {"data": {"components": [{"data": {"id": "113"}, "typeId": "ItemIdComponent"}, {"data": {}, "typeId": "RenderableComponent"}]}, "typeId": "ItemBlueprintComponent"}], "entityId": "113"},
+{"components": [{"data": {"name": "Ribbons"}, "typeId": "NameComponent"}, {"data": {"desc": ""}, "typeId": "DescriptionComponent"}, {"data": {"textureName": "ribbons"}, "typeId": "RewardIconComponent"}, {"data": {"objects": [{"type": "ImageStatic", "textureName": "ribbons"}]}, "typeId": "TextureCollectionComponent"}, {"data": {"components": [{"data": {"id": "114"}, "typeId": "ItemIdComponent"}, {"data": {}, "typeId": "RenderableComponent"}]}, "typeId": "ItemBlueprintComponent"}], "entityId": "114"},
+{"components": [{"data": {"name": "Rope"}, "typeId": "NameComponent"}, {"data": {"desc": ""}, "typeId": "DescriptionComponent"}, {"data": {"textureName": "rope"}, "typeId": "RewardIconComponent"}, {"data": {"objects": [{"type": "ImageStatic", "textureName": "rope"}]}, "typeId": "TextureCollectionComponent"}, {"data": {"components": [{"data": {"id": "115"}, "typeId": "ItemIdComponent"}, {"data": {}, "typeId": "RenderableComponent"}]}, "typeId": "ItemBlueprintComponent"}], "entityId": "115"},
+{"components": [{"data": {"name": "Tree"}, "typeId": "NameComponent"}, {"data": {"desc": ""}, "typeId": "DescriptionComponent"}, {"data": {"textureName": "tree"}, "typeId": "RewardIconComponent"}, {"data": {"objects": [{"type": "ImageStatic", "textureName": "tree"}]}, "typeId": "TextureCollectionComponent"}, {"data": {"components": [{"data": {"id": "116"}, "typeId": "ItemIdComponent"}, {"data": {}, "typeId": "RenderableComponent"}]}, "typeId": "ItemBlueprintComponent"}], "entityId": "116"},
+{"components": [{"data": {"name": "Dragon Green"}, "typeId": "NameComponent"}, {"data": {"desc": ""}, "typeId": "DescriptionComponent"}, {"data": {"textureName": "dragon_green"}, "typeId": "RewardIconComponent"}, {"data": {"objects": [{"textureName": "dragon_green", "type": "ImageStatic"}]}, "typeId": "TextureCollectionComponent"}, {"data": {"components": [{"data": {"id": "117"}, "typeId": "ItemIdComponent"}, {"data": {}, "typeId": "RenderableComponent"}]}, "typeId": "ItemBlueprintComponent"}], "entityId": "117"},
+{"components": [{"data": {"name": "Dragon Red"}, "typeId": "NameComponent"}, {"data": {"desc": ""}, "typeId": "DescriptionComponent"}, {"data": {"textureName": "dragon_red"}, "typeId": "RewardIconComponent"}, {"data": {"objects": [{"textureName": "dragon_red", "type": "ImageStatic"}]}, "typeId": "TextureCollectionComponent"}, {"data": {"components": [{"data": {"id": "118"}, "typeId": "ItemIdComponent"}, {"data": {}, "typeId": "RenderableComponent"}]}, "typeId": "ItemBlueprintComponent"}], "entityId": "118"},
+{"components": [{"data": {"name": "Elf"}, "typeId": "NameComponent"}, {"data": {"desc": ""}, "typeId": "DescriptionComponent"}, {"data": {"textureName": "elf"}, "typeId": "RewardIconComponent"}, {"data": {"objects": [{"textureName": "elf", "type": "ImageStatic"}]}, "typeId": "TextureCollectionComponent"}, {"data": {"components": [{"data": {"id": "119"}, "typeId": "ItemIdComponent"}, {"data": {}, "typeId": "RenderableComponent"}]}, "typeId": "ItemBlueprintComponent"}], "entityId": "119"},
+{"components": [{"data": {"name": "Fairy"}, "typeId": "NameComponent"}, {"data": {"desc": ""}, "typeId": "DescriptionComponent"}, {"data": {"textureName": "fairy"}, "typeId": "RewardIconComponent"}, {"data": {"objects": [{"textureName": "fairy", "type": "ImageStatic"}]}, "typeId": "TextureCollectionComponent"}, {"data": {"components": [{"data": {"id": "120"}, "typeId": "ItemIdComponent"}, {"data": {}, "typeId": "RenderableComponent"}]}, "typeId": "ItemBlueprintComponent"}], "entityId": "120"},
+{"components": [{"data": {"name": "Monster"}, "typeId": "NameComponent"}, {"data": {"desc": ""}, "typeId": "DescriptionComponent"}, {"data": {"textureName": "monster"}, "typeId": "RewardIconComponent"}, {"data": {"objects": [{"textureName": "monster", "type": "ImageStatic"}]}, "typeId": "TextureCollectionComponent"}, {"data": {"components": [{"data": {"id": "121"}, "typeId": "ItemIdComponent"}, {"data": {}, "typeId": "RenderableComponent"}]}, "typeId": "ItemBlueprintComponent"}], "entityId": "121"},
+{"components": [{"data": {"name": "Pegasus"}, "typeId": "NameComponent"}, {"data": {"desc": ""}, "typeId": "DescriptionComponent"}, {"data": {"textureName": "pegasus"}, "typeId": "RewardIconComponent"}, {"data": {"objects": [{"textureName": "pegasus", "type": "ImageStatic"}]}, "typeId": "TextureCollectionComponent"}, {"data": {"components": [{"data": {"id": "122"}, "typeId": "ItemIdComponent"}, {"data": {}, "typeId": "RenderableComponent"}]}, "typeId": "ItemBlueprintComponent"}], "entityId": "122"},
+{"components": [{"data": {"name": "Sea Sprite"}, "typeId": "NameComponent"}, {"data": {"desc": ""}, "typeId": "DescriptionComponent"}, {"data": {"textureName": "sea_sprite"}, "typeId": "RewardIconComponent"}, {"data": {"objects": [{"textureName": "sea_sprite", "type": "ImageStatic"}]}, "typeId": "TextureCollectionComponent"}, {"data": {"components": [{"data": {"id": "123"}, "typeId": "ItemIdComponent"}, {"data": {}, "typeId": "RenderableComponent"}]}, "typeId": "ItemBlueprintComponent"}], "entityId": "123"},
+{"components": [{"data": {"name": "Troll"}, "typeId": "NameComponent"}, {"data": {"desc": ""}, "typeId": "DescriptionComponent"}, {"data": {"textureName": "troll"}, "typeId": "RewardIconComponent"}, {"data": {"objects": [{"textureName": "troll", "type": "ImageStatic"}]}, "typeId": "TextureCollectionComponent"}, {"data": {"components": [{"data": {"id": "124"}, "typeId": "ItemIdComponent"}, {"data": {}, "typeId": "RenderableComponent"}]}, "typeId": "ItemBlueprintComponent"}], "entityId": "124"},
+{"components": [{"data": {"name": "Troll Forest"}, "typeId": "NameComponent"}, {"data": {"desc": ""}, "typeId": "DescriptionComponent"}, {"data": {"textureName": "troll_forest"}, "typeId": "RewardIconComponent"}, {"data": {"objects": [{"textureName": "troll_forest", "type": "ImageStatic"}]}, "typeId": "TextureCollectionComponent"}, {"data": {"components": [{"data": {"id": "125"}, "typeId": "ItemIdComponent"}, {"data": {}, "typeId": "RenderableComponent"}]}, "typeId": "ItemBlueprintComponent"}], "entityId": "125"},
+{"components": [{"data": {"name": "Troll Mountain"}, "typeId": "NameComponent"}, {"data": {"desc": ""}, "typeId": "DescriptionComponent"}, {"data": {"textureName": "troll_mountain"}, "typeId": "RewardIconComponent"}, {"data": {"objects": [{"textureName": "troll_mountain", "type": "ImageStatic"}]}, "typeId": "TextureCollectionComponent"}, {"data": {"components": [{"data": {"id": "126"}, "typeId": "ItemIdComponent"}, {"data": {}, "typeId": "RenderableComponent"}]}, "typeId": "ItemBlueprintComponent"}], "entityId": "126"},
+{"components": [{"data": {"name": "Unicorn"}, "typeId": "NameComponent"}, {"data": {"desc": ""}, "typeId": "DescriptionComponent"}, {"data": {"textureName": "unicorn"}, "typeId": "RewardIconComponent"}, {"data": {"objects": [{"textureName": "unicorn", "type": "ImageStatic"}]}, "typeId": "TextureCollectionComponent"}, {"data": {"components": [{"data": {"id": "127"}, "typeId": "ItemIdComponent"}, {"data": {}, "typeId": "RenderableComponent"}]}, "typeId": "ItemBlueprintComponent"}], "entityId": "127"},
+{"components": [{"typeId": "NameComponent", "data": {"name": "Alien"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "alien"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "alien", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "128"}}, {"typeId": "RenderableComponent", "data": {}}]}}], "entityId": "128"},
+{"components": [{"typeId": "NameComponent", "data": {"name": "Martian"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "martian"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "martian", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "129"}}, {"typeId": "RenderableComponent", "data": {}}]}}], "entityId": "129"},
+{"components": [{"typeId": "NameComponent", "data": {"name": "Moon"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "moon"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "moon", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "130"}}, {"typeId": "RenderableComponent", "data": {}}]}}], "entityId": "130"},
+{"components": [{"typeId": "NameComponent", "data": {"name": "Moon Craft"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "moon_craft"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "moon_craft", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "131"}}, {"typeId": "RenderableComponent", "data": {}}]}}], "entityId": "131"},
+{"components": [{"typeId": "NameComponent", "data": {"name": "Pedrie"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "pedrie"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "pedrie", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "132"}}, {"typeId": "RenderableComponent", "data": {}}]}}], "entityId": "132"},
+{"components": [{"typeId": "NameComponent", "data": {"name": "Plutonian"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "plutonian"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "plutonian", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "133"}}, {"typeId": "RenderableComponent", "data": {}}]}}], "entityId": "133"},
+{"components": [{"typeId": "NameComponent", "data": {"name": "Rock"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "rock"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "rock", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "134"}}, {"typeId": "RenderableComponent", "data": {}}]}}], "entityId": "134"},
+{"components": [{"typeId": "NameComponent", "data": {"name": "Space Ship"}}, {"typeId": "DescriptionComponent", "data": {"desc": ""}}, {"typeId": "RewardIconComponent", "data": {"textureName": "space_ship"}}, {"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "space_ship", "type": "ImageStatic"}]}}, {"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "135"}}, {"typeId": "RenderableComponent", "data": {}}]}}], "entityId": "135"},
+{"components": [
+{"typeId": "NameComponent", "data": {"name": "Default Cursor"}},
+{"typeId": "PriceComponent", "data": {"price": 0}}, 
+{"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "custom_cursor", "type": "ImageStatic"}]}}, 
+{"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "136"}}, {"typeId": "RenderableComponent", "data": {}}, {"typeId": "EquippableComponent", "data": {"equippableType":"mouse"}}]}}], 
+"entityId": "136"},
+{"components": [
+{"typeId": "NameComponent", "data": {"name": "Blue Fire"}},
+{"typeId": "PriceComponent", "data": {"price": 500}}, 
+{"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "blue_fire_cursor", "type": "ImageStatic"}]}}, 
+{"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "137"}}, {"typeId": "RenderableComponent", "data": {}}, {"typeId": "EquippableComponent", "data": {"equippableType":"mouse"}}]}}], 
+"entityId": "137"},
+{"components": [
+{"typeId": "NameComponent", "data": {"name": "Yellow Fire"}},
+{"typeId": "PriceComponent", "data": {"price": 500}}, 
+{"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "yellow_fire_cursor", "type": "ImageStatic"}]}}, 
+{"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "138"}}, {"typeId": "RenderableComponent", "data": {}}, {"typeId": "EquippableComponent", "data": {"equippableType":"mouse"}}]}}], 
+"entityId": "138"},
+{"components": [
+{"typeId": "NameComponent", "data": {"name": "Leaf"}},
+{"typeId": "PriceComponent", "data": {"price": 500}}, 
+{"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "leaf_cursor", "type": "ImageStatic"}]}}, 
+{"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "139"}}, {"typeId": "RenderableComponent", "data": {}}, {"typeId": "EquippableComponent", "data": {"equippableType":"mouse"}}]}}], 
+"entityId": "139"},
+{"components": [
+{"typeId": "NameComponent", "data": {"name": "Shovel"}},
+{"typeId": "PriceComponent", "data": {"price": 500}}, 
+{"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "shovel_cursor", "type": "ImageStatic"}]}}, 
+{"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "140"}}, {"typeId": "RenderableComponent", "data": {}}, {"typeId": "EquippableComponent", "data": {"equippableType":"mouse"}}]}}], 
+"entityId": "140"},
+{"components": [
+{"typeId": "NameComponent", "data": {"name": "Swirls"}},
+{"typeId": "PriceComponent", "data": {"price": 500}}, 
+{"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "swirl_cursor", "type": "ImageStatic"}]}}, 
+{"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "141"}}, {"typeId": "RenderableComponent", "data": {}}, {"typeId": "EquippableComponent", "data": {"equippableType":"mouse"}}]}}], 
+"entityId": "141"},
+{"components": [
+{"typeId": "NameComponent", "data": {"name": "Frog"}},
+{"typeId": "PriceComponent", "data": {"price": 500}}, 
+{"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "frog_cursor", "type": "ImageStatic"}]}}, 
+{"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "142"}}, {"typeId": "RenderableComponent", "data": {}}, {"typeId": "EquippableComponent", "data": {"equippableType":"mouse"}}]}}], 
+"entityId": "142"},
+{"components": [
+{"typeId": "NameComponent", "data": {"name": "Spaceship"}},
+{"typeId": "PriceComponent", "data": {"price": 500}}, 
+{"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "spaceship_cursor", "type": "ImageStatic"}]}}, 
+{"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "143"}}, {"typeId": "RenderableComponent", "data": {}}, {"typeId": "EquippableComponent", "data": {"equippableType":"mouse"}}]}}], 
+"entityId": "143"},
+{"components": [
+{"typeId": "NameComponent", "data": {"name": "Blue"}},
+{"typeId": "PriceComponent", "data": {"price": 200}}, 
+{"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "", "type": "ImageStatic", "color":"0x006CC1"}]}}, 
+{"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "144"}}, {"typeId": "RenderableComponent", "data": {}}, {"typeId": "EquippableComponent", "data": {"equippableType":"button_color"}}]}}], 
+"entityId": "144"},
+{"components": [
+{"typeId": "NameComponent", "data": {"name": "Gold"}},
+{"typeId": "PriceComponent", "data": {"price": 200}}, 
+{"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "", "type": "ImageStatic", "color":"0xE2A004"}]}}, 
+{"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "145"}}, {"typeId": "RenderableComponent", "data": {}}, {"typeId": "EquippableComponent", "data": {"equippableType":"button_color"}}]}}], 
+"entityId": "145"},
+{"components": [
+{"typeId": "NameComponent", "data": {"name": "Teal"}},
+{"typeId": "PriceComponent", "data": {"price": 200}}, 
+{"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "", "type": "ImageStatic", "color":"0x42AF9C"}]}}, 
+{"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "146"}}, {"typeId": "RenderableComponent", "data": {}}, {"typeId": "EquippableComponent", "data": {"equippableType":"button_color"}}]}}], 
+"entityId": "146"},
+{"components": [
+{"typeId": "NameComponent", "data": {"name": "Purple"}},
+{"typeId": "PriceComponent", "data": {"price": 200}}, 
+{"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "", "type": "ImageStatic", "color":"0x9E3587"}]}}, 
+{"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "147"}}, {"typeId": "RenderableComponent", "data": {}}, {"typeId": "EquippableComponent", "data": {"equippableType":"button_color"}}]}}], 
+"entityId": "147"},
+{"components": [
+{"typeId": "NameComponent", "data": {"name": "Green"}},
+{"typeId": "PriceComponent", "data": {"price": 200}}, 
+{"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "", "type": "ImageStatic", "color":"0x98BF48"}]}}, 
+{"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "148"}}, {"typeId": "RenderableComponent", "data": {}}, {"typeId": "EquippableComponent", "data": {"equippableType":"button_color"}}]}}], 
+"entityId": "148"},
+{"components": [
+{"typeId": "NameComponent", "data": {"name": "Red"}},
+{"typeId": "PriceComponent", "data": {"price": 200}}, 
+{"typeId": "TextureCollectionComponent", "data": {"objects": [{"textureName": "", "type": "ImageStatic", "color":"0xBA2F04"}]}}, 
+{"typeId": "ItemBlueprintComponent", "data": {"components": [{"typeId": "ItemIdComponent", "data": {"id": "149"}}, {"typeId": "RenderableComponent", "data": {}}, {"typeId": "EquippableComponent", "data": {"equippableType":"button_color"}}]}}], 
+"entityId": "149"}
+    ]
+}

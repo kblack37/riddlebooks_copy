@@ -1,0 +1,214 @@
+{
+    "achievements": [
+        {
+            "id": "1",
+            "description": "Complete 5 Levels.",
+            "color": "Green",
+            "params": [
+                5
+            ],
+            "name": "Problem Solver 1",
+            "function": "nLevelsCompleted"
+        },
+        {
+            "id": "2",
+            "description": "Complete 10 Levels.",
+            "color": "Green",
+            "params": [
+                10
+            ],
+            "name": "Problem Solver 2",
+            "function": "nLevelsCompleted"
+        },
+        {
+            "id": "3",
+            "description": "Complete 15 Levels.",
+            "color": "Green",
+            "params": [
+                15
+            ],
+            "name": "Problem Solver 3",
+            "function": "nLevelsCompleted"
+        },
+        {
+            "id": "4",
+            "description": "Complete 20 Levels.",
+            "color": "Blue",
+            "params": [
+                20
+            ],
+            "name": "Problem Solver 4",
+            "function": "nLevelsCompleted"
+        },
+        {
+            "id": "5",
+            "description": "Completed 25 Levels.",
+            "color": "Blue",
+            "params": [
+                25
+            ],
+            "name": "Problem Solver 5",
+            "function": "nLevelsCompleted"
+        },
+        {
+            "id": "16",
+            "description": "Completed 30 Levels",
+            "color": "Blue",
+            "params": [
+                30
+            ],
+            "name": "Problem Solver 6",
+            "function": "nLevelsCompleted"
+        },
+        {
+            "id": "17",
+            "description": "Completed 50 Levels",
+            "color": "Orange",
+            "params": [
+                50
+            ],
+            "name": "Problem Solver 7",
+            "function": "nLevelsCompleted"
+        },
+        {
+            "id": "18",
+            "description": "Completed 100 Levels",
+            "color": "Orange",
+            "params": [
+                100
+            ],
+            "name": "Problem Solving Expert",
+            "function": "nLevelsCompleted"
+        },
+        {
+            "id": "6",
+            "description": "Reach Brain Level 2",
+            "color": "Green",
+            "params": [
+                2
+            ],
+            "name": "Brain Power 1",
+            "function": "reachPlayerLevelN"
+        },
+        {
+            "id": "7",
+            "description": "Reach Brain Level 5",
+            "color": "Green",
+            "params": [
+                5
+            ],
+            "name": "Brain Power 2",
+            "function": "reachPlayerLevelN"
+        },
+        {
+            "id": "8",
+            "description": "Reach Brain Level 10",
+            "color": "Green",
+            "params": [
+                10
+            ],
+            "name": "Brain Power 3",
+            "function": "reachPlayerLevelN"
+        },
+        {
+            "id": "19",
+            "description": "Reach Brain Level 20",
+            "color": "Blue",
+            "params": [
+                20
+            ],
+            "name": "Brain Power 4",
+            "function": "reachPlayerLevelN"
+        },
+        {
+            "id": "20",
+            "description": "Reach Brain Level 30",
+            "color": "Blue",
+            "params": [
+                30
+            ],
+            "name": "Brain Power 5",
+            "function": "reachPlayerLevelN"
+        },
+        {
+            "id": "21",
+            "description": "Reach Brain Level 50",
+            "color": "Orange",
+            "params": [
+                50
+            ],
+            "name": "Super Brain Strength!",
+            "function": "reachPlayerLevelN"
+        },
+        {
+            "id": "9",
+            "description": "Master New Problem Type",
+            "color": "Green",
+            "params": [
+                "1a"
+            ],
+            "name": "Problem Master 1",
+            "function": "levelNodeCompleted"
+        },
+        {
+            "id": "10",
+            "description": "Master New Problem Type",
+            "color": "Green",
+            "params": [
+                "2b-2e"
+            ],
+            "name": "Problem Master 2",
+            "function": "levelNodeCompleted"
+        },
+        {
+            "id": "11",
+            "description": "Master New Problem Type",
+            "color": "Green",
+            "params": [
+                "3a_3b"
+            ],
+            "name": "Problem Master 3",
+            "function": "levelNodeCompleted"
+        },
+        {
+            "id": "12",
+            "description": "Master New Problem Type",
+            "color": "Green",
+            "params": [
+                "4a-4f"
+            ],
+            "name": "Problem Master 4",
+            "function": "levelNodeCompleted"
+        },
+        {
+            "id": "13",
+            "description": "Master New Problem Type",
+            "color": "Blue",
+            "params": [
+                "fractions_group_a"
+            ],
+            "name": "Problem Master 5",
+            "function": "levelNodeCompleted"
+        },
+        {
+            "id": "14",
+            "description": "Master New Problem Type",
+            "color": "Blue",
+            "params": [
+                "fractions_group_b"
+            ],
+            "name": "Problem Master 6",
+            "function": "levelNodeCompleted"
+        },
+        {
+            "id": "15",
+            "description": "Master New Problem Type",
+            "color": "Orange",
+            "params": [
+                "two_step_group_a"
+            ],
+            "name": "Problem Master 7",
+            "function": "levelNodeCompleted"
+        }
+    ]
+}
