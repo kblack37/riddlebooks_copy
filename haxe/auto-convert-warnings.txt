@@ -1,0 +1,126 @@
+WARNING: There is XML that may not have translated correctly in these files:
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/hints/DrawBarModelTypeHint.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/levelscripts/barmodel/tutorialsv2/IntroPickTextNoColor.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/levelscripts/barmodel/tutorials/LSAddSegmentsA.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/levelscripts/barmodel/tutorials/LSTextDiscoverA.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/levelscripts/barmodel/tutorials/LSAddLabelA.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/hints/BasicTextWithCardsHint.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/hints/selector/ShowHintOnBarModelMistake.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/scripts/level/util/TextReplacementControl.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/levelscripts/barmodel/tutorialsv2/IntroPickTextEasy.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/levelscripts/barmodel/tutorials/LSAddVerticalLabelA.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/creator/WordProblemCreateUtil.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/hints/selector/ShowHintOnBarModelMistakeNew.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/hints/HintCommonUtil.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/levelscripts/barmodel/tutorials/LSTwoStepA.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/levelscripts/barmodel/tutorials/LSEquationFromBarA.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/levelscripts/barmodel/tutorials/LSAddComparisonA.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/levelscripts/barmodel/tutorials/LSSplitCopyA.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/levelscripts/barmodel/tutorials/LSFractionEnterCardA.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/levelscripts/barmodel/tutorialsv2/TutorialV2Util.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/hints/CustomHintGenerator.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/engine/barmodel/BarModelLevelCreator.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/levelscripts/barmodel/tutorials/LSMultiplyBarA.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/levelscripts/barmodel/tutorialsv2/IntroPickText.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/levelscripts/barmodel/tutorials/LSAddBarA.hx
+WARNING: Required constructor was added for member var initialization
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/engine/constants/Alignment.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/gameconfig/versions/replay/events/ReplayEvents.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/event/CommandEvent.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/scripts/level/util/LevelCommonUtil.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/resource/Resources.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/engine/objectives/ObjectivesFactory.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/engine/scripting/graph/ScriptStatus.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/dragonbox/common/util/XString.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/level/LevelNodeActions.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/engine/constants/Direction.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/level/LevelNodeStatuses.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/dragonbox/common/util/XSprite.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/dragonbox/common/particlesystem/activities/Activity.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/achievements/PlayerAchievementData.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/engine/text/TextParserUtil.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/engine/text/GameFonts.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/event/LevelSelectEvent.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/dragonbox/common/expressiontree/ExpressionUtil.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/levelscripts/barmodel/tutorialsv2/TutorialV2Util.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/level/LevelNodeCompletionValues.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/engine/events/GameEvent.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/engine/widget/WidgetUtil.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/dragonbox/common/util/XColor.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/engine/level/LevelEndTypes.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/engine/expression/event/ExpressionTreeEvent.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/dragonbox/common/math/util/MathUtil.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/creator/ProblemCreateEvent.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/dragonbox/common/util/XTextField.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/dragonbox/common/util/ListUtil.hx
+FATAL: These files have a Vector.<T> call, which was not handled. Check versus source file!
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/hints/selector/HintXMLStorage.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/scripts/equationtotext/EquationToText.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/engine/component/ComponentFactory.hx
+WARNING: as int casts in these files
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/summary/scripts/SummaryScript.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/levelselect/GenreWidget.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/scripts/barmodel/RemoveBarSegment.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/creator/scripts/ShowExampleProblemScript.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/scripts/expression/TermAreaCallout.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/scripts/barmodel/CardOnSegmentRadialOptions.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/hints/selector/ShowHintOnBarModelMistake.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/creator/EditableTextArea.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/creator/scripts/PickElementFromBarModel.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/scripts/barmodel/BarToCard.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/engine/text/TextViewFactory.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/hints/selector/ShowHintOnBarModelMistakeNew.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/scripts/barmodel/MultiplyBarSegments.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/scripts/barmodel/AddNewLabelOnSegment.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/playercollections/scripts/PlayerCollectionCustomizeViewer.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/scripts/barmodel/SplitBarSegment.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/engine/barmodel/view/BarComparisonView.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/hints/tips/GestureAndTextTip.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/scripts/barmodel/ResizeBarComparison.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/achievements/PlayerAchievementButton.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/scripts/barmodel/ResizeHorizontalBarLabel.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/scripts/deck/DeckCallout.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/callouts/TooltipControl.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/creator/scripts/ShowBarModelPartDescription.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/creator/scripts/ChangeAliasScript.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/scripts/barmodel/ResizeVerticalBarLabel.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/creator/scripts/ChangeTextAppearanceScript.hx
+ERROR: The following files have xml notation that will need porting. See http://haxe.org/doc/advanced/xml_fast
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/engine/objectives/TotalEquationAndBarModelMistakeObjective.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/engine/objectives/HintUsedObjective.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/hints/selector/HintXMLStorage.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/engine/objectives/ObjectivesFactory.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/hints/BasicTextWithCardsHint.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/AlgebraAdventureConfig.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/hints/selector/ShowHintOnBarModelMistake.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/engine/objectives/BaseObjective.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/engine/level/LevelCompiler.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/creator/WordProblemCreateUtil.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/engine/level/LevelRules.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/engine/objectives/TimeLimitObjective.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/hints/selector/ShowHintOnBarModelMistakeNew.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/scripts/level/GenericBarModelLevelScript.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/engine/text/TextParser.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/hints/CustomHintGenerator.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/engine/barmodel/BarModelLevelCreator.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/scripts/level/BaseCustomLevelScript.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/engine/scripting/ScriptParser.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/creator/ProblemCreateData.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/WordProblemGameBase.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/resource/AssetManager.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/creator/scripts/PrepopulateTextScript.hx
+WARNING: These files casted using 'obj as Class', which may produce incorrect code
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/dragonbox/common/state/StateMachine.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/resource/FlashResourceUtil.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/engine/scripting/ScriptParser.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/resource/AssetManager.hx
+ERROR: type must be determined for 'as array' cast for:
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/scripts/items/BaseGiveRewardScript.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/engine/component/ComponentFactory.hx
+        C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/level/nodes/WordProblemLevelPack.hx
+
+ERRORS: These files were not written due to source parsing errors:
+In C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/flash/src/dragonbox/common/display/TrapezoidalImage.as(97) : Unexpected ;
+In C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/flash/src/wordproblem/engine/barmodel/analysis/BarModelClassifier.as(99) : Unexpected )
+In C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/flash/src/wordproblem/hints/HintScriptWithProcesses.as(148) : Unexpected ;
+In C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/flash/src/wordproblem/hints/ai/AiPolicyHintSelector.as(80) : Unexpected )
