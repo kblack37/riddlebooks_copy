@@ -1,0 +1,4 @@
+Libraries that need to be installed via haxelib on the command line:
+
+haxelib install openfl
+haxelib install starling
