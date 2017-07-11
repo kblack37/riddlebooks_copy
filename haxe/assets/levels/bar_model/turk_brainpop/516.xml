@@ -1,0 +1,90 @@
+<level barModelType="1a" name="Bar model 516" id="516">
+  <symbols>
+    <symbol name="3" abbreviatedName="3 chihuahuas" value="3" backgroundTexturePositive="card_background_square" customBarColor="0xFFFDD1FF" useCustomBarColor="true"/>
+    <symbol name="4" abbreviatedName="4 chihuahuas" value="4" backgroundTexturePositive="card_background_square" customBarColor="0xFFB39566" useCustomBarColor="true"/>
+    <symbol name="2" abbreviatedName="2 chihuahuas" value="2" backgroundTexturePositive="card_background_square" customBarColor="0xFF6099F5" useCustomBarColor="true"/>
+    <symbol name="total chihuahuas" abbreviatedName="chihuahuas" value="chihuahuas" backgroundTexturePositive="card_background_square" customBarColor="0xFFFFFFFF" useCustomBarColor="true"/>
+  </symbols>
+  <overrideLayoutAttributes name="barEquationModel">
+    <textArea id="textArea" src="url(../assets/level_images/book_crystal_cave.jpg)"/>
+  </overrideLayoutAttributes>
+  <rules>
+    <allowAddNewSegments value="true"/>
+    <allowAddUnitBar value="false"/>
+    <allowSplitBar value="false"/>
+    <allowCopyBar value="false"/>
+    <allowCreateCard value="false"/>
+    <allowParenthesis value="false"/>
+    <allowSubtract value="false"/>
+    <allowMultiply value="false"/>
+    <allowDivide value="false"/>
+    <allowResizeBrackets value="false"/>
+  </rules>
+  <script>
+    <scriptedActions>
+      <code id="wordproblem.scripts.level.GenericBarModelLevelScript">
+        <documentToCard documentId="a1" value="3"/>
+        <documentToCard documentId="b2" value="2"/>
+        <documentToCard documentId="unk" value="chihuahuas"/>
+        <documentToCard documentId="b1" value="4"/>
+        <barNormalizingFactor value="2"/>
+        <termValueToBarValue termValue="chihuahuas" barValue="9"/>
+        <referenceModel>
+          <barWhole id="a">
+            <barSegment value="3" label="3"/>
+            <barSegment value="2" label="2"/>
+            <barSegment value="4" label="4"/>
+            <bracket value="chihuahuas" start="0" end="2"/>
+          </barWhole>
+        </referenceModel>
+        <referenceModel>
+          <verticalBracket value="chihuahuas" start="0" end="1"/>
+          <barWhole id="a">
+            <barSegment value="3" label="3"/>
+          </barWhole>
+          <barWhole id="b">
+            <barSegment value="2" label="2"/>
+            <barSegment value="4" label="4"/>
+          </barWhole>
+        </referenceModel>
+        <equation value="chihuahuas=3+2+4"/>
+        <customHints>
+          <hint step="1">This problem has parts being added together. What are they?</hint>
+          <hint step="4" targetMissingDocId="a1">You need to add '$0' for the number of chihuahuas Sally brought.</hint>
+          <hint step="4" targetMissingDocId="b1">You need to add '$0' for the number of chihuahuas Judy brought.</hint>
+          <hint step="4" targetMissingDocId="b2">You need to add '$0' for the number of chihuahuas I brought.</hint>
+          <hint step="3" targetMissingDocId="a1">You need to add the number of chihuahuas Sally brought.</hint>
+          <hint step="3" targetMissingDocId="b1">You need to add the number of chihuahuas Judy brought.</hint>
+          <hint step="3" targetMissingDocId="b2">You need to add the number of chihuahuas I brought.</hint>
+          <hint step="2">Can you find the missing part that needs to be added.</hint>
+          <hint step="5">'$0' needs to be the total chihuahuas at the park.</hint>
+          <hint step="6">Show the part for the total chihuahuas at the park.</hint>
+          <hint step="8">What part represents the total chihuahuas at the park?</hint>
+          <hint step="7">The part for the total is missing? What is it?</hint>
+          <hint step="10">What is the total of all the parts added together?</hint>
+        </customHints>
+      </code>
+    </scriptedActions>
+  </script>
+  <style>{"p":{"fontName":"Calibri","color":"0x0000000","fontSize":24}}</style>
+  <wordproblem>
+    <page paddingLeft="110" paddingTop="50">
+      <div layout="relative" width="580">
+        <p>
+          Aunt Sally brought her
+          <span class="term" id="a1">3 chihuahuas</span>
+          to a dog park. If Judy brings her
+          <span class="term" id="b1">4 chihuahuas</span>
+          and I bring my
+          <span class="term" id="b2">2 chihuahuas</span>
+          , how many
+          <span alias="chihuahuas" class="term" id="unk">total chihuahuas are at the dog park</span>
+          ?
+        </p>
+      </div>
+    </page>
+  </wordproblem>
+  <resources>
+    <audio type="streaming" src="bg_music_fantasy_2"/>
+  </resources>
+</level>

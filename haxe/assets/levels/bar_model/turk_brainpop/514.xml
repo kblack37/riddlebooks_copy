@@ -1,0 +1,83 @@
+<level barModelType="1a" name="Bar model 514" id="514">
+  <symbols>
+    <symbol name="animals" abbreviatedName="animals" value="animals" backgroundTexturePositive="card_background_square" customBarColor="0xFF19FD02" useCustomBarColor="true"/>
+    <symbol value="12" customBarColor="0xFF6099F5" useCustomBarColor="true"/>
+    <symbol value="8" customBarColor="0xFFFAFF96" useCustomBarColor="true"/>
+  </symbols>
+  <overrideLayoutAttributes name="barEquationModel">
+    <textArea id="textArea" src="url(../assets/level_images/book_mountain_meadow.jpg)"/>
+  </overrideLayoutAttributes>
+  <rules>
+    <allowAddNewSegments value="true"/>
+    <allowAddUnitBar value="false"/>
+    <allowSplitBar value="false"/>
+    <allowCopyBar value="false"/>
+    <allowCreateCard value="false"/>
+    <allowParenthesis value="false"/>
+    <allowSubtract value="false"/>
+    <allowMultiply value="false"/>
+    <allowDivide value="false"/>
+    <allowResizeBrackets value="false"/>
+  </rules>
+  <script>
+    <scriptedActions>
+      <code id="wordproblem.scripts.level.GenericBarModelLevelScript">
+        <documentToCard documentId="a1" value="12"/>
+        <documentToCard documentId="unk" value="animals"/>
+        <documentToCard documentId="b1" value="8"/>
+        <barNormalizingFactor value="8"/>
+        <termValueToBarValue termValue="animals" barValue="20"/>
+        <referenceModel>
+          <barWhole id="a">
+            <barSegment value="12" label="12"/>
+            <barSegment value="8" label="8"/>
+            <bracket value="animals" start="0" end="1"/>
+          </barWhole>
+        </referenceModel>
+        <referenceModel>
+          <verticalBracket value="animals" start="0" end="1"/>
+          <barWhole id="a">
+            <barSegment value="12" label="12"/>
+          </barWhole>
+          <barWhole id="b">
+            <barSegment value="8" label="8"/>
+          </barWhole>
+        </referenceModel>
+        <equation value="animals=12+8"/>
+        <customHints>
+          <hint step="1">What are the two types of animals present in this problem?</hint>
+          <hint step="2" existingBar="b">How many elk were in the herd?</hint>
+          <hint step="2" existingBar="a">How many wolves were there?</hint>
+          <hint step="3" existingBar="b">You have a part for the wolves Chrissy saw, what other animals did she see?</hint>
+          <hint step="3" existingBar="a">You have a part for the elk Chrissy saw, what other animals did she see?</hint>
+          <hint step="4" existingBar="a">How many wolves chased the elk?</hint>
+          <hint step="4" existingBar="b">You need to add the number of animals in both the groups.</hint>
+          <hint step="5">Animals consists of both elk and wolves.</hint>
+          <hint step="6">Total animals include both elk and wolves.</hint>
+          <hint step="7">Are both elk and wolves animals?</hint>
+          <hint step="8">Animals consists of both elk and wolves together.</hint>
+          <hint step="9">Animals includes both elk and wolves.</hint>
+        </customHints>
+      </code>
+    </scriptedActions>
+  </script>
+  <style>{"p":{"fontName":"Calibri","color":"0x0000000","fontSize":24}}</style>
+  <wordproblem>
+    <page paddingLeft="110" paddingTop="50">
+      <div layout="relative" width="580">
+        <p>
+          Chrissy loves exploring outdoors. Yesterday, she saw a herd of
+          <span class="term" id="a1">12 elk</span>
+          being chased by a pack of
+          <span class="term" id="b1">8 wolves</span>
+          . How many
+          <span class="term" alias="animals" id="unk">animals in total did Chrissy see</span>
+          while she was exploring?
+        </p>
+      </div>
+    </page>
+  </wordproblem>
+  <resources>
+    <audio type="streaming" src="bg_music_fantasy_1"/>
+  </resources>
+</level>

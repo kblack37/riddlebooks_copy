@@ -1,0 +1,83 @@
+<level barModelType="1a" name="Bar model 519" id="519">
+  <symbols>
+    <symbol name="children on bus" abbreviatedName="children" value="children" backgroundTexturePositive="card_background_square" customBarColor="0xFFF05CFD" useCustomBarColor="true"/>
+    <symbol value="10" customBarColor="0xFF6099F5" useCustomBarColor="true"/>
+    <symbol value="16" customBarColor="0xFFFDB402" useCustomBarColor="true"/>
+  </symbols>
+  <overrideLayoutAttributes name="barEquationModel">
+    <textArea id="textArea" src="url(../assets/level_images/detective_book.jpg)"/>
+  </overrideLayoutAttributes>
+  <rules>
+    <allowAddNewSegments value="true"/>
+    <allowAddUnitBar value="false"/>
+    <allowSplitBar value="false"/>
+    <allowCopyBar value="false"/>
+    <allowCreateCard value="false"/>
+    <allowParenthesis value="false"/>
+    <allowSubtract value="false"/>
+    <allowMultiply value="false"/>
+    <allowDivide value="false"/>
+    <allowResizeBrackets value="false"/>
+  </rules>
+  <script>
+    <scriptedActions>
+      <code id="wordproblem.scripts.level.GenericBarModelLevelScript">
+        <documentToCard documentId="a1" value="16"/>
+        <documentToCard documentId="unk" value="children"/>
+        <documentToCard documentId="b1" value="10"/>
+        <barNormalizingFactor value="10"/>
+        <termValueToBarValue termValue="children" barValue="26"/>
+        <referenceModel>
+          <barWhole id="a">
+            <barSegment value="16" label="16"/>
+            <barSegment value="10" label="10"/>
+            <bracket value="children" start="0" end="1"/>
+          </barWhole>
+        </referenceModel>
+        <referenceModel>
+          <verticalBracket value="children" start="0" end="1"/>
+          <barWhole id="a">
+            <barSegment value="16" label="16"/>
+          </barWhole>
+          <barWhole id="b">
+            <barSegment value="10" label="10"/>
+          </barWhole>
+        </referenceModel>
+        <equation value="children=16+10"/>
+        <customHints>
+          <hint step="1">Which grades of students rode the bus?</hint>
+          <hint step="2" existingBar="a">How many second graders ride the bus?</hint>
+          <hint step="2" existingBar="b">How many first graders ride the bus?</hint>
+          <hint step="3" existingBar="a">You need to show the second graders also, not just the first graders!</hint>
+          <hint step="3" existingBar="b">You need to show the first graders also, not just the second graders!</hint>
+          <hint step="4" existingBar="a">You need to add the number of children in the second grade.</hint>
+          <hint step="4" existingBar="b">You need to add the number of children in the first grade.</hint>
+          <hint step="5">The total needs to include all the children who rode the bus.</hint>
+          <hint step="6">The number of students in the first grade should be added to the number of students in the second grade.</hint>
+          <hint step="7">How many children ride the Cherry Hill Bus?</hint>
+          <hint step="8">What is the total of first grade and second grade children riding the bus?</hint>
+          <hint step="9">You showed both groups of children. Now you need to show how to put them together.</hint>
+        </customHints>
+      </code>
+    </scriptedActions>
+  </script>
+  <style>{"p":{"fontName":"Calibri","color":"0x0000000","fontSize":24}}</style>
+  <wordproblem>
+    <page paddingLeft="110" paddingTop="50">
+      <div layout="relative" width="580">
+        <p>
+          In the Cherry Hill neighborhood, many children ride the Cherry Hill bus to elementary school.
+          <span class="term" id="a1">16 children</span>
+          that ride the bus are in the first grade, and
+          <span class="term" id="b1">10 are in the second grade</span>
+          . How many
+          <span class="term" alias="children" id="unk">first and second graders total ride the Cherry Hill bus</span>
+          ?
+        </p>
+      </div>
+    </page>
+  </wordproblem>
+  <resources>
+    <audio type="streaming" src="bg_music_fantasy_1"/>
+  </resources>
+</level>

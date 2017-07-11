@@ -1,0 +1,83 @@
+<level barModelType="1a" name="Bar model 513" id="513">
+  <symbols>
+    <symbol name="15" abbreviatedName="15 trolls" value="15" backgroundTexturePositive="card_background_square" customBarColor="0xFF02E2FD" useCustomBarColor="true"/>
+    <symbol name="10" abbreviatedName="10 trolls" value="10" backgroundTexturePositive="card_background_square" customBarColor="0xFF6099F5" useCustomBarColor="true"/>
+    <symbol name="total trolls" abbreviatedName="trolls" value="trolls" backgroundTexturePositive="card_background_square" customBarColor="0xFFFAFF96" useCustomBarColor="true"/>
+  </symbols>
+  <overrideLayoutAttributes name="barEquationModel">
+    <textArea id="textArea" src="url(../assets/level_images/book_fantasy_v1.jpg)"/>
+  </overrideLayoutAttributes>
+  <rules>
+    <allowAddNewSegments value="true"/>
+    <allowAddUnitBar value="false"/>
+    <allowSplitBar value="false"/>
+    <allowCopyBar value="false"/>
+    <allowCreateCard value="false"/>
+    <allowParenthesis value="false"/>
+    <allowSubtract value="false"/>
+    <allowMultiply value="false"/>
+    <allowDivide value="false"/>
+    <allowResizeBrackets value="false"/>
+  </rules>
+  <script>
+    <scriptedActions>
+      <code id="wordproblem.scripts.level.GenericBarModelLevelScript">
+        <documentToCard documentId="a1" value="15"/>
+        <documentToCard documentId="unk" value="trolls"/>
+        <documentToCard documentId="b1" value="10"/>
+        <barNormalizingFactor value="10"/>
+        <termValueToBarValue termValue="trolls" barValue="25"/>
+        <referenceModel>
+          <barWhole id="a">
+            <barSegment value="15" label="15"/>
+            <barSegment value="10" label="10"/>
+            <bracket value="trolls" start="0" end="1"/>
+          </barWhole>
+        </referenceModel>
+        <referenceModel>
+          <verticalBracket value="trolls" start="0" end="1"/>
+          <barWhole id="a">
+            <barSegment value="15" label="15"/>
+          </barWhole>
+          <barWhole id="b">
+            <barSegment value="10" label="10"/>
+          </barWhole>
+        </referenceModel>
+        <equation value="trolls=15+10"/>
+        <customHints>
+          <hint step="1">You should try to put different troll counts in different boxes to be added.</hint>
+          <hint step="2" existingBar="a">Kilgorf smashed some trolls after lunch as well. How many?</hint>
+          <hint step="2" existingBar="b">What about the poor trolls smashed before lunch?</hint>
+          <hint step="3" existingBar="b">Do not forget to show the trolls that Kilgorf smashed before lunch as well!</hint>
+          <hint step="3" existingBar="a">There is another group of trolls that Kilgorf smashed.</hint>
+          <hint step="4" existingBar="b">You need to create a group for the trolls that Kilgorf smashed before lunch.</hint>
+          <hint step="4" existingBar="a">You need to create a group for the trolls that Kilgorf smashed after lunch.</hint>
+          <hint step="5">You need to add the number of trolls killed before and after lunch.</hint>
+          <hint step="6">I can see all the trolls that Kilgorf smashed. Can you show what needs to be done after that?</hint>
+          <hint step="7">The trolls smashed before and after lunch must be combined into a single answer.</hint>
+          <hint step="8">Kilgorf smashed how many trolls altogether?</hint>
+          <hint step="9">The number of trolls Kilgorf smashed before and after lunch should be put together.</hint>
+        </customHints>
+      </code>
+    </scriptedActions>
+  </script>
+  <style>{"p":{"fontName":"Immortal","color":"0x3D1E07","fontSize":23}}</style>
+  <wordproblem>
+    <page paddingLeft="110" paddingTop="50">
+      <div layout="relative" width="580">
+        <p>
+          Kilgorf the barbarian used his mighty hammer to smash
+          <span class="term" id="a1">15 trolls</span>
+          . After lunch he saw more trolls and smashed another
+          <span class="term" id="b1">10</span>
+          .  How many
+          <span class="term" alias="trolls" id="unk">trolls did Kilgorf smash in all</span>
+          ?
+        </p>
+      </div>
+    </page>
+  </wordproblem>
+  <resources>
+    <audio type="streaming" src="bg_music_fantasy_2"/>
+  </resources>
+</level>

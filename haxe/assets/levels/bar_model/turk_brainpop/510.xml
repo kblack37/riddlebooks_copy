@@ -1,0 +1,83 @@
+<level barModelType="1a" name="Bar model 510" id="510">
+  <symbols>
+    <symbol name="218" abbreviatedName="218 passengers" value="218" backgroundTexturePositive="card_background_square" customBarColor="0xFFF05CFD" useCustomBarColor="true"/>
+    <symbol name="191" abbreviatedName="191 crew" value="191" backgroundTexturePositive="card_background_square" customBarColor="0xFF6099F5" useCustomBarColor="true"/>
+    <symbol name="total people" abbreviatedName="people" value="people" backgroundTexturePositive="card_background_square" customBarColor="0xFF19FD02" useCustomBarColor="true"/>
+  </symbols>
+  <overrideLayoutAttributes name="barEquationModel">
+    <textArea id="textArea" src="url(../assets/level_images/book_pastel.jpg)"/>
+  </overrideLayoutAttributes>
+  <rules>
+    <allowAddNewSegments value="true"/>
+    <allowAddUnitBar value="false"/>
+    <allowSplitBar value="false"/>
+    <allowCopyBar value="false"/>
+    <allowCreateCard value="false"/>
+    <allowParenthesis value="false"/>
+    <allowSubtract value="false"/>
+    <allowMultiply value="false"/>
+    <allowDivide value="false"/>
+    <allowResizeBrackets value="false"/>
+  </rules>
+  <script>
+    <scriptedActions>
+      <code id="wordproblem.scripts.level.GenericBarModelLevelScript">
+        <documentToCard documentId="a1" value="218"/>
+        <documentToCard documentId="unk" value="people"/>
+        <documentToCard documentId="b1" value="191"/>
+        <barNormalizingFactor value="191"/>
+        <termValueToBarValue termValue="people" barValue="409"/>
+        <referenceModel>
+          <barWhole id="a">
+            <barSegment value="218" label="218"/>
+            <barSegment value="191" label="191"/>
+            <bracket value="people" start="0" end="1"/>
+          </barWhole>
+        </referenceModel>
+        <referenceModel>
+          <verticalBracket value="people" start="0" end="1"/>
+          <barWhole id="a">
+            <barSegment value="218" label="218"/>
+          </barWhole>
+          <barWhole id="b">
+            <barSegment value="191" label="191"/>
+          </barWhole>
+        </referenceModel>
+        <equation value="people=218+191"/>
+        <customHints>
+          <hint step="1">There are two groups here, what are they and how many are there total?</hint>
+          <hint step="2" existingBar="b">Who else was on the ship besides the crew members?</hint>
+          <hint step="2" existingBar="a">How many crew members were on the ship?</hint>
+          <hint step="3" existingBar="a">Types of people on the ship include passengers and ____________.</hint>
+          <hint step="3" existingBar="b">Who else was on the ship and how many were there?</hint>
+          <hint step="4" existingBar="b">There are also passengers on the ship.</hint>
+          <hint step="4" existingBar="a">There are 218 passengers, what is the number of crew members?</hint>
+          <hint step="5">The sum of all of the people is how many people are on the ship.</hint>
+          <hint step="6">What does the total number of people represent?</hint>
+          <hint step="7">What does the number of passengers and crew members represent?</hint>
+          <hint step="8">You have counted the 218 passengers and the 191 crew members. How do you combine the different types of people to find the total number of people? Have you solved a similar problem before?</hint>
+          <hint step="9">In your model, you need to also show the total from both groups of people on the ship.</hint>
+        </customHints>
+      </code>
+    </scriptedActions>
+  </script>
+  <style>{"p":{"fontName":"Calibri","color":"0x0000000","fontSize":24}}</style>
+  <wordproblem>
+    <page paddingLeft="110" paddingTop="50">
+      <div layout="relative" width="580">
+        <p>
+          There are
+          <span class="term" id="a1">218 passengers</span>
+          and
+          <span class="term" id="b1">191 crew members</span>
+          on a ship. How many
+          <span class="term" alias="people" id="unk">people are on the ship together</span>
+          ?
+        </p>
+      </div>
+    </page>
+  </wordproblem>
+  <resources>
+    <audio type="streaming" src="bg_music_fantasy_2"/>
+  </resources>
+</level>

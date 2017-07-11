@@ -1,0 +1,83 @@
+<level barModelType="1a" name="Bar model 515" id="515">
+  <symbols>
+    <symbol name="52" abbreviatedName="52 pounds" value="52" backgroundTexturePositive="card_background_square" customBarColor="0xFFC4C4C4" useCustomBarColor="true"/>
+    <symbol name="35" abbreviatedName="35 pounds" value="35" backgroundTexturePositive="card_background_square" customBarColor="0xFF6099F5" useCustomBarColor="true"/>
+    <symbol name="total pounds food" abbreviatedName="total pounds" value="food" backgroundTexturePositive="card_background_square" customBarColor="0xFFF05CFD" useCustomBarColor="true"/>
+  </symbols>
+  <overrideLayoutAttributes name="barEquationModel">
+    <textArea id="textArea" src="url(../assets/level_images/book_dead_forest.jpg)"/>
+  </overrideLayoutAttributes>
+  <rules>
+    <allowAddNewSegments value="true"/>
+    <allowAddUnitBar value="false"/>
+    <allowSplitBar value="false"/>
+    <allowCopyBar value="false"/>
+    <allowCreateCard value="false"/>
+    <allowParenthesis value="false"/>
+    <allowSubtract value="false"/>
+    <allowMultiply value="false"/>
+    <allowDivide value="false"/>
+    <allowResizeBrackets value="false"/>
+  </rules>
+  <script>
+    <scriptedActions>
+      <code id="wordproblem.scripts.level.GenericBarModelLevelScript">
+        <documentToCard documentId="a1" value="35"/>
+        <documentToCard documentId="unk" value="food"/>
+        <documentToCard documentId="b1" value="52"/>
+        <barNormalizingFactor value="35"/>
+        <termValueToBarValue termValue="food" barValue="87"/>
+        <referenceModel>
+          <barWhole id="a">
+            <barSegment value="35" label="35"/>
+            <barSegment value="52" label="52"/>
+            <bracket value="food" start="0" end="1"/>
+          </barWhole>
+        </referenceModel>
+        <referenceModel>
+          <verticalBracket value="food" start="0" end="1"/>
+          <barWhole id="a">
+            <barSegment value="35" label="35"/>
+          </barWhole>
+          <barWhole id="b">
+            <barSegment value="52" label="52"/>
+          </barWhole>
+        </referenceModel>
+        <equation value="food=35+52"/>
+        <customHints>
+          <hint step="1">You need to identify the different meals given to the hippo for the day.</hint>
+          <hint step="2" existingBar="a">Don't forget the food that the hippo ate at noon!</hint>
+          <hint step="2" existingBar="b">The hippo was also given some food in the morning.</hint>
+          <hint step="3" existingBar="b">The hippo had 52 pounds of food in the morning. How much did it have at noon?</hint>
+          <hint step="3" existingBar="a">The hippo had 25 pounds of food at noon. How much did it have in the morning?</hint>
+          <hint step="4" existingBar="b">You need to add the pounds of food the hippo ate in the morning.</hint>
+          <hint step="4" existingBar="a">You need to add the pounds of food the hippo ate at noon.</hint>
+          <hint step="5">Total food includes the food given in the morning and afternoon.</hint>
+          <hint step="6">You're missing the total amount of food the hippo ate.</hint>
+          <hint step="7">The hippo ate twice, and both quantities of food are required to be in the single answer.</hint>
+          <hint step="8">What is the total amount of food the hippo was fed?</hint>
+          <hint step="9">Total food given to hippo is a combination of the food it ate in the morning and at noon.</hint>
+        </customHints>
+      </code>
+    </scriptedActions>
+  </script>
+  <style>{"p":{"fontName":"Calibri","color":"0x0000000","fontSize":24}}</style>
+  <wordproblem>
+    <page paddingLeft="110" paddingTop="50">
+      <div layout="relative" width="580">
+        <p>
+          The zoo keeper gave the hippo
+          <span class="term" id="b1">52 pounds of food</span>
+          in the morning. At noon, he gave the hippo
+          <span class="term" id="a1">35 more pounds of food</span>
+          . How many
+          <span class="term" alias="food" id="unk">pounds of food did he give the hippo altogether</span>
+          ?
+        </p>
+      </div>
+    </page>
+  </wordproblem>
+  <resources>
+    <audio type="streaming" src="bg_music_fantasy_2"/>
+  </resources>
+</level>

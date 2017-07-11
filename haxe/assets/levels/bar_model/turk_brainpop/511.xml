@@ -1,0 +1,83 @@
+<level barModelType="1a" name="Bar model 511" id="511">
+  <symbols>
+    <symbol name="11" abbreviatedName="11 oranges" value="11" backgroundTexturePositive="card_background_square" customBarColor="0xFF6099F5" useCustomBarColor="true"/>
+    <symbol name="6" abbreviatedName="6 kiwis" value="6" backgroundTexturePositive="card_background_square" customBarColor="0xFFEDDB48" useCustomBarColor="true"/>
+    <symbol name="fruit John bought" abbreviatedName="fruit" value="fruit" backgroundTexturePositive="card_background_square" customBarColor="0xFFF05CFD" useCustomBarColor="true"/>
+  </symbols>
+  <overrideLayoutAttributes name="barEquationModel">
+    <textArea id="textArea" src="url(../assets/level_images/book_vampire_high.jpg)"/>
+  </overrideLayoutAttributes>
+  <rules>
+    <allowAddNewSegments value="true"/>
+    <allowAddUnitBar value="false"/>
+    <allowSplitBar value="false"/>
+    <allowCopyBar value="false"/>
+    <allowCreateCard value="false"/>
+    <allowParenthesis value="false"/>
+    <allowSubtract value="false"/>
+    <allowMultiply value="false"/>
+    <allowDivide value="false"/>
+    <allowResizeBrackets value="false"/>
+  </rules>
+  <script>
+    <scriptedActions>
+      <code id="wordproblem.scripts.level.GenericBarModelLevelScript">
+        <documentToCard documentId="a1" value="11"/>
+        <documentToCard documentId="unk" value="fruit"/>
+        <documentToCard documentId="b1" value="6"/>
+        <barNormalizingFactor value="6"/>
+        <termValueToBarValue termValue="fruit" barValue="17"/>
+        <referenceModel>
+          <barWhole id="a">
+            <barSegment value="11" label="11"/>
+            <barSegment value="6" label="6"/>
+            <bracket value="fruit" start="0" end="1"/>
+          </barWhole>
+        </referenceModel>
+        <referenceModel>
+          <verticalBracket value="fruit" start="0" end="1"/>
+          <barWhole id="a">
+            <barSegment value="11" label="11"/>
+          </barWhole>
+          <barWhole id="b">
+            <barSegment value="6" label="6"/>
+          </barWhole>
+        </referenceModel>
+        <equation value="fruit=11+6"/>
+        <customHints>
+          <hint step="1">There are two different types of fruits being added together, identify each one.</hint>
+          <hint step="2" existingBar="a">What other fruit did John buy, besides oranges?</hint>
+          <hint step="2" existingBar="b">Each type of fruit needs its own box to be added together.</hint>
+          <hint step="3" existingBar="a">John bought oranges, but what else did he buy and how many?</hint>
+          <hint step="3" existingBar="b">John bought kiwis, but what else did he buy?</hint>
+          <hint step="4" existingBar="a">How many kiwis did John buy?</hint>
+          <hint step="4" existingBar="b">You are showing the kiwis, but you also need to show the oranges.</hint>
+          <hint step="5">The sum of all of the fruit is how many pieces he bought.</hint>
+          <hint step="6">You need the combination of the oranges and kiwis.</hint>
+          <hint step="7">What does the number of oranges and kiwis represent?</hint>
+          <hint step="8">What would be the total number of oranges and kiwis that John bought?</hint>
+          <hint step="9">The number of oranges should be added to the number of kiwis to get the total number of fruit John bought.</hint>
+        </customHints>
+      </code>
+    </scriptedActions>
+  </script>
+  <style>{"p":{"fontName":"Calibri","color":"0x0000000","fontSize":24}}</style>
+  <wordproblem>
+    <page paddingLeft="110" paddingTop="50">
+      <div layout="relative" width="580">
+        <p>
+          John went to the grocery store to buy some fruit. He picked out
+          <span class="term" id="a1">11 oranges</span>
+          and
+          <span class="term" id="b1">6 kiwis</span>
+          . How many
+          <span class="term" alias="fruit" id="unk">pieces of fruit did he buy all together</span>
+          ?
+        </p>
+      </div>
+    </page>
+  </wordproblem>
+  <resources>
+    <audio type="streaming" src="bg_music_fantasy_1"/>
+  </resources>
+</level>

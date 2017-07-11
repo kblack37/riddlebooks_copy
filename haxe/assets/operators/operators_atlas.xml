@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker http://www.codeandweb.com/texturepacker-->
+<!-- $TexturePacker:SmartUpdate:806506c9ff134aeaff2c2b24d897a3b4:68e48248dc7387ad758c69311adadef7:323d507cf7da71ce657e505ba7a81a17$ -->
+<TextureAtlas imagePath="operators_atlas.png">
+    <SubTexture name="divide" x="59" y="2" width="61" height="9"/>
+    <SubTexture name="equal" x="30" y="32" width="23" height="21"/>
+    <SubTexture name="multiply" x="55" y="32" width="11" height="11"/>
+    <SubTexture name="parentheses_left" x="16" y="2" width="12" height="51"/>
+    <SubTexture name="parentheses_right" x="2" y="2" width="12" height="51"/>
+    <SubTexture name="plus" x="30" y="2" width="27" height="28"/>
+</TextureAtlas>

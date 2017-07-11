@@ -1,0 +1,83 @@
+<level barModelType="1a" name="Bar model 517" id="517">
+  <symbols>
+    <symbol name="total berries" abbreviatedName="berries" value="berries" backgroundTexturePositive="card_background_square" customBarColor="0xFFC4C4C4" useCustomBarColor="true"/>
+    <symbol value="13" customBarColor="0xFF6099F5" useCustomBarColor="true"/>
+    <symbol value="18" customBarColor="0xFFBB89DD" useCustomBarColor="true"/>
+  </symbols>
+  <overrideLayoutAttributes name="barEquationModel">
+    <textArea id="textArea" src="url(../assets/level_images/book_mountain_meadow.jpg)"/>
+  </overrideLayoutAttributes>
+  <rules>
+    <allowAddNewSegments value="true"/>
+    <allowAddUnitBar value="false"/>
+    <allowSplitBar value="false"/>
+    <allowCopyBar value="false"/>
+    <allowCreateCard value="false"/>
+    <allowParenthesis value="false"/>
+    <allowSubtract value="false"/>
+    <allowMultiply value="false"/>
+    <allowDivide value="false"/>
+    <allowResizeBrackets value="false"/>
+  </rules>
+  <script>
+    <scriptedActions>
+      <code id="wordproblem.scripts.level.GenericBarModelLevelScript">
+        <documentToCard documentId="a1" value="18"/>
+        <documentToCard documentId="unk" value="berries"/>
+        <documentToCard documentId="b1" value="13"/>
+        <barNormalizingFactor value="13"/>
+        <termValueToBarValue termValue="berries" barValue="31"/>
+        <referenceModel>
+          <barWhole id="a">
+            <barSegment value="18" label="18"/>
+            <barSegment value="13" label="13"/>
+            <bracket value="berries" start="0" end="1"/>
+          </barWhole>
+        </referenceModel>
+        <referenceModel>
+          <verticalBracket value="berries" start="0" end="1"/>
+          <barWhole id="a">
+            <barSegment value="18" label="18"/>
+          </barWhole>
+          <barWhole id="b">
+            <barSegment value="13" label="13"/>
+          </barWhole>
+        </referenceModel>
+        <equation value="berries=18+13"/>
+        <customHints>
+          <hint step="1">The numbers of blackberries the two cubs ate should be added together.</hint>
+          <hint step="2" existingBar="b">You're missing a group of berries that needs to be added.</hint>
+          <hint step="2" existingBar="a">You're missing a group of berries that needs to be added.</hint>
+          <hint step="3" existingBar="b">How about including the berries eaten by the first cub too?</hint>
+          <hint step="3" existingBar="a">How about including the berries eaten by the second cub too?</hint>
+          <hint step="4" existingBar="b">You need to add the berries eaten by the first cub.</hint>
+          <hint step="4" existingBar="a">You need to add the berries eaten by the second cub.</hint>
+          <hint step="5">In addition to the two different groups of blackberries, what else do you need to show to complete the model?</hint>
+          <hint step="6">The number of berries eaten by one cub should be added to the number of berries eaten by the second cub.</hint>
+          <hint step="7">The missing part is the total you find by adding the number of berries eaten together.</hint>
+          <hint step="8">The number of berries eaten by each bear cub should be put together.</hint>
+          <hint step="9">How many berries did both bears eat in total?</hint>
+        </customHints>
+      </code>
+    </scriptedActions>
+  </script>
+  <style>{"p":{"fontName":"Calibri","color":"0x0000000","fontSize":24}}</style>
+  <wordproblem>
+    <page paddingLeft="110" paddingTop="50">
+      <div layout="relative" width="580">
+        <p>
+          There are two hungry bear cubs sitting in a forest glade. They find a bush covered in blackberries and decide to eat them all. If one cub eats
+          <span class="term" id="a1">18 berries</span>
+          and the other eats
+          <span class="term" id="b1">13 berries</span>
+          , how many
+          <span class="term" alias="berries" id="unk">blackberries were there on the bush</span>
+          ?
+        </p>
+      </div>
+    </page>
+  </wordproblem>
+  <resources>
+    <audio type="streaming" src="bg_home_music"/>
+  </resources>
+</level>
