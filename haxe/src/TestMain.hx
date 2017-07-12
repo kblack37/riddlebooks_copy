@@ -1,5 +1,6 @@
 package;
 
+import dragonbox.common.tests.MathUtilTest;
 import openfl.display.Sprite;
 import openfl.Lib;
 
@@ -16,7 +17,8 @@ class TestMain extends Sprite
 		
 		// Assets:
 		// openfl.Assets.getBitmapData("img/assetname.jpg");
-		trace("Hello World");
+		var mathUtilTests = new MathUtilTest();
+		mathUtilTests.runTests();
 	}
 
 }
