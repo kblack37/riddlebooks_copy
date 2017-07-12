@@ -68,8 +68,6 @@ source AS3 file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/flash/src/d
 target HX file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/dragonbox/common/expressiontree/compile/LatexCompiler.hx
 source AS3 file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/flash/src/dragonbox/common/expressiontree/compile/Token.as
 target HX file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/dragonbox/common/expressiontree/compile/Token.hx
-source AS3 file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/flash/src/dragonbox/common/math/util/MathUtil.as
-target HX file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/dragonbox/common/math/util/MathUtil.hx
 source AS3 file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/flash/src/dragonbox/common/math/vectorspace/IVectorSpace.as
 target HX file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/dragonbox/common/math/vectorspace/IVectorSpace.hx
 source AS3 file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/flash/src/dragonbox/common/math/vectorspace/RealsOperator.as
