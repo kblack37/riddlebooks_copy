@@ -1,5 +1,6 @@
 package starling.extensions.textureutil;
 
+import haxe.xml.Fast;
 import starling.extensions.textureutil.MaxRectPacker;
 
 import flash.display.Bitmap;
@@ -68,7 +69,7 @@ class AtlasBuilder
         
         
         atlasText = "<TextureAtlas imagePath=\"atlas.png\">" + atlasText + "</TextureAtlas>";
-        var atlasXml : FastXML = new FastXML(atlasText);
+        var atlasXml : Xml = Xml.parse(atlasText);
         
         //Create the atlas
         var texture : Texture = Texture.fromBitmapData(atlasBitmap, false);
@@ -129,7 +130,7 @@ class AtlasBuilder
         
         
         atlasText = "<TextureAtlas imagePath=\"atlas.png\">" + atlasText + "</TextureAtlas>";
-        var atlasXml : FastXML = new FastXML(atlasText);
+        var atlasXml : Xml = Xml.parse(atlasText);
         
         //Create the atlas
         var atlas : TextureAtlas = new TextureAtlas(cardAtlasTexture, atlasXml);
