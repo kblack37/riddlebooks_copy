@@ -70,7 +70,7 @@ class MaxRectPacker
     private function quickFindPositionForNewNodeBestAreaFit(width : Float,
             height : Float) : Rectangle
     {
-        var score : Int = Int.MAX_VALUE;
+        var score : Int = Std.int(Math.pow(2, 30));
         var areaFit : Float;
         var r : Rectangle;
         var bestNode : Rectangle = new Rectangle();
@@ -89,7 +89,7 @@ class MaxRectPacker
                     bestNode.y = r.y;
                     bestNode.width = width;
                     bestNode.height = height;
-                    score = areaFit;
+                    score = Std.int(areaFit);
                 }
             }
             i++;

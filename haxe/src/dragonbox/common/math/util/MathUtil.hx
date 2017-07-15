@@ -23,7 +23,7 @@ class MathUtil
     
     public static function leastCommonMultiple(valueA : Int, valueB : Int) : Int
     {
-        return (valueA * valueB) / MathUtil.greatestCommonDivisor(valueA, valueB);
+        return Std.int((valueA * valueB) / MathUtil.greatestCommonDivisor(valueA, valueB));
     }
     
     /**
@@ -91,14 +91,14 @@ class MathUtil
             controlB : Point,
             controlC : Point,
             controlD : Point,
-            steps : Float = 10.0) : Float
+            steps : Int = 10) : Float
     {
         // Just sum up the length of several lines at different points in the curve
         var length : Float = 0;
         var i : Int;
         var prevPointBuffer : Point = new Point();
         var pointBuffer : Point = new Point();
-        for (i in 0...steps){
+        for (i in 0...(steps + 1)){
             var t : Float = i / steps;
             MathUtil.calculateCubicBezierPoint(t, controlA, controlB, controlC, controlD, pointBuffer);
             
@@ -140,8 +140,8 @@ class MathUtil
         (6 * u * t - 3 * tt) * controlC.y +
         3 * tt * controlD.y;
         var slope : Float = tangentY / tangentX;
-        
-        return ((slope == 0 || tangentX == 0)) ? -1 : -1 / slope;
+		
+		return -1 / slope;
     }
     
     /**
@@ -241,7 +241,11 @@ class MathUtil
             doesIntersect = false;
         }  // Check if corners are on the same side  
         
-        
+		function lineThroughStartEnd(x : Float, y : Float) : Float
+        {
+            return (p2.y - p1.y) * x + (p1.x - p2.x) * y +
+            (p2.x * p1.y - p1.x * p2.y);
+        };
         
         if (doesIntersect) 
         {
@@ -255,12 +259,6 @@ class MathUtil
                 doesIntersect = false;
             }
         }
-        
-        function lineThroughStartEnd(x : Float, y : Float) : Float
-        {
-            return (p2.y - p1.y) * x + (p1.x - p2.x) * y +
-            (p2.x * p1.y - p1.x * p2.y);
-        };
         
         return doesIntersect;
     }

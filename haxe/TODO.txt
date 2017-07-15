@@ -68,8 +68,6 @@ source AS3 file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/flash/src/d
 target HX file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/dragonbox/common/expressiontree/compile/LatexCompiler.hx
 source AS3 file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/flash/src/dragonbox/common/expressiontree/compile/Token.as
 target HX file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/dragonbox/common/expressiontree/compile/Token.hx
-source AS3 file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/flash/src/dragonbox/common/math/util/MathUtil.as
-target HX file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/dragonbox/common/math/util/MathUtil.hx
 source AS3 file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/flash/src/dragonbox/common/math/vectorspace/IVectorSpace.as
 target HX file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/dragonbox/common/math/vectorspace/IVectorSpace.hx
 source AS3 file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/flash/src/dragonbox/common/math/vectorspace/RealsOperator.as
@@ -364,10 +362,6 @@ source AS3 file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/flash/src/s
 target HX file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/starling/extensions/Polygon.hx
 source AS3 file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/flash/src/starling/extensions/pixelmask/PixelMaskDisplayObject.as
 target HX file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/starling/extensions/pixelmask/PixelMaskDisplayObject.hx
-source AS3 file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/flash/src/starling/extensions/textureutil/AtlasBuilder.as
-target HX file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/starling/extensions/textureutil/AtlasBuilder.hx
-source AS3 file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/flash/src/starling/extensions/textureutil/MaxRectPacker.as
-target HX file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/starling/extensions/textureutil/MaxRectPacker.hx
 source AS3 file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/flash/src/starling/extensions/textureutil/TextureUtil.as
 target HX file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/starling/extensions/textureutil/TextureUtil.hx
 source AS3 file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/flash/src/starling/filters/PixelateFilter.as
@@ -999,8 +993,6 @@ source AS3 file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/flash/src/w
 target HX file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/playercollections/scripts/PlayerCollectionStatsViewer.hx
 source AS3 file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/flash/src/wordproblem/playercollections/scripts/PlayerCollectionViewer.as
 target HX file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/playercollections/scripts/PlayerCollectionViewer.hx
-source AS3 file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/flash/src/wordproblem/resource/AssetManager.as
-target HX file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/resource/AssetManager.hx
 source AS3 file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/flash/src/wordproblem/resource/FlashResourceUtil.as
 target HX file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/haxe/src/wordproblem/resource/FlashResourceUtil.hx
 source AS3 file: C:/Users/szetor.CSENETID/Repos/cgs-riddlebooks-haxe/flash/src/wordproblem/resource/Resources.as
