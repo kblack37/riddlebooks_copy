@@ -8,7 +8,7 @@ import flash.utils.Dictionary;
 	 */
 class Map
 {
-    private var m_backingStructure : Dictionary;
+    private var m_backingStructure : Dictionary<Dynamic, Dynamic>;
     private var m_size : Int;
     
     public function new()
@@ -43,12 +43,7 @@ class Map
     }
     
     public function clear() : Void
-    {
-        for (key in Reflect.fields(m_backingStructure))
-        {
-            ;
-        }
-        
+    {   
         m_size = 0;
     }
     
@@ -57,7 +52,6 @@ class Map
         if (contains(key)) 
         {
             m_size--;
-            ;
         }
     }
     

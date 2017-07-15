@@ -23,7 +23,7 @@ class ImageView extends DocumentView
     {
         var hitView : Bool = this.hitTest(this.globalToLocal(globalPoint)) != null;
         var viewToReturn : DocumentView = null;
-        if (hitView && (super.node.getSelectable() || !ignoreNonSelectable)) 
+        if (hitView && (this.node.getSelectable() || !ignoreNonSelectable)) 
         {
             viewToReturn = this;
         }

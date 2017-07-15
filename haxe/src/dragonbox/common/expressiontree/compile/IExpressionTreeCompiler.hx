@@ -1,6 +1,6 @@
-package utils.expressiontree.compile;
-import utils.expressiontree.ExpressionNode;
-import utils.math.RealsVectorSpace;
+package dragonbox.common.expressiontree.compile;
+import dragonbox.common.expressiontree.ExpressionNode;
+import dragonbox.common.math.vectorspace.RealsVectorSpace;
 
 /**
  * @author Roy

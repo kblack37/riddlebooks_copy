@@ -2,6 +2,7 @@ package wordproblem.engine.level;
 
 
 import dragonbox.common.util.XString;
+import haxe.xml.Fast;
 
 /**
  * These are the list of rules to be applied to a single level.
@@ -190,7 +191,7 @@ class LevelRules
      *      The default values to use if a rule is not in the xml. Note if this is null, the xml must
      *      contain every rule.
      */
-    public static function createRulesFromXml(rulesXml : FastXML, defaultRules : LevelRules = null) : LevelRules
+    public static function createRulesFromXml(rulesXml : Fast, defaultRules : LevelRules = null) : LevelRules
     {
         // HACK: When default rules are constructed in the first place, it might be annoying to have to re-specify all
         // the rules in the config xml
@@ -199,25 +200,25 @@ class LevelRules
             defaultRules = new LevelRules(true, true, true, true, false, true, true);
         }
         
-        var allowSubtractElement : FastXML = rulesXml.nodes.elements("allowSubtract")[0];
+        var allowSubtractElement : Fast = rulesXml.hasNode.allowSubtract ? rulesXml.node.allowSubtract : null;
         var allowSubtract : Bool = getBooleanValueFromElement(allowSubtractElement, defaultRules.allowSubtract);
         
-        var allowMultiplyElement : FastXML = rulesXml.nodes.elements("allowMultiply")[0];
+        var allowMultiplyElement : Fast = rulesXml.hasNode.allowMultiply ? rulesXml.node.allowMultiply : null;
         var allowMultiply : Bool = getBooleanValueFromElement(allowMultiplyElement, defaultRules.allowMultiply);
         
-        var allowDivideElement : FastXML = rulesXml.nodes.elements("allowDivide")[0];
+        var allowDivideElement :Fast = rulesXml.hasNode.allowDivide ? rulesXml.node.allowDivide : null;
         var allowDivide : Bool = getBooleanValueFromElement(allowDivideElement, defaultRules.allowDivide);
         
-        var allowCardFlipElement : FastXML = rulesXml.nodes.elements("allowCardFlip")[0];
+        var allowCardFlipElement : Fast = rulesXml.hasNode.allowCardFlip ? rulesXml.node.allowCardFlip : null;
         var allowCardFlip : Bool = getBooleanValueFromElement(allowCardFlipElement, defaultRules.allowCardFlip);
         
-        var autoSimplifyNumbersElement : FastXML = rulesXml.nodes.elements("autoSimplifyNumbers")[0];
+        var autoSimplifyNumbersElement : Fast = rulesXml.hasNode.autoSimplifyNumbers ? rulesXml.node.autoSimplifyNumbers : null;
         var autoSimplifyNumbers : Bool = getBooleanValueFromElement(autoSimplifyNumbersElement, defaultRules.autoSimplifyNumbers);
         
-        var allowImbalanceElement : FastXML = (rulesXml.nodes.elements("allowImbalance")[0]);
+        var allowImbalanceElement : Fast = rulesXml.hasNode.allowImbalance ? rulesXml.node.allowImbalance : null;
         var allowImbalance : Bool = getBooleanValueFromElement(allowImbalanceElement, defaultRules.allowImbalance);
         
-        var allowParenthesisElement : FastXML = (rulesXml.nodes.elements("allowParenthesis")[0]);
+        var allowParenthesisElement : Fast = rulesXml.hasNode.allowParenthesis ? rulesXml.node.allowParenthesis : null;
         var allowParenthesis : Bool = getBooleanValueFromElement(allowParenthesisElement, defaultRules.allowParenthesis);
         
         var levelRules : LevelRules = new LevelRules(
@@ -227,55 +228,55 @@ class LevelRules
         allowCardFlip, 
         autoSimplifyNumbers, 
         allowImbalance, 
-        allowParenthesis, 
+        allowParenthesis
         );
         
-        var allowAdditionElement : FastXML = rulesXml.nodes.elements("allowAddition")[0];
+        var allowAdditionElement : Fast = rulesXml.hasNode.allowAddition ? rulesXml.node.allowAddition : null;
         levelRules.allowAddition = getBooleanValueFromElement(allowAdditionElement, defaultRules.allowAddition);
         
-        var allowAddNewSegmentsElement : FastXML = rulesXml.nodes.elements("allowAddNewSegments")[0];
+        var allowAddNewSegmentsElement : Fast = rulesXml.hasNode.allowAddNewSegments ? rulesXml.node.allowAddNewSegments : null;
         levelRules.allowAddNewSegments = getBooleanValueFromElement(allowAddNewSegmentsElement, defaultRules.allowAddNewSegments);
         
-        var allowAddBarComparisonElement : FastXML = rulesXml.nodes.elements("allowAddBarComparison")[0];
+        var allowAddBarComparisonElement : Fast = rulesXml.hasNode.allowAddBarComparison ? rulesXml.node.allowAddBarComparison : null;
         levelRules.allowAddBarComparison = getBooleanValueFromElement(allowAddBarComparisonElement, defaultRules.allowAddBarComparison);
         
-        var allowAddUnitBarElement : FastXML = rulesXml.nodes.elements("allowAddUnitBar")[0];
+        var allowAddUnitBarElement : Fast = rulesXml.hasNode.allowAddUnitBar ? rulesXml.node.allowAddUnitBar : null;
         levelRules.allowAddUnitBar = getBooleanValueFromElement(allowAddUnitBarElement, defaultRules.allowAddUnitBar);
         
-        var allowAddHorizontalLabelsElement : FastXML = rulesXml.nodes.elements("allowAddHorizontalLabels")[0];
+        var allowAddHorizontalLabelsElement : Fast = rulesXml.hasNode.allowAddHorizontalLabels ? rulesXml.node.allowAddHorizontalLabels : null;
         levelRules.allowAddHorizontalLabels = getBooleanValueFromElement(allowAddHorizontalLabelsElement, defaultRules.allowAddHorizontalLabels);
         
-        var allowAddVerticalLabelsElement : FastXML = rulesXml.nodes.elements("allowAddVerticalLabel")[0];
+        var allowAddVerticalLabelsElement : Fast = rulesXml.hasNode.allowAddVerticalLabels ? rulesXml.node.allowAddVerticalLabels : null;
         levelRules.allowAddVerticalLabels = getBooleanValueFromElement(allowAddVerticalLabelsElement, defaultRules.allowAddVerticalLabels);
         
-        var allowCopyBarElement : FastXML = rulesXml.nodes.elements("allowCopyBar")[0];
+        var allowCopyBarElement : Fast = rulesXml.hasNode.allowCopyBar ? rulesXml.node.allowCopyBar : null;
         levelRules.allowCopyBar = getBooleanValueFromElement(allowCopyBarElement, defaultRules.allowCopyBar);
         
-        var allowSplitBarElement : FastXML = rulesXml.nodes.elements("allowSplitBar")[0];
+        var allowSplitBarElement : Fast = rulesXml.hasNode.allowSplitBar ? rulesXml.node.allowSplitBar : null;
         levelRules.allowSplitBar = getBooleanValueFromElement(allowSplitBarElement, defaultRules.allowSplitBar);
         
-        var allowCreateCardElement : FastXML = rulesXml.nodes.elements("allowCreateCard")[0];
+        var allowCreateCardElement : Fast = rulesXml.hasNode.allowCreateCard ? rulesXml.node.allowCreateCard : null;
         levelRules.allowCreateCard = getBooleanValueFromElement(allowCreateCardElement, defaultRules.allowCreateCard);
         
-        var allowResizeBracketsElement : FastXML = rulesXml.nodes.elements("allowResizeBrackets")[0];
+        var allowResizeBracketsElement : Fast = rulesXml.hasNode.allowResizeBrackets ? rulesXml.node.allowResizeBrackets : null;
         levelRules.allowResizeBrackets = getBooleanValueFromElement(allowResizeBracketsElement, defaultRules.allowResizeBrackets);
         
-        var autoResizeHorizontalBracketsElement : FastXML = rulesXml.nodes.elements("autoResizeHorizontalBrackets")[0];
+        var autoResizeHorizontalBracketsElement : Fast = rulesXml.hasNode.autoResizeHorizontalBrackets ? rulesXml.node.autoResizeHorizontalBrackets : null;
         levelRules.autoResizeHorizontalBrackets = getBooleanValueFromElement(autoResizeHorizontalBracketsElement, defaultRules.autoResizeHorizontalBrackets);
         
-        var autoResizeVerticalBracketsElement : FastXML = rulesXml.nodes.elements("autoResizeVerticalBrackets")[0];
+        var autoResizeVerticalBracketsElement : Fast = rulesXml.hasNode.autoResizeVerticalBrackets ? rulesXml.node.autoResizeVerticalBrackets : null;
         levelRules.autoResizeVerticalBrackets = getBooleanValueFromElement(autoResizeVerticalBracketsElement, defaultRules.autoResizeVerticalBrackets);
         
-        var maxBarRowsAllowedElement : FastXML = rulesXml.nodes.elements("maxBarRowsAllowed")[0];
+        var maxBarRowsAllowedElement : Fast = rulesXml.hasNode.maxBarRowsAllowed ? rulesXml.node.maxBarRowsAllowed : null;
         levelRules.maxBarRowsAllowed = getIntValueFromElement(maxBarRowsAllowedElement, defaultRules.maxBarRowsAllowed);
         
-        var restrictCardsElement : FastXML = rulesXml.nodes.elements("restrictCardsInBarModel")[0];
+        var restrictCardsElement : Fast = rulesXml.hasNode.restrictCardsInBarModel ? rulesXml.node.restrictCardsInBarModel : null;
         levelRules.restrictCardsInBarModel = getBooleanValueFromElement(restrictCardsElement, defaultRules.restrictCardsInBarModel);
         
         return levelRules;
     }
     
-    private static function getBooleanValueFromElement(element : FastXML, defaultValue : Bool) : Bool
+    private static function getBooleanValueFromElement(element : Fast, defaultValue : Bool) : Bool
     {
         var value : Bool = defaultValue;
         if (element != null) 
@@ -285,12 +286,12 @@ class LevelRules
         return value;
     }
     
-    private static function getIntValueFromElement(element : FastXML, defaultValue : Int) : Int
+    private static function getIntValueFromElement(element : Fast, defaultValue : Int) : Int
     {
         var value : Int = defaultValue;
         if (element != null) 
         {
-            value = parseInt(element.att.value);
+            value = Std.parseInt(element.att.value);
             if (!Math.isNaN(value)) 
             {
                 value = defaultValue;

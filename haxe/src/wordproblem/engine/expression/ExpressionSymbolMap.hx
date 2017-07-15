@@ -7,8 +7,8 @@ import flash.text.TextFormat;
 
 import dragonbox.common.system.Map;
 
-import feathers.display.Scale9Image;
-import feathers.textures.Scale9Textures;
+//import feathers.display.Scale9Image;
+//import feathers.textures.Scale9Textures;
 
 import starling.display.DisplayObject;
 import starling.display.Image;
@@ -216,8 +216,8 @@ class ExpressionSymbolMap
             
             // Create the new texture and immediately add it to the map
             var renderTexture : RenderTexture = new RenderTexture(
-            cardObject.width, 
-            cardObject.height, 
+            Std.int(cardObject.width), 
+            Std.int(cardObject.height)
             );
             
             renderTexture.draw(cardObject);
@@ -265,6 +265,7 @@ class ExpressionSymbolMap
             measuringTextField : MeasuringTextField) : DisplayObject
     {
         var cardContainer : Sprite = new Sprite();
+		var symbolTextField : TextField = null;
         
         // If text name is specified then create a stylized textfield on top of everything
         var scaleBackgroundToFitTextWidth : Float = -1;
@@ -278,13 +279,13 @@ class ExpressionSymbolMap
             measuringTextField.embedFonts = GameFonts.getFontIsEmbedded(symbolData.fontName);
             measuringTextField.text = symbolData.abbreviatedName;
             
-            var symbolTextField : TextField = new TextField(
-            measuringTextField.textWidth + 20, 
-            measuringTextField.textHeight + 10, 
+            symbolTextField = new TextField(
+            Std.int(measuringTextField.textWidth + 20), 
+            Std.int(measuringTextField.textHeight + 10), 
             symbolData.abbreviatedName, 
             symbolData.fontName, 
             symbolData.fontSize, 
-            symbolData.fontColor, 
+            symbolData.fontColor
             );
             symbolTextField.hAlign = HAlign.CENTER;
             
@@ -302,15 +303,16 @@ class ExpressionSymbolMap
             var backgroundImage : DisplayObject;
             if (scaleBackgroundToFitTextWidth > backgroundOriginalWidth) 
             {
+				// TODO: replace this with something other than feathers
                 // If the background needs to be expanded, then we need to do a nine-slice on the background
-                var nineScalePadding : Float = 8;
-                var scale9Background : Scale9Image = new Scale9Image(new Scale9Textures(
-                backgroundTexture, 
-                new Rectangle(nineScalePadding, nineScalePadding, backgroundOriginalWidth - 2 * nineScalePadding, backgroundOriginalHeight - 2 * nineScalePadding), 
-                ));
-                scale9Background.color = symbolData.backgroundColor;
-                scale9Background.width = scaleBackgroundToFitTextWidth;
-                backgroundImage = scale9Background;
+                //var nineScalePadding : Float = 8;
+                //var scale9Background : Scale9Image = new Scale9Image(new Scale9Textures(
+                //backgroundTexture, 
+                //new Rectangle(nineScalePadding, nineScalePadding, backgroundOriginalWidth - 2 * nineScalePadding, backgroundOriginalHeight - 2 * nineScalePadding)
+                //));
+                //scale9Background.color = symbolData.backgroundColor;
+                //scale9Background.width = scaleBackgroundToFitTextWidth;
+                //backgroundImage = scale9Background;
             }
             else 
             {
@@ -409,7 +411,7 @@ class ExpressionSymbolMap
         null, 
         backgroundToUse, 
         0xFFFFFF, 
-        m_defaultCardAttributes.defaultFontName, 
+        m_defaultCardAttributes.defaultFontName
         );
         symbolData.fontColor = ((isNegative)) ? m_defaultCardAttributes.defaultNegativeTextColor : m_defaultCardAttributes.defaultPositiveTextColor;
         symbolData.fontSize = m_defaultCardAttributes.defaultFontSize;

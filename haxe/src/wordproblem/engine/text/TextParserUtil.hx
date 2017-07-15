@@ -1,5 +1,6 @@
 package wordproblem.engine.text;
 
+import haxe.xml.Fast;
 import wordproblem.engine.text.TextViewFactory;
 
 import starling.display.DisplayObject;
@@ -30,7 +31,7 @@ class TextParserUtil
         // First remove all whitespace
         if (source != null) 
         {
-            source = source.replace(WHITE_SPACE_REGEX, "");
+            source = WHITE_SPACE_REGEX.replace(source, "");
             
             // The source might reference a list of resources, we need to parse out each
             // individual element. We assume the end of an element is when we encounter
@@ -85,7 +86,7 @@ class TextParserUtil
      *      Root node view for the new xml
      *      
      */
-    public static function createTextViewFromXML(content : FastXML,
+    public static function createTextViewFromXML(content : Fast,
             style : Dynamic,
             width : Float,
             textParser : TextParser,

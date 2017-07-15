@@ -1,4 +1,4 @@
-package utils.math;
+package dragonbox.common.math.vectorspace;
 
 /**
  * Manipulation of scalars consisting of the set of real numbers.

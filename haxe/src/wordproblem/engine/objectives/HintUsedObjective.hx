@@ -1,6 +1,7 @@
 package wordproblem.engine.objectives;
 
 
+import haxe.xml.Fast;
 import wordproblem.engine.level.LevelStatistics;
 
 /**
@@ -53,16 +54,16 @@ class HintUsedObjective extends BaseObjective
         }
     }
     
-    override public function deserializeFromXml(element : FastXML) : Void
+    override public function deserializeFromXml(element : Fast) : Void
     {
         super.deserializeFromXml(element);
-        m_maxNewHints = parseInt(element.att.value);
+        m_maxNewHints = Std.parseInt(element.att.value);
     }
     
     override public function deserializeFromJson(data : Dynamic) : Void
     {
         super.deserializeFromJson(data);
-        m_maxNewHints = parseInt(data.value);
+        m_maxNewHints = Std.parseInt(data.value);
     }
     
     override public function clone() : BaseObjective

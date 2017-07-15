@@ -165,7 +165,7 @@ class SymbolData
         this.symbolTextureName, 
         this.backgroundTextureName, 
         this.backgroundColor, 
-        this.fontName, 
+        this.fontName
         );
         clone.fontColor = this.fontColor;
         clone.fontSize = this.fontSize;

@@ -3,7 +3,7 @@ package wordproblem.engine.component;
 
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.ExpressionUtil;
-import dragonbox.common.math.vectorspace.IVectorSpace;
+import dragonbox.common.math.vectorspace.RealsVectorSpace;
 
 import wordproblem.engine.text.TextParserUtil;
 
@@ -156,7 +156,7 @@ class WidgetAttributesComponent extends Component
     /**
      * Return a deep copy of the attributes component
      */
-    public function clone(vectorSpace : IVectorSpace) : WidgetAttributesComponent
+    public function clone(vectorSpace : RealsVectorSpace) : WidgetAttributesComponent
     {
         var sourceResult : String = null;
         var sourceList : Array<Dynamic> = m_sourceList;
@@ -180,7 +180,7 @@ class WidgetAttributesComponent extends Component
         var clonedExtraData : Dynamic = { };
         for (key in Reflect.fields(this.extraData))
         {
-            Reflect.setField(clonedExtraData, key, this.extraData[key]);
+            Reflect.setField(clonedExtraData, key, Reflect.field(this.extraData, key));
         }
         
         var clone : WidgetAttributesComponent = new WidgetAttributesComponent(
@@ -194,7 +194,7 @@ class WidgetAttributesComponent extends Component
         this.viewportHeight, 
         sourceResult, 
         this.visible, 
-        clonedExtraData, 
+        clonedExtraData
         );
         
         if (this.children != null) 

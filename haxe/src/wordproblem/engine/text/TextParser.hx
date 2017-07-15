@@ -1,6 +1,7 @@
 package wordproblem.engine.text;
 
 import flash.errors.Error;
+import haxe.xml.Fast;
 
 import dragonbox.common.util.XString;
 
@@ -78,9 +79,6 @@ class TextParser
                 "fontName");
         m_nodeAttributes.push(
                 "color");
-        m_nodeAttributes.push(
-                );
-        
     }
     
     /**
@@ -90,7 +88,7 @@ class TextParser
      * @param content
      *      XML object that has as its root tag the wrapper around all pages of text content
      */
-    public function parseDocument(content : FastXML,
+    public function parseDocument(content : Fast,
             maxWidth : Float) : DocumentNode
     {
         var documentNodeRoot : DocumentNode = _parseDocument(content);
@@ -192,13 +190,13 @@ class TextParser
      */
     public function getImagesToLoad(node : DocumentNode, outImages : Array<String>) : Void
     {
+		var imageNotAdded : Bool = true;
         if (Std.is(node, ImageNode)) 
         {
             var imageNode : ImageNode = try cast(node, ImageNode) catch(e:Dynamic) null;
             var imageSource : String = imageNode.src.name;
             
             // Do not add duplicate images
-            var imageNotAdded : Bool = true;
             for (i in 0...outImages.length){
                 if (outImages[i] == imageSource) 
                 {
@@ -358,17 +356,17 @@ class TextParser
      * @return
      *      A custom node representing the data in the xml chunk
      */
-    private function _parseDocument(content : FastXML) : DocumentNode
+    private function _parseDocument(content : Fast) : DocumentNode
     {
         // Create a document node base on the tagname of the content root
         var documentNode : DocumentNode;
-        var contentTagName : String = content.node.name.innerData();
+        var contentTagName : String = content.name;
         
         if (contentTagName == null) 
         {
             // Strip out new line characters and replace with string
             var textContent : String = Std.string(content);
-            documentNode = new TextNode(textContent.replace(new EReg('\\r?\\n|\\r', "g"), " "));
+            documentNode = new TextNode((new EReg('\\r?\\n|\\r', "g")).replace(textContent, " "));
         }
         // Pages are div are mostly the same, a page is just a way to explicitly break up
         // content is separate screen but logically they both simply aggregate other tags.
@@ -380,14 +378,14 @@ class TextParser
         {
             documentNode = new ParagraphNode();
             
-            if (content.node.exists.innerData("lineHeight")) 
+            if (content.has.lineHeight) 
             {
-                (try cast(documentNode, ParagraphNode) catch(e:Dynamic) null).lineHeight = content.att.lineHeight;
+                (try cast(documentNode, ParagraphNode) catch(e:Dynamic) null).lineHeight = Std.parseFloat(content.att.lineHeight);
             }
         }
         else if (contentTagName == TAG_IMAGE) 
         {
-            var imageSrc : String = content.node.attribute.innerData("src");
+            var imageSrc : String = content.att.src;
             documentNode = new ImageNode(imageSrc);
         }
         else if (contentTagName == TAG_SPAN) 
@@ -399,38 +397,42 @@ class TextParser
             throw new Error("Unrecognized xml tag name: " + contentTagName);
         }
         
-        if (content.node.exists.innerData("@id")) 
+        if (content.has.id) 
         {
-            documentNode.id = content.node.attribute.innerData("id");
+            documentNode.id = content.att.id;
         }  ///Generated sentences have "ref" attributes, which are like ids.  But if the top paragraph element has id="question" do not overwrite it.  
         
-        if (content.node.exists.innerData("@ref") && documentNode.id != "question") 
+        if (content.has.ref && documentNode.id != "question") 
         {
-            documentNode.id = content.node.attribute.innerData("ref");
+            documentNode.id = content.att.ref;
         }
         
-        if (content.node.exists.innerData("@class")) 
+        if (content.has.resolve("class")) 
         {
-            var classString : String = content.node.attribute.innerData("class");
-            var classArray : Array<Dynamic> = classString.split(" ");
-            var classVector : Array<String> = classArray;
-            documentNode.classes = classVector;
+            var classString : String = content.att.resolve("class");
+            var classArray : Array<String> = classString.split(" ");
+            documentNode.classes = classArray;
         }
         
         this.checkAndApplyPropertyToNode(documentNode, content);
         
         // Parse the children tags of the content if they exist
         // They will be the children tags of the root.
-        var childXMLList : FastXMLList = content.node.children.innerData();
-        var numberChildren : Int = childXMLList.length();
-        for (i in 0...numberChildren){
-            var childXML : FastXML = childXMLList.get(i);
-            var childDocumentNode : DocumentNode = _parseDocument(childXML);
-            documentNode.children.push(childDocumentNode);
-        }  // Thus even if it is empty, we always at least add an empty text node as a child    // HACK: We assume a span is a non-terminal node  
+        //var childXMLList : FastXMLList = content.node.children.innerData();
+        //var numberChildren : Int = childXMLList.length();
+        //for (i in 0...numberChildren){
+            //var childXML : FastXML = childXMLList.get(i);
+            //var childDocumentNode : DocumentNode = _parseDocument(childXML);
+            //documentNode.children.push(childDocumentNode);
+        //}  // Thus even if it is empty, we always at least add an empty text node as a child    // HACK: We assume a span is a non-terminal node  
         
-        
-        
+        var childXMLList = content.elements;
+		var numberChildren : Int = 0;
+		for (child in childXMLList) {
+			var childDocumentNode : DocumentNode = _parseDocument(child);
+			documentNode.children.push(childDocumentNode);
+			numberChildren++;
+		}
         
         
         if (contentTagName == TAG_SPAN && numberChildren == 0) 
@@ -448,7 +450,7 @@ class TextParser
     // Only works is for xml we apply the @ prefix for everything
     private function checkAndApplyPropertyToNode(node : DocumentNode, properties : Dynamic) : Void
     {
-        var usePrefix : Bool = Std.is(properties, FastXML);
+        var usePrefix : Bool = Std.is(properties, Fast);
         var numAttributes : Int = m_nodeAttributes.length;
         var i : Int;
         var baseAttribute : String;
@@ -466,11 +468,11 @@ class TextParser
                 }
                 else if (baseAttribute == "width") 
                 {
-                    node.width = parseInt(attributeValue);
+                    node.width = Std.parseInt(attributeValue);
                 }
                 else if (baseAttribute == "height") 
                 {
-                    node.height = parseInt(attributeValue);
+                    node.height = Std.parseInt(attributeValue);
                 }
                 else if (baseAttribute == "x") 
                 {
@@ -523,7 +525,7 @@ class TextParser
                     
                     var j : Int;
                     for (j in 0...sliceValues.length){
-                        paddingValues.push(parseInt(sliceValues[j]));
+                        paddingValues.push(Std.parseInt(sliceValues[j]));
                     }
                     
                     node.background9Slice = paddingValues;
@@ -538,15 +540,15 @@ class TextParser
                 }
                 else if (baseAttribute == "lineHeight" && Std.is(node, ParagraphNode)) 
                 {
-                    (try cast(node, ParagraphNode) catch(e:Dynamic) null).lineHeight = parseFloat(attributeValue);
+                    (try cast(node, ParagraphNode) catch(e:Dynamic) null).lineHeight = Std.parseFloat(attributeValue);
                 }
                 else if (baseAttribute == "color") 
                 {
-                    node.fontColor = parseInt(attributeValue, 16);
+                    node.fontColor = Std.parseInt(attributeValue);
                 }
                 else if (baseAttribute == "fontSize") 
                 {
-                    node.fontSize = parseInt(attributeValue);
+                    node.fontSize = Std.parseInt(attributeValue);
                 }
                 // TODO: (this might be a bit strange)
                 // If a node got the value from the xml, then the only way that attribute can be

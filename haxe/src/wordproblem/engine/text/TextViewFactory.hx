@@ -5,10 +5,10 @@ import flash.errors.Error;
 import flash.geom.Rectangle;
 import flash.text.TextFormat;
 
-import feathers.display.Scale3Image;
-import feathers.display.Scale9Image;
-import feathers.textures.Scale3Textures;
-import feathers.textures.Scale9Textures;
+//import feathers.display.Scale3Image;
+//import feathers.display.Scale9Image;
+//import feathers.textures.Scale3Textures;
+//import feathers.textures.Scale9Textures;
 
 import starling.display.DisplayObject;
 import starling.display.Image;
@@ -119,7 +119,7 @@ class TextViewFactory
             widthToSet += rootNode.paddingLeft + rootNode.paddingRight;
             heightToSet += rootNode.paddingTop + rootNode.paddingBottom;
             
-            var backgroundImage : DisplayObject = this.createImageFromProperties(widthToSet, heightToSet, rootNode.backgroundImage, rootNode.background9Slice);
+            var backgroundImage : DisplayObject = this.createImageFromProperties(Std.int(widthToSet), Std.int(heightToSet), rootNode.backgroundImage, rootNode.background9Slice);
             
             // Background images will ignore padding values.
             //backgroundImage.x -= rootNode.paddingLeft;
@@ -221,7 +221,7 @@ class TextViewFactory
         // asset manager
         // We assume that non-embedded images were loaded prior to the level start and
         // are available in the asset manager
-        var image : DisplayObject = this.createImageFromProperties(imageNode.width, imageNode.height, imageNode.src);
+        var image : DisplayObject = this.createImageFromProperties(Std.int(imageNode.width), Std.int(imageNode.height), imageNode.src);
         
         var viewWrapper : DocumentView = new ImageView(imageNode, image);
         return viewWrapper;
@@ -276,26 +276,27 @@ class TextViewFactory
                 {
                     image = new Image(originalTexture);
                 }
-                else if (targetHeightSmaller) 
-                {
-                    var scale3Texture : Scale3Textures = new Scale3Textures(originalTexture, nineSlicePadding[0], nineSlicePadding[2], "horizontal");
-                    image = new Scale3Image(scale3Texture);
-                }
-                else if (targetWidthSmaller) 
-                {
-                    scale3Texture = new Scale3Textures(originalTexture, nineSlicePadding[1], nineSlicePadding[3], "vertical");
-                    image = new Scale3Image(scale3Texture);
-                }
-                else 
-                {
-                    var scale9Texture : Scale9Textures = new Scale9Textures(originalTexture, new Rectangle(
-                    nineSlicePadding[0], 
-                    nineSlicePadding[1], 
-                    originalTexture.width - nineSlicePadding[1] - nineSlicePadding[3], 
-                    originalTexture.height - nineSlicePadding[0] - nineSlicePadding[2], 
-                    ));
-                    image = new Scale9Image(scale9Texture);
-                }
+				// TODO: replace with something other than feathers
+                //else if (targetHeightSmaller) 
+                //{
+                    //var scale3Texture : Scale3Textures = new Scale3Textures(originalTexture, nineSlicePadding[0], nineSlicePadding[2], "horizontal");
+                    //image = new Scale3Image(scale3Texture);
+                //}
+                //else if (targetWidthSmaller) 
+                //{
+                    //scale3Texture = new Scale3Textures(originalTexture, nineSlicePadding[1], nineSlicePadding[3], "vertical");
+                    //image = new Scale3Image(scale3Texture);
+                //}
+                //else 
+                //{
+                    //var scale9Texture : Scale9Textures = new Scale9Textures(originalTexture, new Rectangle(
+                    //nineSlicePadding[0], 
+                    //nineSlicePadding[1], 
+                    //originalTexture.width - nineSlicePadding[1] - nineSlicePadding[3], 
+                    //originalTexture.height - nineSlicePadding[0] - nineSlicePadding[2]
+                    //));
+                    //image = new Scale9Image(scale9Texture);
+                //}
             }
             else 
             {
@@ -332,7 +333,7 @@ class TextViewFactory
         var textFormat : TextFormat = new TextFormat(
         paragraphNode.fontName, 
         paragraphNode.fontSize, 
-        paragraphNode.fontColor, 
+        paragraphNode.fontColor
         );
         var outCreatedViews : Array<DocumentView> = new Array<DocumentView>();
         for (childIndex in 0...paragraphChildren.length){
@@ -396,7 +397,7 @@ class TextViewFactory
             var spanFormat : TextFormat = new TextFormat(
             spanNode.fontName, 
             spanNode.fontSize, 
-            spanNode.fontColor, 
+            spanNode.fontColor
             );
             
             var i : Int;
@@ -451,6 +452,40 @@ class TextViewFactory
         var i : Int;
         var numViews : Int = views.length;
         var view : DocumentView;
+		function positionView(view : DocumentView, measuredWidth : Int, measuredHeight : Int) : Void
+            {
+                var maxAllowedX = getMaxAllowedX(Std.int(currentLineTopY), parentContentBounds, measuredHeight, floatRightBounds);
+                if (measuredWidth + currentX <= maxAllowedX) 
+                    { }  // No need to center in this case    // With the new line, the content sets the starting height bounds so it always fits vertically.    // For an image we wrap to the next line  
+                // Set coordinates of the given target view
+                else if (Std.is(view, ImageView)) 
+                {
+                    // Right now this only occurs for images
+                    // If we have text that is wrapping that is handled in the text layout algorithm
+                    currentX = (yWithinRectangle(currentLineTopY + pixelSpaceBetweenLines, floatLeftBounds)) ? 
+                            floatLeftBounds.right : parentContentBounds.x;
+                    currentLineTopY += pixelSpaceBetweenLines;
+                    
+                    view.lineNumber = ++m_currentLineNumber;
+                }
+                
+                
+                
+                view.x = currentX;
+                view.y = ((centerInline)) ? 
+                        currentLineTopY + (pixelSpaceBetweenLines - measuredHeight) * 0.5 : currentLineTopY;
+                currentX += measuredWidth;
+                
+                // HACK: If image is the first part of a paragrah, space is not added at the end
+                // so that the bit of text butts up against it. Add extra padding
+                if (i == 0 && Std.is(view, ImageView)) 
+                {
+                    currentX += 5;
+                }
+                
+                outViews.push(view);
+            };
+			
         for (i in 0...numViews){
             view = views[i];
             
@@ -474,7 +509,7 @@ class TextViewFactory
                 var wordsForCurrentLine : String = ((i - 1 > 0 && Std.is(views[i - 1], ImageView))) ? " " : "";
                 var textMeasuredWidth : Int;
                 var textMeasuredHeight : Int;
-                var maxAllowedX : Int = getMaxAllowedX(currentLineTopY, parentContentBounds, pixelSpaceBetweenLines, floatRightBounds);
+                var maxAllowedX : Int = getMaxAllowedX(Std.int(currentLineTopY), parentContentBounds, Std.int(pixelSpaceBetweenLines), floatRightBounds);
                 for (wordIndex in 0...numWords){
                     word = wordBuffer[wordIndex];
                     if (word == " " || word == "") 
@@ -483,7 +518,7 @@ class TextViewFactory
                     }
                     
                     measuringTextField.text = wordsForCurrentLine + word;
-                    textMeasuredHeight = measuringTextField.textHeight + TEXT_HACK_HEIGHT;
+                    textMeasuredHeight = Std.int(measuringTextField.textHeight + TEXT_HACK_HEIGHT);
                     
                     // If adding a new word overflows the horizontal bounds, then we create a new text view
                     // with that previous word removed. The content added should just fit within the allowable bounds
@@ -507,14 +542,14 @@ class TextViewFactory
                             }
                             
                             measuringTextField.text = wordsForCurrentLine;
-                            textMeasuredWidth = measuringTextField.textWidth + m_measuringTextForWhitespace.textWidth * 2.5;
+                            textMeasuredWidth = Std.int(measuringTextField.textWidth + m_measuringTextForWhitespace.textWidth * 2.5);
                             var newTextView : TextView = this.createTextView(
                                     view.node,
                                     wordsForCurrentLine,
                                     measuringTextFormat,
                                     0, 0, textMeasuredWidth, textMeasuredHeight
                                     );
-                            positionView(newTextView, measuringTextField.textWidth, textMeasuredHeight);
+                            positionView(newTextView, Std.int(measuringTextField.textWidth), textMeasuredHeight);
                             newTextView.lineNumber = m_currentLineNumber++;
                         }  // No content left on this line, we need to immediately shift downward    // at all, we cannot rely on position view to do anything    // start of the next line. Note that since we are not guaranteed that there was any content    // Since the last word we added will not fit on the current line, we need to move to the  
                         
@@ -529,7 +564,7 @@ class TextViewFactory
                         currentLineTopY += pixelSpaceBetweenLines;
                         currentX = (yWithinRectangle(currentLineTopY + pixelSpaceBetweenLines, floatLeftBounds)) ? 
                                 floatLeftBounds.right : parentContentBounds.x;
-                        maxAllowedX = getMaxAllowedX(currentLineTopY, parentContentBounds, textMeasuredHeight, floatRightBounds);
+                        maxAllowedX = getMaxAllowedX(Std.int(currentLineTopY), parentContentBounds, textMeasuredHeight, floatRightBounds);
                         
                         if (!addedCurrentWordToPreviousLine) 
                         {
@@ -594,9 +629,9 @@ class TextViewFactory
                 
                 
                 measuringTextField.text = wordsForCurrentLine;
-                textMeasuredWidth = measuringTextField.textWidth + m_measuringTextForWhitespace.textWidth * 2.5;
-                textMeasuredHeight = measuringTextField.textHeight + TEXT_HACK_HEIGHT;
-                newTextView = this.createTextView(
+                textMeasuredWidth = Std.int(measuringTextField.textWidth + m_measuringTextForWhitespace.textWidth * 2.5);
+                textMeasuredHeight = Std.int(measuringTextField.textHeight + TEXT_HACK_HEIGHT);
+                var newTextView = this.createTextView(
                                 view.node,
                                 wordsForCurrentLine,
                                 measuringTextFormat,
@@ -613,7 +648,7 @@ class TextViewFactory
                 {
                     boundsOfCurrentTextToAdd += m_measuringTextForWhitespace.textWidth;
                 }
-                positionView(newTextView, boundsOfCurrentTextToAdd, textMeasuredHeight);
+                positionView(newTextView, Std.int(boundsOfCurrentTextToAdd), textMeasuredHeight);
                 newTextView.lineNumber = m_currentLineNumber;
             }
             /**
@@ -628,49 +663,13 @@ class TextViewFactory
             else if (Std.is(view, ImageView)) 
             {
                 var imageView : ImageView = try cast(view, ImageView) catch(e:Dynamic) null;
-                positionView(imageView, imageView.width, imageView.height);
+                positionView(imageView, Std.int(imageView.width), Std.int(imageView.height));
             }
             else 
             {
                 // Error: An invalid view type was added in the list
                 throw new Error("Invalid view type during layout: " + view.node.getTagName());
             }
-            
-            
-            
-            function positionView(view : DocumentView, measuredWidth : Int, measuredHeight : Int) : Void
-            {
-                maxAllowedX = getMaxAllowedX(currentLineTopY, parentContentBounds, measuredHeight, floatRightBounds);
-                if (measuredWidth + currentX <= maxAllowedX) 
-                    { }  // No need to center in this case    // With the new line, the content sets the starting height bounds so it always fits vertically.    // For an image we wrap to the next line  
-                // Set coordinates of the given target view
-                else if (Std.is(view, ImageView)) 
-                {
-                    // Right now this only occurs for images
-                    // If we have text that is wrapping that is handled in the text layout algorithm
-                    currentX = (yWithinRectangle(currentLineTopY + pixelSpaceBetweenLines, floatLeftBounds)) ? 
-                            floatLeftBounds.right : parentContentBounds.x;
-                    currentLineTopY += pixelSpaceBetweenLines;
-                    
-                    view.lineNumber = ++m_currentLineNumber;
-                }
-                
-                
-                
-                view.x = currentX;
-                view.y = ((centerInline)) ? 
-                        currentLineTopY + (pixelSpaceBetweenLines - measuredHeight) * 0.5 : currentLineTopY;
-                currentX += measuredWidth;
-                
-                // HACK: If image is the first part of a paragrah, space is not added at the end
-                // so that the bit of text butts up against it. Add extra padding
-                if (i == 0 && Std.is(view, ImageView)) 
-                {
-                    currentX += 5;
-                }
-                
-                outViews.push(view);
-            };
         }
     }
     
@@ -683,7 +682,7 @@ class TextViewFactory
         this.yWithinRectangle(currentLineTopY + viewHeight, floatRightBounds));
         var maxAllowedX : Float = ((isParagraphChildHittingFloat && floatRightBounds.width > 0)) ? 
         floatRightBounds.left : parentContentBounds.width;
-        return maxAllowedX;
+        return Std.int(maxAllowedX);
     }
     
     /**
@@ -744,8 +743,8 @@ class TextViewFactory
                     var spanY : Int;
                     if (i == 0) 
                     {
-                        spanX = viewInSpan.x;
-                        spanY = viewInSpan.y;
+                        spanX = Std.int(viewInSpan.x);
+                        spanY = Std.int(viewInSpan.y);
                         spanView.x = spanX;
                         spanView.y = spanY;
                     }
@@ -763,7 +762,8 @@ class TextViewFactory
                 for (i in 0...outViewsForNonTerminal.length){
                     outViews.push(outViewsForNonTerminal[i]);
                 }
-                as3hx.Compat.setArrayLength(outViewsForNonTerminal, 0);
+				// TODO: ask about this
+                //as3hx.Compat.setArrayLength(outViewsForNonTerminal, 0);
             }
         }
     }
@@ -802,7 +802,7 @@ class TextViewFactory
                 height,
                 textFormat.font,
                 try cast(textFormat.color, Int) catch(e:Dynamic) null,
-                Std.parseInt(textFormat.size)
+                textFormat.size
                 );
         textView.x = x;
         textView.y = y;
