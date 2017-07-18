@@ -1,6 +1,7 @@
 package wordproblem.engine.objectives;
 
 
+import haxe.xml.Fast;
 import wordproblem.engine.level.LevelStatistics;
 
 /**
@@ -57,16 +58,16 @@ class TotalEquationAndBarModelMistakeObjective extends BaseObjective
         }
     }
     
-    override public function deserializeFromXml(element : FastXML) : Void
+    override public function deserializeFromXml(element : Fast) : Void
     {
         super.deserializeFromXml(element);
-        m_totalMistakesAllowed = parseInt(element.att.value);
+        m_totalMistakesAllowed = Std.parseInt(element.att.value);
     }
     
     override public function deserializeFromJson(data : Dynamic) : Void
     {
         super.deserializeFromJson(data);
-        m_totalMistakesAllowed = parseInt(data.value);
+        m_totalMistakesAllowed = Std.parseInt(data.value);
     }
     
     override public function clone() : BaseObjective

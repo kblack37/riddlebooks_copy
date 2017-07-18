@@ -1,4 +1,4 @@
-package utils.math;
+package dragonbox.common.math.vectorspace;
 
 /**
  * A simple struct to store general properties of an operator

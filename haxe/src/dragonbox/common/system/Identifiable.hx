@@ -1,4 +1,4 @@
-package utils.system;
+package dragonbox.common.system;
 
 /**
  * ...
@@ -13,12 +13,12 @@ class Identifiable
 		this.id = id;
 	}
 	
-	function get_id()
+	public function get_id()
 	{
 		return this.id;
 	}
 	
-	function set_id(id)
+	public function set_id(id)
 	{
 		return this.id = id;
 	}

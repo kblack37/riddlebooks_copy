@@ -1,9 +1,10 @@
 package wordproblem;
 
-
-import cgs.server.logging.CGSServerProps;
+// TODO: uncomment once cgs porting is done
+//import cgs.server.logging.CGSServerProps;
 
 import dragonbox.common.util.XString;
+import haxe.xml.Fast;
 
 import gameconfig.commonresource.LoadingScreenResources;
 
@@ -129,32 +130,33 @@ class AlgebraAdventureConfig
      * @param data
      *      The contents of the xml file with configuration tags
      */
-    public function readConfigFromData(configXml : FastXML) : Void
+    public function readConfigFromData(configXml : Fast) : Void
     {
         // Parse out logging options
-        var loggingXml : FastXML = configXml.nodes.elements("logging")[0];
-        m_versionId = parseInt(loggingXml.nodes.elements("versionId")[0].att.value);
-        m_categoryId = parseInt(loggingXml.nodes.elements("categoryId")[0].att.value);
-        m_challengeId = parseInt(loggingXml.nodes.elements("challengeId")[0].att.value);
-        m_experimentId = parseInt(loggingXml.nodes.elements("experimentId")[0].att.value);
+        var loggingXml : Fast = configXml.node.logging;
+        m_versionId = Std.parseInt(loggingXml.node.versionId.att.value);
+        m_categoryId = Std.parseInt(loggingXml.node.categoryId.att.value);
+        m_challengeId = Std.parseInt(loggingXml.node.challengeId.att.value);
+        m_experimentId = Std.parseInt(loggingXml.node.experimentId.att.value);
         m_useHttps = XString.stringToBool(getValueFromElementName(loggingXml, "useHttps", "false"));
         m_enableABTesting = XString.stringToBool(getValueFromElementName(loggingXml, "enableABTesting", "false"));
-        var serverDeployment : String = loggingXml.nodes.elements("deployment")[0].att.value;
+        var serverDeployment : String = loggingXml.node.deployment.att.value;
+		// TODO: uncomment these once cgs porting is done
         if (serverDeployment == "production") 
         {
-            serverDeployment = CGSServerProps.PRODUCTION_SERVER;
+            //serverDeployment = CGSServerProps.PRODUCTION_SERVER;
         }
         else if (serverDeployment == "local") 
         {
-            serverDeployment = CGSServerProps.LOCAL_SERVER;
+            //serverDeployment = CGSServerProps.LOCAL_SERVER;
         }
         else if (serverDeployment == "staging") 
         {
-            serverDeployment = CGSServerProps.STAGING_SERVER;
+            //serverDeployment = CGSServerProps.STAGING_SERVER;
         }
         else 
         {
-            serverDeployment = CGSServerProps.DEVELOPMENT_SERVER;
+            //serverDeployment = CGSServerProps.DEVELOPMENT_SERVER;
         }
         m_serverDeployment = serverDeployment;
         
@@ -162,18 +164,18 @@ class AlgebraAdventureConfig
         m_useActiveServer = XString.stringToBool(getValueFromElementName(loggingXml, "useActiveServer", "true"));
         
         // Parse out default text style options
-        var styleAttributesXml : FastXML = configXml.nodes.elements("style")[0];
-        m_defaultTextStyle = styleAttributesXml;
+        var styleAttributesXml : Fast = configXml.node.style;
+        m_defaultTextStyle = styleAttributesXml.innerData;
         
         // Parse out the settings
-        var settingsXml : FastXML = configXml.nodes.elements("settings")[0];
-        m_width = parseInt(settingsXml.nodes.elements("width")[0].att.value);
-        m_height = parseInt(settingsXml.nodes.elements("height")[0].att.value);
-        m_fps = parseInt(settingsXml.nodes.elements("fps")[0].att.value);
+        var settingsXml : Fast = configXml.node.settings;
+        m_width = Std.parseInt(settingsXml.node.width.att.value);
+        m_height = Std.parseInt(settingsXml.node.height.att.value);
+        m_fps = Std.parseInt(settingsXml.node.fps.att.value);
         m_usernameAsPassword = XString.stringToBool(getValueFromElementName(settingsXml, "usernameAsPassword", "true"));
         m_enableConsole = XString.stringToBool(getValueFromElementName(settingsXml, "enableConsole", "true"));
         m_enableUnlockLevelsShortcut = XString.stringToBool(getValueFromElementName(settingsXml, "enableUnlockLevelsShortcut", "false"));
-        m_lockAnonymousThreshold = parseInt(settingsXml.nodes.elements("lockAnonymousThreshold")[0].att.value);
+        m_lockAnonymousThreshold = Std.parseInt(settingsXml.node.lockAnonymousThreashold.att.value);
         m_fakeTeacherUid = getValueFromElementName(settingsXml, "fakeTeacherUid", null);
         m_teacherCode = getValueFromElementName(settingsXml, "teacherCode", null);
         m_tosKey = getValueFromElementName(settingsXml, "tosKey", null);
@@ -196,7 +198,7 @@ class AlgebraAdventureConfig
         unlockAllLevels = XString.stringToBool(getValueFromElementName(settingsXml, "debugUnlockAllLevels", "false"));
         
         // Parse out default rules options
-        var defaultRulesXml : FastXML = configXml.nodes.elements("defaultRules")[0];
+        var defaultRulesXml : Fast = configXml.node.defaultRules;
         m_defaultLevelRules = LevelRules.createRulesFromXml(defaultRulesXml);
         
         m_resourcePathBase = getValueFromElementName(settingsXml, "resourcePathBase", null);
@@ -210,12 +212,12 @@ class AlgebraAdventureConfig
         m_allowResetData = XString.stringToBool(getValueFromElementName(settingsXml, "allowResetData", "true"));
     }
     
-    private function getValueFromElementName(xml : FastXML, elementName : String, defaultValue : String) : String
+    private function getValueFromElementName(xml : Fast, elementName : String, defaultValue : String) : String
     {
         var value : String = defaultValue;
-        if (xml.node.elements.innerData(elementName).length() > 0) 
+        if (xml.hasNode.elementName) 
         {
-            value = xml.nodes.elements(elementName)[0].att.value;
+            value = xml.node.elementName.att.value;
         }
         return value;
     }

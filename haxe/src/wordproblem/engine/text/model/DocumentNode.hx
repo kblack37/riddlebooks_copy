@@ -149,7 +149,7 @@ class DocumentNode
     public function new(tagName : String)
     {
         m_tagName = tagName;
-        m_shouldInheritProperty = new Dynamic();
+        m_shouldInheritProperty = { };
         this.id = null;
         this.classes = null;
         this.children = new Array<DocumentNode>();

@@ -41,7 +41,7 @@ class TextView extends DocumentView
             m_textField.removeFromParent(true);
         }
         
-        var textField : TextField = new TextField(width, height, text, fontName, size, color);
+        var textField : TextField = new TextField(Std.int(width), Std.int(height), text, fontName, size, color);
         textField.hAlign = HAlign.LEFT;
         addChild(textField);
         

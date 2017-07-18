@@ -109,7 +109,7 @@ class DocumentView extends Sprite
             }
             else 
             {
-                view.drawBoxesAroundSegment(parseInt(view.node.getBackgroundColor(), 16));
+                view.drawBoxesAroundSegment(Std.parseInt(view.node.getBackgroundColor()));
             }
             view.node.backgroundColorDirty = false;
         }
@@ -222,7 +222,7 @@ class DocumentView extends Sprite
             {
                 // For leaf views we compare whether the further has a bottom bound further
                 // down than the current furthest bound
-                var currentViewBound : Rectangle = ((currentView.stage)) ? currentView.getBounds(this) : new Rectangle();
+                var currentViewBound : Rectangle = ((currentView.stage != null)) ? currentView.getBounds(this) : new Rectangle();
                 if (currentViewBound.bottom > inOutFurthestRectangle.bottom) 
                 {
                     furthestView = currentView;

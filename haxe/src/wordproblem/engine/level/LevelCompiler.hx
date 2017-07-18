@@ -155,7 +155,7 @@ class LevelCompiler
             symbolTexture, 
             symbolBackgroundTexturePositive, 
             symbolBackgroundColor, 
-            symbolFontName, 
+            symbolFontName
             );
             positiveSymbolData.fontColor = symbolFontColorPositive;
             positiveSymbolData.fontSize = symbolFontSize;
@@ -176,7 +176,7 @@ class LevelCompiler
             symbolTexture, 
             symbolBackgroundTextureNegative, 
             symbolBackgroundColor, 
-            symbolFontName, 
+            symbolFontName
             );
             negativeSymbolData.fontColor = symbolFontColorNegative;
             negativeSymbolData.fontSize = symbolFontSize;
@@ -395,7 +395,7 @@ class LevelCompiler
         layoutData, 
         cardAttributes, 
         levelRules, 
-        barModelType, 
+        barModelType
         );
         
         // TODO: Should overwriting be occuring? Right now just append everything
@@ -678,7 +678,7 @@ class LevelCompiler
         viewportHeight, 
         backgroundSource, 
         visible, 
-        extraData, 
+        extraData
         );
         
         return attributes;

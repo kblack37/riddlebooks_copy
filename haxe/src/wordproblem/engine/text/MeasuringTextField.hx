@@ -42,7 +42,7 @@ class MeasuringTextField extends TextField
         var fontName : String = this.defaultTextFormat.font;
         
         // Creating another textfield for measurement
-        var tf : TextFormat = new TextFormat(fontName, fontSize);
+        var tf : TextFormat = new TextFormat(fontName, Std.int(fontSize));
         var testingTextfield : MeasuringTextField = new MeasuringTextField();
         testingTextfield.width = this.width;
         testingTextfield.height = this.height;
@@ -62,7 +62,7 @@ class MeasuringTextField extends TextField
                 fontSize > minimumFontSize)
                 {
                     fontSize -= 1;
-                    tf.size = fontSize;
+                    tf.size = Std.int(fontSize);
                     testingTextfield.defaultTextFormat = tf;
                     testingTextfield.text = text;
                 }
@@ -76,7 +76,7 @@ class MeasuringTextField extends TextField
                 while (testingTextfield.textWidth < maxWidth * 0.9 && testingTextfield.textHeight < maxHeight * 0.9)
                 {
                     fontSize += fontStepSize;
-                    tf.size = fontSize;
+                    tf.size = Std.int(fontSize);
                     testingTextfield.defaultTextFormat = tf;
                     testingTextfield.text = text;
                     performedFontIncrease = true;
@@ -93,7 +93,7 @@ class MeasuringTextField extends TextField
             }
         }
         
-        var newFontSize : Int = Math.max(minimumFontSize, fontSize);
+        var newFontSize : Int = Std.int(Math.max(minimumFontSize, fontSize));
         return newFontSize;
     }
 }

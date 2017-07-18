@@ -1,6 +1,7 @@
-package utils.expressiontree;
+package dragonbox.common.expressiontree;
 import haxe.ds.GenericStack;
-import utils.math.RealsVectorSpace;
+import dragonbox.common.math.vectorspace.RealsVectorSpace;
+import dragonbox.common.math.util.MathUtil;
 
 /**
  * ...
@@ -696,7 +697,7 @@ class ExpressionUtil
 		var matchingNode:ExpressionNode = null;
 		if (root != null)
 		{
-			if (root.id == id)
+			if (root.get_id() == id)
 			{
 				matchingNode = root;
 			}
@@ -1395,7 +1396,7 @@ class ExpressionUtil
 			{
 				if (allowNumericSimplify)
 				{
-					var gcd:Int = MathUtil.greatestCommonDivisor(Std.parseFloat(nodeA.data), Std.parseFloat(nodeB.data));
+					var gcd:Int = MathUtil.greatestCommonDivisor(Std.int(Std.parseFloat(nodeA.data)), Std.int(Std.parseFloat(nodeB.data)));
 					canDivide = (gcd != vectorSpace.identity() || (bIsDenom && Std.parseFloat(nodeB.data) == vectorSpace.identity() || aIsDenom && Std.parseFloat(nodeA.data) == vectorSpace.identity()));
 				}
 				else

@@ -1,6 +1,7 @@
 package wordproblem.engine.objectives;
 
 
+import haxe.xml.Fast;
 import wordproblem.engine.level.LevelStatistics;
 
 /**
@@ -43,25 +44,25 @@ class TimeLimitObjective extends BaseObjective
             }
             else if (timeOverLimit > m_timeLimitSeconds) 
             {
-                m_grade = 60 - (timeOverLimit - m_timeLimitSeconds) / m_timeLimitSeconds * 60;
+                m_grade = Std.int(60 - (timeOverLimit - m_timeLimitSeconds) / m_timeLimitSeconds * 60);
             }
             else 
             {
-                m_grade = 100 - (timeOverLimit / m_timeLimitSeconds) * 40;
+                m_grade = Std.int(100 - (timeOverLimit / m_timeLimitSeconds) * 40);
             }
         }
     }
     
-    override public function deserializeFromXml(element : FastXML) : Void
+    override public function deserializeFromXml(element : Fast) : Void
     {
         super.deserializeFromXml(element);
-        m_timeLimitSeconds = parseInt(element.att.value);
+        m_timeLimitSeconds = Std.parseInt(element.att.value);
     }
     
     override public function deserializeFromJson(data : Dynamic) : Void
     {
         super.deserializeFromJson(data);
-        m_timeLimitSeconds = parseInt(data.value);
+        m_timeLimitSeconds = Std.parseInt(data.value);
     }
     
     override public function clone() : BaseObjective

@@ -1,5 +1,6 @@
 package dragonbox.common.util;
 
+import dragonbox.common.math.util.MathUtil;
 import flash.geom.Point;
 
 
@@ -37,7 +38,7 @@ import flash.geom.Point;
         var numericRegex : EReg = new EReg('([0-9])', "");
         
         // Strip whitespace
-        value = value.replace(" ", "");
+        value = StringTools.replace(value, " ", "");
         
         // Simply iterate through every character and check if each one is a digit
         // Also allow for decimal
@@ -61,7 +62,7 @@ import flash.geom.Point;
                 }
             }
             // Found a character that is not a number
-            else if (!numericRegex.test(char)) 
+            else if (!numericRegex.match(char)) 
             {
                 isNumber = false;
                 break;
@@ -101,7 +102,7 @@ import flash.geom.Point;
         var ret : Array<Int> = new Array<Int>();
         var strArray : Array<Dynamic> = stripParens(str).split(",");
         for (substr in strArray){
-            ret.push(as3hx.Compat.parseInt(substr));
+            ret.push(Std.parseInt(substr));
         }
         return ret;
     }
@@ -136,7 +137,7 @@ import flash.geom.Point;
         var new_string : String = "";
         var i : Int = 0;
         for (pt in vec){
-            new_string += "(" + Std.string(pt.x.toFixed(1)) + "," + Std.string(pt.y.toFixed(1)) + ")";
+            new_string += "(" + Std.string(MathUtil.roundToDecimal(pt.x, 1)) + "," + Std.string(MathUtil.roundToDecimal(pt.y, 1)) + ")";
             if (i + 1 < vec.length) 
                 new_string += ",";
             i++;

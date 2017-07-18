@@ -1,31 +1,28 @@
 package wordproblem.engine.objectives;
 
+import haxe.xml.Fast;
 import wordproblem.engine.objectives.TimeLimitObjective;
 import wordproblem.engine.objectives.TotalEquationAndBarModelMistakeObjective;
 
 class ObjectivesFactory
 {
-    public static function getObjectivesFromXml(objectivesXml : FastXML, outObjectives : Array<BaseObjective> = null) : Array<BaseObjective>
+    public static function getObjectivesFromXml(objectivesXml : Fast, outObjectives : Array<BaseObjective> = null) : Array<BaseObjective>
     {
         if (outObjectives == null) 
         {
             outObjectives = new Array<BaseObjective>();
         }
-        
-        var i : Int;
-        var objectivesList : FastXMLList = objectivesXml.node.children.innerData();
-        var numObjectives : Int = objectivesList.length();
-        for (i in 0...numObjectives){
-            var objective : FastXML = objectivesList.get(i);
-            var objectiveType : String = objective.att.type;
-            var newObjective : BaseObjective = createDefaultObjectiveFromName(objectiveType);
-            
-            if (newObjective != null) 
-            {
-                newObjective.deserializeFromXml(objective);
-                outObjectives.push(newObjective);
-            }
-        }
+		
+		var objectivesList = objectivesXml.elements;
+		for (objective in objectivesList) {
+			var objectiveType : String = objective.att.type;
+			var newObjective : BaseObjective = createDefaultObjectiveFromName(objectiveType);
+			
+			if (newObjective != null) {
+				newObjective.deserializeFromXml(objective);
+				outObjectives.push(newObjective);
+			}
+		}
         
         return outObjectives;
     }

@@ -2,7 +2,7 @@ package;
 
 import haxe.xml.Fast;
 //import dragonbox.common.expressiontree.compile.LatexCompiler;
-//import wordproblem.engine.level.LevelCompiler;
+import wordproblem.engine.level.LevelCompiler;
 import wordproblem.resource.AssetManager;
 
 import starling.display.Image;

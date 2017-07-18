@@ -1,7 +1,7 @@
-package utils.expressiontree;
+package dragonbox.common.expressiontree;
 
 import openfl.geom.Vector3D;
-import utils.math.RealsVectorSpace;
+import dragonbox.common.math.vectorspace.RealsVectorSpace;
 
 /**
  * A wild card represents a node that at the time is an indeterminate value.
@@ -28,7 +28,7 @@ class WildCardNode extends ExpressionNode
 	/** Matches blank slotted wild card nodes, these are the same as found in normal dragonbox */
 	public static var TYPE_REGULAR:String = "?";
 	
-	public static var WILD_CARD_SYMBOLS:Array<String> = new Array<String>(["$", "?"]);
+	public static var WILD_CARD_SYMBOLS:Array<String> = ["$", "?"];
 	
 	/**
 	 * Callback that is repsonsible for creating appropriate wild card nodes when signaled
@@ -39,7 +39,7 @@ class WildCardNode extends ExpressionNode
 	{
 		// Data format for regex dynamic variables is generally <type>_<id>
 		// type is required and contains the special prefix character while id can be ignored
-		var dataParts:Array<String> = data.split("_", 2);
+		var dataParts:Array<String> = data.split("_");
 		var wildCardType:String = dataParts[0];
 		var wildCardId:String = null;
 		if (dataParts.length == 2)

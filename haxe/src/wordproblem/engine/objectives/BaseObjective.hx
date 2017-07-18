@@ -2,6 +2,7 @@ package wordproblem.engine.objectives;
 
 
 import dragonbox.common.dispose.IDisposable;
+import haxe.xml.Fast;
 
 import wordproblem.engine.level.LevelStatistics;
 
@@ -123,9 +124,9 @@ class BaseObjective implements IDisposable
      * Subclasses should override AND call this super method if they have more
      * data to parse.
      */
-    public function deserializeFromXml(element : FastXML) : Void
+    public function deserializeFromXml(element : Fast) : Void
     {
-        if (element.node.exists.innerData("@useInSummary")) 
+        if (element.has.useInSummary) 
         {
             this.useInSummary = (element.att.useInSummary == "true");
         }
