@@ -418,27 +418,15 @@ class TextParser
         
         // Parse the children tags of the content if they exist
         // They will be the children tags of the root.
-        //var childXMLList : FastXMLList = content.node.children.innerData();
-        //var numberChildren : Int = childXMLList.length();
-        //for (i in 0...numberChildren){
-            //var childXML : FastXML = childXMLList.get(i);
-            //var childDocumentNode : DocumentNode = _parseDocument(childXML);
-            //documentNode.children.push(childDocumentNode);
-        //}  // Thus even if it is empty, we always at least add an empty text node as a child    // HACK: We assume a span is a non-terminal node  
-        
         var childXMLList = content.elements;
-		var numberChildren : Int = 0;
-		for (child in childXMLList) {
-			var childDocumentNode : DocumentNode = _parseDocument(child);
-			documentNode.children.push(childDocumentNode);
-			numberChildren++;
+		if (childXMLList.hasNext()) {
+			for (child in childXMLList) {
+				var childDocumentNode : DocumentNode = _parseDocument(child);
+				documentNode.children.push(childDocumentNode);
+			}
+		} else if (contentTagName == TAG_SPAN) {
+			documentNode.children.push(new TextNode(""));
 		}
-        
-        
-        if (contentTagName == TAG_SPAN && numberChildren == 0) 
-        {
-            documentNode.children.push(new TextNode(""));
-        }
         
         return documentNode;
     }

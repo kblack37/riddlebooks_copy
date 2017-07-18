@@ -303,16 +303,17 @@ class ExpressionSymbolMap
             var backgroundImage : DisplayObject;
             if (scaleBackgroundToFitTextWidth > backgroundOriginalWidth) 
             {
-				// TODO: replace this with something other than feathers
+				// TODO: these were replaced from the feathers library straight to the starling library;
+				// images will probably need to be fixed later
                 // If the background needs to be expanded, then we need to do a nine-slice on the background
-                //var nineScalePadding : Float = 8;
-                //var scale9Background : Scale9Image = new Scale9Image(new Scale9Textures(
-                //backgroundTexture, 
-                //new Rectangle(nineScalePadding, nineScalePadding, backgroundOriginalWidth - 2 * nineScalePadding, backgroundOriginalHeight - 2 * nineScalePadding)
-                //));
-                //scale9Background.color = symbolData.backgroundColor;
-                //scale9Background.width = scaleBackgroundToFitTextWidth;
-                //backgroundImage = scale9Background;
+                var nineScalePadding : Float = 8;
+                var scale9Background : Image = new Image(Texture.fromTexture(
+                backgroundTexture, 
+                new Rectangle(nineScalePadding, nineScalePadding, backgroundOriginalWidth - 2 * nineScalePadding, backgroundOriginalHeight - 2 * nineScalePadding)
+                ));
+                scale9Background.color = symbolData.backgroundColor;
+                scale9Background.width = scaleBackgroundToFitTextWidth;
+                backgroundImage = scale9Background;
             }
             else 
             {

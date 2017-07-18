@@ -5,11 +5,6 @@ import flash.errors.Error;
 import flash.geom.Rectangle;
 import flash.text.TextFormat;
 
-//import feathers.display.Scale3Image;
-//import feathers.display.Scale9Image;
-//import feathers.textures.Scale3Textures;
-//import feathers.textures.Scale9Textures;
-
 import starling.display.DisplayObject;
 import starling.display.Image;
 import starling.textures.Texture;
@@ -276,27 +271,39 @@ class TextViewFactory
                 {
                     image = new Image(originalTexture);
                 }
-				// TODO: replace with something other than feathers
-                //else if (targetHeightSmaller) 
-                //{
-                    //var scale3Texture : Scale3Textures = new Scale3Textures(originalTexture, nineSlicePadding[0], nineSlicePadding[2], "horizontal");
-                    //image = new Scale3Image(scale3Texture);
-                //}
-                //else if (targetWidthSmaller) 
-                //{
-                    //scale3Texture = new Scale3Textures(originalTexture, nineSlicePadding[1], nineSlicePadding[3], "vertical");
-                    //image = new Scale3Image(scale3Texture);
-                //}
-                //else 
-                //{
-                    //var scale9Texture : Scale9Textures = new Scale9Textures(originalTexture, new Rectangle(
-                    //nineSlicePadding[0], 
-                    //nineSlicePadding[1], 
-                    //originalTexture.width - nineSlicePadding[1] - nineSlicePadding[3], 
-                    //originalTexture.height - nineSlicePadding[0] - nineSlicePadding[2]
-                    //));
-                    //image = new Scale9Image(scale9Texture);
-                //}
+				// TODO: these were replaced from the feathers library straight to the starling library;
+				// images will probably need to be fixed later
+                else if (targetHeightSmaller) 
+                {
+					// note: replaced from Scale3Texture from the feathers library
+                    var starlingTexture : Texture = Texture.fromTexture(originalTexture, new Rectangle(
+						0,
+						nineSlicePadding[0],
+						originalTexture.width,
+						originalTexture.height - nineSlicePadding[0] - nineSlicePadding[2]));
+                    image = new Image(starlingTexture);
+                }
+                else if (targetWidthSmaller) 
+                {
+					// note: replaced from scale3Texture from the feathers library
+                    var starlingTexture : Texture = Texture.fromTexture(originalTexture, new Rectangle(
+						nineSlicePadding[3],
+						0,
+						originalTexture.width - nineSlicePadding[1] - nineSlicePadding[3],
+						originalTexture.height));
+                    image = new Image(starlingTexture);
+                }
+                else 
+                {
+					// note: replaced from scale9Texture from the feathers library
+                    var starlingTexture : Texture = Texture.fromTexture(originalTexture, new Rectangle(
+                    nineSlicePadding[0], 
+                    nineSlicePadding[1], 
+                    originalTexture.width - nineSlicePadding[1] - nineSlicePadding[3], 
+                    originalTexture.height - nineSlicePadding[0] - nineSlicePadding[2]
+                    ));
+                    image = new Image(starlingTexture);
+                }
             }
             else 
             {
@@ -762,8 +769,7 @@ class TextViewFactory
                 for (i in 0...outViewsForNonTerminal.length){
                     outViews.push(outViewsForNonTerminal[i]);
                 }
-				// TODO: ask about this
-                //as3hx.Compat.setArrayLength(outViewsForNonTerminal, 0);
+				outViewsForNonTerminal = new Array<DocumentView>();
             }
         }
     }

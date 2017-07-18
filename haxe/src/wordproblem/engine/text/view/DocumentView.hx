@@ -222,18 +222,17 @@ class DocumentView extends Sprite
             {
                 // For leaf views we compare whether the further has a bottom bound further
                 // down than the current furthest bound
-				// TODO: ask about this
-                //var currentViewBound : Rectangle = ((currentView.stage)) ? currentView.getBounds(this) : new Rectangle();
-                //if (currentViewBound.bottom > inOutFurthestRectangle.bottom) 
-                //{
-                    //furthestView = currentView;
-                    //inOutFurthestRectangle.setTo(
-                            //currentViewBound.x,
-                            //currentViewBound.y,
-                            //currentViewBound.width,
-                            //currentViewBound.height
-                            //);
-                //}
+                var currentViewBound : Rectangle = ((currentView.stage != null)) ? currentView.getBounds(this) : new Rectangle();
+                if (currentViewBound.bottom > inOutFurthestRectangle.bottom) 
+                {
+                    furthestView = currentView;
+                    inOutFurthestRectangle.setTo(
+                            currentViewBound.x,
+                            currentViewBound.y,
+                            currentViewBound.width,
+                            currentViewBound.height
+                            );
+                }
             }
             else 
             {
