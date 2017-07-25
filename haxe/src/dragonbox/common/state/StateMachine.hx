@@ -4,6 +4,8 @@ package dragonbox.common.state;
 import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
 
+import haxe.Constraints.Function;
+
 import starling.display.Sprite;
 
 /**

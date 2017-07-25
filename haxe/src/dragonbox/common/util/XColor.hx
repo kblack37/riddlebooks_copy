@@ -24,7 +24,8 @@ class XColor
                 0xFFC4C4C4,   // Gray  
                 0xFFB39566,   // Light Brown  
                 0xFFFDD1FF,   // Light Pink  
-                0xFFD1FFDC  //0xFFFFAA99 // Peach    //0xFF99CC99, // Sea Green    // Light Green  ];
+                0xFFD1FFDC  //0xFFFFAA99 // Peach    //0xFF99CC99, // Sea Green    // Light Green  
+				];
     
     public static function getCandidateColorsForSession() : Array<Int>
     {
@@ -148,9 +149,9 @@ class XColor
         }
         
         var ratio : Float = 1 + percent;
-        var redAmount : Int = clampColor((color >> 16 & 0xFF) * ratio);
-        var greenAmount : Int = clampColor((color >> 8 & 0xFF) * ratio);
-        var blueAmount : Int = clampColor((color & 0xFF) * ratio);
+        var redAmount : Int = clampColor(Std.int((color >> 16 & 0xFF) * ratio));
+        var greenAmount : Int = clampColor(Std.int((color >> 8 & 0xFF) * ratio));
+        var blueAmount : Int = clampColor(Std.int((color & 0xFF) * ratio));
         
         var shadedColor : Int = (redAmount << 16) | (greenAmount << 8) | blueAmount;
         return shadedColor;

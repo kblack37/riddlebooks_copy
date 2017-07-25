@@ -7,17 +7,7 @@ import flash.text.TextFormatAlign;
 
 import dragonbox.common.util.XColor;
 
-import feathers.controls.Button;
-import feathers.controls.IScrollBar;
-import feathers.controls.ScrollBar;
-import feathers.controls.ToggleButton;
-import feathers.controls.text.TextFieldTextRenderer;
-import feathers.core.ITextRenderer;
-import feathers.display.Scale9Image;
-import feathers.layout.VerticalLayout;
-import feathers.layout.ViewPortBounds;
-import feathers.textures.Scale9Textures;
-
+import starling.display.Button;
 import starling.display.DisplayObject;
 import starling.display.Image;
 import starling.display.Sprite;
@@ -44,16 +34,23 @@ class WidgetUtil
         var scaleNineRect : Rectangle = new Rectangle(8, 8, 16, 16);
         var buttonBackground : Texture = assetManager.getTexture("button_white");
         var buttonOutline : Texture = assetManager.getTexture("button_outline_white");
-        var defaultSkin : Scale9Image = new Scale9Image(new Scale9Textures(buttonBackground, scaleNineRect));
+        var defaultSkin : Image = new Image(Texture.fromTexture(buttonBackground, scaleNineRect));
         
-        var hoverBackground : Scale9Image = new Scale9Image(new Scale9Textures(buttonBackground, scaleNineRect));
-        var hoverOutline : Scale9Image = new Scale9Image(new Scale9Textures(buttonOutline, scaleNineRect));
-        var hoverSkin : Sprite = new Scale9CompositeImage(hoverBackground, hoverOutline);
+		var compositeArray = new Array<Image>();
+        var hoverBackground : Image = new Image(Texture.fromTexture(buttonBackground, scaleNineRect));
+        var hoverOutline : Image = new Image(Texture.fromTexture(buttonOutline, scaleNineRect));
+		compositeArray.push(hoverBackground);
+		compositeArray.push(hoverOutline);
+        var hoverSkin : Sprite = new Scale9CompositeImage(compositeArray);
+		
+		compositeArray = new Array<Image>();
         
-        var downBackground : Scale9Image = new Scale9Image(new Scale9Textures(buttonBackground, scaleNineRect));
-        var downOutline : Scale9Image = new Scale9Image(new Scale9Textures(buttonOutline, scaleNineRect));
+        var downBackground : Image = new Image(Texture.fromTexture(buttonBackground, scaleNineRect));
+        var downOutline : Image = new Image(Texture.fromTexture(buttonOutline, scaleNineRect));
         downOutline.color = 0x000000;
-        var downSkin : Sprite = new Scale9CompositeImage(downBackground, downOutline);
+		compositeArray.push(downBackground);
+		compositeArray.push(downOutline);
+        var downSkin : Sprite = new Scale9CompositeImage(compositeArray);
         
         var button : Button = WidgetUtil.createButtonFromImages(defaultSkin,
                 downSkin, null, hoverSkin, label, textFormatDefault, textFormatHover, isToggle);
@@ -66,13 +63,13 @@ class WidgetUtil
      */
     public static function changeColorForGenericButton(genericButton : Button, color : Int) : Void
     {
-        var defaultSkin : Scale9Image = try cast(genericButton.defaultSkin, Scale9Image) catch(e:Dynamic) null;
+        var defaultSkin : Image = try cast(genericButton.upState, Image) catch(e:Dynamic) null;
         defaultSkin.color = color;
         
-        var hoverSkin : Scale9Image = try cast((try cast(genericButton.hoverSkin, Sprite) catch(e:Dynamic) null).getChildAt(0), Scale9Image) catch(e:Dynamic) null;
+        var hoverSkin : Image = try cast((try cast(genericButton.overState, Sprite) catch(e:Dynamic) null).getChildAt(0), Image) catch(e:Dynamic) null;
         hoverSkin.color = XColor.shadeColor(color, 0.2);
         
-        var downSkin : Scale9Image = try cast((try cast(genericButton.downSkin, Sprite) catch(e:Dynamic) null).getChildAt(0), Scale9Image) catch(e:Dynamic) null;
+        var downSkin : Image = try cast((try cast(genericButton.downState, Sprite) catch(e:Dynamic) null).getChildAt(0), Image) catch(e:Dynamic) null;
         downSkin.color = XColor.shadeColor(color, -0.2);
     }
     
@@ -92,31 +89,14 @@ class WidgetUtil
             nineSlice : Rectangle = null,
             isToggle : Bool = false) : Button
     {
-        var defaultSkin : DisplayObject = createSkin(defaultSkinName, nineSlice);
-        
-        if (downSkinName != null) 
-        {
-            var downSkin : DisplayObject = createSkin(downSkinName, nineSlice);
-        }
-        
-        if (disabledSkinName != null) 
-        {
-            var disabledSkin : DisplayObject = createSkin(disabledSkinName, nineSlice);
-        }
-        
-        if (hoverSkinName != null) 
-        {
-            var hoverSkin : DisplayObject = createSkin(hoverSkinName, nineSlice);
-        }
-        
-        function createSkin(textureName : String, nineSlice : Rectangle) : DisplayObject
+		function createSkin(textureName : String, nineSlice : Rectangle) : DisplayObject
         {
             var useNineSlice : Bool = (nineSlice != null);
             var skin : DisplayObject = null;
             var texture : Texture = assetManager.getTexture(textureName);
             if (useNineSlice) 
             {
-                skin = new Scale9Image(new Scale9Textures(texture, nineSlice));
+                skin = new Image(Texture.fromTexture(texture, nineSlice));
             }
             else 
             {
@@ -125,8 +105,28 @@ class WidgetUtil
             
             return skin;
         };
+		
+        var defaultSkin : DisplayObject = createSkin(defaultSkinName, nineSlice);
         
-        return createButtonFromImages(defaultSkin, downSkin, disabledSkin, hoverSkin, label, textFormatDefault, textFormatHover, isToggle);
+		var downSkin : DisplayObject = null;
+        if (downSkinName != null) 
+        {
+            downSkin = createSkin(downSkinName, nineSlice);
+        }
+        
+		var disabledSkin : DisplayObject = null;
+        if (disabledSkinName != null) 
+        {
+            disabledSkin = createSkin(disabledSkinName, nineSlice);
+        }
+        
+		var hoverSkin : DisplayObject = null;
+        if (hoverSkinName != null) 
+        {
+            hoverSkin = createSkin(hoverSkinName, nineSlice);
+        }
+		
+		return createButtonFromImages(defaultSkin, downSkin, disabledSkin, hoverSkin, label, textFormatDefault, textFormatHover, isToggle);
     }
     
     public static function createButtonFromImages(defaultSkin : DisplayObject,
@@ -138,45 +138,47 @@ class WidgetUtil
             textFormatHover : TextFormat = null,
             isToggle : Bool = false) : Button
     {
-        var button : Button = ((isToggle)) ? new ToggleButton() : new Button();
-        button.defaultSkin = defaultSkin;
-        button.downSkin = downSkin;
-        button.disabledSkin = disabledSkin;
-        button.hoverSkin = hoverSkin;
+		// TODO: uncomment once ToggleButton is designed
+		//
+        var button : Button = /*((isToggle)) ? new ToggleButton() : */new Button(
+			try cast(defaultSkin, Texture) catch (e : Dynamic) null,
+			label,
+			try cast(downSkin, Texture) catch (e : Dynamic) null,
+			try cast(hoverSkin, Texture) catch (e : Dynamic) null,
+			try cast(disabledSkin, Texture) catch (e : Dynamic) null
+		);
         
-        button.label = label;
-        
+		// TODO: uncomment once buttons need to be figured out
         if (textFormatDefault != null) 
         {
-            button.defaultLabelProperties.textFormat = textFormatDefault;
-            button.defaultLabelProperties.wordWrap = true;
+            //button.defaultLabelProperties.textFormat = textFormatDefault;
+            //button.defaultLabelProperties.wordWrap = true;
             
-            button.labelFactory = function() : ITextRenderer
-                    {
-                        var textRenderer : TextFieldTextRenderer = new TextFieldTextRenderer();
-                        textRenderer.embedFonts = GameFonts.getFontIsEmbedded(textFormatDefault.font);
-                        if (textFormatDefault.align == null) 
-                        {
-                            textFormatDefault.align = TextFormatAlign.CENTER;
-                        }
-                        textRenderer.textFormat = textFormatDefault;
-                        
-                        // Need to set the width otherwise the label is set to some small value
-                        if (button.width > 0) 
-                        {
-                            textRenderer.width = button.width;
-                        }
-                        
-                        return textRenderer;
-                    };
-        }  // Have an optional text format for over  
-        
-        
-        
+            //button.labelFactory = function() : ITextRenderer
+                    //{
+                        //var textRenderer : TextFieldTextRenderer = new TextFieldTextRenderer();
+                        //textRenderer.embedFonts = GameFonts.getFontIsEmbedded(textFormatDefault.font);
+                        //if (textFormatDefault.align == null) 
+                        //{
+                            //textFormatDefault.align = TextFormatAlign.CENTER;
+                        //}
+                        //textRenderer.textFormat = textFormatDefault;
+                        //
+                        //// Need to set the width otherwise the label is set to some small value
+                        //if (button.width > 0) 
+                        //{
+                            //textRenderer.width = button.width;
+                        //}
+                        //
+                        //return textRenderer;
+                    //};
+        }
+		
+		// Have an optional text format for over
         if (textFormatHover != null) 
         {
-            button.hoverLabelProperties.textFormat = textFormatHover;
-            button.downLabelProperties.textFormat = textFormatHover;
+            //button.hoverLabelProperties.textFormat = textFormatHover;
+            //button.downLabelProperties.textFormat = textFormatHover;
         }
         
         return button;
@@ -201,80 +203,80 @@ class WidgetUtil
         return arrowImage;
     }
     
-    public static function createScrollbar(assetManager : AssetManager) : IScrollBar
-    {
-        var scrollbar : ScrollBar = new ScrollBar();
-        scrollbar.thumbFactory = function() : Button
-                {
-                    var thumbButton : Button = new Button();
-                    thumbButton.defaultSkin = new Image(assetManager.getTexture("scrollbar_button"));
-                    thumbButton.downSkin = new Image(assetManager.getTexture("scrollbar_button_click"));
-                    thumbButton.hoverSkin = new Image(assetManager.getTexture("scrollbar_button_mouseover"));
-                    return thumbButton;
-                };
-        
-        scrollbar.decrementButtonFactory = function() : Button
-                {
-                    var decrementButton : Button = new Button();
-                    decrementButton.defaultSkin = new Image(assetManager.getTexture("scrollbar_up"));
-                    decrementButton.downSkin = new Image(assetManager.getTexture("scrollbar_up_click"));
-                    return decrementButton;
-                };
-        
-        scrollbar.incrementButtonFactory = function() : Button
-                {
-                    var incrementButton : Button = new Button();
-                    incrementButton.defaultSkin = new Image(assetManager.getTexture("scrollbar_down"));
-                    incrementButton.downSkin = new Image(assetManager.getTexture("scrollbar_down_click"));
-                    return incrementButton;
-                };
-        
-        scrollbar.minimumTrackFactory = function() : Button
-                {
-                    var trackButton : Button = new Button();
-                    trackButton.defaultSkin = new Image(assetManager.getTexture("scrollbar_track"));
-                    return trackButton;
-                };
-        
-        scrollbar.minimum = 0;
-        scrollbar.maximum = 1.0;
-        scrollbar.step = 0.05;  // Increment amount when pressing increment buttons or slowly moving thumb  
-        scrollbar.value = 0.0;
-        scrollbar.page =0  //0.1;    // Increment amount when pressing on the track?  ;
-        scrollbar.trackLayoutMode = ScrollBar.TRACK_LAYOUT_MODE_SINGLE;
-        scrollbar.direction = ScrollBar.DIRECTION_VERTICAL;
-        /*scrollbar.addEventListener(Event.CHANGE, function onChange(event:Event):void
-        {
-        const target:IScrollBar = event.currentTarget as IScrollBar;
-        const ratio:Number = target.value;
-        });*/
-        
-        return scrollbar;
-    }
-    
-    public static function layoutInList(displayObjects : Array<DisplayObject>,
-            itemWidth : Float,
-            itemHeight : Float,
-            viewportWidth : Float,
-            viewportHeight : Float,
-            yOffset : Float,
-            gap : Float = 10) : Void
-    {
-        var viewportBounds : ViewPortBounds = new ViewPortBounds();
-        viewportBounds.explicitHeight = viewportHeight;
-        viewportBounds.explicitWidth = viewportWidth;
-        viewportBounds.y = yOffset;
-        
-        var verticalLayout : VerticalLayout = new VerticalLayout();
-        verticalLayout.typicalItemHeight = itemHeight;
-        verticalLayout.typicalItemWidth = itemWidth;
-        verticalLayout.padding = 0;
-        verticalLayout.gap = gap;
-        verticalLayout.horizontalAlign = VerticalLayout.HORIZONTAL_ALIGN_CENTER;
-        verticalLayout.verticalAlign = VerticalLayout.VERTICAL_ALIGN_MIDDLE;
-        verticalLayout.useVirtualLayout = false;
-        verticalLayout.layout(displayObjects, viewportBounds);
-    }
+    //public static function createScrollbar(assetManager : AssetManager) : IScrollBar
+    //{
+        //var scrollbar : ScrollBar = new ScrollBar();
+        //scrollbar.thumbFactory = function() : Button
+                //{
+                    //var thumbButton : Button = new Button();
+                    //thumbButton.defaultSkin = new Image(assetManager.getTexture("scrollbar_button"));
+                    //thumbButton.downSkin = new Image(assetManager.getTexture("scrollbar_button_click"));
+                    //thumbButton.hoverSkin = new Image(assetManager.getTexture("scrollbar_button_mouseover"));
+                    //return thumbButton;
+                //};
+        //
+        //scrollbar.decrementButtonFactory = function() : Button
+                //{
+                    //var decrementButton : Button = new Button();
+                    //decrementButton.defaultSkin = new Image(assetManager.getTexture("scrollbar_up"));
+                    //decrementButton.downSkin = new Image(assetManager.getTexture("scrollbar_up_click"));
+                    //return decrementButton;
+                //};
+        //
+        //scrollbar.incrementButtonFactory = function() : Button
+                //{
+                    //var incrementButton : Button = new Button();
+                    //incrementButton.defaultSkin = new Image(assetManager.getTexture("scrollbar_down"));
+                    //incrementButton.downSkin = new Image(assetManager.getTexture("scrollbar_down_click"));
+                    //return incrementButton;
+                //};
+        //
+        //scrollbar.minimumTrackFactory = function() : Button
+                //{
+                    //var trackButton : Button = new Button();
+                    //trackButton.defaultSkin = new Image(assetManager.getTexture("scrollbar_track"));
+                    //return trackButton;
+                //};
+        //
+        //scrollbar.minimum = 0;
+        //scrollbar.maximum = 1.0;
+        //scrollbar.step = 0.05;  // Increment amount when pressing increment buttons or slowly moving thumb  
+        //scrollbar.value = 0.0;
+        //scrollbar.page = 0.1;    // Increment amount when pressing on the track?  ;
+        //scrollbar.trackLayoutMode = ScrollBar.TRACK_LAYOUT_MODE_SINGLE;
+        //scrollbar.direction = ScrollBar.DIRECTION_VERTICAL;
+        ///*scrollbar.addEventListener(Event.CHANGE, function onChange(event:Event):void
+        //{
+        //const target:IScrollBar = event.currentTarget as IScrollBar;
+        //const ratio:Number = target.value;
+        //});*/
+        //
+        //return scrollbar;
+    //}
+    //
+    //public static function layoutInList(displayObjects : Array<DisplayObject>,
+            //itemWidth : Float,
+            //itemHeight : Float,
+            //viewportWidth : Float,
+            //viewportHeight : Float,
+            //yOffset : Float,
+            //gap : Float = 10) : Void
+    //{
+        //var viewportBounds : ViewPortBounds = new ViewPortBounds();
+        //viewportBounds.explicitHeight = viewportHeight;
+        //viewportBounds.explicitWidth = viewportWidth;
+        //viewportBounds.y = yOffset;
+        //
+        //var verticalLayout : VerticalLayout = new VerticalLayout();
+        //verticalLayout.typicalItemHeight = itemHeight;
+        //verticalLayout.typicalItemWidth = itemWidth;
+        //verticalLayout.padding = 0;
+        //verticalLayout.gap = gap;
+        //verticalLayout.horizontalAlign = VerticalLayout.HORIZONTAL_ALIGN_CENTER;
+        //verticalLayout.verticalAlign = VerticalLayout.VERTICAL_ALIGN_MIDDLE;
+        //verticalLayout.useVirtualLayout = false;
+        //verticalLayout.layout(displayObjects, viewportBounds);
+    //}
 
     public function new()
     {

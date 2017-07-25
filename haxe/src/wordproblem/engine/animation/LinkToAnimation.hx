@@ -1,9 +1,8 @@
 package wordproblem.engine.animation;
 
-
-import flash.display3d.Context3DBlendFactor;
 import flash.geom.Point;
 import flash.geom.Rectangle;
+import starling.display.Image;
 
 import dragonbox.common.particlesystem.action.Action;
 import dragonbox.common.particlesystem.action.Age;
@@ -20,8 +19,10 @@ import dragonbox.common.particlesystem.initializer.VelocityInitializer;
 import dragonbox.common.particlesystem.renderer.ParticleRenderer;
 import dragonbox.common.particlesystem.zone.LineZone;
 
-import feathers.display.Scale3Image;
-import feathers.textures.Scale3Textures;
+//import feathers.display.Scale3Image;
+//import feathers.textures.Scale3Textures;
+
+import openfl.display3D.Context3DBlendFactor;
 
 import starling.animation.IAnimatable;
 import starling.core.Starling;
@@ -44,7 +45,7 @@ class LinkToAnimation implements IAnimatable
     private var m_anchorYOffset : Float;
     private var m_objectTwo : DisplayObject;
     
-    private var m_arrowImage : Scale3Image;
+    private var m_arrowImage : Image;
     private var m_arrowOriginalLength : Float;
     
     private var m_particleEmitter : Emitter;
@@ -83,7 +84,9 @@ class LinkToAnimation implements IAnimatable
         var texture : Texture = assetManager.getTexture("arrow_short");
         m_arrowOriginalLength = texture.width;
         
-        var image : Scale3Image = new Scale3Image(new Scale3Textures(texture, 20, 30));
+		// TODO: this was replaced from the Scale3Texture from the feathers library and
+		// will probably need to be fixed
+        var image : Image = new Image(Texture.fromTexture(texture, new Rectangle(0, 20, texture.width, 30)));
         image.pivotY = image.height * 0.5;
         m_arrowImage = image;
     }
@@ -121,7 +124,7 @@ class LinkToAnimation implements IAnimatable
         m_particleEmitter.start();
         
         */
-        Starling.juggler.add(this);
+        Starling.current.juggler.add(this);
     }
     
     public function stop() : Void
@@ -132,7 +135,7 @@ class LinkToAnimation implements IAnimatable
         
         */
         m_arrowImage.removeFromParent();
-        Starling.juggler.remove(this);
+        Starling.current.juggler.remove(this);
     }
     
     public function advanceTime(time : Float) : Void

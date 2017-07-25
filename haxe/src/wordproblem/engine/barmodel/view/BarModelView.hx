@@ -5,8 +5,8 @@ import wordproblem.engine.barmodel.view.BarWholeView;
 
 import flash.geom.Rectangle;
 
-import feathers.textures.Scale3Textures;
-import feathers.textures.Scale9Textures;
+//import feathers.textures.Scale3Textures;
+//import feathers.textures.Scale9Textures;
 
 import starling.display.DisplayObject;
 import starling.display.DisplayObjectContainer;
@@ -331,7 +331,7 @@ class BarModelView extends Sprite
         symbolData.abbreviatedName, 
         labelImage, 
         symbolData.symbolTextureName != null, 
-        hiddenLabelImage, 
+        hiddenLabelImage
         );
         return barLabelView;
     }
@@ -342,7 +342,8 @@ class BarModelView extends Sprite
         var comparisonRightTexture : Texture = m_assetManager.getTexture("comparison_right");
         var comparisonFullTexture : Texture = m_assetManager.getTexture("comparison_full");
         var threeSlicePadding : Float = 28;
-        var threeSliceComparisonTexture : Scale3Textures = new Scale3Textures(comparisonFullTexture, threeSlicePadding, comparisonFullTexture.width - 2 * threeSlicePadding);
+		// TODO: this image was replaced from the feathers library and will probably need to be fixed
+        var threeSliceComparisonTexture : Texture = Texture.fromTexture(comparisonFullTexture);
         
         var symbolData : SymbolData = m_expressionSymbolMap.getSymbolDataFromValue(barComparison.value);
         var fontName : String = symbolData.fontName;
@@ -359,7 +360,7 @@ class BarModelView extends Sprite
         0xFFFFFF, 
         symbolImage, 
         threeSliceComparisonTexture, 
-        comparisonFullTexture, 
+        comparisonFullTexture
         );
         return barComparisonView;
     }
@@ -515,11 +516,11 @@ class BarModelView extends Sprite
         
         // Find the smallest possible bar segment and see if the unit value
         // we calculated would result in a box that would appear visible
+		var minSegmentValue : Float = Math.pow(2, 30);
         for (i in 0...numBars){
-            barWhole = barModelData.barWholes[i];
+            var barWhole = barModelData.barWholes[i];
             var barSegments : Array<BarSegment> = barWhole.barSegments;
             var j : Int = 0;
-            var minSegmentValue : Float = Int.MAX_VALUE;
             for (j in 0...barSegments.length){
                 var barSegment : BarSegment = barSegments[j];
                 var barSegmentValue : Float = barSegment.getValue();
@@ -608,7 +609,7 @@ class BarModelView extends Sprite
             if (!barWholeView.data.displayHiddenSegments) 
             {
                 for (j in 0...numSegmentViews){
-                    barSegmentView = barWholeView.segmentViews[j];
+                    var barSegmentView = barWholeView.segmentViews[j];
                     if (barSegmentView.data.hiddenValue != null) 
                     {
                         hiddenSegmentStack.push(barSegmentView);
@@ -620,19 +621,18 @@ class BarModelView extends Sprite
                 }  // Re-order both the view and the backing data lists of the segments  
                 
                 
-                
-                barWholeView.data.barSegments.length = 0;
-                barWholeView.segmentViews.length = 0;
+                barWholeView.data.barSegments = new Array<BarSegment>();
+				barWholeView.segmentViews = new Array<BarSegmentView>();
                 while (shownSegmentStack.length > 0)
                 {
-                    barSegmentView = shownSegmentStack.shift();
+                    var barSegmentView = shownSegmentStack.shift();
                     barWholeView.data.barSegments.push(barSegmentView.data);
                     barWholeView.segmentViews.push(barSegmentView);
                 }
                 
                 while (hiddenSegmentStack.length > 0)
                 {
-                    barSegmentView = hiddenSegmentStack.shift();
+                    var barSegmentView = hiddenSegmentStack.shift();
                     barWholeView.data.barSegments.push(barSegmentView.data);
                     barWholeView.segmentViews.push(barSegmentView);
                 }
@@ -688,18 +688,18 @@ class BarModelView extends Sprite
         
         
         for (i in 0...m_barWholeViews.length){
-            barWholeView = m_barWholeViews[i];
+            var barWholeView = m_barWholeViews[i];
             m_objectLayer.addChild(barWholeView);
             
-            numLabelViews = barWholeView.labelViews.length;
+            var numLabelViews = barWholeView.labelViews.length;
             
             // First pass draw all the label on top of the bar, need to start backwards
             // as later ones are closer
             var yOffsetLabel : Float = 0;
             var numTopLabels : Int = 0;
-            j = numLabelViews - 1;
+            var j = numLabelViews - 1;
             while (j >= 0){
-                barLabelView = barWholeView.labelViews[j];
+                var barLabelView = barWholeView.labelViews[j];
                 
                 if (barLabelView.data.isAboveSegment && barLabelView.data.bracketStyle != BarLabel.BRACKET_NONE) 
                 {
@@ -719,7 +719,7 @@ class BarModelView extends Sprite
                 yOffsetLabel += 5;
             }
             
-            numSegmentViews = barWholeView.segmentViews.length;
+            var numSegmentViews = barWholeView.segmentViews.length;
             for (j in 0...numSegmentViews){
                 barWholeView.segmentViews[j].y = yOffsetLabel;
             }  // Position all of the labels that go underneath the bar segment  
@@ -728,7 +728,7 @@ class BarModelView extends Sprite
             
             yOffsetLabel += barWholeView.segmentViews[0].height;
             for (j in 0...numLabelViews){
-                barLabelView = barWholeView.labelViews[j];
+                var barLabelView = barWholeView.labelViews[j];
                 
                 // Also take care of situations where the label should sit directly on top of the segment
                 if (barLabelView.data.bracketStyle == BarLabel.BRACKET_NONE) 
@@ -745,9 +745,9 @@ class BarModelView extends Sprite
                     // Note that label length also depends on whether the bar is scaled.
                     var startIndex : Int = barLabelView.data.startSegmentIndex;
                     var endIndex : Int = barLabelView.data.endSegmentIndex;
-                    labelLength = 0;
+                    var labelLength = 0;
                     for (k in startIndex...endIndex + 1){
-                        labelLength += barWholeView.segmentViews[k].data.getValue() * this.unitLength;
+                        labelLength += Std.int(barWholeView.segmentViews[k].data.getValue() * this.unitLength);
                     }
                     
                     barLabelView.rescaleAndRedraw(labelLength, -1, 1.0, 1.0);
@@ -765,7 +765,7 @@ class BarModelView extends Sprite
         var yOffsetBar : Float = topBarPadding;
         var boundingRectangleBuffer : Rectangle = new Rectangle();
         for (i in 0...m_barWholeViews.length){
-            barWholeView = m_barWholeViews[i];
+            var barWholeView = m_barWholeViews[i];
             barWholeView.getBounds(this, boundingRectangleBuffer);
             
             barWholeView.x = this.leftBarPadding;
@@ -793,11 +793,11 @@ class BarModelView extends Sprite
         
         
         for (i in 0...m_barWholeViews.length){
-            barWholeView = m_barWholeViews[i];
+            var barWholeView = m_barWholeViews[i];
             
             var segmentView : BarSegmentView;
             var segmentViews : Array<BarSegmentView> = barWholeView.segmentViews;
-            numSegmentViews = segmentViews.length;
+            var numSegmentViews = segmentViews.length;
             for (j in 0...numSegmentViews){
                 segmentView = segmentViews[j];
                 barWholeView.addChild(segmentView);  // Make sure segment view is added as part of the stage  
@@ -835,7 +835,7 @@ class BarModelView extends Sprite
         
         var numBarWholeViews : Int = m_barWholeViews.length;
         for (i in 0...numBarWholeViews){
-            barWholeView = m_barWholeViews[i];
+            var barWholeView = m_barWholeViews[i];
             
             var leftCompareEdge : Float = barWholeView.segmentViews[barWholeView.segmentViews.length - 1].rigidBody.boundingRectangle.right;
             var barComparisonView : BarComparisonView = barWholeView.comparisonView;
@@ -877,7 +877,7 @@ class BarModelView extends Sprite
         
         var startingXOffsetForVertical : Float = 0;
         for (i in 0...numBarWholesViews){
-            barWholeView = m_barWholeViews[i];
+            var barWholeView = m_barWholeViews[i];
             barWholeView.getBounds(this, boundingRectangleBuffer);
             
             startingXOffsetForVertical = Math.max(startingXOffsetForVertical, boundingRectangleBuffer.right);
@@ -886,9 +886,9 @@ class BarModelView extends Sprite
         var verticalBarXOffset : Float = 20;
         var numVerticalBars : Int = m_barModelData.verticalBarLabels.length;
         for (i in 0...numVerticalBars){
-            barLabelView = this.getVerticalBarLabelViews()[i];
-            startSegmentIndex = barLabelView.data.startSegmentIndex;
-            endSegmentIndex = barLabelView.data.endSegmentIndex;
+            var barLabelView = this.getVerticalBarLabelViews()[i];
+            var startSegmentIndex = barLabelView.data.startSegmentIndex;
+            var endSegmentIndex = barLabelView.data.endSegmentIndex;
             
             var startingBarView : BarWholeView = m_barWholeViews[startSegmentIndex];
             var topY : Float = ((startingBarView.segmentViews.length > 0)) ? 
@@ -911,7 +911,7 @@ class BarModelView extends Sprite
         
         
         for (i in 0...m_verticalLabelViews.length){
-            labelView = m_verticalLabelViews[i];
+            var labelView = m_verticalLabelViews[i];
             labelView.lineGraphicDisplayContainer.getBounds(this, boundingRectangleBuffer);
             labelView.rigidBody.boundingRectangle.setTo(
                     boundingRectangleBuffer.x,
@@ -945,12 +945,12 @@ class BarModelView extends Sprite
         var numBarWholes : Int = m_barModelData.barWholes.length;
         var segmentTexture : Texture = m_assetManager.getTexture("card_background_square");
         var nineSlicePadding : Float = 8;
-        var nineSliceTexture : Scale9Textures = new Scale9Textures(segmentTexture, 
+        var nineSliceTexture : Texture = Texture.fromTexture(segmentTexture, 
         new Rectangle(nineSlicePadding, 
         nineSlicePadding, 
         segmentTexture.width - 2 * nineSlicePadding, 
-        segmentTexture.height - 2 * nineSlicePadding, 
-        ), 
+        segmentTexture.height - 2 * nineSlicePadding
+        )
         );
         
         var blankTexturePadding : Float = 12;
@@ -977,7 +977,7 @@ class BarModelView extends Sprite
                 barSegment, 
                 nineSliceTexture, 
                 segmentTexture, 
-                hiddenSegment, 
+                hiddenSegment
                 );
                 barWholeView.addSegmentView(barSegmentView);
             }  // Its length requires looking at the other bar to compare against    // Add the comparison view if it exists, it goes at the edge of the bar  
@@ -1016,8 +1016,8 @@ class BarModelView extends Sprite
         
         var numVerticalBars : Int = m_barModelData.verticalBarLabels.length;
         for (i in 0...numVerticalBars){
-            barLabel = m_barModelData.verticalBarLabels[i];
-            barLabelView = this.createBarLabelView(barLabel);
+            var barLabel = m_barModelData.verticalBarLabels[i];
+            var barLabelView = this.createBarLabelView(barLabel);
             m_objectLayer.addChild(barLabelView);
             
             m_verticalLabelViews.push(barLabelView);
@@ -1070,7 +1070,7 @@ class BarModelView extends Sprite
         var excessPadding : Float = boundsBuffer.width - maxScaledWidthOfLongestBar;
         var desiredUnitLength : Float = this.getUnitValueFromBarModelData(m_barModelData, excessPadding);
         var newUnitLength : Float = m_unitLength;
-        if (desiredUnitLength != this.unitLength && desiredUnitLength != Infinity) 
+        if (desiredUnitLength != this.unitLength && desiredUnitLength != Math.POSITIVE_INFINITY) 
         {
             if (desiredUnitLength > m_savedUnitLength && !this.alwaysAutoCalculateUnitLength) 
             {
@@ -1145,7 +1145,7 @@ class BarModelView extends Sprite
         
         
         for (i in 0...m_verticalLabelViews.length){
-            labelView = m_verticalLabelViews[i];
+            var labelView = m_verticalLabelViews[i];
             labelView.lineGraphicDisplayContainer.getBounds(this, boundingRectangleBuffer);
             labelView.rigidBody.boundingRectangle.setTo(
                     boundingRectangleBuffer.x,

@@ -408,10 +408,10 @@ class BarLabelView extends ResizeableBarPieceView
                     
                     var totalSpanningWidth : Float = imageWidth * descriptionImageContainer.numChildren;
                     var targetScale : Float = Math.min(
-                            totalSpanningWidth / imageWidth,
-                            boundingHeight / imageHeight,
-                            1.0
-                            );
+							Math.min(
+								totalSpanningWidth / imageWidth,
+								boundingHeight / imageHeight
+                            ), 1.0);
                     imageWidth *= targetScale;
                     imageHeight *= targetScale;
                     
@@ -432,10 +432,10 @@ class BarLabelView extends ResizeableBarPieceView
                 else 
                 {
                     m_descriptionImage.scaleX = m_descriptionImage.scaleY = Math.min(
-                                            boundingWidth / m_descriptionImage.width,
-                                            boundingHeight / m_descriptionImage.height,
-                                            1.0
-                                            );
+											Math.min(
+												boundingWidth / m_descriptionImage.width,
+												boundingHeight / m_descriptionImage.height
+                                            ), 1.0);
                     m_descriptionImage.x = (boundingWidth - m_descriptionImage.width) * 0.5;
                     m_descriptionImage.y = (boundingHeight - m_descriptionImage.height) * 0.5;
                 }
@@ -450,7 +450,7 @@ class BarLabelView extends ResizeableBarPieceView
                 // applied to them so we just use the bounds as they are.
                 // Dimensions of the text purely depends on the bounds
                 var hackExtraWidthPadding : Float = 8;
-                var fontSize : Int = m_measuringTextfield.resizeToDimensions(boundingWidth, boundingHeight, nameToShow);
+                var fontSize : Int = Std.int(m_measuringTextfield.resizeToDimensions(boundingWidth, boundingHeight, nameToShow));
                 var prevTextformat : TextFormat = m_measuringTextfield.defaultTextFormat;
                 prevTextformat.size = fontSize;
                 m_measuringTextfield.text = nameToShow;
@@ -463,7 +463,7 @@ class BarLabelView extends ResizeableBarPieceView
                     // If there is still overflow perform some pruning on the name to show
                     // If the value is a number, just show the number since we expect those to
                     // be fairly short anyways
-                    var isValueANumber : Bool = !Math.isNaN(parseFloat(this.data.value));
+                    var isValueANumber : Bool = !Math.isNaN(Std.parseFloat(this.data.value));
                     if (isValueANumber) 
                     {
                         nameToShow = this.data.value;
@@ -487,7 +487,7 @@ class BarLabelView extends ResizeableBarPieceView
                         }
                     }  // Scaling up is messed up, so reset font size  
                     
-                    fontSize = m_measuringTextfield.resizeToDimensions(boundingWidth, boundingHeight, nameToShow);
+                    fontSize = Std.int(m_measuringTextfield.resizeToDimensions(boundingWidth, boundingHeight, nameToShow));
                     prevTextformat.size = fontSize;
                     m_measuringTextfield.text = nameToShow;
                     m_measuringTextfield.setTextFormat(prevTextformat);
@@ -495,12 +495,12 @@ class BarLabelView extends ResizeableBarPieceView
                 
                 descriptionTextFieldWidth = m_measuringTextfield.textWidth + hackExtraWidthPadding;
                 var descriptionTextField : TextField = new TextField(
-                descriptionTextFieldWidth + 6, 
-                m_measuringTextfield.textHeight + 5, 
+                Std.int(descriptionTextFieldWidth + 6), 
+                Std.int(m_measuringTextfield.textHeight + 5), 
                 nameToShow, 
                 m_measuringTextfield.defaultTextFormat.font, 
                 fontSize, 
-                try cast(m_measuringTextfield.defaultTextFormat.color, Int) catch(e:Dynamic) null, 
+                try cast(m_measuringTextfield.defaultTextFormat.color, Int) catch(e:Dynamic) null
                 );
                 m_descriptionTextfield = descriptionTextField;
                 m_descriptionTextfield.x = (boundingWidth - m_descriptionTextfield.width) * 0.5;

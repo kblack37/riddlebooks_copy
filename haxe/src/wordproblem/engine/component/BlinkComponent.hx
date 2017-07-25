@@ -43,7 +43,7 @@ class BlinkComponent extends Component
         if (this.tween != null) 
         {
             // HACK: Assume the tween is always added to the root juggler
-            Starling.juggler.remove(this.tween);
+            Starling.current.juggler.remove(this.tween);
             
             // Restore prior alpha value
             (try cast(this.tween.target, DisplayObject) catch(e:Dynamic) null).alpha = 1.0;

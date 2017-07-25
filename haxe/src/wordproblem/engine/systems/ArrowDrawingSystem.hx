@@ -1,11 +1,12 @@
 package wordproblem.engine.systems;
 
+import starling.display.Image;
 import wordproblem.engine.systems.BaseSystemScript;
 
 import flash.geom.Point;
 
-import feathers.display.Scale3Image;
-import feathers.textures.Scale3Textures;
+//import feathers.display.Scale3Image;
+//import feathers.textures.Scale3Textures;
 
 import starling.animation.Tween;
 import starling.core.Starling;
@@ -87,8 +88,9 @@ class ArrowDrawingSystem extends BaseSystemScript
         // If an arrow has not been drawn then add it to the display
         if (arrowComponent.arrowView == null) 
         {
+			// TODO: this image will likely need to be fixed
             var arrowTexture : Texture = m_assetManager.getTexture("arrow_short");
-            var arrowImage : Scale3Image = new Scale3Image(new Scale3Textures(arrowTexture, 20, 30));
+            var arrowImage : Image = new Image(Texture.fromTexture(arrowTexture));
             
             arrowImage.pivotX = arrowImage.width * 0.5;
             arrowImage.pivotY = arrowImage.height * 0.5;
@@ -141,7 +143,7 @@ class ArrowDrawingSystem extends BaseSystemScript
                     arrowTween.moveTo(midX + targetView.x - animX, midY + targetView.y - animY);
                     arrowTween.repeatCount = 0;
                     arrowTween.reverse = true;
-                    Starling.juggler.add(arrowTween);
+                    Starling.current.juggler.add(arrowTween);
                     
                     arrowComponent.animation = arrowTween;
                 }  // If it hasn't no need to do any repositioning    // Check if the position of the target view has changed.  
@@ -157,7 +159,7 @@ class ArrowDrawingSystem extends BaseSystemScript
                 arrowView.removeFromParent();
                 if (arrowComponent.animation != null) 
                 {
-                    Starling.juggler.remove(arrowComponent.animation);
+                    Starling.current.juggler.remove(arrowComponent.animation);
                     arrowComponent.animation = null;
                 }
             }

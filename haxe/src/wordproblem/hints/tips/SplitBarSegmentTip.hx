@@ -34,7 +34,7 @@ import wordproblem.scripts.drag.WidgetDragSystem;
 class SplitBarSegmentTip extends BarModelTip
 {
     private var m_widgetDragSystem : WidgetDragSystem;
-    private var m_vectorSpace : IVectorSpace;
+    private var m_vectorSpace : RealsVectorSpace;
     
     private var m_splitGesture : SplitBarSegment;
     
@@ -85,14 +85,14 @@ class SplitBarSegmentTip extends BarModelTip
         
         // The start drag location is above the bars
         var startDragLocation : Point = new Point(
-        segmentToDivideBounds.left + segmentToDivideBounds.width * 0.5, 
-        segmentToDivideBounds.top - 50, 
+			segmentToDivideBounds.left + segmentToDivideBounds.width * 0.5, 
+			segmentToDivideBounds.top - 50
         );
         
         // The final drag location is in the middle of the segment
         var finalDragLocation : Point = new Point(
-        segmentToDivideBounds.left + segmentToDivideBounds.width * 0.5, 
-        segmentToDivideBounds.top + segmentToDivideBounds.height * 0.5, 
+			segmentToDivideBounds.left + segmentToDivideBounds.width * 0.5, 
+			segmentToDivideBounds.top + segmentToDivideBounds.height * 0.5
         );
         
         var mainAnimationEvents : Array<SequenceEvent> = new Array<SequenceEvent>();

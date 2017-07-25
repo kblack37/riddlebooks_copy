@@ -79,7 +79,7 @@ class SplitBarSegment extends BaseBarModelScript implements ICardOnSegmentScript
         var targetBarWholeIndex : Int = outIndices[0];
         var targetBarSegmentIndex : Int = outIndices[1];
         var previewView : BarModelView = m_barModelArea.getPreviewView(true);
-        var numSegmentsToSplitInto : Int = parseInt(cardValue);
+        var numSegmentsToSplitInto : Int = Std.parseInt(cardValue);
         splitBarSegment(targetBarWholeIndex,
                 targetBarSegmentIndex, numSegmentsToSplitInto, previewView.getBarModelData());
         m_barModelArea.showPreview(true);
@@ -109,7 +109,7 @@ class SplitBarSegment extends BaseBarModelScript implements ICardOnSegmentScript
             m_barModelArea.componentManager.removeAllComponentsFromEntity(blinkingSegmentId);
         }
         
-        as3hx.Compat.setArrayLength(m_segmentIdsBlinkingForPreview, 0);
+		m_segmentIdsBlinkingForPreview = new Array<String>();
     }
     
     public function performAction(cardValue : String, segmentId : String) : Void
@@ -122,19 +122,17 @@ class SplitBarSegment extends BaseBarModelScript implements ICardOnSegmentScript
         var barModelData : BarModelData = m_barModelArea.getBarModelData();
         var outIndices : Array<Int> = new Array<Int>();
         barModelData.getBarSegmentById(segmentId, outIndices);
-        splitBarSegment(outIndices[0], outIndices[1], parseInt(cardValue), barModelData);
+        splitBarSegment(outIndices[0], outIndices[1], Std.parseInt(cardValue), barModelData);
         m_eventDispatcher.dispatchEventWith(GameEvent.BAR_MODEL_AREA_CHANGE, false, {
-                    previousSnapshot : previousModelDataSnapshot
-
-                });
+            previousSnapshot : previousModelDataSnapshot
+        });
         m_barModelArea.redraw();
         
         // Log splitting on an existing segment
         m_eventDispatcher.dispatchEventWith(AlgebraAdventureLoggingConstants.SPLIT_BAR_SEGMENT, false, {
-                    barModel : m_barModelArea.getBarModelData().serialize(),
-                    value : cardValue,
-
-                });
+            barModel : m_barModelArea.getBarModelData().serialize(),
+            value : cardValue,
+        });
     }
     
     public function getName() : String
@@ -150,7 +148,7 @@ class SplitBarSegment extends BaseBarModelScript implements ICardOnSegmentScript
             m_globalMouseBuffer.setTo(m_mouseState.mousePositionThisFrame.x, m_mouseState.mousePositionThisFrame.y);
             m_barModelArea.globalToLocal(m_globalMouseBuffer, m_localMouseBuffer);
             
-            as3hx.Compat.setArrayLength(m_outParamsBuffer, 0);
+			m_outParamsBuffer = new Array<Dynamic>();
             if (m_eventTypeBuffer.length > 0) 
             {
                 var args : Dynamic = m_eventParamBuffer[0];
@@ -165,7 +163,7 @@ class SplitBarSegment extends BaseBarModelScript implements ICardOnSegmentScript
                 {
                     var targetBarWholeIndex : Int = Std.parseInt(m_outParamsBuffer[0]);
                     var targetBarSegmentIndex : Int = Std.parseInt(m_outParamsBuffer[1]);
-                    var value : Int = parseInt(releasedWidget.getNode().data);
+                    var value : Int = Std.parseInt(releasedWidget.getNode().data);
                     
                     // In order to see whether the box would fit we need to apply the change
                     // Give a bar model with target set
@@ -175,16 +173,14 @@ class SplitBarSegment extends BaseBarModelScript implements ICardOnSegmentScript
                         var previousModelDataSnapshot : BarModelData = m_barModelArea.getBarModelData().clone();
                         splitBarSegment(targetBarWholeIndex, targetBarSegmentIndex, value, m_barModelArea.getBarModelData());
                         m_eventDispatcher.dispatchEventWith(GameEvent.BAR_MODEL_AREA_CHANGE, false, {
-                                    previousSnapshot : previousModelDataSnapshot
-
-                                });
+                            previousSnapshot : previousModelDataSnapshot
+                        });
                         
                         // Log splitting on an existing segment
                         m_eventDispatcher.dispatchEventWith(AlgebraAdventureLoggingConstants.SPLIT_BAR_SEGMENT, false, {
-                                    barModel : m_barModelArea.getBarModelData().serialize(),
-                                    value : value,
-
-                                });
+                            barModel : m_barModelArea.getBarModelData().serialize(),
+                            value : value,
+                        });
                         
                         // Redraw at the end to refresh
                         m_barModelArea.redraw();
@@ -197,13 +193,13 @@ class SplitBarSegment extends BaseBarModelScript implements ICardOnSegmentScript
             }
             else if (m_widgetDragSystem.getWidgetSelected() != null) 
             {
-                releasedWidget = m_widgetDragSystem.getWidgetSelected();
+                var releasedWidget = m_widgetDragSystem.getWidgetSelected();
                 if (BarModelHitAreaUtil.checkPointInBarSegment(m_outParamsBuffer, m_barModelArea, m_localMouseBuffer)
                     && checkDraggedWidgetValid(releasedWidget)) 
                 {
-                    targetBarWholeIndex = Std.parseInt(m_outParamsBuffer[0]);
-                    targetBarSegmentIndex = Std.parseInt(m_outParamsBuffer[1]);
-                    value = parseInt(releasedWidget.getNode().data);
+                    var targetBarWholeIndex = Std.parseInt(m_outParamsBuffer[0]);
+                    var targetBarSegmentIndex = Std.parseInt(m_outParamsBuffer[1]);
+                    var value = Std.parseInt(releasedWidget.getNode().data);
                     
                     // This check shows the preview if either it was not showing already OR a lower priority
                     // script had activated it but we want to overwrite it.
@@ -263,7 +259,7 @@ class SplitBarSegment extends BaseBarModelScript implements ICardOnSegmentScript
         // Do not allow a segment to be split by a non-numeric value or any non-positive value
         // since it doesn't make sense how a split would occur in those situations.
         // Also ignore a split by one since that has no effect
-        var value : Float = parseInt(dataValue);
+        var value : Float = Std.parseInt(dataValue);
         return (!Math.isNaN(value) && value > 1 && value < m_splitLimit);
     }
     
@@ -372,7 +368,7 @@ class SplitBarSegment extends BaseBarModelScript implements ICardOnSegmentScript
             // Take into account the additional value provided by the bar assuming that it is
             // always on the left end.
             barWhole = barWholesWithComparison[i];
-            comparisonValue = originalComparisonValues[i] + barWhole.getValue();
+            var comparisonValue = originalComparisonValues[i] + barWhole.getValue();
             
             var j : Int;
             var barSegments : Array<BarSegment> = targetBarWhole.barSegments;

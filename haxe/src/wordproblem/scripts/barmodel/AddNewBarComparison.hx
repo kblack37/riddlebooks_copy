@@ -82,7 +82,7 @@ class AddNewBarComparison extends BaseBarModelScript implements IHitAreaScript i
         {
             m_globalMouseBuffer.setTo(m_mouseState.mousePositionThisFrame.x, m_mouseState.mousePositionThisFrame.y);
             m_barModelArea.globalToLocal(m_globalMouseBuffer, m_localMouseBuffer);
-            as3hx.Compat.setArrayLength(m_outParamsBuffer, 0);
+			m_outParamsBuffer = new Array<Dynamic>();
             
             if (m_eventTypeBuffer.length > 0) 
             {
@@ -129,8 +129,8 @@ class AddNewBarComparison extends BaseBarModelScript implements IHitAreaScript i
                 m_showHitAreas = true;
                 if (checkOverHitArea(m_outParamsBuffer)) 
                 {
-                    targetBarWholeView = try cast(m_outParamsBuffer[0], BarWholeView) catch(e:Dynamic) null;
-                    barToCompareAgainst = try cast(m_outParamsBuffer[1], BarWholeView) catch(e:Dynamic) null;
+                    var targetBarWholeView = try cast(m_outParamsBuffer[0], BarWholeView) catch(e:Dynamic) null;
+                    var barToCompareAgainst = try cast(m_outParamsBuffer[1], BarWholeView) catch(e:Dynamic) null;
                     var barsInComparisonDifferFromLastVisit : Bool = m_currentCompareToBarId != barToCompareAgainst.data.id ||
                     m_currentTargetBarId != targetBarWholeView.data.id;
                     
@@ -142,9 +142,9 @@ class AddNewBarComparison extends BaseBarModelScript implements IHitAreaScript i
                         m_currentTargetBarId = targetBarWholeView.data.id;
                         m_currentCompareToBarId = barToCompareAgainst.data.id;
                         
-                        widthDifference = barToCompareAgainst.segmentViews[barToCompareAgainst.segmentViews.length - 1].rigidBody.boundingRectangle.right -
+                        var widthDifference = barToCompareAgainst.segmentViews[barToCompareAgainst.segmentViews.length - 1].rigidBody.boundingRectangle.right -
                                 targetBarWholeView.segmentViews[targetBarWholeView.segmentViews.length - 1].rigidBody.boundingRectangle.right;
-                        releasedExpressionNode = m_widgetDragSystem.getWidgetSelected().getNode();
+                        var releasedExpressionNode = m_widgetDragSystem.getWidgetSelected().getNode();
                         
                         var previewView : BarModelView = m_barModelArea.getPreviewView(true);
                         var previewBarWhole : BarWhole = previewView.getBarModelData().getBarWholeById(targetBarWholeView.data.id);
@@ -218,7 +218,7 @@ class AddNewBarComparison extends BaseBarModelScript implements IHitAreaScript i
             m_hitAreaPool.push(m_hitAreas.pop());
         }
         
-        as3hx.Compat.setArrayLength(m_hitAreaBarIds, 0);
+		m_hitAreaBarIds = new Array<String>();
         
         // For each individual bar, the hit area starts at the edge of the end and
         // extends to the edge of the longest bar
@@ -239,21 +239,18 @@ class AddNewBarComparison extends BaseBarModelScript implements IHitAreaScript i
                 longestBarViewIndex = i;
                 furthestRightEdgeX = rightEdgeX;
             }
-        }  // and vertically from the top and bottom of its segments    // extending horizontally from its last segment edge to the furthest edge of the longest bar    // With the proper end, go through each bar and treat each having a hit area  
-        
-        
-        
-        
-        
-        
-        
+        }
+		
+		// With the proper end, go through each bar and treat each having a hit area  
+        // extending horizontally from its last segment edge to the furthest edge of the longest bar
+		// and vertically from the top and bottom of its segments
         for (i in 0...numBarWholeViews){
             // No hit area for the longest bar since we define the comparison to always span from
             // a smaller value to a larger one.
             if (i != longestBarViewIndex) 
             {
                 barWholeView = barWholeViews[i];
-                segmentViews = barWholeView.segmentViews;
+                var segmentViews = barWholeView.segmentViews;
                 var lastSegmentBounds : Rectangle = segmentViews[segmentViews.length - 1].rigidBody.boundingRectangle;
                 var leftEdgeX : Float = lastSegmentBounds.right;
                 var topEdgeY : Float = lastSegmentBounds.top;

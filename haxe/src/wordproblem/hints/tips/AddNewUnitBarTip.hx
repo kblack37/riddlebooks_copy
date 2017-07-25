@@ -32,7 +32,7 @@ import wordproblem.scripts.drag.WidgetDragSystem;
 class AddNewUnitBarTip extends BarModelTip
 {
     private var m_widgetDragSystem : WidgetDragSystem;
-    private var m_vectorSpace : IVectorSpace;
+    private var m_vectorSpace : RealsVectorSpace;
     
     private var m_orderedGestures : PrioritySelector;
     
@@ -46,7 +46,7 @@ class AddNewUnitBarTip extends BarModelTip
             isActive : Bool = true)
     {
         super(expressionSymbolMap, canvas, mouseState, time, assetManager,
-                DEFAULT_BAR_MODEL_WIDTH, DEFAULT_BAR_MODEL_HEIGHT, screenBounds,
+                BarModelTip.DEFAULT_BAR_MODEL_WIDTH, BarModelTip.DEFAULT_BAR_MODEL_HEIGHT, screenBounds,
                 id,
                 "When you drag a number here, it will make that number of equal sized boxes.",
                 id, isActive);
@@ -56,7 +56,7 @@ class AddNewUnitBarTip extends BarModelTip
         
         m_orderedGestures = new PrioritySelector();
         var addNewUnitBar : AddNewUnitBar = new AddNewUnitBar(null, null, assetManager, 30);
-        addNewUnitBar.setParams(m_barModelArea, m_widgetDragSystem, mouseState, expressionSymbolMap, m_barModelArea.unitLength, m_gameEnginePlaceholderEventDispatcher);
+        addNewUnitBar.setParams(m_barModelArea, m_widgetDragSystem, mouseState, expressionSymbolMap, Std.int(m_barModelArea.unitLength), m_gameEnginePlaceholderEventDispatcher);
         m_orderedGestures.pushChild(addNewUnitBar);
         
         var addNewUnitBarHitArea : ShowBarModelHitAreas = new ShowBarModelHitAreas(
@@ -101,13 +101,14 @@ class AddNewUnitBarTip extends BarModelTip
         
         // The start drag location is above the bars
         var startDragLocation : Point = new Point(
-        barModelBounds.width * 0.5 + barModelBounds.x, barModelBounds.top - 20, 
+			barModelBounds.width * 0.5 + barModelBounds.x,
+			barModelBounds.top - 20
         );
         
         // The final drag location is in the hit area new the left edge
         var finalDragLocation : Point = new Point(
-        unitHitAreaBounds.left + unitHitAreaBounds.width * 0.5, 
-        unitHitAreaBounds.top + unitHitAreaBounds.height * 0.5, 
+			unitHitAreaBounds.left + unitHitAreaBounds.width * 0.5, 
+			unitHitAreaBounds.top + unitHitAreaBounds.height * 0.5
         );
         
         var mainAnimationEvents : Array<SequenceEvent> = new Array<SequenceEvent>();

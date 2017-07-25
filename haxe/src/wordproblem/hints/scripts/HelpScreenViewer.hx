@@ -10,12 +10,9 @@ import flash.text.TextFormatAlign;
 
 import dragonbox.common.util.XColor;
 
-import feathers.controls.Button;
-import feathers.controls.ToggleButton;
-import feathers.core.ToggleGroup;
-import feathers.display.Scale9Image;
-import feathers.textures.Scale9Textures;
+import haxe.Constraints.Function;
 
+import starling.display.Button;
 import starling.display.DisplayObjectContainer;
 import starling.display.Image;
 import starling.display.Quad;
@@ -79,7 +76,7 @@ class HelpScreenViewer extends ScriptNode
      * The categories of help options available for viewing.
      */
     private var m_categoryButtons : Array<Button>;
-    private var m_categoryToggleGroup : ToggleGroup;
+    //private var m_categoryToggleGroup : ToggleGroup;
     private var m_helpCategoryScripts : Array<IShowableScript>;
     private var m_currentlyShownScript : IShowableScript;
     
@@ -118,56 +115,56 @@ class HelpScreenViewer extends ScriptNode
         var numButtons : Int = buttonLabels.length;
         m_categoryButtons = new Array<Button>();
         var whiteButtonTexture : Texture = assetManager.getTexture("button_white");
-        var whiteScale9Texture : Scale9Textures = new Scale9Textures(whiteButtonTexture, new Rectangle(8, 8, 16, 16));
+        var whiteScale9Texture : Texture = Texture.fromTexture(whiteButtonTexture, new Rectangle(8, 8, 16, 16));
         var i : Int;
         var fontSize : Int = 20;
         var categoryButtonWidth : Float = 170;
         var categoryButtonHeight : Float = 40;
         var padding : Float = 50;
-        m_categoryToggleGroup = new ToggleGroup();
-        m_categoryToggleGroup.isSelectionRequired = true;
-        var totalButtonWidth : Float = (numButtons - 1) * padding + numButtons * categoryButtonWidth;
-        var xOffset : Float = (screenWidth - totalButtonWidth) * 0.5;
-        for (i in 0...numButtons){
-            var categoryToggleButton : ToggleButton = try cast(WidgetUtil.createGenericColoredButton(
-                    assetManager,
-                    buttonColorData.getUpButtonColor(),
-                    buttonLabels[i],
-                    new TextFormat(GameFonts.DEFAULT_FONT_NAME, fontSize, 0xFFFFFF),
-                    new TextFormat(GameFonts.DEFAULT_FONT_NAME, fontSize, 0xFFFFFF),
-                    true
-                    ), ToggleButton) catch(e:Dynamic) null;
-            categoryToggleButton.isToggle = true;
-            m_categoryButtons.push(categoryToggleButton);
-            
-            // Set a selection skin
-            var defaultSelectedImage : Scale9Image = new Scale9Image(whiteScale9Texture);
-            defaultSelectedImage.color = XColor.shadeColor(buttonColorData.getUpButtonColor(), 1.0);
-            categoryToggleButton.defaultSelectedSkin = defaultSelectedImage;
-            categoryToggleButton.defaultSelectedLabelProperties = {
-                        textFormat : new TextFormat(GameFonts.DEFAULT_FONT_NAME, fontSize, 0x000000, null, null, null, null, null, TextFormatAlign.CENTER)
-
-                    };
-            categoryToggleButton.width = categoryButtonWidth;
-            categoryToggleButton.height = categoryButtonHeight;
-            screenLayer.addChild(categoryToggleButton);
-            categoryToggleButton.x = xOffset;
-            xOffset += categoryButtonWidth + padding;
-            
-            m_categoryToggleGroup.addItem(categoryToggleButton);
-            
-            // HACK: Bind the listener AFTER the item is added
-            // We do not want to trigger the toggle change event at this moment
-            categoryToggleButton.addEventListener(Event.CHANGE, onCategorySelected);
-        }
+		
+		// TODO: uncomment once a radio button group is designed
+        //m_categoryToggleGroup = new ToggleGroup();
+        //m_categoryToggleGroup.isSelectionRequired = true;
+        //var totalButtonWidth : Float = (numButtons - 1) * padding + numButtons * categoryButtonWidth;
+        //var xOffset : Float = (screenWidth - totalButtonWidth) * 0.5;
+        //for (i in 0...numButtons){
+            //var categoryToggleButton : ToggleButton = try cast(WidgetUtil.createGenericColoredButton(
+                    //assetManager,
+                    //buttonColorData.getUpButtonColor(),
+                    //buttonLabels[i],
+                    //new TextFormat(GameFonts.DEFAULT_FONT_NAME, fontSize, 0xFFFFFF),
+                    //new TextFormat(GameFonts.DEFAULT_FONT_NAME, fontSize, 0xFFFFFF),
+                    //true
+                    //), ToggleButton) catch(e:Dynamic) null;
+            //categoryToggleButton.isToggle = true;
+            //m_categoryButtons.push(categoryToggleButton);
+            //
+            //// Set a selection skin
+            //var defaultSelectedImage : Scale9Image = new Scale9Image(whiteScale9Texture);
+            //defaultSelectedImage.color = XColor.shadeColor(buttonColorData.getUpButtonColor(), 1.0);
+            //categoryToggleButton.defaultSelectedSkin = defaultSelectedImage;
+            //categoryToggleButton.defaultSelectedLabelProperties = {
+                        //textFormat : new TextFormat(GameFonts.DEFAULT_FONT_NAME, fontSize, 0x000000, null, null, null, null, null, TextFormatAlign.CENTER)
+//
+                    //};
+            //categoryToggleButton.width = categoryButtonWidth;
+            //categoryToggleButton.height = categoryButtonHeight;
+            //screenLayer.addChild(categoryToggleButton);
+            //categoryToggleButton.x = xOffset;
+            //xOffset += categoryButtonWidth + padding;
+            //
+            //m_categoryToggleGroup.addItem(categoryToggleButton);
+            //
+            //// HACK: Bind the listener AFTER the item is added
+            //// We do not want to trigger the toggle change event at this moment
+            //categoryToggleButton.addEventListener(Event.CHANGE, onCategorySelected);
+        //}
         
         var closeWidth : Float = 80;
         var closeIconTexture : Texture = assetManager.getTexture("wrong");
         var closeIcon : Image = new Image(closeIconTexture);
-        m_closeButton = new Button();
-        m_closeButton.defaultSkin = closeIcon;
-        m_closeButton.defaultIcon = closeIcon;
-        m_closeButton.scaleWhenHovering = 1.2;
+        m_closeButton = new Button(closeIconTexture);
+        m_closeButton.scaleWhenOver = 1.2;
         m_closeButton.scaleWhenDown = 0.8;
         m_closeButton.width = m_closeButton.height = closeWidth;
         m_closeButton.addEventListener(Event.TRIGGERED, onCloseClicked);
@@ -271,31 +268,33 @@ class HelpScreenViewer extends ScriptNode
     {
         m_parentCanvas.addChild(m_mainLayer);
         
-        // First time hint opens, show the hints automatically
-        if (m_categoryToggleGroup.selectedIndex < 0) 
-        {
-            m_categoryToggleGroup.selectedIndex = 0;
-        }
-        else 
-        {
-            var scriptToShow : IShowableScript = m_helpCategoryScripts[m_categoryToggleGroup.selectedIndex];
-            scriptToShow.show();
-            m_currentlyShownScript = scriptToShow;
-            
-            // Make sure close button is not obscured by the layers
-            m_closeButton.parent.addChild(m_closeButton);
-        }
+		// TODO: uncomment once radio toggle button group is designed
+        //// First time hint opens, show the hints automatically
+        //if (m_categoryToggleGroup.selectedIndex < 0) 
+        //{
+            //m_categoryToggleGroup.selectedIndex = 0;
+        //}
+        //else 
+        //{
+            //var scriptToShow : IShowableScript = m_helpCategoryScripts[m_categoryToggleGroup.selectedIndex];
+            //scriptToShow.show();
+            //m_currentlyShownScript = scriptToShow;
+            //
+            //// Make sure close button is not obscured by the layers
+            //m_closeButton.parent.addChild(m_closeButton);
+        //}
     }
     
     public function hide() : Void
     {
         m_mainLayer.removeFromParent();
         
-        if (m_categoryToggleGroup.selectedIndex >= 0) 
-        {
-            var scriptToHide : IShowableScript = m_helpCategoryScripts[m_categoryToggleGroup.selectedIndex];
-            scriptToHide.hide();
-        }
+		// TODO: uncomment once radio button toggle group is designed
+        //if (m_categoryToggleGroup.selectedIndex >= 0) 
+        //{
+            //var scriptToHide : IShowableScript = m_helpCategoryScripts[m_categoryToggleGroup.selectedIndex];
+            //scriptToHide.hide();
+        //}
     }
     
     override public function dispose() : Void
@@ -321,12 +320,13 @@ class HelpScreenViewer extends ScriptNode
     
     override public function visit() : Int
     {
+		// TODO: uncomment once radio button toggle group is designed
         // Run visit on the currently active screen
-        var currentlySelectedScreenIndex : Int = m_categoryToggleGroup.selectedIndex;
-        if (currentlySelectedScreenIndex >= 0) 
-        {
-            (try cast(m_helpCategoryScripts[currentlySelectedScreenIndex], ScriptNode) catch(e:Dynamic) null).visit();
-        }
+        //var currentlySelectedScreenIndex : Int = m_categoryToggleGroup.selectedIndex;
+        //if (currentlySelectedScreenIndex >= 0) 
+        //{
+            //(try cast(m_helpCategoryScripts[currentlySelectedScreenIndex], ScriptNode) catch(e:Dynamic) null).visit();
+        //}
         
         return ScriptStatus.SUCCESS;
     }
@@ -341,22 +341,23 @@ class HelpScreenViewer extends ScriptNode
     
     private function onCategorySelected(event : Event) : Void
     {
+		// TODO: uncomment once radio button toggle group is designed
         // Do not show script again if it is already currently showing
         
-        var targetButton : ToggleButton = try cast(event.currentTarget, ToggleButton) catch(e:Dynamic) null;
-        var buttonIndex : Int = m_categoryToggleGroup.getItemIndex(targetButton);
-        var scriptAtIndex : IShowableScript = m_helpCategoryScripts[buttonIndex];
-        if (targetButton.isSelected) 
-        {
-            if (m_currentlyShownScript != scriptAtIndex) 
-            {
-                scriptAtIndex.show();
-                m_currentlyShownScript = scriptAtIndex;
-            }
-        }
-        else 
-        {
-            scriptAtIndex.hide();
-        }
+        //var targetButton : ToggleButton = try cast(event.currentTarget, ToggleButton) catch(e:Dynamic) null;
+        //var buttonIndex : Int = m_categoryToggleGroup.getItemIndex(targetButton);
+        //var scriptAtIndex : IShowableScript = m_helpCategoryScripts[buttonIndex];
+        //if (targetButton.isSelected) 
+        //{
+            //if (m_currentlyShownScript != scriptAtIndex) 
+            //{
+                //scriptAtIndex.show();
+                //m_currentlyShownScript = scriptAtIndex;
+            //}
+        //}
+        //else 
+        //{
+            //scriptAtIndex.hide();
+        //}
     }
 }

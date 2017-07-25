@@ -2,9 +2,10 @@ package wordproblem.engine.systems;
 
 
 import flash.geom.Rectangle;
+import starling.display.Image;
 
-import feathers.display.Scale9Image;
-import feathers.textures.Scale9Textures;
+//import feathers.display.Scale9Image;
+//import feathers.textures.Scale9Textures;
 
 import starling.animation.Juggler;
 import starling.animation.Tween;
@@ -20,6 +21,8 @@ import wordproblem.engine.component.RenderableComponent;
 import wordproblem.engine.text.view.DocumentView;
 import wordproblem.resource.AssetManager;
 
+// TODO: uncomment this once callout system is redesigned
+
 /**
  * This is responsible for drawing a highlight that might animate on a display object
  */
@@ -31,7 +34,7 @@ class HighlightSystem extends BaseSystemScript
      * The primary texture representing the base highlight, only need to create this once
      * since all highlights will share this texture.
      */
-    private var m_highlightTexture : Scale9Textures;
+    private var m_highlightTexture : Texture;
     
     private var m_boundsBuffer : Rectangle;
     
@@ -39,16 +42,16 @@ class HighlightSystem extends BaseSystemScript
     {
         super("HighlightSystem");
         
-        m_highlightJuggler = Starling.juggler;
+        m_highlightJuggler = Starling.current.juggler;
         
         var highlightTexture : Texture = assetManager.getTexture("halo");
         var scale9Delta : Float = 2;
-        m_highlightTexture = new Scale9Textures(highlightTexture, new Rectangle(
+        m_highlightTexture = Texture.fromTexture(highlightTexture, new Rectangle(
                 (highlightTexture.width - scale9Delta) * 0.5, 
                 (highlightTexture.height - scale9Delta) * 0.5, 
                 scale9Delta, 
-                scale9Delta, 
-                ));
+                scale9Delta
+        ));
         
         m_boundsBuffer = new Rectangle();
     }
@@ -128,9 +131,9 @@ class HighlightSystem extends BaseSystemScript
                         for (lineIndex in 0...lineBounds.length){
                             resultBounds = lineBounds[lineIndex];
                             
-                            var highlightImage : Scale9Image = new Scale9Image(m_highlightTexture);
-                            highlightImage.width = Math.max(m_highlightTexture.texture.width, resultBounds.width);
-                            highlightImage.height = Math.max(m_highlightTexture.texture.height, resultBounds.height);
+                            var highlightImage : Image = new Image(m_highlightTexture);
+                            highlightImage.width = Math.max(m_highlightTexture.width, resultBounds.width);
+                            highlightImage.height = Math.max(m_highlightTexture.height, resultBounds.height);
                             highlightImage.x = resultBounds.x - (highlightImage.width - resultBounds.width) * 0.5;
                             highlightImage.y = resultBounds.y - (highlightImage.height - resultBounds.height) * 0.5;
                             highlightImage.color = highlightComponent.color;
@@ -149,12 +152,12 @@ class HighlightSystem extends BaseSystemScript
                     var renderView : DisplayObject = renderableComponent.view;
                     if (highlightComponent.displayedHighlight == null && renderView.stage != null) 
                     {
-                        highlightImage = new Scale9Image(m_highlightTexture);
+                        var highlightImage = new Image(m_highlightTexture);
                         highlightImage.color = highlightComponent.color;
                         
                         // Add the highlight just below the object
                         var displayIndex : Int = renderView.parent.getChildIndex(renderView);
-                        renderView.parent.addChildAt(highlightImage, Math.max(0, displayIndex - 1));
+                        renderView.parent.addChildAt(highlightImage, Std.int(Math.max(0, displayIndex - 1)));
                         
                         highlightComponent.displayedHighlight = highlightImage;
                         addHighlightAnimation(highlightComponent);
@@ -167,8 +170,8 @@ class HighlightSystem extends BaseSystemScript
                         
                         // Make sure the highlight also scales
                         m_boundsBuffer.inflate(20, 20);
-                        highlightDisplay.width = Math.max(m_highlightTexture.texture.width, m_boundsBuffer.width);
-                        highlightDisplay.height = Math.max(m_highlightTexture.texture.height, m_boundsBuffer.height);
+                        highlightDisplay.width = Math.max(m_highlightTexture.width, m_boundsBuffer.width);
+                        highlightDisplay.height = Math.max(m_highlightTexture.height, m_boundsBuffer.height);
                         
                         // Center the image so it becomes easier later to reposition within the center of the anchor object
                         highlightDisplay.pivotX = highlightDisplay.width * 0.5;

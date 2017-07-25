@@ -1,7 +1,7 @@
 package wordproblem.engine.barmodel;
 
-import wordproblem.engine.barmodel.BarmodelLevelTemplate;
-import wordproblem.engine.barmodel.PMPRNG;
+//import wordproblem.engine.barmodel.BarmodelLevelTemplate;
+import dragonbox.common.util.PMPRNG;
 
 import flash.text.TextFormat;
 
@@ -9,6 +9,8 @@ import dragonbox.common.util.PMPRNG;
 import dragonbox.common.util.TextToNumber;
 import dragonbox.common.util.XColor;
 import dragonbox.common.util.XString;
+
+import haxe.Constraints.Function;
 
 import wordproblem.engine.text.MeasuringTextField;
 import wordproblem.hints.CustomHintGenerator;
@@ -135,7 +137,7 @@ class BarModelLevelCreator
             problemText : String,
             backgroundId : String,
             additionalDetails : Dynamic,
-            customHintGenerator : CustomHintGenerator = null) : FastXML
+            customHintGenerator : CustomHintGenerator = null) : Xml
     {
         // Have a default background style
         if (backgroundId == null) 
@@ -143,16 +145,16 @@ class BarModelLevelCreator
             backgroundId = "general_a";
         }
         
-        var levelTemplateXml : FastXML = new FastXML(Type.createInstance(barmodel_level_template, []));
+        var levelTemplateXml : Xml = new Xml(Type.createInstance(barmodel_level_template, []));
         levelTemplateXml.setAttribute("id", levelId);
         levelTemplateXml.setAttribute("barModelType", barModelType);
         levelTemplateXml.setAttribute("name", "Bar model " + levelId) = "Bar model " + levelId;
         
-        var problemTextXml : FastXML = new FastXML("<p>" + problemText + "</p>");
+        var problemTextXml : Xml = new Xml("<p>" + problemText + "</p>");
         
         var documentIdToExpressionNameMap : Dynamic = { };
         var documentIdToExpressionNumericValue : Dynamic = { };
-        var taggedElements : Array<FastXML> = new Array<FastXML>();
+        var taggedElements : Array<Xml> = new Array<Xml>();
         _getTaggedElements(problemTextXml, taggedElements);
         for (taggedElement in taggedElements)
         {
@@ -162,7 +164,7 @@ class BarModelLevelCreator
         
         
         
-        var problemTextRoot : FastXML = levelTemplateXml.nodes.wordproblem.get(0).node.page.innerData[0].div[0];
+        var problemTextRoot : Xml = levelTemplateXml.nodes.wordproblem.get(0).node.page.innerData[0].div[0];
         problemTextRoot.node.appendChild.innerData(problemTextXml);
         
         // We assume the document ids in the text have a specific role in how they fit in the
@@ -256,7 +258,7 @@ class BarModelLevelCreator
                         {
                             if (symbolData.value == Std.string(numberFromText)) 
                             {
-                                var symbolElement : FastXML = FastXML.parse("<symbol/>");
+                                var symbolElement : Xml = Xml.parse("<symbol/>");
                                 symbolElement.setAttribute("name", ((symbolData.exists("name"))) ? 
                                 symbolData.name : numberFromText);
                                 // Zoran wanted to remove the words from the tiles
@@ -279,11 +281,11 @@ class BarModelLevelCreator
                     // Remove any special characters that might mess up the expression compiler,
                     // this includes anything that can be confused as an operator, parenthesis, '?', and '='
                     taggedValueNoSpaces = taggedValueNoSpaces.replace(new EReg('[\\?\\+=\\-\\*\\(\\)]', "g"), "");
-                    symbolElement = FastXML.parse("<symbol/>");
+                    symbolElement = Xml.parse("<symbol/>");
                     symbolElement.setAttribute("name", ((aliasValue != null && Reflect.setField(tagIdToAliasMap, taggedId, null).exists("name"))) ? 
-                    Reflect.setField(tagIdToAliasMap, taggedId, ).name : taggedValueUnmodified);
+                    Reflect.setField(tagIdToAliasMap, taggedId).name : taggedValueUnmodified);
                     symbolElement.setAttribute("abbreviatedName", ((aliasValue != null && Reflect.setField(tagIdToAliasMap, taggedId, null).exists("abbreviated"))) ? 
-                    Reflect.setField(tagIdToAliasMap, taggedId, ).abbreviated : taggedValueUnmodified);
+                    Reflect.setField(tagIdToAliasMap, taggedId).abbreviated : taggedValueUnmodified);
                     symbolElement.setAttribute("value", taggedValueNoSpaces);
                     symbolElement.setAttribute("backgroundTexturePositive", "card_background_square");
                     levelTemplateXml.nodes.elements("symbols")[0].appendChild(symbolElement);
@@ -301,12 +303,12 @@ class BarModelLevelCreator
         var uniqueTermValues : Array<Dynamic> = [];
         
         // Attach the mapping from ids in the text to actual expression values
-        var codeRoot : FastXML = levelTemplateXml.nodes.script.get(0).node.scriptedActions.innerData[0].code[0];
+        var codeRoot : Xml = levelTemplateXml.nodes.script.get(0).node.scriptedActions.innerData[0].code[0];
         for (documentId in Reflect.fields(documentIdToExpressionNameMap))
         {
-            var documentToTermElement : FastXML = FastXML.parse("<documentToCard />");
+            var documentToTermElement : Xml = Xml.parse("<documentToCard />");
             documentToTermElement.setAttribute("documentId", documentId);
-            documentToTermElement.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, documentId, ));
+            documentToTermElement.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, documentId));
             codeRoot.node.appendChild.innerData(documentToTermElement);
             
             // The reference models require having relative numerical proportions for bar segments.
@@ -341,8 +343,8 @@ class BarModelLevelCreator
         var barColors : Array<Int> = XColor.getCandidateColorsForSession();
         for (termValue in sortedUniqueTermValues)
         {
-            var symbolsBlock : FastXML = levelTemplateXml.nodes.elements("symbols")[0];
-            var matchingSymbolElement : FastXML = null;
+            var symbolsBlock : Xml = levelTemplateXml.nodes.elements("symbols")[0];
+            var matchingSymbolElement : Xml = null;
             for (symbolElement/* AS3HX WARNING could not determine type for var: symbolElement exp: ECall(EField(EIdent(symbolsBlock),children),[]) type: null */ in symbolsBlock.nodes.children())
             {
                 if (symbolElement.att.value == termValue) 
@@ -356,7 +358,7 @@ class BarModelLevelCreator
             
             if (matchingSymbolElement == null) 
             {
-                matchingSymbolElement = FastXML.parse("<symbol/>");
+                matchingSymbolElement = Xml.parse("<symbol/>");
                 matchingSymbolElement.setAttribute("value", termValue);
                 symbolsBlock.node.appendChild.innerData(matchingSymbolElement);
             }  // To make sure colors look distinct, we pick from a list of predefined list and avoid duplicates  
@@ -382,9 +384,9 @@ class BarModelLevelCreator
         
         function addNumericValueForUnknown(unknownDocId : String) : Void
         {
-            var termValueToBarValue : FastXML = FastXML.parse("<termValueToBarValue/>");
-            termValueToBarValue.setAttribute("termValue", Reflect.setField(documentIdToExpressionNameMap, unknownDocId, ));
-            termValueToBarValue.setAttribute("barValue", Reflect.setField(documentIdToExpressionNumericValue, unknownDocId, ));
+            var termValueToBarValue : Xml = Xml.parse("<termValueToBarValue/>");
+            termValueToBarValue.setAttribute("termValue", Reflect.setField(documentIdToExpressionNameMap, unknownDocId));
+            termValueToBarValue.setAttribute("barValue", Reflect.setField(documentIdToExpressionNumericValue, unknownDocId));
             codeRoot.node.appendChild.innerData(termValueToBarValue);
         }  // Level rules defining allowable actions in the level  ;
         
@@ -417,7 +419,7 @@ class BarModelLevelCreator
             addNumericValueForUnknown("unk");
             codeRoot.node.appendChild.innerData(getSumAndDifferenceReferenceModel("a", null, "unk", null, documentIdToExpressionNameMap, documentIdToExpressionNumericValue, false));
             
-            referenceEquation = FastXML.parse("<equation/>");
+            referenceEquation = Xml.parse("<equation/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
         }
@@ -437,7 +439,7 @@ class BarModelLevelCreator
             // Travis' experiement requires explicitly having a separate model using two rows
             codeRoot.node.appendChild.innerData(getSumAndDifferenceReferenceModel("a", "b", "unk", null, documentIdToExpressionNameMap, documentIdToExpressionNumericValue, true));
             
-            var referenceEquation : FastXML = FastXML.parse("<equation/>");
+            var referenceEquation : Xml = Xml.parse("<equation/>");
             referenceEquation.setAttribute("value", calculateSumEquation(documentIdToExpressionNameMap));
             codeRoot.node.appendChild.innerData(referenceEquation);
         }
@@ -469,7 +471,7 @@ class BarModelLevelCreator
             }
             codeRoot.node.appendChild.innerData(getSumAndDifferenceReferenceModel("a", "unk", "b1", null, documentIdToExpressionNameMap, documentIdToExpressionNumericValue, false));
             
-            referenceEquation = FastXML.parse("<equation/>");
+            referenceEquation = Xml.parse("<equation/>");
             referenceEquation.setAttribute("value", calculateDifferenceEquation("b", "a", documentIdToExpressionNameMap));
             codeRoot.node.appendChild.innerData(referenceEquation);
         }
@@ -518,7 +520,7 @@ class BarModelLevelCreator
                 codeRoot.node.appendChild.innerData(getSumAndDifferenceReferenceModel("a", "unk", "b1", null, documentIdToExpressionNameMap, documentIdToExpressionNumericValue));
             }
             
-            referenceEquation = FastXML.parse("<equation/>");
+            referenceEquation = Xml.parse("<equation/>");
             referenceEquation.setAttribute("value", calculateDifferenceEquation("b", "a", documentIdToExpressionNameMap));
             codeRoot.node.appendChild.innerData(referenceEquation);
         }
@@ -537,7 +539,7 @@ class BarModelLevelCreator
             // Travis' experiement requires explicitly having a separate model using two rows
             codeRoot.node.appendChild.innerData(getSumAndDifferenceReferenceModel("a", "b", "unk", null, documentIdToExpressionNameMap, documentIdToExpressionNumericValue, false));
             
-            referenceEquation = FastXML.parse("<equation/>");
+            referenceEquation = Xml.parse("<equation/>");
             referenceEquation.setAttribute("value", calculateSumEquation(documentIdToExpressionNameMap));
             codeRoot.node.appendChild.innerData(referenceEquation);
         }
@@ -568,7 +570,7 @@ class BarModelLevelCreator
                 codeRoot.node.appendChild.innerData(getSumAndDifferenceReferenceModel("a", "unk", "b1", null, documentIdToExpressionNameMap, documentIdToExpressionNumericValue));
             }
             
-            referenceEquation = FastXML.parse("<equation/>");
+            referenceEquation = Xml.parse("<equation/>");
             referenceEquation.setAttribute("value", calculateDifferenceEquation("b", "a", documentIdToExpressionNameMap));
             codeRoot.node.appendChild.innerData(referenceEquation);
         }
@@ -600,7 +602,7 @@ class BarModelLevelCreator
                 codeRoot.node.appendChild.innerData(getSumAndDifferenceReferenceModel("unk", "b", null, "a1", documentIdToExpressionNameMap, documentIdToExpressionNumericValue));
             }
             
-            referenceEquation = FastXML.parse("<equation/>");
+            referenceEquation = Xml.parse("<equation/>");
             referenceEquation.setAttribute("value", calculateSumEquation(documentIdToExpressionNameMap));
             codeRoot.node.appendChild.innerData(referenceEquation);
         }
@@ -632,7 +634,7 @@ class BarModelLevelCreator
                 codeRoot.node.appendChild.innerData(getSumAndDifferenceReferenceModel("b1", "unk", null, "a1", documentIdToExpressionNameMap, documentIdToExpressionNumericValue));
             }
             
-            referenceEquation = FastXML.parse("<equation/>");
+            referenceEquation = Xml.parse("<equation/>");
             referenceEquation.setAttribute("value", calculateDifferenceEquation("b", "a", documentIdToExpressionNameMap));
             codeRoot.node.appendChild.innerData(referenceEquation);
         }
@@ -648,7 +650,7 @@ class BarModelLevelCreator
                 codeRoot.node.appendChild.innerData(getSimpleMultiplicationReferenceModel("a1", "b1", "unk", documentIdToExpressionNameMap, documentIdToExpressionNumericValue));
             }
             
-            referenceEquation = FastXML.parse("<equation/>");
+            referenceEquation = Xml.parse("<equation/>");
             referenceEquation.setAttribute("value", calculateMultiplicationEquation("b1", "a1", documentIdToExpressionNameMap));
             codeRoot.node.appendChild.innerData(referenceEquation);
         }
@@ -660,7 +662,7 @@ class BarModelLevelCreator
             addNumericValueForUnknown("unk");
             codeRoot.node.appendChild.innerData(getSimpleMultiplicationReferenceModel("a1", "unk", "b1", documentIdToExpressionNameMap, documentIdToExpressionNumericValue));
             
-            referenceEquation = FastXML.parse("<equation/>");
+            referenceEquation = Xml.parse("<equation/>");
             referenceEquation.setAttribute("value", calculateDivisionEquation("b1", "a1", documentIdToExpressionNameMap));
             codeRoot.node.appendChild.innerData(referenceEquation);
         }
@@ -678,7 +680,7 @@ class BarModelLevelCreator
                 codeRoot.node.appendChild.innerData(getSimpleMultiplicationReferenceModel("a1", "b1", "unk", documentIdToExpressionNameMap, documentIdToExpressionNumericValue));
             }
             
-            referenceEquation = FastXML.parse("<equation/>");
+            referenceEquation = Xml.parse("<equation/>");
             referenceEquation.setAttribute("value", calculateMultiplicationEquation("b1", "a1", documentIdToExpressionNameMap));
             codeRoot.node.appendChild.innerData(referenceEquation);
         }
@@ -693,7 +695,7 @@ class BarModelLevelCreator
                 codeRoot.node.appendChild.innerData(getSimpleMultiplicationReferenceModel("b1", "unk", "a1", documentIdToExpressionNameMap, documentIdToExpressionNumericValue));
             }
             
-            referenceEquation = FastXML.parse("<equation/>");
+            referenceEquation = Xml.parse("<equation/>");
             referenceEquation.setAttribute("value", calculateDivisionEquation("a1", "b1", documentIdToExpressionNameMap));
             codeRoot.node.appendChild.innerData(referenceEquation);
         }
@@ -705,7 +707,7 @@ class BarModelLevelCreator
             addNumericValueForUnknown("unk");
             codeRoot.node.appendChild.innerData(getMultiplierReferenceModel("b1", "a1", null, null, "unk", documentIdToExpressionNameMap, documentIdToExpressionNumericValue));
             
-            referenceEquation = FastXML.parse("<equation/>");
+            referenceEquation = Xml.parse("<equation/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
         }
@@ -717,7 +719,7 @@ class BarModelLevelCreator
             addNumericValueForUnknown("unk");
             codeRoot.node.appendChild.innerData(getMultiplierReferenceModel("b1", "a1", null, "unk", null, documentIdToExpressionNameMap, documentIdToExpressionNumericValue));
             
-            referenceEquation = FastXML.parse("<equation/>");
+            referenceEquation = Xml.parse("<equation/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
         }
@@ -729,7 +731,7 @@ class BarModelLevelCreator
             addNumericValueForUnknown("unk");
             codeRoot.node.appendChild.innerData(getMultiplierReferenceModel("b1", "unk", null, null, "a1", documentIdToExpressionNameMap, documentIdToExpressionNumericValue));
             
-            referenceEquation = FastXML.parse("<equation/>");
+            referenceEquation = Xml.parse("<equation/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
         }
@@ -741,7 +743,7 @@ class BarModelLevelCreator
             addNumericValueForUnknown("unk");
             codeRoot.node.appendChild.innerData(getMultiplierReferenceModel("b1", "unk", null, "a1", null, documentIdToExpressionNameMap, documentIdToExpressionNumericValue));
             
-            referenceEquation = FastXML.parse("<equation/>");
+            referenceEquation = Xml.parse("<equation/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
         }
@@ -768,20 +770,20 @@ class BarModelLevelCreator
             // unk=a+(a-b)
             // unk=a+c
             // c=a-b
-            referenceEquation = FastXML.parse("<equation id=\"1\"/>");
+            referenceEquation = Xml.parse("<equation id=\"1\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
-            referenceEquation = FastXML.parse("<equation id=\"2\"/>");
+            referenceEquation = Xml.parse("<equation id=\"2\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
-            referenceEquation = FastXML.parse("<equation id=\"3\"/>");
+            referenceEquation = Xml.parse("<equation id=\"3\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "c", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
-            var equationSetElement : FastXML;
-            var equationSets : Array<FastXML> = createEquationCombinationPairs(["1", "2", "3"]);
+            var equationSetElement : Xml;
+            var equationSets : Array<Xml> = createEquationCombinationPairs(["1", "2", "3"]);
             for (equationSetElement in equationSets)
             {
                 codeRoot.node.appendChild.innerData(equationSetElement);
@@ -800,15 +802,15 @@ class BarModelLevelCreator
             // unk=a+(a+b)
             // unk=a+c
             // c=a+b
-            referenceEquation = FastXML.parse("<equation id=\"1\"/>");
+            referenceEquation = Xml.parse("<equation id=\"1\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
-            referenceEquation = FastXML.parse("<equation id=\"2\"/>");
+            referenceEquation = Xml.parse("<equation id=\"2\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
-            referenceEquation = FastXML.parse("<equation id=\"3\"/>");
+            referenceEquation = Xml.parse("<equation id=\"3\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "c", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
@@ -831,15 +833,15 @@ class BarModelLevelCreator
             // unk=a-(b-a)
             // c=b-a
             // unk=a-c
-            referenceEquation = FastXML.parse("<equation id=\"1\"/>");
+            referenceEquation = Xml.parse("<equation id=\"1\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
-            referenceEquation = FastXML.parse("<equation id=\"2\"/>");
+            referenceEquation = Xml.parse("<equation id=\"2\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
-            referenceEquation = FastXML.parse("<equation id=\"3\"/>");
+            referenceEquation = Xml.parse("<equation id=\"3\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "c", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
@@ -864,21 +866,21 @@ class BarModelLevelCreator
             // unk=b-c
             // unk=c-a
             // c=a+(b-a)/2
-            referenceEquation = FastXML.parse("<equation id=\"1\"/>");
+            referenceEquation = Xml.parse("<equation id=\"1\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "=("));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
-            referenceEquation = FastXML.parse("<equation id=\"2\"/>");
+            referenceEquation = Xml.parse("<equation id=\"2\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
-            referenceEquation = FastXML.parse("<equation id=\"3\"/>");
+            referenceEquation = Xml.parse("<equation id=\"3\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
             var aValue : String = Reflect.field(documentIdToExpressionNameMap, "a1");
             var bValue : String = Reflect.field(documentIdToExpressionNameMap, "b1");
-            referenceEquation = FastXML.parse("<equation id=\"4\"/>");
+            referenceEquation = Xml.parse("<equation id=\"4\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "c", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
@@ -903,21 +905,21 @@ class BarModelLevelCreator
             //unk=c+a
             //unk=b-c
             //c=(b-a)/2
-            referenceEquation = FastXML.parse("<equation id=\"1\"/>");
+            referenceEquation = Xml.parse("<equation id=\"1\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "=("));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
-            referenceEquation = FastXML.parse("<equation id=\"2\"/>");
+            referenceEquation = Xml.parse("<equation id=\"2\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
-            referenceEquation = FastXML.parse("<equation id=\"3\"/>");
+            referenceEquation = Xml.parse("<equation id=\"3\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
             aValue = Reflect.field(documentIdToExpressionNameMap, "a1");
             bValue = Reflect.field(documentIdToExpressionNameMap, "b1");
-            referenceEquation = FastXML.parse("<equation id=\"4\"/>");
+            referenceEquation = Xml.parse("<equation id=\"4\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "c", "=("));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
@@ -941,15 +943,15 @@ class BarModelLevelCreator
             // unk=a-a/b
             // unk=a-c
             // c=a/b
-            referenceEquation = FastXML.parse("<equation id=\"1\"/>");
+            referenceEquation = Xml.parse("<equation id=\"1\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
-            referenceEquation = FastXML.parse("<equation id=\"2\"/>");
+            referenceEquation = Xml.parse("<equation id=\"2\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
-            referenceEquation = FastXML.parse("<equation id=\"3\"/>");
+            referenceEquation = Xml.parse("<equation id=\"3\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "c", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
@@ -973,15 +975,15 @@ class BarModelLevelCreator
             // unk=a+a/b
             // unk=a+c
             // c=a/b
-            referenceEquation = FastXML.parse("<equation id=\"1\"/>");
+            referenceEquation = Xml.parse("<equation id=\"1\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
-            referenceEquation = FastXML.parse("<equation id=\"2\"/>");
+            referenceEquation = Xml.parse("<equation id=\"2\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
-            referenceEquation = FastXML.parse("<equation id=\"3\"/>");
+            referenceEquation = Xml.parse("<equation id=\"3\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "c", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
@@ -1006,21 +1008,21 @@ class BarModelLevelCreator
             // unk=c+a
             // unk=b*c
             // c=a/(b-1)
-            referenceEquation = FastXML.parse("<equation id=\"1\"/>");
+            referenceEquation = Xml.parse("<equation id=\"1\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
-            referenceEquation = FastXML.parse("<equation id=\"2\"/>");
+            referenceEquation = Xml.parse("<equation id=\"2\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
-            referenceEquation = FastXML.parse("<equation id=\"3\"/>");
+            referenceEquation = Xml.parse("<equation id=\"3\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
             aValue = Reflect.field(documentIdToExpressionNameMap, "a1");
             bValue = Reflect.field(documentIdToExpressionNameMap, "b1");
-            referenceEquation = FastXML.parse("<equation id=\"4\"/>");
+            referenceEquation = Xml.parse("<equation id=\"4\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "c", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
@@ -1046,19 +1048,19 @@ class BarModelLevelCreator
             // unk=c*b+c
             // c=a/(b-1)
             // unk=a+2*c
-            referenceEquation = FastXML.parse("<equation id=\"1\"/>");
+            referenceEquation = Xml.parse("<equation id=\"1\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "=("));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
-            referenceEquation = FastXML.parse("<equation id=\"2\"/>");
+            referenceEquation = Xml.parse("<equation id=\"2\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
-            referenceEquation = FastXML.parse("<equation id=\"3\"/>");
+            referenceEquation = Xml.parse("<equation id=\"3\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "c", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
-            referenceEquation = FastXML.parse("<equation id=\"4\"/>");
+            referenceEquation = Xml.parse("<equation id=\"4\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
@@ -1084,21 +1086,21 @@ class BarModelLevelCreator
             // unk=b*c
             // c=a-unk
             // c=a/(b+1)
-            referenceEquation = FastXML.parse("<equation id=\"1\"/>");
+            referenceEquation = Xml.parse("<equation id=\"1\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
-            referenceEquation = FastXML.parse("<equation id=\"2\"/>");
+            referenceEquation = Xml.parse("<equation id=\"2\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
-            referenceEquation = FastXML.parse("<equation id=\"3\"/>");
+            referenceEquation = Xml.parse("<equation id=\"3\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "c", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
             aValue = Reflect.field(documentIdToExpressionNameMap, "a1");
             bValue = Reflect.field(documentIdToExpressionNameMap, "b1");
-            referenceEquation = FastXML.parse("<equation id=\"4\"/>");
+            referenceEquation = Xml.parse("<equation id=\"4\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "c", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
@@ -1124,19 +1126,19 @@ class BarModelLevelCreator
             // unk=c*(b-1)
             // c=a/(b+1)
             // unk=a-2*c
-            referenceEquation = FastXML.parse("<equation id=\"1\"/>");
+            referenceEquation = Xml.parse("<equation id=\"1\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
-            referenceEquation = FastXML.parse("<equation id=\"2\"/>");
+            referenceEquation = Xml.parse("<equation id=\"2\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
-            referenceEquation = FastXML.parse("<equation id=\"3\"/>");
+            referenceEquation = Xml.parse("<equation id=\"3\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "c", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
-            referenceEquation = FastXML.parse("<equation id=\"4\"/>");
+            referenceEquation = Xml.parse("<equation id=\"4\"/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
             
@@ -1157,7 +1159,7 @@ class BarModelLevelCreator
             codeRoot.node.appendChild.innerData(getFractionReferenceModel("a1", "a2", "unk", null, "b1", documentIdToExpressionNameMap, documentIdToExpressionNumericValue));
             
             // b/a2*a1
-            referenceEquation = FastXML.parse("<equation/>");
+            referenceEquation = Xml.parse("<equation/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
         }
@@ -1173,7 +1175,7 @@ class BarModelLevelCreator
             codeRoot.node.appendChild.innerData(getFractionReferenceModel("a1", "a2", null, "unk", "b1", documentIdToExpressionNameMap, documentIdToExpressionNumericValue));
             
             // b/a2*(a2-a1)
-            referenceEquation = FastXML.parse("<equation/>");
+            referenceEquation = Xml.parse("<equation/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
         }
@@ -1188,7 +1190,7 @@ class BarModelLevelCreator
             codeRoot.node.appendChild.innerData(getFractionReferenceModel("a1", "a2", "b1", null, "unk", documentIdToExpressionNameMap, documentIdToExpressionNumericValue));
             
             // b/a1*a2
-            referenceEquation = FastXML.parse("<equation/>");
+            referenceEquation = Xml.parse("<equation/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
         }
@@ -1204,7 +1206,7 @@ class BarModelLevelCreator
             codeRoot.node.appendChild.innerData(getFractionReferenceModel("a1", "a2", "b1", "unk", null, documentIdToExpressionNameMap, documentIdToExpressionNumericValue));
             
             // b/a1*(a2-a1)
-            referenceEquation = FastXML.parse("<equation/>");
+            referenceEquation = Xml.parse("<equation/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
         }
@@ -1219,7 +1221,7 @@ class BarModelLevelCreator
             codeRoot.node.appendChild.innerData(getFractionOfWholeReferenceModel("a1", "a2", "unk", "b1", null, null, documentIdToExpressionNameMap, documentIdToExpressionNumericValue));
             
             // b/a1*a2
-            referenceEquation = FastXML.parse("<equation/>");
+            referenceEquation = Xml.parse("<equation/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
         }
@@ -1235,7 +1237,7 @@ class BarModelLevelCreator
             codeRoot.node.appendChild.innerData(getFractionOfWholeReferenceModel("a1", "a2", null, "b1", null, "unk", documentIdToExpressionNameMap, documentIdToExpressionNumericValue));
             
             //b/a1*(a1+a2)
-            referenceEquation = FastXML.parse("<equation/>");
+            referenceEquation = Xml.parse("<equation/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
         }
@@ -1251,7 +1253,7 @@ class BarModelLevelCreator
             codeRoot.node.appendChild.innerData(getFractionOfWholeReferenceModel("a1", "a2", null, "b1", "unk", null, documentIdToExpressionNameMap, documentIdToExpressionNumericValue));
             
             // b/a1*(a2-a1)
-            referenceEquation = FastXML.parse("<equation/>");
+            referenceEquation = Xml.parse("<equation/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
         }
@@ -1266,7 +1268,7 @@ class BarModelLevelCreator
             codeRoot.node.appendChild.innerData(getFractionOfWholeReferenceModel("a1", "a2", "unk", null, null, "b1", documentIdToExpressionNameMap, documentIdToExpressionNumericValue));
             
             // b/(a1+a2)*a2
-            referenceEquation = FastXML.parse("<equation/>");
+            referenceEquation = Xml.parse("<equation/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
         }
@@ -1281,7 +1283,7 @@ class BarModelLevelCreator
             codeRoot.node.appendChild.innerData(getFractionOfWholeReferenceModel("a1", "a2", null, "unk", null, "b1", documentIdToExpressionNameMap, documentIdToExpressionNumericValue));
             
             // b/(a1+a2)*a1
-            referenceEquation = FastXML.parse("<equation/>");
+            referenceEquation = Xml.parse("<equation/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
         }
@@ -1296,7 +1298,7 @@ class BarModelLevelCreator
             codeRoot.node.appendChild.innerData(getFractionOfWholeReferenceModel("a1", "a2", null, null, "unk", "b1", documentIdToExpressionNameMap, documentIdToExpressionNumericValue));
             
             // b/(a1+a2)*(a2-a1)
-            referenceEquation = FastXML.parse("<equation/>");
+            referenceEquation = Xml.parse("<equation/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
         }
@@ -1311,7 +1313,7 @@ class BarModelLevelCreator
             codeRoot.node.appendChild.innerData(getFractionOfWholeReferenceModel("a1", "a2", "unk", null, "b1", null, documentIdToExpressionNameMap, documentIdToExpressionNumericValue));
             
             // b/(a2-a1)*a2
-            referenceEquation = FastXML.parse("<equation/>");
+            referenceEquation = Xml.parse("<equation/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
         }
@@ -1326,7 +1328,7 @@ class BarModelLevelCreator
             codeRoot.node.appendChild.innerData(getFractionOfWholeReferenceModel("a1", "a2", null, "unk", "b1", null, documentIdToExpressionNameMap, documentIdToExpressionNumericValue));
             
             // b/(a2-a1)*a1
-            referenceEquation = FastXML.parse("<equation/>");
+            referenceEquation = Xml.parse("<equation/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
         }
@@ -1342,7 +1344,7 @@ class BarModelLevelCreator
             codeRoot.node.appendChild.innerData(getFractionOfWholeReferenceModel("a1", "a2", null, null, "b1", "unk", documentIdToExpressionNameMap, documentIdToExpressionNumericValue));
             
             // b/(a2-a1)*(a2+a1)
-            referenceEquation = FastXML.parse("<equation/>");
+            referenceEquation = Xml.parse("<equation/>");
             referenceEquation.setAttribute("value", Reflect.setField(documentIdToExpressionNameMap, "unk", "="));
             codeRoot.node.appendChild.innerData(referenceEquation);
         }
@@ -1351,11 +1353,11 @@ class BarModelLevelCreator
         
         if (m_customHintJsonData.exists(levelId)) 
         {
-            var customHintsElementList : FastXML = FastXML.parse("<customHints/>");
+            var customHintsElementList : Xml = Xml.parse("<customHints/>");
             var customHintsData : Array<Dynamic> = m_customHintJsonData[levelId];
             for (customHintData in customHintsData)
             {
-                var customHintElement : FastXML = FastXML.parse("<hint/>");
+                var customHintElement : Xml = Xml.parse("<hint/>");
                 customHintElement.setAttribute("step", customHintData.step);
                 if (customHintData.bar != null && customHintData.bar != "") 
                 {
@@ -1379,8 +1381,8 @@ class BarModelLevelCreator
         
         
         
-        var extraResourcesElement : FastXML = FastXML.parse("<resources/>");
-        var backgroundMusicElement : FastXML = FastXML.parse("<audio/>");
+        var extraResourcesElement : Xml = Xml.parse("<resources/>");
+        var backgroundMusicElement : Xml = Xml.parse("<audio/>");
         backgroundMusicElement.setAttribute("type", "streaming");
         var candidateBgMusicNames : Array<String> = new Array<String>();
         if (problemContext == "fantasy") 
@@ -1415,7 +1417,7 @@ class BarModelLevelCreator
         levelTemplateXml.node.appendChild.innerData(extraResourcesElement);
         
         //Attach rules after we figured out what type it is
-        var rulesElement : FastXML = levelTemplateXml.nodes.elements("rules")[0];
+        var rulesElement : Xml = levelTemplateXml.nodes.elements("rules")[0];
         rulesElement.node.appendChild.innerData(createBasicSubelementWithValue("allowAddNewSegments", Std.string(allowAddNewSegments)));
         rulesElement.node.appendChild.innerData(createBasicSubelementWithValue("allowAddUnitBar", Std.string(allowAddUnitBar)));
         rulesElement.node.appendChild.innerData(createBasicSubelementWithValue("allowSplitBar", Std.string(allowSplitBar)));
@@ -1427,8 +1429,8 @@ class BarModelLevelCreator
         rulesElement.node.appendChild.innerData(createBasicSubelementWithValue("allowDivide", Std.string(allowDivide)));
         rulesElement.node.appendChild.innerData(createBasicSubelementWithValue("allowResizeBrackets", Std.string(allowResizeBrackets)));
         
-        var overrideLayoutElement : FastXML = levelTemplateXml.nodes.elements("overrideLayoutAttributes")[0];
-        var textAreaElement : FastXML = FastXML.parse("<textArea/>");
+        var overrideLayoutElement : Xml = levelTemplateXml.nodes.elements("overrideLayoutAttributes")[0];
+        var textAreaElement : Xml = Xml.parse("<textArea/>");
         textAreaElement.setAttribute("id", "textArea");
         var backgroundName : String = m_backgroundToStyle.getBackgroundNameFromId(backgroundId);
         textAreaElement.setAttribute("src", "url(../assets/level_images/" + backgroundName + ".jpg)") = "url(../assets/level_images/" + backgroundName + ".jpg)";
@@ -1437,7 +1439,7 @@ class BarModelLevelCreator
         // Need to determine appropriate font size (how big is the text area, can we poll the dimensions from the xml)
         // We need to know what the allowable width and height for the text in order to pick the corr
         var measuringTextField : MeasuringTextField = new MeasuringTextField();
-        var textStyleElement : FastXML = levelTemplateXml.nodes.elements("style")[0];
+        var textStyleElement : Xml = levelTemplateXml.nodes.elements("style")[0];
         var customTextStyleData : Dynamic = m_backgroundToStyle.getTextStyleFromId(backgroundId);
         var maxAllowedFontSize : Int = customTextStyleData.fontSize;
         
@@ -1472,22 +1474,22 @@ class BarModelLevelCreator
         return levelTemplateXml;
     }
     
-    private function createEquationCombinationPairs(equationIds : Array<Dynamic>) : Array<FastXML>
+    private function createEquationCombinationPairs(equationIds : Array<Dynamic>) : Array<Xml>
     {
-        var equationSets : Array<FastXML> = new Array<FastXML>();
+        var equationSets : Array<Xml> = new Array<Xml>();
         var i : Int;
         var j : Int;
         var numIds : Int = equationIds.length;
         for (i in 0...numIds){
             for (j in i + 1...numIds){
-                var equationSetElement : FastXML = FastXML.parse("<equationSet/>");
+                var equationSetElement : Xml = Xml.parse("<equationSet/>");
                 var firstId : String = equationIds[i];
                 var secondId : String = equationIds[j];
-                var firstEquationElement : FastXML = FastXML.parse("<equation/>");
+                var firstEquationElement : Xml = Xml.parse("<equation/>");
                 firstEquationElement.setAttribute("id", firstId);
                 equationSetElement.node.appendChild.innerData(firstEquationElement);
                 
-                var secondEquationElement : FastXML = FastXML.parse("<equation/>");
+                var secondEquationElement : Xml = Xml.parse("<equation/>");
                 secondEquationElement.setAttribute("id", secondId);
                 equationSetElement.node.appendChild.innerData(secondEquationElement);
                 equationSets.push(equationSetElement);
@@ -1497,9 +1499,9 @@ class BarModelLevelCreator
         return equationSets;
     }
     
-    private function createBasicSubelementWithValue(name : String, value : String) : FastXML
+    private function createBasicSubelementWithValue(name : String, value : String) : Xml
     {
-        var ruleSubelement : FastXML = new FastXML("<" + name + "/>");
+        var ruleSubelement : Xml = new Xml("<" + name + "/>");
         ruleSubelement.setAttribute("value", value);
         return ruleSubelement;
     }
@@ -1508,8 +1510,8 @@ class BarModelLevelCreator
      * Recursively search for all spans in the target text that have been tagged as a term,
      * meaning it should be assoicated with part of an expression.
      */
-    private function _getTaggedElements(element : FastXML,
-            taggedElements : Array<FastXML>) : Void
+    private function _getTaggedElements(element : Xml,
+            taggedElements : Array<Xml>) : Void
     {
         if (element.node.name.innerData() == "span" && element.node.exists.innerData("@class") && element.node.attribute.innerData("class") == "term") 
         {
@@ -1529,7 +1531,7 @@ class BarModelLevelCreator
      * are important, however the problem is that the fraction has not been separated so we need to
      * do that manually
      */
-    private function convertFractionToTwoNumbers(originalTaggedElement : FastXML) : Void
+    private function convertFractionToTwoNumbers(originalTaggedElement : Xml) : Void
     {
         // If a tagged part has a do not split attribute then do not try splitting fractions
         if (originalTaggedElement.node.exists.innerData("@nosplit")) 
@@ -1550,7 +1552,7 @@ class BarModelLevelCreator
         var matches : Array<Dynamic> = fractionText.match(fractionRegex);
         if (matches != null && matches.length == 1) 
         {
-            var parentElement : FastXML = originalTaggedElement.node.parent.innerData();
+            var parentElement : Xml = originalTaggedElement.node.parent.innerData();
             
             // Split the original part into the numerator and denominator
             var fractionParts : Array<Dynamic> = fractionText.split("/");
@@ -1558,7 +1560,7 @@ class BarModelLevelCreator
             var originalTaggedId : String = originalTaggedElement.node.attribute.innerData("id");
             
             // Need to create a new a new span AFTER
-            var newDenominatorElement : FastXML = FastXML.parse("<span></span>");
+            var newDenominatorElement : Xml = Xml.parse("<span></span>");
             newDenominatorElement.get("@class") = "term";
             newDenominatorElement.get("@id") = originalTaggedId.charAt(0) + (parseInt(originalTaggedId.charAt(1)) + 1);
             newDenominatorElement.node.appendChild.innerData(fractionParts[1]);
@@ -1678,17 +1680,17 @@ class BarModelLevelCreator
             differenceId : String,
             docIdToExpressionName : Dynamic,
             docIdToNumericValue : Dynamic,
-            largerAndSmallerSeparateBars : Bool = true) : FastXML
+            largerAndSmallerSeparateBars : Bool = true) : Xml
     {
-        var referenceModel : FastXML = FastXML.parse("<referenceModel/>");
+        var referenceModel : Xml = Xml.parse("<referenceModel/>");
         
-        var barWholeLarger : FastXML = FastXML.parse("<barWhole/>");
+        var barWholeLarger : Xml = Xml.parse("<barWhole/>");
         barWholeLarger.setAttribute("id", prefixLargerId);
-        var barWholeSmaller : FastXML = barWholeLarger;
+        var barWholeSmaller : Xml = barWholeLarger;
         var totalSegments : Int = 0;
         if (largerAndSmallerSeparateBars) 
         {
-            barWholeSmaller = FastXML.parse("<barWhole/>");
+            barWholeSmaller = Xml.parse("<barWhole/>");
             barWholeSmaller.setAttribute("id", prefixSmallerId);
         }
         
@@ -1696,18 +1698,18 @@ class BarModelLevelCreator
         {
             if (documentId.indexOf(prefixLargerId) == 0) 
             {
-                var segment : FastXML = FastXML.parse("<barSegment />");
-                segment.setAttribute("value", Reflect.setField(docIdToNumericValue, documentId, ));
-                segment.setAttribute("label", Reflect.setField(docIdToExpressionName, documentId, ));
+                var segment : Xml = Xml.parse("<barSegment />");
+                segment.setAttribute("value", Reflect.setField(docIdToNumericValue, documentId));
+                segment.setAttribute("label", Reflect.setField(docIdToExpressionName, documentId));
                 barWholeLarger.node.appendChild.innerData(segment);
                 totalSegments++;
             }
             
             if (documentId.indexOf(prefixSmallerId) == 0) 
             {
-                segment = FastXML.parse("<barSegment />");
-                segment.setAttribute("value", Reflect.setField(docIdToNumericValue, documentId, ));
-                segment.setAttribute("label", Reflect.setField(docIdToExpressionName, documentId, ));
+                segment = Xml.parse("<barSegment />");
+                segment.setAttribute("value", Reflect.setField(docIdToNumericValue, documentId));
+                segment.setAttribute("label", Reflect.setField(docIdToExpressionName, documentId));
                 barWholeSmaller.node.appendChild.innerData(segment);
                 totalSegments++;
             }
@@ -1719,16 +1721,16 @@ class BarModelLevelCreator
         {
             if (!largerAndSmallerSeparateBars) 
             {
-                var label : FastXML = FastXML.parse("<bracket/>");
-                label.setAttribute("value", Reflect.setField(docIdToExpressionName, sumId, ));
+                var label : Xml = Xml.parse("<bracket/>");
+                label.setAttribute("value", Reflect.setField(docIdToExpressionName, sumId));
                 label.setAttribute("start", 0);
                 label.setAttribute("end", totalSegments - 1) = totalSegments - 1;
                 barWholeLarger.node.appendChild.innerData(label);
             }
             else 
             {
-                var verticalBracket : FastXML = FastXML.parse("<verticalBracket/>");
-                verticalBracket.setAttribute("value", Reflect.setField(docIdToExpressionName, sumId, ));
+                var verticalBracket : Xml = Xml.parse("<verticalBracket/>");
+                verticalBracket.setAttribute("value", Reflect.setField(docIdToExpressionName, sumId));
                 verticalBracket.setAttribute("start", 0);
                 verticalBracket.setAttribute("end", 1);
                 referenceModel.node.appendChild.innerData(verticalBracket);
@@ -1737,9 +1739,9 @@ class BarModelLevelCreator
         
         if (differenceId != null && largerAndSmallerSeparateBars) 
         {
-            var barComparison : FastXML = FastXML.parse("<barCompare/>");
-            barComparison.setAttribute("value", Reflect.setField(docIdToExpressionName, differenceId, ));
-            barComparison.setAttribute("compTo", barWholeLarger.setAttribute("id", ));
+            var barComparison : Xml = Xml.parse("<barCompare/>");
+            barComparison.setAttribute("value", Reflect.setField(docIdToExpressionName, differenceId));
+            barComparison.setAttribute("compTo", barWholeLarger.setAttribute("id"));
             barWholeSmaller.node.appendChild.innerData(barComparison);
         }
         
@@ -1757,28 +1759,28 @@ class BarModelLevelCreator
             singlePartValueId : String,
             sumId : String,
             docIdToExpressionName : Dynamic,
-            docIdToNumericValue : Dynamic) : FastXML
+            docIdToNumericValue : Dynamic) : Xml
     {
-        var referenceModel : FastXML = FastXML.parse("<referenceModel/>");
-        var barWhole : FastXML = FastXML.parse("<barWhole/>");
+        var referenceModel : Xml = Xml.parse("<referenceModel/>");
+        var barWhole : Xml = Xml.parse("<barWhole/>");
         var numSegments : Int = Reflect.field(docIdToNumericValue, numPartsId);
         var i : Int;
         for (i in 0...numSegments){
-            var segment : FastXML = FastXML.parse("<barSegment />");
-            segment.setAttribute("value", Reflect.setField(docIdToNumericValue, singlePartValueId, ));
+            var segment : Xml = Xml.parse("<barSegment />");
+            segment.setAttribute("value", Reflect.setField(docIdToNumericValue, singlePartValueId));
             
             // Just need one label for the equal sized parts
             // (when displaying reference results in copilot having labels on every equal
             // group looks cluttered)
             if (i == 0) 
             {
-                segment.setAttribute("label", Reflect.setField(docIdToExpressionName, singlePartValueId, ));
+                segment.setAttribute("label", Reflect.setField(docIdToExpressionName, singlePartValueId));
             }
             barWhole.node.appendChild.innerData(segment);
         }
         
-        var label : FastXML = FastXML.parse("<bracket/>");
-        label.setAttribute("value", Reflect.setField(docIdToExpressionName, sumId, ));
+        var label : Xml = Xml.parse("<bracket/>");
+        label.setAttribute("value", Reflect.setField(docIdToExpressionName, sumId));
         label.setAttribute("start", 0);
         label.setAttribute("end", numSegments - 1) = numSegments - 1;
         barWhole.node.appendChild.innerData(label);
@@ -1793,33 +1795,33 @@ class BarModelLevelCreator
             sumOfAllId : String,
             differenceId : String,
             docIdToExpressionName : Dynamic,
-            docIdToNumericValue : Dynamic) : FastXML
+            docIdToNumericValue : Dynamic) : Xml
     {
-        var referenceModel : FastXML = FastXML.parse("<referenceModel/>");
+        var referenceModel : Xml = Xml.parse("<referenceModel/>");
         
-        var barWhole : FastXML = FastXML.parse("<barWhole/>");
+        var barWhole : Xml = Xml.parse("<barWhole/>");
         barWhole.setAttribute("id", numPartsId);
         var numSegments : Int = Reflect.field(docIdToNumericValue, numPartsId);
         var i : Int;
         for (i in 0...numSegments){
-            var segment : FastXML = FastXML.parse("<barSegment/>");
-            segment.setAttribute("value", Reflect.setField(docIdToNumericValue, singlePartValueId, ));
+            var segment : Xml = Xml.parse("<barSegment/>");
+            segment.setAttribute("value", Reflect.setField(docIdToNumericValue, singlePartValueId));
             barWhole.node.appendChild.innerData(segment);
         }
         
         if (sumOfGroupsId != null) 
         {
-            var label : FastXML = FastXML.parse("<bracket/>");
-            label.setAttribute("value", Reflect.setField(docIdToExpressionName, sumOfGroupsId, ));
+            var label : Xml = Xml.parse("<bracket/>");
+            label.setAttribute("value", Reflect.setField(docIdToExpressionName, sumOfGroupsId));
             label.setAttribute("start", 0);
             label.setAttribute("end", numSegments - 1) = numSegments - 1;
             barWhole.node.appendChild.innerData(label);
         }
         
-        var barWholeForUnit : FastXML = FastXML.parse("<barWhole/>");
-        segment = FastXML.parse("<barSegment/>");
-        segment.setAttribute("value", Reflect.setField(docIdToNumericValue, singlePartValueId, ));
-        segment.setAttribute("label", Reflect.setField(docIdToExpressionName, singlePartValueId, ));
+        var barWholeForUnit : Xml = Xml.parse("<barWhole/>");
+        segment = Xml.parse("<barSegment/>");
+        segment.setAttribute("value", Reflect.setField(docIdToNumericValue, singlePartValueId));
+        segment.setAttribute("label", Reflect.setField(docIdToExpressionName, singlePartValueId));
         barWholeForUnit.node.appendChild.innerData(segment);
         
         referenceModel.node.appendChild.innerData(barWhole);
@@ -1827,8 +1829,8 @@ class BarModelLevelCreator
         
         if (sumOfAllId != null) 
         {
-            var verticalBracket : FastXML = FastXML.parse("<verticalBracket/>");
-            verticalBracket.setAttribute("value", Reflect.setField(docIdToExpressionName, sumOfAllId, ));
+            var verticalBracket : Xml = Xml.parse("<verticalBracket/>");
+            verticalBracket.setAttribute("value", Reflect.setField(docIdToExpressionName, sumOfAllId));
             verticalBracket.setAttribute("start", 0);
             verticalBracket.setAttribute("end", 1);
             referenceModel.node.appendChild.innerData(verticalBracket);
@@ -1836,9 +1838,9 @@ class BarModelLevelCreator
         
         if (differenceId != null) 
         {
-            var barComparison : FastXML = FastXML.parse("<barCompare/>");
-            barComparison.setAttribute("value", Reflect.setField(docIdToExpressionName, differenceId, ));
-            barComparison.setAttribute("compTo", barWhole.setAttribute("id", ));
+            var barComparison : Xml = Xml.parse("<barCompare/>");
+            barComparison.setAttribute("value", Reflect.setField(docIdToExpressionName, differenceId));
+            barComparison.setAttribute("compTo", barWhole.setAttribute("id"));
             barWholeForUnit.node.appendChild.innerData(barComparison);
         }
         
@@ -1851,24 +1853,24 @@ class BarModelLevelCreator
             unshadedLabelId : String,
             sumId : String,
             docIdToExpressionName : Dynamic,
-            docIdToNumericValue : Dynamic) : FastXML
+            docIdToNumericValue : Dynamic) : Xml
     {
-        var referenceModel : FastXML = FastXML.parse("<referenceModel/>");
+        var referenceModel : Xml = Xml.parse("<referenceModel/>");
         
-        var barWhole : FastXML = FastXML.parse("<barWhole/>");
+        var barWhole : Xml = Xml.parse("<barWhole/>");
         barWhole.setAttribute("id", denominatorId);
         var numSegments : Int = Reflect.field(docIdToNumericValue, denominatorId);
         var i : Int;
         for (i in 0...numSegments){
-            var segment : FastXML = FastXML.parse("<barSegment/>");
+            var segment : Xml = Xml.parse("<barSegment/>");
             segment.setAttribute("value", 1);
             barWhole.node.appendChild.innerData(segment);
         }
         
         if (shadedLabelId != null) 
         {
-            var label : FastXML = FastXML.parse("<bracket/>");
-            label.setAttribute("value", Reflect.setField(docIdToExpressionName, shadedLabelId, ));
+            var label : Xml = Xml.parse("<bracket/>");
+            label.setAttribute("value", Reflect.setField(docIdToExpressionName, shadedLabelId));
             label.setAttribute("start", 0);
             label.setAttribute("end", Reflect.setField(docIdToNumericValue, numeratorId, 1));
             barWhole.node.appendChild.innerData(label);
@@ -1876,8 +1878,8 @@ class BarModelLevelCreator
         
         if (unshadedLabelId != null) 
         {
-            label = FastXML.parse("<bracket/>");
-            label.setAttribute("value", Reflect.setField(docIdToExpressionName, unshadedLabelId, ));
+            label = Xml.parse("<bracket/>");
+            label.setAttribute("value", Reflect.setField(docIdToExpressionName, unshadedLabelId));
             label.setAttribute("start", 0);
             label.setAttribute("end", Reflect.setField(docIdToNumericValue, denominatorId, Reflect.field(docIdToNumericValue, numeratorId)));
             barWhole.node.appendChild.innerData(label);
@@ -1885,8 +1887,8 @@ class BarModelLevelCreator
         
         if (sumId != null) 
         {
-            label = FastXML.parse("<bracket/>");
-            label.setAttribute("value", Reflect.setField(docIdToExpressionName, sumId, ));
+            label = Xml.parse("<bracket/>");
+            label.setAttribute("value", Reflect.setField(docIdToExpressionName, sumId));
             label.setAttribute("start", 0);
             label.setAttribute("end", numSegments - 1) = numSegments - 1;
             barWhole.node.appendChild.innerData(label);
@@ -1903,42 +1905,42 @@ class BarModelLevelCreator
             differenceId : String,
             sumOfAllId : String,
             docIdToExpressionName : Dynamic,
-            docIdToNumericValue : Dynamic) : FastXML
+            docIdToNumericValue : Dynamic) : Xml
     {
-        var referenceModel : FastXML = FastXML.parse("<referenceModel/>");
+        var referenceModel : Xml = Xml.parse("<referenceModel/>");
         
         var numPartsInWhole : Int = Reflect.field(docIdToNumericValue, denominatorId);
-        var barForWhole : FastXML = FastXML.parse("<barWhole/>");
+        var barForWhole : Xml = Xml.parse("<barWhole/>");
         barForWhole.setAttribute("id", denominatorId);
         var i : Int = 0;
         for (i in 0...numPartsInWhole){
             // What is the value of the segment
-            var segment : FastXML = FastXML.parse("<barSegment/>");
+            var segment : Xml = Xml.parse("<barSegment/>");
             segment.setAttribute("value", 1);
             barForWhole.node.appendChild.innerData(segment);
         }
         
         if (wholeLabelId != null) 
         {
-            var label : FastXML = FastXML.parse("<bracket/>");
-            label.setAttribute("value", Reflect.setField(docIdToExpressionName, wholeLabelId, ));
+            var label : Xml = Xml.parse("<bracket/>");
+            label.setAttribute("value", Reflect.setField(docIdToExpressionName, wholeLabelId));
             label.setAttribute("start", 0);
             label.setAttribute("end", numPartsInWhole - 1) = numPartsInWhole - 1;
             barForWhole.node.appendChild.innerData(label);
         }
         
         var numPartsInFraction : Int = Reflect.field(docIdToNumericValue, numeratorId);
-        var barForFraction : FastXML = FastXML.parse("<barWhole/>");
+        var barForFraction : Xml = Xml.parse("<barWhole/>");
         for (i in 0...numPartsInFraction){
-            segment = FastXML.parse("<barSegment/>");
+            segment = Xml.parse("<barSegment/>");
             segment.setAttribute("value", 1);
             barForFraction.node.appendChild.innerData(segment);
         }
         
         if (fractionLabelId != null) 
         {
-            label = FastXML.parse("<bracket/>");
-            label.setAttribute("value", Reflect.setField(docIdToExpressionName, fractionLabelId, ));
+            label = Xml.parse("<bracket/>");
+            label.setAttribute("value", Reflect.setField(docIdToExpressionName, fractionLabelId));
             label.setAttribute("start", 0);
             label.setAttribute("end", numPartsInFraction - 1) = numPartsInFraction - 1;
             barForFraction.node.appendChild.innerData(label);
@@ -1949,8 +1951,8 @@ class BarModelLevelCreator
         
         if (sumOfAllId != null) 
         {
-            var verticalBracket : FastXML = FastXML.parse("<verticalBracket/>");
-            verticalBracket.setAttribute("value", Reflect.setField(docIdToExpressionName, sumOfAllId, ));
+            var verticalBracket : Xml = Xml.parse("<verticalBracket/>");
+            verticalBracket.setAttribute("value", Reflect.setField(docIdToExpressionName, sumOfAllId));
             verticalBracket.setAttribute("start", 0);
             verticalBracket.setAttribute("end", 1);
             referenceModel.node.appendChild.innerData(verticalBracket);
@@ -1958,9 +1960,9 @@ class BarModelLevelCreator
         
         if (differenceId != null) 
         {
-            var barComparison : FastXML = FastXML.parse("<barCompare/>");
-            barComparison.setAttribute("value", Reflect.setField(docIdToExpressionName, differenceId, ));
-            barComparison.setAttribute("compTo", barForWhole.setAttribute("id", ));
+            var barComparison : Xml = Xml.parse("<barCompare/>");
+            barComparison.setAttribute("value", Reflect.setField(docIdToExpressionName, differenceId));
+            barComparison.setAttribute("compTo", barForWhole.setAttribute("id"));
             barForFraction.node.appendChild.innerData(barComparison);
         }
         

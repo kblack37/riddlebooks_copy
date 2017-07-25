@@ -42,7 +42,7 @@ class HelperCharacterRenderSystem extends BaseSystemScript
      * To detect changes on each visit, for each entity id we map to the state
      * value it was on the last visit.
      */
-    private var m_previousStateValue : Dictionary;
+    private var m_previousStateValue : Dictionary<String, Int>;
     
     private var m_parentDisplay : DisplayObjectContainer;
     
@@ -141,6 +141,11 @@ class HelperCharacterRenderSystem extends BaseSystemScript
                         m_spriteSheetJuggler.add(movieClip);
                     }
                     
+					var textureAtlasStateComponent : AnimatedTextureAtlasStateComponent = try cast(componentManager.getComponentFromEntityIdAndType(
+                            entityId,
+                            AnimatedTextureAtlasStateComponent.TYPE_ID
+                            ), AnimatedTextureAtlasStateComponent) catch(e:Dynamic) null;
+					
                     if (textureAtlasStateComponent != null) 
                     {
                         textureAtlasStateComponent.currentFrameCounter++;
@@ -167,7 +172,7 @@ class HelperCharacterRenderSystem extends BaseSystemScript
                     view.rotation = positionComponent.rotation;
                 }  // Re-add view  
                 
-                
+                var view : DisplayObject = renderComponent.view;
                 
                 if (view.parent == null || view.parent != m_parentDisplay) 
                 {
@@ -178,7 +183,6 @@ class HelperCharacterRenderSystem extends BaseSystemScript
             {
                 renderComponent.view.removeFromParent();
                 m_spriteSheetJuggler.remove(try cast(renderComponent.view, MovieClip) catch(e:Dynamic) null);
-                ;
             }
         }
     }

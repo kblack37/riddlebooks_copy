@@ -697,7 +697,7 @@ class ExpressionUtil
 		var matchingNode:ExpressionNode = null;
 		if (root != null)
 		{
-			if (root.get_id() == id)
+			if (root.id == id)
 			{
 				matchingNode = root;
 			}

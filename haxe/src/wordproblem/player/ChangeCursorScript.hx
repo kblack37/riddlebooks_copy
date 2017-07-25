@@ -4,7 +4,7 @@ package wordproblem.player;
 import flash.display.BitmapData;
 import flash.geom.Point;
 import flash.ui.Mouse;
-import flash.ui.MouseCursorData;
+//import flash.ui.MouseCursorData;
 
 import wordproblem.engine.component.Component;
 import wordproblem.engine.component.EquippableComponent;

@@ -49,14 +49,14 @@ class SimulatedMouseVisualizer implements IDisposable
     public function dispose() : Void
     {
         m_cursor.removeFromParent(true);
-        Starling.juggler.remove(m_pulseAnimation);
+        Starling.current.juggler.remove(m_pulseAnimation);
         m_pulseAnimation.dispose();
     }
     
     public function hide() : Void
     {
         m_cursor.removeFromParent();
-        Starling.juggler.remove(m_pulseAnimation);
+        Starling.current.juggler.remove(m_pulseAnimation);
         m_pulseAnimation.dispose();
     }
     
@@ -76,7 +76,7 @@ class SimulatedMouseVisualizer implements IDisposable
         if (m_mouseState.leftMousePressedThisFrame) 
         {
             m_pulseAnimation.reset(m_localBuffer.x, m_localBuffer.y, m_canvas, XColor.BRIGHT_ORANGE);
-            Starling.juggler.add(m_pulseAnimation);
+            Starling.current.juggler.add(m_pulseAnimation);
         }  // Must make sure the cursor graphic stays on top  
         
         
@@ -86,6 +86,6 @@ class SimulatedMouseVisualizer implements IDisposable
     
     private function onPulseComplete() : Void
     {
-        Starling.juggler.remove(m_pulseAnimation);
+        Starling.current.juggler.remove(m_pulseAnimation);
     }
 }

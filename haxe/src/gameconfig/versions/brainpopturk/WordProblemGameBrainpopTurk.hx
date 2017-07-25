@@ -14,9 +14,10 @@ import flash.net.URLVariables;
 import flash.system.Capabilities;
 import flash.utils.Timer;
 
-import cgs.cache.ICgsUserCache;
-import cgs.levelprogression.nodes.ICgsLevelNode;
-import cgs.server.logging.CGSServerProps;
+// TODO: uncomment once cgs library is ported
+//import cgs.cache.ICgsUserCache;
+//import cgs.levelprogression.nodes.ICgsLevelNode;
+//import cgs.server.logging.CGSServerProps;
 
 import dragonbox.common.console.expression.MethodExpression;
 import dragonbox.common.state.IState;
@@ -354,7 +355,7 @@ class WordProblemGameBrainpopTurk extends WordProblemGameBase
                 m_assetManager, 
                 onStartLevel, 
                 onNoNextLevel, 
-                !m_config.unlockAllLevels, 
+                !m_config.unlockAllLevels
                 );
         
         // For the challenge, a login might be required
@@ -371,7 +372,7 @@ class WordProblemGameBrainpopTurk extends WordProblemGameBase
             m_logger, 
             onContinueUserSelected, 
             onNewUserSelected, 
-            "", 
+            ""
             );
             titleScreenState.addEventListener(CommandEvent.WAIT_HIDE, onWaitHide);
             titleScreenState.addEventListener(CommandEvent.WAIT_SHOW, onWaitShow);
@@ -740,7 +741,7 @@ class WordProblemGameBrainpopTurk extends WordProblemGameBase
         m_itemDataSource, 
         m_logger, 
         m_nativeFlashStage, 
-        buttonColorData, 
+        buttonColorData
         );
         wordProblemSelectState.addEventListener(CommandEvent.GO_TO_LEVEL, onGoToLevel);
         wordProblemSelectState.addEventListener(CommandEvent.SIGN_OUT, onSignOut);
@@ -760,7 +761,7 @@ class WordProblemGameBrainpopTurk extends WordProblemGameBase
         m_config, 
         m_console, 
         buttonColorData, 
-        m_levelManager, 
+        m_levelManager
         );
         wordProblemGameState.addEventListener(CommandEvent.WAIT_HIDE, onWaitHide);
         wordProblemGameState.addEventListener(CommandEvent.WAIT_SHOW, onWaitShow);
@@ -791,7 +792,7 @@ class WordProblemGameBrainpopTurk extends WordProblemGameBase
                 m_levelManager.goToNextLevel();
             }
         }, 
-        buttonColorData, 
+        buttonColorData
         );
         m_stateMachine.register(playerCollectionState);
         
@@ -803,7 +804,7 @@ class WordProblemGameBrainpopTurk extends WordProblemGameBase
                 m_playerItemInventory, 
                 m_itemDataSource, 
                 m_assetManager, 
-                m_mainJuggler, 
+                m_mainJuggler
                 ));
         
         // Add scripts that have logic that operate across several levels.

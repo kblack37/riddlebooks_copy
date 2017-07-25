@@ -3,6 +3,8 @@ package wordproblem.engine.animation;
 
 import dragonbox.common.dispose.IDisposable;
 
+import haxe.Constraints.Function;
+
 import starling.animation.IAnimatable;
 import starling.animation.Tween;
 import starling.display.DisplayObjectContainer;
@@ -86,7 +88,7 @@ class RingPulseAnimation implements IAnimatable implements IDisposable
         for (i in 0...numTweens){
             (try cast(m_activeTweens[i].target, Image) catch(e:Dynamic) null).removeFromParent(true);
         }
-        as3hx.Compat.setArrayLength(m_activeTweens, 0);
+		m_activeTweens = new Array<Tween>();
         
         // Each individual ring should start out minimized and then expand outwards while fading
         m_displayContainer = displayContainer;
@@ -129,7 +131,7 @@ class RingPulseAnimation implements IAnimatable implements IDisposable
         m_numCompletedTweens++;
         if (m_numCompletedTweens >= m_totalTweensToPlay) 
         {
-            as3hx.Compat.setArrayLength(m_activeTweens, 0);
+			m_activeTweens = new Array<Tween>();
             m_onComplete();
         }
     }

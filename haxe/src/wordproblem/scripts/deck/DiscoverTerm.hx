@@ -4,7 +4,8 @@ package wordproblem.scripts.deck;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 
-import cgs.audio.Audio;
+// TODO: uncomment once cgs library is ported
+//import cgs.audio.Audio;
 
 import starling.display.DisplayObject;
 import starling.events.Event;
@@ -112,7 +113,8 @@ class DiscoverTerm extends BaseGameScript
                     currentExpressions.push(expressionValueDragged);
                     currentExpressionHidden.push(false);
                     m_gameEngine.setDeckAreaContent(currentExpressions, currentExpressionHidden, true);
-                    Audio.instance.playSfx("card2deck");
+                    // TODO: uncomment once cgs library is ported
+					//Audio.instance.playSfx("card2deck");
                 }
                 else 
                 {
@@ -151,7 +153,8 @@ class DiscoverTerm extends BaseGameScript
             m_deckWidget.toggleSymbolEnabled(true, data);
             m_deckWidget.layout();
             
-            Audio.instance.playSfx("card2deck");
+			// TODO: uncomment once cgs library is ported
+            //Audio.instance.playSfx("card2deck");
             
             // Signal expression revealed
             var aComponent : ExpressionComponent = try cast(m_deckWidget.componentManager.getComponentFromEntityIdAndType(data, ExpressionComponent.TYPE_ID), ExpressionComponent) catch(e:Dynamic) null;

@@ -41,7 +41,7 @@ import wordproblem.scripts.drag.WidgetDragSystem;
 class AddNewBarComparisonTip extends BarModelTip implements IShowableScript
 {
     private var m_widgetDragSystem : WidgetDragSystem;
-    private var m_vectorSpace : IVectorSpace;
+    private var m_vectorSpace : RealsVectorSpace;
     
     private var m_orderedGestures : PrioritySelector;
     
@@ -55,7 +55,7 @@ class AddNewBarComparisonTip extends BarModelTip implements IShowableScript
             isActive : Bool = true)
     {
         super(expressionSymbolMap, canvas, mouseState, time, assetManager,
-                DEFAULT_BAR_MODEL_WIDTH, DEFAULT_BAR_MODEL_HEIGHT, screenBounds,
+                BarModelTip.DEFAULT_BAR_MODEL_WIDTH, BarModelTip.DEFAULT_BAR_MODEL_HEIGHT, screenBounds,
                 id,
                 "This shows the difference between two boxes",
                 id, isActive);
@@ -103,14 +103,14 @@ class AddNewBarComparisonTip extends BarModelTip implements IShowableScript
         
         // The start drag location is above the bars
         var startDragLocation : Point = new Point(
-        greaterSegmentBounds.left + greaterSegmentBounds.width * 0.5, 
-        greaterSegmentBounds.top - 50, 
+			greaterSegmentBounds.left + greaterSegmentBounds.width * 0.5, 
+			greaterSegmentBounds.top - 50
         );
         
         // The final drag location is in the middle of the gap between the bigger and smaller bar
         var finalDragLocation : Point = new Point(
-        (greaterSegmentBounds.right - lesserSegmentBounds.right) * 0.5 + lesserSegmentBounds.right, 
-        lesserSegmentBounds.top + lesserSegmentBounds.height * 0.5, 
+			(greaterSegmentBounds.right - lesserSegmentBounds.right) * 0.5 + lesserSegmentBounds.right, 
+			lesserSegmentBounds.top + lesserSegmentBounds.height * 0.5
         );
         
         var mainAnimationEvents : Array<SequenceEvent> = new Array<SequenceEvent>();

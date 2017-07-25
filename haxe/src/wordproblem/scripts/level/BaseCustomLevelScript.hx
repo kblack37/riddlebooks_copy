@@ -1,20 +1,19 @@
 package wordproblem.scripts.level;
 
-import wordproblem.scripts.level.PMPRNG;
-
-import flash.utils.Dictionary;
-
-import cgs.internationalization.StringTable;
+// TODO: uncomment once cgs library is ported
+//import cgs.internationalization.StringTable;
 
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.ui.MouseState;
 import dragonbox.common.util.PMPRNG;
 import dragonbox.common.util.XColor;
 
-import feathers.controls.Button;
+import haxe.xml.Fast;
+import haxe.Constraints.Function;
 
 import starling.animation.Tween;
 import starling.core.Starling;
+import starling.display.Button;
 import starling.display.DisplayObject;
 import starling.display.DisplayObjectContainer;
 import starling.events.EventDispatcher;
@@ -96,14 +95,14 @@ class BaseCustomLevelScript extends BaseGameScript
      * xml element containing the dialog that is to be parsed and displayed during
      * the course of the level.
      */
-    private var m_dialogIdToXMLMap : Dictionary;
+    private var m_dialogIdToXMLMap : Map<String, Fast>;
     
     /**
      * Map from dialog id to the DialogWidget that is current visible.
      * This is only for dialog that aren't bound to an entity. I.e. things that are floating within the
      * text area.
      */
-    private var m_dialogIdToVisibleWidgetMap : Dictionary;
+    //private var m_dialogIdToVisibleWidgetMap : Dictionary;
     
     /**
      * There are instances in a level where the player must click to continue.
@@ -139,8 +138,8 @@ class BaseCustomLevelScript extends BaseGameScript
         m_childrenListModifyTypeBuffer = new Array<String>();
         m_childrenListModifyIndexBuffer = new Array<Int>();
         
-        m_dialogIdToXMLMap = new Dictionary();
-        m_dialogIdToVisibleWidgetMap = new Dictionary();
+        m_dialogIdToXMLMap = new Map<String, Fast>();
+        //m_dialogIdToVisibleWidgetMap = new Dictionary();
         m_continueIndicator = new TextField(200, 60, StringTable.lookup("click_to_continue"), GameFonts.DEFAULT_FONT_NAME, 24, CONTINUE_TEXT_DEFAULT_COLOR);
         m_continueTextDefaultHighlightFilter = BlurFilter.createGlow(0xFFFFFF);
         m_continueIndicator.hAlign = HAlign.CENTER;

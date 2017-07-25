@@ -1,7 +1,7 @@
 package wordproblem.engine.animation;
 
 
-import flash.display3d.Context3DBlendFactor;
+import openfl.display3D.Context3DBlendFactor;
 import flash.geom.Rectangle;
 
 import dragonbox.common.particlesystem.action.Accelerate;
@@ -18,6 +18,8 @@ import dragonbox.common.particlesystem.initializer.TextureGridInitializer;
 import dragonbox.common.particlesystem.initializer.VelocityInitializer;
 import dragonbox.common.particlesystem.renderer.ParticleRenderer;
 import dragonbox.common.particlesystem.zone.DiskZone;
+
+import haxe.Constraints.Function;
 
 import starling.animation.IAnimatable;
 import starling.animation.Juggler;
@@ -102,7 +104,7 @@ class ShatterAnimation implements IAnimatable
     {
         if (juggler == null) 
         {
-            juggler = Starling.juggler;
+            juggler = Starling.current.juggler;
         }
         
         m_juggler = juggler;

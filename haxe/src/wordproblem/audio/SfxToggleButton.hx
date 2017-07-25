@@ -3,8 +3,9 @@ package wordproblem.audio;
 
 import flash.text.TextFormat;
 
-import cgs.audio.Audio;
-import cgs.internationalization.StringTable;
+// TODO: uncomment once cgs library is ported
+//import cgs.audio.Audio;
+//import cgs.internationalization.StringTable;
 
 import wordproblem.log.AlgebraAdventureLoggingConstants;
 import wordproblem.resource.AssetManager;
@@ -18,34 +19,36 @@ class SfxToggleButton extends AudioButton
             assetManager : AssetManager,
             color : Int)
     {
-        super(width, height, textFormatUp, textFormatHover, assetManager, StringTable.lookup("sfx") + ":", color);
+		// TODO: uncomment all this once cgs library is ported
+        super(width, height, textFormatUp, textFormatHover, assetManager, /*StringTable.lookup("sfx") + ":"*/ "", color);
         
         // Adjust sfx based on the saved value
         if (m_localSharedObject.data.exists("sfx")) 
         {
-            Audio.instance.sfxOn = m_localSharedObject.data["sfx"];
+            //Audio.instance.sfxOn = m_localSharedObject.data["sfx"];
         }
         
-        this.redrawLabel(Audio.instance.sfxOn);
+        this.redrawLabel(/*Audio.instance.sfxOn*/ false);
     }
     
     override private function handleClick() : Void
     {
+		// TODO: uncomment once cgs library is ported
         // Toggle whether sfx is on
-        var audioDriver : Audio = Audio.instance;
-        audioDriver.sfxOn = !audioDriver.sfxOn;
-        
-        var loggingDetails : Dynamic = {
-            buttonName : "SfxButton",
-            toggleState : (audioDriver.sfxOn) ? "On" : "Off",
-
-        };
-        this.dispatchEventWith(AlgebraAdventureLoggingConstants.BUTTON_PRESSED_EVENT, false, loggingDetails);
-        
-        this.redrawLabel(Audio.instance.sfxOn);
-        
-        // Save value to shared object
-        m_localSharedObject.data["sfx"] = audioDriver.sfxOn;
-        m_localSharedObject.flush();
+        //var audioDriver : Audio = Audio.instance;
+        //audioDriver.sfxOn = !audioDriver.sfxOn;
+        //
+        //var loggingDetails : Dynamic = {
+            //buttonName : "SfxButton",
+            //toggleState : (audioDriver.sfxOn) ? "On" : "Off",
+//
+        //};
+        //this.dispatchEventWith(AlgebraAdventureLoggingConstants.BUTTON_PRESSED_EVENT, false, loggingDetails);
+        //
+        //this.redrawLabel(Audio.instance.sfxOn);
+        //
+        //// Save value to shared object
+        //m_localSharedObject.data["sfx"] = audioDriver.sfxOn;
+        //m_localSharedObject.flush();
     }
 }

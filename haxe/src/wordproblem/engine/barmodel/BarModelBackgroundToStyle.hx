@@ -41,8 +41,7 @@ class BarModelBackgroundToStyle
             a : 0xd11141,
             b : 0x00b159,
             c : 0x00aedb,
-            ? : 0xf37735,
-
+            d : 0xf37735,
         };
         
         // http://www.color-hex.com/color-palette/7098
@@ -50,8 +49,7 @@ class BarModelBackgroundToStyle
             a : 0xef4f91,
             b : 0xc79dd7,
             c : 0x7bb3ff,
-            ? : 0xe86af0,
-
+            d : 0xe86af0,
         };
         
         var style_id_to_package : Dynamic = {

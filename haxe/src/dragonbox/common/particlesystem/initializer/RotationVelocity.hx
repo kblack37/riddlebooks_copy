@@ -19,7 +19,7 @@ class RotationVelocity extends Initializer
      *      Max angular velocity in radians per sec
      */
     public function new(minAngularVelocity : Float,
-            maxAngularVelocity : Float = Math.NaN)
+            maxAngularVelocity : Float)
     {
         super();
         

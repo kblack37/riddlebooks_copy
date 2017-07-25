@@ -53,7 +53,7 @@ class ScanSystem extends BaseSystemScript
                     scanComponent.color, 
                     scanComponent.velocity, 
                     scanComponent.width, 
-                    scanComponent.delay, 
+                    scanComponent.delay
                     );
                     animation.play(childViewsAsDisplayObject);
                     scanComponent.animation = animation;

@@ -64,8 +64,10 @@ class BaseTermAreaScript extends BaseGameScript
         m_levelRules = levelRules;
         m_eventDispatcher = gameEngineEventDispatcher;
         m_mouseState = mouseState;
+		
+		var castedGameEngine = try cast(m_gameEngine, EventDispatcher) catch (e : Dynamic) null;
         
-        if (m_eventDispatcher != m_gameEngine) 
+        if (m_eventDispatcher != castedGameEngine) 
         {
             m_eventDispatcher.addEventListener(GameEvent.END_DRAG_TERM_WIDGET, bufferEvent);
         }
@@ -81,7 +83,7 @@ class BaseTermAreaScript extends BaseGameScript
         var termAreas : Array<DisplayObject> = m_gameEngine.getUiEntitiesByClass(TermAreaWidget);
         for (termArea in termAreas)
         {
-            m_termAreas.push(termArea);
+            m_termAreas.push(try cast(termArea, TermAreaWidget) catch (e : Dynamic) null);
         }
         
         m_mouseState = m_gameEngine.getMouseState();

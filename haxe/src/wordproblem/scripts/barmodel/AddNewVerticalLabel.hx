@@ -242,7 +242,7 @@ class AddNewVerticalLabel extends BaseBarModelScript implements IHitAreaScript
         }
         else 
         {
-            as3hx.Compat.setArrayLength(m_hitAreas, 0);
+			m_hitAreas = new Array<Rectangle>();
         }
     }
     

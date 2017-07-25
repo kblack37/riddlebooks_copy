@@ -1,14 +1,15 @@
 package dragonbox.common.particlesystem.renderer;
 
-import dragonbox.common.particlesystem.renderer.SHADER;
+//import dragonbox.common.particlesystem.renderer.SHADER;
 
-import flash.display3d.Context3D;
-import flash.display3d.Context3DBlendFactor;
-import flash.display3d.Context3DProgramType;
-import flash.display3d.Context3DVertexBufferFormat;
-import flash.display3d.IndexBuffer3D;
-import flash.display3d.Program3D;
-import flash.display3d.VertexBuffer3D;
+import openfl.Vector;
+import openfl.display3D.Context3D;
+import openfl.display3D.Context3DBlendFactor;
+import openfl.display3D.Context3DProgramType;
+import openfl.display3D.Context3DVertexBufferFormat;
+import openfl.display3D.IndexBuffer3D;
+import openfl.display3D.Program3D;
+import openfl.display3D.VertexBuffer3D;
 import flash.geom.Matrix;
 import flash.geom.Matrix3D;
 import flash.geom.Point;
@@ -75,7 +76,7 @@ class ParticleRenderer extends DisplayObject
      * Each particle is formed by six indices, each triplet forms half of
      * the quad
      */
-    private var m_indexData : Array<Int>;
+    private var m_indexData : Vector<Int>;
     
     /**
      * Index buffer needed by stage3d
@@ -98,7 +99,7 @@ class ParticleRenderer extends DisplayObject
      */
     private var m_numParticlesToRender : Int;
     
-    private var m_alpha : Array<Float> = [1.0, 1.0, 1.0, 1.0];
+    private var m_alpha : Vector<Float>;
     private var m_sourceBlendMode : String;
     private var m_destinationBlendMode : String;
     
@@ -132,8 +133,11 @@ class ParticleRenderer extends DisplayObject
         m_sourceTexture = sourceTexture;
         
         m_vertexData = new VertexData(0);
-        m_indexData = new Array<Int>();
+        m_indexData = new Vector<Int>();
         m_numParticlesToRender = -1;
+		
+		m_alpha = new Vector<Float>(4);
+		for (i in 0...4) m_alpha[i] = 1.0;
         
         this.touchable = false;
         
@@ -146,8 +150,8 @@ class ParticleRenderer extends DisplayObject
         
         // By default we will choose a blend mode that takes into account the alpha in
         // a texture
-        m_destinationBlendMode = destinationBlendMode || Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA;
-        m_sourceBlendMode = sourceBlendMode ||
+        m_destinationBlendMode = destinationBlendMode != null ? destinationBlendMode : Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA;
+        m_sourceBlendMode = sourceBlendMode != null ? sourceBlendMode : 
                 ((sourceTexture.premultipliedAlpha) ? Context3DBlendFactor.ONE : Context3DBlendFactor.SOURCE_ALPHA);
         
         // handle a lost device context
@@ -222,7 +226,7 @@ class ParticleRenderer extends DisplayObject
         var alpha : Float;
         var i : Int;
         var numEmitters : Int = m_emitters.length;
-        var numSpacesForParticles : Int = m_vertexData.numVertices / 4;
+        var numSpacesForParticles : Int = Std.int(m_vertexData.numVertices / 4);
         for (i in 0...numEmitters){
             // To get the number of particles to render, add up the limits from each emitter
             
@@ -339,7 +343,7 @@ class ParticleRenderer extends DisplayObject
             
             if (m_numParticlesToRender > 0) 
             {
-                var context3d : Context3D = Starling.context;
+                var context3d : Context3D = Starling.current.context;
                 m_vertexBuffer = context3d.createVertexBuffer(numParticlesProcessed * 4, VertexData.ELEMENTS_PER_VERTEX);
                 m_indexBuffer = context3d.createIndexBuffer(numParticlesProcessed * 6);
             }
@@ -377,7 +381,7 @@ class ParticleRenderer extends DisplayObject
         support.finishQuadBatch();
         support.raiseDrawCount();
         
-        var context3d : Context3D = Starling.context;
+        var context3d : Context3D = Starling.current.context;
         if (context3d == null) 
         {
             throw new MissingContextError();

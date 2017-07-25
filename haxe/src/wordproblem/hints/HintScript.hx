@@ -1,5 +1,6 @@
 package wordproblem.hints;
 
+import haxe.Constraints.Function;
 
 import starling.display.DisplayObject;
 

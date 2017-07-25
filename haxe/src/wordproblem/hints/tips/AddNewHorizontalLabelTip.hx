@@ -36,7 +36,7 @@ import wordproblem.scripts.drag.WidgetDragSystem;
 class AddNewHorizontalLabelTip extends BarModelTip
 {
     private var m_widgetDragSystem : WidgetDragSystem;
-    private var m_vectorSpace : IVectorSpace;
+    private var m_vectorSpace : RealsVectorSpace;
     
     private var m_orderedGestures : PrioritySelector;
     
@@ -50,7 +50,7 @@ class AddNewHorizontalLabelTip extends BarModelTip
             isActive : Bool = true)
     {
         super(expressionSymbolMap, canvas, mouseState, time, assetManager,
-                DEFAULT_BAR_MODEL_WIDTH, 150, screenBounds,
+                BarModelTip.DEFAULT_BAR_MODEL_WIDTH, 150, screenBounds,
                 id,
                 "This shows that many boxes together equal a name.", id, isActive);
         
@@ -103,14 +103,14 @@ class AddNewHorizontalLabelTip extends BarModelTip
         
         // The start drag location is above the bars
         var startDragLocation : Point = new Point(
-        barWholeBounds.left + barWholeBounds.width * 0.5, 
-        barWholeBounds.top - 50, 
+			barWholeBounds.left + barWholeBounds.width * 0.5, 
+			barWholeBounds.top - 50
         );
         
         // The final drag location is in the middle of the hit area
         var finalDragLocation : Point = new Point(
-        addLabelHitArea.left + addLabelHitArea.width * 0.5, 
-        addLabelHitArea.top + addLabelHitArea.height * 0.5, 
+			addLabelHitArea.left + addLabelHitArea.width * 0.5, 
+			addLabelHitArea.top + addLabelHitArea.height * 0.5
         );
         
         var mainAnimationEvents : Array<SequenceEvent> = new Array<SequenceEvent>();

@@ -3,10 +3,11 @@ package levelscripts.barmodel.tutorialsv2;
 
 import flash.geom.Rectangle;
 
-import cgs.overworld.core.engine.avatar.AvatarColors;
-import cgs.overworld.core.engine.avatar.body.AvatarAnimations;
-import cgs.overworld.core.engine.avatar.body.AvatarExpressions;
-import cgs.overworld.core.engine.avatar.data.AvatarSpeciesData;
+// TODO: uncomment once cgs library is ported
+//import cgs.overworld.core.engine.avatar.AvatarColors;
+//import cgs.overworld.core.engine.avatar.body.AvatarAnimations;
+//import cgs.overworld.core.engine.avatar.body.AvatarExpressions;
+//import cgs.overworld.core.engine.avatar.data.AvatarSpeciesData;
 
 import dragonbox.common.util.TextToNumber;
 

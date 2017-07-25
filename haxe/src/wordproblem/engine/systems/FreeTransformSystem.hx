@@ -62,7 +62,7 @@ class FreeTransformSystem extends BaseSystemScript
                     rotateTween.onCompleteArgs = [rotateTween, rotatableComponent];
                     rotateTween.animate("rotation", rotatableComponent.targetRotation);
                     
-                    Starling.juggler.add(rotateTween);
+                    Starling.current.juggler.add(rotateTween);
                 }
                 
                 rotatableComponent.requestHandled = true;
@@ -99,7 +99,7 @@ class FreeTransformSystem extends BaseSystemScript
                     moveTween.animate("x", moveableComponent.targetX);
                     moveTween.animate("y", moveableComponent.targetY);
                     
-                    Starling.juggler.add(moveTween);
+                    Starling.current.juggler.add(moveTween);
                 }
                 
                 moveableComponent.requestHandled = true;
@@ -112,7 +112,7 @@ class FreeTransformSystem extends BaseSystemScript
         // Put back tween
         if (tween != null) 
         {
-            Starling.juggler.remove(tween);
+            Starling.current.juggler.remove(tween);
             m_tweenPool.push(tween);
         }  // Set component to not active  
         
@@ -125,7 +125,7 @@ class FreeTransformSystem extends BaseSystemScript
     {
         if (tween != null) 
         {
-            Starling.juggler.remove(tween);
+            Starling.current.juggler.remove(tween);
             m_tweenPool.push(tween);
         }
         

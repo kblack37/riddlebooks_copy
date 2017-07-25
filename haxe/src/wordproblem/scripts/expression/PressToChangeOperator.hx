@@ -1,6 +1,7 @@
 package wordproblem.scripts.expression;
 
 
+import dragonbox.common.math.vectorspace.RealsVectorSpace;
 import flash.geom.Point;
 
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
@@ -61,8 +62,9 @@ class PressToChangeOperator extends BaseTermAreaScript
             var i : Int;
             var numTermAreas : Int = m_termAreas.length;
             var operatorUnderPoint : GroupTermWidget = null;
+			var termArea : TermAreaWidget = null;
             for (i in 0...numTermAreas){
-                var termArea : TermAreaWidget = m_termAreas[i];
+                termArea = m_termAreas[i];
                 if (termArea.isInteractable) 
                 {
                     var widgetUnderPoint : BaseTermWidget = termArea.pickWidgetUnderPoint(m_globalBuffer.x, m_globalBuffer.y, true);
@@ -134,13 +136,9 @@ class PressToChangeOperator extends BaseTermAreaScript
     private function populateOperatorsToCycleThrough() : Void
     {
         // Go through level rules and check that the operator is allowed
-        var vectorSpace : IVectorSpace = m_expressionCompiler.getVectorSpace();
-        as3hx.Compat.setArrayLength(m_operatorsToCycleThrough, 0);
-        m_operatorsToCycleThrough.push(
-                vectorSpace.getAdditionOperator());
-        m_operatorsToCycleThrough.push(
-                );
-        
+        var vectorSpace : RealsVectorSpace = m_expressionCompiler.getVectorSpace();
+		m_operatorsToCycleThrough = new Array<String>();
+        m_operatorsToCycleThrough.push(vectorSpace.getAdditionOperator());
         
         var levelRules : LevelRules = m_levelRules;
         if (levelRules.allowSubtract) 

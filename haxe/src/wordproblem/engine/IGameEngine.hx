@@ -8,6 +8,8 @@ import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
 
+import haxe.Constraints.Function;
+
 import starling.display.DisplayObject;
 
 import wordproblem.engine.component.ComponentManager;

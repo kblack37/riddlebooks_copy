@@ -1,6 +1,8 @@
 package wordproblem.hints.tips;
 
+import dragonbox.common.math.vectorspace.RealsVectorSpace;
 import flash.errors.Error;
+import starling.display.Image;
 
 import flash.geom.Point;
 import flash.geom.Rectangle;
@@ -12,8 +14,8 @@ import dragonbox.common.math.vectorspace.IVectorSpace;
 import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
 
-import feathers.display.Scale9Image;
-import feathers.textures.Scale9Textures;
+//import feathers.display.Scale9Image;
+//import feathers.textures.Scale9Textures;
 
 import starling.display.DisplayObjectContainer;
 import starling.display.Sprite;
@@ -163,14 +165,14 @@ class GestureAndTextTip extends ScriptNode implements IShowableScript
         measuringText.width = maxTitleWidth;
         measuringText.text = m_titleText;
         
-        var titleTextfield : TextField = new TextField(maxTitleWidth, measuringText.textHeight + 10, 
-        m_titleText, 
-        textFormat.font, Std.parseInt(textFormat.size), try cast(textFormat.color, Int) catch(e:Dynamic) null);
-        titleTextfield.y = titleY;
-        titleTextfield.x = titleX;
-        titleTextfield.vAlign = VAlign.TOP;
-        titleTextfield.hAlign = HAlign.CENTER;
-        m_mainDisplay.addChild(titleTextfield);
+        var titleTextfield : TextField = new TextField(Std.int(maxTitleWidth), Std.int(measuringText.textHeight + 10), 
+			m_titleText, 
+			textFormat.font, textFormat.size, try cast(textFormat.color, Int) catch(e:Dynamic) null);
+		titleTextfield.y = titleY;
+		titleTextfield.x = titleX;
+		titleTextfield.vAlign = VAlign.TOP;
+		titleTextfield.hAlign = HAlign.CENTER;
+		m_mainDisplay.addChild(titleTextfield);
         
         // Need some space between the text and the outline
         var outlinePadding : Float = 15;
@@ -178,15 +180,15 @@ class GestureAndTextTip extends ScriptNode implements IShowableScript
         measuringText.width = descriptionWidth - 2 * outlinePadding;
         measuringText.text = m_descriptionText;
         
-        var descriptionTextField : TextField = new TextField(measuringText.width, measuringText.textHeight + 10, m_descriptionText, 
-        textFormat.font, 26, try cast(textFormat.color, Int) catch(e:Dynamic) null);
+        var descriptionTextField : TextField = new TextField(Std.int(measuringText.width), Std.int(measuringText.textHeight + 10), m_descriptionText, 
+			textFormat.font, 26, try cast(textFormat.color, Int) catch(e:Dynamic) null);
         descriptionTextField.vAlign = VAlign.TOP;
         var scale9Padding : Float = 12;
         
         // TEMP: No chalk outline as it may cause unneeded clutter
         var chalkOutlineTexture : Texture = m_assetManager.getTexture("chalk_outline");
-        var chalkOutline : Scale9Image = new Scale9Image(new Scale9Textures(chalkOutlineTexture, 
-        new Rectangle(scale9Padding, scale9Padding, chalkOutlineTexture.width - 2 * scale9Padding, chalkOutlineTexture.height - 2 * scale9Padding)));
+        var chalkOutline : Image = new Image(Texture.fromTexture(chalkOutlineTexture, 
+			new Rectangle(scale9Padding, scale9Padding, chalkOutlineTexture.width - 2 * scale9Padding, chalkOutlineTexture.height - 2 * scale9Padding)));
         chalkOutline.width = descriptionWidth;
         chalkOutline.height = descriptionTextField.height + outlinePadding * 2;
         chalkOutline.x = descriptionX;
@@ -209,7 +211,7 @@ class GestureAndTextTip extends ScriptNode implements IShowableScript
     private function pressAndStartDragOfExpression(startLocation : Point,
             draggedExpression : String,
             widgetDragSystem : WidgetDragSystem,
-            vectorSpace : IVectorSpace) : Void
+            vectorSpace : RealsVectorSpace) : Void
     {
         setMouseLocation(startLocation);
         

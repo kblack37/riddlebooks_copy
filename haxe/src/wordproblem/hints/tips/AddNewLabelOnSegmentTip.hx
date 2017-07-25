@@ -35,7 +35,7 @@ import wordproblem.scripts.drag.WidgetDragSystem;
 class AddNewLabelOnSegmentTip extends BarModelTip
 {
     private var m_widgetDragSystem : WidgetDragSystem;
-    private var m_vectorSpace : IVectorSpace;
+    private var m_vectorSpace : RealsVectorSpace;
     
     private var m_addLabelOnSegment : AddNewLabelOnSegment;
     
@@ -49,7 +49,7 @@ class AddNewLabelOnSegmentTip extends BarModelTip
             isActive : Bool = true)
     {
         super(expressionSymbolMap, canvas, mouseState, time, assetManager,
-                DEFAULT_BAR_MODEL_WIDTH, 150, screenBounds,
+                BarModelTip.DEFAULT_BAR_MODEL_WIDTH, 150, screenBounds,
                 id,
                 "This shows that a box is equal to a value.", id, isActive);
         
@@ -90,14 +90,14 @@ class AddNewLabelOnSegmentTip extends BarModelTip
         
         // The start drag location is above the bars
         var startDragLocation : Point = new Point(
-        barWholeBounds.left + barWholeBounds.width * 0.5, 
-        barWholeBounds.top - 50, 
+			barWholeBounds.left + barWholeBounds.width * 0.5, 
+			barWholeBounds.top - 50
         );
         
         // The final drag location is in the middle of the segment
         var finalDragLocation : Point = new Point(
-        barSegmentBounds.left + barSegmentBounds.width * 0.5, 
-        barSegmentBounds.top + barSegmentBounds.height * 0.5, 
+			barSegmentBounds.left + barSegmentBounds.width * 0.5, 
+			barSegmentBounds.top + barSegmentBounds.height * 0.5
         );
         
         var mainAnimationEvents : Array<SequenceEvent> = new Array<SequenceEvent>();

@@ -34,7 +34,7 @@ import wordproblem.scripts.drag.WidgetDragSystem;
 class AddNewBarTip extends BarModelTip
 {
     private var m_widgetDragSystem : WidgetDragSystem;
-    private var m_vectorSpace : IVectorSpace;
+    private var m_vectorSpace : RealsVectorSpace;
     
     private var m_addNewBar : AddNewBar;
     
@@ -48,7 +48,7 @@ class AddNewBarTip extends BarModelTip
             isActive : Bool = true)
     {
         super(expressionSymbolMap, canvas, mouseState, time, assetManager,
-                DEFAULT_BAR_MODEL_WIDTH, 240, screenBounds,
+                BarModelTip.DEFAULT_BAR_MODEL_WIDTH, 240, screenBounds,
                 id,
                 "This adds a box on a new line.", id, isActive);
         
@@ -86,14 +86,14 @@ class AddNewBarTip extends BarModelTip
         
         // The start drag location is above the bars
         var startDragLocation : Point = new Point(
-        barWholeBounds.left + barWholeBounds.width * 0.5, 
-        barWholeBounds.top - 50, 
+			barWholeBounds.left + barWholeBounds.width * 0.5, 
+			barWholeBounds.top - 50
         );
         
         // The final drag location is below the bar, this is a bit arbitrary though
         var finalDragLocation : Point = new Point(
-        startDragLocation.x - 100, 
-        barWholeBounds.bottom + barWholeBounds.height, 
+			startDragLocation.x - 100, 
+			barWholeBounds.bottom + barWholeBounds.height
         );
         
         var mainAnimationEvents : Array<SequenceEvent> = new Array<SequenceEvent>();

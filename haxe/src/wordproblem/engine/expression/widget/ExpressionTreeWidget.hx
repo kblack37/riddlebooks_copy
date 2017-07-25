@@ -1,5 +1,6 @@
 package wordproblem.engine.expression.widget;
 
+import dragonbox.common.math.vectorspace.RealsVectorSpace;
 import flash.errors.Error;
 
 import flash.geom.Point;
@@ -60,7 +61,7 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
      * This will define the dimensions of this widget.
      */
     private var m_contraintsBox : Rectangle;
-    private var m_vectorSpace : IVectorSpace;
+    private var m_vectorSpace : RealsVectorSpace;
     private var m_tree : ExpressionTree;
     private var m_expressionSymbolResources : ExpressionSymbolMap;
     
@@ -325,16 +326,14 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
                             try cast(nodeToCreateWidgetFor, WildCardNode) catch(e:Dynamic) null, 
                             m_expressionSymbolResources, 
                             m_assetManager, 
-                            this.showWildCards, 
-                            );
+                            this.showWildCards);
                 }
                 else 
                 {
                     addedNodeWidget = new SymbolTermWidget(
                             nodeToCreateWidgetFor, 
                             m_expressionSymbolResources, 
-                            m_assetManager, 
-                            );
+                            m_assetManager);
                 }
             }
             else 

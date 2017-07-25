@@ -58,7 +58,7 @@ class BarWhole
         this.barLabels = new Array<BarLabel>();
         this.displayHiddenSegments = displayHiddenSegments;
         
-        this.id = ((id == null)) ? Std.string(Identifiable.getId(1)) : id;
+        this.id = ((id == null)) ? Std.string(Identifiable.getId()) : id;
     }
     
     /**

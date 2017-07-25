@@ -39,7 +39,7 @@ class OutlinedTextField extends Sprite
         super();
         
         m_backingTextfield = new TextField();
-        m_backingTextfield.defaultTextFormat = new TextFormat(font, size, textColor, true, null, null, null, null, TextFormatAlign.CENTER);
+        m_backingTextfield.defaultTextFormat = new TextFormat(font, Std.int(size), textColor, true, null, null, null, null, TextFormatAlign.CENTER);
         m_backingTextfield.wordWrap = true;
         m_backingTextfield.embedFonts = GameFonts.getFontIsEmbedded(font);
         m_outlineFilter = new GlowFilter(outlineColor, 1.0, 6, 6);
@@ -64,7 +64,7 @@ class OutlinedTextField extends Sprite
             m_backingTextfield.text = text;
             
             var backingFieldDimensions : Rectangle = new Rectangle(0, 0, m_backingTextfield.width, m_backingTextfield.height);
-            var bitmapData : BitmapData = new BitmapData(backingFieldDimensions.width, backingFieldDimensions.height, true, 0x000000);
+            var bitmapData : BitmapData = new BitmapData(Std.int(backingFieldDimensions.width), Std.int(backingFieldDimensions.height), true, 0x000000);
             bitmapData.draw(m_backingTextfield);
             bitmapData.applyFilter(bitmapData, backingFieldDimensions, new Point(0, 0), m_outlineFilter);
             

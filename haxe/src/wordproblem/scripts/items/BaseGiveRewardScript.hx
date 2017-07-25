@@ -134,7 +134,7 @@ class BaseGiveRewardScript extends BaseBufferEventScript
                 if (rewardData.exists("itemInstanceIds")) 
                 {
                     // Add each item inside a collection, assume collections do not nest
-                    var rewardsCollection : Array<Dynamic> = try cast(Reflect.field(rewardData, "itemInstanceIds"), Array</*AS3HX WARNING no type*/>) catch(e:Dynamic) null;
+                    var rewardsCollection : Array<Dynamic> = try cast(Reflect.field(rewardData, "itemInstanceIds"), Array<Dynamic>) catch(e:Dynamic) null;
                     for (idInCollection in rewardsCollection)
                     {
                         m_itemInventory.createItemFromBlueprint(idInCollection);

@@ -6,7 +6,7 @@ import starling.display.Sprite;
 
 class Scale9CompositeImage extends Sprite
 {
-    public function new()
+    public function new(args : Array<Dynamic>)
     {
         super();
         

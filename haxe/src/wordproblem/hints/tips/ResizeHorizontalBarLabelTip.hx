@@ -79,8 +79,8 @@ class ResizeHorizontalBarLabelTip extends BarModelTip
         
         // The mouse should start at the edge of the label
         var startDragLocation : Point = new Point(
-        labelBounds.right, 
-        labelBounds.top + labelBounds.height * 0.5, 
+			labelBounds.right, 
+			labelBounds.top + labelBounds.height * 0.5
         );
         
         // The final drag should be at the edge of a new segment
@@ -91,8 +91,8 @@ class ResizeHorizontalBarLabelTip extends BarModelTip
         segmentBounds.y = segmentGlobalPoint.y;
         
         var finalDragLocation : Point = new Point(
-        segmentBounds.right, 
-        labelBounds.y, 
+			segmentBounds.right, 
+			labelBounds.y
         );
         
         var mainAnimationEvents : Array<SequenceEvent> = new Array<SequenceEvent>();

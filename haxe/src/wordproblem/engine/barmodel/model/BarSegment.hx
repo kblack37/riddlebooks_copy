@@ -59,7 +59,7 @@ class BarSegment
         this.color = color;
         this.hiddenValue = hiddenValue;
         
-        this.id = ((id == null)) ? Std.string(Identifiable.getId(1)) : id;
+        this.id = ((id == null)) ? Std.string(Identifiable.getId()) : id;
     }
     
     /**
@@ -80,7 +80,7 @@ class BarSegment
         this.denominatorValue, 
         this.color, 
         this.hiddenValue, 
-        this.id, 
+        this.id
         );
         return barSegmentClone;
     }

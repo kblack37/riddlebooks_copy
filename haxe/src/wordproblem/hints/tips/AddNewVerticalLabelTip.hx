@@ -36,7 +36,7 @@ import wordproblem.scripts.drag.WidgetDragSystem;
 class AddNewVerticalLabelTip extends BarModelTip
 {
     private var m_widgetDragSystem : WidgetDragSystem;
-    private var m_vectorSpace : IVectorSpace;
+    private var m_vectorSpace : RealsVectorSpace;
     
     private var m_orderedGestures : PrioritySelector;
     
@@ -55,14 +55,14 @@ class AddNewVerticalLabelTip extends BarModelTip
                 mouseState,
                 time,
                 assetManager,
-                DEFAULT_BAR_MODEL_WIDTH,
-                DEFAULT_BAR_MODEL_HEIGHT,
+                BarModelTip.DEFAULT_BAR_MODEL_WIDTH,
+                BarModelTip.DEFAULT_BAR_MODEL_HEIGHT,
                 screenBounds,
                 titleText,
                 "Drag here to show boxes on different lines are equal to something.",
                 id,
                 isActive
-                );
+        );
         
         m_barModelArea.topBarPadding = 20;
         m_widgetDragSystem = new WidgetDragSystem(null, null, assetManager);
@@ -113,14 +113,14 @@ class AddNewVerticalLabelTip extends BarModelTip
         
         // The start drag location is above the bars
         var startDragLocation : Point = new Point(
-        barWholeBounds.left + barWholeBounds.width * 0.5, 
-        barWholeBounds.top - 50, 
+			barWholeBounds.left + barWholeBounds.width * 0.5, 
+			barWholeBounds.top - 50
         );
         
         // The final drag location is in the middle of the hit area
         var finalDragLocation : Point = new Point(
-        addLabelHitArea.left + addLabelHitArea.width * 0.5, 
-        addLabelHitArea.top + addLabelHitArea.height * 0.5, 
+			addLabelHitArea.left + addLabelHitArea.width * 0.5, 
+			addLabelHitArea.top + addLabelHitArea.height * 0.5
         );
         
         var mainAnimationEvents : Array<SequenceEvent> = new Array<SequenceEvent>();
@@ -171,12 +171,7 @@ class AddNewVerticalLabelTip extends BarModelTip
     private function setBarModelToStartState() : Void
     {
         var exampleBarModel : BarModelData = new BarModelData();
-        createBarWhole(3, 1);
-        createBarWhole(2, 2);
-        m_barModelArea.setBarModelData(exampleBarModel);
-        m_barModelArea.redraw(false);
-        
-        function createBarWhole(numSegments : Int, valuePerSegment : Float) : Void
+		function createBarWhole(numSegments : Int, valuePerSegment : Float) : Void
         {
             var barWhole : BarWhole = new BarWhole(false);
             for (i in 0...numSegments){
@@ -184,5 +179,9 @@ class AddNewVerticalLabelTip extends BarModelTip
             }
             exampleBarModel.barWholes.push(barWhole);
         };
+        createBarWhole(3, 1);
+        createBarWhole(2, 2);
+        m_barModelArea.setBarModelData(exampleBarModel);
+        m_barModelArea.redraw(false);
     }
 }

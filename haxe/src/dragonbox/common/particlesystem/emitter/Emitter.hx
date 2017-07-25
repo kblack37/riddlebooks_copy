@@ -120,7 +120,7 @@ class Emitter implements IDisposable
     
     public function removeActions() : Void
     {
-        as3hx.Compat.setArrayLength(m_actions, 0);
+		m_actions = new Array<Action>();
     }
     
     public function addInitializer(initializer : Initializer) : Void
@@ -130,7 +130,7 @@ class Emitter implements IDisposable
     
     public function removeAllInitializers() : Void
     {
-        as3hx.Compat.setArrayLength(m_initializers, 0);
+        m_initializers = new Array<Initializer>();
     }
     
     public function addActivity(activity : Activity) : Void
@@ -140,7 +140,7 @@ class Emitter implements IDisposable
     
     public function removeAllActivities() : Void
     {
-        as3hx.Compat.setArrayLength(m_activities, 0);
+        m_activities = new Array<Activity>();
     }
     
     private function get_x() : Float
@@ -182,7 +182,7 @@ class Emitter implements IDisposable
         var i : Int = 0;
         var classNameOfInitializer : String;
         for (i in 0...m_initializers.length){
-            classNameOfInitializer = Type.getClassName(m_initializers[i]);
+            classNameOfInitializer = Type.getClassName(Type.getClass(m_initializers[i]));
             if (classNameOfInitializer == classNameToSearch) 
             {
                 initializer = m_initializers[i];
@@ -220,7 +220,8 @@ class Emitter implements IDisposable
         }
         
         var particle : Particle;
-        for (i in 0...m_deadParticleIndex){
+		var i = 0;
+		while (i < m_deadParticleIndex) {
             particle = m_particles[i];
             
             // Apply the list of actions to each of the particles
@@ -229,18 +230,13 @@ class Emitter implements IDisposable
             for (j in 0...numActions){
                 var action : Action = m_actions[j];
                 action.update(this, particle, secondsElapsed);
-            }  // exceeding some lifetime limit    // Conditions for particle death include entering/exiting some bounding zone or    // to the inactive half of the vector    // If so we need to reorganize the particle list swapping out the dead ones    // Go through each particle after all operators have been applied and see if it is dead.  
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
+            }
+			
+			// Go through each particle after all operators have been applied and see if it is dead.  
+            // If so we need to reorganize the particle list swapping out the dead ones
+			// to the inactive half of the vector
+			// Conditions for particle death include entering/exiting some bounding zone or
+			// exceeding some lifetime limit
             if (particle.isDead) 
             {
                 // The last alive particle is just to the left of the current dead

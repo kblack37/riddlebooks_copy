@@ -7,6 +7,8 @@ import flash.geom.Rectangle;
 
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 
+import haxe.Constraints.Function;
+
 import starling.animation.IAnimatable;
 import starling.animation.Juggler;
 import starling.animation.Tween;
@@ -49,13 +51,13 @@ class BarModelToExpressionAnimation implements IAnimatable
         
         
         
-        var barModelRenderTexture : RenderTexture = new RenderTexture(totalBoundsBuffer.width, totalBoundsBuffer.height, false);
-        barModelRenderTexture.drawBundled(function() : Void
+        var barModelRenderTexture : RenderTexture = new RenderTexture(Std.int(totalBoundsBuffer.width), Std.int(totalBoundsBuffer.height), false);
+        barModelRenderTexture.drawBundled(function(DisplayObject, Matrix, Float) : Void
                 {
                     // We want each individual view to be oriented relative to the total bounds
                     for (i in 0...numViews){
-                        barModelViewBound = barModelViewBounds[i];
-                        barModelView = barModelViews[i];
+                        var barModelViewBound = barModelViewBounds[i];
+                        var barModelView = barModelViews[i];
                         
                         var xOffset : Float = barModelViewBound.x - totalBoundsBuffer.x;
                         var yOffset : Float = barModelViewBound.y - totalBoundsBuffer.y;
@@ -172,7 +174,7 @@ class BarModelToExpressionAnimation implements IAnimatable
     
     public function start() : Void
     {
-        as3hx.Compat.setArrayLength(m_barModelToExpressionMappings, 0);
+		m_barModelToExpressionMappings = new Array<Dynamic>();
         
         m_mapFunction(m_barModelView, addMapping);
         
@@ -214,8 +216,8 @@ class BarModelToExpressionAnimation implements IAnimatable
             }
         }
         
-        as3hx.Compat.setArrayLength(m_barModelCopyImages, 0);
-        as3hx.Compat.setArrayLength(m_subexpressionViews, 0);
+		m_barModelCopyImages = new Array<Image>();
+		m_subexpressionViews = new Array<ExpressionTreeWidget>();
     }
     
     /**
@@ -266,8 +268,8 @@ class BarModelToExpressionAnimation implements IAnimatable
         
         // Need a tween that collapses the bar model part into the subexpression
         var subExpressionTree : ExpressionTree = new ExpressionTree(
-        m_expressionCompiler.getVectorSpace(), 
-        m_expressionCompiler.compile(data.subexpression).head, 
+			m_expressionCompiler.getVectorSpace(), 
+			m_expressionCompiler.compile(data.subexpression)
         );
         var subexpressionView : ExpressionTreeWidget = new ExpressionTreeWidget(subExpressionTree, m_expressionSymbolResource, m_assetManager, 200, 150, true, false);
         subexpressionView.refreshNodes();

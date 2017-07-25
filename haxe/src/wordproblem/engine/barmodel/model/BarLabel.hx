@@ -110,7 +110,7 @@ class BarLabel
         this.hiddenValue = hiddenValue;
         this.numImages = 1;
         
-        this.id = ((id == null)) ? Std.string(Identifiable.getId(1)) : id;
+        this.id = ((id == null)) ? Std.string(Identifiable.getId()) : id;
         this.color = color;
         m_displayedName = value;
     }
@@ -125,7 +125,7 @@ class BarLabel
         this.isAboveSegment, 
         this.bracketStyle, 
         this.hiddenValue, 
-        this.id, 
+        this.id
         );
         barLabelClone.numImages = this.numImages;
         return barLabelClone;
@@ -161,7 +161,7 @@ class BarLabel
     
     public function deserialize(data : Dynamic) : Void
     {
-        this.id = id;
+        this.id = data.id;
         this.value = data.v;
         this.startSegmentIndex = data.s;
         this.endSegmentIndex = data.e;

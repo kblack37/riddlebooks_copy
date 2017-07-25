@@ -3,8 +3,9 @@ package wordproblem.scripts.level.util;
 
 import flash.geom.Rectangle;
 
-import cgs.overworld.core.engine.avatar.AvatarCreator;
-import cgs.overworld.core.engine.avatar.container.AvatarSpriteContainer;
+// TODO: uncomment once cgs library is ported
+//import cgs.overworld.core.engine.avatar.AvatarCreator;
+//import cgs.overworld.core.engine.avatar.container.AvatarSpriteContainer;
 
 import dragonbox.common.dispose.IDisposable;
 

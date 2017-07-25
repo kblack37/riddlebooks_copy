@@ -1,6 +1,7 @@
 package wordproblem.engine.expression.widget.manager;
 
 
+import dragonbox.common.math.vectorspace.RealsVectorSpace;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 
@@ -49,7 +50,7 @@ class SnapManager implements IDisposable
      */
     private var m_termArea : TermAreaWidget;
     
-    private var m_vectorSpace : IVectorSpace;
+    private var m_vectorSpace : RealsVectorSpace;
     private var m_assetManager : AssetManager;
     private var m_expressionResourceMap : ExpressionSymbolMap;
     
@@ -132,7 +133,7 @@ class SnapManager implements IDisposable
     
     public function new(termArea : TermAreaWidget,
             levelRules : LevelRules,
-            vectorSpace : IVectorSpace,
+            vectorSpace : RealsVectorSpace,
             assetManager : AssetManager,
             expressionResourceMap : ExpressionSymbolMap)
     {
@@ -229,12 +230,10 @@ class SnapManager implements IDisposable
                         widgetAcceptingSnap = widgetCandidate;
                         break;
                     }
-                }  // Check if an intersection occurs with the bounding box of the dragged widget and the boxes of either parenthesis    // For candiates that are operators, we only care about whether the dragged card hits a parenthesis  
-                
-                
-                
-                
-                
+                }
+				
+				// For candiates that are operators, we only care about whether the dragged card hits a parenthesis  
+				// Check if an intersection occurs with the bounding box of the dragged widget and the boxes of either parenthesis
                 var doPerformSnap : Bool = false;
                 if (node.isOperator() &&
                     node.wrapInParentheses &&
@@ -435,10 +434,10 @@ class SnapManager implements IDisposable
     private function onTermAreaChanged() : Void
     {
         // Reset the list of available widget and their bounding rectangles
-        as3hx.Compat.setArrayLength(m_widgetCandidates, 0);
-        as3hx.Compat.setArrayLength(m_widgetCandidateBounds, 0);
-        as3hx.Compat.setArrayLength(m_widgetCandidateParenthesisBounds, 0);
-        
+		m_widgetCandidates = new Array<BaseTermWidget>();
+		m_widgetCandidateBounds = new Array<Rectangle>();
+		m_widgetCandidateParenthesisBounds = new Array<Rectangle>();
+		
         _refreshCandidateWidgetList(m_termArea.getWidgetRoot(), m_widgetCandidates, m_widgetCandidateBounds);
         
         // Look at the current state of the widgets and sort based on snapping priority
@@ -524,14 +523,10 @@ class SnapManager implements IDisposable
             snapToLeft : Bool,
             widgetAcceptingSnap : BaseTermWidget) : Void
     {
-        var vectorspace : IVectorSpace = m_vectorSpace;
+        var vectorspace : RealsVectorSpace = m_vectorSpace;
         var previewTree : ExpressionTreeWidget = m_termArea.getPreviewView(true);
         var previewExpressionTree : ExpressionTree = previewTree.getTree();
-        previewExpressionTree.addEventListener(ExpressionTreeEvent.ADD, onNodeAddedToPreview);
-        var matchingNode : ExpressionNode = ExpressionUtil.getNodeById(widgetAcceptingSnap.getNode().id, previewExpressionTree.getRoot());
-        previewExpressionTree.addLeafNode(operator, data, snapToLeft, matchingNode, 0, 0);
-        
-        function onNodeAddedToPreview(event : Event, params : Dynamic) : Void
+		function onNodeAddedToPreview(event : Event, params : Dynamic) : Void
         {
             // Timing issue:
             // Only redraw the preview after the new node has been added to the expression tree
@@ -549,7 +544,7 @@ class SnapManager implements IDisposable
             m_blinkTween.scaleTo(1.1);
             m_blinkTween.repeatCount = 0;
             m_blinkTween.reverse = true;
-            Starling.juggler.add(m_blinkTween);
+            Starling.current.juggler.add(m_blinkTween);
             
             // For division, the bar spills over horizontally after some amount so width should be capped to some max amount
             var operatorImage : DisplayObject = (try cast(snappedOperatorCopy, GroupTermWidget) catch(e:Dynamic) null).groupImage;
@@ -561,8 +556,11 @@ class SnapManager implements IDisposable
             m_operatorTween.animate("scaleY", 1.5);
             m_operatorTween.repeatCount = 0;
             m_operatorTween.reverse = true;
-            Starling.juggler.add(m_operatorTween);
+            Starling.current.juggler.add(m_operatorTween);
         };
+        previewExpressionTree.addEventListener(ExpressionTreeEvent.ADD, onNodeAddedToPreview);
+        var matchingNode : ExpressionNode = ExpressionUtil.getNodeById(widgetAcceptingSnap.getNode().id, previewExpressionTree.getRoot());
+        previewExpressionTree.addLeafNode(operator, data, snapToLeft, matchingNode, 0, 0);
     }
     
     private function hideMultiplyDividePreview() : Void
@@ -570,10 +568,10 @@ class SnapManager implements IDisposable
         if (m_termArea.getPreviewShowing()) 
         {
             // Kill the blink tween on the preview card
-            Starling.juggler.remove(m_blinkTween);
+            Starling.current.juggler.remove(m_blinkTween);
             
             // Kill the operator tween on the preview operator
-            Starling.juggler.remove(m_operatorTween);
+            Starling.current.juggler.remove(m_operatorTween);
             
             m_termArea.showPreview(false);
         }

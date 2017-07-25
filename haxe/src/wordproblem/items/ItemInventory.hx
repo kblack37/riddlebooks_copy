@@ -1,7 +1,7 @@
 package wordproblem.items;
 
-
-import cgs.cache.ICgsUserCache;
+// TODO: uncomment once cgs library is ported
+//import cgs.cache.ICgsUserCache;
 
 import dragonbox.common.expressiontree.compile.LatexCompiler;
 import dragonbox.common.math.vectorspace.RealsVectorSpace;

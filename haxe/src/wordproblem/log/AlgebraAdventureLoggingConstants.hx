@@ -1,9 +1,7 @@
 package wordproblem.log;
 
-
-import flash.utils.Dictionary;
-
-import cgs.server.logging.GameServerData;
+// TODO: uncomment once cgs library is ported
+//import cgs.server.logging.GameServerData;
 
 /**
 	 * ...
@@ -15,7 +13,7 @@ class AlgebraAdventureLoggingConstants
 
     // Game information
     public static inline var SKEY : String = "4047346551f969e5c329dd2eececbcd8";
-    public static var SKEY_HASH : Int = GameServerData.DATA_SKEY_HASH;
+    //public static var SKEY_HASH : Int = GameServerData.DATA_SKEY_HASH;
     public static inline var GAME_NAME : String = "wordproblems";
     public static inline var GAME_ID : Int = 17;
     
@@ -128,12 +126,12 @@ class AlgebraAdventureLoggingConstants
     }
     
     // State
-    private var m_actionMapping : Dictionary;
+    private var m_actionMapping : Map<String, Int>;
     
     public function new()
     {
         // Build action mapping
-        m_actionMapping = new Dictionary();
+        m_actionMapping = new Map<String, Int>();
         Reflect.setField(m_actionMapping, PHRASE_PICKUP_EVENT, 1);
         Reflect.setField(m_actionMapping, PHRASE_DROP_EVENT, 2);
         Reflect.setField(m_actionMapping, EXPRESSION_PICKUP_EVENT, 3);

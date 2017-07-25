@@ -2,7 +2,9 @@ package wordproblem.engine.component;
 
 import wordproblem.engine.component.Component;
 
-import feathers.controls.Callout;
+//import feathers.controls.Callout;
+
+import haxe.Constraints.Function;
 
 import starling.animation.Tween;
 import starling.display.DisplayObject;
@@ -15,11 +17,12 @@ class CalloutComponent extends Component
 {
     public static inline var TYPE_ID : String = "CalloutComponent";
     
+	// TODO: uncomment this once callout class is redesigned
     /**
      * Reference to the actuall callout display object. Do not set this manually,
      * it is automatically created by a system.
      */
-    public var callout : Callout;
+    //public var callout : Callout;
     
     /**
      * If null, don't use any background
@@ -107,7 +110,7 @@ class CalloutComponent extends Component
     {
         super(entityId, TYPE_ID);
         
-        this.directionFromOrigin = Callout.DIRECTION_ANY;
+        //this.directionFromOrigin = Callout.DIRECTION_ANY;
         this.edgePadding = 0.0;
         this.contentPadding = 0.0;
         this.arrowAnimationPeriod = 0.0;
@@ -118,21 +121,22 @@ class CalloutComponent extends Component
         this.yOffset = 0.0;
     }
     
+	// TODO: uncomment this once callout system is redesigned
     override public function dispose() : Void
     {
-        if (this.callout != null) 
-        {
-            this.callout.close(true);
-            this.callout = null;
-            
-            // If the arrow texture is animating, kill the tween associated with it.
-            // The system that created the tween should be the on disposing it
-            // The on complete notifies the system to erase the tween
-            if (this.arrowAnimationTween != null) 
-            {
-                this.arrowAnimationTween.onComplete(this.arrowAnimationTween);
-                this.arrowAnimationTween = null;
-            }
-        }
+        //if (this.callout != null) 
+        //{
+            //this.callout.close(true);
+            //this.callout = null;
+            //
+            //// If the arrow texture is animating, kill the tween associated with it.
+            //// The system that created the tween should be the on disposing it
+            //// The on complete notifies the system to erase the tween
+            //if (this.arrowAnimationTween != null) 
+            //{
+                //this.arrowAnimationTween.onComplete(this.arrowAnimationTween);
+                //this.arrowAnimationTween = null;
+            //}
+        //}
     }
 }

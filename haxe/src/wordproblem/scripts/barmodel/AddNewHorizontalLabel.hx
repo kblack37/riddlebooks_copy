@@ -78,12 +78,12 @@ class AddNewHorizontalLabel extends BaseBarModelScript implements IHitAreaScript
     {
         var status : Int = ScriptStatus.FAIL;
         m_showHitAreas = false;
-        if (super.m_ready && m_isActive) 
+        if (this.m_ready && m_isActive) 
         {
             m_globalMouseBuffer.setTo(m_mouseState.mousePositionThisFrame.x, m_mouseState.mousePositionThisFrame.y);
             m_barModelArea.globalToLocal(m_globalMouseBuffer, m_localMouseBuffer);
             
-            as3hx.Compat.setArrayLength(m_outParamsBuffer, 0);
+			m_outParamsBuffer = new Array<Dynamic>();
             
             if (m_eventTypeBuffer.length > 0) 
             {
@@ -127,9 +127,9 @@ class AddNewHorizontalLabel extends BaseBarModelScript implements IHitAreaScript
                     // script had activated it but we want to overwrite it.
                     if (!m_barModelArea.getPreviewShowing() || !m_didActivatePreview) 
                     {
-                        hitBarWholeView = try cast(m_outParamsBuffer[0], BarWholeView) catch(e:Dynamic) null;
-                        isTop = m_outParamsBuffer[1];
-                        releasedExpressionNode = m_widgetDragSystem.getWidgetSelected().getNode();
+                        var hitBarWholeView = try cast(m_outParamsBuffer[0], BarWholeView) catch(e:Dynamic) null;
+                        var isTop = m_outParamsBuffer[1];
+                        var releasedExpressionNode = m_widgetDragSystem.getWidgetSelected().getNode();
                         var previewView : BarModelView = m_barModelArea.getPreviewView(true);
                         var targetBarWholePreview : BarWhole = previewView.getBarModelData().getBarWholeById(hitBarWholeView.data.id);
                         addNewHorizontalBracket(targetBarWholePreview, releasedExpressionNode.data, targetBarWholePreview.barSegments.length - 1, isTop, PREVIEW_NEW_HORIZONTAL_LABEL_ID);

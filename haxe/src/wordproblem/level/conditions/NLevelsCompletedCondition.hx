@@ -33,7 +33,7 @@ class NLevelsCompletedCondition implements ICondition
     
     public function deserialize(data : Dynamic) : Void
     {
-        m_n = parseInt(data.n);
+        m_n = Std.parseInt(data.n);
         
         if (data.exists("save")) 
         {

@@ -84,9 +84,11 @@ class RemoveBarSegment extends BaseBarModelScript implements IRemoveBarElement
             var hitSegmentView : BarSegmentView = try cast(element, BarSegmentView) catch(e:Dynamic) null;
             var foundSegment : Bool = false;
             var barWholes : Array<BarWhole> = m_barModelArea.getBarModelData().barWholes;
-            for (i in 0...barWholes.length){
+			var i = 0;
+			var j = 0;
+            while (i < barWholes.length) {
                 var barSegments : Array<BarSegment> = barWholes[i].barSegments;
-                for (j in 0...barSegments.length){
+                while (j < barSegments.length) {
                     if (barSegments[j] == hitSegmentView.data) 
                     {
                         foundSegment = true;
@@ -105,12 +107,12 @@ class RemoveBarSegment extends BaseBarModelScript implements IRemoveBarElement
             hitSegmentView.alpha = 1.0;
             
             var segmentViewBounds : Rectangle = hitSegmentView.rigidBody.boundingRectangle;
-            var renderTexture : RenderTexture = new RenderTexture(segmentViewBounds.width, segmentViewBounds.height, false);
+            var renderTexture : RenderTexture = new RenderTexture(Std.int(segmentViewBounds.width), Std.int(segmentViewBounds.height), false);
             var barLabelId : String = BarModelHitAreaUtil.getBarLabelIdOnTopOfSegment(m_barModelArea, i, j);
             if (barLabelId != null) 
             {
                 var labelViewToRemove : BarLabelView = m_barModelArea.getBarLabelViewById(barLabelId);
-                renderTexture.drawBundled(function() : Void
+                renderTexture.drawBundled(function(DisplayObject, Matrix, Float) : Void
                         {
                             renderTexture.draw(hitSegmentView, new Matrix(1, 0, 0, 1, 0, 0));
                             renderTexture.draw(labelViewToRemove, new Matrix(1, 0, 0, 1, 0, 0));
@@ -152,7 +154,7 @@ class RemoveBarSegment extends BaseBarModelScript implements IRemoveBarElement
         {
             m_globalMouseBuffer.setTo(m_mouseState.mousePositionThisFrame.x, m_mouseState.mousePositionThisFrame.y);
             m_barModelArea.globalToLocal(m_globalMouseBuffer, m_localMouseBuffer);
-            as3hx.Compat.setArrayLength(m_outParamsBuffer, 0);
+			m_outParamsBuffer = new Array<Dynamic>();
             
             if (m_mouseState.leftMousePressedThisFrame) 
             {
@@ -163,7 +165,7 @@ class RemoveBarSegment extends BaseBarModelScript implements IRemoveBarElement
                     m_hitSegmentView.alpha = 0.3;
                     
                     m_ringPulseAnimation.reset(m_localMouseBuffer.x, m_localMouseBuffer.y, m_barModelArea.getForegroundLayer(), 0xFF0000);
-                    Starling.juggler.add(m_ringPulseAnimation);
+                    Starling.current.juggler.add(m_ringPulseAnimation);
                     status = ScriptStatus.SUCCESS;
                     
                     m_hitAnchor.x = m_localMouseBuffer.x;
@@ -251,7 +253,7 @@ class RemoveBarSegment extends BaseBarModelScript implements IRemoveBarElement
     
     private function removeBarSegment(barModelData : BarModelData, barSegmentId : String) : Void
     {
-        as3hx.Compat.setArrayLength(m_outParamsBuffer, 0);
+		m_outParamsBuffer = new Array<Dynamic>();
         getBarWholeIndexFromSegmentId(m_outParamsBuffer, barModelData.barWholes, barSegmentId);
         
         var targetBarWholeIndex : Int = Std.parseInt(m_outParamsBuffer[0]);
@@ -350,8 +352,8 @@ class RemoveBarSegment extends BaseBarModelScript implements IRemoveBarElement
     {
         var numBarLabels : Int = barLabels.length;
         var barLabel : BarLabel;
-        var i : Int;
-        for (i in 0...numBarLabels){
+        var i : Int = 0;
+        while (i < numBarLabels) {
             barLabel = barLabels[i];
             
             // If label is only pointing to the bar that was deleted then it should be removed
@@ -387,6 +389,6 @@ class RemoveBarSegment extends BaseBarModelScript implements IRemoveBarElement
     private function onRingPulseAnimationComplete() : Void
     {
         // Make sure animation isn't showing
-        Starling.juggler.remove(m_ringPulseAnimation);
+        Starling.current.juggler.remove(m_ringPulseAnimation);
     }
 }

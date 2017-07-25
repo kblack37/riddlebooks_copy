@@ -34,7 +34,7 @@ class BaseSystemScript extends ScriptNode
     
     public function clear() : Void
     {
-        as3hx.Compat.setArrayLength(m_componentManagers, 0);
+		m_componentManagers = new Array<ComponentManager>();
     }
     
     /**

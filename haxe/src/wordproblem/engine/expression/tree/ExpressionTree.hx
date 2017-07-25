@@ -6,6 +6,7 @@ import dragonbox.common.expressiontree.ExpressionUtil;
 import dragonbox.common.expressiontree.WildCardNode;
 import dragonbox.common.math.util.MathUtil;
 import dragonbox.common.math.vectorspace.IVectorSpace;
+import dragonbox.common.math.vectorspace.RealsVectorSpace;
 import dragonbox.common.system.Map;
 
 import starling.events.EventDispatcher;
@@ -33,9 +34,9 @@ class ExpressionTree extends EventDispatcher
     
     private var m_id : Int;
     private var m_root : ExpressionNode;
-    private var m_vectorSpace : IVectorSpace;
+    private var m_vectorSpace : RealsVectorSpace;
     
-    public function new(vectorSpace : IVectorSpace, root : ExpressionNode)
+    public function new(vectorSpace : RealsVectorSpace, root : ExpressionNode)
     {
         super();
         m_id = TREE_COUNTER++;
@@ -48,7 +49,7 @@ class ExpressionTree extends EventDispatcher
         return m_id;
     }
     
-    public function getVectorSpace() : IVectorSpace
+    public function getVectorSpace() : RealsVectorSpace
     {
         return m_vectorSpace;
     }
@@ -376,22 +377,22 @@ class ExpressionTree extends EventDispatcher
         }
         
         for (i in 0...topMostNodeTiltLeftA.length){
-            newChild = topMostNodeTiltLeftA[i];
-            newParent = bottomMostNodeTiltLeftA[i];
+            var newChild = topMostNodeTiltLeftA[i];
+            var newParent = bottomMostNodeTiltLeftA[i];
             newChild.parent = newParent;
             newParent.right = newChild;
         }
         
         for (i in 0...topMostNodeTiltRightB.length){
-            newChild = topMostNodeTiltRightB[i];
-            newParent = bottomMostNodeTiltRightB[i];
+            var newChild = topMostNodeTiltRightB[i];
+            var newParent = bottomMostNodeTiltRightB[i];
             newChild.parent = newParent;
             newParent.left = newChild;
         }
         
         for (i in 0...topMostNodeTiltLeftB.length){
-            newChild = topMostNodeTiltLeftB[i];
-            newParent = bottomMostNodeTiltLeftB[i];
+            var newChild = topMostNodeTiltLeftB[i];
+            var newParent = bottomMostNodeTiltLeftB[i];
             newChild.parent = newParent;
             newParent.right = newChild;
         }  // If this happens the last element of of topMostNodeTiltLeft becomes the new subtree root    // of the common ancestor.    // I.e. if bottomMostNodeTiltLeft has at least one element, that first element is the parent    // in which the tilt to the left started.    // Special ending case, the common ancestor may need to become the child of the very first node  
@@ -623,9 +624,8 @@ class ExpressionTree extends EventDispatcher
         
         // Dispatch a removal event
         dispatchEventWith(ExpressionTreeEvent.REMOVE, false, {
-                    nodeId : node.id
-
-                });
+            nodeId : node.id
+		});
     }
     
     /**
@@ -655,7 +655,6 @@ class ExpressionTree extends EventDispatcher
                 {
                     nodeIdToReplace : nodeToReplace.id,
                     subtreeToReplace : replacementRootCopy,
-
                 }
                 );
         
@@ -751,10 +750,11 @@ class ExpressionTree extends EventDispatcher
         }
         
         var numericRegex : EReg = ExpressionUtil.NUMERIC_REGEX;
-        var nodeNumeric : Bool = node.data.search(ExpressionUtil.NUMERIC_REGEX) == 0;
+        var nodeNumeric : Bool = false;
+		if (ExpressionUtil.NUMERIC_REGEX.match(node.data)) nodeNumeric = ExpressionUtil.NUMERIC_REGEX.matchedPos().pos == 0;
         if (nodeNumeric) 
         {
-            var nodeValue : Int = parseInt(node.data);
+            var nodeValue : Int = Std.parseInt(node.data);
             if (nodeValue == m_vectorSpace.zero()) 
             {
                 if (node.parent.isSpecificOperator(m_vectorSpace.getAdditionOperator()) ||
@@ -812,17 +812,19 @@ class ExpressionTree extends EventDispatcher
             }
             
             var numericRegex : EReg = ExpressionUtil.NUMERIC_REGEX;
-            var nodeANumeric : Bool = nodeA.data.search(numericRegex) == 0;
-            var nodeBNumeric : Bool = nodeB.data.search(numericRegex) == 0;
-            var nodeAValue : Int = parseInt(nodeA.data);
-            var nodeBValue : Int = parseInt(nodeB.data);
+            var nodeANumeric : Bool = false;
+			if (numericRegex.match(nodeA.data)) nodeANumeric = numericRegex.matchedPos().pos == 0;
+            var nodeBNumeric : Bool = false;
+			if (numericRegex.match(nodeB.data)) nodeBNumeric = numericRegex.matchedPos().pos == 0;
+            var nodeAValue : Int = Std.parseInt(nodeA.data);
+            var nodeBValue : Int = Std.parseInt(nodeB.data);
             if (ExpressionUtil.canAddNode(nodeA, nodeB, m_vectorSpace, true)) 
             {
                 // Two numeric values simply produces another value that is the sum
                 if (nodeANumeric && nodeBNumeric) 
                 {
                     canSimplify = true;
-                    var sumValue : Int = m_vectorSpace.add(nodeAValue, nodeBValue);
+                    var sumValue : Int = Std.int(m_vectorSpace.add(nodeAValue, nodeBValue));
                     _replaceNode(nodeA, new ExpressionNode(m_vectorSpace, sumValue + ""));
                     _removeNode(nodeB);
                 }
@@ -855,12 +857,12 @@ class ExpressionTree extends EventDispatcher
                     if (gcd != m_vectorSpace.identity()) 
                     {
                         canSimplify = true;
-                        nodeAValue = nodeAValue / gcd;
+                        nodeAValue = Std.int(nodeAValue / gcd);
                         var newNodeA : ExpressionNode = new ExpressionNode(m_vectorSpace, nodeAValue + "");
                         _replaceNode(nodeA, newNodeA);
                         nodeA = newNodeA;
                         
-                        nodeBValue = nodeBValue / gcd;
+                        nodeBValue = Std.int(nodeBValue / gcd);
                         var newNodeB : ExpressionNode = new ExpressionNode(m_vectorSpace, nodeBValue + "");
                         _replaceNode(nodeB, newNodeB);
                         nodeB = newNodeB;
@@ -885,7 +887,7 @@ class ExpressionTree extends EventDispatcher
                 if (nodeANumeric && nodeBNumeric) 
                 {
                     canSimplify = true;
-                    var multiplyValue : Int = m_vectorSpace.mul(nodeAValue, nodeBValue);
+                    var multiplyValue : Int = Std.int(m_vectorSpace.mul(nodeAValue, nodeBValue));
                     _replaceNode(nodeA, new ExpressionNode(m_vectorSpace, multiplyValue + ""));
                     _removeNode(nodeB);
                 }  // Two symbols multiplying only make sense if they are the same value and we have exponents  
@@ -899,9 +901,8 @@ class ExpressionTree extends EventDispatcher
             nodeIdsToSimplify.push(nodeB.id);
             
             dispatchEventWith(ExpressionTreeEvent.SIMPLIFY_PAIR, false, {
-                        nodeIds : nodeIdsToSimplify
-
-                    });
+                nodeIds : nodeIdsToSimplify
+            });
         }
         
         return canSimplify;
@@ -968,7 +969,7 @@ class ExpressionTree extends EventDispatcher
         return outDistributionOptions.length > 0;
     }
     
-    private function nodesInPathAllowDistribution(path : Array<ExpressionNode>, vectorSpace : IVectorSpace) : Bool
+    private function nodesInPathAllowDistribution(path : Array<ExpressionNode>, vectorSpace : RealsVectorSpace) : Bool
     {
         var allowDistribution : Bool = true;
         for (j in 0...path.length - 1){
@@ -994,18 +995,20 @@ class ExpressionTree extends EventDispatcher
         if (getDistributionOptions(nodeToDistribute, distributionOptions, distributionOperators)) 
         {
             var matchedDistributionTarget : Bool = false;
+			var matchedDistributionIndex : Int = 0;
             for (distributionIndex in 0...distributionOptions.length){
                 var nodeToDistributeTo : ExpressionNode = distributionOptions[distributionIndex];
                 if (nodeToDistributeTo == targetNode) 
                 {
                     matchedDistributionTarget = true;
+					matchedDistributionIndex = distributionIndex;
                     break;
                 }
             }
             
             if (matchedDistributionTarget) 
             {
-                var operatorToDistribute : String = distributionOperators[distributionIndex];
+                var operatorToDistribute : String = distributionOperators[matchedDistributionIndex];
                 
                 // Within the target node we must find all groups of nodes that joined together by
                 // a top level addition node. Note it is possible we just have one such group in which
@@ -1118,7 +1121,7 @@ class ExpressionTree extends EventDispatcher
      *         List of leafs nodes
      */
     public function simplifyCluster(nodes : Array<ExpressionNode>,
-            vectorSpace : IVectorSpace) : Bool
+            vectorSpace : RealsVectorSpace) : Bool
     {
         var canSimplify : Bool = false;
         
@@ -1229,7 +1232,7 @@ class ExpressionTree extends EventDispatcher
      */
     public function simplifyPairOfSubtrees(groupRootA : ExpressionNode,
             groupRootB : ExpressionNode,
-            vectorSpace : IVectorSpace) : Bool
+            vectorSpace : RealsVectorSpace) : Bool
     {
         var canSimplify : Bool = false;
         // Assuming that both groups roots are separate additive terms
@@ -1315,7 +1318,7 @@ class ExpressionTree extends EventDispatcher
         var negativeBitB : Float = 1;
         for (leafNode in leafNodesB)
         {
-            leafData = leafNode.data;
+            var leafData = leafNode.data;
             
             if (leafData.charAt(0) == vectorSpace.getSubtractionOperator()) 
             {
@@ -1328,7 +1331,7 @@ class ExpressionTree extends EventDispatcher
             {
                 if (denominatorTallyMap.contains(leafData)) 
                 {
-                    denomTally = denominatorTallyMap.get(leafData);
+                    var denomTally = denominatorTallyMap.get(leafData);
                     denominatorTallyMap.put(leafData, denomTally - 1);
                 }
                 else 
@@ -1341,7 +1344,7 @@ class ExpressionTree extends EventDispatcher
             {
                 if (numeratorTallyMap.contains(leafData)) 
                 {
-                    numeratorTally = numeratorTallyMap.get(leafData);
+                    var numeratorTally = numeratorTallyMap.get(leafData);
                     numeratorTallyMap.put(leafData, numeratorTally - 1);
                 }
                 else 
@@ -1358,7 +1361,7 @@ class ExpressionTree extends EventDispatcher
             var numeratorSymbols : Array<Dynamic> = numeratorTallyMap.getKeys();
             for (numeratorSymbol in numeratorSymbols)
             {
-                numeratorTally = numeratorTallyMap.get(numeratorSymbol);
+                var numeratorTally = numeratorTallyMap.get(numeratorSymbol);
                 if (numeratorTally != 0) 
                 {
                     variableStructureMatches = false;
@@ -1369,7 +1372,7 @@ class ExpressionTree extends EventDispatcher
             var denominatorSymbols : Array<Dynamic> = denominatorTallyMap.getKeys();
             for (denominatorSymbol in denominatorSymbols)
             {
-                denomTally = denominatorTallyMap.get(denominatorSymbol);
+                var denomTally = denominatorTallyMap.get(denominatorSymbol);
                 if (denomTally != 0) 
                 {
                     variableStructureMatches = false;
@@ -1424,7 +1427,8 @@ class ExpressionTree extends EventDispatcher
         for (leafNode in leafNodes)
         {
             // If we want to strip variables then remove nodes that are not literals
-            var isLiteral : Bool = leafNode.data.search(ExpressionUtil.NUMERIC_REGEX) == 0;
+            var isLiteral : Bool = false;
+			if (ExpressionUtil.NUMERIC_REGEX.match(leafNode.data)) isLiteral = ExpressionUtil.NUMERIC_REGEX.matchedPos().pos == 0;
             if (isLiteral && stripLiterals || !isLiteral && !stripLiterals) 
             {
                 nodesToRemove.push(leafNode);

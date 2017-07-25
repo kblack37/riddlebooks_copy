@@ -3,10 +3,10 @@ package wordproblem.engine.barmodel.view;
 
 import dragonbox.common.dispose.IDisposable;
 
-import feathers.display.Scale3Image;
-import feathers.display.Scale9Image;
-import feathers.textures.Scale3Textures;
-import feathers.textures.Scale9Textures;
+//import feathers.display.Scale3Image;
+//import feathers.display.Scale9Image;
+//import feathers.textures.Scale3Textures;
+//import feathers.textures.Scale9Textures;
 
 import starling.display.DisplayObject;
 import starling.display.Image;
@@ -29,9 +29,11 @@ class BarSegmentView extends Sprite implements IDisposable
      */
     public var rigidBody : RigidBodyComponent;
     
-    private var m_nineSliceImage : Scale9Image;
-    private var m_threeSliceHorizontalImage : Scale3Image;
-    private var m_threeSliceVerticalImage : Scale3Image;
+	// TODO: these were scaled image classes from the feathers library and
+	// will probably have to be fixed
+    private var m_nineSliceImage : Image;
+    private var m_threeSliceHorizontalImage : Image;
+    private var m_threeSliceVerticalImage : Image;
     private var m_originalImage : Image;
     
     /**
@@ -40,7 +42,7 @@ class BarSegmentView extends Sprite implements IDisposable
     private var m_hiddenImage : DottedRectangle;
     
     public function new(barSegment : BarSegment,
-            nineSliceTexture : Scale9Textures,
+            nineSliceTexture : Texture,
             regularTexture : Texture,
             hiddenImage : DottedRectangle)
     {
@@ -54,9 +56,11 @@ class BarSegmentView extends Sprite implements IDisposable
         // However this fails if one of the dimensions is LESS than the padding we start the slice from
         // (i.e. if non-scaling parts exceeds the desired width)
         // In this instance we need to fall back to drawing the unsliced image
-        m_nineSliceImage = new Scale9Image(nineSliceTexture);
-        m_threeSliceHorizontalImage = new Scale3Image(new Scale3Textures(regularTexture, nineSliceTexture.scale9Grid.left, nineSliceTexture.scale9Grid.width, "horizontal"));
-        m_threeSliceVerticalImage = new Scale3Image(new Scale3Textures(regularTexture, nineSliceTexture.scale9Grid.top, nineSliceTexture.scale9Grid.height, "vertical"));
+		// TODO: these images were replaced from the feathers library and will need
+		// to be fixed later
+        m_nineSliceImage = new Image(nineSliceTexture);
+        m_threeSliceHorizontalImage = new Image(Texture.fromTexture(regularTexture));
+        m_threeSliceVerticalImage = new Image(Texture.fromTexture(regularTexture));
         m_originalImage = new Image(regularTexture);
         
         m_hiddenImage = hiddenImage;
@@ -66,10 +70,10 @@ class BarSegmentView extends Sprite implements IDisposable
     {
         this.removeChildren();
         
-        var nineSliceTexture : Scale9Textures = m_nineSliceImage.textures;
+        var nineSliceTexture : Texture = m_nineSliceImage.texture;
         var targetWidth : Float = unitWidth * data.getValue();
-        var minimumWidthForNineSlice : Float = 2 * nineSliceTexture.scale9Grid.left;  // Assume padding on left and right are the same  
-        var minimumHeightForNineSlice : Float = 2 * nineSliceTexture.scale9Grid.top;
+        var minimumWidthForNineSlice : Float = 2 * nineSliceTexture.width;  // Assume padding on left and right are the same  
+        var minimumHeightForNineSlice : Float = 2 * nineSliceTexture.height;
         
         // HACK: To avoid having invisible segments we push up the width of a segment to one even
         // if it causes things to lose proportionality

@@ -1,13 +1,15 @@
 package wordproblem.engine.expression.widget.term;
 
 
+import dragonbox.common.math.vectorspace.RealsVectorSpace;
 import flash.geom.Rectangle;
+import starling.display.Image;
 
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.math.vectorspace.IVectorSpace;
 
-import feathers.display.Scale3Image;
-import feathers.textures.Scale3Textures;
+//import feathers.display.Scale3Image;
+//import feathers.textures.Scale3Textures;
 
 import starling.display.DisplayObject;
 import starling.textures.Texture;
@@ -27,14 +29,14 @@ class GroupTermWidget extends BaseTermWidget
     public var groupImage : DisplayObject;
     
     public function new(node : ExpressionNode,
-            vectorSpace : IVectorSpace,
+            vectorSpace : RealsVectorSpace,
             expressionSymbolMap : ExpressionSymbolMap,
             assetManager : AssetManager)
     {
         super(node, assetManager);
         
         var textureName : String;
-        super.mainGraphicBounds = new Rectangle(0, 0, 0, 0);
+        this.mainGraphicBounds = new Rectangle(0, 0, 0, 0);
         
         if (node.isSpecificOperator(vectorSpace.getDivisionOperator())) 
         {
@@ -42,7 +44,9 @@ class GroupTermWidget extends BaseTermWidget
             var texture : Texture = assetManager.getTexture("divide_bar");
             var centerX : Float = 10;
             var centerWidth : Float = texture.width - 2 * centerX;
-            this.groupImage = new Scale3Image(new Scale3Textures(texture, centerX, centerWidth));
+			// TODO: this was converted from a Scale3Texture from the feathers library
+			// and will probably need to be fixed
+            this.groupImage = new Image(Texture.fromTexture(texture, new Rectangle(centerX, 0, centerWidth, texture.height)));
         }
         else 
         {
@@ -53,6 +57,6 @@ class GroupTermWidget extends BaseTermWidget
         this.groupImage.pivotY = this.groupImage.height * 0.5;
         this.addChild(groupImage);
         
-        super.mainGraphicBounds = this.groupImage.getBounds(this);
+        this.mainGraphicBounds = this.groupImage.getBounds(this);
     }
 }

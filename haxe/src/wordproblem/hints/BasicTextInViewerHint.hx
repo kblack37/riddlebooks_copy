@@ -32,11 +32,11 @@ class BasicTextInViewerHint extends HintScript
     override public function getDescription(width : Float, height : Float) : DisplayObject
     {
         var container : Sprite = new Sprite();
-        var titleTextfield : TextField = new TextField(width, 70, m_title, GameFonts.DEFAULT_FONT_NAME, 24);
+        var titleTextfield : TextField = new TextField(Std.int(width), 70, m_title, GameFonts.DEFAULT_FONT_NAME, 24);
         titleTextfield.y = -13;
         container.addChild(titleTextfield);
         
-        var descriptionTextfield : TextField = new TextField(width, height, m_mainContent, GameFonts.DEFAULT_FONT_NAME, 18);
+        var descriptionTextfield : TextField = new TextField(Std.int(width), Std.int(height), m_mainContent, GameFonts.DEFAULT_FONT_NAME, 18);
         container.addChild(descriptionTextfield);
         return container;
     }

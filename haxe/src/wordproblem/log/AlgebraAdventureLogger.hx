@@ -1,14 +1,14 @@
 package wordproblem.log;
 
-
-import cgs.CgsApi;
-import cgs.server.challenge.ChallengeService;
-import cgs.server.data.TosData;
-import cgs.server.logging.CGSServerProps;
-import cgs.server.logging.actions.QuestAction;
-import cgs.server.responses.QuestLogResponseStatus;
-import cgs.user.CgsUserProperties;
-import cgs.user.ICgsUser;
+// TODO: uncomment once cgs library is ported
+//import cgs.CgsApi;
+//import cgs.server.challenge.ChallengeService;
+//import cgs.server.data.TosData;
+//import cgs.server.logging.CGSServerProps;
+//import cgs.server.logging.actions.QuestAction;
+//import cgs.server.responses.QuestLogResponseStatus;
+//import cgs.user.CgsUserProperties;
+//import cgs.user.ICgsUser;
 
 import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
@@ -351,14 +351,14 @@ class AlgebraAdventureLogger extends BaseBufferEventScript
         // This should read in a configuration from the logging file
         // The main pieces to load are the version id and the category id
         var cgsUserProps : CgsUserProperties = new CgsUserProperties(
-        AlgebraAdventureLoggingConstants.SKEY, 
-        AlgebraAdventureLoggingConstants.SKEY_HASH, 
-        AlgebraAdventureLoggingConstants.GAME_NAME, 
-        AlgebraAdventureLoggingConstants.GAME_ID, 
-        m_config.getLoggingVersionId(), 
-        m_config.getLoggingCategoryId(), 
-        m_config.getServerDeployment(), 
-        ((m_config.getUseActiveServer())) ? CGSServerProps.CURRENT_VERSION : CGSServerProps.VERSION_DEV, 
+			AlgebraAdventureLoggingConstants.SKEY, 
+			AlgebraAdventureLoggingConstants.SKEY_HASH, 
+			AlgebraAdventureLoggingConstants.GAME_NAME, 
+			AlgebraAdventureLoggingConstants.GAME_ID, 
+			m_config.getLoggingVersionId(), 
+			m_config.getLoggingCategoryId(), 
+			m_config.getServerDeployment(), 
+			((m_config.getUseActiveServer())) ? CGSServerProps.CURRENT_VERSION : CGSServerProps.VERSION_DEV
         );
         
         // Enable AB Testing

@@ -1,10 +1,11 @@
 package wordproblem.engine.component;
 
+import starling.display.Image;
 import wordproblem.engine.component.Component;
 
 import flash.geom.Point;
 
-import feathers.display.Scale3Image;
+//import feathers.display.Scale3Image;
 
 import starling.animation.Tween;
 
@@ -30,7 +31,7 @@ class ArrowComponent extends Component
     public var midPoint : Point;
     public var length : Float;
     public var rotation : Float;
-    public var arrowView : Scale3Image;
+    public var arrowView : Image;
     
     /**
      * Indicate whether the arrow should animate, the animation would be a basic bobbing

@@ -1,9 +1,10 @@
 package dragonbox.common.eventsequence;
 
 import dragonbox.common.eventsequence.SequenceEvent;
-
 import dragonbox.common.time.Time;
 import dragonbox.common.eventsequence.endtriggers.EndTrigger;
+
+import haxe.Constraints.Function;
 
 /**
  * Sequence event that executes an arbitrary function up until the end trigger
@@ -26,16 +27,16 @@ class CustomSequenceEvent extends SequenceEvent
     
     override public function update(time : Time) : Void
     {
-        if (currentState == ACTIVE) 
+        if (currentState == SequenceEvent.ACTIVE) 
         {
             endTrigger.update(time);
             if (endTrigger.isComplete()) 
             {
-                this.currentState = COMPLETE;
+                this.currentState = SequenceEvent.COMPLETE;
             }
             else 
             {
-                m_customExecuteFunction.apply(null, m_customExecuteParams);
+				m_customExecuteFunction(null, m_customExecuteParams);
             }
         }
     }

@@ -3,15 +3,15 @@ package wordproblem.scripts.barmodel;
 
 import flash.geom.Rectangle;
 
-import cgs.audio.Audio;
+// TODO: uncomment once cgs library is ported
+//import cgs.audio.Audio;
 
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
-
-import feathers.controls.Button;
 
 import starling.animation.Transitions;
 import starling.animation.Tween;
 import starling.core.Starling;
+import starling.display.Button;
 import starling.display.DisplayObject;
 import starling.display.Image;
 import starling.events.Event;
@@ -81,7 +81,7 @@ class ValidateBarModelArea extends BaseBarModelScript
         m_decomposedReferenceBarModels = new Array<DecomposedBarModelData>();
         m_referenceBarModelValidated = new Array<Bool>();
         m_colorChangeAnimation = new ColorChangeAnimation();
-        m_aliasValueToTermMap = new Dynamic();
+        m_aliasValueToTermMap = { };
     }
     
     public function getReferenceModels() : Array<BarModelData>
@@ -101,7 +101,7 @@ class ValidateBarModelArea extends BaseBarModelScript
     
     public function clearAliases() : Void
     {
-        m_aliasValueToTermMap = new Dynamic();
+        m_aliasValueToTermMap = { };
     }
     
     /**
@@ -136,12 +136,12 @@ class ValidateBarModelArea extends BaseBarModelScript
      */
     public function setReferenceModels(modelData : Array<BarModelData>) : Void
     {
-        as3hx.Compat.setArrayLength(m_referenceBarModels, 0);
+		m_referenceBarModels = new Array<BarModelData>();
         
         // Set all new models as not being validated
-        as3hx.Compat.setArrayLength(m_referenceBarModelValidated, 0);
+		m_referenceBarModelValidated = new Array<Bool>();
         // Create decomposed model data for later validation
-        as3hx.Compat.setArrayLength(m_decomposedReferenceBarModels, 0);
+		m_decomposedReferenceBarModels = new Array<DecomposedBarModelData>();
         for (i in 0...modelData.length){
             m_referenceBarModels.push(modelData[i]);
             m_referenceBarModelValidated.push(false);
@@ -149,9 +149,8 @@ class ValidateBarModelArea extends BaseBarModelScript
         }
         
         m_gameEngine.dispatchEventWith(GameEvent.ADD_NEW_BAR_MODEL, false, {
-                    referenceModels : modelData
-
-                });
+            referenceModels : modelData
+        });
     }
     
     /**
@@ -185,7 +184,7 @@ class ValidateBarModelArea extends BaseBarModelScript
             if (m_validateButton != null) 
             {
                 m_validateButton.removeEventListener(Event.TRIGGERED, validate);
-                (try cast(m_validateButton, Button) catch(e:Dynamic) null).isEnabled = value;
+                (try cast(m_validateButton, Button) catch(e:Dynamic) null).enabled = value;
                 if (value) 
                 {
                     m_validateButton.addEventListener(Event.TRIGGERED, validate);
@@ -271,22 +270,21 @@ class ValidateBarModelArea extends BaseBarModelScript
                 backgroundColorToFadeTo = 0xFF0000;
             }
             m_colorChangeAnimation.play(backgroundColorToFadeTo, 0xFFFFFF, 1.0, m_barModelArea.getBackgroundImage());
-            Starling.juggler.add(m_colorChangeAnimation);
+            Starling.current.juggler.add(m_colorChangeAnimation);
             
             m_gameEngine.dispatchEventWith(GameEvent.BAR_MODEL_CORRECT);
-            Audio.instance.playSfx("find_correct_equation");
+			// TODO: uncomment once cgs library is ported
+            //Audio.instance.playSfx("find_correct_equation");
         }
         else 
         {
             m_gameEngine.dispatchEventWith(GameEvent.BAR_MODEL_INCORRECT);
-            Audio.instance.playSfx("wrong");
-        }  // We replace the values in the labels with the name visible to the player in case they are different    // The serialized object is used mainly for logging purposes  
-        
-        
-        
-        
-        
-        
+			// TODO: uncomment once cgs library is ported
+            //Audio.instance.playSfx("wrong");
+        }  
+		
+		// The serialized object is used mainly for logging purposes  
+        // We replace the values in the labels with the name visible to the player in case they are different
         var modelDataSnapshot : BarModelData = m_barModelArea.getBarModelData().clone();
         modelDataSnapshot.replaceLabelValuesWithVisibleNames(m_gameEngine.getExpressionSymbolResources());
         
@@ -317,8 +315,7 @@ class ValidateBarModelArea extends BaseBarModelScript
     {
         var barModelAreaConstraints : Rectangle = m_barModelArea.getConstraints();
         var maxEdgeLength : Float = Math.min(barModelAreaConstraints.width, barModelAreaConstraints.height);
-        var targetTexture : Texture = ((isValid)) ? targetTexture = m_assetManager.getTexture("correct") : 
-        targetTexture = m_assetManager.getTexture("wrong");
+        var targetTexture : Texture = ((isValid)) ? m_assetManager.getTexture("correct") : m_assetManager.getTexture("wrong");
         
         // Tween in the icon
         var targetIcon : Image = new Image(targetTexture);
@@ -347,8 +344,8 @@ class ValidateBarModelArea extends BaseBarModelScript
                             {
                                 targetIcon.removeFromParent(true);
                             };
-                    Starling.juggler.add(fadeOutTween);
+                    Starling.current.juggler.add(fadeOutTween);
                 };
-        Starling.juggler.add(fadeInTween);
+        Starling.current.juggler.add(fadeInTween);
     }
 }

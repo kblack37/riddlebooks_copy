@@ -1,7 +1,7 @@
 package wordproblem.engine.scripting;
 
 import flash.errors.Error;
-import wordproblem.engine.scripting.ScriptClass;
+//import wordproblem.engine.scripting.ScriptClass;
 
 
 import gameconfig.versions.brainpopturk.WordProblemGameBrainpopTurk;

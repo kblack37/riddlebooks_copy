@@ -1,5 +1,6 @@
 package wordproblem.hints;
 
+import haxe.xml.Fast;
 
 import wordproblem.engine.barmodel.BarModelTypes;
 
@@ -16,7 +17,7 @@ import wordproblem.engine.barmodel.BarModelTypes;
  */
 class CustomHintGenerator
 {
-    private var m_customHintTemplateXml : FastXML;
+    private var m_customHintTemplateXml : Fast;
     
     /**
      * Mapping for a string id of a hint template to the xml element containing all the data
@@ -30,40 +31,40 @@ class CustomHintGenerator
      */
     private var m_barModelTypeToLabelIdListMap : Dynamic;
     
-    public function new(customHintTemplateXml : FastXML)
+    public function new(customHintTemplateXml : Fast)
     {
         m_customHintTemplateXml = customHintTemplateXml;
         
         // Do some pre-processing on the template xml.
         // Each bar model type should link to a list of hint ids that represent the
         // pool of candidate hints that might be useful to show to the player.
-        var barModelHintBlocks : FastXMLList = customHintTemplateXml.node.elements.innerData("barmodelhints");
+        var barModelHintBlocks : FastList = customHintTemplateXml.node.elements.innerData("barmodelhints");
         m_hintLabelIdToHintXmlListMap = { };
         var i : Int;
         for (i in 0...barModelHintBlocks.length()){
-            var barModelHintBlock : FastXML = barModelHintBlocks.get(i);
-            var hintElements : FastXMLList = barModelHintBlock.node.elements.innerData("hint");
+            var barModelHintBlock : Fast = barModelHintBlocks.get(i);
+            var hintElements : FastList = barModelHintBlock.node.elements.innerData("hint");
             var j : Int;
             for (j in 0...hintElements.length()){
                 // Create the mapping from label to step based on the selected block
-                var hintElement : FastXML = hintElements.get(j);
+                var hintElement : Fast = hintElements.get(j);
                 var hintLabelId : String = hintElement.node.attribute.innerData("labelId");
                 if (!m_hintLabelIdToHintXmlListMap.exists(hintLabelId)) 
                 {
-                    Reflect.setField(m_hintLabelIdToHintXmlListMap, hintLabelId, new Array<FastXML>());
+                    Reflect.setField(m_hintLabelIdToHintXmlListMap, hintLabelId, new Array<Fast>());
                 }
                 
-                var hintXmlListForId : Array<FastXML> = Reflect.field(m_hintLabelIdToHintXmlListMap, hintLabelId);
+                var hintXmlListForId : Array<Fast> = Reflect.field(m_hintLabelIdToHintXmlListMap, hintLabelId);
                 hintXmlListForId.push(hintElement);
             }
         }
         
         m_barModelTypeToLabelIdListMap = { };
-        var typeToHintsMappings : FastXMLList = customHintTemplateXml.node.elements.innerData("mapping");
+        var typeToHintsMappings : FastList = customHintTemplateXml.node.elements.innerData("mapping");
         for (i in 0...typeToHintsMappings.length()){
-            var mappingBlock : FastXML = typeToHintsMappings.get(i);
-            var hintLabels : Array<FastXML> = new Array<FastXML>();
-            var mappingElements : FastXMLList = mappingBlock.node.elements.innerData("label");
+            var mappingBlock : Fast = typeToHintsMappings.get(i);
+            var hintLabels : Array<Fast> = new Array<Fast>();
+            var mappingElements : FastList = mappingBlock.node.elements.innerData("label");
             for (j in 0...mappingElements.length()){
                 hintLabels.push(mappingElements.get(j));
             }
@@ -91,7 +92,7 @@ class CustomHintGenerator
      */
     public function generateHintsForLevel(barModelTypeForLevel : String,
             docIdToValueMap : Dynamic,
-            hintDataForLevel : Dynamic) : FastXML
+            hintDataForLevel : Dynamic) : Fast
     {
         // Each bar model type has unique pattern that slightly alters parameters.
         // For example, looking at the reference model pictures, the fact that '?' is a total
@@ -342,10 +343,10 @@ class CustomHintGenerator
         
         
         
-        var generatedCustomHints : FastXML = FastXML.parse("<customHints/>");
+        var generatedCustomHints : Fast = Fast.parse("<customHints/>");
         if (m_barModelTypeToLabelIdListMap.exists(barModelTypeForLevel)) 
         {
-            var labelIdList : Array<FastXML> = Reflect.field(m_barModelTypeToLabelIdListMap, barModelTypeForLevel);
+            var labelIdList : Array<Fast> = Reflect.field(m_barModelTypeToLabelIdListMap, barModelTypeForLevel);
             for (labelIdElement in labelIdList)
             {
                 var labelId : String = labelIdElement.node.attribute.innerData("id");
@@ -353,7 +354,7 @@ class CustomHintGenerator
                 
                 if (m_hintLabelIdToHintXmlListMap.exists(labelId)) 
                 {
-                    var hintXmlsForLabel : Array<FastXML> = Reflect.field(m_hintLabelIdToHintXmlListMap, labelId);
+                    var hintXmlsForLabel : Array<Fast> = Reflect.field(m_hintLabelIdToHintXmlListMap, labelId);
                     for (hintXmlForLabel in hintXmlsForLabel)
                     {
                         // Skip over this hint if the type restriction tags for this particular problem does not
@@ -406,7 +407,7 @@ class CustomHintGenerator
                                         
                                         if (doCreateReplica) 
                                         {
-                                            var replicaXML : FastXML = createCustomHintXML(step, hintXmlForLabel, generalTermsToNumbersMap, hintDataForLevel);
+                                            var replicaXML : Fast = createCustomHintXML(step, hintXmlForLabel, generalTermsToNumbersMap, hintDataForLevel);
                                             var replicaText : String = replicaXML.node.text.innerData();
                                             replicaXML.node.setChildren.innerData(replicaText.replace(new EReg("#" + replicateProperty, "g"), replicationData.names[i]));
                                             replicaXML.setAttribute("targetMissingDocId", replicationData.docIds[i]);
@@ -429,11 +430,11 @@ class CustomHintGenerator
     }
     
     private function createCustomHintXML(step : String,
-            hintTemplateXML : FastXML,
+            hintTemplateXML : Fast,
             generalTermsToNumbersMap : Dynamic,
-            hintDataForLevel : Dynamic) : FastXML
+            hintDataForLevel : Dynamic) : Fast
     {
-        var generatedHintForLabel : FastXML = FastXML.parse("<hint/>");
+        var generatedHintForLabel : Fast = Fast.parse("<hint/>");
         generatedHintForLabel.setAttribute("step", step);
         
         // The text content has regions that should be replaced with word or phrases

@@ -35,9 +35,9 @@ class BounceComponent extends Component
     override public function dispose() : Void
     {
         // Kill the animation
-        if (tween != null && Starling.juggler.contains(tween)) 
+        if (tween != null && Starling.current.juggler.contains(tween)) 
         {
-            Starling.juggler.remove(tween);
+            Starling.current.juggler.remove(tween);
         }
         
         this.resetToOriginalPosition();

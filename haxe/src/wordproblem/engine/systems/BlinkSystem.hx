@@ -40,7 +40,7 @@ class BlinkSystem extends BaseSystemScript
                 blinkTween.repeatCount = 0;
                 blinkTween.reverse = true;
                 blinkTween.animate("alpha", blinkComponent.minAlpha);
-                Starling.juggler.add(blinkTween);
+                Starling.current.juggler.add(blinkTween);
                 
                 blinkComponent.tween = blinkTween;
             }

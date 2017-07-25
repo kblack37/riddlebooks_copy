@@ -1,8 +1,8 @@
 package wordproblem.engine.animation;
 
 
-import flash.display3d.IndexBuffer3D;
-import flash.display3d.VertexBuffer3D;
+import openfl.display3D.IndexBuffer3D;
+import openfl.display3D.VertexBuffer3D;
 
 import starling.animation.IAnimatable;
 import starling.core.RenderSupport;
@@ -94,8 +94,6 @@ class ScanAnimation implements IAnimatable
             scanWidth : Float,
             delay : Float)
     {
-        super();
-        
         m_color = color;
         m_scanVelocity = scanVelocity;
         m_scanWidth = scanWidth;
@@ -112,8 +110,8 @@ class ScanAnimation implements IAnimatable
     public function play(views : Array<DisplayObject>) : Void
     {
         m_views = views;
-        as3hx.Compat.setArrayLength(m_viewTextureWidths, 0);
-        as3hx.Compat.setArrayLength(m_viewTextureEndRatio, 0);
+		m_viewTextureWidths = new Array<Float>();
+		m_viewTextureEndRatio = new Array<Float>();
         
         // We have the issue where the texture used in the filter is not the
         // same dimension as the display object
@@ -151,7 +149,7 @@ class ScanAnimation implements IAnimatable
         // The width of the scan line needs to be converted to a ratio
         // This is based on the width of the texture
         // This will simply give us the difference between the min and max bounds of the filter
-        textureWidth = m_viewTextureWidths[m_currentViewIndex];
+        var textureWidth = m_viewTextureWidths[m_currentViewIndex];
         var scanWidthRatio : Float = m_scanWidth / textureWidth;
         
         // Apply the filter to the view
@@ -159,12 +157,12 @@ class ScanAnimation implements IAnimatable
         m_scanLineFilter = new ScanLineFilter(m_color, -1 * scanWidthRatio, 0.0);
         currentView.filter = m_scanLineFilter;
         
-        Starling.juggler.add(this);
+        Starling.current.juggler.add(this);
     }
     
     public function stop() : Void
     {
-        Starling.juggler.remove(this);
+        Starling.current.juggler.remove(this);
         
         // Kill the current filter
         if (m_views != null) 

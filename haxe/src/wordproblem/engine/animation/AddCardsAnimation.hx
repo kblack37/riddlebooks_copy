@@ -4,6 +4,8 @@ import wordproblem.engine.animation.CardShiftAnimation;
 
 import flash.geom.Point;
 
+import haxe.Constraints.Function;
+
 import starling.animation.Tween;
 import starling.core.Starling;
 
@@ -64,34 +66,35 @@ class AddCardsAnimation
         // another one.
         var cardShiftDuration : Float = 0.25;
         var cardShiftAnimation : CardShiftAnimation = new CardShiftAnimation();
-        cardShiftAnimation.play(
-                termArea,
-                previewTree,
-                function() : Void
-                {
-                    cardShiftAnimationComplete = true;
-                    if (cardShiftAnimationComplete && addedCardShiftComplete) 
-                    {
-                        termArea.removeChild(addedLeafWidgetCopy);
-                        
-                        if (onComplete != null) 
-                        {
-                            onComplete();
-                        }
-                    }
-                },
-                cardShiftDuration
-                );
-        
-        // Create a copy of the widget
+		
+		// Create a copy of the widget
         var addedLeafWidgetCopy : BaseTermWidget = new SymbolTermWidget(
-        addedLeafWidget.getNode(), 
-        nodeResourceMap, 
-        assetManager, 
+			addedLeafWidget.getNode(), 
+			nodeResourceMap, 
+			assetManager
         );
         addedLeafWidgetCopy.x = dropX;
         addedLeafWidgetCopy.y = dropY;
         termArea.addChild(addedLeafWidgetCopy);
+		
+        cardShiftAnimation.play(
+            termArea,
+            previewTree,
+            function() : Void
+            {
+                cardShiftAnimationComplete = true;
+                if (cardShiftAnimationComplete && addedCardShiftComplete) 
+                {
+                    termArea.removeChild(addedLeafWidgetCopy);
+                    
+                    if (onComplete != null) 
+                    {
+                        onComplete();
+                    }
+				}
+            },
+            cardShiftDuration
+        );
         
         // Shift duration depends on the distance to move
         var deltaX : Float = dropX - finalPoint.x;
@@ -100,10 +103,7 @@ class AddCardsAnimation
         var tween : Tween = new Tween(addedLeafWidgetCopy, addedCardShiftDuration);
         tween.moveTo(finalPoint.x, finalPoint.y);
         tween.scaleTo(scaleFactor);
-        tween.onComplete = onCompleteMove;
-        Starling.juggler.add(tween);
-        
-        function onCompleteMove() : Void
+		function onCompleteMove() : Void
         {
             addedCardShiftComplete = true;
             if (cardShiftAnimationComplete && addedCardShiftComplete) 
@@ -116,5 +116,7 @@ class AddCardsAnimation
                 }
             }
         };
+        tween.onComplete = onCompleteMove;
+        Starling.current.juggler.add(tween);
     }
 }

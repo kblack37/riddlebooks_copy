@@ -26,10 +26,7 @@ import wordproblem.engine.component.StageChangeAnimationComponent;
 import wordproblem.engine.component.TextureCollectionComponent;
 import wordproblem.engine.component.TransformComponent;
 
-import flash.utils.Dictionary;
-
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
-import dragonbox.common.system.Map;
 
 /**
  * Provides a singular method to create individual components from a well structured
@@ -54,7 +51,7 @@ class ComponentFactory
      */
     public function createAndAddComponentsForItemList(componentManager : ComponentManager, data : Dynamic) : Void
     {
-        var entities : Array<Dynamic> = try cast(data, Array</*AS3HX WARNING no type*/>) catch(e:Dynamic) null;
+        var entities : Array<Dynamic> = try cast(data, Array<Dynamic>) catch(e:Dynamic) null;
         
         var i : Int;
         var item : Dynamic;
@@ -119,7 +116,7 @@ class ComponentFactory
                 component = new EquippableComponent(entityId);
             case ExpressionComponent.TYPE_ID:
                 var equationString : String = data.data.equationString;
-                component = new ExpressionComponent(entityId, equationString, m_expressionCompiler.compile(equationString).head);
+                component = new ExpressionComponent(entityId, equationString, m_expressionCompiler.compile(equationString));
             case GenreIdComponent.TYPE_ID:
                 component = new GenreIdComponent(entityId);
             case HiddenItemComponent.TYPE_ID:
@@ -174,22 +171,19 @@ class ComponentFactory
     
     public function serializeComponentManager(componentManager : ComponentManager) : Dynamic
     {
-        var entityIdToComponentList : Dictionary = new Dictionary();
+        var entityIdToComponentList : Map<String, Array<Component>> = new Map<String, Array<Component>>();
         
         var enityToComponentMaps : Array<Dynamic> = componentManager.getComponentTypeToEntityComponentMap().getValues();
         var numMaps : Int = enityToComponentMaps.length;
         var i : Int;
         for (i in 0...numMaps){
-            var entityToComponentMap : Map = enityToComponentMaps[i];
-            var components : Array<Dynamic> = entityToComponentMap.getValues();
-            var numComponents : Int = components.length;
-            var j : Int;
-            for (j in 0...numComponents){
-                var component : Component = components[j];
+            var entityToComponentMap : Map<Dynamic, Dynamic> = enityToComponentMaps[i];
+            var components = entityToComponentMap.iterator();
+            for (component in components){
                 var entityId : String = component.entityId;
                 if (entityIdToComponentList.exists(entityId)) 
                 {
-                    (try cast(Reflect.field(entityIdToComponentList, entityId), Array/*Vector.<T> call?*/) catch(e:Dynamic) null).push(component);
+                    (try cast(Reflect.field(entityIdToComponentList, entityId), Array<Dynamic>) catch(e:Dynamic) null).push(component);
                 }
                 else 
                 {
@@ -210,9 +204,9 @@ class ComponentFactory
 
             };
             componentList = Reflect.field(entityIdToComponentList, entityId);
-            numComponents = componentList.length;
+            var numComponents = componentList.length;
             for (i in 0...numComponents){
-                (try cast(entityObject.components, Array</*AS3HX WARNING no type*/>) catch(e:Dynamic) null).push(componentList[i].serialize());
+                (try cast(entityObject.components, Array<Dynamic>) catch(e:Dynamic) null).push(componentList[i].serialize());
             }
             
             serializedItems.push(entityObject);

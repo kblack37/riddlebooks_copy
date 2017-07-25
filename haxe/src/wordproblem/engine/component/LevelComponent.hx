@@ -1,8 +1,8 @@
 package wordproblem.engine.component;
 
-
-import cgs.levelprogression.nodes.ICgsLevelLeaf;
-import cgs.levelprogression.nodes.ICgsLevelNode;
+// TODO: uncomment these once cgs library is ported
+//import cgs.levelprogression.nodes.ICgsLevelLeaf;
+//import cgs.levelprogression.nodes.ICgsLevelNode;
 
 /**
  * This level indicates that an entity is attached to a single particular level in the game
@@ -43,7 +43,7 @@ class LevelComponent extends Component
      * Instead some part of the application will use the other information to identify this node.
      * This assumes that level nodes are never destroyed during a run through
      */
-    public var levelNode : ICgsLevelNode;
+    //public var levelNode : ICgsLevelNode;
     
     public function new(entityId : String)
     {

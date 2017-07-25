@@ -70,7 +70,7 @@ class ShowBarModelHitAreas extends BaseBarModelScript
         m_nodeIdToCalculateHitAreas = nodeIdToCalculateHitAreas;
         m_displayedHitAreaImages = new Array<DisplayObject>();
         m_postProcessHitAreaBuffer = new Array<DisplayObjectContainer>();
-        m_animationJuggler = Starling.juggler;
+        m_animationJuggler = Starling.current.juggler;
     }
     
     /**
@@ -97,7 +97,7 @@ class ShowBarModelHitAreas extends BaseBarModelScript
                 // If no other action is interrupting then we assume that the card is not is any hit area
                 if (!m_hitAreasShown) 
                 {
-                    as3hx.Compat.setArrayLength(m_postProcessHitAreaBuffer, 0);
+					m_postProcessHitAreaBuffer = new Array<DisplayObjectContainer>();
                     var hitAreaBackgroundTexture : Texture = m_assetManager.getTexture("wildcard");
                     var nineslicePadding : Int = 10;
                     var ninesliceGrid : Rectangle = new Rectangle(nineslicePadding, nineslicePadding, hitAreaBackgroundTexture.width - 2 * nineslicePadding, hitAreaBackgroundTexture.height - 2 * nineslicePadding);

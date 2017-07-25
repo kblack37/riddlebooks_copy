@@ -1,19 +1,19 @@
 package wordproblem;
 
 import flash.errors.Error;
-import wordproblem.PREDEFINEDLAYOUTS;
+//import wordproblem.PREDEFINEDLAYOUTS;
 
 import flash.display.DisplayObjectContainer;
 import flash.display.Sprite;
 import flash.display.Stage;
 import flash.geom.Rectangle;
 
-
-import cgs.audio.Audio;
-import cgs.cache.ICgsUserCache;
-import cgs.internationalization.StringTable;
-import cgs.user.ICgsUser;
-import cgs.utils.FlashContext;
+// TODO: uncomment once cgs library is ported
+//import cgs.audio.Audio;
+//import cgs.cache.ICgsUserCache;
+//import cgs.internationalization.StringTable;
+//import cgs.user.ICgsUser;
+//import cgs.utils.FlashContext;
 
 import dragonbox.common.console.Console;
 import dragonbox.common.console.IConsole;
@@ -365,10 +365,10 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
         
         // Only set up the simple load wait screen by default
         var loadingScreenState : WordProblemLoadingState = new WordProblemLoadingState(
-        m_stateMachine, 
-        m_config.getWidth(), 
-        m_config.getHeight(), 
-        m_assetManager, 
+			m_stateMachine, 
+			m_config.getWidth(), 
+			m_config.getHeight(), 
+			m_assetManager
         );
         m_stateMachine.register(loadingScreenState);
         
@@ -421,8 +421,8 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
                     m_expressionCompiler = expressionCompiler;
                     
                     var levelCompiler : LevelCompiler = new LevelCompiler(
-                    expressionCompiler, 
-                    Std.string(Type.createInstance(PREDEFINED_LAYOUTS, [])), 
+						expressionCompiler, 
+						Std.string(Type.createInstance(PREDEFINED_LAYOUTS, []))
                     );
                     m_levelCompiler = levelCompiler;
                     
@@ -486,13 +486,13 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
                                 
                                 // Game engine is the object that plays and renders the levels
                                 gameEngine = new GameEngine(
-                                        m_expressionCompiler, 
-                                        m_assetManager, 
-                                        m_expressionSymbolMap, 
-                                        width, 
-                                        height, 
-                                        m_mouseState, 
-                                        );
+                                    m_expressionCompiler, 
+                                    m_assetManager, 
+                                    m_expressionSymbolMap, 
+                                    width, 
+                                    height, 
+                                    m_mouseState
+                                );
                                 
                                 // For commonly re-used textures that are derived from a fla source
                                 // we need to specify the sampling box.

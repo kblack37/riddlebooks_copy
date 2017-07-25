@@ -92,8 +92,8 @@ class KOutOfNProficientCondition implements ICondition
     
     public function deserialize(data : Dynamic) : Void
     {
-        m_k = parseInt(data.k);
-        m_n = parseInt(data.n);
+        m_k = Std.parseInt(data.k);
+        m_n = Std.parseInt(data.n);
         m_objectiveClass = data.objectiveClass;
         
         if (data.exists("tagName")) 
@@ -148,7 +148,7 @@ class KOutOfNProficientCondition implements ICondition
     
     public function clearState() : Void
     {
-        as3hx.Compat.setArrayLength(m_wasLevelProficientHistory, 0);
+        m_wasLevelProficientHistory = new Array<Bool>();
         m_totalSuccessCount = 0;
     }
     

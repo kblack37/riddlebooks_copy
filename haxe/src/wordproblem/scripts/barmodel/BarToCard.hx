@@ -5,10 +5,13 @@ import wordproblem.scripts.barmodel.BaseBarModelScript;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 
-import cgs.audio.Audio;
+// TODO: uncomment once cgs library is ported
+//import cgs.audio.Audio;
 
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
+
+import haxe.Constraints.Function;
 
 import starling.animation.Tween;
 import starling.core.Starling;
@@ -167,30 +170,30 @@ class BarToCard extends BaseBarModelScript
                     m_mouseState.mousePositionThisFrame.x,
                     m_mouseState.mousePositionThisFrame.y,
                     barModelArea, null);
-            if (widgetDragSystem.getWidgetSelected()) 
+			
+            if (widgetDragSystem.getWidgetSelected() != null) 
             {
                 widgetDragSystem.getWidgetSelected().alpha = 0.0;
-            }  // Tween to shrink copy to nothing  
-            
-            
-            
+            }
+			
+			// Tween to shrink copy to nothing  
             var shrinkCopyTween : Tween = new Tween(selectedBarModelElementCopy, 0.3);
             shrinkCopyTween.scaleTo(0);
             shrinkCopyTween.onComplete = function() : Void
+                {
+                    // Make the dragged part visible after the transform is finished
+                    if (widgetDragSystem.getWidgetSelected() != null) 
                     {
-                        // Make the dragged part visible after the transform is finished
-                        if (widgetDragSystem.getWidgetSelected()) 
-                        {
-                            widgetDragSystem.getWidgetSelected().alpha = 1.0;
-                        }
-                        
-                        clearBarElementCopy();
-                        if (onTransformComplete != null) 
-                        {
-                            onTransformComplete();
-                        }
-                    };
-            Starling.juggler.add(shrinkCopyTween);
+                        widgetDragSystem.getWidgetSelected().alpha = 1.0;
+                    }
+                    
+                    clearBarElementCopy();
+                    if (onTransformComplete != null) 
+                    {
+                        onTransformComplete();
+                    }
+                };
+            Starling.current.juggler.add(shrinkCopyTween);
             m_barElementTransformTween = shrinkCopyTween;
         }
         // Other wise the new dragged segment just appears as it did in the bar model
@@ -232,7 +235,7 @@ class BarToCard extends BaseBarModelScript
     {
         if (m_barElementTransformTween != null) 
         {
-            Starling.juggler.remove(m_barElementTransformTween);
+            Starling.current.juggler.remove(m_barElementTransformTween);
             m_barElementCopy.removeFromParent(true);
         }
     }
@@ -252,13 +255,14 @@ class BarToCard extends BaseBarModelScript
     {
         m_barLabelValueOnSegment = null;
         m_setBarColor = false;
-        as3hx.Compat.setArrayLength(m_barElementsToTransform, 0);
-        as3hx.Compat.setArrayLength(m_outParamsBuffer, 0);
+		m_barElementsToTransform = new Array<DisplayObject>();
+		m_outParamsBuffer = new Array<Dynamic>();
         
         var hitExpressionValue : String = null;
+		var hitElement : Dynamic;
         if (BarModelHitAreaUtil.getBarElementUnderPoint(m_outParamsBuffer, barModelArea, barModelPoint, m_boundsBuffer, prioritizeLabels)) 
         {
-            var hitElement : Dynamic = m_outParamsBuffer[0];
+            hitElement = m_outParamsBuffer[0];
             var hitElementIndex : Int = Std.parseInt(m_outParamsBuffer[1]);
             var hitBarView : BarWholeView = try cast(m_outParamsBuffer[2], BarWholeView) catch(e:Dynamic) null;
             
@@ -269,6 +273,7 @@ class BarToCard extends BaseBarModelScript
             
             // Need to figure out what term value each particular type of hit
             // object should convert to
+			var barLabelView : BarLabelView = null;
             if (hitBarView != null) 
             {
                 if (Std.is(hitElement, BarSegmentView)) 
@@ -281,7 +286,6 @@ class BarToCard extends BaseBarModelScript
                     // Look through all labels and fetch ones that lie exactly on top
                     var barLabelViews : Array<BarLabelView> = hitBarView.labelViews;
                     var i : Int;
-                    var barLabelView : BarLabelView;
                     var numBarLabelViews : Int = barLabelViews.length;
                     var segmentMatchedSingleLabel : Bool = false;
                     for (i in 0...numBarLabelViews){
@@ -336,7 +340,7 @@ class BarToCard extends BaseBarModelScript
                         {
                             // Act like a display was never hit if not allowed to create custom cards and hit a segment
                             hitExpressionValue = null;
-                            as3hx.Compat.setArrayLength(m_barElementsToTransform, 0);
+							m_barElementsToTransform = new Array<DisplayObject>();
                         }
                     }
                 }
@@ -417,7 +421,8 @@ class BarToCard extends BaseBarModelScript
                 
                 if (m_barElementCopy == null && m_widgetDragSystem.getWidgetSelected() == null) 
                 {
-                    Audio.instance.playSfx("bar2card");
+					// TODO: uncomment once cgs library is ported
+                    //Audio.instance.playSfx("bar2card");
                     forceTransform(m_globalMouseBuffer.x, m_globalMouseBuffer.y, m_termValueSelected, m_widgetDragSystem, m_barModelArea);
                 }
             }
@@ -432,7 +437,7 @@ class BarToCard extends BaseBarModelScript
                 {
                     clearBarElementCopy();
                 }
-                as3hx.Compat.setArrayLength(m_barElementsToTransform, 0);
+				m_barElementsToTransform = new Array<DisplayObject>();
                 m_termValueSelected = null;
             }
         }
@@ -448,7 +453,7 @@ class BarToCard extends BaseBarModelScript
         m_barElementCopy = null;
         m_termValueSelected = null;
         
-        Starling.juggler.remove(m_barElementTransformTween);
+        Starling.current.juggler.remove(m_barElementTransformTween);
         m_barElementTransformTween = null;
     }
     

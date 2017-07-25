@@ -3,14 +3,14 @@ package wordproblem.hints.scripts;
 
 import flash.geom.Rectangle;
 import flash.text.TextFormat;
+import starling.display.Button;
 
-import cgs.audio.Audio;
+// TODO: uncomment once cgs library is ported
+//import cgs.audio.Audio;
 
 import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
 import dragonbox.common.util.ListUtil;
-
-import feathers.controls.Button;
 
 import starling.display.DisplayObjectContainer;
 import starling.display.Image;
@@ -144,7 +144,7 @@ class TipsViewer extends ScriptNode implements IShowableScript
         // Can do that here since they don't change after construction
         ListUtil.subdivideList(names, 4, m_namesPerPage);
         
-        m_tipsTitle = new TextField(screenWidth, 60, "How to...", GameFonts.DEFAULT_FONT_NAME, 24, 0xFFFFFF);
+        m_tipsTitle = new TextField(Std.int(screenWidth), 60, "How to...", GameFonts.DEFAULT_FONT_NAME, 24, 0xFFFFFF);
         
         // Create the back button to return from the script view to the tip names view
         var arrowRotateTexture : Texture = m_assetManager.getTexture("arrow_rotate");
@@ -164,7 +164,7 @@ class TipsViewer extends ScriptNode implements IShowableScript
                         null
                         );
         m_backButton.scaleWhenDown = 0.9;
-        m_backButton.scaleWhenHovering = 1.1;
+        m_backButton.scaleWhenOver = 1.1;
         
         // The custom mouse controls do not bind to any events, code in the script
         // will manipulate the properties directly.
@@ -220,7 +220,7 @@ class TipsViewer extends ScriptNode implements IShowableScript
         m_scrollRightButton.y = m_scrollLeftButton.y;
         m_scrollRightButton.scaleWhenDown = m_scrollLeftButton.scaleWhenDown;
         
-        m_pageIndicatorText = new TextField(screenWidth, 80, "ffff", GameFonts.DEFAULT_FONT_NAME, 24, 0xFFFFFF);
+        m_pageIndicatorText = new TextField(Std.int(screenWidth), 80, "ffff", GameFonts.DEFAULT_FONT_NAME, 24, 0xFFFFFF);
         m_pageIndicatorText.x = 0;
         m_pageIndicatorText.y = screenHeight - m_pageIndicatorText.height * 2;
     }
@@ -398,7 +398,7 @@ class TipsViewer extends ScriptNode implements IShowableScript
             tipButton.height = buttonHeight;
             tipButton.addEventListener(Event.TRIGGERED, onTipButtonClicked);
             
-            var rowIndex : Int = i / columns;
+            var rowIndex : Int = Std.int(i / columns);
             var columnIndex : Int = i % columns;
             tipButton.x = columnIndex * buttonWidth + calculatedHorizontalGap * (columnIndex + 1);
             tipButton.y = rowIndex * buttonHeight + calculatedVerticalGap * (rowIndex + 1) + yOffset;
@@ -413,7 +413,7 @@ class TipsViewer extends ScriptNode implements IShowableScript
         // The index of the tip name that was selected will map us to the correct
         // tip script that needs to be executed
         var targetButton : Button = try cast(event.currentTarget, Button) catch(e:Dynamic) null;
-        changeToScriptsView(targetButton.label);
+        changeToScriptsView(targetButton.text);
     }
     
     private function changeToScriptsView(tipName : String) : Void
@@ -448,14 +448,16 @@ class TipsViewer extends ScriptNode implements IShowableScript
     
     private function onBackClicked() : Void
     {
-        Audio.instance.playSfx("button_click");
+		// TODO: uncomment once cgs library is ported
+        //Audio.instance.playSfx("button_click");
         hideScriptsView();
         changeToNamesView();
     }
     
     private function onScrollLeftButtonClicked() : Void
     {
-        Audio.instance.playSfx("button_click");
+		// TODO: uncomment once cgs library is ported
+        //Audio.instance.playSfx("button_click");
         m_currentPageIndex--;
         if (m_currentPageIndex < 0) 
         {
@@ -467,7 +469,8 @@ class TipsViewer extends ScriptNode implements IShowableScript
     
     private function onScrollRightButtonClicked() : Void
     {
-        Audio.instance.playSfx("button_click");
+		// TODO: uncomment once cgs library is ported
+        //Audio.instance.playSfx("button_click");
         m_currentPageIndex++;
         if (m_currentPageIndex > m_namesPerPage.length - 1) 
         {

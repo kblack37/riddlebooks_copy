@@ -107,7 +107,7 @@ class ExpressionPickerWidget extends Sprite implements IDisposable
     
     public function setNumItemsPerColumnLimit(limit : Float = -1) : Void
     {
-        m_numItemsPerColumnLimit = limit;
+        m_numItemsPerColumnLimit = Std.int(limit);
     }
     
     public function addExpressions(expressions : Array<String>) : Void
@@ -122,7 +122,7 @@ class ExpressionPickerWidget extends Sprite implements IDisposable
         m_entryWidth = entryWidth;
         for (i in 0...numTotalExpressions){
             var expression : String = expressions[i];
-            var root : ExpressionNode = m_expressionCompiler.compile(expression).head;
+            var root : ExpressionNode = m_expressionCompiler.compile(expression);
             
             // The width of each entry is determined by the number of columns we would need
             var expressionComponent : ExpressionComponent = new ExpressionComponent(null, expression, root);
@@ -135,7 +135,7 @@ class ExpressionPickerWidget extends Sprite implements IDisposable
             m_entryHeight, 
             "button_white", 
             "button_white", 
-            "button_white", 
+            "button_white"
             );
             m_expressionContainers.push(expressionContainer);
         }
@@ -182,7 +182,7 @@ class ExpressionPickerWidget extends Sprite implements IDisposable
             expressionContainer.removeFromParent();
         }
         
-        as3hx.Compat.setArrayLength(m_selectedExpressionContainersBuffer, 0);
+        m_selectedExpressionContainersBuffer = new Array<ExpressionContainer>();
     }
     
     public function getSelectedExpressionContainers(outContainers : Array<ExpressionContainer>) : Void
@@ -298,11 +298,11 @@ class ExpressionPickerWidget extends Sprite implements IDisposable
         }
         
         var numColumns : Int = 1;
-        var totalContainerHeight : Int = numExpressionContainers * m_entryHeight + verticalSpacing * (numExpressionContainers - 1);
+        var totalContainerHeight : Int = Std.int(numExpressionContainers * m_entryHeight + verticalSpacing * (numExpressionContainers - 1));
         if (m_numItemsPerColumnLimit > 0) 
         {
             numColumns = Math.ceil(numExpressionContainers / m_numItemsPerColumnLimit);
-            totalContainerHeight = m_numItemsPerColumnLimit * m_entryHeight + verticalSpacing * (m_numItemsPerColumnLimit - 1);
+            totalContainerHeight = Std.int(m_numItemsPerColumnLimit * m_entryHeight + verticalSpacing * (m_numItemsPerColumnLimit - 1));
         }
         
         yOffset = (m_totalHeight - totalContainerHeight) * 0.5;

@@ -6,6 +6,8 @@ import dragonbox.common.state.IStateMachine;
 import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
 
+import haxe.Constraints.Function;
+
 import starling.display.Sprite;
 
 import wordproblem.display.Layer;

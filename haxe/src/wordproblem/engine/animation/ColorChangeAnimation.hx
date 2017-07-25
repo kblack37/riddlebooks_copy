@@ -2,8 +2,9 @@ package wordproblem.engine.animation;
 
 
 import dragonbox.common.util.XColor;
+import starling.display.Image;
 
-import feathers.display.Scale9Image;
+//import feathers.display.Scale9Image;
 
 import starling.animation.IAnimatable;
 import starling.display.DisplayObject;
@@ -38,9 +39,9 @@ class ColorChangeAnimation extends EventDispatcher implements IAnimatable
         m_image = image;
         
         // Make the object the starting color
-        if (Std.is(m_image, Scale9Image)) 
+        if (Std.is(m_image, Image)) 
         {
-            (try cast(m_image, Scale9Image) catch(e:Dynamic) null).color = startColor;
+            (try cast(m_image, Image) catch(e:Dynamic) null).color = startColor;
         }
     }
     
@@ -48,14 +49,14 @@ class ColorChangeAnimation extends EventDispatcher implements IAnimatable
     {
         m_elapsedTime += time;
         var resultColor : Int = XColor.interpolateColors(m_endColor, m_startColor, m_elapsedTime / m_duration);
-        if (Std.is(m_image, Scale9Image)) 
+        if (Std.is(m_image, Image)) 
         {
-            (try cast(m_image, Scale9Image) catch(e:Dynamic) null).color = resultColor;
+            (try cast(m_image, Image) catch(e:Dynamic) null).color = resultColor;
         }
         
         if (m_elapsedTime > m_duration) 
         {
-            (try cast(m_image, Scale9Image) catch(e:Dynamic) null).color = m_endColor;
+            (try cast(m_image, Image) catch(e:Dynamic) null).color = m_endColor;
             dispatchEventWith(Event.REMOVE_FROM_JUGGLER);
         }
     }

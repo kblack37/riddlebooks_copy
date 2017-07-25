@@ -3,11 +3,13 @@ package wordproblem.settings;
 
 import flash.text.TextFormat;
 
-import cgs.audio.Audio;
-import cgs.internationalization.StringTable;
+// TODO: uncomment once cgs library is ported
+//import cgs.audio.Audio;
+//import cgs.internationalization.StringTable;
 
-import feathers.controls.Button;
+import haxe.Constraints.Function;
 
+import starling.display.Button;
 import starling.display.DisplayObject;
 import starling.display.Image;
 import starling.display.Quad;
@@ -73,7 +75,8 @@ class OptionsScreen extends Sprite
         var resumeButton : Button = WidgetUtil.createGenericColoredButton(
                 assetManager,
                 buttonColor,
-                StringTable.lookup("resume"),
+				// TODO: uncomment once cgs library is ported
+                /*StringTable.lookup("resume")*/ "",
                 new TextFormat(GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF),
                 new TextFormat(GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF)
                 );
@@ -81,9 +84,10 @@ class OptionsScreen extends Sprite
         var resumeIcon : Image = new Image(resumeIconTexture);
         var resumeIconScale : Float = (buttonHeight * 0.8) / resumeIconTexture.height;
         resumeIcon.scaleX = resumeIcon.scaleY = resumeIconScale;
-        resumeButton.defaultIcon = resumeIcon;
-        resumeButton.iconPosition = Button.ICON_POSITION_RIGHT;
-        resumeButton.iconOffsetX = -resumeIconTexture.width * resumeIconScale;
+        resumeButton.upState = resumeIcon.texture;
+		// TODO: this was a feathers button and will likely have to be fixed
+        //resumeButton.iconPosition = Button.ICON_POSITION_RIGHT;
+        //resumeButton.iconOffsetX = -resumeIconTexture.width * resumeIconScale;
         resumeButton.width = buttonWidth;
         resumeButton.height = buttonHeight;
         resumeButton.addEventListener(Event.TRIGGERED, onResume);
@@ -94,7 +98,8 @@ class OptionsScreen extends Sprite
             var helpButton : Button = WidgetUtil.createGenericColoredButton(
                     assetManager,
                     buttonColor,
-                    StringTable.lookup("help"),
+					// TODO: uncomment once cgs library is ported
+                    /*StringTable.lookup("help")*/ "",
                     new TextFormat(GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF),
                     new TextFormat(GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF)
                     );
@@ -109,7 +114,8 @@ class OptionsScreen extends Sprite
         var resetButton : Button = WidgetUtil.createGenericColoredButton(
                 assetManager,
                 buttonColor,
-                StringTable.lookup("restart"),
+				// TODO: uncomment once cgs library is ported
+                /*StringTable.lookup("restart")*/ "",
                 new TextFormat(GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF),
                 new TextFormat(GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF)
                 );
@@ -124,7 +130,8 @@ class OptionsScreen extends Sprite
             var skipButton : Button = WidgetUtil.createGenericColoredButton(
                     assetManager,
                     buttonColor,
-                    StringTable.lookup("skip"),
+					// TODO: uncomment once cgs library is ported
+                    /*StringTable.lookup("skip")*/ "",
                     new TextFormat(GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF),
                     new TextFormat(GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF)
                     );
@@ -132,9 +139,10 @@ class OptionsScreen extends Sprite
             var skipIcon : Image = new Image(skipIconTexture);
             var skipIconScale : Float = (buttonHeight * 0.8) / skipIcon.height;
             skipIcon.scaleX = skipIcon.scaleY = skipIconScale;
-            skipButton.defaultIcon = skipIcon;
-            skipButton.iconPosition = Button.ICON_POSITION_RIGHT;
-            skipButton.iconOffsetX = -skipIconTexture.width * skipIconScale;
+            skipButton.upState = skipIcon.texture;
+			// TODO: this was a feathers button and will probably have to be fixed
+            //skipButton.iconPosition = Button.ICON_POSITION_RIGHT;
+            //skipButton.iconOffsetX = -skipIconTexture.width * skipIconScale;
             skipButton.width = buttonWidth;
             skipButton.height = buttonHeight;
             skipButton.addEventListener(Event.TRIGGERED, onSkip);
@@ -143,23 +151,23 @@ class OptionsScreen extends Sprite
         }
         
         var musicButton : MusicToggleButton = new MusicToggleButton(
-        buttonWidth, 
-        buttonHeight, 
-        new TextFormat(GameFonts.DEFAULT_FONT_NAME, 18, 0xFFFFFF), 
-        new TextFormat(GameFonts.DEFAULT_FONT_NAME, 18, 0xFFFFFF), 
-        assetManager, 
-        buttonColor, 
+			buttonWidth, 
+			buttonHeight, 
+			new TextFormat(GameFonts.DEFAULT_FONT_NAME, 18, 0xFFFFFF), 
+			new TextFormat(GameFonts.DEFAULT_FONT_NAME, 18, 0xFFFFFF), 
+			assetManager, 
+			buttonColor
         );
         musicButton.addEventListener(AlgebraAdventureLoggingConstants.BUTTON_PRESSED_EVENT, onAudioToggle);
         m_buttons.push(musicButton);
         
         var sfxButton : SfxToggleButton = new SfxToggleButton(
-        buttonWidth, 
-        buttonHeight, 
-        new TextFormat(GameFonts.DEFAULT_FONT_NAME, 18, 0xFFFFFF), 
-        new TextFormat(GameFonts.DEFAULT_FONT_NAME, 18, 0xFFFFFF), 
-        assetManager, 
-        buttonColor, 
+			buttonWidth, 
+			buttonHeight, 
+			new TextFormat(GameFonts.DEFAULT_FONT_NAME, 18, 0xFFFFFF), 
+			new TextFormat(GameFonts.DEFAULT_FONT_NAME, 18, 0xFFFFFF), 
+			assetManager, 
+			buttonColor
         );
         sfxButton.addEventListener(AlgebraAdventureLoggingConstants.BUTTON_PRESSED_EVENT, onAudioToggle);
         m_buttons.push(sfxButton);
@@ -169,7 +177,8 @@ class OptionsScreen extends Sprite
             var exitButton : Button = WidgetUtil.createGenericColoredButton(
                     assetManager,
                     buttonColor,
-                    StringTable.lookup("main_menu"),
+					// TODO: uncomment once cgs library is ported
+                    /*StringTable.lookup("main_menu")*/ "",
                     new TextFormat(GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF),
                     new TextFormat(GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF)
                     );
@@ -186,14 +195,13 @@ class OptionsScreen extends Sprite
             // Add audio to each click
             button.addEventListener(Event.TRIGGERED, function() : Void
                     {
-                        Audio.instance.playSfx("button_click");
+						// TODO: uncomment once cgs library is ported
+                        //Audio.instance.playSfx("button_click");
                     });
-        }  // plus the spacing for level label name    // Dimension of background depends on the total size of the buttons  
-        
-        
-        
-        
-        
+        }
+		
+		// Dimension of background depends on the total size of the buttons  
+        // plus the spacing for level label name 
         var spacingForName : Float = 50;  //m_levelInformationText.height;  
         var buttonVerticalSpacing : Int = 20;
         var optionsButtonContainerWidth : Float = buttonWidth * 2;
@@ -201,7 +209,8 @@ class OptionsScreen extends Sprite
         optionsBackground.width = optionsButtonContainerWidth;
         optionsBackground.height = optionsButtonContainerHeight + spacingForName;
         
-        WidgetUtil.layoutInList(m_buttons, buttonWidth, buttonHeight, optionsButtonContainerWidth, optionsButtonContainerHeight, spacingForName, buttonVerticalSpacing);
+		// TODO: uncomment once layout is redesigned
+        //WidgetUtil.layoutInList(m_buttons, buttonWidth, buttonHeight, optionsButtonContainerWidth, optionsButtonContainerHeight, spacingForName, buttonVerticalSpacing);
         
         optionsButtonContainer.x = (screenWidth - optionsButtonContainerWidth) * 0.5;
         optionsButtonContainer.y = (screenHeight - optionsButtonContainerHeight) * 0.5;
@@ -232,7 +241,7 @@ class OptionsScreen extends Sprite
                 colorMatrixFilter.adjustSaturation(-1);
                 m_skipButton.filter = colorMatrixFilter;
             }
-            m_skipButton.isEnabled = value;
+            m_skipButton.enabled = value;
         }
     }
 }

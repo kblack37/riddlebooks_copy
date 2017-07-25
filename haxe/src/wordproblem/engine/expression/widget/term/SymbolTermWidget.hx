@@ -1,9 +1,11 @@
 package wordproblem.engine.expression.widget.term;
 
-
-import cgs.audio.Audio;
+// TODO: uncomment once cgs library is ported
+//import cgs.audio.Audio;
 
 import dragonbox.common.expressiontree.ExpressionNode;
+
+import haxe.Constraints.Function;
 
 import starling.animation.Tween;
 import starling.core.Starling;
@@ -83,7 +85,7 @@ class SymbolTermWidget extends BaseTermWidget
         else if (m_hiddenGraphic != null && m_hiddenGraphic.parent != null) 
         {
             m_hiddenGraphic.parent.removeChild(m_hiddenGraphic);
-            if (super.m_node.isNegative()) 
+            if (this.m_node.isNegative()) 
             {
                 addChild(m_negativeImage);
             }
@@ -101,13 +103,14 @@ class SymbolTermWidget extends BaseTermWidget
      */
     public function reverseValue(onComplete : Function) : Void
     {
-        Audio.instance.playSfx("card_flip");
+		// TODO: uncomment once cgs library is ported
+        //Audio.instance.playSfx("card_flip");
         m_reverseOnComplete = onComplete;
         
         var collapseTween : Tween = new Tween(this, 0.3);
         collapseTween.animate("scaleX", 0);
         collapseTween.onComplete = onCollapseComplete;
-        Starling.juggler.add(collapseTween);
+        Starling.current.juggler.add(collapseTween);
     }
     
     private function onCollapseComplete() : Void
@@ -135,6 +138,6 @@ class SymbolTermWidget extends BaseTermWidget
                         m_reverseOnComplete();
                     }
                 };
-        Starling.juggler.add(expandTween);
+        Starling.current.juggler.add(expandTween);
     }
 }
