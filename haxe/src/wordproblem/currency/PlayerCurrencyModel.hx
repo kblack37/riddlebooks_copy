@@ -57,12 +57,7 @@ class PlayerCurrencyModel
     
     public function resetCounters() : Void
     {
-        for (level in Reflect.fields(m_coinsEarnedForLevelUp))
-        {
-            ;
-        }
-        
-        this.coinsEarnedForObjectives.length = 0;
+		this.coinsEarnedForObjectives = new Array<Int>();
     }
     
     public function setCoinsEarnedForLevelUp(level : String, coins : Int) : Void

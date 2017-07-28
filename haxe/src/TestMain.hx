@@ -1,13 +1,8 @@
 package;
 
 import dragonbox.common.tests.MathUtilTest;
-import openfl.Assets;
-import openfl.display.DisplayObject;
-import openfl.display.Sprite;
-import openfl.Lib;
 import starling.core.Starling;
-import starling.display.Image;
-import wordproblem.resource.AssetManager;
+import starling.display.Sprite;
 
 /**
  * ...
@@ -20,9 +15,6 @@ class TestMain extends Sprite {
 	public function new() 
 	{
 		super();
-		
-		// Assets:
-		// openfl.Assets.getBitmapData("img/assetname.jpg");
 		
 		// MathUtil tests
 		var mathUtilTests = new MathUtilTest();

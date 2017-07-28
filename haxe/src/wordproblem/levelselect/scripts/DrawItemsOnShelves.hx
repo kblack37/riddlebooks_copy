@@ -3,6 +3,7 @@ package wordproblem.levelselect.scripts;
 
 import flash.geom.Rectangle;
 import flash.utils.Dictionary;
+import openfl.Vector;
 
 import starling.animation.Juggler;
 import starling.display.DisplayObject;
@@ -62,7 +63,7 @@ class DrawItemsOnShelves extends ScriptNode
      * 
      * Maps from entity id to an integer state value
      */
-    private var m_previousStateValue : Dictionary;
+    private var m_previousStateValue : Dictionary<String, Int>;
     
     /**
      * Buffer to store which textures were active on the last update frame.
@@ -71,7 +72,7 @@ class DrawItemsOnShelves extends ScriptNode
      * key: texture name
      * value: true if texture atlas, false otherwise
      */
-    private var m_activeTextureNamesOnLastFrame : Dictionary;
+    private var m_activeTextureNamesOnLastFrame : Dictionary<String, Bool>;
     
     /**
      * Buffer to store active textures on the current pass
@@ -79,7 +80,7 @@ class DrawItemsOnShelves extends ScriptNode
      * key: texture name
      * value: true if texture atlas, false otherwise
      */
-    private var m_activeTextureNamesOnCurrentFrame : Dictionary;
+    private var m_activeTextureNamesOnCurrentFrame : Dictionary<String, Bool>;
     
     public function new(levelSelectState : WordProblemSelectState,
             playerItemInventory : ItemInventory,
@@ -116,13 +117,7 @@ class DrawItemsOnShelves extends ScriptNode
         if (!m_isActive) 
         {
             // Clearing previous state will force a redraw
-            for (entityId in Reflect.fields(m_previousStateValue))
-            {
-                ;
-            }  // Clear out all currently visible views  
-            
-            
-            
+			// Clear out all currently visible views  
             var renderComponents : Array<Component> = m_playerItemInventory.componentManager.getComponentListForType(RenderableComponent.TYPE_ID);
             var numRenderComponents : Int = renderComponents.length;
             var renderComponent : RenderableComponent;
@@ -138,14 +133,7 @@ class DrawItemsOnShelves extends ScriptNode
                         m_spriteSheetJuggler.remove(try cast(renderComponent.view, MovieClip) catch(e:Dynamic) null);
                     }
                 }
-            }  //TODO: Do we need to remove the textures as well?  
-            
-            
-            
-            for (textureName in Reflect.fields(m_activeTextureNamesOnLastFrame))
-            {
-                ;
-            }
+            } 
         }
     }
     
@@ -233,7 +221,7 @@ class DrawItemsOnShelves extends ScriptNode
                 
                 // Here we check the delay to apply to an already playing clip, do not play the movie clip until the
                 // delay is finished
-                movieClip = try cast(renderComponent.view, MovieClip) catch(e:Dynamic) null;
+                var movieClip = try cast(renderComponent.view, MovieClip) catch(e:Dynamic) null;
                 
                 var spriteSheetStateComponent : AnimatedTextureAtlasStateComponent = try cast(componentManager.getComponentFromEntityIdAndType(
                         entityId,
@@ -356,10 +344,9 @@ class DrawItemsOnShelves extends ScriptNode
                     m_spriteSheetJuggler.add(try cast(renderComponent.view, MovieClip) catch(e:Dynamic) null);
                 }
             }
-        }  // Clear out the textures that are no longer visible  
-        
-        
-        
+        }
+		
+		// Clear out the textures that are no longer visible  
         for (textureName in Reflect.fields(m_activeTextureNamesOnLastFrame))
         {
             // Found a texture that can be released
@@ -377,11 +364,10 @@ class DrawItemsOnShelves extends ScriptNode
             }
             
             ;
-        }  // swap the current frame buffer to be the last frame buffer  
-        
-        
-        
-        var swapBuffer : Dictionary = m_activeTextureNamesOnLastFrame;
+        }
+		
+		// swap the current frame buffer to be the last frame buffer  
+        var swapBuffer : Dictionary<String, Bool> = m_activeTextureNamesOnLastFrame;
         m_activeTextureNamesOnLastFrame = m_activeTextureNamesOnCurrentFrame;
         m_activeTextureNamesOnCurrentFrame = swapBuffer;
     }
@@ -391,7 +377,7 @@ class DrawItemsOnShelves extends ScriptNode
         var textureAtlas : TextureAtlas = assetManager.getTextureAtlas(textureDataObject.textureName);
         
         // Get back list of all subtextures in the given atlas
-        var subtextures : Array<Texture> = textureAtlas.getTextures();
+        var subtextures : Vector<Texture> = textureAtlas.getTextures();
         var movieClip : MovieClip = new MovieClip(subtextures, fps);
         if (center) 
         {

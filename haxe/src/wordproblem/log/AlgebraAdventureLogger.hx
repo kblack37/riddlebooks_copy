@@ -1,17 +1,18 @@
 package wordproblem.log;
 
-// TODO: uncomment once cgs library is ported
-//import cgs.CgsApi;
-//import cgs.server.challenge.ChallengeService;
-//import cgs.server.data.TosData;
-//import cgs.server.logging.CGSServerProps;
-//import cgs.server.logging.actions.QuestAction;
-//import cgs.server.responses.QuestLogResponseStatus;
-//import cgs.user.CgsUserProperties;
-//import cgs.user.ICgsUser;
+import cgs.CgsApi;
+import cgs.server.challenge.ChallengeService;
+import cgs.server.data.TosData;
+import cgs.server.logging.CGSServerProps;
+import cgs.server.logging.actions.QuestAction;
+import cgs.server.responses.QuestLogResponseStatus;
+import cgs.user.CgsUserProperties;
+import cgs.user.ICgsUser;
 
 import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
+
+import haxe.Constraints.Function;
 
 import starling.events.Event;
 
@@ -236,7 +237,7 @@ class AlgebraAdventureLogger extends BaseBufferEventScript
     private function logQuestStart(problemData : WordProblemLevelData) : Void
     {
         // Record start time, so we can compute the time at which each action occurs
-        m_startTime = Date.now().time;
+        m_startTime = Date.now().getTime();
         
         var details : Dynamic = ((Std.is(problemData.getScriptRoot(), BaseCustomLevelScript))) ? 
         (try cast(problemData.getScriptRoot(), BaseCustomLevelScript) catch(e:Dynamic) null).getQuestStartDetails() : { };
@@ -437,13 +438,11 @@ class AlgebraAdventureLogger extends BaseBufferEventScript
         // Ensure we work on non-null details
         if (details == null) 
         {
-            details = new Dynamic();
-        }  // also serialize the action data into a string format    // For each action, from its name we need to get the appropriate action id and  
-        
-        
-        
-        
-        
+            details = { };
+        }  
+		
+		// For each action, from its name we need to get the appropriate action id and  
+		// also serialize the action data into a string format
         if (m_inMiddleOfQuest) 
         {
             var aid : Int = AlgebraAdventureLoggingConstants.getAidForLogEvent(loggingEventType);
@@ -451,13 +450,13 @@ class AlgebraAdventureLogger extends BaseBufferEventScript
             if (m_config.getDoLogQuests()) 
             {
                 // Compute the time since the quest began, use it in the action
-                var currentTime : Float = Date.now().time;
-                var deltaTime : Int = (Int)(currentTime - m_startTime);
+                var currentTime : Float = Date.now().getTime();
+                var deltaTime : Int = Std.int(currentTime - m_startTime);
                 
                 var questAction : QuestAction = new QuestAction(aid, deltaTime, deltaTime);
                 questAction.setDetail(details);
                 
-                for (aUser/* AS3HX WARNING could not determine type for var: aUser exp: EField(EField(EIdent(m_cgsApi),userManager),userList) type: null */ in m_cgsApi.userManager.userList)
+                for (aUser in m_cgsApi.userManager.userList)
                 {
                     aUser.logQuestAction(questAction);
                 }
@@ -494,7 +493,7 @@ class AlgebraAdventureLogger extends BaseBufferEventScript
         
         
         
-        var totalActiveTime : Float = m_time.currentTimeMilliseconds - m_questStartTime - m_totalIdleTime;
+        var totalActiveTime : Int = Std.int(m_time.currentTimeMilliseconds - m_questStartTime - m_totalIdleTime);
         Reflect.setField(loggingDetails, "timeInQuest", Std.string(totalActiveTime));
         
         // If a user successfully completed a level, mark it as a completed equation
@@ -512,6 +511,14 @@ class AlgebraAdventureLogger extends BaseBufferEventScript
                 m_challengeService.updateUserPlaytime(totalActiveTime);
             }
         }
+		
+        function onQuestEndComplete(response : QuestLogResponseStatus) : Void
+        {
+            if (TRACE_LOG) 
+            {
+                trace("Quest end dqid: " + response.dqid);
+            }
+        };
         
         if (m_config.getDoLogQuests()) 
         {
@@ -525,14 +532,6 @@ class AlgebraAdventureLogger extends BaseBufferEventScript
         {
             trace("Debug logging: Quest end. " + endType + " timeInQuest: " + totalActiveTime);
         }
-        
-        function onQuestEndComplete(response : QuestLogResponseStatus) : Void
-        {
-            if (TRACE_LOG) 
-            {
-                trace("Quest end dqid: " + response.dqid);
-            }
-        };
         
         m_inMiddleOfQuest = false;
     }

@@ -18,11 +18,10 @@ import cgs.user.ICgsUser;
 import dragonbox.common.state.BaseState;
 import dragonbox.common.state.IStateMachine;
 
-import fl.controls.Button;
-import fl.controls.TextInput;
-
+import starling.display.Button;
 import starling.display.Image;
 import starling.display.Sprite;
+import starling.text.TextField;
 
 import wordproblem.account.RegisterTosScreen;
 import wordproblem.engine.text.GameFonts;
@@ -132,12 +131,13 @@ class ChallengeTitleScreenState extends BaseState
     private function showLoginPopup() : Void
     {
         var cgsApi : CgsApi = m_logger.getCgsApi();
-        var loginPopup : LoginPopup = cgsApi.createUserLoginDialog(
-                m_logger.getCgsUserProperties(m_saveDataToServer, m_saveDataKey),
-                onUserLoginSucceed,
-                true,
-                null
-                );
+		// TODO: uncomment once cgs library is finished
+        var loginPopup : LoginPopup = null;/*cgsApi.createUserLoginDialog(
+            m_logger.getCgsUserProperties(m_saveDataToServer, m_saveDataKey),
+            onUserLoginSucceed,
+            true,
+            null
+        );*/
         loginPopup.teacherCode = m_teacherCode;
         loginPopup.setLoginFailCallback(onUserLoginFail);
         loginPopup.usernameAsPassword = false;
@@ -145,66 +145,62 @@ class ChallengeTitleScreenState extends BaseState
         
         // When the user selects login, some unknown period of time may elapse until we get a response
         // from the server. During that time a waiting screen should appear
-        loginPopup.setLoginButtonFactory(function() : fl.controls.Button
-                {
-                    var button : fl.controls.Button = buttonFactory();
-                    button.addEventListener(MouseEvent.CLICK, function(event : MouseEvent) : Void
-                            {
-                                Audio.instance.playSfx("button_click");
-                                dispatchEventWith(CommandEvent.WAIT_SHOW);
-                            });
-                    return button;
-                });
-        loginPopup.setCancelButtonFactory(buttonFactory);
-        function buttonFactory() : fl.controls.Button
-        {
-            var button : fl.controls.Button = new fl.controls.Button();
-            button.setStyle("upSkin", TitleScreenState.button_purple_up);
-            button.setStyle("overSkin", TitleScreenState.button_purple_over);
-            button.setStyle("downSkin", TitleScreenState.button_purple_over);
-            button.setStyle("textFormat", new TextFormat(GameFonts.DEFAULT_FONT_NAME, 18, 0x000000, null, null, false));
-            button.setStyle("embedFonts", true);
-            button.width = 150;
-            button.height = 50;
-            return button;
-        };
+		// TODO: redesign this with the openfl asset management
+		//function buttonFactory() : Button
+        //{
+            //var button : Button = new Button(TitleScreenState.button_purple_up,
+				//null,
+				//TitleScreenState.button_purple_over,
+				//TitleScreenState.button_purple_over
+			//);
+			//// TODO: uncomment when a suitable button replacement is found
+            ////button.setStyle("textFormat", new TextFormat(GameFonts.DEFAULT_FONT_NAME, 18, 0x000000, null, null, false));
+            ////button.setStyle("embedFonts", true);
+            //button.width = 150;
+            //button.height = 50;
+            //return button;
+        //};
+		//
+        //loginPopup.setLoginButtonFactory(function() : Button
+                //{
+                    //var button : Button = buttonFactory();
+                    //button.addEventListener(MouseEvent.CLICK, function(event : MouseEvent) : Void
+                            //{
+                                //Audio.instance.playSfx("button_click");
+                                //dispatchEventWith(CommandEvent.WAIT_SHOW);
+                            //});
+                    //return button;
+                //});
+        //loginPopup.setCancelButtonFactory(buttonFactory);
         
         loginPopup.setTitleFactory(function() : TextField
                 {
-                    var title : TextField = new TextField();
-                    title.defaultTextFormat = new TextFormat(GameFonts.DEFAULT_FONT_NAME, 32, 0xCC66FF, null, null, false);
-                    title.defaultTextFormat.align = TextFormatAlign.CENTER;
-                    title.embedFonts = true;
-                    title.selectable = false;
-                    title.width = 289;
-                    title.height = 46;
+                    var title : TextField = new TextField(289, 46, null, GameFonts.DEFAULT_FONT_NAME, 32, 0xCC66FF);
+					title.hAlign = TextFormatAlign.CENTER;
+					title.vAlign = TextFormatAlign.CENTER;
                     return title;
                 });
-        
+		
         // Set styles for the labels next to the text inputs
         loginPopup.setInputLabelFactory(function() : TextField
                 {
-                    var inputLabel : TextField = new TextField();
-                    inputLabel.selectable = false;
-                    inputLabel.defaultTextFormat = new TextFormat(GameFonts.DEFAULT_FONT_NAME, 26, 0xFFFFFF);
-                    inputLabel.embedFonts = true;
-                    inputLabel.width = 128;
-                    inputLabel.height = 30;
-                    inputLabel.filters = [new GlowFilter(0x000000, 1, 2, 2)];
+                    var inputLabel : TextField = new TextField(128, 30, "", GameFonts.DEFAULT_FONT_NAME, 26, 0xFFFFFF);
+                    inputLabel.nativeFilters = [new GlowFilter(0x000000, 1, 2, 2)];
                     return inputLabel;
                 });
         
         // Set styles for the text input fields
-        loginPopup.setInputFactory(function() : TextInput
-                {
-                    var input : TextInput = new TextInput();
-                    input.setStyle("upSkin", text_input_background);
-                    input.setStyle("textFormat", new TextFormat(GameFonts.DEFAULT_FONT_NAME, 18, 0, null, null, null, null, null, "center"));
-                    input.setStyle("embedFonts", false);
-                    input.width = 180;
-                    input.height = 27;
-                    return input;
-                });
+		// TODO: uncomment when a text input replacement is found
+        //loginPopup.setInputFactory(function() : TextInput
+                //{
+                    //var input : TextInput = new TextInput();
+                    //input.setStyle("upSkin", text_input_background);
+                    //input.setStyle("textFormat", new TextFormat(GameFonts.DEFAULT_FONT_NAME, 18, 0, null, null, null, null, null, "center"));
+                    //input.setStyle("embedFonts", false);
+                    //input.width = 180;
+                    //input.height = 27;
+                    //return input;
+                //});
         
         // Set the background image
         loginPopup.setBackgroundFactory(function() : DisplayObject
@@ -213,68 +209,69 @@ class ChallengeTitleScreenState extends BaseState
                 });
         
         // Provide custom layout of the components
-        loginPopup.setLayoutFunction(function(logo : DisplayObject,
-                        titleText : TextField,
-                        usernameText : TextField,
-                        usernameInput : TextInput,
-                        passwordText : TextField,
-                        passwordInput : TextInput,
-                        loginButton : fl.controls.Button,
-                        cancelButton : fl.controls.Button,
-                        errorText : TextField,
-                        background : DisplayObject,
-                        allowCancel : Bool,
-                        passwordEnabled : Bool) : Void
-                {
-                    while (this.numChildren > 0)
-                    {
-                        this.removeChildAt(0);
-                    }
-                    
-                    var boxWidth : Float = 280;
-                    titleText.x = (boxWidth - titleText.width) * 0.5;
-                    titleText.y = 0;
-                    titleText.text = "Login";
-                    this.addChild(titleText);
-                    
-                    var userNameX : Float = 0;
-                    var userNameY : Float = titleText.y + titleText.height;
-                    
-                    usernameText.x = userNameX;
-                    usernameText.y = userNameY;
-                    usernameText.text = "username";
-                    this.addChild(usernameText);
-                    
-                    usernameInput.x = userNameX + usernameText.width;
-                    usernameInput.y = userNameY;
-                    this.addChild(usernameInput);
-                    
-                    if (m_teacherCode == null) 
-                    {
-                        var passwordX : Float = 0;
-                        var passwordY : Float = usernameInput.y + usernameInput.height + 10;
-                        
-                        passwordText.text = "password";
-                        passwordText.x = passwordX;
-                        passwordText.y = passwordY;
-                        this.addChild(passwordText);
-                        
-                        passwordInput.x = passwordX + passwordText.width;
-                        passwordInput.y = passwordY;
-                        this.addChild(passwordInput);
-                    }
-                    
-                    errorText.x = userNameX;
-                    errorText.y = ((m_teacherCode == null)) ? passwordInput.y + passwordInput.height : usernameInput.y + usernameInput.height;
-                    this.addChild(errorText);
-                    
-                    var loginButtonX : Float = (boxWidth - loginButton.width) * 0.5;
-                    var loginButtonY : Float = errorText.y + errorText.height + 7;
-                    loginButton.x = loginButtonX;
-                    loginButton.y = loginButtonY;
-                    loginButton.label = "OK";
-                    this.addChild(loginButton);
-                });
+		// TODO: uncomment when a text input replacement is found
+        //loginPopup.setLayoutFunction(function(logo : DisplayObject,
+                        //titleText : TextField,
+                        //usernameText : TextField,
+                        //usernameInput : TextInput,
+                        //passwordText : TextField,
+                        //passwordInput : TextInput,
+                        //loginButton : fl.controls.Button,
+                        //cancelButton : fl.controls.Button,
+                        //errorText : TextField,
+                        //background : DisplayObject,
+                        //allowCancel : Bool,
+                        //passwordEnabled : Bool) : Void
+                //{
+                    //while (this.numChildren > 0)
+                    //{
+                        //this.removeChildAt(0);
+                    //}
+                    //
+                    //var boxWidth : Float = 280;
+                    //titleText.x = (boxWidth - titleText.width) * 0.5;
+                    //titleText.y = 0;
+                    //titleText.text = "Login";
+                    //this.addChild(titleText);
+                    //
+                    //var userNameX : Float = 0;
+                    //var userNameY : Float = titleText.y + titleText.height;
+                    //
+                    //usernameText.x = userNameX;
+                    //usernameText.y = userNameY;
+                    //usernameText.text = "username";
+                    //this.addChild(usernameText);
+                    //
+                    //usernameInput.x = userNameX + usernameText.width;
+                    //usernameInput.y = userNameY;
+                    //this.addChild(usernameInput);
+                    //
+                    //if (m_teacherCode == null) 
+                    //{
+                        //var passwordX : Float = 0;
+                        //var passwordY : Float = usernameInput.y + usernameInput.height + 10;
+                        //
+                        //passwordText.text = "password";
+                        //passwordText.x = passwordX;
+                        //passwordText.y = passwordY;
+                        //this.addChild(passwordText);
+                        //
+                        //passwordInput.x = passwordX + passwordText.width;
+                        //passwordInput.y = passwordY;
+                        //this.addChild(passwordInput);
+                    //}
+                    //
+                    //errorText.x = userNameX;
+                    //errorText.y = ((m_teacherCode == null)) ? passwordInput.y + passwordInput.height : usernameInput.y + usernameInput.height;
+                    //this.addChild(errorText);
+                    //
+                    //var loginButtonX : Float = (boxWidth - loginButton.width) * 0.5;
+                    //var loginButtonY : Float = errorText.y + errorText.height + 7;
+                    //loginButton.x = loginButtonX;
+                    //loginButton.y = loginButtonY;
+                    //loginButton.label = "OK";
+                    //this.addChild(loginButton);
+                //});
         
         // Call the draw function to make sure our own style properties are applied to the
         // popup
@@ -334,17 +331,18 @@ class ChallengeTitleScreenState extends BaseState
         // See if the user still needs to accept a tos
         if (user.tosRequired && !user.tosStatus.accepted) 
         {
-            var tosScreen : RegisterTosScreen = new RegisterTosScreen(
-            user, 
-            function() : Void
-            {
-                tosScreen.dispose();
-                m_flashStage.removeChild(tosScreen);
-                dispatchEventWith(CommandEvent.WAIT_HIDE);
-                dispatchEventWith(CommandEvent.USER_AUTHENTICATED);
-            }, 
-            800, 
-            600, 
+			var tosScreen : RegisterTosScreen = null;
+            tosScreen = new RegisterTosScreen(
+				user, 
+				function() : Void
+				{
+					tosScreen.dispose();
+					m_flashStage.removeChild(tosScreen);
+					dispatchEventWith(CommandEvent.WAIT_HIDE);
+					dispatchEventWith(CommandEvent.USER_AUTHENTICATED);
+				}, 
+				800, 
+				600
             );
             m_flashStage.addChild(tosScreen);
         }

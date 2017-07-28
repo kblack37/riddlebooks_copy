@@ -26,34 +26,28 @@ class ChangeTextStyleAndSelectabilityControl
     private var m_gameEngine : IGameEngine;
     
     private var m_scifiStyle : Dynamic = {
-            .term : {
+            term : {
                 color : "0xA3F981"
-
             }
-
         };
     private var m_fantasyStyle : Dynamic = {
-            .term : {
+            term : {
                 color : "0x6C0AB1"
-
             }
-
         };
     private var m_mysteryStyle : Dynamic = {
-            .term : {
+            term : {
                 color : "0x3F62AA"
-
             }
-
         };
     
-    private var m_genreToStyleObject : Dictionary;
+    private var m_genreToStyleObject : Dictionary<String, Dynamic>;
     
     /**
      * key: genre name
      * value: point.x = chapter, point.y = level
      */
-    private var m_genreToStyleCheckPoint : Dictionary;
+    private var m_genreToStyleCheckPoint : Dictionary<String, Point>;
     
     public function new(gameEngine : IGameEngine)
     {
@@ -133,12 +127,11 @@ class ChangeTextStyleAndSelectabilityControl
         
         for (key in Reflect.fields(extraStyleToApply))
         {
-            currentStyleObject[key] = extraStyleToApply[key];
+			Reflect.setField(currentStyleObject, key, Reflect.field(extraStyleToApply, key));
             styleOrder.push(key);
-        }  // Re-apply the styles  
-        
-        
-        
+        }
+		
+		// Re-apply the styles  
         var documentNodes : Array<DocumentNode> = currentLevel.getRootDocumentNodes();
         var textParser : TextParser = new TextParser();
         for (i in 0...documentNodes.length){

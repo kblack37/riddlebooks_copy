@@ -45,7 +45,8 @@ class ChangedItemScreen extends Sprite
         var itemId : String = data.id;
         var previousStageIndex : Int = data.prevStage;
         var currentStageIndex : Int = data.currentStage;
-        var itemChangeText : TextField = new TextField(400, 60, StringTable.lookup("item_changing"), GameFonts.DEFAULT_FONT_NAME, 32, 0xFFFFFF);
+		// TODO: uncomment when cgs library is finished
+        var itemChangeText : TextField = new TextField(400, 60, "" /*StringTable.lookup("item_changing")*/, GameFonts.DEFAULT_FONT_NAME, 32, 0xFFFFFF);
         itemChangeText.x = (totalScreenWidth - itemChangeText.width) * 0.5;
         itemChangeText.y = totalScreenHeight * 0.15;
         addChild(itemChangeText);
@@ -99,24 +100,16 @@ class ChangedItemScreen extends Sprite
             previousStageImage.x = 400;
             previousStageImage.y = totalScreenHeight * 0.5;
             addChild(previousStageImage);
-            
-            var removePreviousImage : Tween = new Tween(previousStageImage, 0.5);
-            removePreviousImage.animate("alpha", 0.0);
-            removePreviousImage.animate("scaleX", 5.0);
-            removePreviousImage.animate("scaleY", 5.0);
-            removePreviousImage.delay = 0.2;
-            removePreviousImage.onComplete = onRemoveComplete;
-            addRewardDetailTween(removePreviousImage);
-            
-            var newStageImage : Image = new Image(currentTexture);
+			
+			var newStageImage : Image = new Image(currentTexture);
             newStageImage.pivotX = currentTexture.width * 0.5;
             newStageImage.pivotY = currentTexture.height * 0.5;
             newStageImage.x = 400;
             newStageImage.y = totalScreenHeight * 0.5;
             newStageImage.alpha = 0.0;
             newStageImage.scaleX = newStageImage.scaleY = 2.0;
-            
-            // The previous stage starts losing color and turns white before fading out
+			
+			// The previous stage starts losing color and turns white before fading out
             // and being replaced by the new item image
             function onRemoveComplete() : Void
             {
@@ -128,10 +121,17 @@ class ChangedItemScreen extends Sprite
                 addChild(newStageImage);
                 addRewardDetailTween(showNewImage);
             };
-        }  // Change the item to not hidden, marks user has seen it transform  
-        
-        
-        
+            
+            var removePreviousImage : Tween = new Tween(previousStageImage, 0.5);
+            removePreviousImage.animate("alpha", 0.0);
+            removePreviousImage.animate("scaleX", 5.0);
+            removePreviousImage.animate("scaleY", 5.0);
+            removePreviousImage.delay = 0.2;
+            removePreviousImage.onComplete = onRemoveComplete;
+            addRewardDetailTween(removePreviousImage);
+        }
+		
+		// Change the item to not hidden, marks user has seen it transform  
         if (data.exists("hidden") && data.hidden) 
         {
             data.hidden = false;
@@ -144,13 +144,13 @@ class ChangedItemScreen extends Sprite
         super.dispose();
         while (m_rewardDetailsActiveTweens.length > 0)
         {
-            Starling.juggler.remove(m_rewardDetailsActiveTweens.pop());
+            Starling.current.juggler.remove(m_rewardDetailsActiveTweens.pop());
         }
     }
     
     private function addRewardDetailTween(tween : IAnimatable) : Void
     {
         m_rewardDetailsActiveTweens.push(tween);
-        Starling.juggler.add(tween);
+        Starling.current.juggler.add(tween);
     }
 }

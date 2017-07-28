@@ -1,11 +1,14 @@
 package wordproblem.engine.animation;
 
 
+import dragonbox.common.math.vectorspace.RealsVectorSpace;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.math.vectorspace.IVectorSpace;
+
+import haxe.Constraints.Function;
 
 import starling.animation.Tween;
 import starling.core.Starling;
@@ -50,14 +53,14 @@ class DocumentViewToCardAnimation extends Sprite
      */
     private var m_assetManager : AssetManager;
     
-    private var m_vectorSpace : IVectorSpace;
+    private var m_vectorSpace : RealsVectorSpace;
     
     private var m_textShrinkTween : Tween;
     private var m_termExpandTween : Tween;
     
     public function new(expressionSymbolMap : ExpressionSymbolMap,
             assetManager : AssetManager,
-            vectorSpace : IVectorSpace)
+            vectorSpace : RealsVectorSpace)
     {
         super();
         
@@ -96,13 +99,13 @@ class DocumentViewToCardAnimation extends Sprite
         // Kill any playing tweens
         if (m_textShrinkTween != null) 
         {
-            Starling.juggler.remove(m_textShrinkTween);
+            Starling.current.juggler.remove(m_textShrinkTween);
             m_textShrinkTween = null;
         }
         
         if (m_termExpandTween != null) 
         {
-            Starling.juggler.remove(m_termExpandTween);
+            Starling.current.juggler.remove(m_termExpandTween);
             m_termExpandTween = null;
         }
     }
@@ -137,8 +140,9 @@ class DocumentViewToCardAnimation extends Sprite
         if (attachedExpression != null) 
         {
             var termImage : DisplayObject = new SymbolTermWidget(
-            new ExpressionNode(m_vectorSpace, attachedExpression), 
-            m_expressionSymbolMap, m_assetManager, 
+				new ExpressionNode(m_vectorSpace, attachedExpression), 
+				m_expressionSymbolMap,
+				m_assetManager
             );
             
             var tweenDuration : Float = 0.2;
@@ -155,18 +159,17 @@ class DocumentViewToCardAnimation extends Sprite
                         // stuttering with particle system rendering when we try to reuse emitters
                         var termExpandTween : Tween = new Tween(termImage, tweenDuration);
                         termExpandTween.scaleTo(1.0);
-                        termExpandTween.onComplete = onExpandComplete;
-                        Starling.juggler.add(termExpandTween);
-                        
-                        function onExpandComplete() : Void
+						function onExpandComplete() : Void
                         {
                             termImage.visible = false;
                             onAnimationComplete();
                         };
+                        termExpandTween.onComplete = onExpandComplete;
+                        Starling.current.juggler.add(termExpandTween);
                         m_termExpandTween = termExpandTween;
                         viewCopy = termImage;
                     };
-            Starling.juggler.add(textShrinkTween);
+            Starling.current.juggler.add(textShrinkTween);
             m_textShrinkTween = textShrinkTween;
         }
         

@@ -1,6 +1,7 @@
 package wordproblem.scripts.equationtotext;
 
 
+import dragonbox.common.math.vectorspace.RealsVectorSpace;
 import flash.utils.Dictionary;
 
 import dragonbox.common.expressiontree.ExpressionNode;
@@ -27,7 +28,7 @@ class EquationToText extends BaseGameScript
     private var m_equationToTextWidget : EquationToTextWidget;
     private var m_regexRoots : Array<ExpressionNode>;
     private var m_templateList : Array<String>;
-    private var m_vectorSpace : IVectorSpace;
+    private var m_vectorSpace : RealsVectorSpace;
     private var m_symbolMap : ExpressionSymbolMap;
     
     public function new(gameEngine : IGameEngine,
@@ -59,7 +60,7 @@ class EquationToText extends BaseGameScript
         var regexList : Array<String> = new Array<String>();  //currentLevel.getEquationTextRegexList();  
         var regexRoots : Array<ExpressionNode> = new Array<ExpressionNode>();
         for (i in 0...regexList.length){
-            var regexRoot : ExpressionNode = m_expressionCompiler.compile(regexList[i]).head;
+            var regexRoot : ExpressionNode = m_expressionCompiler.compile(regexList[i]);
             regexRoots.push(regexRoot);
         }
         
@@ -143,7 +144,7 @@ class EquationToText extends BaseGameScript
         var regexMatched : Bool = false;
         var i : Int;
         var wildCardId : String;
-        var wildCardToValueMap : Dictionary = new Dictionary();
+        var wildCardToValueMap : Dictionary<String, ExpressionNode> = new Dictionary();
         var numRegexElements : Int = m_regexRoots.length;
         for (i in 0...numRegexElements){
             var regexElement : ExpressionNode = m_regexRoots[i];
@@ -154,12 +155,9 @@ class EquationToText extends BaseGameScript
                 break;
             }
             else 
-            {
-                // Clean out the map for the next search
-                for (wildCardId in Reflect.fields(wildCardToValueMap))
-                {
-                    ;
-                }
+            {                
+				// Clean out the map for the next search
+				wildCardToValueMap = new Dictionary();
             }
         }
         
@@ -188,7 +186,7 @@ class EquationToText extends BaseGameScript
                         replacementText = getStringFromSubtree(root);
                     }
                     
-                    resultingText = resultingText.replace(wildCardId, replacementText);
+                    resultingText = StringTools.replace(resultingText, wildCardId, replacementText);
                 }
                 // TODO:
                 // If its not a node then it is a list of expression nodes with a common operator
@@ -197,10 +195,10 @@ class EquationToText extends BaseGameScript
                 {
                     var expressionNodes : Array<ExpressionNode> = Reflect.field(wildCardToValueMap, wildCardId);
                     if (expressionNodes.length == 1) {  //the wild card can be replaced by evaluating a simple expression  
-                        resultingText = resultingText.replace(wildCardId, Std.string(expressionNodes[0]));
+                        resultingText = StringTools.replace(resultingText, wildCardId, Std.string(expressionNodes[0]));
                     }
                     else {  // TODO: The more complex case  
-                        resultingText = resultingText.replace(wildCardId, "48");
+                        resultingText = StringTools.replace(resultingText, wildCardId, "48");
                     }
                 }
             }
@@ -232,9 +230,6 @@ class EquationToText extends BaseGameScript
     {
         // Search through every regex for a match
         var resultingText : String;
-        var i : Int;
-        var wildCardId : String;
-        var wildCardToValueMap : Dictionary = new Dictionary();
         resultingText = getStringFromSubtree(root);
         
         m_equationToTextWidget.setText(resultingText, root);
@@ -271,8 +266,8 @@ class EquationToText extends BaseGameScript
      */
     public function getExpressionMatchesRegex(regexNode : ExpressionNode,
             expressionNode : ExpressionNode,
-            vectorSpace : IVectorSpace,
-            outRegexIdToNodeMap : Dictionary) : Bool
+            vectorSpace : RealsVectorSpace,
+            outRegexIdToNodeMap : Dictionary<String, ExpressionNode>) : Bool
     {
         var match : Bool = false;
         if (regexNode == null && expressionNode == null) 
@@ -382,8 +377,8 @@ class EquationToText extends BaseGameScript
      */
     public function getExpressionSetMatchesRegexSet(regexSet : Array<ExpressionNode>,
             expressionSet : Array<ExpressionNode>,
-            vectorSpace : IVectorSpace,
-            outRegexIdToNodeMap : Dictionary) : Bool
+            vectorSpace : RealsVectorSpace,
+            outRegexIdToNodeMap : Dictionary<String, ExpressionNode>) : Bool
     {
         // Do an insertion sort on the regex set based on priority
         var i : Int;
@@ -451,11 +446,11 @@ class EquationToText extends BaseGameScript
                             consumedIndices.put(j, true);
                             if (outRegexIdToNodeMap.exists(regexToBindToValue.wildCardId)) 
                             {
-                                (try cast(outRegexIdToNodeMap[regexToBindToValue.wildCardId], Array/*Vector.<T> call?*/) catch(e:Dynamic) null).push(expressionRoot);
+                                (try cast(outRegexIdToNodeMap[regexToBindToValue.wildCardId], Array<Dynamic>) catch(e:Dynamic) null).push(expressionRoot);
                             }
                             else 
                             {
-                                outRegexIdToNodeMap[regexToBindToValue.data] = [expressionRoot];
+								Reflect.setField(outRegexIdToNodeMap, regexToBindToValue.data, [expressionRoot]);
                             }
                             
                             currentRegexCounter++;

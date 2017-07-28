@@ -8,10 +8,9 @@ import cgs.audio.Audio;
 
 import dragonbox.common.ui.MouseState;
 
-import feathers.controls.Button;
-import feathers.layout.TiledRowsLayout;
-import feathers.layout.ViewPortBounds;
+import haxe.Constraints.Function;
 
+import starling.display.Button;
 import starling.display.DisplayObject;
 import starling.display.Image;
 import starling.display.Quad;
@@ -37,7 +36,8 @@ class LevelSetSelector extends Sprite
     /**
      * The layout algorithm to use for buttons.
      */
-    private var m_buttonLayout : TiledRowsLayout;
+    // TODO: uncomment once layout replacement is designed
+	//private var m_buttonLayout : TiledRowsLayout;
     
     private var m_background : DisplayObject;
     private var m_backgroundBoundsBuffer : Rectangle;
@@ -51,7 +51,7 @@ class LevelSetSelector extends Sprite
     private var m_selectorTitle : TextField;
     private var m_progressIndicator : TextField;
     private var m_buttonCanvas : Sprite;
-    private var m_buttonCanvasBounds : ViewPortBounds;
+    private var m_buttonCanvasBounds : Rectangle;
     
     /**
      * The current set of levels that should be displayed
@@ -59,10 +59,10 @@ class LevelSetSelector extends Sprite
     private var m_currentLevelNodes : Array<WordProblemLevelLeaf>;
     
     private var m_currentPageIndex : Int;
-    private inline var MAX_ITEMS_PER_PAGE : Int = 9;
+    private inline static var MAX_ITEMS_PER_PAGE : Int = 9;
     
-    public function new(screenWidth : Float,
-            screenHeight : Float,
+    public function new(screenWidth : Int,
+            screenHeight : Int,
             assetManager : AssetManager,
             onLevelSelectedCallback : Function,
             onDismissCallback : Function)
@@ -91,10 +91,8 @@ class LevelSetSelector extends Sprite
         addChild(m_selectorTitle);
         m_buttonCanvas = new Sprite();
         addChild(m_buttonCanvas);
-        m_buttonCanvasBounds = new ViewPortBounds();
-        m_buttonCanvasBounds.maxWidth = background.width - (5 * arrowTexture.width);
-        m_buttonCanvasBounds.maxHeight = background.height - m_selectorTitle.height;
-        m_buttonCanvas.x = background.x + (background.width - m_buttonCanvasBounds.maxWidth) * 0.5;
+        m_buttonCanvasBounds = new Rectangle(0, 0, background.width - (5 * arrowTexture.width), background.height - m_selectorTitle.height);
+        m_buttonCanvas.x = background.x + (background.width - m_buttonCanvasBounds.width) * 0.5;
         m_buttonCanvas.y = m_selectorTitle.y + m_selectorTitle.height;
         
         m_progressIndicator = new TextField(screenWidth, 50, "", GameFonts.DEFAULT_FONT_NAME, 18, 0xFFFFFF);
@@ -135,17 +133,18 @@ class LevelSetSelector extends Sprite
         m_nextPageButton.x = background.x + background.width - arrowTexture.width * 1.5;
         m_nextPageButton.y = m_prevPageButton.y;
         
-        m_buttonLayout = new TiledRowsLayout();
-        m_buttonLayout.useSquareTiles = true;
-        m_buttonLayout.padding = 15;
-        m_buttonLayout.verticalGap = 25;
-        m_buttonLayout.horizontalGap = 25;
-        m_buttonLayout.paging = TiledRowsLayout.PAGING_NONE;
-        m_buttonLayout.tileHorizontalAlign = TiledRowsLayout.TILE_HORIZONTAL_ALIGN_CENTER;
-        m_buttonLayout.tileVerticalAlign = TiledRowsLayout.TILE_VERTICAL_ALIGN_TOP;
-        m_buttonLayout.horizontalAlign = TiledRowsLayout.HORIZONTAL_ALIGN_CENTER;
-        m_buttonLayout.verticalAlign = TiledRowsLayout.VERTICAL_ALIGN_TOP;
-        m_buttonLayout.useVirtualLayout = false;
+		// TODO: uncomment once layout replacement is designed
+        //m_buttonLayout = new TiledRowsLayout();
+        //m_buttonLayout.useSquareTiles = true;
+        //m_buttonLayout.padding = 15;
+        //m_buttonLayout.verticalGap = 25;
+        //m_buttonLayout.horizontalGap = 25;
+        //m_buttonLayout.paging = TiledRowsLayout.PAGING_NONE;
+        //m_buttonLayout.tileHorizontalAlign = TiledRowsLayout.TILE_HORIZONTAL_ALIGN_CENTER;
+        //m_buttonLayout.tileVerticalAlign = TiledRowsLayout.TILE_VERTICAL_ALIGN_TOP;
+        //m_buttonLayout.horizontalAlign = TiledRowsLayout.HORIZONTAL_ALIGN_CENTER;
+        //m_buttonLayout.verticalAlign = TiledRowsLayout.VERTICAL_ALIGN_TOP;
+        //m_buttonLayout.useVirtualLayout = false;
     }
     
     public function update(mouseState : MouseState) : Void
@@ -259,7 +258,7 @@ class LevelSetSelector extends Sprite
                     null
                     );
             levelButton.scaleWhenDown = 0.9;
-            levelButton.scaleWhenHovering = 1.1;
+            levelButton.scaleWhenOver = 1.1;
             levelButton.addEventListener(Event.TRIGGERED, onLevelSelected);
             
             // Draw the star or lock icon
@@ -279,7 +278,8 @@ class LevelSetSelector extends Sprite
             buttonsToLayout.push(levelButton);
         }
         
-        m_buttonLayout.layout(buttonsToLayout, m_buttonCanvasBounds);
+		// TODO: uncomment once layout replacement is designed
+        //m_buttonLayout.layout(buttonsToLayout, m_buttonCanvasBounds);
     }
     
     private function clearPage() : Void
@@ -303,7 +303,7 @@ class LevelSetSelector extends Sprite
         if (target != null) 
         {
             Audio.instance.playSfx("button_click");
-            var levelIndex : Int = parseInt(target.label) - 1;
+            var levelIndex : Int = Std.parseInt(target.text) - 1;
             if (levelIndex >= 0 && levelIndex < m_currentLevelNodes.length && m_onLevelSelectedCallback != null) 
             {
                 m_onLevelSelectedCallback(m_currentLevelNodes[levelIndex]);

@@ -5,9 +5,6 @@ import wordproblem.achievements.PlayerAchievementGem;
 import flash.geom.Rectangle;
 import flash.text.TextFormat;
 
-import feathers.display.Scale9Image;
-import feathers.textures.Scale9Textures;
-
 import starling.display.Image;
 import starling.display.Sprite;
 import starling.text.TextField;
@@ -41,7 +38,14 @@ class PlayerAchievementButton extends Sprite
         
         var scale9Padding : Float = 8;
         var bgTexture : Texture = assetManager.getTexture("button_white");
-        var bgImage : Scale9Image = new Scale9Image(new Scale9Textures(bgTexture, new Rectangle(scale9Padding, scale9Padding, bgTexture.width - scale9Padding * 2, bgTexture.height - scale9Padding * 2)));
+        var bgImage : Image = new Image(Texture.fromTexture(
+			bgTexture,
+			new Rectangle(scale9Padding,
+				scale9Padding,
+				bgTexture.width - scale9Padding * 2,
+				bgTexture.height - scale9Padding * 2
+			)
+		));
         bgImage.width = width;
         bgImage.height = height;
         addChild(bgImage);
@@ -91,22 +95,29 @@ class PlayerAchievementButton extends Sprite
         var measuringText : MeasuringTextField = new MeasuringTextField();
         measuringText.defaultTextFormat = m_titleTextFormat;
         measuringText.text = achievementData.name;
-        var newFontSize : Int = measuringText.resizeToDimensions(width - achievementGem.width - 20, height * 0.5, achievementData.name);
+        var newFontSize : Int = Std.int(measuringText.resizeToDimensions(width - achievementGem.width - 20, height * 0.5, achievementData.name));
         
         var titleText : TextField = new TextField(
-        width - achievementGem.width, 
-        measuringText.textHeight + 10, 
-        achievementData.name, 
-        m_titleTextFormat.font, newFontSize, textColor);
+			Std.int(width - achievementGem.width), 
+			Std.int(measuringText.textHeight + 10), 
+			achievementData.name, 
+			m_titleTextFormat.font,
+			newFontSize,
+			textColor
+		);
         titleText.x = achievementGem.width;
         addChild(titleText);
         
         measuringText.defaultTextFormat = m_descriptionTextFormat;
         measuringText.text = achievementData.description;
         var descriptionText : TextField = new TextField(
-        width - achievementGem.width, measuringText.textHeight + 5, 
-        achievementData.description, 
-        m_descriptionTextFormat.font, Std.parseInt(m_descriptionTextFormat.size), textColor);
+			Std.int(width - achievementGem.width),
+			Std.int(measuringText.textHeight + 5), 
+			achievementData.description, 
+			m_descriptionTextFormat.font,
+			m_descriptionTextFormat.size,
+			textColor
+		);
         descriptionText.x = titleText.x;
         descriptionText.y = titleText.y + titleText.height;
         addChild(descriptionText);

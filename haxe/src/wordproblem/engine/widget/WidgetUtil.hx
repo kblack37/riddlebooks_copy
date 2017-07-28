@@ -203,6 +203,7 @@ class WidgetUtil
         return arrowImage;
     }
     
+	// TODO: uncomment when scrollbars are redesigned
     //public static function createScrollbar(assetManager : AssetManager) : IScrollBar
     //{
         //var scrollbar : ScrollBar = new ScrollBar();
@@ -254,6 +255,7 @@ class WidgetUtil
         //return scrollbar;
     //}
     //
+	// TODO: uncomment once layouts are redesigned
     //public static function layoutInList(displayObjects : Array<DisplayObject>,
             //itemWidth : Float,
             //itemHeight : Float,

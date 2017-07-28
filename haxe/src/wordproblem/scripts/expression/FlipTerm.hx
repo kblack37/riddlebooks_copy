@@ -112,11 +112,11 @@ class FlipTerm extends BaseTermAreaScript
             if (Std.is(targetWidget, SymbolTermWidget) && targetTermArea.isReady) 
             {
                 targetTermArea.isReady = false;
-                (try cast(targetWidget, SymbolTermWidget) catch(e:Dynamic) null).reverseValue(onComplete);
-                function onComplete() : Void
+				function onComplete() : Void
                 {
                     targetTermArea.redrawAfterModification();
                 };
+                (try cast(targetWidget, SymbolTermWidget) catch(e:Dynamic) null).reverseValue(onComplete);
             }
             
             success = true;

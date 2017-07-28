@@ -136,8 +136,8 @@ class Console extends MovieClip implements IConsole
     private function onInputWindowKeyDown(e : KeyboardEvent) : Void
     {
         var tilde : Int = 96;
-        var _sw0_ = (e.keyCode);        
-
+        var _sw0_ : Int = (e.keyCode);
+		
         switch (_sw0_)
         {
             case tilde:
@@ -208,7 +208,6 @@ class Console extends MovieClip implements IConsole
                     {
                         m_inputWindow.onKeyPress(e);
                     }
-                    break;
                 }
         }
         
@@ -283,8 +282,6 @@ class Console extends MovieClip implements IConsole
                             }
                         }
                     }
-                    
-                    break;
                 }
         }
     }
@@ -312,7 +309,7 @@ class Console extends MovieClip implements IConsole
         if (m_history.length > 0) 
         {
             
-            m_historyPointer = Math.min(m_historyPointer + 1, m_history.length - 1);
+            m_historyPointer = Std.int(Math.min(m_historyPointer + 1, m_history.length - 1));
             m_inputWindow.getInputField().text = m_history[m_historyPointer];
             m_inputWindow.applySyntaxHilighting();
         }
@@ -322,7 +319,7 @@ class Console extends MovieClip implements IConsole
     {
         if (m_history.length > 0) 
         {
-            m_historyPointer = Math.max(0, m_historyPointer - 1);
+            m_historyPointer = Std.int(Math.max(0, m_historyPointer - 1));
             m_inputWindow.getInputField().text = m_history[m_historyPointer];
             m_inputWindow.applySyntaxHilighting();
         }

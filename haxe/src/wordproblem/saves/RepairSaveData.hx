@@ -3,6 +3,8 @@ package wordproblem.saves;
 
 import cgs.cache.ICgsUserCache;
 
+import haxe.Constraints.Function;
+
 import wordproblem.engine.IGameEngine;
 import wordproblem.engine.events.GameEvent;
 import wordproblem.scripts.BaseBufferEventScript;
@@ -39,7 +41,7 @@ class RepairSaveData extends BaseBufferEventScript
      */
     private var m_saveRepairsCallback : Function;
     
-    private inline var MASTER_PROGRESS_SAVE_KEY : String = "master-save";
+    private inline static var MASTER_PROGRESS_SAVE_KEY : String = "master-save";
     
     public function new(gameEngine : IGameEngine,
             cache : ICgsUserCache,

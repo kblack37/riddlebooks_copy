@@ -7,7 +7,7 @@ import flash.text.TextFormat;
 
 import cgs.audio.Audio;
 import cgs.internationalization.StringTable;
-import cgs.levelprogression.nodes.ICgsLevelNode;
+import cgs.levelProgression.nodes.ICgsLevelNode;
 
 import dragonbox.common.state.BaseState;
 import dragonbox.common.state.IStateMachine;
@@ -229,14 +229,14 @@ class WordProblemSelectState extends BaseState
     override public function enter(fromState : Dynamic, params : Array<Dynamic> = null) : Void
     {
         m_currentGenreWidget = new GenreWidget(
-                m_assetManager, 
-                m_levelManager, 
-                m_playerItemInventory, 
-                m_itemDataSource, 
-                onCloseGenreWidgetCallback, 
-                onStartLevelGenreWidgetCallback, 
-                m_buttonColorData.getUpButtonColor(), 
-                );
+            m_assetManager, 
+            m_levelManager, 
+            m_playerItemInventory, 
+            m_itemDataSource, 
+            onCloseGenreWidgetCallback, 
+            onStartLevelGenreWidgetCallback, 
+            m_buttonColorData.getUpButtonColor()
+        );
         
         // Draw a temp background
         m_backgroundLayer = new Layer();
@@ -278,21 +278,20 @@ class WordProblemSelectState extends BaseState
             cachedObjectForSection.hitArea = hitArea;
             
             // For each hit area, assign the background image containing the proper colored hover area
-            cachedObjectForSection.hoverBackgroundImage =new Image(m_assetManager.getTexture(sectionInLevelSelect.hoverBackgroundTexture))  // Check if the genre has a name display object that should be shown on hover over  ;
-            
-            
-            
+            cachedObjectForSection.hoverBackgroundImage = new Image(m_assetManager.getTexture(sectionInLevelSelect.hoverBackgroundTexture));
+			
+			// Check if the genre has a name display object that should be shown on hover over
             var hoverTextDisplay : DisplayObject = null;
             if (sectionInLevelSelect.exists("hoverTextArea")) 
             {
                 var textAreaRectangle : Dynamic = sectionInLevelSelect.hoverTextArea;
                 var hoverTextField : TextField = new TextField(
-                textAreaRectangle.width, 
-                textAreaRectangle.height, 
-                sectionInLevelSelect.title, 
-                GameFonts.DEFAULT_FONT_NAME, 
-                ((textAreaRectangle.exists("fontSize"))) ? textAreaRectangle.fontSize : 32, 
-                0xFFFFFF, 
+					textAreaRectangle.width, 
+					textAreaRectangle.height, 
+					sectionInLevelSelect.title, 
+					GameFonts.DEFAULT_FONT_NAME, 
+					((textAreaRectangle.exists("fontSize"))) ? textAreaRectangle.fontSize : 32, 
+					0xFFFFFF
                 );
                 hoverTextField.x = textAreaRectangle.x + sectionInLevelSelect.hitArea.x;
                 hoverTextField.y = textAreaRectangle.y + sectionInLevelSelect.hitArea.y;
@@ -342,11 +341,11 @@ class WordProblemSelectState extends BaseState
         
         
         var optionsWidget : OptionsWidget = new OptionsWidget(
-        m_assetManager, 
-        optionNames, 
-        onCreditsClicked, 
-        onResetClicked, 
-        m_buttonColorData.getUpButtonColor(), 
+			m_assetManager, 
+			optionNames, 
+			onCreditsClicked, 
+			onResetClicked, 
+			m_buttonColorData.getUpButtonColor()
         );
         optionsWidget.x = 0;
         optionsWidget.y = m_originalBackgroundImage.height - optionsWidget.height;
@@ -355,12 +354,12 @@ class WordProblemSelectState extends BaseState
         
         // Screen to show credits
         m_credits = new CreditsWidget(
-                m_config.getWidth(), 
-                m_config.getHeight(), 
-                m_assetManager, 
-                null, 
-                m_buttonColorData.getUpButtonColor(), 
-                );
+            m_config.getWidth(), 
+            m_config.getHeight(), 
+            m_assetManager, 
+            null, 
+            m_buttonColorData.getUpButtonColor()
+        );
         
         m_resetConfirmationWidget = new ConfirmationWidget(
                 m_config.getWidth(), 
@@ -368,49 +367,51 @@ class WordProblemSelectState extends BaseState
                 function() : DisplayObject
                 {
                     var contentTextField : TextField = new TextField(
-                    400, 
-                    200, 
-                    StringTable.lookup("reset_data_warning"), 
-                    GameFonts.DEFAULT_FONT_NAME, 
-                    30, 
-                    0xFFFFFF, 
-                    );
+						400, 
+						200, 
+						// TODO: uncomment when cgs library is finished
+						"",//StringTable.lookup("reset_data_warning"), 
+						GameFonts.DEFAULT_FONT_NAME, 
+						30, 
+						0xFFFFFF
+						);
                     return contentTextField;
-                }, 
-                function() : Void
-                {
-                    // Perform reset
-                    m_foregroundLayer.removeChild(m_resetConfirmationWidget);
-                    
-                    // Just forward logic to upper level class
-                    dispatchEventWith(CommandEvent.RESET_DATA);
-                }, 
-                function() : Void
-                {
-                    m_foregroundLayer.removeChild(m_resetConfirmationWidget);
-                }, 
-                m_assetManager, 
-                m_buttonColorData.getUpButtonColor(), 
-                StringTable.lookup("yes"), StringTable.lookup("no"), 
-                );
+				}, 
+				function() : Void
+				{
+					// Perform reset
+					m_foregroundLayer.removeChild(m_resetConfirmationWidget);
+					
+					// Just forward logic to upper level class
+					dispatchEventWith(CommandEvent.RESET_DATA);
+				}, 
+				function() : Void
+				{
+					m_foregroundLayer.removeChild(m_resetConfirmationWidget);
+				}, 
+				m_assetManager, 
+				m_buttonColorData.getUpButtonColor(), 
+				// TODO: uncomment when cgs library is finished
+				"", ""//StringTable.lookup("yes"), StringTable.lookup("no")
+        );
         
         // Ui for the player to logout
         m_logoutWidget = new LogoutWidget(
-                m_logger.getCgsUser(), 
-                m_config.showUserNameInSelectScreen, 
-                new TextFormat(GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF, true, null, true), 
-                new TextFormat(GameFonts.DEFAULT_FONT_NAME, 20, 0x5CBFF8, true), 
-                new TextFormat(GameFonts.DEFAULT_FONT_NAME, 20, 0xFFFFFF, true, null, true), 
-                function() : Void
-                {
-                    m_foregroundLayer.addChild(m_logoutConfirmationWidget);
-                }, 
-                function() : Void
-                {
-                    // Go to the create account screen
-                    dispatchEventWith(CommandEvent.SHOW_ACCOUNT_CREATE);
-                }, 
-                );
+            m_logger.getCgsUser(), 
+            m_config.showUserNameInSelectScreen, 
+            new TextFormat(GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF, true, null, true), 
+            new TextFormat(GameFonts.DEFAULT_FONT_NAME, 20, 0x5CBFF8, true), 
+            new TextFormat(GameFonts.DEFAULT_FONT_NAME, 20, 0xFFFFFF, true, null, true), 
+            function() : Void
+            {
+                m_foregroundLayer.addChild(m_logoutConfirmationWidget);
+            }, 
+            function() : Void
+            {
+                // Go to the create account screen
+                dispatchEventWith(CommandEvent.SHOW_ACCOUNT_CREATE);
+            }
+        );
         m_logoutWidget.x = ((m_config.showUserNameInSelectScreen)) ? 510 : 600;
         m_logoutWidget.y = 0;
         var flashToStarlingScale : Float = Starling.current.viewPort.width / m_flashStage.width;
@@ -418,32 +419,34 @@ class WordProblemSelectState extends BaseState
         //m_flashStage.addChild(m_logoutWidget);
         
         m_logoutConfirmationWidget = new ConfirmationWidget(
-                m_config.getWidth(), 
-                m_config.getHeight(), 
-                function() : DisplayObject
-                {
-                    var contentTextField : TextField = new TextField(
-                    400, 
-                    200, 
-                    StringTable.lookup("signout_warning"), 
-                    GameFonts.DEFAULT_FONT_NAME, 
-                    30, 
-                    0xFFFFFF, 
-                    );
-                    return contentTextField;
-                }, 
-                function() : Void
-                {
-                    // Sign out from the current account, clear on data on the client side only
-                    dispatchEventWith(CommandEvent.SIGN_OUT);
-                    m_foregroundLayer.removeChild(m_logoutConfirmationWidget);
-                }, 
-                function() : Void
-                {
-                    m_foregroundLayer.removeChild(m_logoutConfirmationWidget);
-                }, 
-                m_assetManager, XColor.ROYAL_BLUE, StringTable.lookup("yes"), StringTable.lookup("no"), 
+            m_config.getWidth(), 
+            m_config.getHeight(), 
+            function() : DisplayObject
+            {
+                var contentTextField : TextField = new TextField(
+					400, 
+					200, 
+					// TODO: uncomment when cgs library is finished
+					"",//StringTable.lookup("signout_warning"), 
+					GameFonts.DEFAULT_FONT_NAME, 
+					30, 
+					0xFFFFFF
                 );
+                return contentTextField;
+            }, 
+            function() : Void
+            {
+                // Sign out from the current account, clear on data on the client side only
+                dispatchEventWith(CommandEvent.SIGN_OUT);
+                m_foregroundLayer.removeChild(m_logoutConfirmationWidget);
+            }, 
+            function() : Void
+            {
+                m_foregroundLayer.removeChild(m_logoutConfirmationWidget);
+            }, 
+			// TODO: uncomment when cgs library is finished
+            m_assetManager, XColor.ROYAL_BLUE, "", ""//StringTable.lookup("yes"), StringTable.lookup("no")
+        );
         
         // Play background music
         // If background music is already playing do not restart it
@@ -486,11 +489,10 @@ class WordProblemSelectState extends BaseState
         while (this.numChildren > 0)
         {
             removeChildAt(0);
-        }  // Remove objects added to flash stage  
-        
-        
-        
-        if (m_logoutWidget.parent) 
+        }
+		
+		// Remove objects added to flash stage  
+        if (m_logoutWidget.parent != null) 
         {
             m_logoutWidget.parent.removeChild(m_logoutWidget);
         }

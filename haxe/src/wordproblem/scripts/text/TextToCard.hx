@@ -10,8 +10,7 @@ import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.ui.MouseState;
 
-import feathers.display.Scale9Image;
-import feathers.textures.Scale9Textures;
+import haxe.Constraints.Function;
 
 import starling.animation.Tween;
 import starling.core.Starling;
@@ -104,7 +103,7 @@ class TextToCard extends BaseGameScript
      * This function contains the logic that should be executed at the moment a dragged piece of
      * text was released by the mouse.
      */
-    private var m_onReleaseCallback : Function = defaultReleaseText;
+    private var m_onReleaseCallback : Function;
     
     // These are used when you click on a selectable object in the text and it wiggle.
     // We need a reference to properly interuppt this animation
@@ -119,6 +118,7 @@ class TextToCard extends BaseGameScript
             id : String)
     {
         super(gameEngine, expressionCompiler, assetManager, id);
+		m_onReleaseCallback = defaultReleaseText;
     }
     
     /**
@@ -173,16 +173,16 @@ class TextToCard extends BaseGameScript
     
     override public function visit() : Int
     {
-        if (super.m_ready) 
+        if (this.m_ready) 
         {
             // Deal with the dragging out items between components
             // 1.) Drag text to the model deck
             // 2.) Drag equation to the text area
-            if (super.m_isActive) 
+            if (this.m_isActive) 
             {
                 this.iterateThroughBufferedEvents();
                 
-                var mouseState : MouseState = super.m_gameEngine.getMouseState();
+                var mouseState : MouseState = this.m_gameEngine.getMouseState();
                 m_currentMouseGlobalBuffer.setTo(mouseState.mousePositionThisFrame.x, mouseState.mousePositionThisFrame.y);
                 if (mouseState.leftMouseDraggedThisFrame) 
                 {
@@ -235,7 +235,7 @@ class TextToCard extends BaseGameScript
         m_draggedContentFromParagraph = new DocumentViewToCardAnimation(
                 m_expressionSymbolMap, 
                 m_assetManager, 
-                m_expressionCompiler.getVectorSpace(), 
+                m_expressionCompiler.getVectorSpace()
                 );
         
         this.setIsActive(m_isActive);
@@ -399,23 +399,25 @@ class TextToCard extends BaseGameScript
                     
                     var padding : Float = 10;
                     var buttonTexture : Texture = m_assetManager.getTexture("card_background_square");
-                    var nineTextureButton : Scale9Textures = new Scale9Textures(
-                    buttonTexture, 
-                    new Rectangle(padding, padding, buttonTexture.width - 2 * padding, buttonTexture.height - 2 * padding), 
+                    var nineTextureButton : Texture = Texture.fromTexture(
+						buttonTexture, 
+						new Rectangle(padding,
+							padding,
+							buttonTexture.width - 2 * padding,
+							buttonTexture.height - 2 * padding
+						)
                     );
-                    var nineImageButton : Scale9Image = new Scale9Image(nineTextureButton);
+                    var nineImageButton : Image = new Image(nineTextureButton);
                     nineImageButton.x = currentLineBounds.x - padding * 0.5;
                     nineImageButton.y = currentLineBounds.y;
                     nineImageButton.width = currentLineBounds.width + padding * 0.5;
                     nineImageButton.height = currentLineBounds.height;
                     lineButtonContainer.addChildAt(nineImageButton, 0);
                 }
-            }  // and save the blank line for later.    // Make the hit portion look like a button  
-            
-            
-            
-            
-            
+            }
+			
+			// Make the hit portion look like a button  
+            // and save the blank line for later.
             canvasToAddTo.addChild(lineButtonContainer);
             m_currentHitTextAsButton = lineButtonContainer;
             
@@ -425,12 +427,16 @@ class TextToCard extends BaseGameScript
                 currentLineBounds = lines[i];
                 
                 var backgroundTexture : Texture = m_assetManager.getTexture("wildcard");
-                padding = 10;
-                var nineTextureBackground : Scale9Textures = new Scale9Textures(
-                backgroundTexture, 
-                new Rectangle(padding, padding, backgroundTexture.width - 2 * padding, backgroundTexture.height - 2 * padding), 
+                var padding = 10;
+                var nineTextureBackground : Texture = Texture.fromTexture(
+					backgroundTexture, 
+					new Rectangle(padding,
+						padding,
+						backgroundTexture.width - 2 * padding,
+						backgroundTexture.height - 2 * padding
+					)
                 );
-                var nineImageBackground : Scale9Image = new Scale9Image(nineTextureBackground);
+                var nineImageBackground : Image = new Image(nineTextureBackground);
                 nineImageBackground.x = currentLineBounds.x - padding * 0.5;
                 nineImageBackground.y = currentLineBounds.y - padding * 0.5;
                 nineImageBackground.width = currentLineBounds.width + padding;
@@ -438,27 +444,23 @@ class TextToCard extends BaseGameScript
                 
                 lineBackgroundContainer.addChild(nineImageBackground);
                 m_currentHitTextAsBlank = lineBackgroundContainer;
-            }  // Set the original view that was pressed, we may need to reference it later  
-            
-            
-            
+            }
+			
+			// Set the original view that was pressed, we may need to reference it later  
             m_currentHitDocumentView = view;
             
             m_currentHitDocumentView.visible = false;
             
-            Starling.juggler.remove(m_wiggleLeftTween);
-            Starling.juggler.remove(m_wiggleRightTween);
+            Starling.current.juggler.remove(m_wiggleLeftTween);
+            Starling.current.juggler.remove(m_wiggleRightTween);
             if (m_wiggleLeftTween.target != null) 
             {
                 (try cast(m_wiggleLeftTween.target, DisplayObject) catch(e:Dynamic) null).x = m_wiggleOriginalX;
-            }  // (This is only a problem for text pieces that area already cards)    // Kill previous tweens if they were playing, need to reset the moved view to its original position    // Quickly wiggle the selected view (used to help indicate there is something special about it)  
-            
-            
-            
-            
-            
-            
-            
+            }
+			
+			// Quickly wiggle the selected view (used to help indicate there is something special about it)  
+			// Kill previous tweens if they were playing, need to reset the moved view to its original position
+            // (This is only a problem for text pieces that area already cards)
             var wiggleDelta : Float = 8;
             m_wiggleOriginalX = m_currentHitTextAsButton.x;
             
@@ -468,13 +470,13 @@ class TextToCard extends BaseGameScript
             m_wiggleLeftTween.animate("x", m_currentHitTextAsButton.x - wiggleDelta);
             m_wiggleLeftTween.onComplete = function() : Void
                     {
-                        Starling.juggler.add(m_wiggleRightTween);
+                        Starling.current.juggler.add(m_wiggleRightTween);
                     };
             m_wiggleRightTween.reset(m_currentHitTextAsButton, 0.07);
             m_wiggleRightTween.reverse = true;
             m_wiggleRightTween.repeatCount = 2;
             m_wiggleRightTween.animate("x", m_currentHitTextAsButton.x + wiggleDelta);
-            Starling.juggler.add(m_wiggleLeftTween);
+            Starling.current.juggler.add(m_wiggleLeftTween);
             
             // Gather all possible document ids that the given is part of
             this.toggleMouseSelectedForView(view, true);
@@ -510,12 +512,21 @@ class TextToCard extends BaseGameScript
                         m_textArea,
                         null
                         );
-                if (m_widgetDragSystem.getWidgetSelected()) 
+                if (m_widgetDragSystem.getWidgetSelected() != null) 
                 {
                     m_widgetDragSystem.getWidgetSelected().alpha = 0.0;
                 }
             }
             
+			function onAnimationComplete() : Void
+            {
+                // Make sure dragged part is visible
+                if (m_widgetDragSystem.getWidgetSelected() != null) 
+                {
+                    m_widgetDragSystem.getWidgetSelected().alpha = 1.0;
+                }
+            };
+			
             if (draggedObjectIsCardAlready) 
             {
                 onAnimationComplete();
@@ -531,21 +542,9 @@ class TextToCard extends BaseGameScript
                         );
             }
             
-            function onAnimationComplete() : Void
-            {
-                // Make sure dragged part is visible
-                if (m_widgetDragSystem.getWidgetSelected()) 
-                {
-                    m_widgetDragSystem.getWidgetSelected().alpha = 1.0;
-                }
-            }  // the display hierarchy.    // if the background exists. Always assume background image is at the lowest index of    // Note that we want the indentation to appear on top of the background of a document node  ;
-            
-            
-            
-            
-            
-            
-            
+			// Note that we want the indentation to appear on top of the background of a document node  
+			// if the background exists. Always assume background image is at the lowest index of
+            // the display hierarchy.
             var indexToAddBlankTo : Int = 0;
             if (Std.is(m_currentHitTextAsButton.parent, DocumentView)) 
             {

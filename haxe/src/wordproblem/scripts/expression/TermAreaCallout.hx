@@ -6,8 +6,6 @@ import flash.text.TextFormat;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.ui.MouseState;
 
-import feathers.controls.Callout;
-
 import starling.text.TextField;
 
 import wordproblem.engine.IGameEngine;
@@ -108,14 +106,16 @@ class TermAreaCallout extends BaseTermAreaScript
                             calloutComponent.backgroundTexture = "button_white";
                             calloutComponent.backgroundColor = 0x000000;
                             calloutComponent.arrowTexture = "callout_arrow";
-                            calloutComponent.directionFromOrigin = Callout.DIRECTION_UP;
+							// TODO: this was replaced from the feathers Callout.DIRECTION_ and will
+							// need to be replaced when the callout system is
+                            calloutComponent.directionFromOrigin = "up";
                             calloutComponent.display = new TextField(
-                                    m_measuringTextfield.textWidth + 10, 
-                                    m_measuringTextfield.textHeight + 10, 
+                                    Std.int(m_measuringTextfield.textWidth + 10), 
+                                    Std.int(m_measuringTextfield.textHeight + 10), 
                                     name, 
                                     m_measuringTextFormat.font, 
-                                    Std.parseInt(m_measuringTextFormat.size), 
-                                    try cast(m_measuringTextFormat.color, Int) catch(e:Dynamic) null, 
+                                    m_measuringTextFormat.size, 
+                                    try cast(m_measuringTextFormat.color, Int) catch(e:Dynamic) null
                                     );
                             termArea.componentManager.addComponentToEntity(calloutComponent);
                             

@@ -21,9 +21,10 @@ import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
 import dragonbox.common.util.XColor;
 
-import feathers.controls.Button;
+import haxe.Constraints.Function;
 
 import starling.animation.Juggler;
+import starling.display.Button;
 import starling.display.DisplayObject;
 import starling.display.Image;
 import starling.events.Event;
@@ -160,42 +161,44 @@ class ExternalLoginTitleScreenState extends BaseState
         
         // Screen to show credits
         var creditsWidget : CreditsWidget = new CreditsWidget(
-        screenWidth, 
-        screenHeight, 
-        m_assetManager, 
-        null, 
-        XColor.ROYAL_BLUE, 
+			screenWidth, 
+			screenHeight, 
+			m_assetManager, 
+			null, 
+			XColor.ROYAL_BLUE
         );
         m_credits = creditsWidget;
         
         // Screen to confirm whether starting a new game is okay
         var confirmationWidget : ConfirmationWidget = new ConfirmationWidget(
-        screenWidth, 
-        screenHeight, 
-        function() : DisplayObject
-        {
-            var contentTextField : TextField = new TextField(
-            400, 
-            200, 
-            StringTable.lookup("start_new_warning"), 
-            GameFonts.DEFAULT_FONT_NAME, 
-            30, 
-            0xFFFFFF, 
-            );
-            return contentTextField;
-        }, 
-        function() : Void
-        {
-            // Continue with starting new game
-            removeChild(m_newGameConfirmationWidget);
-            m_newGameCallback();
-        }, 
-        function() : Void
-        {
-            // Decline
-            removeChild(m_newGameConfirmationWidget);
-        }, 
-        m_assetManager, XColor.ROYAL_BLUE, StringTable.lookup("yes"), StringTable.lookup("no"), 
+			screenWidth, 
+			screenHeight, 
+			function() : DisplayObject
+			{
+				var contentTextField : TextField = new TextField(
+					400, 
+					200, 
+					// TODO: uncomment once cgs library is finished
+					"",//StringTable.lookup("start_new_warning"), 
+					GameFonts.DEFAULT_FONT_NAME, 
+					30, 
+					0xFFFFFF 
+				);
+				return contentTextField;
+			}, 
+			function() : Void
+			{
+				// Continue with starting new game
+				removeChild(m_newGameConfirmationWidget);
+				m_newGameCallback();
+			}, 
+			function() : Void
+			{
+				// Decline
+				removeChild(m_newGameConfirmationWidget);
+			}, 
+			// TODO: uncomment once cgs library is finished
+			m_assetManager, XColor.ROYAL_BLUE, "", ""//StringTable.lookup("yes"), StringTable.lookup("no")
         );
         m_newGameConfirmationWidget = confirmationWidget;
     }
@@ -210,11 +213,11 @@ class ExternalLoginTitleScreenState extends BaseState
         
         // Create the options on top
         var optionsWidget : OptionsWidget = new OptionsWidget(
-        m_assetManager, 
-        [OptionsWidget.OPTION_MUSIC, OptionsWidget.OPTION_SFX, OptionsWidget.OPTION_CREDITS], 
-        onCreditsClicked, 
-        null, 
-        XColor.ROYAL_BLUE, 
+			m_assetManager, 
+			[OptionsWidget.OPTION_MUSIC, OptionsWidget.OPTION_SFX, OptionsWidget.OPTION_CREDITS], 
+			onCreditsClicked, 
+			null, 
+			XColor.ROYAL_BLUE
         );
         optionsWidget.x = 0;
         optionsWidget.y = maxHeight - optionsWidget.height;
@@ -232,10 +235,10 @@ class ExternalLoginTitleScreenState extends BaseState
         var baseContinueGameButtonTexture : Texture = m_assetManager.getTexture("button_green_up");
         var buttonTexturePadding : Float = 16;
         var nineSliceGrid : Rectangle = new Rectangle(
-        buttonTexturePadding, 
-        buttonTexturePadding, 
-        baseContinueGameButtonTexture.width - 2 * buttonTexturePadding, 
-        baseContinueGameButtonTexture.height - 2 * buttonTexturePadding, 
+			buttonTexturePadding, 
+			buttonTexturePadding, 
+			baseContinueGameButtonTexture.width - 2 * buttonTexturePadding, 
+			baseContinueGameButtonTexture.height - 2 * buttonTexturePadding
         );
         m_continueGameButton = WidgetUtil.createButton(
                         m_assetManager,
@@ -264,22 +267,22 @@ class ExternalLoginTitleScreenState extends BaseState
         var baseNewGameButtonTexture : Texture = m_assetManager.getTexture("button_green_up");
         buttonTexturePadding = 16;
         nineSliceGrid = new Rectangle(
-                buttonTexturePadding, 
-                buttonTexturePadding, 
-                baseNewGameButtonTexture.width - 2 * buttonTexturePadding, 
-                baseNewGameButtonTexture.height - 2 * buttonTexturePadding, 
-                );
+            buttonTexturePadding, 
+            buttonTexturePadding, 
+            baseNewGameButtonTexture.width - 2 * buttonTexturePadding, 
+            baseNewGameButtonTexture.height - 2 * buttonTexturePadding
+        );
         m_newGameButton = WidgetUtil.createButton(
-                        m_assetManager,
-                        "button_green_up",
-                        "button_green_over",
-                        null,
-                        "button_green_over",
-                        "New Guest",
-                        new TextFormat(GameFonts.DEFAULT_FONT_NAME, 36, 0x000000),
-                        null,
-                        nineSliceGrid
-                        );
+            m_assetManager,
+            "button_green_up",
+            "button_green_over",
+            null,
+            "button_green_over",
+            "New Guest",
+            new TextFormat(GameFonts.DEFAULT_FONT_NAME, 36, 0x000000),
+            null,
+            nineSliceGrid
+        );
         m_newGameButton.width = 330;
         m_newGameButton.addEventListener(Event.TRIGGERED, onNewGameClick);
         
@@ -298,7 +301,7 @@ class ExternalLoginTitleScreenState extends BaseState
         // to an account they can use on several machines
         if (m_loginMessage != null) 
         {
-            var messageTextfield : TextField = new TextField(m_newGameButton.width, 80, m_loginMessage, GameFonts.DEFAULT_FONT_NAME, 24, 0xFFFFFF);
+            var messageTextfield : TextField = new TextField(Std.int(m_newGameButton.width), 80, m_loginMessage, GameFonts.DEFAULT_FONT_NAME, 24, 0xFFFFFF);
             messageTextfield.hAlign = HAlign.CENTER;
             messageTextfield.x = (maxWidth - messageTextfield.width) * 0.5;
             messageTextfield.y = ((allowContinue)) ? m_newGameButton.y + 80 : m_newGameButton.y + 100;
@@ -339,7 +342,7 @@ class ExternalLoginTitleScreenState extends BaseState
         // Use the user id saved in the local cache
         if (m_localSharedObject.data.exists("uid")) 
         {
-            var username : String = m_localSharedObject.data["uid"];
+            var username : String = Reflect.field(m_localSharedObject.data, "uid");
             var password : String = null;
             
             var cgsApi : CgsApi = m_logger.getCgsApi();
@@ -366,7 +369,7 @@ class ExternalLoginTitleScreenState extends BaseState
         
         // Save user id to the local cache
         var userId : String = createGuid("");
-        m_localSharedObject.data["uid"] = userId;
+		Reflect.setField(m_localSharedObject.data, "uid", userId);
         m_localSharedObject.flush();
         
         // Use that user id to register a new student
@@ -426,7 +429,7 @@ class ExternalLoginTitleScreenState extends BaseState
         var userId : String = anonymousUser.userId;
         
         // Save user id to the local cache
-        m_localSharedObject.data["uid"] = userId;
+		Reflect.setField(m_localSharedObject, "uid", userId);
         m_localSharedObject.flush();
         
         // Use that user id to register a new student
@@ -449,10 +452,10 @@ class ExternalLoginTitleScreenState extends BaseState
     private function createGuid(prefix : String, value : Array<Dynamic> = null) : String
     {
         var uid : Array<Dynamic> = new Array<Dynamic>();
-        var chars : Array<Dynamic> = new Array<Dynamic>(48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 65, 66, 67, 68, 69, 
-        70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90);
+        var chars : Array<Dynamic> = [48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 65, 66, 67, 68, 69, 
+        70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90];
         var separator : Int = 45;
-        var template : Array<Dynamic> = value || new Array<Dynamic>(8, 4, 4, 4, 12);
+        var template : Array<Dynamic> = value != null ? value : [8, 4, 4, 4, 12];
         
         for (a in 0...template.length){
             for (b in 0...template[a]){
@@ -465,6 +468,9 @@ class ExternalLoginTitleScreenState extends BaseState
             }
         }
         
-        return prefix + String.fromCharCode.apply(null, uid);
+		var str = "";
+		for (id in uid) str += String.fromCharCode(id);
+		
+        return prefix + str;
     }
 }

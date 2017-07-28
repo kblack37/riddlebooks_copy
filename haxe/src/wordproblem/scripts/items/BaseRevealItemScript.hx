@@ -1,7 +1,7 @@
 package wordproblem.scripts.items;
 
 
-import cgs.levelprogression.nodes.ICgsLevelNode;
+import cgs.levelProgression.nodes.ICgsLevelNode;
 
 import wordproblem.engine.IGameEngine;
 import wordproblem.engine.component.Component;
@@ -68,10 +68,11 @@ class BaseRevealItemScript extends BaseBufferEventScript
         var levelComponents : Array<Component> = m_itemInventory.componentManager.getComponentListForType(LevelComponent.TYPE_ID);
         var numComponents : Int = levelComponents.length;
         for (i in 0...numComponents){
-            var levelComponent : LevelComponent = try cast(levelComponents[i], LevelComponent) catch(e:Dynamic) null;
+            var levelComponent : LevelComponent = try cast(levelComponents[i], LevelComponent) catch (e:Dynamic) null;
+			var targetNode : ICgsLevelNode = null;
             if (levelComponent.levelName != null) 
             {
-                var targetNode : ICgsLevelNode = m_levelManager.getNodeByName(levelComponent.levelName);
+                targetNode = m_levelManager.getNodeByName(levelComponent.levelName);
                 levelComponent.levelNode = targetNode;
                 
                 if (Std.is(targetNode, WordProblemLevelLeaf)) 
@@ -120,10 +121,9 @@ class BaseRevealItemScript extends BaseBufferEventScript
                 levelComponent.levelName = targetNode.nodeName;
             }
             levelComponent.levelNode = targetNode;
-        }  // At the start reveal initial items based on player progress or if the data json was overriden  
-        
-        
-        
+        }
+		
+		// At the start reveal initial items based on player progress or if the data json was overriden  
         var numEntities : Int = m_possibleEntityIdsRevealed.length;
         var i : Int;
         var entityId : String;
@@ -155,7 +155,7 @@ class BaseRevealItemScript extends BaseBufferEventScript
     {
         if (eventType == GameEvent.LEVEL_SOLVED) 
         {
-            m_itemInventory.outNewRewardItemIds.length = 0;
+			m_itemInventory.outNewRewardItemIds = new Array<String>();
             
             var numEntities : Int = m_possibleEntityIdsRevealed.length;
             var i : Int;

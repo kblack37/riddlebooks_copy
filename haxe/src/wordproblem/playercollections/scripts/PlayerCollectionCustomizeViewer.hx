@@ -1,5 +1,6 @@
 package wordproblem.playercollections.scripts;
 
+import starling.textures.Texture;
 import wordproblem.playercollections.scripts.PlayerCollectionViewer;
 
 import flash.geom.Point;
@@ -12,13 +13,8 @@ import dragonbox.common.ui.MouseState;
 import dragonbox.common.util.ListUtil;
 import dragonbox.common.util.XColor;
 
-import feathers.controls.Button;
-import feathers.controls.text.TextFieldTextRenderer;
-import feathers.core.ITextRenderer;
-import feathers.display.Scale9Image;
-import feathers.textures.Scale9Textures;
-
 import starling.core.Starling;
+import starling.display.Button;
 import starling.display.DisplayObject;
 import starling.display.DisplayObjectContainer;
 import starling.display.Image;
@@ -195,7 +191,7 @@ class PlayerCollectionCustomizeViewer extends PlayerCollectionViewer
         m_backButton.removeFromParent();
         
         m_currencyCounter.removeFromParent();
-        Starling.juggler.remove(m_currencyChangeAnimation);
+        Starling.current.juggler.remove(m_currencyChangeAnimation);
     }
     
     override public function visit() : Int
@@ -256,21 +252,17 @@ class PlayerCollectionCustomizeViewer extends PlayerCollectionViewer
         var xOffset : Float = (800 - buttonWidth) * 0.5;
         var yOffset : Float = m_titleText.y + m_titleText.height;
         var nineSliceRectangle : Rectangle = new Rectangle(8, 8, 16, 16);
-        var scale9Texture : Scale9Textures = new Scale9Textures(m_assetManager.getTexture("button_white"), nineSliceRectangle);
+        var scale9Texture : Texture = Texture.fromTexture(m_assetManager.getTexture("button_white"), nineSliceRectangle);
         for (i in 0...numCategories){
-            var categoryButton : Button = new Button();
-            var defaultBackground : Scale9Image = new Scale9Image(scale9Texture);
+            var defaultBackground : Image = new Image(scale9Texture);
             defaultBackground.color = m_buttonColorData.getUpButtonColor();
-            categoryButton.defaultSkin = defaultBackground;
+            var categoryButton : Button = new Button(defaultBackground.texture, categoryIdsForPage[i]);
             
-            categoryButton.label = categoryIdsForPage[i];
-            categoryButton.labelFactory = categoryLabelFactory;
-            
-            var hoverBackground : Scale9Image = new Scale9Image(scale9Texture);
+            var hoverBackground : Image = new Image(scale9Texture);
             hoverBackground.color = XColor.shadeColor(m_buttonColorData.getUpButtonColor(), 0.3);
-            categoryButton.hoverSkin = hoverBackground;
+            categoryButton.overState = hoverBackground.texture;
             
-            categoryButton.downSkin = hoverBackground;
+            categoryButton.downState = hoverBackground.texture;
             
             categoryButton.width = buttonWidth;
             categoryButton.height = buttonHeight;
@@ -283,14 +275,15 @@ class PlayerCollectionCustomizeViewer extends PlayerCollectionViewer
             yOffset += buttonHeight + gap;
         }
         
-        function categoryLabelFactory() : ITextRenderer
-        {
-            var renderer : TextFieldTextRenderer = new TextFieldTextRenderer();
-            var fontName : String = GameFonts.DEFAULT_FONT_NAME;
-            renderer.embedFonts = GameFonts.getFontIsEmbedded(fontName);
-            renderer.textFormat = new TextFormat(fontName, 24, 0xFFFFFF);
-            return renderer;
-        };
+		// TODO: replace when we have a suitable button replacement
+        //function categoryLabelFactory() : ITextRenderer
+        //{
+            //var renderer : TextFieldTextRenderer = new TextFieldTextRenderer();
+            //var fontName : String = GameFonts.DEFAULT_FONT_NAME;
+            //renderer.embedFonts = GameFonts.getFontIsEmbedded(fontName);
+            //renderer.textFormat = new TextFormat(fontName, 24, 0xFFFFFF);
+            //return renderer;
+        //};
     }
     
     private function clearCategoryViewsInCurrentPage() : Void
@@ -300,7 +293,7 @@ class PlayerCollectionCustomizeViewer extends PlayerCollectionViewer
             categoryButton.removeEventListener(Event.TRIGGERED, onCategorySelected);
             categoryButton.removeFromParent(true);
         }
-        as3hx.Compat.setArrayLength(m_activeCategoryButtons, 0);
+		m_activeCategoryButtons = new Array<Button>();
     }
     
     private function onCategorySelected(event : Event) : Void
@@ -337,9 +330,10 @@ class PlayerCollectionCustomizeViewer extends PlayerCollectionViewer
      */
     private function changeToItemsView(customizableCategoryData : Dynamic) : Void
     {
-        var itemsPerPage : Int = customizableCategoryData.columnsPerPage * customizableCategoryData.rowsPerPage;
-        var itemIdsInCategory : Array<String> = new Array<String>();
-        for (itemId/* AS3HX WARNING could not determine type for var: itemId exp: EField(EIdent(customizableCategoryData),itemIds) type: null */ in customizableCategoryData.itemIds)
+        var itemsPerPage : Int = Std.int(customizableCategoryData.columnsPerPage * customizableCategoryData.rowsPerPage);
+        var customizableCategoryDataItemIds : Array<Dynamic> = try cast(customizableCategoryData.itemIds, Array<Dynamic>) catch (e : Dynamic) null;
+		var itemIdsInCategory : Array<String> = new Array<String>();
+        for (itemId in customizableCategoryDataItemIds)
         {
             itemIdsInCategory.push(itemId);
         }
@@ -372,12 +366,12 @@ class PlayerCollectionCustomizeViewer extends PlayerCollectionViewer
             // Button appearance will differ if the item was already purchased or if it is currently equipped.
             // The logic to change this is all baked inside the button class
             var itemButton : CustomizableItemButton = new CustomizableItemButton(itemId, 
-            categoryId, m_itemDataSource, m_playerItemInventory, m_assetManager, buttonWidth, buttonHeight, 
-            m_buttonColorData.getUpButtonColor(), 
-            XColor.shadeColor(m_buttonColorData.getUpButtonColor(), 0.4), 
+				categoryId, m_itemDataSource, m_playerItemInventory, m_assetManager, buttonWidth, buttonHeight, 
+				m_buttonColorData.getUpButtonColor(), 
+				XColor.shadeColor(m_buttonColorData.getUpButtonColor(), 0.4)
             );
             
-            var rowIndex : Int = i / columns;
+            var rowIndex : Int = Std.int(i / columns);
             var columnIndex : Int = i % columns;
             itemButton.x = columnIndex * buttonWidth + calculatedHorizontalGap * (columnIndex + 1);
             itemButton.y = rowIndex * buttonHeight + calculatedVerticalGap * (rowIndex + 1) + yOffset;
@@ -394,10 +388,10 @@ class PlayerCollectionCustomizeViewer extends PlayerCollectionViewer
             itemButton.removeFromParent(true);
         }
         
-        as3hx.Compat.setArrayLength(m_activeItemsButtonsInPage, 0);
+		m_activeItemsButtonsInPage = new Array<CustomizableItemButton>();
         
         // Delete the pagination of items, gets reconstructed the next time we enter an item
-        as3hx.Compat.setArrayLength(m_customizableItemIdsPages, 0);
+		m_customizableItemIdsPages = new Array<Array<String>>();
     }
     
     private function onItemsViewSelected(targetButton : CustomizableItemButton) : Void
@@ -430,86 +424,98 @@ class PlayerCollectionCustomizeViewer extends PlayerCollectionViewer
             {
                 // Display a confirmation screen
                 m_confirmationWidget = new ConfirmationWidget(800, 600, 
-                        function() : DisplayObject
-                        {
-                            var mainDisplayContainer : Sprite = new Sprite();
-                            
-                            var textFormat : TextFormat = new TextFormat(GameFonts.DEFAULT_FONT_NAME, 32, 0xFFFFFF);
-                            var measuringText : MeasuringTextField = new MeasuringTextField();
-                            measuringText.defaultTextFormat = textFormat;
-                            measuringText.text = StringTable.lookup("buy_for") + " ";
-                            
-                            var askText : TextField = new TextField(measuringText.textWidth + 10, 
-                            measuringText.textHeight + 10, measuringText.text, textFormat.font, Std.parseInt(textFormat.size), try cast(textFormat.color, Int) catch(e:Dynamic) null);
-                            askText.hAlign = HAlign.LEFT;
-                            mainDisplayContainer.addChild(askText);
-                            
-                            var priceIndicatorHeight : Float = 40;
-                            var coin : Image = new Image(m_assetManager.getTexture("coin"));
-                            coin.scaleX = coin.scaleY = priceIndicatorHeight / coin.height;
-                            coin.x = askText.x + askText.width;
-                            mainDisplayContainer.addChild(coin);
-                            
-                            var displayedPrice : String = itemCost + "?";
-                            measuringText.text = displayedPrice;
-                            var priceText : TextField = new TextField(measuringText.textWidth + 10, measuringText.textHeight + 10, displayedPrice, 
-                            textFormat.font, Std.parseInt(textFormat.size), try cast(textFormat.color, Int) catch(e:Dynamic) null);
-                            priceText.x = coin.x + coin.width + 10;
-                            mainDisplayContainer.addChild(priceText);
-                            
-                            // Add the icon below
-                            var itemIcon : DisplayObject = targetButton.createItemIcon();
-                            itemIcon.x = (mainDisplayContainer.width - itemIcon.width) * 0.5;
-                            itemIcon.y = askText.y + askText.height + 10;
-                            mainDisplayContainer.addChild(itemIcon);
-                            
-                            return mainDisplayContainer;
-                        }, 
-                        function() : Void
-                        {
-                            // Subtract item cost from the player's current coins
-                            var newCoinValue : Int = m_playerCurrencyModel.totalCoins - itemCost;
-                            m_currencyChangeAnimation.start(m_playerCurrencyModel.totalCoins, newCoinValue);
-                            Starling.juggler.add(m_currencyChangeAnimation);
-                            m_playerCurrencyModel.totalCoins = newCoinValue;
-                            m_playerCurrencyModel.save(true);
-                            
-                            // Add the item to the player's inventory and then save
-                            m_playerItemInventory.createItemFromBlueprint(itemIdSelected, itemIdSelected);
-                            m_playerItemInventory.save();
-                            discardConfirmation();
-                            
-                            // Immediately equip the item that was just selected
-                            switchToItem(itemIdSelected);
-                            
-                            refreshItemButtons();
-                        }, 
-                        discardConfirmation, 
-                        m_assetManager, 
-                        m_buttonColorData.getUpButtonColor(), StringTable.lookup("yes"), StringTable.lookup("no"), 
-                        );
+					function() : DisplayObject
+					{
+						var mainDisplayContainer : Sprite = new Sprite();
+						
+						var textFormat : TextFormat = new TextFormat(GameFonts.DEFAULT_FONT_NAME, 32, 0xFFFFFF);
+						var measuringText : MeasuringTextField = new MeasuringTextField();
+						measuringText.defaultTextFormat = textFormat;
+						// TODO: uncomment when cgs library is finished
+						measuringText.text = "";// StringTable.lookup("buy_for") + " ";
+						
+						var askText : TextField = new TextField(Std.int(measuringText.textWidth + 10), 
+							Std.int(measuringText.textHeight + 10),
+							measuringText.text,
+							textFormat.font,
+							textFormat.size,
+							try cast(textFormat.color, Int) catch(e:Dynamic) null);
+						askText.hAlign = HAlign.LEFT;
+						mainDisplayContainer.addChild(askText);
+						
+						var priceIndicatorHeight : Float = 40;
+						var coin : Image = new Image(m_assetManager.getTexture("coin"));
+						coin.scaleX = coin.scaleY = priceIndicatorHeight / coin.height;
+						coin.x = askText.x + askText.width;
+						mainDisplayContainer.addChild(coin);
+						
+						var displayedPrice : String = itemCost + "?";
+						measuringText.text = displayedPrice;
+						var priceText : TextField = new TextField(Std.int(measuringText.textWidth + 10),
+							Std.int(measuringText.textHeight + 10),
+							displayedPrice, 
+							textFormat.font,
+							textFormat.size,
+							try cast(textFormat.color, Int) catch(e:Dynamic) null);
+						priceText.x = coin.x + coin.width + 10;
+						mainDisplayContainer.addChild(priceText);
+						
+						// Add the icon below
+						var itemIcon : DisplayObject = targetButton.createItemIcon();
+						itemIcon.x = (mainDisplayContainer.width - itemIcon.width) * 0.5;
+						itemIcon.y = askText.y + askText.height + 10;
+						mainDisplayContainer.addChild(itemIcon);
+						
+						return mainDisplayContainer;
+					}, 
+					function() : Void
+					{
+						// Subtract item cost from the player's current coins
+						var newCoinValue : Int = m_playerCurrencyModel.totalCoins - itemCost;
+						m_currencyChangeAnimation.start(m_playerCurrencyModel.totalCoins, newCoinValue);
+						Starling.current.juggler.add(m_currencyChangeAnimation);
+						m_playerCurrencyModel.totalCoins = newCoinValue;
+						m_playerCurrencyModel.save(true);
+						
+						// Add the item to the player's inventory and then save
+						m_playerItemInventory.createItemFromBlueprint(itemIdSelected, itemIdSelected);
+						m_playerItemInventory.save();
+						discardConfirmation();
+						
+						// Immediately equip the item that was just selected
+						switchToItem(itemIdSelected);
+						
+						refreshItemButtons();
+					}, 
+					discardConfirmation, 
+					m_assetManager, 
+					// TODO: uncomment when cgs library is finished
+					m_buttonColorData.getUpButtonColor(), "", ""// StringTable.lookup("yes"), StringTable.lookup("no")
+                );
             }
             else 
             {
                 m_confirmationWidget = new ConfirmationWidget(800, 600, 
-                        function() : DisplayObject
-                        {
-                            var contentTextField : TextField = new TextField(
-                            400, 
-                            200, 
-                            StringTable.lookup("not_enough_coins"), 
-                            GameFonts.DEFAULT_FONT_NAME, 
-                            30, 
-                            0xFFFFFF, 
-                            );
-                            return contentTextField;
-                        }, 
-                        discardConfirmation, 
-                        null, 
-                        m_assetManager, 
-                        m_buttonColorData.getUpButtonColor(), 
-                        StringTable.lookup("ok"), null, true, 
+                    function() : DisplayObject
+                    {
+                        var contentTextField : TextField = new TextField(
+							400, 
+							200, 
+							// TODO: uncomment when cgs library is finished
+							"",//StringTable.lookup("not_enough_coins"), 
+							GameFonts.DEFAULT_FONT_NAME, 
+							30,
+							0xFFFFFF
                         );
+                        return contentTextField;
+                    }, 
+                    discardConfirmation, 
+                    null, 
+                    m_assetManager, 
+                    m_buttonColorData.getUpButtonColor(), 
+					// TODO: uncomment when cgs library is finished
+                    "" /*StringTable.lookup("ok")*/, null, true
+                );
             }
             m_canvasContainer.stage.addChild(m_confirmationWidget);
         }

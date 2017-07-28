@@ -1,7 +1,7 @@
 package wordproblem.currency;
 
 
-import flash.display3d.Context3DBlendFactor;
+import openfl.display3D.Context3DBlendFactor;
 import flash.geom.Rectangle;
 
 import dragonbox.common.particlesystem.action.Accelerate;

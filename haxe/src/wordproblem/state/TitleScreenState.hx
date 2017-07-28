@@ -23,10 +23,8 @@ import dragonbox.common.ui.MouseState;
 import dragonbox.common.ui.TextButton;
 import dragonbox.common.util.XColor;
 
-import fl.controls.Button;
-import fl.controls.TextInput;
-
 import starling.animation.Juggler;
+import starling.display.Button;
 import starling.display.Image;
 import starling.display.Quad;
 import starling.textures.Texture;
@@ -154,7 +152,7 @@ class TitleScreenState extends BaseState
     /**
      * Button for the player to create a new account
      */
-    private var m_signUpButton : fl.controls.Button;
+    private var m_signUpButton : Button;
     
     /**
      * Button for the player to start playing without an account
@@ -267,24 +265,21 @@ class TitleScreenState extends BaseState
         signUpHereText.height = signUpHereText.textHeight;
         m_flashStage.addChild(signUpHereText);
         
-        m_signUpButton = new fl.controls.Button();
-        m_signUpButton.setStyle("upSkin", TitleScreenState.button_green_up);
-        m_signUpButton.setStyle("overSkin", TitleScreenState.button_green_hover);
-        m_signUpButton.setStyle("downSkin", TitleScreenState.button_green_hover);
-        //button.setStyle("disabledSkin", button_disabled);
-        m_signUpButton.setStyle("textFormat", new TextFormat(GameFonts.DEFAULT_FONT_NAME, 32, 0x000000, null, null, false));
-        m_signUpButton.setStyle("embedFonts", true);
-        m_signUpButton.label = "START";
-        m_signUpButton.width = 170;
-        m_signUpButton.height = 66;
-        m_signUpButton.x = 283;
-        m_signUpButton.y = 251;
-        m_signUpButton.addEventListener(MouseEvent.CLICK, onSignUpButtonClick);
-        m_flashStage.addChild(m_signUpButton);
-        if (!m_allowSignup) 
-        {
-            m_signUpButton.enabled = false;
-        }
+		// TODO: redesign this with the openfl asset manager
+        //m_signUpButton = new Button(TitleScreenState.button_green_up, "START", TitleScreenState.button_green_hover, TitleScreenState.button_green_hover);
+		//m_signUpButton.fontName = GameFonts.DEFAULT_FONT_NAME;
+		//m_signUpButton.fontSize = 32;
+		//m_signUpButton.fontColor = 0x000000;
+        //m_signUpButton.width = 170;
+        //m_signUpButton.height = 66;
+        //m_signUpButton.x = 283;
+        //m_signUpButton.y = 251;
+        //m_signUpButton.addEventListener(MouseEvent.CLICK, onSignUpButtonClick);
+        //m_flashStage.addChild(m_signUpButton);
+        //if (!m_allowSignup) 
+        //{
+            //m_signUpButton.enabled = false;
+        //}
         
         m_playNowButton = new TextButton();
         m_playNowButton.textFormat = new TextFormat(GameFonts.DEFAULT_FONT_NAME, 20, 0x5CBFF8, null, null, false);
@@ -311,20 +306,20 @@ class TitleScreenState extends BaseState
         
         // Create the options on top
         var optionsWidget : OptionsWidget = new OptionsWidget(
-        m_assetManager, 
-        [OptionsWidget.OPTION_MUSIC, OptionsWidget.OPTION_SFX, OptionsWidget.OPTION_CREDITS], 
-        function() : Void
-        {
-            // Since flash display objects appear on top, make them not visible while credits open
-            var i : Int;
-            for (i in 0...m_flashStageObjects.length){
-                m_flashStageObjects[i].visible = false;
-            }
-            
-            addChild(m_credits);
-        }, 
-        null, 
-        XColor.ROYAL_BLUE, 
+			m_assetManager, 
+			[OptionsWidget.OPTION_MUSIC, OptionsWidget.OPTION_SFX, OptionsWidget.OPTION_CREDITS], 
+			function() : Void
+			{
+				// Since flash display objects appear on top, make them not visible while credits open
+				var i : Int;
+				for (i in 0...m_flashStageObjects.length){
+					m_flashStageObjects[i].visible = false;
+				}
+				
+				addChild(m_credits);
+			}, 
+			null, 
+			XColor.ROYAL_BLUE
         );
         optionsWidget.y = 600 - optionsWidget.height;
         addChild(optionsWidget);
@@ -332,19 +327,19 @@ class TitleScreenState extends BaseState
         
         // Show credits
         m_credits = new CreditsWidget(
-                800, 
-                600, 
-                m_assetManager, 
-                function() : Void
-                {
-                    // Re-enable visibility of flash stage objects
-                    var i : Int;
-                    for (i in 0...m_flashStageObjects.length){
-                        m_flashStageObjects[i].visible = true;
-                    }
-                }, 
-                XColor.ROYAL_BLUE, 
-                );
+            800, 
+            600, 
+            m_assetManager, 
+            function() : Void
+            {
+                // Re-enable visibility of flash stage objects
+                var i : Int;
+                for (i in 0...m_flashStageObjects.length){
+                    m_flashStageObjects[i].visible = true;
+                }
+            }, 
+            XColor.ROYAL_BLUE
+        );
         
         var bgTexture : Texture = ((m_autoLogin)) ? 
         m_assetManager.getTexture("login_background") : m_assetManager.getTexture("login_background_with_ui");
@@ -362,9 +357,10 @@ class TitleScreenState extends BaseState
             
             if (m_autoLoginUsername != null) 
             {
-                m_loginPopup.username = m_autoLoginUsername;
-                m_loginPopup.password = m_autoLoginPassword;
-                m_loginPopup.attemptLogin();
+				// TODO: uncomment once cgs library is finished
+                //m_loginPopup.username = m_autoLoginUsername;
+                //m_loginPopup.password = m_autoLoginPassword;
+                //m_loginPopup.attemptLogin();
                 
                 dispatchEventWith(CommandEvent.WAIT_SHOW);
             }
@@ -434,143 +430,144 @@ class TitleScreenState extends BaseState
      */
     private function showLoginPopup() : Void
     {
+		// TODO: uncomment when cgs library is finished
         var cgsApi : CgsApi = m_logger.getCgsApi();
-        var loginPopup : LoginPopup = cgsApi.createUserLoginDialog(
-                m_logger.getCgsUserProperties(m_config.getSaveDataToServer(), m_config.getSaveDataKey()),
-                onUserLoginSucceed,
-                true,
-                onLoginCancel
-                );
-        loginPopup.teacherCode = m_config.getTeacherCode();
-        loginPopup.setLoginFailCallback(onUserLoginFail);
-        loginPopup.usernameAsPassword = m_config.getUsernameAsPassword();
-        loginPopup.showCreateStudentDialogOnFail = false;
-        
-        // When the user selects login, some unknown period of time may elapse until we get a response
-        // from the server. During that time a waiting screen should appear
-        loginPopup.setLoginButtonFactory(function() : fl.controls.Button
-                {
-                    var button : fl.controls.Button = buttonFactory();
-                    button.addEventListener(MouseEvent.CLICK, function(event : MouseEvent) : Void
-                            {
-                                Audio.instance.playSfx("button_click");
-                                dispatchEventWith(CommandEvent.WAIT_SHOW);
-                            });
-                    return button;
-                });
-        loginPopup.setCancelButtonFactory(buttonFactory);
-        function buttonFactory() : fl.controls.Button
-        {
-            var button : fl.controls.Button = new fl.controls.Button();
-            button.setStyle("upSkin", TitleScreenState.button_purple_up);
-            button.setStyle("overSkin", TitleScreenState.button_purple_over);
-            button.setStyle("downSkin", TitleScreenState.button_purple_over);
-            button.setStyle("textFormat", new TextFormat(GameFonts.DEFAULT_FONT_NAME, 18, 0x000000, null, null, false));
-            button.setStyle("embedFonts", true);
-            button.width = 110;
-            button.height = 27;
-            return button;
-        };
-        
-        loginPopup.setTitleFactory(function() : TextField
-                {
-                    var title : TextField = new TextField();
-                    title.defaultTextFormat = new TextFormat(GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF, null, null, false);
-                    title.embedFonts = true;
-                    title.selectable = false;
-                    title.width = 289;
-                    title.height = 106;
-                    return title;
-                });
-        
-        // Set styles for the labels next to the text inputs
-        loginPopup.setInputLabelFactory(function() : TextField
-                {
-                    var inputLabel : TextField = new TextField();
-                    inputLabel.selectable = false;
-                    inputLabel.defaultTextFormat = new TextFormat(GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF);
-                    inputLabel.embedFonts = true;
-                    inputLabel.width = 188;
-                    inputLabel.height = 50;
-                    return inputLabel;
-                });
-        
-        // Set styles for the text input fields
-        loginPopup.setInputFactory(function() : TextInput
-                {
-                    var input : TextInput = new TextInput();
-                    input.setStyle("upSkin", text_input_background);
-                    input.setStyle("textFormat", new TextFormat(GameFonts.DEFAULT_FONT_NAME, 18, 0, null, null, null, null, null, "center"));
-                    input.setStyle("embedFonts", false);
-                    input.width = 180;
-                    input.height = 27;
-                    return input;
-                });
-        
-        // Set the background image
-        loginPopup.setBackgroundFactory(function() : DisplayObject
-                {
-                    return null;
-                });
-        
-        // Provide custom layout of the components
-        loginPopup.setLayoutFunction(function(logo : DisplayObject,
-                        titleText : TextField,
-                        usernameText : TextField,
-                        usernameInput : TextInput,
-                        passwordText : TextField,
-                        passwordInput : TextInput,
-                        loginButton : fl.controls.Button,
-                        cancelButton : fl.controls.Button,
-                        errorText : TextField,
-                        background : DisplayObject,
-                        allowCancel : Bool,
-                        passwordEnabled : Bool) : Void
-                {
-                    while (this.numChildren > 0)
-                    {
-                        this.removeChildAt(0);
-                    }
-                    
-                    var boxWidth : Float = 280;
-                    titleText.x = (boxWidth - titleText.width) * 0.5;
-                    titleText.y = 0;
-                    titleText.text = "Already have an account?";
-                    this.addChild(titleText);
-                    
-                    var userNameX : Float = 0;
-                    var userNameY : Float = titleText.y + 30;
-                    
-                    usernameInput.x = userNameX;
-                    usernameInput.y = userNameY;
-                    
-                    if (m_usernamePrefix != null) 
-                    {
-                        usernameInput.text = m_usernamePrefix;
-                    }
-                    
-                    this.addChild(usernameInput);
-                    
-                    errorText.x = userNameX;
-                    errorText.y = usernameInput.y + usernameInput.height;
-                    this.addChild(errorText);
-                    
-                    loginButton.x = usernameInput.x + usernameInput.width + 15;
-                    loginButton.y = usernameInput.y;
-                    loginButton.label = "Resume";
-                    this.addChild(loginButton);
-                });
-        
-        // Call the draw function to make sure our own style properties are applied to the
-        // popup
-        loginPopup.drawAndLayout();
-        
-        // Add to the flash stage
-        loginPopup.x = (800 - loginPopup.width) * 0.5;
-        loginPopup.y = (600 - loginPopup.height) * 0.72;
-        m_flashStage.addChild(loginPopup);
-        
-        m_loginPopup = loginPopup;
+        //var loginPopup : LoginPopup = cgsApi.createUserLoginDialog(
+                //m_logger.getCgsUserProperties(m_config.getSaveDataToServer(), m_config.getSaveDataKey()),
+                //onUserLoginSucceed,
+                //true,
+                //onLoginCancel
+                //);
+        //loginPopup.teacherCode = m_config.getTeacherCode();
+        //loginPopup.setLoginFailCallback(onUserLoginFail);
+        //loginPopup.usernameAsPassword = m_config.getUsernameAsPassword();
+        //loginPopup.showCreateStudentDialogOnFail = false;
+        //
+        //// When the user selects login, some unknown period of time may elapse until we get a response
+        //// from the server. During that time a waiting screen should appear
+        //loginPopup.setLoginButtonFactory(function() : fl.controls.Button
+                //{
+                    //var button : fl.controls.Button = buttonFactory();
+                    //button.addEventListener(MouseEvent.CLICK, function(event : MouseEvent) : Void
+                            //{
+                                //Audio.instance.playSfx("button_click");
+                                //dispatchEventWith(CommandEvent.WAIT_SHOW);
+                            //});
+                    //return button;
+                //});
+        //loginPopup.setCancelButtonFactory(buttonFactory);
+        //function buttonFactory() : fl.controls.Button
+        //{
+            //var button : fl.controls.Button = new fl.controls.Button();
+            //button.setStyle("upSkin", TitleScreenState.button_purple_up);
+            //button.setStyle("overSkin", TitleScreenState.button_purple_over);
+            //button.setStyle("downSkin", TitleScreenState.button_purple_over);
+            //button.setStyle("textFormat", new TextFormat(GameFonts.DEFAULT_FONT_NAME, 18, 0x000000, null, null, false));
+            //button.setStyle("embedFonts", true);
+            //button.width = 110;
+            //button.height = 27;
+            //return button;
+        //};
+        //
+        //loginPopup.setTitleFactory(function() : TextField
+                //{
+                    //var title : TextField = new TextField();
+                    //title.defaultTextFormat = new TextFormat(GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF, null, null, false);
+                    //title.embedFonts = true;
+                    //title.selectable = false;
+                    //title.width = 289;
+                    //title.height = 106;
+                    //return title;
+                //});
+        //
+        //// Set styles for the labels next to the text inputs
+        //loginPopup.setInputLabelFactory(function() : TextField
+                //{
+                    //var inputLabel : TextField = new TextField();
+                    //inputLabel.selectable = false;
+                    //inputLabel.defaultTextFormat = new TextFormat(GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF);
+                    //inputLabel.embedFonts = true;
+                    //inputLabel.width = 188;
+                    //inputLabel.height = 50;
+                    //return inputLabel;
+                //});
+        //
+        //// Set styles for the text input fields
+        //loginPopup.setInputFactory(function() : TextInput
+                //{
+                    //var input : TextInput = new TextInput();
+                    //input.setStyle("upSkin", text_input_background);
+                    //input.setStyle("textFormat", new TextFormat(GameFonts.DEFAULT_FONT_NAME, 18, 0, null, null, null, null, null, "center"));
+                    //input.setStyle("embedFonts", false);
+                    //input.width = 180;
+                    //input.height = 27;
+                    //return input;
+                //});
+        //
+        //// Set the background image
+        //loginPopup.setBackgroundFactory(function() : DisplayObject
+                //{
+                    //return null;
+                //});
+        //
+        //// Provide custom layout of the components
+        //loginPopup.setLayoutFunction(function(logo : DisplayObject,
+                        //titleText : TextField,
+                        //usernameText : TextField,
+                        //usernameInput : TextInput,
+                        //passwordText : TextField,
+                        //passwordInput : TextInput,
+                        //loginButton : fl.controls.Button,
+                        //cancelButton : fl.controls.Button,
+                        //errorText : TextField,
+                        //background : DisplayObject,
+                        //allowCancel : Bool,
+                        //passwordEnabled : Bool) : Void
+                //{
+                    //while (this.numChildren > 0)
+                    //{
+                        //this.removeChildAt(0);
+                    //}
+                    //
+                    //var boxWidth : Float = 280;
+                    //titleText.x = (boxWidth - titleText.width) * 0.5;
+                    //titleText.y = 0;
+                    //titleText.text = "Already have an account?";
+                    //this.addChild(titleText);
+                    //
+                    //var userNameX : Float = 0;
+                    //var userNameY : Float = titleText.y + 30;
+                    //
+                    //usernameInput.x = userNameX;
+                    //usernameInput.y = userNameY;
+                    //
+                    //if (m_usernamePrefix != null) 
+                    //{
+                        //usernameInput.text = m_usernamePrefix;
+                    //}
+                    //
+                    //this.addChild(usernameInput);
+                    //
+                    //errorText.x = userNameX;
+                    //errorText.y = usernameInput.y + usernameInput.height;
+                    //this.addChild(errorText);
+                    //
+                    //loginButton.x = usernameInput.x + usernameInput.width + 15;
+                    //loginButton.y = usernameInput.y;
+                    //loginButton.label = "Resume";
+                    //this.addChild(loginButton);
+                //});
+        //
+        //// Call the draw function to make sure our own style properties are applied to the
+        //// popup
+        //loginPopup.drawAndLayout();
+        //
+        //// Add to the flash stage
+        //loginPopup.x = (800 - loginPopup.width) * 0.5;
+        //loginPopup.y = (600 - loginPopup.height) * 0.72;
+        //m_flashStage.addChild(loginPopup);
+        //
+        //m_loginPopup = loginPopup;
     }
     
     /**
@@ -639,17 +636,18 @@ class TitleScreenState extends BaseState
         // See if the user still needs to accept a tos
         if (user.tosRequired && !user.tosStatus.accepted) 
         {
-            var tosScreen : RegisterTosScreen = new RegisterTosScreen(
-            user, 
-            function() : Void
-            {
-                tosScreen.dispose();
-                m_flashStage.removeChild(tosScreen);
-                dispatchEventWith(CommandEvent.WAIT_HIDE);
-                dispatchEventWith(CommandEvent.USER_AUTHENTICATED);
-            }, 
-            800, 
-            600, 
+			var tosScreen : RegisterTosScreen = null;
+            tosScreen = new RegisterTosScreen(
+				user, 
+				function() : Void
+				{
+					tosScreen.dispose();
+					m_flashStage.removeChild(tosScreen);
+					dispatchEventWith(CommandEvent.WAIT_HIDE);
+					dispatchEventWith(CommandEvent.USER_AUTHENTICATED);
+				}, 
+				800, 
+				600
             );
             m_flashStage.addChild(tosScreen);
         }
@@ -701,15 +699,15 @@ class TitleScreenState extends BaseState
         addChild(disableQuad);
         
         m_registerAccountState = new RegisterAccountState(
-                m_dummyAnonymousUser, 
-                m_config, 
-                m_logger.getCgsApi(), 
-                m_logger.getChallengeService(), 
-                m_logger.getCgsUserProperties(m_config.getSaveDataToServer(), m_config.getSaveDataKey()), 
-                onCancel, 
-                onComplete, 
-                "Create an account to earn a prize!", 
-                );
+            m_dummyAnonymousUser, 
+            m_config, 
+            m_logger.getCgsApi(), 
+            m_logger.getChallengeService(), 
+            m_logger.getCgsUserProperties(m_config.getSaveDataToServer(), m_config.getSaveDataKey()), 
+            onCancel, 
+            onComplete, 
+            "Create an account to earn a prize!"
+        );
         m_flashStage.addChild(m_registerAccountState);
         
         function onCancel() : Void

@@ -2,11 +2,10 @@ package wordproblem.level.nodes;
 
 import wordproblem.level.nodes.WordProblemLevelPack;
 
-// TODO: uncomment once cgs library is ported
-//import cgs.cache.ICgsUserCache;
-//import cgs.levelprogression.ICgsLevelManager;
-//import cgs.levelprogression.util.ICgsLevelFactory;
-//import cgs.levelprogression.util.ICgsLockFactory;
+import cgs.cache.ICgsUserCache;
+import cgs.levelProgression.ICgsLevelManager;
+import cgs.levelProgression.util.ICgsLevelFactory;
+import cgs.levelProgression.util.ICgsLockFactory;
 
 /**
  * This level pack will group together word problems that all have the same primary genre.
@@ -19,21 +18,21 @@ import wordproblem.level.nodes.WordProblemLevelPack;
  */
 class GenreLevelPack extends WordProblemLevelPack
 {
-    //public static inline var NODE_TYPE : String = "GenreLevelPack";
-    //
-    //public function new(levelManager : ICgsLevelManager, cache : ICgsUserCache, levelFactory : ICgsLevelFactory, lockFactory : ICgsLockFactory, nodeLabel : Int)
-    //{
-        //super(levelManager, cache, levelFactory, lockFactory, nodeLabel);
-    //}
-    //
-    ///**
-     //* The theme id links to a key in the asset manager that is a parsed json object
-     //* containing specifics about the theme.
-     //* 
-     //* Look at the README in assets/genres for more data
-     //*/
-    //public function getThemeId() : String
-    //{
-        //return super.nodeName;
-    //}
+    public static inline var NODE_TYPE : String = "GenreLevelPack";
+    
+    public function new(levelManager : ICgsLevelManager, cache : ICgsUserCache, levelFactory : ICgsLevelFactory, lockFactory : ICgsLockFactory, nodeLabel : Int)
+    {
+        super(levelManager, cache, levelFactory, lockFactory, nodeLabel);
+    }
+    
+    /**
+     * The theme id links to a key in the asset manager that is a parsed json object
+     * containing specifics about the theme.
+     * 
+     * Look at the README in assets/genres for more data
+     */
+    public function getThemeId() : String
+    {
+        return super.nodeName;
+    }
 }

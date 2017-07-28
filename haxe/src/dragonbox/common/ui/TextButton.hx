@@ -74,7 +74,7 @@ class TextButton extends Sprite implements IDisposable
     
     private function onMouseOver(event : MouseEvent) : Void
     {
-        if (m_upTextField.parent) 
+        if (m_upTextField.parent != null) 
         {
             this.removeChild(m_upTextField);
         }
@@ -84,7 +84,7 @@ class TextButton extends Sprite implements IDisposable
     
     private function onMouseOut(event : MouseEvent) : Void
     {
-        if (m_hoverTextField.parent) 
+        if (m_hoverTextField.parent != null) 
         {
             this.removeChild(m_hoverTextField);
         }

@@ -8,8 +8,6 @@ import flash.text.TextFormat;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.ui.MouseState;
 
-import feathers.controls.Callout;
-
 import starling.display.DisplayObject;
 import starling.text.TextField;
 
@@ -169,19 +167,21 @@ class DeckCallout extends BaseGameScript
                             var backgroundPadding : Float = 8;
                             var textFormat : TextFormat = m_measuringTextField.defaultTextFormat;
                             var textField : TextField = new TextField(
-                            m_measuringTextField.textWidth + backgroundPadding * 2, 
-                            m_measuringTextField.textHeight * 2, 
-                            symbolName, 
-                            textFormat.font, 
-                            Std.parseInt(textFormat.size), 
-                            try cast(textFormat.color, Int) catch(e:Dynamic) null, 
+								Std.int(m_measuringTextField.textWidth + backgroundPadding * 2), 
+								Std.int(m_measuringTextField.textHeight * 2), 
+								symbolName, 
+								textFormat.font, 
+								textFormat.size, 
+								try cast(textFormat.color, Int) catch(e:Dynamic) null
                             );
                             var calloutComponent : CalloutComponent = new CalloutComponent(deckEntityId);
                             calloutComponent.backgroundTexture = "button_white";
                             calloutComponent.backgroundColor = 0x000000;
                             calloutComponent.arrowTexture = "callout_arrow";
                             calloutComponent.edgePadding = -2.0;
-                            calloutComponent.directionFromOrigin = Callout.DIRECTION_UP;
+							// TODO: this was replaced from the feathers Callout.DIRECTION_ and will
+							// need to be replaced when the callout system is
+                            calloutComponent.directionFromOrigin = "up";
                             calloutComponent.display = textField;
                             calloutComponent.xOffset = calloutXOffset;
                             m_deckArea.componentManager.addComponentToEntity(calloutComponent);

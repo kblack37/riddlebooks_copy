@@ -89,7 +89,7 @@ class PlayerCollectionsAchievementsViewer extends PlayerCollectionViewer
         
         // Much like items we need to break up achievements into pages
         var achievementIds : Array<String> = m_playerAchievementsModel.getAchievementIds();
-        as3hx.Compat.setArrayLength(m_achievementsPerPage, 0);
+		m_achievementsPerPage = new Array<Array<String>>();
         divideAchievementIdsIntoPages(m_playerAchievementsModel.getAchievementIds(), 3, m_achievementsPerPage);
         
         // Always start at the first page of achievements
@@ -167,6 +167,6 @@ class PlayerCollectionsAchievementsViewer extends PlayerCollectionViewer
             achievementButton.removeFromParent(true);
         }
         
-        as3hx.Compat.setArrayLength(m_activeAchievementButtons, 0);
+		m_activeAchievementButtons = new Array<PlayerAchievementButton>();
     }
 }

@@ -175,9 +175,9 @@ class HighlightBarModelThenTextProcess extends ScriptNode
                 textComponentManager.getComponentFromEntityIdAndType(documentId, RenderableComponent.TYPE_ID) != null) 
             {
                 var highlightComponent : HighlightComponent = new HighlightComponent(
-                documentId, 
-                m_highlightColor, 
-                1, 
+					documentId, 
+					m_highlightColor, 
+					1
                 );
                 textComponentManager.addComponentToEntity(highlightComponent);
             }

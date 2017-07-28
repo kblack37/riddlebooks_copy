@@ -21,7 +21,8 @@ import wordproblem.resource.FlashResourceUtil;
  */
 class AvatarControl implements IDisposable
 {
-    private var m_avatarCreator : AvatarCreator;
+	// TODO: uncomment once cgs library is ported
+    //private var m_avatarCreator : AvatarCreator;
     
     private var m_playerCostumes : Dynamic;
     
@@ -30,7 +31,8 @@ class AvatarControl implements IDisposable
     
     public function new()
     {
-        m_avatarCreator = new AvatarCreator();
+		// TODO: uncomment once cgs library is ported
+        //m_avatarCreator = new AvatarCreator();
         
         m_playerCostumes = {
                     ninja : {
@@ -121,34 +123,36 @@ class AvatarControl implements IDisposable
             canvasViewport : Rectangle,
             direction : Int) : Image
     {
-        var avatar : AvatarSpriteContainer = try cast(m_avatarCreator.createAvatarFromParameters(
-                avatarHeight,
-                species,
-                earType,
-                color,
-                shirtId,
-                hatId
-                ), AvatarSpriteContainer) catch(e:Dynamic) null;
-        
-        if (direction == Direction.NORTH) 
-        {
-            avatar.cycleFrameLeft();
-        }
-        else if (direction == Direction.SOUTH) 
-        {
-            avatar.cycleFrameRight();
-        }
-        else if (direction == Direction.WEST) 
-        {
-            avatar.cycleFrameRight();
-            avatar.cycleFrameRight();
-        }
-        avatar.setAvatarBehavior(expressionId, animationCycle, 0, frameInAnimation);
-        
-        var avatarTexture : Texture = FlashResourceUtil.avatarDisplayToStarlingTexture(
-                avatar,
-                canvasViewport
-                );
-        return new Image(avatarTexture);
+		// TODO: uncomment once cgs library is ported
+        //var avatar : AvatarSpriteContainer = try cast(m_avatarCreator.createAvatarFromParameters(
+                //avatarHeight,
+                //species,
+                //earType,
+                //color,
+                //shirtId,
+                //hatId
+                //), AvatarSpriteContainer) catch(e:Dynamic) null;
+        //
+        //if (direction == Direction.NORTH) 
+        //{
+            //avatar.cycleFrameLeft();
+        //}
+        //else if (direction == Direction.SOUTH) 
+        //{
+            //avatar.cycleFrameRight();
+        //}
+        //else if (direction == Direction.WEST) 
+        //{
+            //avatar.cycleFrameRight();
+            //avatar.cycleFrameRight();
+        //}
+        //avatar.setAvatarBehavior(expressionId, animationCycle, 0, frameInAnimation);
+        //
+        //var avatarTexture : Texture = FlashResourceUtil.avatarDisplayToStarlingTexture(
+                //avatar,
+                //canvasViewport
+                //);
+        //return new Image(avatarTexture);
+		return null;
     }
 }

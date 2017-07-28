@@ -3,8 +3,7 @@ package wordproblem.scripts.barmodel;
 
 import flash.geom.Rectangle;
 
-// TODO: uncomment once cgs library is ported
-//import cgs.audio.Audio;
+import cgs.audio.Audio;
 
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 
@@ -273,14 +272,12 @@ class ValidateBarModelArea extends BaseBarModelScript
             Starling.current.juggler.add(m_colorChangeAnimation);
             
             m_gameEngine.dispatchEventWith(GameEvent.BAR_MODEL_CORRECT);
-			// TODO: uncomment once cgs library is ported
-            //Audio.instance.playSfx("find_correct_equation");
+            Audio.instance.playSfx("find_correct_equation");
         }
         else 
         {
             m_gameEngine.dispatchEventWith(GameEvent.BAR_MODEL_INCORRECT);
-			// TODO: uncomment once cgs library is ported
-            //Audio.instance.playSfx("wrong");
+            Audio.instance.playSfx("wrong");
         }  
 		
 		// The serialized object is used mainly for logging purposes  

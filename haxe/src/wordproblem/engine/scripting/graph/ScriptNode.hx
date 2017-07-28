@@ -2,6 +2,7 @@ package wordproblem.engine.scripting.graph;
 
 
 import dragonbox.common.dispose.IDisposable;
+import haxe.xml.Fast;
 
 class ScriptNode implements IDisposable
 {
@@ -69,7 +70,7 @@ class ScriptNode implements IDisposable
      * 
      * This is a prototype that should be overridden by each subclass.
      */
-    public function setExtraData(data : Dynamic) : Void
+    public function setExtraData(data : Iterator<Fast>) : Void
     {
     }
     

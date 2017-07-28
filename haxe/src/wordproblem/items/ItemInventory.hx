@@ -1,7 +1,6 @@
 package wordproblem.items;
 
-// TODO: uncomment once cgs library is ported
-//import cgs.cache.ICgsUserCache;
+import cgs.cache.ICgsUserCache;
 
 import dragonbox.common.expressiontree.compile.LatexCompiler;
 import dragonbox.common.math.vectorspace.RealsVectorSpace;
@@ -81,7 +80,7 @@ class ItemInventory
         loadFromSaveData();
         
         // Add the reward collectable items
-        m_itemIdsThatNeedToBeSaved = BaseGiveRewardScript.LEVEL_UP_REWARDS.concat();
+        m_itemIdsThatNeedToBeSaved.concat(BaseGiveRewardScript.LEVEL_UP_REWARDS);
         // Add the purchasable items
         m_itemIdsThatNeedToBeSaved.push("136");
         m_itemIdsThatNeedToBeSaved.push("137");
@@ -91,16 +90,12 @@ class ItemInventory
         m_itemIdsThatNeedToBeSaved.push("141");
         m_itemIdsThatNeedToBeSaved.push("142");
         m_itemIdsThatNeedToBeSaved.push("143");
-        m_itemIdsThatNeedToBeSaved.push(
-                "144");
+        m_itemIdsThatNeedToBeSaved.push("144");
         m_itemIdsThatNeedToBeSaved.push("145");
         m_itemIdsThatNeedToBeSaved.push("146");
         m_itemIdsThatNeedToBeSaved.push("147");
         m_itemIdsThatNeedToBeSaved.push("148");
         m_itemIdsThatNeedToBeSaved.push("149");
-        m_itemIdsThatNeedToBeSaved.push(
-                );
-        
     }
     
     /**

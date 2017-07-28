@@ -12,7 +12,9 @@ import cgs.user.ICgsUser;
 
 import dragonbox.common.dispose.IDisposable;
 
-import fl.controls.Button;
+import haxe.Constraints.Function;
+
+import starling.display.Button;
 
 /**
  * This is the screen to display the reward that gets earned after registering a new account

@@ -1,7 +1,6 @@
 package wordproblem.engine.expression.widget.term;
 
-// TODO: uncomment once cgs library is ported
-//import cgs.audio.Audio;
+import cgs.audio.Audio;
 
 import dragonbox.common.expressiontree.ExpressionNode;
 
@@ -103,8 +102,7 @@ class SymbolTermWidget extends BaseTermWidget
      */
     public function reverseValue(onComplete : Function) : Void
     {
-		// TODO: uncomment once cgs library is ported
-        //Audio.instance.playSfx("card_flip");
+        Audio.instance.playSfx("card_flip");
         m_reverseOnComplete = onComplete;
         
         var collapseTween : Tween = new Tween(this, 0.3);

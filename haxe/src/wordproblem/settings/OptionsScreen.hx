@@ -3,9 +3,8 @@ package wordproblem.settings;
 
 import flash.text.TextFormat;
 
-// TODO: uncomment once cgs library is ported
-//import cgs.audio.Audio;
-//import cgs.internationalization.StringTable;
+import cgs.audio.Audio;
+import cgs.internationalization.StringTable;
 
 import haxe.Constraints.Function;
 
@@ -75,8 +74,8 @@ class OptionsScreen extends Sprite
         var resumeButton : Button = WidgetUtil.createGenericColoredButton(
                 assetManager,
                 buttonColor,
-				// TODO: uncomment once cgs library is ported
-                /*StringTable.lookup("resume")*/ "",
+				// TODO: uncomment this once cgs library is finished
+                "", //StringTable.lookup("resume"),
                 new TextFormat(GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF),
                 new TextFormat(GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF)
                 );
@@ -98,8 +97,8 @@ class OptionsScreen extends Sprite
             var helpButton : Button = WidgetUtil.createGenericColoredButton(
                     assetManager,
                     buttonColor,
-					// TODO: uncomment once cgs library is ported
-                    /*StringTable.lookup("help")*/ "",
+                    // TODO: uncomment this once cgs library is finished
+					"", //StringTable.lookup("help"),
                     new TextFormat(GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF),
                     new TextFormat(GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF)
                     );
@@ -114,8 +113,8 @@ class OptionsScreen extends Sprite
         var resetButton : Button = WidgetUtil.createGenericColoredButton(
                 assetManager,
                 buttonColor,
-				// TODO: uncomment once cgs library is ported
-                /*StringTable.lookup("restart")*/ "",
+				// TODO: uncomment this once cgs library is finished
+                "", //StringTable.lookup("restart"),
                 new TextFormat(GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF),
                 new TextFormat(GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF)
                 );
@@ -130,8 +129,8 @@ class OptionsScreen extends Sprite
             var skipButton : Button = WidgetUtil.createGenericColoredButton(
                     assetManager,
                     buttonColor,
-					// TODO: uncomment once cgs library is ported
-                    /*StringTable.lookup("skip")*/ "",
+					// TODO: uncomment this once cgs library is finished
+                    "", //StringTable.lookup("skip"),
                     new TextFormat(GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF),
                     new TextFormat(GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF)
                     );
@@ -177,8 +176,8 @@ class OptionsScreen extends Sprite
             var exitButton : Button = WidgetUtil.createGenericColoredButton(
                     assetManager,
                     buttonColor,
-					// TODO: uncomment once cgs library is ported
-                    /*StringTable.lookup("main_menu")*/ "",
+					// TODO: uncomment this once cgs library is finished
+                    "", //StringTable.lookup("main_menu"),
                     new TextFormat(GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF),
                     new TextFormat(GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF)
                     );
@@ -195,8 +194,7 @@ class OptionsScreen extends Sprite
             // Add audio to each click
             button.addEventListener(Event.TRIGGERED, function() : Void
                     {
-						// TODO: uncomment once cgs library is ported
-                        //Audio.instance.playSfx("button_click");
+                        Audio.instance.playSfx("button_click");
                     });
         }
 		

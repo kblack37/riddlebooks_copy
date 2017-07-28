@@ -4,8 +4,7 @@ import wordproblem.hints.scripts.IShowableScript;
 
 import flash.geom.Rectangle;
 
-// TODO: uncomment this once cgs library is ported
-//import cgs.internationalization.StringTable;
+import cgs.internationalization.StringTable;
 
 import starling.animation.Tween;
 import starling.core.Starling;
@@ -172,10 +171,10 @@ class HintsViewer extends ScriptNode implements IShowableScript
         lightbulbIcon.y = (starBurst.height - lightbulbIcon.height) * 0.5;
         
 		// TODO: uncomment once cgs library is ported
-        //var newHintText : TextField = new TextField(Std.int(starBurst.width), 30, StringTable.lookup("new_hint"), GameFonts.DEFAULT_FONT_NAME, 20, 0xFFFFFF);
-        //newHintText.hAlign = HAlign.RIGHT;
-        //newHintText.y = lightbulbIcon.y + lightbulbIcon.height;
-        //newHintText.x = 0;
+        var newHintText : TextField = new TextField(Std.int(starBurst.width), 30, /*StringTable.lookup("new_hint")*/ "", GameFonts.DEFAULT_FONT_NAME, 20, 0xFFFFFF);
+        newHintText.hAlign = HAlign.RIGHT;
+        newHintText.y = lightbulbIcon.y + lightbulbIcon.height;
+        newHintText.x = 0;
         
         var newHintSkinContainer : Sprite = new Sprite();
         newHintSkinContainer.addChild(starBurst);

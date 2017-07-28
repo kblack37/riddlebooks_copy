@@ -1,7 +1,7 @@
 package wordproblem.scripts.items;
 
 
-import cgs.levelprogression.nodes.ICgsLevelPack;
+import cgs.levelProgression.nodes.ICgsLevelPack;
 
 import wordproblem.engine.IGameEngine;
 import wordproblem.items.ItemInventory;
@@ -41,11 +41,11 @@ class DefaultGiveRewardScript extends BaseGiveRewardScript
                 giveReward = targetChapter != null && targetChapter.numLevelLeafsUncompleted == 0 && !checkIfUniqueRewardGiven("1");
             case "fish_bowl":
                 // Give reward after player finishes first level
-                targetChapter = try cast(m_levelManager.getNodeByName("intro_one"), ICgsLevelPack) catch(e:Dynamic) null;
+                var targetChapter = try cast(m_levelManager.getNodeByName("intro_one"), ICgsLevelPack) catch(e:Dynamic) null;
                 giveReward = targetChapter != null && targetChapter.numLevelLeafsCompleted > 0 && !checkIfUniqueRewardGiven("4");
             case "dragonbox_box":
                 // Give reward after player finishes three levels
-                targetChapter = try cast(m_levelManager.getNodeByName("intro_one"), ICgsLevelPack) catch(e:Dynamic) null;
+                var targetChapter = try cast(m_levelManager.getNodeByName("intro_one"), ICgsLevelPack) catch(e:Dynamic) null;
                 giveReward = targetChapter != null && targetChapter.numLevelLeafsCompleted > 3 && !checkIfUniqueRewardGiven("5");
         }
         

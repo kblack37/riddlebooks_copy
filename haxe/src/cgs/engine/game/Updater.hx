@@ -1,10 +1,8 @@
 package cgs.engine.game;
 
-import flash.events.Event;
-import flash.display.Sprite;
+import cgs.engine.game.IUpdatable;
 import flash.events.TimerEvent;
 import flash.utils.Timer;
-import cgs.engine.game.IUpdatable;
 
 /**
 	 * An Updater tracks IUpdatable objects and calls the update function on each of 

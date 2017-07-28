@@ -152,7 +152,7 @@ class DeckController extends BaseGameScript
         
         if (m_snapBackAnimation != null) 
         {
-            Starling.juggler.remove(m_snapBackAnimation);
+            Starling.current.juggler.remove(m_snapBackAnimation);
             m_snapBackAnimation.dispose();
         }
     }
@@ -199,27 +199,10 @@ class DeckController extends BaseGameScript
         if (animate) 
         {
             var widgetToSnap : BaseTermWidget = m_deckArea.getWidgetFromSymbol(data);
-            if (widgetToSnap != null && !widgetToSnap.getIsHidden()) 
-            {
-                if (m_deckArea.stage != null) 
-                {
-                    widgetToSnap.stage.addChild(widget);
-                    m_snapBackAnimation.setParameters(widget, widgetToSnap, 800, onAnimationDone);
-                    Starling.juggler.add(m_snapBackAnimation);
-                }
-            }
-            else 
-            {
-                Starling.juggler.tween(widget, 0.5, {
-                            alpha : 0.0
-
-                        });
-            }
-            
-            function onAnimationDone() : Void
+			function onAnimationDone() : Void
             {
                 widget.removeFromParent();
-                Starling.juggler.remove(m_snapBackAnimation);
+                Starling.current.juggler.remove(m_snapBackAnimation);
                 
                 if (m_originalOfDraggedWidget != null) 
                 {
@@ -227,6 +210,21 @@ class DeckController extends BaseGameScript
                     m_originalOfDraggedWidget = null;
                 }
             };
+            if (widgetToSnap != null && !widgetToSnap.getIsHidden()) 
+            {
+                if (m_deckArea.stage != null) 
+                {
+                    widgetToSnap.stage.addChild(widget);
+                    m_snapBackAnimation.setParameters(widget, widgetToSnap, 800, onAnimationDone);
+                    Starling.current.juggler.add(m_snapBackAnimation);
+                }
+            }
+            else 
+            {
+                Starling.current.juggler.tween(widget, 0.5, {
+                            alpha : 0.0
+                        });
+            }
         }
         else 
         {

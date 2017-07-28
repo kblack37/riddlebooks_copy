@@ -1,9 +1,10 @@
 package wordproblem.account;
 
-
 import cgs.server.IntegrationDataService;
 import cgs.server.responses.CgsUserResponse;
 import cgs.server.responses.ResponseStatus;
+
+import haxe.Constraints.Function;
 
 import wordproblem.log.AlgebraAdventureLogger;
 
@@ -95,7 +96,7 @@ class ExternalIdAuthenticator
                                 m_logger.getCgsUserProperties(m_saveToServer, m_noSqlSaveKey), m_savedExternalId, m_dummyTeacherCode, 4,
                                 function(response : CgsUserResponse) : Void
                                 {
-                                    if (response.success && response.cgsUser) 
+                                    if (response.success && response.cgsUser != null) 
                                     {
                                         // Create a link from the registered user (need to get the cgs id)
                                         // and the external id for data analysis purposes

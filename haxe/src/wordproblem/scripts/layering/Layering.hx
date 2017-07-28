@@ -56,7 +56,7 @@ class Layering extends ScriptNode
     
     override public function visit() : Int
     {
-        as3hx.Compat.setArrayLength(m_layers, 0);
+		m_layers = new Array<Layer>();
         this.getOrderedLayerList(m_baseLayer, m_layers);
         
         m_mousePoint.setTo(m_mouseState.mousePositionThisFrame.x, m_mouseState.mousePositionThisFrame.y);

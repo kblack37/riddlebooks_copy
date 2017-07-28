@@ -159,6 +159,6 @@ class HighlightTextForCard extends ScriptNode
         {
             m_textAreaWidget.componentManager.removeComponentFromEntity(blinkId, BlinkComponent.TYPE_ID);
         }
-        as3hx.Compat.setArrayLength(m_currentlyBlinkingTextAreaIds, 0);
+		m_currentlyBlinkingTextAreaIds = new Array<String>();
     }
 }

@@ -48,20 +48,20 @@ class CGSServerProps implements ICGSServerProps
     //public static inline var DELAYED_DATA_LEVEL : Int = 0;
     //public static inline var IMMEDIATE_DATA_LEVEL : Int = 1;
     //
-    //public static inline var LOCAL_SERVER : String = "local";
-    //public static inline var DEVELOPMENT_SERVER : String = "dev";
-    //public static inline var STAGING_SERVER : String = "staging";
-    //public static inline var PRODUCTION_SERVER : String = "prd";
+    public static inline var LOCAL_SERVER : String = "local";
+    public static inline var DEVELOPMENT_SERVER : String = "dev";
+    public static inline var STAGING_SERVER : String = "staging";
+    public static inline var PRODUCTION_SERVER : String = "prd";
     //public static inline var STUDY_SERVER : String = "school";
     //public static inline var CUSTOM_SERVER : String = "custom";
     //
     ////Version of the logging code prior to sequence ids and client ts.
-    //public static inline var VERSION_DEV : Int = 3;
+    public static inline var VERSION_DEV : Int = 3;
     //public static inline var VERSION1 : Int = 1;
     //
     ////Logging includes sequence ids and client timestamp.
     //public static inline var VERSION2 : Int = 2;
-    //public static var CURRENT_VERSION : Int = VERSION2;
+    public static var CURRENT_VERSION : Int = VERSION2;
     
     /**
      * Important: If loading an application that uses a secure server, this must be set to true to avoid

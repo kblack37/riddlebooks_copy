@@ -1,7 +1,6 @@
 package wordproblem.scripts.level;
 
-// TODO: uncomment once cgs library is ported
-//import cgs.internationalization.StringTable;
+import cgs.internationalization.StringTable;
 
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.ui.MouseState;
@@ -140,7 +139,8 @@ class BaseCustomLevelScript extends BaseGameScript
         
         m_dialogIdToXMLMap = new Map<String, Fast>();
         //m_dialogIdToVisibleWidgetMap = new Dictionary();
-        m_continueIndicator = new TextField(200, 60, StringTable.lookup("click_to_continue"), GameFonts.DEFAULT_FONT_NAME, 24, CONTINUE_TEXT_DEFAULT_COLOR);
+		// TODO: uncomment once cgs library is finished
+        m_continueIndicator = new TextField(200, 60, "", /*StringTable.lookup("click_to_continue"),*/ GameFonts.DEFAULT_FONT_NAME, 24, CONTINUE_TEXT_DEFAULT_COLOR);
         m_continueTextDefaultHighlightFilter = BlurFilter.createGlow(0xFFFFFF);
         m_continueIndicator.hAlign = HAlign.CENTER;
         m_playerStatsAndSaveData = playerStatsAndSaveData;
@@ -212,35 +212,27 @@ class BaseCustomLevelScript extends BaseGameScript
         return 1;
     }
     
-    override public function setExtraData(data : Dynamic) : Void
+    override public function setExtraData(data : Iterator<Fast>) : Void
     {
-        // For this intro script the extra data we input are the pages for the dynamic dialog
-        var extraXMLList : FastXMLList = try cast(data, FastXMLList) catch(e:Dynamic) null;
-        var numElements : Int = extraXMLList.length();
-        
-        var i : Int;
-        var elementXML : FastXML;
-        for (i in 0...numElements){
-            elementXML = extraXMLList.get(i);
-            if (elementXML.node.name.innerData() == "dialog") 
-            {
-                var dialogId : String = elementXML.att.id;
-                Reflect.setField(m_dialogIdToXMLMap, dialogId, elementXML);
-            }
-        }
+		for (xml in data) {
+			if (xml.name == "dialog") {
+				var dialogId : String = xml.att.id;
+				Reflect.setField(m_dialogIdToXMLMap, dialogId, xml);
+			}
+		}
     }
     
     override public function visit() : Int
     {
         if (m_isActive && m_ready) 
         {
-            m_childrenListModifyTypeBuffer.length = 0;
-            m_childrenListModifyIndexBuffer.length = 0;
+			m_childrenListModifyTypeBuffer = new Array<String>();
+			m_childrenListModifyIndexBuffer = new Array<Int>();
             
             super.iterateThroughBufferedEvents();
             var numChildren : Int = m_children.length;
             var i : Int;
-            for (i in 0...numChildren){
+            while (i < numChildren){
                 m_children[i].visit();
                 
                 // Adjust the indices based on changes made to the child list while in the middle of visiting
@@ -267,21 +259,17 @@ class BaseCustomLevelScript extends BaseGameScript
                         }
                     }
                     
-                    m_childrenListModifyTypeBuffer.length = 0;
-                    m_childrenListModifyIndexBuffer.length = 0;
+					m_childrenListModifyTypeBuffer = new Array<String>();
+					m_childrenListModifyIndexBuffer = new Array<Int>();
                     numChildren = m_children.length;
                 }
             }
-        }  // after this function returns the parent select might call reset.    // This occurs because the child script that dispatch events are visited afterwards,    // has finished iterating through it's current buffer get reset by the parent selector    // Must return running otherwise buffered events that are added AFTER the script  
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        }
+		
+		// Must return running otherwise buffered events that are added AFTER the script  
+		// has finished iterating through it's current buffer get reset by the parent selector
+		// This occurs because the child script that dispatch events are visited afterwards,
+        // after this function returns the parent select might call reset.
         return ScriptStatus.RUNNING;
     }
     
@@ -337,7 +325,7 @@ class BaseCustomLevelScript extends BaseGameScript
                 targetButton.filter = null;
                 targetButton.alpha = 1.0;
             }
-            targetButton.isEnabled = !disable;
+            targetButton.enabled = !disable;
         }
     }
     
@@ -346,13 +334,13 @@ class BaseCustomLevelScript extends BaseGameScript
      */
     private function disablePrevNextTextButtons() : Void
     {
-        var textArea : TextAreaWidget = try cast(m_gameEngine.getUiEntity("textArea"), TextAreaWidget) catch(e:Dynamic) null;
-        textArea.setOnGoToPageCallback(onGoToPage);
-        function onGoToPage(pageIndex : Int) : Void
+        var textArea : TextAreaWidget = try cast(m_gameEngine.getUiEntity("textArea"), TextAreaWidget) catch (e:Dynamic) null;
+		function onGoToPage(pageIndex : Int) : Void
         {
             textArea.getNextPageButton().visible = false;
             textArea.getPrevPageButton().visible = false;
         };
+        textArea.setOnGoToPageCallback(onGoToPage);
     }
     
     private function resetExpressionPickerOptions(pickerId : String, entryHeight : Float, maxItemsPerColumn : Int, options : Array<String>) : Void
@@ -571,7 +559,7 @@ class BaseCustomLevelScript extends BaseGameScript
                     endAlpha = 0.0;
                 }
                 targetDocumentView.alpha = initialAlpha;
-                Starling.juggler.tween(targetDocumentView, fadeInDuration, {
+                Starling.current.juggler.tween(targetDocumentView, fadeInDuration, {
                             alpha : endAlpha
 
                         });
@@ -649,10 +637,10 @@ class BaseCustomLevelScript extends BaseGameScript
             tween.animate("y", param.y);
             tween.onComplete = function() : Void
                     {
-                        Starling.juggler.remove(tween);
+                        Starling.current.juggler.remove(tween);
                         param.finished = true;
                     };
-            Starling.juggler.add(tween);
+            Starling.current.juggler.add(tween);
         }
         else 
         {

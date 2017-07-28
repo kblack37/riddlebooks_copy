@@ -1,7 +1,7 @@
 package wordproblem.scripts.performance;
 
 
-import cgs.levelprogression.nodes.ICgsLevelNode;
+import cgs.levelProgression.nodes.ICgsLevelNode;
 
 import wordproblem.engine.IGameEngine;
 import wordproblem.engine.events.GameEvent;
@@ -62,7 +62,7 @@ class PerformanceAndStatsScript extends BaseBufferEventScript
             // Set the time upon completion of a level
             if (m_levelStartTime > 0) 
             {
-                levelStatistics.totalMillisecondsPlayed = Date.now().time - m_levelStartTime;
+                levelStatistics.totalMillisecondsPlayed = Date.now().getTime() - m_levelStartTime;
             }
             onLevelSolved();
             m_levelStartTime = -1;
@@ -71,12 +71,12 @@ class PerformanceAndStatsScript extends BaseBufferEventScript
         {
             m_levelStartTime = -1;
         }
-        else if (eventType == GameEvent.PRESS_TEXT_AREA || GameEvent.SELECT_DECK_AREA || GameEvent.BAR_MODEL_AREA_CHANGE) 
+        else if (eventType == GameEvent.PRESS_TEXT_AREA || eventType == GameEvent.SELECT_DECK_AREA || eventType == GameEvent.BAR_MODEL_AREA_CHANGE) 
         {
             // We assume that these actions are the very first things that a player can do
             if (m_levelStartTime <= 0) 
             {
-                m_levelStartTime = Date.now().time;
+                m_levelStartTime = Date.now().getTime();
             }
         }
     }
@@ -168,7 +168,7 @@ class PerformanceAndStatsScript extends BaseBufferEventScript
                 if (wordProblemNode.getSavePerformanceStateAcrossInstances()) 
                 {
                     var saveData : Dynamic = { };
-                    saveData[LevelNodeSaveKeys.PERFORMANCE_STATE] = m_gameEngine.getCurrentLevel().statistics.serialize();
+					Reflect.setField(saveData, LevelNodeSaveKeys.PERFORMANCE_STATE, m_gameEngine.getCurrentLevel().statistics.serialize());
                     wordProblemNode.updateNode(wordProblemNode.nodeLabel, saveData);
                 }
             }

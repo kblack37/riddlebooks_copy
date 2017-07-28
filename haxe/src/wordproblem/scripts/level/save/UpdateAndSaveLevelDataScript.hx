@@ -1,7 +1,7 @@
 package wordproblem.scripts.level.save;
 
 
-import cgs.levelprogression.nodes.ICgsLevelNode;
+import cgs.levelProgression.nodes.ICgsLevelNode;
 
 import wordproblem.engine.IGameEngine;
 import wordproblem.engine.events.GameEvent;
@@ -84,7 +84,7 @@ class UpdateAndSaveLevelDataScript extends BaseBufferEventScript
             
             if (levelNode != null) 
             {
-                levelStatistics.previousCompletionStatus = levelNode.completionValue;
+                levelStatistics.previousCompletionStatus = Std.int(levelNode.completionValue);
                 m_levelManager.endLevel(levelName, levelStatistics);
             }
             else 

@@ -47,7 +47,7 @@ class BookWidget extends Sprite implements IDisposable
     /**
      * Map from the sprite object to it's fixed width
      */
-    private var m_pageToWidthMap : Dictionary;
+    private var m_pageToWidthMap : Dictionary<String, Float>;
     
     public function new(firstPageOnLeft : Bool)
     {
@@ -106,8 +106,8 @@ class BookWidget extends Sprite implements IDisposable
         // and the page below that one becomes the right top.
         
         // page index needs to be clamped between zero to the total number of pages
-        pageIndex = Math.min(pageIndex, (m_leftPageStack.length + m_rightPageStack.length) - 1);
-        pageIndex = Math.max(0, pageIndex);
+        pageIndex = Std.int(Math.min(pageIndex, (m_leftPageStack.length + m_rightPageStack.length) - 1));
+        pageIndex = Std.int(Math.max(0, pageIndex));
         
         // Check if the page is already visible, don't do anything if it is
         if (pageIndex != m_currentPageIndexVisibleOnRight &&
@@ -130,7 +130,7 @@ class BookWidget extends Sprite implements IDisposable
             
             
             
-            var delta : Int = (pageIndex - m_currentPageIndexVisibleOnRight) / 2;
+            var delta : Int = Std.int((pageIndex - m_currentPageIndexVisibleOnRight) / 2);
             
             // Re-arrange the stacks such that new pages are on top and visible
             var stackToPopFrom : Array<Sprite>;
@@ -146,7 +146,7 @@ class BookWidget extends Sprite implements IDisposable
                 stackToPushTo = m_leftPageStack;
             }
             
-            delta = Math.abs(delta);
+            delta = Std.int(Math.abs(delta));
             while (delta > 0)
             {
                 // Need to shift over two pages for every single flip
@@ -224,10 +224,7 @@ class BookWidget extends Sprite implements IDisposable
     private function redraw() : Void
     {
         // Need to remove previous pages
-        removePages(m_leftPageStack);
-        removePages(m_rightPageStack);
-        
-        function removePages(pageStack : Array<Sprite>) : Void
+		function removePages(pageStack : Array<Sprite>) : Void
         {
             var page : Sprite;
             for (page in pageStack)
@@ -235,6 +232,9 @@ class BookWidget extends Sprite implements IDisposable
                 page.removeFromParent();
             }
         };
+		
+        removePages(m_leftPageStack);
+        removePages(m_rightPageStack);
         
         if (m_leftPageStack.length > 0) 
         {

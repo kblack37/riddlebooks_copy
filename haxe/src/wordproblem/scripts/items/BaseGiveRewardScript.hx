@@ -152,7 +152,7 @@ class BaseGiveRewardScript extends BaseBufferEventScript
                 else 
                 {
                     m_itemInventory.createItemFromBlueprint(rewardData.itemInstanceId);
-                    itemIdComponent = try cast(m_itemInventory.componentManager.getComponentFromEntityIdAndType(
+                    var itemIdComponent = try cast(m_itemInventory.componentManager.getComponentFromEntityIdAndType(
                                     rewardData.itemInstanceId,
                                     ItemIdComponent.TYPE_ID
                                     ), ItemIdComponent) catch(e:Dynamic) null;
@@ -171,7 +171,7 @@ class BaseGiveRewardScript extends BaseBufferEventScript
         // Detecting rewards to give at the END of a level
         if (eventType == GameEvent.LEVEL_SOLVED) 
         {
-            m_itemInventory.outNewRewardItemIds.length = 0;
+			m_itemInventory.outNewRewardItemIds = new Array<String>();
             checkAndAddItemsToInventory(m_rewardsData, m_itemInventory.outNewRewardItemIds);
         }
         // Temp step to check if player leveled up by finishing this level.
@@ -183,7 +183,7 @@ class BaseGiveRewardScript extends BaseBufferEventScript
             var outData : Array<Int> = new Array<Int>();
             m_xpModel.getLevelAndRemainingXpFromTotalXp(m_xpModel.totalXP, outData);
             var currentLevel : Int = outData[0];
-            as3hx.Compat.setArrayLength(outData, 0);
+			outData = new Array<Int>();
             var xpInLevel : Int = m_gameEngine.getCurrentLevel().statistics.xpEarnedForLevel;
             m_xpModel.getLevelAndRemainingXpFromTotalXp(m_xpModel.totalXP - xpInLevel, outData);
             var prevLevel : Int = outData[0];

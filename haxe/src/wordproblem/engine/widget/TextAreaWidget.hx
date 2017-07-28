@@ -44,7 +44,8 @@ import wordproblem.resource.AssetManager;
  * The viewport determines the window that is interactable and most clearly visible
  * to the player.
  */
-// TODO: uncomment all the button references once a button replacement is designed
+
+ // TODO: uncomment all scrollbar references after scrollbar is redesigned
 class TextAreaWidget extends Sprite implements IBaseWidget
 {
     public var componentManager(get, never) : ComponentManager;

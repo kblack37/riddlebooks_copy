@@ -5,8 +5,7 @@ import flash.geom.Rectangle;
 import flash.text.TextFormat;
 import starling.display.Button;
 
-// TODO: uncomment once cgs library is ported
-//import cgs.audio.Audio;
+import cgs.audio.Audio;
 
 import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
@@ -448,16 +447,14 @@ class TipsViewer extends ScriptNode implements IShowableScript
     
     private function onBackClicked() : Void
     {
-		// TODO: uncomment once cgs library is ported
-        //Audio.instance.playSfx("button_click");
+        Audio.instance.playSfx("button_click");
         hideScriptsView();
         changeToNamesView();
     }
     
     private function onScrollLeftButtonClicked() : Void
     {
-		// TODO: uncomment once cgs library is ported
-        //Audio.instance.playSfx("button_click");
+        Audio.instance.playSfx("button_click");
         m_currentPageIndex--;
         if (m_currentPageIndex < 0) 
         {
@@ -469,8 +466,7 @@ class TipsViewer extends ScriptNode implements IShowableScript
     
     private function onScrollRightButtonClicked() : Void
     {
-		// TODO: uncomment once cgs library is ported
-        //Audio.instance.playSfx("button_click");
+        Audio.instance.playSfx("button_click");
         m_currentPageIndex++;
         if (m_currentPageIndex > m_namesPerPage.length - 1) 
         {

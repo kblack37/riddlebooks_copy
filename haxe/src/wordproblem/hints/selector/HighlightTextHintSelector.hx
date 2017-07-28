@@ -107,7 +107,7 @@ class HighlightTextHintSelector extends HintSelectorNode
         {
             textArea = try cast(textAreas[0], TextAreaWidget) catch(e:Dynamic) null;
         }
-        
+        var hint : HintScript = null;
         if (textArea != null) 
         {
             // Checking if the user has picked up all the critical pieces from the text
@@ -151,12 +151,13 @@ class HighlightTextHintSelector extends HintSelectorNode
             else 
             {
                 var expressionsInText : Array<Component> = textArea.componentManager.getComponentListForType(ExpressionComponent.TYPE_ID);
-                as3hx.Compat.setArrayLength(m_uniqueExpressionsBuffer, 0);
+				m_uniqueExpressionsBuffer = new Array<String>();
                 for (expressionInText in expressionsInText)
                 {
-                    if (Lambda.indexOf(m_uniqueExpressionsBuffer, expressionInText.expressionString) == -1) 
+					var castedExpressionInText : ExpressionComponent = try cast(expressionInText, ExpressionComponent) catch (e : Dynamic) null;
+                    if (Lambda.indexOf(m_uniqueExpressionsBuffer, castedExpressionInText.expressionString) == -1) 
                     {
-                        m_uniqueExpressionsBuffer.push(expressionInText.expressionString);
+                        m_uniqueExpressionsBuffer.push(castedExpressionInText.expressionString);
                     }
                 }
                 
@@ -164,7 +165,7 @@ class HighlightTextHintSelector extends HintSelectorNode
                 {
                     var foundMatch : Bool = false;
                     for (i in 0...expressionsInDeck.length){
-                        expressionInDeck = try cast(expressionsInDeck[i], ExpressionComponent) catch(e:Dynamic) null;
+                        var expressionInDeck = try cast(expressionsInDeck[i], ExpressionComponent) catch(e:Dynamic) null;
                         if (expressionInDeck.expressionString == uniqueExpression) 
                         {
                             foundMatch = true;
@@ -180,13 +181,11 @@ class HighlightTextHintSelector extends HintSelectorNode
                 }
             }
             
-            var hint : HintScript = null;
             if (importantLabelIsMissing && m_attemptsToClickText > m_attemptsToClickThreshold) 
             {
                 var hintData : Dynamic = {
                     descriptionContent : "Make sure you've found all the important numbers and names first.",
                     highlightDocIds : textArea.getAllDocumentIdsTiedToExpression(),
-
                 };
                 hint = HintCommonUtil.createHintFromMismatchData(hintData,
                                 m_characterController,
@@ -197,14 +196,13 @@ class HighlightTextHintSelector extends HintSelectorNode
             {
                 // Check if the question exists
                 // Go to the text area and see if there is an element with the id tagged question
-                as3hx.Compat.setArrayLength(m_outDocumentViewsBuffer, 0);
+				m_outDocumentViewsBuffer = new Array<DocumentView>();
                 textArea.getDocumentViewsAtPageIndexById("question", m_outDocumentViewsBuffer);
                 if (m_outDocumentViewsBuffer.length > 0) 
                 {
-                    hintData = {
+                    var hintData = {
                                 descriptionContent : "Read carefully, what is the question asking you to find?",
                                 highlightDocIds : ["question"],
-
                             };
                     hint = HintCommonUtil.createHintFromMismatchData(hintData,
                                     m_characterController,

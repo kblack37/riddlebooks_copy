@@ -2,14 +2,14 @@ package wordproblem.scripts.expression;
 
 
 import cgs.audio.Audio;
+import dragonbox.common.math.vectorspace.RealsVectorSpace;
 
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.ExpressionUtil;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.math.vectorspace.IVectorSpace;
 
-import feathers.controls.Button;
-
+import starling.display.Button;
 import starling.display.DisplayObject;
 import starling.events.Event;
 
@@ -154,7 +154,7 @@ class UndoTermArea extends BaseGameScript
     public function undo() : Void
     {
         // Look at the current equation in focus and pull from its stack
-        var vectorSpace : IVectorSpace = m_expressionCompiler.getVectorSpace();
+        var vectorSpace : RealsVectorSpace = m_expressionCompiler.getVectorSpace();
         var historyManager : HistoryManager = m_historyManager;
         
         // Signal that an undo was triggered
@@ -217,7 +217,7 @@ class UndoTermArea extends BaseGameScript
     private function toggleUndoButtonEnabled(enabled : Bool) : Void
     {
         m_undoButton.alpha = ((enabled)) ? 1.0 : 0.4;
-        m_undoButton.isEnabled = enabled;
+        m_undoButton.enabled = enabled;
     }
     
     private function clickUndo() : Void

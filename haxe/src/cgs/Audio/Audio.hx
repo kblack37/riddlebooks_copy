@@ -6,6 +6,7 @@ import flash.media.SoundChannel;
 import flash.media.SoundMixer;
 import flash.media.SoundTransform;
 import flash.net.URLRequest;
+import haxe.xml.Fast;
 
 /**
 	 * Properties and functions for game music and sound effects
@@ -72,12 +73,12 @@ class Audio
 		 * Initializes the Audio Engine by loading in the data from the given xmls. Requests Sound data from
 		 * the given IAudioResource for data that is not streamed.
 		**/
-    public function init(xmls : Array<FastXML>, res : IAudioResource) : Void
+    public function init(xmls : Array<Xml>, res : IAudioResource) : Void
     {
         reset();
         for (i in 0...xmls.length)
         {
-            var xml : FastXML = xmls[i];
+            var xml : Xml = xmls[i];
             loadMusicTypesFromXml(xml, res);
         }
     }
@@ -289,52 +290,45 @@ class Audio
     /**
 		 * Loads the music types from the given XML and loads their sound resources through the provided IAudioResource.
 		**/
-    private function loadMusicTypesFromXml(xml : FastXML, res : IAudioResource) : Void
+    private function loadMusicTypesFromXml(xml : Xml, res : IAudioResource) : Void
     {
-        var swfName : String = xml.node.attribute.innerData("swfName");
-        var usePanning : Bool = xml.node.attribute.innerData("usePanning") == "true";
+		var fast : Fast = new Fast(xml);
+        var swfName : String = fast.att.swfName;
+        var usePanning : Bool = fast.att.usePanning == "true";
         _musicTypes.usePanning = usePanning;
         
         // Cycle through all the types
-        var types : FastXMLList = xml.node.child.innerData("type");
+		var types = fast.nodes.type;
         for (type in types)
         {
             var musicType : MusicType = new MusicType();
             
             // A music type
-            musicType.type = type.node.attribute.innerData("name");
-            musicType.volume = as3hx.Compat.parseFloat(type.node.attribute.innerData("volume"));
-            musicType.previewMuffle = type.node.attribute.innerData("previewMuffle") == "true";
+            musicType.type = type.att.name;
+            musicType.volume = Std.parseFloat(type.att.volume);
+            musicType.previewMuffle = type.att.previewMuffle == "true";
             musicType.symbols = new Array<Dynamic>();
             
             // Load the sound resources for this music type
-            var sounds : FastXMLList = type.node.child.innerData("sound");
+            var sounds = type.nodes.sound;
             for (sound in sounds)
             {
-                var soundName : String = sound.node.attribute.innerData("name");
-                var url : String = sound.node.attribute.innerData("url");
-                var loadAtStart : Bool = sound.node.attribute.innerData("loadAtStart") == "true";
+                var soundName : String = sound.att.name;
+                var url : String = sound.att.url;
+                var loadAtStart : Bool = sound.att.loadAtStart == "true";
                 if (soundName != null)
                 {
                     // Get the sound resource through the provided IAudioResource
+					var soundRes : Sound = null;
                     if (url == "")
                     {
-                        var soundRes : Sound = res.getSoundResource(soundName);
+                        soundRes = res.getSoundResource(soundName);
                     }
-                    else
+                    else if (loadAtStart)
                     {
-                        // Load the sound from a URL immediatelyif (loadAtStart)
-                        {
-                            soundRes = new Sound();
-                            soundRes.load(new URLRequest(url + soundName));
-                        }
-                        else
-                        {
-                            // Load the sound from a URL, but do it later
-                            {
-                                soundRes = null;
-                            }
-                        }
+                        // Load the sound from a URL immediatelyif
+                        soundRes = new Sound();
+                        soundRes.load(new URLRequest(url + soundName));
                     }
                     
                     musicType.symbols.push(soundName);
@@ -407,7 +401,7 @@ class Audio
         if (_currentBackgroundType != null && _currentBackgroundType.sounds.length >= 1)
         {
             // Randomly select between different loops for this background sound
-            var randomLoop : Int = as3hx.Compat.parseInt(Math.random() * _currentBackgroundType.symbols.length);
+            var randomLoop : Int = Std.int(Math.random() * _currentBackgroundType.symbols.length);
             loop = _currentBackgroundType.sounds[randomLoop];
             
             // Play those background sounds!
@@ -486,7 +480,7 @@ class Audio
         if (_currentMusicType != null && _currentMusicType.sounds.length >= 1)
         {
             // Randomly select between different loops for this type
-            var randomLoop : Int = as3hx.Compat.parseInt(Math.random() * _currentMusicType.symbols.length);
+            var randomLoop : Int = Std.int(Math.random() * _currentMusicType.symbols.length);
             loop = _currentMusicType.sounds[randomLoop];
             
             // We need to stream the music before playing it
@@ -630,7 +624,7 @@ class Audio
                     if (sfxMt.sounds.length > 1)
                     {
                         // Many options! Randomly select between different sfx for this type
-                        var randomLoop : Int = as3hx.Compat.parseInt(Math.random() * sfxMt.symbols.length);
+                        var randomLoop : Int = Std.int(Math.random() * sfxMt.symbols.length);
                         sfxSound = sfxMt.sounds[randomLoop];
                     }
                 }
@@ -756,12 +750,12 @@ class Audio
                         var randomLoop : Int;
                         do
                         {
-                            randomLoop = as3hx.Compat.parseInt(Math.random() * sfxMt.symbols.length);
+                            randomLoop = Std.int(Math.random() * sfxMt.symbols.length);
                         }
-                        while ((randomLoop == _lastStoppable)  // Remember what we choose so we don't choose it twice in a row  );
-                        
-                        
-                        
+						
+                        while ((randomLoop == _lastStoppable));
+						
+						// Remember what we choose so we don't choose it twice in a row
                         _lastStoppable = randomLoop;
                         
                         sfxSound = sfxMt.sounds[randomLoop];

@@ -4,9 +4,6 @@ package wordproblem.currency;
 import flash.geom.Rectangle;
 import flash.text.TextFormat;
 
-import feathers.display.Scale9Image;
-import feathers.textures.Scale9Textures;
-
 import starling.animation.Tween;
 import starling.core.Starling;
 import starling.display.Image;
@@ -50,13 +47,14 @@ class CurrencyCounter extends Sprite
         
         var scale9Padding : Float = 8;
         var textBackgroundTexture : Texture = assetManager.getTexture("button_white");
-        var currencyTextBackground : Scale9Image = new Scale9Image(
-        new Scale9Textures(textBackgroundTexture, 
-        new Rectangle(
-        scale9Padding, 
-        scale9Padding, 
-        textBackgroundTexture.width - 2 * scale9Padding, 
-        textBackgroundTexture.height - 2 * scale9Padding)), 
+        var currencyTextBackground : Image = new Image(
+			Texture.fromTexture(textBackgroundTexture, 
+			new Rectangle(
+				scale9Padding, 
+				scale9Padding, 
+				textBackgroundTexture.width - 2 * scale9Padding, 
+				textBackgroundTexture.height - 2 * scale9Padding)
+			)
         );
         currencyTextBackground.width = textMaxWidth;
         currencyTextBackground.height = textMaxHeight;
@@ -91,19 +89,20 @@ class CurrencyCounter extends Sprite
         var textFormat : TextFormat = new TextFormat(GameFonts.DEFAULT_FONT_NAME, 24, 0x000000);
         var measuringText : MeasuringTextField = new MeasuringTextField();
         measuringText.defaultTextFormat = textFormat;
-        var targetSize : Int = measuringText.resizeToDimensions(textfieldWidth, textfieldHeight, "" + Int.MAX_VALUE);
+        var targetSize : Int = Std.int(measuringText.resizeToDimensions(textfieldWidth, textfieldHeight, "" + Std.int(Math.pow(2, 3))));
         m_currencyText = new OutlinedTextField(textfieldWidth, textfieldHeight, 
                 textFormat.font, targetSize, try cast(textFormat.color, Int) catch(e:Dynamic) null, 0xFFFFFF);
         
         // Add another layer
         var extraBackgroundPadding : Float = textMaxHeight * 0.1;
-        var extraCurrencyTextBackground : Scale9Image = new Scale9Image(
-        new Scale9Textures(textBackgroundTexture, 
-        new Rectangle(
-        scale9Padding, 
-        scale9Padding, 
-        textBackgroundTexture.width - 2 * scale9Padding, 
-        textBackgroundTexture.height - 2 * scale9Padding)), 
+        var extraCurrencyTextBackground : Image = new Image(
+			Texture.fromTexture(textBackgroundTexture, 
+			new Rectangle(
+				scale9Padding, 
+				scale9Padding, 
+				textBackgroundTexture.width - 2 * scale9Padding, 
+				textBackgroundTexture.height - 2 * scale9Padding)
+			)
         );
         extraCurrencyTextBackground.width = textfieldWidth - 2 * extraBackgroundPadding;
         extraCurrencyTextBackground.height = textMaxHeight - 2 * extraBackgroundPadding;
@@ -140,7 +139,7 @@ class CurrencyCounter extends Sprite
         m_flipTween = new Tween(m_threeDimensionalCoin, duration);
         m_flipTween.animate("rotationY", Math.PI * 2);
         m_flipTween.repeatCount = numFlips;
-        Starling.juggler.add(m_flipTween);
+        Starling.current.juggler.add(m_flipTween);
         
         m_flipTween.onComplete = function() : Void
                 {
@@ -160,7 +159,7 @@ class CurrencyCounter extends Sprite
         if (m_flipTween != null) 
         {
             m_threeDimensionalCoin.rotationY = 0;
-            Starling.juggler.remove(m_flipTween);
+            Starling.current.juggler.remove(m_flipTween);
             m_flipTween = null;
         }
     }

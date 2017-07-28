@@ -187,15 +187,6 @@ class GenericModelLevelScript extends BaseCustomLevelScript
         m_gameEngine.getCharacterComponentManager(), 
         new CalloutCreator(m_textParser, m_textViewFactory));
         var hintSelector : HintSelectorNode = new HintSelectorNode();
-        hintSelector.setCustomGetHintFunction(function() : HintScript
-                {
-                    var hintScript : HintScript = highlightTextHint.getHint();
-                    if (hintScript == null) 
-                    {
-                        hintScript = expressionModelHint.getHint();
-                    }
-                    return hintScript;
-                }, null);
         
         // Add the single equation to model
         var modelSpecificEquationScript : ModelSpecificEquation = try cast(this.getNodeById("ModelSpecificEquation"), ModelSpecificEquation) catch(e:Dynamic) null;
@@ -205,11 +196,21 @@ class GenericModelLevelScript extends BaseCustomLevelScript
             modelSpecificEquationScript.addEquation("1", equationString, false, true);
         }
         var expressionModelHint : ExpressionModelHintSelector = new ExpressionModelHintSelector(
-        m_gameEngine, m_assetManager, helperCharacterController, m_expressionCompiler, modelSpecificEquationScript, 200, 370);
-        hintSelector.addChild(expressionModelHint);
+			m_gameEngine, m_assetManager, helperCharacterController, m_expressionCompiler, modelSpecificEquationScript, 200, 370);
+		var highlightTextHint : HighlightTextHintSelector = new HighlightTextHintSelector(m_gameEngine, m_assetManager, null, helperCharacterController, 
+			m_textParser, m_textViewFactory);
+		
+		hintSelector.setCustomGetHintFunction(function() : HintScript
+        {
+            var hintScript : HintScript = highlightTextHint.getHint();
+            if (hintScript == null) 
+            {
+                hintScript = expressionModelHint.getHint();
+            }
+            return hintScript;
+        }, null);
         
-        var highlightTextHint : HighlightTextHintSelector = new HighlightTextHintSelector(m_gameEngine, m_assetManager, null, helperCharacterController, 
-        m_textParser, m_textViewFactory);
+		hintSelector.addChild(expressionModelHint);
         hintSelector.addChild(highlightTextHint);
         
         m_hintingScript = new HelpController(m_gameEngine, m_expressionCompiler, m_assetManager);
@@ -264,7 +265,7 @@ class GenericModelLevelScript extends BaseCustomLevelScript
     // HACK: Multiple redraws screws this up completely
     private function onTextAreaRedrawn() : Void
     {
-        as3hx.Compat.setArrayLength(m_documentViewsMatchingHideableClass, 0);
+		m_documentViewsMatchingHideableClass = new Array<DocumentView>();
         m_textAreaWidget.getDocumentViewsByClass("delay_reveal", m_documentViewsMatchingHideableClass);
         var numDocumentViewsMatchingClass : Int = m_documentViewsMatchingHideableClass.length;
         
@@ -277,10 +278,9 @@ class GenericModelLevelScript extends BaseCustomLevelScript
             
             // Cascade selectability of the documents views to be false
             documentViewMatchingClass.node.setSelectable(false);
-        }  // Color for click to continue matches those defined by the paragraph text style  
-        
-        
-        
+        }
+		
+		// Color for click to continue matches those defined by the paragraph text style  
         var textStyle : Dynamic = m_gameEngine.getCurrentLevel().getCssStyleObject();
         var clickToContinueColor : Int = 0;
         if (textStyle != null && textStyle.exists("p")) 
@@ -306,10 +306,15 @@ class GenericModelLevelScript extends BaseCustomLevelScript
                 y : furthestViewBounds.bottom,
                 parent : m_textAreaWidget,
                 color : clickToContinueColor,
-
             };
             revealTextGraduallySequence.pushChild(new CustomVisitNode(clickToContinue, clickToContinueParams));
             
+			function revealEquationUi(param : Dynamic) : Int
+			{
+				goToEquationModelMode();
+				return ScriptStatus.SUCCESS;
+			};
+			
             if (i == 1) 
             {
                 revealTextGraduallySequence.pushChild(new CustomVisitNode(revealEquationUi, null));
@@ -317,26 +322,18 @@ class GenericModelLevelScript extends BaseCustomLevelScript
             
             revealTextGraduallySequence.pushChild(new CustomVisitNode(showHiddenClassDocumentViewByIndex, {
                         index : i
-
                     }));
             revealTextGraduallySequence.pushChild(new CustomVisitNode(secondsElapsed, {
                         duration : 0.1
-
                     }));
         }
         super.pushChild(revealTextGraduallySequence);
-        
-        function revealEquationUi(param : Dynamic) : Int
-        {
-            goToEquationModelMode();
-            return ScriptStatus.SUCCESS;
-        };
     }
     
     private function showHiddenClassDocumentViewByIndex(param : Dynamic) : Int
     {
         var documentViewToReveal : DocumentView = m_documentViewsMatchingHideableClass[param.index];
-        Starling.juggler.tween(documentViewToReveal, 0.5,
+        Starling.current.juggler.tween(documentViewToReveal, 0.5,
                 {
                     alpha : 1.0,
                     onComplete : function() : Void
@@ -357,7 +354,7 @@ class GenericModelLevelScript extends BaseCustomLevelScript
             m_gameEngine.dispatchEventWith(GameEvent.LEVEL_SOLVED);
             
             // Wait for some short time before marking the level as totally complete
-            Starling.juggler.delayCall(function() : Void
+            Starling.current.juggler.delayCall(function() : Void
                     {
                         m_gameEngine.dispatchEventWith(GameEvent.LEVEL_COMPLETE);
                     },
@@ -371,12 +368,11 @@ class GenericModelLevelScript extends BaseCustomLevelScript
         // Assuming we don't care about the space for the inventory in these levels
         // since we always deal with one equation.
         var equationLayer : DisplayObject = m_gameEngine.getUiEntity("equationLayer");
-        Starling.juggler.tween(equationLayer, 0.5, {
+        Starling.current.juggler.tween(equationLayer, 0.5, {
                     y : 0,
                     onComplete : function() : Void
                     {
                     },
-
                 });
         
         // Show all the parts needed for modeling

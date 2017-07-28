@@ -103,7 +103,7 @@ class FlashContext
         {
             try
             {
-                gradeLevel = as3hx.Compat.parseInt(gradeLevel);
+                gradeLevel = Std.parseInt(gradeLevel);
             }
             catch (e : Error)
             {

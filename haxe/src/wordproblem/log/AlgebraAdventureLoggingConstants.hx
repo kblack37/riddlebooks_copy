@@ -1,7 +1,7 @@
 package wordproblem.log;
 
-// TODO: uncomment once cgs library is ported
-//import cgs.server.logging.GameServerData;
+import cgs.server.logging.GameServerData;
+import cgs.server.logging.IGameServerData.SkeyHashVersion;
 
 /**
 	 * ...
@@ -13,7 +13,8 @@ class AlgebraAdventureLoggingConstants
 
     // Game information
     public static inline var SKEY : String = "4047346551f969e5c329dd2eececbcd8";
-    //public static var SKEY_HASH : Int = GameServerData.DATA_SKEY_HASH;
+	// TODO: uncomment once cgs library is finished
+    public static var SKEY_HASH : SkeyHashVersion = null; //GameServerData.skeyHashVersion;
     public static inline var GAME_NAME : String = "wordproblems";
     public static inline var GAME_ID : Int = 17;
     

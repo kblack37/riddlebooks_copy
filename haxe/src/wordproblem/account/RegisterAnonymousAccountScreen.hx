@@ -17,10 +17,9 @@ import cgs.user.ICgsUser;
 import dragonbox.common.dispose.IDisposable;
 import dragonbox.common.ui.LoadingSpinner;
 
-import fl.controls.Button;
-import fl.controls.ComboBox;
-import fl.controls.TextInput;
-import fl.data.DataProvider;
+import haxe.Constraints.Function;
+
+import starling.display.Button;
 
 import wordproblem.AlgebraAdventureConfig;
 
@@ -33,91 +32,75 @@ class RegisterAnonymousAccountScreen extends Sprite implements IDisposable
     private static inline var MIN_USERNAME_LENGTH : Int = 3;
     private static inline var MAX_USERNAME_LENGTH : Int = 30;
     
-    private static var GRADES : Array<Dynamic> = new Array<Dynamic>(
+    private static var GRADES : Array<Dynamic> = [
         {
             label : "",
             data : -1,
-
         }, 
         {
             label : "1st",
             data : 1,
-
         }, 
         {
             label : "2nd",
             data : 2,
-
         }, 
         {
             label : "3rd",
             data : 3,
-
         }, 
         {
             label : "4th",
             data : 4,
-
         }, 
         {
             label : "5th",
             data : 5,
-
         }, 
         {
             label : "6th",
             data : 6,
-
         }, 
         {
             label : "7th",
             data : 7,
-
         }, 
         {
             label : "8th",
             data : 8,
-
         }, 
         {
             label : "9th",
             data : 9,
-
         }, 
         {
             label : "10th",
             data : 10,
-
         }, 
         {
             label : "11th",
             data : 11,
-
         }, 
         {
             label : "12th",
             data : 12,
-
-        }, 
-        );
+        }
+    ];
     
-    private static var GENDERS : Array<Dynamic> = new Array<Dynamic>(
+    private static var GENDERS : Array<Dynamic> = [
         {
             label : "",
             data : -1,
-
         }, 
         {
             label : "Girl",
             data : 1,
-
         }, 
         {
             label : "Boy",
             data : 2,
-
-        }, 
-        );
+        }
+    ];
     
     /* Factory functions that should be overwritten to customize the appearance of this screen */
     
@@ -247,7 +230,8 @@ class RegisterAnonymousAccountScreen extends Sprite implements IDisposable
     /**
      * Input for player to enter a desired username
      */
-    private var m_userNameInput : TextInput;
+    // TODO: uncomment when a text input replacement is found
+	//private var m_userNameInput : TextInput;
     
     /** Text to show username does not pass constraints*/
     private var m_userNameErrorLabel : TextField;
@@ -280,7 +264,8 @@ class RegisterAnonymousAccountScreen extends Sprite implements IDisposable
     /**
      * A selector for player to input their grade.
      */
-    private var m_gradeComboBox : ComboBox;
+	// TODO: uncomment when a combo box replacement is found
+    //private var m_gradeComboBox : ComboBox;
     
     /** Describe the gender combo box */
     private var m_genderLabel : TextField;
@@ -288,7 +273,8 @@ class RegisterAnonymousAccountScreen extends Sprite implements IDisposable
     /**
      * A selector for player to input their gender.
      */
-    private var m_genderComboBox : ComboBox;
+    // TODO: uncomment when a combo box replacement is found
+	//private var m_genderComboBox : ComboBox;
     
     /**
      * Button to submit credentials
@@ -358,8 +344,9 @@ class RegisterAnonymousAccountScreen extends Sprite implements IDisposable
         
         m_userNameLabel = userNameLabelFactory();
         
-        m_userNameInput = userNameInputFactory();
-        m_userNameInput.addEventListener(Event.CHANGE, onUserNameChanged);
+		// TODO: uncomment when a text input replacement is found
+        //m_userNameInput = userNameInputFactory();
+        //m_userNameInput.addEventListener(Event.CHANGE, onUserNameChanged);
         
         m_userNameErrorLabel = userNameErrorLabelFactory();
         
@@ -368,16 +355,18 @@ class RegisterAnonymousAccountScreen extends Sprite implements IDisposable
         m_userNameLoadingSpinner = userNameLoadingSpinnerFactory();
         
         m_gradeLabel = gradeLabelFactory();
-        m_gradeComboBox = gradeComboBoxFactory();
-        m_gradeComboBox.dataProvider = new DataProvider(GRADES);
-        m_gradeComboBox.addEventListener(Event.CHANGE, onComboBoxChange);
+		// TODO: uncomment when a combo box replacement is found
+        //m_gradeComboBox = gradeComboBoxFactory();
+        //m_gradeComboBox.dataProvider = new DataProvider(GRADES);
+        //m_gradeComboBox.addEventListener(Event.CHANGE, onComboBoxChange);
         m_gradeSelectedIcon = userNameAcceptableIconFactory();
         m_gradeNotSelectedIcon = userNameNotAcceptableIconFactory();
         
         m_genderLabel = genderLabelFactory();
-        m_genderComboBox = genderComboBoxFactory();
-        m_genderComboBox.dataProvider = new DataProvider(GENDERS);
-        m_genderComboBox.addEventListener(Event.CHANGE, onComboBoxChange);
+		// TODO: uncomment when a combo box replacement is found
+        //m_genderComboBox = genderComboBoxFactory();
+        //m_genderComboBox.dataProvider = new DataProvider(GENDERS);
+        //m_genderComboBox.addEventListener(Event.CHANGE, onComboBoxChange);
         m_genderSelectedIcon = userNameAcceptableIconFactory();
         m_genderNotSelectedIcon = userNameNotAcceptableIconFactory();
         
@@ -390,22 +379,23 @@ class RegisterAnonymousAccountScreen extends Sprite implements IDisposable
         
         m_registerFailMessage = registerFailMessageFactory();
         
+		// TODO: uncomment when replacements are found
         layoutFunction(
                 m_background,
                 m_titleLabel,
                 m_description,
                 m_userNameLabel,
-                m_userNameInput,
+                //m_userNameInput,
                 m_userNameAcceptableIcon,
                 m_userNameNotAcceptableIcon,
                 m_userNameLoadingSpinner,
                 m_userNameErrorLabel,
                 m_gradeLabel,
-                m_gradeComboBox,
+                //m_gradeComboBox,
                 m_gradeSelectedIcon,
                 m_gradeNotSelectedIcon,
                 m_genderLabel,
-                m_genderComboBox,
+                //m_genderComboBox,
                 m_genderSelectedIcon,
                 m_genderNotSelectedIcon,
                 m_registerButton,
@@ -416,32 +406,32 @@ class RegisterAnonymousAccountScreen extends Sprite implements IDisposable
     
     private function onUserNameChanged(event : Event) : Void
     {
-        var nameToCheck : String = m_userNameInput.text;
-        if (!m_userNameAvailableInProgress) 
-        {
-            // On every change of the user name send a request to check if that
-            // name has already been taken.
-            m_userNameAvailableInProgress = true;
-            addChild(m_userNameLoadingSpinner);
-            
-            if (m_config.getTeacherCode() == null) 
-            {
-                m_userNameCheckService.checkUserNameAvailable(nameToCheck, onUserNameResponse);
-            }
-            else 
-            {
-                m_userNameCheckService.checkStudentNameAvailable(nameToCheck, null, m_config.getTeacherCode(), onUserNameResponse);
-            }
-        }
-        // Only want one request at a time, so keep a queue of pending requests
-        // If multiple requests waiting only need to send the most recent one
-        else 
-        {
-            m_userNameQueued = nameToCheck;
-        }  // On every request keep the register button locked  
-        
-        
-        
+		// TODO: uncomment when a text input replacement is found
+        //var nameToCheck : String = m_userNameInput.text;
+        //if (!m_userNameAvailableInProgress) 
+        //{
+            //// On every change of the user name send a request to check if that
+            //// name has already been taken.
+            //m_userNameAvailableInProgress = true;
+            //addChild(m_userNameLoadingSpinner);
+            //
+            //if (m_config.getTeacherCode() == null) 
+            //{
+                //m_userNameCheckService.checkUserNameAvailable(nameToCheck, onUserNameResponse);
+            //}
+            //else 
+            //{
+                //m_userNameCheckService.checkStudentNameAvailable(nameToCheck, null, m_config.getTeacherCode(), onUserNameResponse);
+            //}
+        //}
+        //// Only want one request at a time, so keep a queue of pending requests
+        //// If multiple requests waiting only need to send the most recent one
+        //else 
+        //{
+            //m_userNameQueued = nameToCheck;
+        //}
+		
+		// On every request keep the register button locked  
         checkRegisterEnabled();
     }
     
@@ -451,10 +441,9 @@ class RegisterAnonymousAccountScreen extends Sprite implements IDisposable
         // Has it been taken already
         // Is it between the minimum and maximum allowable lengths
         // Show error if it fails either of these
-        m_userNameAvailable =response.success  // If a username was already queued, we immediately send another request  ;
-        
-        
-        
+        m_userNameAvailable = response.success;
+		
+		// If a username was already queued, we immediately send another request
         if (m_userNameQueued != null) 
         {
             if (m_config.getTeacherCode() == null) 
@@ -491,25 +480,24 @@ class RegisterAnonymousAccountScreen extends Sprite implements IDisposable
         
         for (iconToRemove in iconsToRemove)
         {
-            if (iconToRemove.parent) 
+            if (iconToRemove.parent != null) 
             {
                 iconToRemove.parent.removeChild(iconToRemove);
             }
-        }  // Check that grade is ok    // Add icon whether a valid grade was selected  
-        
-        
-        
-        
-        
-        var gradeSelected : Bool = (m_gradeComboBox.selectedItem.data > -1);
-        var gradeIcon : DisplayObject = ((gradeSelected)) ? m_gradeSelectedIcon : m_gradeNotSelectedIcon;
-        addChild(gradeIcon);
-        
-        // Add icon whether a valid gender was selected
-        // Check that gender is ok
-        var genderSelected : Bool = (m_genderComboBox.selectedItem.data > -1);
-        var genderIcon : DisplayObject = ((genderSelected)) ? m_genderSelectedIcon : m_genderNotSelectedIcon;
-        addChild(genderIcon);
+        }
+		
+		// Add icon whether a valid grade was selected  
+		// Check that grade is ok
+        // TODO: uncomment when a combo box replacement is found
+        //var gradeSelected : Bool = (m_gradeComboBox.selectedItem.data > -1);
+        //var gradeIcon : DisplayObject = ((gradeSelected)) ? m_gradeSelectedIcon : m_gradeNotSelectedIcon;
+        //addChild(gradeIcon);
+        //
+        //// Add icon whether a valid gender was selected
+        //// Check that gender is ok
+        //var genderSelected : Bool = (m_genderComboBox.selectedItem.data > -1);
+        //var genderIcon : DisplayObject = ((genderSelected)) ? m_genderSelectedIcon : m_genderNotSelectedIcon;
+        //addChild(genderIcon);
         
         // Keep disabled if any of the following conditions are met
         // username too short
@@ -518,29 +506,30 @@ class RegisterAnonymousAccountScreen extends Sprite implements IDisposable
         // username taken
         var nameOk : Bool = false;
         var errorText : String = "";
-        var nameToCheck : String = m_userNameInput.text;
-        if (nameToCheck.length < MIN_USERNAME_LENGTH) 
-        {
-            errorText = "Username must be at least " + MIN_USERNAME_LENGTH + " characters long!";
-        }
-        else if (nameToCheck.length > MAX_USERNAME_LENGTH) 
-        {
-            errorText = "Username must be less than " + MAX_USERNAME_LENGTH + " characters long!";
-        }
-        else if (m_userNameAvailableInProgress) 
-            { }
-        // Set up the icon indicating a username is usable
-        else if (!m_userNameAvailable) 
-        {
-            // Username was already taken, keep the register button locked
-            errorText = "Username is not available!";
-        }
-        else 
-        {
-            // Name is available
-            // Also make sure that grade and gender are also selected
-            nameOk = true;
-        }
+		// TODO: uncomment when a text input replacement is found
+        //var nameToCheck : String = m_userNameInput.text;
+        //if (nameToCheck.length < MIN_USERNAME_LENGTH) 
+        //{
+            //errorText = "Username must be at least " + MIN_USERNAME_LENGTH + " characters long!";
+        //}
+        //else if (nameToCheck.length > MAX_USERNAME_LENGTH) 
+        //{
+            //errorText = "Username must be less than " + MAX_USERNAME_LENGTH + " characters long!";
+        //}
+        //else if (m_userNameAvailableInProgress) 
+            //{ }
+        //// Set up the icon indicating a username is usable
+        //else if (!m_userNameAvailable) 
+        //{
+            //// Username was already taken, keep the register button locked
+            //errorText = "Username is not available!";
+        //}
+        //else 
+        //{
+            //// Name is available
+            //// Also make sure that grade and gender are also selected
+            //nameOk = true;
+        //}
         
         
         
@@ -554,39 +543,41 @@ class RegisterAnonymousAccountScreen extends Sprite implements IDisposable
         }
         
         m_userNameErrorLabel.text = errorText;
-        m_registerButton.enabled = (nameOk && gradeSelected && genderSelected);
+        //m_registerButton.enabled = (nameOk && gradeSelected && genderSelected);
     }
     
     private function onRegisterClick(event : MouseEvent) : Void
     {
         // On a register, submit the desired username, password, and grade
-        var userName : String = m_userNameInput.text;
+		// TODO: uncomment when a text input replacement is found
+        //var userName : String = m_userNameInput.text;
         
         // Since we don't want the player to enter a password we automatically set it
         // the same as their username
-        var password : String = userName;
+        //var password : String = userName;
         
         // If teacher code is used then register as a student
         // Get the grade and gender information
         var teacherCode : String = m_config.getTeacherCode();
-        var grade : Int = m_gradeComboBox.selectedItem.data;
-        var gender : Int = m_genderComboBox.selectedItem.data;
+		// TODO: uncomment when a combo box replacement is found
+        //var grade : Int = m_gradeComboBox.selectedItem.data;
+        //var gender : Int = m_genderComboBox.selectedItem.data;
         
         // Note that it is possible the username was taken so a register might fail.
         if (m_anonymousUser != null) 
         {
             // Bind account information to an existing user
-            m_anonymousUser.createAccount(userName, null, null, grade, gender, teacherCode, onRegisterResponse);
+            //m_anonymousUser.createAccount(userName, null, null, grade, gender, teacherCode, onRegisterResponse);
         }
         else 
         {
             if (teacherCode != null) 
             {
-                m_anonymousUser = m_cgsApi.registerStudent(m_userLoggingProperties, userName, m_config.getTeacherCode(), grade, onRegisterResponse, gender);
+                //m_anonymousUser = m_cgsApi.registerStudent(m_userLoggingProperties, userName, m_config.getTeacherCode(), grade, onRegisterResponse, gender);
             }
             else 
             {
-                m_anonymousUser = m_cgsApi.registerUser(m_userLoggingProperties, userName, password, null, onRegisterResponse);
+                //m_anonymousUser = m_cgsApi.registerUser(m_userLoggingProperties, userName, password, null, onRegisterResponse);
             }
         }
         
@@ -602,14 +593,15 @@ class RegisterAnonymousAccountScreen extends Sprite implements IDisposable
         if (response.success) 
         {
             // Get the grade and gender information
-            var grade : Int = m_gradeComboBox.selectedItem.data;
-            var gender : Int = m_genderComboBox.selectedItem.data;
+			// TODO: uncomment when a combo box replacement is found
+            //var grade : Int = m_gradeComboBox.selectedItem.data;
+            //var gender : Int = m_genderComboBox.selectedItem.data;
             
             // Register the account with a challenge
             if (m_challengeService != null) 
             {
                 // Register the new user with a challenge so equations now become logged.
-                m_challengeService.registerMember(grade, onChallengeRegisterResponse);
+                //m_challengeService.registerMember(grade, onChallengeRegisterResponse);
             }
             else 
             {

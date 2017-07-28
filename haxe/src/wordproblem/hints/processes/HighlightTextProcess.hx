@@ -63,9 +63,9 @@ class HighlightTextProcess extends ScriptNode
                 textComponentManager.getComponentFromEntityIdAndType(documentId, RenderableComponent.TYPE_ID) != null) 
             {
                 var highlightComponent : HighlightComponent = new HighlightComponent(
-                documentId, 
-                m_highlightColor, 
-                m_animationPeriodSeconds, 
+					documentId, 
+					m_highlightColor, 
+					m_animationPeriodSeconds
                 );
                 textComponentManager.addComponentToEntity(highlightComponent);
             }

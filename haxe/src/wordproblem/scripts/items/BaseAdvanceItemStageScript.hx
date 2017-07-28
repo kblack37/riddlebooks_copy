@@ -117,9 +117,9 @@ class BaseAdvanceItemStageScript extends BaseBufferEventScript
     {
         if (eventType == GameEvent.LEVEL_SOLVED) 
         {
-            m_itemInventory.outChangedRewardEntityIds.length = 0;
-            m_itemInventory.outPreviousStages.length = 0;
-            m_itemInventory.outCurrentStages.length = 0;
+			m_itemInventory.outChangedRewardEntityIds = new Array<String>();
+			m_itemInventory.outPreviousStages = new Array<Int>();
+			m_itemInventory.outCurrentStages = new Array<Int>();
             
             var currentGrowInStageComponents : Array<Component> = m_itemInventory.componentManager.getComponentListForType(CurrentGrowInStageComponent.TYPE_ID);
             var numComponents : Int = currentGrowInStageComponents.length;
@@ -185,12 +185,13 @@ class BaseAdvanceItemStageScript extends BaseBufferEventScript
         
         // If the returned stage is different then signal something
         var entityId : String = currentGrowInStageComponent.entityId;
+		var completedLevels : Int = 0;
         switch (entityId)
         {
             // Right now all eggs share the same progress model
             // Purple egg
             case "1":
-                var completedLevels : Int = this.getCompletedLevelsForGenre("multiply_divide");
+                completedLevels = this.getCompletedLevelsForGenre("multiply_divide");
                 useGenericEggStageFunction = true;
             // Blue egg
             case "3":

@@ -110,14 +110,14 @@ class EquationSolver
         if (TRACE_STEPS) {trace("Final 0's removed:" + Std.string(rootCopy));
         }
         
-        if (TRACE_STEPS) {trace("Total number of moves: " + Std.parseFloat(assocMoves + reduceMoves + cancelMoves + removeZeroesMoves + multiplyMoves + subtractNonKeyMoves + subtractNonKeyMoves2 + subtractKeyMoves + cancelTwoMoves + removeTwoMoves + divideMoves + finalReduceMoves + finalCancelMoves + finalRemoveZeroesMoves));
+        if (TRACE_STEPS) {trace("Total number of moves: " + (assocMoves + reduceMoves + cancelMoves + removeZeroesMoves + multiplyMoves + subtractNonKeyMoves + subtractNonKeyMoves2 + subtractKeyMoves + cancelTwoMoves + removeTwoMoves + divideMoves + finalReduceMoves + finalCancelMoves + finalRemoveZeroesMoves));
         }  // At this point X should be alone  
         
         if (keyOnLeftSide) {
             return rootCopy;
         }
         else {  //swap right and left  
-            left = rootCopy.left;
+            var left = rootCopy.left;
             rootCopy.left = rootCopy.right;
             rootCopy.right = left;
             return rootCopy;
@@ -221,14 +221,14 @@ class EquationSolver
             if (termToCheck.data == root.vectorSpace.getDivisionOperator()) {
                 ExpressionUtil.getLeafNodes(termToCheck.left, allLeafNodes);
             }
-            else if (termToCheck.data == root.vectorSpace.getMultiplicationOperator())                 { }
-            else if (termToCheck.data == root.vectorSpace.zero()) {
+            else if (termToCheck.data == root.vectorSpace.getMultiplicationOperator()) { }
+            else if (Std.parseFloat(termToCheck.data) == root.vectorSpace.zero()) {
                 removeMe = true;
             }
             
             if (allLeafNodes.length > 0) {
                 for (leafNode in allLeafNodes){
-                    if (leafNode.data == root.vectorSpace.zero()) {
+                    if (Std.parseFloat(leafNode.data) == root.vectorSpace.zero()) {
                         removeMe = true;
                         break;
                     }
@@ -397,7 +397,7 @@ class EquationSolver
                     // Don't remove the last term if we've removed all the rest (have to leave at least one)
                     break;
                 }
-                if (numeratorNodes[i].data == root.vectorSpace.identity()) {
+                if (Std.parseFloat(numeratorNodes[i].data) == root.vectorSpace.identity()) {
                     // Simplify 1*a -> a, one move
                     ExpressionUtil.removeNode(root, numeratorNodes[i]);
                     onesRemoved++;

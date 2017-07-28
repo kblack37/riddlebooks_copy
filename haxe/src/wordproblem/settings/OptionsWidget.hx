@@ -6,9 +6,10 @@ import flash.text.TextFormat;
 import cgs.audio.Audio;
 import cgs.internationalization.StringTable;
 
-import feathers.controls.Button;
+import haxe.Constraints.Function;
 
 import starling.core.Starling;
+import starling.display.Button;
 import starling.display.DisplayObject;
 import starling.display.Quad;
 import starling.display.Sprite;
@@ -94,33 +95,29 @@ class OptionsWidget extends Sprite
         var audioDriver : Audio = Audio.instance;
         
         // Create each option make sure it is in the right order
-        var i : Int;
-        var numOptions : Int = options.length;
-        var optionName : String;
         var button : DisplayObject;
-        for (numOptions){
-            optionName = options[i];
+        for (optionName in options){
             if (optionName == OPTION_MUSIC) 
             {
                 button = new MusicToggleButton(
-                        buttonWidth, 
-                        buttonHeight, 
-                        new TextFormat(GameFonts.DEFAULT_FONT_NAME, 14, 0xFFFFFF), 
-                        new TextFormat(GameFonts.DEFAULT_FONT_NAME, 14, 0xFFFFFF), 
-                        assetManager, 
-                        color, 
-                        );
+                    buttonWidth, 
+                    buttonHeight, 
+                    new TextFormat(GameFonts.DEFAULT_FONT_NAME, 14, 0xFFFFFF), 
+                    new TextFormat(GameFonts.DEFAULT_FONT_NAME, 14, 0xFFFFFF), 
+                    assetManager, 
+                    color
+                );
             }
             else if (optionName == OPTION_SFX) 
             {
                 button = new SfxToggleButton(
-                        buttonWidth, 
-                        buttonHeight, 
-                        new TextFormat(GameFonts.DEFAULT_FONT_NAME, 14, 0xFFFFFF), 
-                        new TextFormat(GameFonts.DEFAULT_FONT_NAME, 14, 0xFFFFFF), 
-                        assetManager, 
-                        color, 
-                        );
+                    buttonWidth, 
+                    buttonHeight, 
+                    new TextFormat(GameFonts.DEFAULT_FONT_NAME, 14, 0xFFFFFF), 
+                    new TextFormat(GameFonts.DEFAULT_FONT_NAME, 14, 0xFFFFFF), 
+                    assetManager, 
+                    color
+                );
             }
             else 
             {
@@ -129,21 +126,23 @@ class OptionsWidget extends Sprite
                 if (optionName == OPTION_CREDITS) 
                 {
                     callbackFunction = onCreditsClicked;
-                    buttonTextLabel = StringTable.lookup("credits");
+					// TODO: uncomment when cgs library is finished
+                    buttonTextLabel = "";// StringTable.lookup("credits");
                 }
                 else if (optionName == OPTION_RESET) 
                 {
                     callbackFunction = onResetClicked;
-                    buttonTextLabel = StringTable.lookup("reset");
+                    // TODO: uncomment when cgs library is finished
+					buttonTextLabel = "";// StringTable.lookup("reset");
                 }
                 
                 button = WidgetUtil.createGenericColoredButton(
-                                assetManager,
-                                color,
-                                buttonTextLabel,
-                                new TextFormat(GameFonts.DEFAULT_FONT_NAME, 20, 0xFFFFFF),
-                                new TextFormat(GameFonts.DEFAULT_FONT_NAME, 20, 0xFFFFFF)
-                                );
+                    assetManager,
+                    color,
+                    buttonTextLabel,
+                    new TextFormat(GameFonts.DEFAULT_FONT_NAME, 20, 0xFFFFFF),
+                    new TextFormat(GameFonts.DEFAULT_FONT_NAME, 20, 0xFFFFFF)
+                );
                 button.width = buttonWidth;
                 button.height = buttonHeight;
                 button.addEventListener(Event.TRIGGERED, callbackFunction);
@@ -161,7 +160,8 @@ class OptionsWidget extends Sprite
         m_optionsButtonContainer = optionsButtonContainer;
         
         // Layout in list
-        WidgetUtil.layoutInList(buttons, buttonWidth, buttonHeight, optionsContainerWidth, optionsContainerHeight, 0);
+		// TODO: uncomment when layout is redesigned
+        //WidgetUtil.layoutInList(buttons, buttonWidth, buttonHeight, optionsContainerWidth, optionsContainerHeight, 0);
         
         // Add audio to clicks on the buttons
         for (button in m_buttonsAudio)
@@ -192,24 +192,22 @@ class OptionsWidget extends Sprite
             addChild(m_optionsButtonContainer);
             
             m_optionsButtonContainer.alpha = 0.0;
-            Starling.juggler.tween(m_optionsButtonContainer, 0.3, {
-                        alpha : 1.0
-
-                    });
+            Starling.current.juggler.tween(m_optionsButtonContainer, 0.3, {
+                alpha : 1.0
+            });
         }
         else if (!value) 
         {
-            Starling.juggler.tween(m_optionsButtonContainer, 0.3, {
-                        alpha : 0.0,
-                        onComplete : function() : Void
-                        {
-                            if (m_optionsButtonContainer.parent) 
-                            {
-                                m_optionsButtonContainer.removeFromParent();
-                            }
-                        },
-
-                    });
+            Starling.current.juggler.tween(m_optionsButtonContainer, 0.3, {
+                alpha : 0.0,
+                onComplete : function() : Void
+                {
+                    if (m_optionsButtonContainer.parent != null) 
+                    {
+                        m_optionsButtonContainer.removeFromParent();
+                    }
+                },
+            });
         }
     }
     

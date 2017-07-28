@@ -1,5 +1,7 @@
 package wordproblem.xp;
 
+import haxe.Constraints.Function;
+
 import wordproblem.xp.PlayerXpModel;
 
 import starling.animation.Transitions;
@@ -90,7 +92,7 @@ class PlayerXpBarAnimation
         var startPlayerLevel : Int = outData[0];
         
         // Determine the end xp state and level
-        as3hx.Compat.setArrayLength(outData, 0);
+		outData = new Array<Int>();
         m_playerXpModel.getLevelAndRemainingXpFromTotalXp(endTotalXp, outData);
         var endRemainingXp : Int = outData[1];
         var endPlayerLevel : Int = outData[0];
@@ -116,7 +118,6 @@ class PlayerXpBarAnimation
                 m_animationListParams.push({
                             startRatio : 0.0,
                             endRatio : endFillRatio,
-
                         });
             }
             // The fill should go from 0.0 to 1.0 (this is the rare case where enough xp was earned to jump several levels)
@@ -126,33 +127,27 @@ class PlayerXpBarAnimation
                 m_animationListParams.push({
                             startRatio : 0.0,
                             endRatio : 1.0,
-
                         });
-            }  // Add a special tween for level up after the fill is completed  
-            
-            
-            
+            }
+			
+			// Add a special tween for level up after the fill is completed  
             m_animationList.push(playerLevelUpAnimation);
             m_animationListParams.push({
                         level : currentLevelCounter
-
                     });
-            
+			
             currentLevelCounter--;
-        }  // One case is player stays at same level so we just need to calculate the end    // Regardless of level ups we always have a tween for the first fill  
-        
-        
-        
-        
-        
+        }
+		
+		// Regardless of level ups we always have a tween for the first fill  
+        // One case is player stays at same level so we just need to calculate the end
         if (startPlayerLevel == endPlayerLevel) 
         {
-            endFillRatio = endRemainingXp / (totalXpForNextLevelAfterStart - totalXpForStart);
+            var endFillRatio = endRemainingXp / (totalXpForNextLevelAfterStart - totalXpForStart);
             m_animationList.push(playFillAnimation);
             m_animationListParams.push({
                         startRatio : startFillRatio,
                         endRatio : endFillRatio,
-
                     });
         }
         // The fill should stop at one, this is when the first tween goes to a level up
@@ -162,12 +157,10 @@ class PlayerXpBarAnimation
             m_animationListParams.push({
                         startRatio : startFillRatio,
                         endRatio : 1.0,
-
                     });
-        }  // Start the animation  
-        
-        
-        
+        }
+		
+		// Start the animation  
         playNextAnimation();
     }
     
@@ -177,11 +170,11 @@ class PlayerXpBarAnimation
         var numTweens : Int = m_activeTweens.length;
         for (i in 0...numTweens){
             var tween : Tween = m_activeTweens[i];
-            Starling.juggler.remove(tween);
+            Starling.current.juggler.remove(tween);
         }
         
-        as3hx.Compat.setArrayLength(m_activeTweens, 0);
-        as3hx.Compat.setArrayLength(m_animationList, 0);
+		m_activeTweens = new Array<Tween>();
+		m_animationList = new Array<Function>();
     }
     
     /**
@@ -235,7 +228,7 @@ class PlayerXpBarAnimation
                 };
         fillBarTween.onComplete = function() : Void
                 {
-                    Starling.juggler.remove(flashTargetTween);
+                    Starling.current.juggler.remove(flashTargetTween);
                     m_playerXpBar.removeBackgroundFill();
                     playNextAnimation();
                 };
@@ -272,6 +265,6 @@ class PlayerXpBarAnimation
     private function addAndPlayTween(tween : Tween) : Void
     {
         m_activeTweens.push(tween);
-        Starling.juggler.add(tween);
+        Starling.current.juggler.add(tween);
     }
 }

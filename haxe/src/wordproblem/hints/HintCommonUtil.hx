@@ -1,5 +1,6 @@
 package wordproblem.hints;
 
+import haxe.xml.Fast;
 import wordproblem.hints.HintScript;
 import wordproblem.hints.HintScriptWithProcesses;
 
@@ -9,8 +10,7 @@ import flash.text.TextFormat;
 import dragonbox.common.ui.MouseState;
 import dragonbox.common.util.XColor;
 
-import feathers.controls.Button;
-
+import starling.display.Button;
 import starling.display.DisplayObject;
 import starling.display.DisplayObjectContainer;
 import starling.display.Image;
@@ -175,7 +175,7 @@ class HintCommonUtil
             {
                 var expectedTotalTally : Int = pickedMismatch.expected;
                 var actualTotalTally : Int = pickedMismatch.actual;
-                var tallyDifference : Int = Math.abs(expectedTotalTally - actualTotalTally);
+                var tallyDifference : Int = Std.int(Math.abs(expectedTotalTally - actualTotalTally));
                 var box : String = ((tallyDifference > 1)) ? "boxes" : "box";
                 pickedMismatch.descriptionContent = ((expectedTotalTally > actualTotalTally)) ? 
                         "You have " + tallyDifference + " " + box + " fewer than one of the answers." : 
@@ -185,8 +185,8 @@ class HintCommonUtil
             {
                 var expectedUniqueCount : Int = pickedMismatch.expected;
                 var actualUniqueCount : Int = pickedMismatch.actual;
-                var uniqueCountDifference : Int = Math.abs(expectedUniqueCount - actualUniqueCount);
-                box = ((tallyDifference > 1)) ? "boxes" : "box";
+                var uniqueCountDifference : Int = Std.int(Math.abs(expectedUniqueCount - actualUniqueCount));
+                var box = ((uniqueCountDifference > 1)) ? "boxes" : "box";
                 pickedMismatch.descriptionContent = ((expectedUniqueCount > actualUniqueCount)) ? 
                         "You may need to add more boxes of a different size" : "You may have too many different sized boxes. Try removing one.";
             }
@@ -262,8 +262,8 @@ class HintCommonUtil
                 if (actualLabelType != "c" && expectedLabelType != "c") 
                 {
                     // Compare the amount of box the labels
-                    var expectedLabelAmount : Float = expectedDecomposed.labelValueToNormalizedSegmentValue[expectedLabelValue];
-                    var actualLabelAmount : Float = actualDecomposed.labelValueToNormalizedSegmentValue[expectedLabelValue];
+                    var expectedLabelAmount : Float = Reflect.field(expectedDecomposed.labelValueToNormalizedSegmentValue, expectedLabelValue);
+                    var actualLabelAmount : Float = Reflect.field(actualDecomposed.labelValueToNormalizedSegmentValue, expectedLabelValue);
                     if (Math.abs(expectedLabelAmount - actualLabelAmount) > ERROR) 
                     {
                         // A mismatch of the amount might be related to the number of boxes a label spans
@@ -275,16 +275,16 @@ class HintCommonUtil
                         var actualBarLabel : BarLabel = ((actualLabelType == "h" || actualLabelType == "n")) ? 
                         actual.getHorizontalBarLabelsByValue(expectedLabelValue)[0] : actual.getVerticalBarLabelsByValue(expectedLabelValue)[0];
                         
+						var segmentsInExpected : Int = 0;
+						var segmentsInActual : Int = 0;
                         if (actualLabelType == "h" || actualLabelType == "n") 
                         {
-                            var segmentsInExpected : Int = expectedBarLabel.endSegmentIndex - expectedBarLabel.startSegmentIndex + 1;
-                            var segmentsInActual : Int = actualBarLabel.endSegmentIndex - actualBarLabel.startSegmentIndex + 1;
+                            segmentsInExpected = expectedBarLabel.endSegmentIndex - expectedBarLabel.startSegmentIndex + 1;
+                            segmentsInActual = actualBarLabel.endSegmentIndex - actualBarLabel.startSegmentIndex + 1;
                         }
                         else if (actualLabelType == "v") 
                         {
-                            segmentsInExpected = getNumSegmentsCoveredByVerticalLabel(expectedBarLabel, expected);
-                            segmentsInActual = getNumSegmentsCoveredByVerticalLabel(actualBarLabel, actual);
-                            function getNumSegmentsCoveredByVerticalLabel(label : BarLabel, barModelData : BarModelData) : Int
+							function getNumSegmentsCoveredByVerticalLabel(label : BarLabel, barModelData : BarModelData) : Int
                             {
                                 var i : Int;
                                 var numSegments : Int = 0;
@@ -294,6 +294,8 @@ class HintCommonUtil
                                 }
                                 return numSegments;
                             };
+                            segmentsInExpected = getNumSegmentsCoveredByVerticalLabel(expectedBarLabel, expected);
+                            segmentsInActual = getNumSegmentsCoveredByVerticalLabel(actualBarLabel, actual);
                         }
                         
                         if (segmentsInExpected > segmentsInActual) 
@@ -302,7 +304,6 @@ class HintCommonUtil
                             incorrectLabelRatioBuffer.push({
                                         type : LABEL_TOO_LITTLE,
                                         value : expectedLabelValue,
-
                                     });
                         }
                         else if (segmentsInExpected < segmentsInActual) 
@@ -311,21 +312,18 @@ class HintCommonUtil
                             incorrectLabelRatioBuffer.push({
                                         type : LABEL_TOO_MUCH,
                                         value : expectedLabelValue,
-
                                     });
                         }
-                    }  // Check if the overall ratio of a label matches with that of the reference  
-                    
-                    
-                    
-                    var expectedTotalRatio : Float = expectedDecomposed.labelToRatioOfTotalBoxes[expectedLabelValue];
-                    var actualTotalRatio : Float = actualDecomposed.labelToRatioOfTotalBoxes[expectedLabelValue];
+                    }
+					
+					// Check if the overall ratio of a label matches with that of the reference  
+                    var expectedTotalRatio : Float = Reflect.field(expectedDecomposed.labelToRatioOfTotalBoxes, expectedLabelValue);
+                    var actualTotalRatio : Float = Reflect.field(actualDecomposed.labelToRatioOfTotalBoxes, expectedLabelValue);
                     if (Math.abs(expectedTotalRatio - actualTotalRatio) > ERROR) 
                     {
                         incorrectLabelRatioBuffer.push({
                                     type : LABEL_RATIO_INCORRECT,
                                     value : expectedLabelValue,
-
                                 });
                     }
                 }
@@ -335,16 +333,13 @@ class HintCommonUtil
                     incorrectLabelTypeBuffer.push({
                                 type : INCORRECT_COMPARE,
                                 value : expectedLabelValue,
-
                             });
                 }
             }
-        }  // groups is incorrectly used a label.    // Checking for unexected label. This occurs primarily for bar model problems dealing with groups where the number of  
-        
-        
-        
-        
-        
+        }
+		
+		// Checking for unexected label. This occurs primarily for bar model problems dealing with groups where the number of  
+        // groups is incorrectly used a label.
         for (actualLabelName in Reflect.fields(actualLabelToType))
         {
             if (!expectedLabelToType.exists(actualLabelName)) 
@@ -352,26 +347,16 @@ class HintCommonUtil
                 incorrectLabelTypeBuffer.push({
                             type : INCORRECT_EXTRA_NAME,
                             value : actualLabelName,
-
                         });
             }
-        }  // of that value    // value, we can highlight that piece to explain there are too few or too many    // The hint would need to be able to find the box that matches the normalized    // Purely checking for too many or too few boxes    // Checking for the tallies of the number of boxes  
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        var expectedTotalSegments : Int = getTotalSegmentTally(expectedDecomposed.normalizedBarSegmentValueTally);
-        var expectedDifferentSegmentValues : Int = expectedDecomposed.normalizedBarSegmentValueTally.length;
-        var actualTotalSegments : Int = getTotalSegmentTally(actualDecomposed.normalizedBarSegmentValueTally);
-        var actualDifferentSegmentValues : Int = actualDecomposed.normalizedBarSegmentValueTally.length;
-        function getTotalSegmentTally(segmentTally : Array<Int>) : Int
+        }
+		
+		// Checking for the tallies of the number of boxes  
+		// Purely checking for too many or too few boxes
+		// The hint would need to be able to find the box that matches the normalized
+		// value, we can highlight that piece to explain there are too few or too many 
+		// of that value
+		function getTotalSegmentTally(segmentTally : Array<Int>) : Int
         {
             var total : Int = 0;
             for (tally in segmentTally)
@@ -380,6 +365,10 @@ class HintCommonUtil
             }
             return total;
         };
+        var expectedTotalSegments : Int = getTotalSegmentTally(expectedDecomposed.normalizedBarSegmentValueTally);
+        var expectedDifferentSegmentValues : Int = expectedDecomposed.normalizedBarSegmentValueTally.length;
+        var actualTotalSegments : Int = getTotalSegmentTally(actualDecomposed.normalizedBarSegmentValueTally);
+        var actualDifferentSegmentValues : Int = actualDecomposed.normalizedBarSegmentValueTally.length;
         
         if (expectedTotalSegments != actualTotalSegments) 
         {
@@ -387,7 +376,6 @@ class HintCommonUtil
                         type : SEGMENT_TALLY_DIFFERENT,
                         expected : expectedTotalSegments,
                         actual : actualTotalSegments,
-
                     });
         }
         
@@ -397,31 +385,25 @@ class HintCommonUtil
                         type : SEGMENT_UNIQUE_RATIOS_DIFFERENT,
                         expected : expectedDifferentSegmentValues,
                         actual : actualDifferentSegmentValues,
-
                     });
-        }  // Iterate through each buffer  
-        
-        
-        
-        missingLabelBuffer.forEach(addToMismatch);
-        missingComparisonBuffer.forEach(addToMismatch);
-        incorrectSegmentsCountBuffer.forEach(addToMismatch);
-        incorrectLabelTypeBuffer.forEach(addToMismatch);
-        incorrectLabelRatioBuffer.forEach(addToMismatch);
-        
-        function addToMismatch(itemObject : Dynamic, index : Int, vector : Array<Dynamic>) : Void
+        }
+		
+		// Iterate through each buffer  
+        function addToMismatch(itemObject : Dynamic) : Void
         {
             mismatchData.push(itemObject);
-        }  // before others (one that will apply to all the models)    // When processing the list we need a rule to determine which errors should be displayed    // one we should target.    // Each mismatch goes into an output list. The model with the fewest in the list is the  ;
+        };
         
-        
-        
-        
-        
-        
-        
-        
-        
+		Lambda.iter(missingLabelBuffer, addToMismatch);
+		Lambda.iter(missingComparisonBuffer, addToMismatch);
+		Lambda.iter(incorrectSegmentsCountBuffer, addToMismatch);
+		Lambda.iter(incorrectLabelTypeBuffer, addToMismatch);
+		Lambda.iter(incorrectLabelRatioBuffer, addToMismatch);
+		
+		// Each mismatch goes into an output list. The model with the fewest in the list is the
+		// one we should target.
+		// When processing the list we need a rule to determine which errors should be displayed
+		// before others (one that will apply to all the models)
         return mismatchData;
     }
     
@@ -456,15 +438,15 @@ class HintCommonUtil
         var maxTextWidth : Float = measuringTexture.width - 2 * paddingSide;
         var paddingTop : Float = 50;
         var maxTextHeight : Float = measuringTexture.height - 2 * paddingTop;
-        var contentXML : FastXML = FastXML.parse("<p></p>");
-        contentXML.node.appendChild.innerData(pickedMismatch.descriptionContent);
+        var contentXML : Xml = Xml.parse("<p></p>");
+        contentXML.addChild(Xml.createPCData(pickedMismatch.descriptionContent));
         
         // Measure the text so we can set a font size that will cause everything to fit into the speech bubble
         // texture.
         if (MEASURING_TEXTFIELD == null) 
         {
             MEASURING_TEXTFIELD = new MeasuringTextField();
-            MEASURING_TEXTFIELD.defaultTextFormat = new TextFormat(fontName, fontSize, 0);
+            MEASURING_TEXTFIELD.defaultTextFormat = new TextFormat(fontName, Std.int(fontSize), 0);
             MEASURING_TEXTFIELD.width = maxTextWidth;
             MEASURING_TEXTFIELD.height = maxTextHeight;
             MEASURING_TEXTFIELD.wordWrap = true;
@@ -481,15 +463,13 @@ class HintCommonUtil
         
         
         var calloutContent : DisplayObject = TextParserUtil.createTextViewFromXML(
-                contentXML,
+                new Fast(contentXML),
                 {
                     p : {
                         color : "0x000000",
                         fontName : fontName,
                         fontSize : fontSize,
-
                     }
-
                 },
                 maxTextWidth,
                 textParser,
@@ -499,14 +479,14 @@ class HintCommonUtil
         // If the hint data has been marked that it should link to a tip replay, we'll
         // need to add an extra button to the callout that goes to the tip
         var helpButton : Button = null;
+		var tipName : String = null;
         if (pickedMismatch.exists("linkToTip")) 
         {
-            var tipName : String = pickedMismatch.linkToTip;
+            tipName = pickedMismatch.linkToTip;
             
             var helpButtonTexture : Texture = assetManager.getTexture("help_icon");
-            helpButton = new Button();
-            helpButton.defaultSkin = new Image(helpButtonTexture);
-            helpButton.scaleWhenHovering = 1.1;
+            helpButton = new Button(helpButtonTexture);
+            helpButton.scaleWhenOver = 1.1;
             helpButton.scaleWhenDown = 0.9;
             helpButton.x = (calloutContent.width - helpButtonTexture.width) * 0.5;
             helpButton.y = calloutContent.height;
@@ -517,7 +497,6 @@ class HintCommonUtil
         {
             gameEngine.dispatchEventWith(GameEvent.LINK_TO_TIP, false, {
                         tipName : tipName
-
                     });
         };
         
@@ -611,12 +590,12 @@ class HintCommonUtil
         if (pickedMismatch.exists("highlightDocIds")) 
         {
             var docIdsToHighlight : Array<Dynamic> = pickedMismatch.highlightDocIds;
-            documentIds = new Array<String>();
+            var documentIds = new Array<String>();
             for (docId in docIdsToHighlight)
             {
                 documentIds.push(docId);
             }
-            highlightTextProcess = new HighlightTextProcess(textArea, documentIds, 0x00FF00);
+            var highlightTextProcess = new HighlightTextProcess(textArea, documentIds, 0x00FF00);
             hintScriptToRun.addProcess(highlightTextProcess, 1);
         }
         
@@ -624,9 +603,9 @@ class HintCommonUtil
         {
             var highlightColor : Int = ((pickedMismatch.exists("highlightBarsThenTextColor"))) ? 
             pickedMismatch.highlightBarsThenTextColor : 0x00FF00;
-            docIdsToHighlight = pickedMismatch.highlightBarsThenTextFromDocIds;
-            documentIds = new Array<String>();
-            for (docId/* AS3HX WARNING could not determine type for var: docId exp: EIdent(docIdsToHighlight) type: null */ in docIdsToHighlight)
+            var docIdsToHighlight = try cast(pickedMismatch.highlightBarsThenTextFromDocIds, Array<Dynamic>) catch (e : Dynamic) null;
+            var documentIds = new Array<String>();
+            for (docId in docIdsToHighlight)
             {
                 documentIds.push(docId);
             }
@@ -638,20 +617,19 @@ class HintCommonUtil
         
         if (pickedMismatch.exists("highlightBarModelArea") && pickedMismatch.highlightBarModelArea) 
         {
-            highlightColor = ((pickedMismatch.exists("highlightBarModelAreaColor"))) ? 
+            var highlightColor = ((pickedMismatch.exists("highlightBarModelAreaColor"))) ? 
                     pickedMismatch.highlightBarModelAreaColor : 0x00FF00;
             hintScriptToRun.addProcess(new HighlightUiElementProcess(gameEngine, "barModelArea", highlightColor), 1);
         }
         
         if (pickedMismatch.exists("highlightValidateButton") && pickedMismatch.highlightValidateButton) 
         {
-            highlightColor = ((pickedMismatch.exists("highlightValidateButtonColor"))) ? 
+            var highlightColor = ((pickedMismatch.exists("highlightValidateButtonColor"))) ? 
                     pickedMismatch.highlightValidateButtonColor : 0x00FF00;
             hintScriptToRun.addProcess(new HighlightUiElementProcess(gameEngine, "validateButton", highlightColor), 1);
-        }  // Set serialized data so the hint details can be logged  
-        
-        
-        
+        }
+		
+		// Set serialized data so the hint details can be logged  
         hintScriptToRun.serializedHintData = pickedMismatch;
         
         return hintScriptToRun;

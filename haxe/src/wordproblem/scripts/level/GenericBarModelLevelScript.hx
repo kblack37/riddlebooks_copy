@@ -1,5 +1,6 @@
 package wordproblem.scripts.level;
 
+import haxe.xml.Fast;
 import wordproblem.scripts.level.PMPRNG;
 
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
@@ -316,7 +317,7 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
         m_gameEngine.removeEventListener(GameEvent.BAR_MODEL_CORRECT, bufferEvent);
     }
     
-    override public function setExtraData(data : Dynamic) : Void
+    override public function setExtraData(data : Iterator<Fast>) : Void
     {
         // For this intro script the extra data we input are the pages for the dynamic dialog
         var extraXMLList : FastXMLList = try cast(data, FastXMLList) catch(e:Dynamic) null;

@@ -1,10 +1,8 @@
 package wordproblem.hints.processes;
 
-
-import feathers.controls.Button;
-
 import starling.animation.Tween;
 import starling.core.Starling;
+import starling.display.Button;
 import starling.display.Image;
 import starling.display.Quad;
 import starling.display.Sprite;
@@ -77,7 +75,7 @@ class DismissQuestionProcess extends ScriptNode
         {
             m_enableAnswerClick = true;
         }
-        else if (m_blockingLayer.parent) 
+        else if (m_blockingLayer.parent != null) 
         {
             // Remove display objects
             m_blockingLayer.removeFromParent(true);
@@ -136,7 +134,7 @@ class DismissQuestionProcess extends ScriptNode
         
         
         var targetButton : Button = try cast(event.target, Button) catch(e:Dynamic) null;
-        var answer : String = targetButton.label;
+        var answer : String = targetButton.text;
         var indexOfAnswer : Int = Lambda.indexOf(m_potentialAnswers, answer);
         if (indexOfAnswer > -1) 
         {
@@ -156,7 +154,7 @@ class DismissQuestionProcess extends ScriptNode
             icon.pivotX = icon.width * 0.5;
             icon.pivotY = icon.height * 0.5;
             
-            targetButton.isEnabled = false;
+            targetButton.enabled = false;
             
             var finalIconScale : Float = Math.min(targetButton.width, targetButton.height) / icon.width;
             icon.scaleX = icon.scaleY = 2;
@@ -177,7 +175,7 @@ class DismissQuestionProcess extends ScriptNode
                         m_correctAnswerSelected = isCorrect;
                         m_enableAnswerClick = true;
                     };
-            Starling.juggler.add(tween);
+            Starling.current.juggler.add(tween);
         }
     }
 }

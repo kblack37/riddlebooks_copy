@@ -1,7 +1,6 @@
 package wordproblem.state;
 
-// TODO: uncomment once cgs library is ported
-//import cgs.audio.Audio;
+import cgs.audio.Audio;
 
 import dragonbox.common.console.IConsole;
 import dragonbox.common.console.IConsoleInterfacable;
@@ -121,8 +120,7 @@ class WordProblemGameState extends BaseState implements IConsoleInterfacable
      * Handle the turning on and off of background music while playing,
      * upon entering and exiting a level.  This variable holds the singleton audio driver.
      */
-	// TODO: uncomment once cgs library is ported
-    //private var m_audioDriver : Audio;
+    private var m_audioDriver : Audio;
     
     /**
      * If true then all levels in this version should ignore any skip values specified in the level data
@@ -184,8 +182,7 @@ class WordProblemGameState extends BaseState implements IConsoleInterfacable
         m_levelInformationText.y = 0;
         m_levelInformationText.touchable = false;
         
-		// TODO: uncomment once cgs library is ported
-        //m_audioDriver = Audio.instance;
+        m_audioDriver = Audio.instance;
         
         // Prepare space for helper characters
         m_characterComponentManager = new ComponentManager();
@@ -378,15 +375,13 @@ class WordProblemGameState extends BaseState implements IConsoleInterfacable
         if (audioData != null && audioData.length > 0) 
         {
             var backgroundMusicData : Dynamic = audioData[0];
-			// TODO: uncomment once cgs library is ported
-            //m_audioDriver.playMusic(backgroundMusicData.src);
+            m_audioDriver.playMusic(backgroundMusicData.src);
         }
         else 
         {
             // Play default music, if we want genre specific default then some other
             // script should have populated the audio to load field in the level data
-            // TODO: uncomment once cgs library is ported
-			//m_audioDriver.playMusic("bg_level_music");
+			m_audioDriver.playMusic("bg_level_music");
         }
         
         m_helpScreenViewer = new HelpScreenViewer(m_gameEngine, m_assetManager, [], this, onHelpClose, m_buttonColorData);
@@ -404,8 +399,7 @@ class WordProblemGameState extends BaseState implements IConsoleInterfacable
         m_preBakedScript.dispose();
         
         // Kill the background music
-        // TODO: uncomment once cgs library is ported
-		//m_audioDriver.reset();
+		m_audioDriver.reset();
         
         // Make sure game is unpaused
         setPaused(false);
@@ -553,8 +547,7 @@ class WordProblemGameState extends BaseState implements IConsoleInterfacable
      */
     public function onOptionsClicked() : Void
     {
-		// TODO: uncomment once cgs library is ported
-        //Audio.instance.playSfx("button_click");
+        Audio.instance.playSfx("button_click");
         var loggingDetails : Dynamic = {
             buttonName : "OptionsButton"
 

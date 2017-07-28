@@ -6,8 +6,7 @@ import flash.display.BitmapData;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 
-// TODO: uncomment once cgs library is ported
-//import cgs.audio.Audio;
+import cgs.audio.Audio;
 
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.math.util.MathUtil;
@@ -356,8 +355,7 @@ class HoldToCopy extends BaseBarModelScript
                     renderComponent.view = m_hitBarElement;
                     m_barModelArea.componentManager.addComponentToEntity(renderComponent);
                     
-					// TODO: uncomment once cgs library is ported
-                    //Audio.instance.playSfx("card_flip");
+                    Audio.instance.playSfx("card_flip");
                 } 
 				
 				// Buffer what elements were hit in the transform script  
@@ -486,8 +484,7 @@ class HoldToCopy extends BaseBarModelScript
                     fadeoutCompletedTween.onComplete = onFadeCompletedRingComplete;
                     Starling.current.juggler.add(fadeoutCompletedTween);
                     
-					// TODO: uncomment once cgs library is ported
-                    //Audio.instance.playSfx("text2card");
+                    Audio.instance.playSfx("text2card");
                 }
                 else 
                 {

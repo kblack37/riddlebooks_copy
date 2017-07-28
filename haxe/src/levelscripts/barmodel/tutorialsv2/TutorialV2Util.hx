@@ -32,7 +32,8 @@ class TutorialV2Util
     /*
     Default Settings for the player's avatar
     */
-    public static var DEFAULT_CHARACTER_SPECIES : Int = AvatarSpeciesData.MAMMAL;
+	// TODO: uncomment once cgs library is ported
+    //public static var DEFAULT_CHARACTER_SPECIES : Int = AvatarSpeciesData.MAMMAL;
     public static inline var DEFAULT_CHARACTER_EAR_ID : Int = 6;
     
     public static inline var GENDER_MALE : String = "m";
@@ -45,14 +46,14 @@ class TutorialV2Util
     public static var JOBS : Array<Dynamic> = [TutorialV2Util.JOB_BASKETBALL_PLAYER, TutorialV2Util.JOB_FAIRY, TutorialV2Util.JOB_NINJA, TutorialV2Util.JOB_SUPERHERO, TutorialV2Util.JOB_ZOMBIE];
     
     public static var m_colorValueToAvatarColor : Dynamic = {
-            red : AvatarColors.RED,
-            orange : AvatarColors.ORANGE,
-            yellow : AvatarColors.YELLOW,
-            green : AvatarColors.DARK_GREEN,
-            blue : AvatarColors.DARK_BLUE,
-            purple : AvatarColors.PURPLE,
-            start : AvatarColors.WHITE,
-
+		// TODO: uncomment once cgs library is ported
+            //red : AvatarColors.RED,
+            //orange : AvatarColors.ORANGE,
+            //yellow : AvatarColors.YELLOW,
+            //green : AvatarColors.DARK_GREEN,
+            //blue : AvatarColors.DARK_BLUE,
+            //purple : AvatarColors.PURPLE,
+            //start : AvatarColors.WHITE,
         };
     
     public static function addSimpleSumReferenceForModel(validation : ValidateBarModelArea, values : Array<Int>, bracketValue : String) : Void
@@ -85,14 +86,14 @@ class TutorialV2Util
             pageIndex : Int) : Void
     {
         var jobNamesToRemove : Array<String> = new Array<String>();
-        var emptyReplacementContent : Array<FastXML> = new Array<FastXML>();
+        var emptyReplacementContent : Array<Xml> = new Array<Xml>();
         var possibleCharacterJobs : Array<Dynamic> = TutorialV2Util.JOBS;
         for (jobName in possibleCharacterJobs)
         {
             if (jobName != selectedPlayerJob) 
             {
                 jobNamesToRemove.push(jobName);
-                emptyReplacementContent.push(FastXML.parse("<p></p>"));
+                emptyReplacementContent.push(Xml.parse("<p></p>"));
             }
         }
         textReplacementControl.replaceContentAtDocumentIdsAtPageIndex(jobNamesToRemove, emptyReplacementContent, pageIndex);
@@ -120,7 +121,7 @@ class TutorialV2Util
         // From the various set of player choices made at the start of a level,
         // create an avatar image.
         // Grab the placeholder for the avatar and inject a blank character
-        var avatarColor : Int = TutorialV2Util.m_colorValueToAvatarColor[color];
+        var avatarColor : Int = Reflect.field(TutorialV2Util.m_colorValueToAvatarColor, color);
         
         // Have different parts depending job and gender
         var hatId : Int = 0;
@@ -185,12 +186,13 @@ class TutorialV2Util
         }
         
         var avatar : Image = avatarControl.createAvatarImage(
-                TutorialV2Util.DEFAULT_CHARACTER_SPECIES,
+				// TODO: uncomment once cgs library is ported
+                0, //TutorialV2Util.DEFAULT_CHARACTER_SPECIES,
                 TutorialV2Util.DEFAULT_CHARACTER_EAR_ID,
                 avatarColor, hatId, shirtId,
-                AvatarExpressions.NEUTRAL,
-                AvatarAnimations.IDLE, 0, 200,
-                new Rectangle(-10, 185, 145, 205),
+                0, //AvatarExpressions.NEUTRAL,
+                0, //AvatarAnimations.IDLE,
+				0, 200, new Rectangle(-10, 185, 145, 205),
                 Direction.SOUTH
                 );
         return avatar;

@@ -5,6 +5,7 @@ import dragonbox.common.dispose.IDisposable;
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.ExpressionUtil;
 import dragonbox.common.math.vectorspace.IVectorSpace;
+import dragonbox.common.math.vectorspace.RealsVectorSpace;
 
 /**
  * Manage all the expression tree snapshots as it changes from some initial state.
@@ -43,7 +44,7 @@ class HistoryManager implements IDisposable
      *      The root of the expression tree that represents the state of the expression
      *      if the last recorded change to the tree was undone. Returns null for blank expressions
      */
-    public function undo(vectorSpace : IVectorSpace) : ExpressionNode
+    public function undo(vectorSpace : RealsVectorSpace) : ExpressionNode
     {
         var rootAfterUndo : ExpressionNode = null;
         
@@ -52,26 +53,22 @@ class HistoryManager implements IDisposable
         if (m_historyStack.length > 1) 
         {
             m_historyStack.pop();
-        }  // Peek at the new top (this is the old state)  
-        
-        
-        
+        }
+		
+		// Peek at the new top (this is the old state)  
         if (m_historyStack.length > 0) 
         {
             rootAfterUndo = m_historyStack[m_historyStack.length - 1];
-        }  // Create a copy so the tree is the stack doesn't get modified    // Return a peek of the previous state while keeping it on the stack  
-        
-        
-        
-        
-        
-        
+        }
+		
+		// Return a peek of the previous state while keeping it on the stack  
+        // Create a copy so the tree is the stack doesn't get modified
         return ExpressionUtil.copy(rootAfterUndo, vectorSpace);
     }
     
     public function createHistorySnapshotEquation(leftRoot : ExpressionNode,
             rightRoot : ExpressionNode,
-            vectorSpace : IVectorSpace) : Void
+            vectorSpace : RealsVectorSpace) : Void
     {
         var equalityRoot : ExpressionNode = ExpressionUtil.createOperatorTree(
                 leftRoot,

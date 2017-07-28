@@ -1,8 +1,5 @@
 package wordproblem.hints.processes;
 
-
-import feathers.controls.Callout;
-
 import starling.display.DisplayObject;
 import starling.textures.Texture;
 
@@ -39,7 +36,7 @@ class ShowCharacterTextProcess extends ScriptNode
         super.setIsActive(true);
         if (!value) 
         {
-            if (m_characterController.getComponentManager().getComponentFromEntityIdAndType(m_characterId, CalloutComponent.TYPE_ID)) 
+            if (m_characterController.getComponentManager().getComponentFromEntityIdAndType(m_characterId, CalloutComponent.TYPE_ID) != null) 
             {
                 m_characterController.getComponentManager().removeComponentFromEntity(m_characterId, CalloutComponent.TYPE_ID);
             }
@@ -64,7 +61,9 @@ class ShowCharacterTextProcess extends ScriptNode
         var paddingSide : Float = 10;
         
         calloutComponent.display = m_calloutContent;
-        calloutComponent.directionFromOrigin = Callout.DIRECTION_RIGHT;
+		// TODO: this was replaced from the feathers Callout.DIRECTION_RIGHT and will
+		// need to be replaced when the callout system is
+        calloutComponent.directionFromOrigin = "right";
         calloutComponent.contentPadding = paddingSide;
         m_characterController.getComponentManager().addComponentToEntity(calloutComponent);
         

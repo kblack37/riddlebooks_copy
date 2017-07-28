@@ -82,7 +82,9 @@ class FlashResourceUtil
         var texture : Texture = null;
         var objectToDraw : DisplayObject = Type.createInstance(resourceClass, []);
         
-        if (resourceClass == Robot) 
+		// TODO: not sure if this is a correct conversion
+		//if (resourceClass == Robot)
+        if (Type.getClassName(resourceClass) == "Robot") 
         {
             var robot : MovieClip = try cast(objectToDraw, MovieClip) catch(e:Dynamic) null;
             robot.gotoAndStop(params.frame);

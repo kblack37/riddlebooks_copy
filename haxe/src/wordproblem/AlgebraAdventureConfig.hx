@@ -1,7 +1,6 @@
 package wordproblem;
 
-// TODO: uncomment once cgs porting is done
-//import cgs.server.logging.CGSServerProps;
+import cgs.server.logging.CGSServerProps;
 
 import dragonbox.common.util.XString;
 import haxe.xml.Fast;
@@ -130,10 +129,10 @@ class AlgebraAdventureConfig
      * @param data
      *      The contents of the xml file with configuration tags
      */
-    public function readConfigFromData(configXml : Fast) : Void
+    public function readConfigFromData(configXml : Xml) : Void
     {
         // Parse out logging options
-        var loggingXml : Fast = configXml.node.logging;
+        var loggingXml : Fast = new Fast(configXml).node.logging;
         m_versionId = Std.parseInt(loggingXml.node.versionId.att.value);
         m_categoryId = Std.parseInt(loggingXml.node.categoryId.att.value);
         m_challengeId = Std.parseInt(loggingXml.node.challengeId.att.value);
@@ -141,22 +140,21 @@ class AlgebraAdventureConfig
         m_useHttps = XString.stringToBool(getValueFromElementName(loggingXml, "useHttps", "false"));
         m_enableABTesting = XString.stringToBool(getValueFromElementName(loggingXml, "enableABTesting", "false"));
         var serverDeployment : String = loggingXml.node.deployment.att.value;
-		// TODO: uncomment these once cgs porting is done
         if (serverDeployment == "production") 
         {
-            //serverDeployment = CGSServerProps.PRODUCTION_SERVER;
+            serverDeployment = CGSServerProps.PRODUCTION_SERVER;
         }
         else if (serverDeployment == "local") 
         {
-            //serverDeployment = CGSServerProps.LOCAL_SERVER;
+            serverDeployment = CGSServerProps.LOCAL_SERVER;
         }
         else if (serverDeployment == "staging") 
         {
-            //serverDeployment = CGSServerProps.STAGING_SERVER;
+            serverDeployment = CGSServerProps.STAGING_SERVER;
         }
         else 
         {
-            //serverDeployment = CGSServerProps.DEVELOPMENT_SERVER;
+            serverDeployment = CGSServerProps.DEVELOPMENT_SERVER;
         }
         m_serverDeployment = serverDeployment;
         
@@ -164,11 +162,11 @@ class AlgebraAdventureConfig
         m_useActiveServer = XString.stringToBool(getValueFromElementName(loggingXml, "useActiveServer", "true"));
         
         // Parse out default text style options
-        var styleAttributesXml : Fast = configXml.node.style;
+        var styleAttributesXml : Fast = new Fast(configXml).node.style;
         m_defaultTextStyle = styleAttributesXml.innerData;
         
         // Parse out the settings
-        var settingsXml : Fast = configXml.node.settings;
+        var settingsXml : Fast = new Fast(configXml).node.settings;
         m_width = Std.parseInt(settingsXml.node.width.att.value);
         m_height = Std.parseInt(settingsXml.node.height.att.value);
         m_fps = Std.parseInt(settingsXml.node.fps.att.value);
@@ -198,7 +196,7 @@ class AlgebraAdventureConfig
         unlockAllLevels = XString.stringToBool(getValueFromElementName(settingsXml, "debugUnlockAllLevels", "false"));
         
         // Parse out default rules options
-        var defaultRulesXml : Fast = configXml.node.defaultRules;
+        var defaultRulesXml : Fast = new Fast(configXml).node.defaultRules;
         m_defaultLevelRules = LevelRules.createRulesFromXml(defaultRulesXml);
         
         m_resourcePathBase = getValueFromElementName(settingsXml, "resourcePathBase", null);

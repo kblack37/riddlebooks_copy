@@ -1,7 +1,6 @@
 package wordproblem.player;
 
-// TODO: uncomment once cgs library is ported
-//import cgs.cache.ICgsUserCache;
+import cgs.cache.ICgsUserCache;
 
 /**
  * This class keeps track of persistent data about the player and their progress that is not

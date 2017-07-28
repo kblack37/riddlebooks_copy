@@ -34,7 +34,7 @@ class XTextField
     
     public static function createTextField(text : String, size : Float = 60, color : Int = 0xFFCC00) : TextField
     {
-        var textFormat : TextFormat = new TextFormat("Urban Brush 32", size, color);
+        var textFormat : TextFormat = new TextFormat("Urban Brush 32", Std.int(size), color);
         textFormat.align = TextFormatAlign.CENTER;
         
         var textField : TextField = new TextField();
@@ -63,7 +63,7 @@ class XTextField
         
         var ty : Float = ((verticalAlign)) ? (height - descriptionMeasuringTextField.textHeight) * 0.5 : 0;
         
-        var textBitmapData : BitmapData = new BitmapData(descriptionMeasuringTextField.width, descriptionMeasuringTextField.height, true, 0xFF0000);
+        var textBitmapData : BitmapData = new BitmapData(Std.int(descriptionMeasuringTextField.width), Std.int(descriptionMeasuringTextField.height), true, 0xFF0000);
         textBitmapData.draw(descriptionMeasuringTextField, new Matrix(1, 0, 0, 1, 0, ty));
         
         var textFieldTexture : Texture = Texture.fromBitmapData(textBitmapData, false);

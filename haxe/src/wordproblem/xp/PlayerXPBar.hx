@@ -3,9 +3,6 @@ package wordproblem.xp;
 
 import flash.geom.Rectangle;
 
-import feathers.display.Scale3Image;
-import feathers.textures.Scale3Textures;
-
 import starling.animation.Juggler;
 import starling.animation.Tween;
 import starling.core.Starling;
@@ -27,14 +24,14 @@ class PlayerXPBar extends Sprite
     /**
      * Other classes need to access the fill bar so it gets set to the correct ratio
      */
-    private var m_xpBarFillImageSliced : Scale3Image;
+    private var m_xpBarFillImageSliced : Image;
     
     /**
      * The unsliced version should only be used for very small ratios
      */
     private var m_xpBarFillImageUnsliced : Sprite;
     
-    private var m_xpBackgroundFillSliced : Scale3Image;
+    private var m_xpBackgroundFillSliced : Image;
     private var m_xpBackgroundFillUnsliced : Sprite;
     
     /**
@@ -90,11 +87,20 @@ class PlayerXPBar extends Sprite
         
         var fillContainer : Sprite = new Sprite();
         m_fillContainer = fillContainer;
-        m_juggler = Starling.juggler;
+        m_juggler = Starling.current.juggler;
         
         var padding : Float = 10;
         var xpBarBackTexture : Texture = assetManager.getTexture("xp_bar_back");
-        var xpBarBackImage : Scale3Image = new Scale3Image(new Scale3Textures(xpBarBackTexture, padding, xpBarBackTexture.width - 2 * padding));
+		
+		// TODO: this was replaced from a Scale3Texture and may need to be fixed
+        var xpBarBackImage : Image = new Image(Texture.fromTexture(
+			xpBarBackTexture,
+			new Rectangle(padding,
+				0,
+				xpBarBackTexture.width - 2 * padding,
+				xpBarBackTexture.height
+			)
+		));
         xpBarBackImage.width = maxBarLength;
         fillContainer.addChild(xpBarBackImage);
         
@@ -104,7 +110,15 @@ class PlayerXPBar extends Sprite
         m_fillWidthWhenFull = maxBarLength - fillPaddingLeft * 2;
         var xpBarFillTexture : Texture = assetManager.getTexture("xp_bar_fill");
         
-        m_xpBarFillImageSliced = new Scale3Image(new Scale3Textures(xpBarFillTexture, padding, xpBarFillTexture.width - 2 * padding));
+		// TODO: this was replaced from a Scale3Texture and may need to be fixed
+        m_xpBarFillImageSliced = new Image(Texture.fromTexture(
+			xpBarFillTexture,
+			new Rectangle(padding,
+				0,
+				xpBarFillTexture.width - 2 * padding,
+				xpBarFillTexture.height
+			)
+		));
         m_xpBarFillImageSliced.x = fillPaddingLeft;
         m_xpBarFillImageSliced.y = fillPaddingTop;
         
@@ -118,8 +132,16 @@ class PlayerXPBar extends Sprite
         
         // Add grayscale filter to make the fill look white
         var colorMatrixFilter : ColorMatrixFilter = new ColorMatrixFilter();
-        colorMatrixFilter.adjustSaturation(-1);
-        m_xpBackgroundFillSliced = new Scale3Image(new Scale3Textures(xpBarFillTexture, padding, xpBarFillTexture.width - 2 * padding));
+        colorMatrixFilter.adjustSaturation( -1);
+		// TODO: this was replaced from a Scale3Texture and may need to be fixed
+        m_xpBackgroundFillSliced = new Image(Texture.fromTexture(
+			xpBarFillTexture,
+			new Rectangle(padding,
+				0,
+				xpBarFillTexture.width - 2 * padding,
+				xpBarFillTexture.height
+			)
+		));
         m_xpBackgroundFillSliced.x = fillPaddingLeft;
         m_xpBackgroundFillSliced.y = fillPaddingTop;
         m_xpBackgroundFillSliced.filter = colorMatrixFilter;
@@ -145,11 +167,10 @@ class PlayerXPBar extends Sprite
             brainBackground.pivotX = brainBackground.width * 0.5;
             brainBackground.pivotY = brainBackground.height * 0.5;
             m_brainBackgroundLayers.push(brainBackground);
-        }  // Put a single background behind the current brain  
-        
-        
-        
-        brainBackground = m_brainBackgroundLayers[0];
+        }
+		
+		// Put a single background behind the current brain  
+        var brainBackground = m_brainBackgroundLayers[0];
         brainBackground.scaleX = brainBackground.scaleY = 0.8;
         brainBackground.x = 50;
         brainBackground.y = 12;
@@ -271,7 +292,7 @@ class PlayerXPBar extends Sprite
         var layerC : DisplayObject = m_brainBackgroundLayers[2];
         layerC.removeFromParent();
         
-        as3hx.Compat.setArrayLength(m_cycleTweens, 0);
+		m_cycleTweens = new Array<Tween>();
     }
     
     private function getTargetScale(layer : DisplayObject, desiredWidth : Float) : Float
@@ -295,7 +316,7 @@ class PlayerXPBar extends Sprite
         
         var newFillWidth : Float = m_fillWidthWhenFull * ratio;
         var imageToUse : DisplayObject = m_xpBarFillImageSliced;
-        if (newFillWidth < m_xpBarFillImageSliced.textures.first.width) 
+        if (newFillWidth < m_xpBarFillImageSliced.texture.width) 
         {
             imageToUse = m_xpBarFillImageUnsliced;
             
@@ -304,8 +325,11 @@ class PlayerXPBar extends Sprite
             // if just using scaling.
             var unslicedImage : Image = (try cast(m_xpBarFillImageUnsliced.getChildAt(0), Image) catch(e:Dynamic) null);
             m_xpBarFillImageUnsliced.clipRect = new Rectangle(
-                    unslicedImage.x, unslicedImage.y, newFillWidth, unslicedImage.texture.height, 
-                    );
+                unslicedImage.x,
+				unslicedImage.y,
+				newFillWidth,
+				unslicedImage.texture.height
+            );
         }
         else 
         {
@@ -322,7 +346,7 @@ class PlayerXPBar extends Sprite
     {
         var newFillWidth : Float = m_fillWidthWhenFull * ratio;
         var imageToUse : DisplayObject = m_xpBackgroundFillSliced;
-        if (newFillWidth < m_xpBarFillImageSliced.textures.first.width) 
+        if (newFillWidth < m_xpBarFillImageSliced.texture.width) 
         {
             imageToUse = m_xpBackgroundFillUnsliced;
             
@@ -331,8 +355,11 @@ class PlayerXPBar extends Sprite
             // if just using scaling.
             var unslicedImage : Image = (try cast(m_xpBackgroundFillUnsliced.getChildAt(0), Image) catch(e:Dynamic) null);
             m_xpBackgroundFillUnsliced.clipRect = new Rectangle(
-                    unslicedImage.x, unslicedImage.y, newFillWidth, unslicedImage.texture.height, 
-                    );
+                unslicedImage.x,
+				unslicedImage.y,
+				newFillWidth,
+				unslicedImage.texture.height
+            );
         }
         else 
         {

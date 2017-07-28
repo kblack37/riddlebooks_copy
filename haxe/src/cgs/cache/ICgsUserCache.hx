@@ -1,4 +1,5 @@
 package cgs.cache;
+import haxe.Constraints.Function;
 
 interface ICgsUserCache
 {
@@ -28,7 +29,7 @@ interface ICgsUserCache
 		 * @param	callback Optional callback to be used when completed
 		 * @return
 		 */
-    function flush(callback : Dynamic = null) : Bool
+    function flush(callback : Function = null) : Bool
     ;
     
     /**
@@ -39,7 +40,7 @@ interface ICgsUserCache
 		 * @param	property The unqiue id for data being saved.
 		 * @param	callback Callback when completed.
 		 */
-    function registerSaveCallback(property : String, callback : Dynamic) : Void
+    function registerSaveCallback(property : String, callback : Function) : Void
     ;
     
     /**

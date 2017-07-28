@@ -1,5 +1,6 @@
 package wordproblem.hints;
 
+import haxe.Constraints.Function;
 
 /**
  * This node class encapsulates the proper selection of the a hint process base on the current
@@ -65,7 +66,7 @@ class HintSelectorNode
         
         if (m_customGetHintFunction != null) 
         {
-            hint = m_customGetHintFunction.apply(null, m_customGetHintParameters);
+            hint = m_customGetHintFunction(m_customGetHintParameters);
         }
         else 
         {

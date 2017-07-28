@@ -5,6 +5,8 @@ import flash.geom.Point;
 
 import dragonbox.common.ui.MouseState;
 
+import haxe.Constraints.Function;
+
 import starling.display.DisplayObject;
 import starling.events.Event;
 
@@ -123,15 +125,15 @@ class DismissCharacterOnClickProcess extends ScriptNode
                 var numCallouts : Int = calloutComponents.length;
                 for (i in 0...numCallouts){
                     var calloutComponent : CalloutComponent = try cast(calloutComponents[i], CalloutComponent) catch(e:Dynamic) null;
-                    if (calloutComponent.callout != null) 
-                    {
-                        calloutComponent.callout.alpha = ((mouseHitCharacterOnFrame)) ? 1.0 : 0.2;
-                    }
+                    // TODO: uncomment when callout system is replaced
+					//if (calloutComponent.callout != null) 
+                    //{
+                        //calloutComponent.callout.alpha = ((mouseHitCharacterOnFrame)) ? 1.0 : 0.2;
+                    //}
                 }
-            }  // On click of character schedule the action that dismisses the it  
-            
-            
-            
+            }
+			
+			// On click of character schedule the action that dismisses the it  
             var shouldDismissOnFrame : Bool = false;
             if (m_mouseState.leftMousePressedThisFrame) 
             {
@@ -167,25 +169,26 @@ class DismissCharacterOnClickProcess extends ScriptNode
             m_globalMouseBuffer.y = globalY;
             
             // Extra guard where character is visible but the callout has not been created yet
-            if (calloutComponent.callout != null && calloutComponent.entityId == characterId) 
-            {
-                calloutComponent.callout.globalToLocal(m_globalMouseBuffer, m_localMouseBuffer);
-                if (!calloutComponent.callout.hitTest(m_localMouseBuffer)) 
-                {
-                    var characterView : DisplayObject = (try cast(characterComponentManager.getComponentFromEntityIdAndType(characterId, RenderableComponent.TYPE_ID), RenderableComponent) catch(e:Dynamic) null).view;
-                    characterView.globalToLocal(m_globalMouseBuffer, m_localMouseBuffer);
-                    if (characterView.hitTest(m_localMouseBuffer) != null) 
-                    {
-                        hitCallout = true;
-                        break;
-                    }
-                }
-                else 
-                {
-                    hitCallout = true;
-                    break;
-                }
-            }
+			// TODO: uncomment when callout system is replaced
+            //if (calloutComponent.callout != null && calloutComponent.entityId == characterId) 
+            //{
+                //calloutComponent.callout.globalToLocal(m_globalMouseBuffer, m_localMouseBuffer);
+                //if (!calloutComponent.callout.hitTest(m_localMouseBuffer)) 
+                //{
+                    //var characterView : DisplayObject = (try cast(characterComponentManager.getComponentFromEntityIdAndType(characterId, RenderableComponent.TYPE_ID), RenderableComponent) catch(e:Dynamic) null).view;
+                    //characterView.globalToLocal(m_globalMouseBuffer, m_localMouseBuffer);
+                    //if (characterView.hitTest(m_localMouseBuffer) != null) 
+                    //{
+                        //hitCallout = true;
+                        //break;
+                    //}
+                //}
+                //else 
+                //{
+                    //hitCallout = true;
+                    //break;
+                //}
+            //}
         }
         
         return hitCallout;

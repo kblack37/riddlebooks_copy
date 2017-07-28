@@ -227,9 +227,9 @@ class RevisedPlayerXPScript extends BaseBufferEventScript
                 var validateEquationModel : ModelSpecificEquation = try cast(m_gameEngine.getCurrentLevel().getScriptRoot().getNodeById("ModelSpecificEquation"), ModelSpecificEquation) catch(e:Dynamic) null;
                 if (validateEquationModel != null) 
                 {
-                    for (expressionComponent/* AS3HX WARNING could not determine type for var: expressionComponent exp: ECall(EField(EIdent(validateEquationModel),getEquations),[]) type: null */ in validateEquationModel.getEquations())
+                    for (expressionComponent in validateEquationModel.getEquations())
                     {
-                        m_maxNumberOfTermsInTheExpressionForCurrentLevel = Math.max(ExpressionUtil.nodeCount(expressionComponent.root), m_maxNumberOfTermsInTheExpressionForCurrentLevel);
+                        m_maxNumberOfTermsInTheExpressionForCurrentLevel = Std.int(Math.max(ExpressionUtil.nodeCount(expressionComponent.root), m_maxNumberOfTermsInTheExpressionForCurrentLevel));
                     }
                 }
             }  // ones they had created    // Check whether the equation created by the user is sufficiently different from previous  
@@ -325,7 +325,8 @@ class RevisedPlayerXPScript extends BaseBufferEventScript
         levelStats.xpEarnedForLevel += amountToAdd;
         
         var mouseState : MouseState = m_gameEngine.getMouseState();
-        var brainPointDisplay : BrainPoint = new BrainPoint("+" + amountToAdd + " " + StringTable.lookup("brain_points"), m_assetManager);
+		// TODO: uncomment when cgs library is finished
+        var brainPointDisplay : BrainPoint = new BrainPoint("+" + amountToAdd + " " + "" /*StringTable.lookup("brain_points")*/, m_assetManager);
         brainPointDisplay.x = mouseState.mousePositionThisFrame.x;
         brainPointDisplay.y = mouseState.mousePositionThisFrame.y - 50;
         m_gameEngine.getSprite().addChild(brainPointDisplay);
@@ -337,9 +338,9 @@ class RevisedPlayerXPScript extends BaseBufferEventScript
         fadeUpAndOut.onComplete = function() : Void
                 {
                     brainPointDisplay.removeFromParent(true);
-                    Starling.juggler.remove(fadeUpAndOut);
+                    Starling.current.juggler.remove(fadeUpAndOut);
                 };
-        Starling.juggler.add(fadeUpAndOut);
+        Starling.current.juggler.add(fadeUpAndOut);
     }
     
     /**
@@ -375,12 +376,10 @@ class RevisedPlayerXPScript extends BaseBufferEventScript
                 {
                     equivalencyScore++;
                 }
-            }  // To check the children    // This is imperfect in that in non-communative operators the order does matter  
-            
-            
-            
-            
-            
+            }
+			
+			// This is imperfect in that in non-communative operators the order does matter  
+			// To check the children    
             var firstComboScore : Int = getExpressionEquivalencyScore(nodeA.left, nodeB.left) +
             getExpressionEquivalencyScore(nodeA.right, nodeB.right);
             
@@ -390,7 +389,7 @@ class RevisedPlayerXPScript extends BaseBufferEventScript
             {
                 var secondComboScore : Int = getExpressionEquivalencyScore(nodeA.left, nodeB.right) +
                 getExpressionEquivalencyScore(nodeA.right, nodeB.left);
-                equivalencyScore += Math.min(firstComboScore, secondComboScore);
+                equivalencyScore += Std.int(Math.min(firstComboScore, secondComboScore));
             }
         }
         // If one is null and the other is not, we add to the difference

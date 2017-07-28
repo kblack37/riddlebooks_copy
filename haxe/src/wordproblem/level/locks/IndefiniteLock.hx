@@ -1,13 +1,12 @@
 package wordproblem.level.locks;
 
-// TODO: uncomment once cgs library is ported
-//import cgs.levelprogression.locks.ICgsLevelLock;
+import cgs.levelProgression.locks.ICgsLevelLock;
 
 /**
  * An indefinite lock can only be unlocked by the programmer going into the
  * level file and switching the lock value to false
  */
-class IndefiniteLock //implements ICgsLevelLock
+class IndefiniteLock implements ICgsLevelLock
 {
     public var lockType(get, never) : String;
     public var isLocked(get, never) : Bool;

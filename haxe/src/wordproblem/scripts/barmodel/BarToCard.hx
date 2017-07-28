@@ -5,8 +5,7 @@ import wordproblem.scripts.barmodel.BaseBarModelScript;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 
-// TODO: uncomment once cgs library is ported
-//import cgs.audio.Audio;
+import cgs.audio.Audio;
 
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
@@ -421,8 +420,7 @@ class BarToCard extends BaseBarModelScript
                 
                 if (m_barElementCopy == null && m_widgetDragSystem.getWidgetSelected() == null) 
                 {
-					// TODO: uncomment once cgs library is ported
-                    //Audio.instance.playSfx("bar2card");
+                    Audio.instance.playSfx("bar2card");
                     forceTransform(m_globalMouseBuffer.x, m_globalMouseBuffer.y, m_termValueSelected, m_widgetDragSystem, m_barModelArea);
                 }
             }
