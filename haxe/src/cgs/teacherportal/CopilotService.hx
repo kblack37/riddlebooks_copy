@@ -8,7 +8,7 @@ import cgs.teacherportal.data.CopilotResponseTags;
 import cgs.user.CgsUserManager;
 import cgs.user.ICgsUserProperties;
 import cgs.user.ICgsUser;
-//import cgs.teacherportal.IExternalComm;
+import cgs.teacherportal.IExternalComm;
 
 /**
  * Contains methods for talking to student app (game)
@@ -55,7 +55,7 @@ class CopilotService implements IActivityLogger
     private var _userManager : CgsUserManager;
     
 	// External Communication
-	//private var ec:IExternalComm;
+	private var ec:IExternalComm;
 	
     /**
 		 * Creates the Copilot Service.
@@ -85,7 +85,7 @@ class CopilotService implements IActivityLogger
 		
 		_userManager = (userManager != null) ? userManager : new CgsUserManager();
 		
-		//this.ec = (ec != null) ? ec : new ExternalComm();
+		this.ec = (ec != null) ? ec : new ExternalComm();
     }
     
     /**
@@ -291,13 +291,13 @@ class CopilotService implements IActivityLogger
      */
 	private function setupExternalInterface()
 	{
-		//ec.setMessageCallback(START_ACTIVITY, startActivity);
-		//ec.setMessageCallback(STOP_ACTIVITY, stopActivity);
-		//ec.setMessageCallback(SET_WIDGET_ID, setWidgetId);
-		//ec.setMessageCallback(SET_PAUSED, setPaused);
-		//ec.setMessageCallback(COMMAND_TO_WIDGET, commandToWidget);
-		//ec.setMessageCallback(ADD_USER, addUser);
-		//ec.setMessageCallback(REMOVE_USER, removeUser);
+		ec.setMessageCallback(START_ACTIVITY, startActivity);
+		ec.setMessageCallback(STOP_ACTIVITY, stopActivity);
+		ec.setMessageCallback(SET_WIDGET_ID, setWidgetId);
+		ec.setMessageCallback(SET_PAUSED, setPaused);
+		ec.setMessageCallback(COMMAND_TO_WIDGET, commandToWidget);
+		ec.setMessageCallback(ADD_USER, addUser);
+		ec.setMessageCallback(REMOVE_USER, removeUser);
 	}
     
     /**
@@ -319,13 +319,13 @@ class CopilotService implements IActivityLogger
 			try
 			{
 				args.insert(0, _widgetId);
-				//var msg:ExternalCommuicationParentMessage = 
-				//{
-					//command : funcName,
-					//
-					//args:args
-				//}
-				//ec.sendMsgToParent(msg);
+				var msg:ExternalCommuicationParentMessage = 
+				{
+					command : funcName,
+					
+					args:args
+				}
+				ec.sendMsgToParent(msg);
 			}
 			catch (e:Dynamic)
 			{

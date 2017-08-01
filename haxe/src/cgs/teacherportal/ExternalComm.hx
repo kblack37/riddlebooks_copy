@@ -54,7 +54,7 @@ class ExternalComm implements IExternalComm
 	{
 		myWindow.parent.postMessage(msg, target);
 	}
-//#else
-	//#error  
+#else
+	#error  
 #end
 }
