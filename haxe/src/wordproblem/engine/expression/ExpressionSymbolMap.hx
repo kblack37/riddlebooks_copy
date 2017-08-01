@@ -292,7 +292,6 @@ class ExpressionSymbolMap
 				symbolData.fontColor
             );
             symbolTextField.hAlign = HAlign.CENTER;
-			trace(measuringTextField.textWidth + ", " + measuringTextField.textHeight);
             
             cardContainer.addChild(symbolTextField);
             scaleBackgroundToFitTextWidth = symbolTextField.width;

@@ -355,7 +355,7 @@ class TextParser
         if (contentTagName == null) 
         {
             // Strip out new line characters and replace with string
-            var textContent : String = Std.string(content);
+            var textContent : String = content.x.nodeValue;
             documentNode = new TextNode((new EReg('\\r?\\n|\\r', "g")).replace(textContent, " "));
         }
         // Pages are div are mostly the same, a page is just a way to explicitly break up
@@ -367,7 +367,7 @@ class TextParser
         else if (contentTagName == TAG_PARAGRAPH) 
         {
             documentNode = new ParagraphNode();
-            
+			
             if (content.has.lineHeight) 
             {
                 (try cast(documentNode, ParagraphNode) catch(e:Dynamic) null).lineHeight = Std.parseFloat(content.att.lineHeight);
@@ -390,8 +390,10 @@ class TextParser
         if (content.has.id) 
         {
             documentNode.id = content.att.id;
-        }  ///Generated sentences have "ref" attributes, which are like ids.  But if the top paragraph element has id="question" do not overwrite it.  
-        
+        }
+		
+		// Generated sentences have "ref" attributes, which are like ids.
+		// But if the top paragraph element has id="question" do not overwrite it.  
         if (content.has.ref && documentNode.id != "question") 
         {
             documentNode.id = content.att.ref;
@@ -415,7 +417,7 @@ class TextParser
 				documentNode.children.push(childDocumentNode);
 			}
 		} else if (contentTagName == TAG_SPAN) {
-			documentNode.children.push(new TextNode(""));
+			documentNode.children.push(new TextNode(content.innerData));
 		}
         
         return documentNode;
@@ -428,15 +430,12 @@ class TextParser
     // Only works is for xml we apply the @ prefix for everything
     private function checkAndApplyPropertyToNode(node : DocumentNode, properties : Dynamic) : Void
     {
-        var usePrefix : Bool = Std.is(properties, Fast);
-        var numAttributes : Int = m_nodeAttributes.length;
-        var i : Int = 0;
+		var usePrefix : Bool = Std.is(properties, Fast);
         var baseAttribute : String = null;
         var attributeName : String = null;
         var attributeValue : Dynamic = null;
-        for (i in 0...numAttributes){
-            baseAttribute = m_nodeAttributes[i];
-            attributeName = ((usePrefix)) ? "@" + baseAttribute : baseAttribute;
+        for (baseAttribute in m_nodeAttributes){
+            attributeName = baseAttribute;
             if (Reflect.hasField(properties, attributeName)) 
             {
                 attributeValue = Reflect.field(properties, attributeName);
@@ -537,16 +536,6 @@ class TextParser
                 {
                     node.fontName = attributeValue;
                 }
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
                 
                 if (usePrefix) 
                 {
