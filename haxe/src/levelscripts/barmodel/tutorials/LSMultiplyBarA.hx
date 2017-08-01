@@ -560,7 +560,7 @@ class LSMultiplyBarA extends BaseCustomLevelScript
         var referenceBarModels : Array<BarModelData> = new Array<BarModelData>();
         var correctModel : BarModelData = new BarModelData();
         var correctBarWhole : BarWhole = new BarWhole(true);
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...3){
             correctBarWhole.barSegments.push(new BarSegment(1, 1, 0, null));
         }
@@ -584,7 +584,7 @@ class LSMultiplyBarA extends BaseCustomLevelScript
         var referenceBarModels : Array<BarModelData> = new Array<BarModelData>();
         var correctModel : BarModelData = new BarModelData();
         var correctBarWhole : BarWhole = new BarWhole(true);
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...4){
             correctBarWhole.barSegments.push(new BarSegment(1, 1, 0, null));
         }
@@ -621,7 +621,7 @@ class LSMultiplyBarA extends BaseCustomLevelScript
         var referenceBarModels : Array<BarModelData> = new Array<BarModelData>();
         var correctModel : BarModelData = new BarModelData();
         var correctBarWhole : BarWhole = new BarWhole(true);
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...5){
             correctBarWhole.barSegments.push(new BarSegment(1, 1, 0, null));
         }
@@ -740,7 +740,7 @@ class LSMultiplyBarA extends BaseCustomLevelScript
     private function showDragUnder() : Void
     {
         // Draw callout underneath the middle segment
-        var id : String;
+        var id : String = null;
         if (m_barModelArea.getBarModelData().barWholes.length > 0) 
         {
             var firstBar : BarWhole = m_barModelArea.getBarModelData().barWholes[0];

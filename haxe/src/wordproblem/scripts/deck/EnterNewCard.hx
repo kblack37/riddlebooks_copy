@@ -11,8 +11,7 @@ import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.ui.MouseState;
 import dragonbox.common.util.XColor;
 
-import feathers.controls.Button;
-
+import starling.display.Button;
 import starling.display.DisplayObject;
 import starling.display.DisplayObjectContainer;
 import starling.display.Image;
@@ -158,7 +157,7 @@ class EnterNewCard extends BaseGameScript
                 });
         
         // Pick whether the ui with letters or just numbers should be used
-        var uiToUse : DisplayObject;
+        var uiToUse : DisplayObject = null;
         m_useKeyboard = useKeyboard;
         if (m_useKeyboard) 
         {
@@ -183,13 +182,14 @@ class EnterNewCard extends BaseGameScript
         var closeDimensions : Float = 50;
         var closeIcon : Image = new Image(assetManager.getTexture("wrong"));
         closeIcon.scaleX = closeIcon.scaleY = (closeDimensions * 0.8) / closeIcon.width;
-        m_closeButton.defaultIcon = closeIcon;
+        m_closeButton.upState = closeIcon.texture;
         m_closeButton.width = m_closeButton.height = closeDimensions;
         m_closeButton.x = uiToUse.x + uiToUse.width - m_closeButton.width;
         m_closeButton.y = uiToUse.y;
         m_canvas.addChild(m_closeButton);
         
-        m_description = new TextField(450, 60, StringTable.lookup("create_number"), GameFonts.DEFAULT_FONT_NAME, 32, 0xFFFFFF);
+		// TODO: uncomment when cgs library is finished
+        m_description = new TextField(450, 60, "" /*StringTable.lookup("create_number")*/, GameFonts.DEFAULT_FONT_NAME, 32, 0xFFFFFF);
         m_description.x = (screenWidth - m_description.width) * 0.5;
         m_description.y = uiToUse.y - m_description.height;
         m_canvas.addChild(m_description);
@@ -251,7 +251,7 @@ class EnterNewCard extends BaseGameScript
                 m_termWidgetPressedOn.getBounds(m_termWidgetPressedOn.stage, m_globalBoundsBuffer);
                 if (m_globalBoundsBuffer.contains(mouseState.mousePositionThisFrame.x, mouseState.mousePositionThisFrame.y)) 
                 {
-                    baseTermWidget = m_termWidgetPressedOn;
+                    var baseTermWidget = m_termWidgetPressedOn;
                     var expressionValue : String = baseTermWidget.getNode().data;
                     if (expressionValue == "NEW") 
                     {
@@ -278,7 +278,7 @@ class EnterNewCard extends BaseGameScript
                             { }
                         else 
                         {
-                            m_numberpadWidget.value = parseInt(expressionValue);
+                            m_numberpadWidget.value = Std.parseInt(expressionValue);
                         }
                         m_gameEngine.getSprite().addChild(m_canvas);
                     }
@@ -310,13 +310,13 @@ class EnterNewCard extends BaseGameScript
         // HACK: Special rendering parameters for the card used to add additional values to the deck
         // We reserve a value for the card adding portion
         var newSymbolData : SymbolData = new SymbolData(
-        "NEW", 
-        "Add New Card", 
-        "NEW", 
-        null, 
-        "card_blank", 
-        0xFFFFFF, 
-        GameFonts.DEFAULT_FONT_NAME, 
+			"NEW", 
+			"Add New Card", 
+			"NEW", 
+			null, 
+			"assets/card/blank_card.png", 
+			0xFFFFFF, 
+			GameFonts.DEFAULT_FONT_NAME
         );
         newSymbolData.fontColor = 0xFFFFFF;
         newSymbolData.fontSize = 14;
@@ -336,7 +336,7 @@ class EnterNewCard extends BaseGameScript
         var isHiddenToSetTo : Array<Bool> = new Array<Bool>();
         var renderComponents : Array<DisplayObject> = m_deckWidget.getObjects();
         var numRenderComponents : Int = renderComponents.length;
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...numRenderComponents){
             // We assume everything in the deck is a term widget that ties to some expression value
             var baseTermWidget : BaseTermWidget = try cast(renderComponents[i], BaseTermWidget) catch(e:Dynamic) null;
@@ -375,7 +375,7 @@ class EnterNewCard extends BaseGameScript
         var currentHiddenValuesInDeck : Array<Bool> = new Array<Bool>();
         var renderComponents : Array<DisplayObject> = m_deckWidget.getObjects();
         var numComponents : Int = renderComponents.length;
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...numComponents){
             var baseTermWidget : BaseTermWidget = try cast(renderComponents[i], BaseTermWidget) catch(e:Dynamic) null;
             var expressionValue : String = baseTermWidget.getNode().data;

@@ -207,12 +207,12 @@ class BarModelAreaWidget extends BarModelView implements IBaseWidget
         
         // We just do a brute force search through all elements
         var barWholeViews : Array<BarWholeView> = barModelArea.getBarWholeViews();
-        var i : Int;
+        var i : Int = 0;
         var numBarWholeViews : Int = barWholeViews.length;
         for (i in 0...numBarWholeViews){
             var barWholeView : BarWholeView = barWholeViews[i];
             
-            var j : Int;
+            var j : Int = 0;
             for (j in 0...barWholeView.segmentViews.length){
                 var segmentView : BarSegmentView = barWholeView.segmentViews[j];
                 if (segmentView.data.id == id) 

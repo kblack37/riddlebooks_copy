@@ -131,7 +131,7 @@ class ResetTermArea extends BaseGameScript
         }
         
         var termAreas : Array<DisplayObject> = m_gameEngine.getUiEntitiesByClass(TermAreaWidget);
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...termAreas.length){
             // Check if there an initial expression a term area should reset to.
             // If none it becomes empty.

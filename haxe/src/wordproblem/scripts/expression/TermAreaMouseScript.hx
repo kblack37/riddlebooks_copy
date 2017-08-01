@@ -88,8 +88,8 @@ class TermAreaMouseScript extends BaseTermAreaScript
                 return ScriptStatus.FAIL;
             }
             
-            var termArea : TermAreaWidget;
-            var i : Int;
+            var termArea : TermAreaWidget = null;
+            var i : Int = 0;
             for (i in 0...m_termAreas.length){
                 termArea = m_termAreas[i];
                 
@@ -190,7 +190,7 @@ class TermAreaMouseScript extends BaseTermAreaScript
         widget.scaleX = widget.scaleY = 1.0;
         var widgetBounds : Rectangle = widget.getBounds(stage);
         
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...m_termAreas.length){
             if (m_termAreas[i].stage != null) 
             {

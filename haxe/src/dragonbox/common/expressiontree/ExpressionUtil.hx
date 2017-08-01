@@ -573,7 +573,7 @@ class ExpressionUtil
 	 */
 	public static function copy(originalNode:ExpressionNode, vectorSpace:RealsVectorSpace):ExpressionNode
 	{
-		var nodeCopy:ExpressionNode;
+		var nodeCopy:ExpressionNode = null;
 		if (originalNode != null)
 		{
 			nodeCopy = originalNode.clone();

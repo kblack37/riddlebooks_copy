@@ -172,7 +172,7 @@ class DottedRectangle extends Sprite
         m_dottedLineImages.push(bottomRightCorner);
         
         
-        var i : Int;
+        var i : Int = 0;
         var xOffset : Float = cornerTextureWidth + newHorizontalSpacing;
         var yTop : Float = 0;
         var yBottom : Float = height - lineTextureHeight;

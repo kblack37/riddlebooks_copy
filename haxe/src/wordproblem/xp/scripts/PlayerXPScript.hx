@@ -413,7 +413,7 @@ class PlayerXPScript extends BaseBufferEventScript
             
             // If history isn't big enough then we will not award points for the latest gesture
             // We still need to check that the snapshot looks different enough
-            var i : Int;
+            var i : Int = 0;
             var numSnapshots : Int = m_decomposeBarModelHistory.length;
             var isCurrentDifferentEnough : Bool = true;
             for (i in 0...numSnapshots){

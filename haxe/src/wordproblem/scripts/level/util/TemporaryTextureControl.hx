@@ -58,7 +58,7 @@ class TemporaryTextureControl implements IDisposable
     
     public function dispose() : Void
     {
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...m_textureNamesToDispose.length){
             var textureName : String = m_textureNamesToDispose[i];
             m_assetManager.removeTexture(textureName, true);

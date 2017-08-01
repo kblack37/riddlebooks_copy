@@ -249,7 +249,7 @@ class ScrollGridWidget extends Sprite
                 
                 
                 
-                var i : Int;
+                var i : Int = 0;
                 var numObjects : Int = m_objects.length;
                 for (i in 0...numObjects){
                     var displayObject : DisplayObject = m_objects[i];
@@ -336,8 +336,8 @@ class ScrollGridWidget extends Sprite
         if (m_viewPort.containsPoint(m_localPointBuffer)) 
         {
             var renderComponents : Array<DisplayObject> = this.getObjects();
-            var i : Int;
-            var renderComponent : DisplayObject;
+            var i : Int = 0;
+            var renderComponent : DisplayObject = null;
             var numObjects : Int = renderComponents.length;
             for (i in 0...numObjects){
                 renderComponent = renderComponents[i];
@@ -391,7 +391,7 @@ class ScrollGridWidget extends Sprite
     
     public function batchAddRemove(objectsToAdd : Array<DisplayObject>, objectsToRemove : Array<DisplayObject>, layoutImmediately : Bool) : Void
     {
-        var i : Int;
+        var i : Int = 0;
         if (objectsToAdd != null) 
         {
             for (i in 0...objectsToAdd.length){
@@ -401,7 +401,7 @@ class ScrollGridWidget extends Sprite
         
         if (objectsToRemove != null) 
         {
-            var objectToRemove : DisplayObject;
+            var objectToRemove : DisplayObject = null;
             for (i in 0...objectsToRemove.length){
                 this.removeObject(objectsToRemove[i], false);
             }
@@ -430,8 +430,8 @@ class ScrollGridWidget extends Sprite
         
         
         
-        var i : Int;
-        var actualObject : DisplayObject;
+        var i : Int = 0;
+        var actualObject : DisplayObject = null;
         var numActualObjects : Int = m_objects.length;
 		m_dummyBoundsBuffer = new Array<Rectangle>();
         for (i in 0...numActualObjects){
@@ -496,7 +496,7 @@ class ScrollGridWidget extends Sprite
             // For a row find the max height of the bounds, attempt to center all objects
             var numItemsInRow : Int = itemsPerRow[i];
             var lastItemInRowIndex : Int = currentItemIndex + numItemsInRow;
-            var j : Int;
+            var j : Int = 0;
             var maxHeightInRow : Float = 0;
             for (j in currentItemIndex...lastItemInRowIndex){
                 var dummyBounds = m_dummyBoundsBuffer[j];

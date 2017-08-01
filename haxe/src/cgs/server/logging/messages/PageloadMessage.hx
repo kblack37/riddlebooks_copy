@@ -3,7 +3,7 @@ package cgs.server.logging.messages;
 import cgs.server.logging.IGameServerData;
 import cgs.server.utils.INtpTime;
 import flash.system.Capabilities;
-import js.html.DataElement;
+//import js.html.DataElement;
 
 class PageloadMessage extends Message
 {
@@ -37,8 +37,8 @@ class PageloadMessage extends Message
 #if js
         //Add the timezone to the pageload.
         _plDetails.timezone = untyped Date.now().getTimezoneOffset();
-#else
-	#error  
+//#else
+	//#error  
 #end
         
         //Add the domain if it has been set.

@@ -115,7 +115,7 @@ class TooltipControl implements IDisposable
             {
                 var newCalloutComponent : CalloutComponent = new CalloutComponent(m_uiEntityId);
                 newCalloutComponent.display = new TextField(Std.int(textWidth), Std.int(textHeight), m_toolTipText, 
-                        m_textStyle.font, m_textStyle.size, try cast(m_textStyle.color, Int) catch(e:Dynamic) null);
+                        m_textStyle.font, m_textStyle.size, try cast(m_textStyle.color, Int) catch(e:Dynamic) 0);
                 newCalloutComponent.backgroundTexture = "button_white";
                 newCalloutComponent.arrowTexture = "";
                 newCalloutComponent.backgroundColor = 0x000000;

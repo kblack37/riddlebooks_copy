@@ -95,7 +95,7 @@ class OptionsWidget extends Sprite
         var audioDriver : Audio = Audio.instance;
         
         // Create each option make sure it is in the right order
-        var button : DisplayObject;
+        var button : DisplayObject = null;
         for (optionName in options){
             if (optionName == OPTION_MUSIC) 
             {

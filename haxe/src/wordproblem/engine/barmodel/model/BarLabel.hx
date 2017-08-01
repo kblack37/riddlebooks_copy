@@ -154,7 +154,6 @@ class BarLabel
             e : this.endSegmentIndex,
             o : orientation,
             dn : m_displayedName,
-
         };
         return serializedObject;
     }
@@ -176,7 +175,7 @@ class BarLabel
             this.bracketStyle = BarLabel.BRACKET_STRAIGHT;
         }
         
-        if (data.exists("dn")) 
+        if (Reflect.hasField(data, "dn")) 
         {
             m_displayedName = data.dn;
         }

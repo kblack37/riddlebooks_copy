@@ -51,7 +51,7 @@ class BaseBufferEventScript extends ScriptNode
     {
         if (m_eventTypeBuffer.length > 0) 
         {
-            var i : Int;
+            var i : Int = 0;
             var numEvents : Int = m_eventTypeBuffer.length;
             for (i in 0...numEvents){
                 var eventType : String = m_eventTypeBuffer[i];

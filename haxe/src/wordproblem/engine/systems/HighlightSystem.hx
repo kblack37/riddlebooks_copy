@@ -44,7 +44,7 @@ class HighlightSystem extends BaseSystemScript
         
         m_highlightJuggler = Starling.current.juggler;
         
-        var highlightTexture : Texture = assetManager.getTexture("halo");
+        var highlightTexture : Texture = assetManager.getTexture("assets/card/halo.png");
         var scale9Delta : Float = 2;
         m_highlightTexture = Texture.fromTexture(highlightTexture, new Rectangle(
                 (highlightTexture.width - scale9Delta) * 0.5, 
@@ -60,8 +60,8 @@ class HighlightSystem extends BaseSystemScript
     {
         var highlightComponents : Array<Component> = componentManager.getComponentListForType(HighlightComponent.TYPE_ID);
         var numHighlightComponents : Int = highlightComponents.length;
-        var highlightComponent : HighlightComponent;
-        var i : Int;
+        var highlightComponent : HighlightComponent = null;
+        var i : Int = 0;
         for (i in 0...numHighlightComponents){
             highlightComponent = try cast(highlightComponents[i], HighlightComponent) catch(e:Dynamic) null;
             
@@ -83,11 +83,11 @@ class HighlightSystem extends BaseSystemScript
                         var outChildViews : Array<DocumentView> = new Array<DocumentView>();
                         documentView.getDocumentViewLeaves(outChildViews);
                         var canvasToAddTo : Sprite = documentView;
-                        var viewIndex : Int;
-                        var childView : DocumentView;
+                        var viewIndex : Int = 0;
+                        var childView : DocumentView = null;
                         var currentLineNumber : Int = -1;
                         var currentLineBounds : Rectangle = null;
-                        var resultBounds : Rectangle;
+                        var resultBounds : Rectangle = null;
                         var lineBounds : Array<Rectangle> = new Array<Rectangle>();
                         for (viewIndex in 0...outChildViews.length){
                             // Determine the bounding dimensions of the content of each line.
@@ -127,7 +127,7 @@ class HighlightSystem extends BaseSystemScript
                         
                         
                         var highlightLayer : Sprite = new Sprite();
-                        var lineIndex : Int;
+                        var lineIndex : Int = 0;
                         for (lineIndex in 0...lineBounds.length){
                             resultBounds = lineBounds[lineIndex];
                             

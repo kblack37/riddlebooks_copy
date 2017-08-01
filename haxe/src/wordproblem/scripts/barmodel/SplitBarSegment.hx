@@ -276,7 +276,7 @@ class SplitBarSegment extends BaseBarModelScript implements ICardOnSegmentScript
         var originalComparisonValues : Array<Float> = new Array<Float>();
         var barWholes : Array<BarWhole> = barModelData.barWholes;
         var numBarWholes : Int = barWholes.length;
-        var barWhole : BarWhole;
+        var barWhole : BarWhole = null;
         for (i in 0...numBarWholes){
             barWhole = barWholes[i];
             
@@ -301,7 +301,7 @@ class SplitBarSegment extends BaseBarModelScript implements ICardOnSegmentScript
         var targetNumeratorValue : Float = targetBarSegment.numeratorValue;
         var targetDenominatorValue : Float = targetBarSegment.denominatorValue * numSplits;
         var newSegmentsToAdd : Array<BarSegment> = new Array<BarSegment>();
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...numSplits){
             var newBarSegment : BarSegment = new BarSegment(targetNumeratorValue, targetDenominatorValue, targetBarSegment.color, null);
             newSegmentsToAdd.push(newBarSegment);
@@ -336,7 +336,7 @@ class SplitBarSegment extends BaseBarModelScript implements ICardOnSegmentScript
         
         
         
-        var barLabel : BarLabel;
+        var barLabel : BarLabel = null;
         var numBarLabels : Int = targetBarWhole.barLabels.length;
         for (i in 0...numBarLabels){
             barLabel = targetBarWhole.barLabels[i];
@@ -370,7 +370,7 @@ class SplitBarSegment extends BaseBarModelScript implements ICardOnSegmentScript
             barWhole = barWholesWithComparison[i];
             var comparisonValue = originalComparisonValues[i] + barWhole.getValue();
             
-            var j : Int;
+            var j : Int = 0;
             var barSegments : Array<BarSegment> = targetBarWhole.barSegments;
             var numSegments : Int = barSegments.length;
             var segmentValueCounter : Float = 0.0;

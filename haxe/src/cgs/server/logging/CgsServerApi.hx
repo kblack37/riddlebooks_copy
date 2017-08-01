@@ -1451,7 +1451,7 @@ class CgsServerApi implements ICGSLoggingServer implements IABTestingServer impl
             
             //Create user data and add it to the data manager.
             var responseObj : Dynamic = response.data;
-            var currUserData : UserData;
+            var currUserData : UserData = null;
             var members : Array<Dynamic> = responseObj.members;
             var memberUids : Array<Dynamic> = [];
             for (memberObj in members)

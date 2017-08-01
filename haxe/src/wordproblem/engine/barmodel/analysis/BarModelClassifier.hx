@@ -362,10 +362,10 @@ class BarModelClassifier
 	private function isValidModel(model:BarModelData) : Bool
 	{
 
-		var i : Int;
-		var j : Int;
-		var value:String;
-		var label:BarLabel;
+		var i : Int = 0;
+		var j : Int = 0;
+		var value:String = null;
+		var label:BarLabel = null;
 		//check labels
 		var allLabels : Array<String> = new Array<String>();
 		for (barWhole in model.barWholes)
@@ -589,6 +589,7 @@ class BarModelClassifier
 			{
 				//stacked brackets, type H
 				var regLabel:String = null;
+				var label = null;
 				var j2 : Int;
 				for (j2 in 0...3)
 				{
@@ -614,7 +615,6 @@ class BarModelClassifier
 					}
 					regLabel = label.value;
 				}
-
 				if ( regLabel == getName("a"))
 				{
 					return "H1";
@@ -682,11 +682,11 @@ class BarModelClassifier
 					trace("Huh? Not missing anything, but only 2 parts! ");
 					return null;
 				}
-
 			}
 			if (model.barWholes[0].barSegments.length == 2 && model.barWholes[0].barLabels.length == 3)
 			{
 				var bracketLabel:String = null;
+				var label = null;
 				for (j2 in 0...3)
 				{
 					label = model.barWholes[0].barLabels[j2];
@@ -711,7 +711,6 @@ class BarModelClassifier
 					}
 					bracketLabel = label.value;
 				}
-
 				if ( bracketLabel == getName("a"))
 				{
 					return "E1";

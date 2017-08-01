@@ -46,7 +46,7 @@ class PlayerAchievementsModel
         // The data source provides an explicit ordering of all achievements
         // This order is used to render
         var achievementList : Array<Dynamic> = dataSource.achievements;
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...achievementList.length){
             var achievementData : Dynamic = achievementList[i];
             var achievementId : String = achievementData.id;

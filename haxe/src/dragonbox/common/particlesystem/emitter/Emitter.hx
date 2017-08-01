@@ -78,7 +78,7 @@ class Emitter implements IDisposable
     public function start() : Void
     {
         var particlesToCreate : Int = m_clock.start(this);
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...particlesToCreate){
             createParticle();
         }  // Initialize all activities  
@@ -180,7 +180,7 @@ class Emitter implements IDisposable
         
         var initializer : Initializer = null;
         var i : Int = 0;
-        var classNameOfInitializer : String;
+        var classNameOfInitializer : String = null;
         for (i in 0...m_initializers.length){
             classNameOfInitializer = Type.getClassName(Type.getClass(m_initializers[i]));
             if (classNameOfInitializer == classNameToSearch) 
@@ -207,7 +207,7 @@ class Emitter implements IDisposable
         // Check if we need to create a new set of particles based
         // on this emitter's clock
         var particlesToCreate : Int = m_clock.update(this, secondsElapsed);
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...particlesToCreate){
             createParticle();
         }  // Apply activities to this emitter  
@@ -219,14 +219,14 @@ class Emitter implements IDisposable
             m_activities[i].update(this, secondsElapsed);
         }
         
-        var particle : Particle;
+        var particle : Particle = null;
 		var i = 0;
 		while (i < m_deadParticleIndex) {
             particle = m_particles[i];
             
             // Apply the list of actions to each of the particles
             var numActions : Int = m_actions.length;
-            var j : Int;
+            var j : Int = 0;
             for (j in 0...numActions){
                 var action : Action = m_actions[j];
                 action.update(this, particle, secondsElapsed);
@@ -260,7 +260,7 @@ class Emitter implements IDisposable
      */
     private function createParticle() : Void
     {
-        var particle : Particle;
+        var particle : Particle = null;
         if (m_particles.length <= m_deadParticleIndex) 
         {
             particle = new Particle();
@@ -277,7 +277,7 @@ class Emitter implements IDisposable
         this.initializeParticle(particle);
         
         var numInitializers : Int = m_initializers.length;
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...numInitializers){
             var initializer : Initializer = m_initializers[i];
             initializer.initialize(this, particle);

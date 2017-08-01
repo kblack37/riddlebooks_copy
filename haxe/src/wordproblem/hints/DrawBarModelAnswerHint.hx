@@ -147,11 +147,11 @@ class DrawBarModelAnswerHint extends HintScript
     private function modifyPropertiesOfBarModel(barModelData : BarModelData) : Void
     {
         var barWholes : Array<BarWhole> = barModelData.barWholes;
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...barWholes.length){
             var barWhole : BarWhole = barWholes[i];
             var barLabels : Array<BarLabel> = barWhole.barLabels;
-            var j : Int;
+            var j : Int = 0;
             for (j in 0...barLabels.length){
                 var barLabel : BarLabel = barLabels[j];
                 barLabel.color = 0x000000;

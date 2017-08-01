@@ -184,7 +184,7 @@ class AddNewHorizontalLabel extends BaseBarModelScript implements IHitAreaScript
         var rightBracketTexture : Texture = m_assetManager.getTexture("brace_right_end");
         var middleBracketTexture : Texture = m_assetManager.getTexture("brace_center");
         var fullBracketTexture : Texture = m_assetManager.getTexture("brace_full");
-        var i : Int;
+        var i : Int = 0;
         var numHitAreas : Int = hitAreas.length;
         for (i in 0...numHitAreas){
             var hitArea : Rectangle = hitAreas[i];
@@ -232,7 +232,7 @@ class AddNewHorizontalLabel extends BaseBarModelScript implements IHitAreaScript
             {
                 var labelViews : Array<BarLabelView> = thisBarView.labelViews;
                 var numLabelViews : Int = labelViews.length;
-                var j : Int;
+                var j : Int = 0;
                 var numBracketLabels : Int = 0;
                 for (j in 0...numLabelViews){
                     if (labelViews[j].data.bracketStyle == BarLabel.BRACKET_STRAIGHT) 
@@ -281,9 +281,9 @@ class AddNewHorizontalLabel extends BaseBarModelScript implements IHitAreaScript
         this.calculateHitAreas();
         var didHitArea : Bool = false;
         var barWholeViews : Array<BarWholeView> = m_barModelArea.getBarWholeViews();
-        var i : Int;
+        var i : Int = 0;
         var numHitAreas : Int = m_addNewHorizontalBarLabelHitAreas.length;
-        var hitArea : Rectangle;
+        var hitArea : Rectangle = null;
         for (i in 0...numHitAreas){
             hitArea = m_addNewHorizontalBarLabelHitAreas[i];
             if (hitArea.containsPoint(m_localMouseBuffer)) 

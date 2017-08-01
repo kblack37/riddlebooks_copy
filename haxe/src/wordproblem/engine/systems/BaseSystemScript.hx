@@ -18,7 +18,7 @@ class BaseSystemScript extends ScriptNode
     
     override public function visit() : Int
     {
-        var i : Int;
+        var i : Int = 0;
         var numComponentManagers : Int = m_componentManagers.length;
         for (i in 0...numComponentManagers){
             update(m_componentManagers[i]);

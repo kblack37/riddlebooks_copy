@@ -166,7 +166,7 @@ class PlayerXpBarAnimation
     
     public function stop() : Void
     {
-        var i : Int;
+        var i : Int = 0;
         var numTweens : Int = m_activeTweens.length;
         for (i in 0...numTweens){
             var tween : Tween = m_activeTweens[i];

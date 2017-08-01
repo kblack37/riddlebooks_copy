@@ -125,7 +125,7 @@ class TextParser
         // ancestors if they have not been explicitly set in the child.
         var selectorNameList : Array<Dynamic> = [];
         var stylesObject : Dynamic = cssObject;
-        if (cssObject.exists("ORDER")) 
+        if (Reflect.hasField(cssObject, "ORDER")) 
         {
             selectorNameList = Reflect.field(cssObject, "ORDER");
         }
@@ -138,14 +138,11 @@ class TextParser
             {
                 selectorNameList.push(selectorKey);
             }
-        }  // Need to now inherit properties that were not explicitly set    // text can render without any other information being provided    // Set up default properties at the root and cascade them at the start to ensure  
-        
-        
-        
-        
-        
-        
-        
+        }
+		
+		// Set up default properties at the root and cascade them at the start to ensure  
+		// text can render without any other information being provided
+        // Need to now inherit properties that were not explicitly set
         _inheritStylesFromParent(null, pageRoot, { });
         
         // Once all the attributes have been parsed out we need to walk
@@ -155,13 +152,13 @@ class TextParser
         _flattenToList(pageRoot, outNodeList);
         
         // Loop through all selectors and check which ones apply to the set of nodes
-        var i : Int;
-        var selectorName : String;
+        var i : Int = 0;
+        var selectorName : String = null;
         for (i in 0...selectorNameList.length){
             selectorName = selectorNameList[i];
             
-            var j : Int;
-            var node : DocumentNode;
+            var j : Int = 0;
+            var node : DocumentNode = null;
             var numNodes : Int = outNodeList.length;
             for (j in 0...numNodes){
                 node = outNodeList[j];
@@ -261,36 +258,31 @@ class TextParser
             // each one
             // DO NOT inherit from parent if the property of the node was explicitly already set
             // by a selector earlier in this frame or in the xml.
-            if (propertiesToInherit.exists("fontName")) 
+            if (Reflect.hasField(propertiesToInherit, "fontName")) 
             {
                 node.fontName = parentNode.fontName;
             }
             
-            if (propertiesToInherit.exists("fontSize")) 
+            if (Reflect.hasField(propertiesToInherit, "fontSize")) 
             {
                 node.fontSize = parentNode.fontSize;
             }
             
-            if (propertiesToInherit.exists("color")) 
+            if (Reflect.hasField(propertiesToInherit, "color")) 
             {
                 node.fontColor = parentNode.fontColor;
-            }  // if it was not explicitly defined in the level data    // Whether or not a node is selectable should be inherited from it's parent  
-            
-            
-            
-            
-            
+            }
+			
+			// Whether or not a node is selectable should be inherited from it's parent  
+            // if it was not explicitly defined in the level data
             if (node.getShouldInheritProperty("selectable")) 
             {
                 node.setSelectable(parentNode.getSelectable());
-            }  // or mark a tag indicating how they should be laid out by default.    // Check which dimension properties were not set and either inherit them    // Dimension data is inherited for all nodes except spans, text, and images  
-            
-            
-            
-            
-            
-            
-            
+            }
+			
+			// Dimension data is inherited for all nodes except spans, text, and images  
+			// Check which dimension properties were not set and either inherit them
+            // or mark a tag indicating how they should be laid out by default.
             var isTextNode : Bool = Std.is(node, TextNode);
             var isSpan : Bool = Std.is(node, SpanNode);
             var isImageNode : Bool = Std.is(node, ImageNode);
@@ -300,10 +292,9 @@ class TextParser
                 {
                     node.width = parentNode.width;
                 }
-            }  // If the layout for a node is not set, it should inherit from its closest parent div.  
-            
-            
-            
+            }  
+			
+			// If the layout for a node is not set, it should inherit from its closest parent div.  
             if (Std.is(node, DivNode)) 
             {
                 var divNode : DivNode = try cast(node, DivNode) catch(e:Dynamic) null;
@@ -312,14 +303,13 @@ class TextParser
                     divNode.setLayout((try cast(parentNode, DivNode) catch(e:Dynamic) null).getLayout());
                 }
             }
-        }  // Evaluate each child recursively  
-        
-        
-        
+        }  
+		
+		// Evaluate each child recursively  
         var nodeChildren : Array<DocumentNode> = node.children;
         if (nodeChildren != null) 
         {
-            var i : Int;
+            var i : Int = 0;
             for (i in 0...nodeChildren.length){
                 var nodeChild : DocumentNode = nodeChildren[i];
                 _inheritStylesFromParent(node, nodeChild, propertiesToInherit);
@@ -337,7 +327,7 @@ class TextParser
             if (nodeChildren != null) 
             {
                 var numChildren : Int = nodeChildren.length;
-                var i : Int;
+                var i : Int = 0;
                 for (i in 0...numChildren){
                     var nodeChild : DocumentNode = nodeChildren[i];
                     _flattenToList(nodeChild, outNodeList);
@@ -359,7 +349,7 @@ class TextParser
     private function _parseDocument(content : Fast) : DocumentNode
     {
         // Create a document node base on the tagname of the content root
-        var documentNode : DocumentNode;
+        var documentNode : DocumentNode = null;
         var contentTagName : String = content.name;
         
         if (contentTagName == null) 
@@ -440,14 +430,14 @@ class TextParser
     {
         var usePrefix : Bool = Std.is(properties, Fast);
         var numAttributes : Int = m_nodeAttributes.length;
-        var i : Int;
-        var baseAttribute : String;
-        var attributeName : String;
-        var attributeValue : Dynamic;
+        var i : Int = 0;
+        var baseAttribute : String = null;
+        var attributeName : String = null;
+        var attributeValue : Dynamic = null;
         for (i in 0...numAttributes){
             baseAttribute = m_nodeAttributes[i];
             attributeName = ((usePrefix)) ? "@" + baseAttribute : baseAttribute;
-            if (properties.exists(attributeName)) 
+            if (Reflect.hasField(properties, attributeName)) 
             {
                 attributeValue = Reflect.field(properties, attributeName);
                 if (baseAttribute == "layout" && Std.is(node, DivNode)) 
@@ -511,7 +501,7 @@ class TextParser
                     var sliceValues : Array<Dynamic> = sliceString.split(" ");
                     var paddingValues : Array<Int> = new Array<Int>();
                     
-                    var j : Int;
+                    var j : Int = 0;
                     for (j in 0...sliceValues.length){
                         paddingValues.push(Std.parseInt(sliceValues[j]));
                     }

@@ -35,9 +35,9 @@ class LinkToDrawingSystem extends BaseSystemScript
         
         var linkToComponents : Array<Component> = componentManager.getComponentListForType(LinkToDraggedObjectComponent.TYPE_ID);
         var numComponents : Int = linkToComponents.length;
-        var i : Int;
-        var linkToComponent : LinkToDraggedObjectComponent;
-        var entityId : String;
+        var i : Int = 0;
+        var linkToComponent : LinkToDraggedObjectComponent = null;
+        var entityId : String = null;
         for (i in 0...numComponents){
             linkToComponent = try cast(linkToComponents[i], LinkToDraggedObjectComponent) catch(e:Dynamic) null;
             entityId = linkToComponent.entityId;

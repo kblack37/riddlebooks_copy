@@ -197,7 +197,7 @@ class CustomizableItemButton extends Sprite
     
     public function createItemIcon() : DisplayObject
     {
-        var icon : DisplayObject;
+        var icon : DisplayObject = null;
         var texturesComponent : TextureCollectionComponent = try cast(m_itemDataSource.getComponentFromEntityIdAndType(
                 m_itemId, TextureCollectionComponent.TYPE_ID), TextureCollectionComponent) catch(e:Dynamic) null;
         if (m_categoryId == PlayerCollectionCustomizeViewer.CATEGORY_POINTERS) 

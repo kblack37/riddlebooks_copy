@@ -36,7 +36,7 @@ class TextParserUtil
             // The source might reference a list of resources, we need to parse out each
             // individual element. We assume the end of an element is when we encounter
             // a closing paren.
-            var i : Int;
+            var i : Int = 0;
             var numCharacters : Int = source.length;
             var startIndexOfResource : Int = -1;
             for (i in 0...numCharacters){

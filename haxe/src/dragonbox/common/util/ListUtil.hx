@@ -8,7 +8,7 @@ class ListUtil
      */
     public static function subdivideList(originalList : Array<String>, numItemsInGroup : Int, outSubdivisionList : Array<Array<String>>) : Void
     {
-        var i : Int;
+        var i : Int = 0;
         var numTotalElements : Int = originalList.length;
         var currentSubdivisionList : Array<String> = new Array<String>();
         for (i in 0...numTotalElements){

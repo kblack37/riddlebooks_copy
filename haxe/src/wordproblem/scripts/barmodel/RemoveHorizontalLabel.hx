@@ -67,16 +67,16 @@ class RemoveHorizontalLabel extends BaseBarModelScript implements IRemoveBarElem
                 // Delete the label
                 var barWholes : Array<BarWhole> = m_barModelArea.getBarModelData().barWholes;
                 var numBarWholes : Int = barWholes.length;
-                var i : Int;
-                var barWhole : BarWhole;
+                var i : Int = 0;
+                var barWhole : BarWhole = null;
                 var foundMatchingLabel : Bool = false;
                 for (i in 0...numBarWholes){
                     barWhole = barWholes[i];
                     
                     var barLabels : Array<BarLabel> = barWhole.barLabels;
                     var numBarLabels : Int = barLabels.length;
-                    var j : Int;
-                    var barLabel : BarLabel;
+                    var j : Int = 0;
+                    var barLabel : BarLabel = null;
                     for (j in 0...numBarLabels){
                         barLabel = barLabels[j];
                         
@@ -156,7 +156,7 @@ class RemoveHorizontalLabel extends BaseBarModelScript implements IRemoveBarElem
                 {
                     m_hitBarLabelView.setBracketAndDescriptionAlpha(0.3);
                     m_ringPulseAnimation.reset(m_localMouseBuffer.x, m_localMouseBuffer.y, m_barModelArea, 0xFF0000);
-                    Starling.juggler.add(m_ringPulseAnimation);
+                    Starling.current.juggler.add(m_ringPulseAnimation);
                     
                     status = ScriptStatus.SUCCESS;
                 }
@@ -187,12 +187,12 @@ class RemoveHorizontalLabel extends BaseBarModelScript implements IRemoveBarElem
         var hitLabel : BarLabelView = null;
         var barWholeViews : Array<BarWholeView> = m_barModelArea.getBarWholeViews();
         var numBarWholeViews : Int = barWholeViews.length;
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...numBarWholeViews){
             var barLabelViews : Array<BarLabelView> = barWholeViews[i].labelViews;
             var numBarLabelViews : Int = barLabelViews.length;
-            var j : Int;
-            var barLabelView : BarLabelView;
+            var j : Int = 0;
+            var barLabelView : BarLabelView = null;
             for (j in 0...numBarLabelViews){
                 barLabelView = barLabelViews[j];
                 
@@ -228,6 +228,6 @@ class RemoveHorizontalLabel extends BaseBarModelScript implements IRemoveBarElem
     private function onRingPulseAnimationComplete() : Void
     {
         // Make sure animation isn't showing
-        Starling.juggler.remove(m_ringPulseAnimation);
+        Starling.current.juggler.remove(m_ringPulseAnimation);
     }
 }

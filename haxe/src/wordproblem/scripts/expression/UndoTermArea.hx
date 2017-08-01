@@ -73,8 +73,8 @@ class UndoTermArea extends BaseGameScript
         super.setIsActive(value);
         if (m_ready) 
         {
-            var i : Int;
-            var termArea : TermAreaWidget;
+            var i : Int = 0;
+            var termArea : TermAreaWidget = null;
             var termAreaWidgets : Array<DisplayObject> = m_gameEngine.getUiEntitiesByClass(TermAreaWidget);
             
             for (i in 0...termAreaWidgets.length){

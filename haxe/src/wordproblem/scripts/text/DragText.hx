@@ -69,7 +69,7 @@ class DragText extends BaseGameScript
         {
             // The dragging of existing items and their release does not care about the layering
             // deactivation.
-            var params : Dynamic;
+            var params : Dynamic = null;
             var mouseState : MouseState = this.m_gameEngine.getMouseState();
             m_mousePoint.setTo(mouseState.mousePositionThisFrame.x, mouseState.mousePositionThisFrame.y);
             if (mouseState.leftMouseDraggedThisFrame && m_viewPressedDownOn != null) 

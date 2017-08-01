@@ -150,7 +150,7 @@ class DecomposedBarModelData
     public function getEquivalencyScore(otherModel : DecomposedBarModelData) : Int
     {
         var equivalencyScore : Float = 0;
-        var i : Int;
+        var i : Int = 0;
         
         // Need to make a copy of the tallies in the other model, since
         // we will be modifying it need to keep track of of what things got consumed
@@ -305,18 +305,18 @@ class DecomposedBarModelData
         // Once we figure out the min value we can figure out how all the parts of the model
         // fit relative to this value
         var barWholes : Array<BarWhole> = barModelData.barWholes;
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...barWholes.length){
             var barWhole : BarWhole = barWholes[i];
             var barSegments : Array<BarSegment> = barWhole.barSegments;
-            var j : Int;
+            var j : Int = 0;
             for (j in 0...barSegments.length){
                 var barSegment : BarSegment = barSegments[j];
                 var normalizedValue : Float = (barSegment.numeratorValue * segmentWithMinValue.denominatorValue) /
                 (barSegment.denominatorValue * segmentWithMinValue.numeratorValue);
                 
                 // Check if the normalized value is in the list
-                var k : Int;
+                var k : Int = 0;
                 var numNormalizedValues : Int = this.normalizedBarSegmentValuesList.length;
                 var foundExistingValue : Bool = false;
                 for (k in 0...numNormalizedValues){
@@ -427,7 +427,7 @@ class DecomposedBarModelData
         // segment or label simply as a percentage of this whole.
         //
         var totalBarValue : Float = 0.0;
-        var i : Int;
+        var i : Int = 0;
         var barWholes : Array<BarWhole> = barModelData.barWholes;
         for (barWhole in barWholes)
         {

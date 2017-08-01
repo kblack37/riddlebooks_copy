@@ -5,9 +5,6 @@ import wordproblem.engine.barmodel.view.BarWholeView;
 
 import flash.geom.Rectangle;
 
-//import feathers.textures.Scale3Textures;
-//import feathers.textures.Scale9Textures;
-
 import starling.display.DisplayObject;
 import starling.display.DisplayObjectContainer;
 import starling.display.Sprite;
@@ -285,17 +282,17 @@ class BarModelView extends Sprite
     
     public function createBarLabelView(barLabel : BarLabel) : BarLabelView
     {
-        var leftBracketTexture : Texture = m_assetManager.getTexture("brace_left_end");
-        var rightBracketTexture : Texture = m_assetManager.getTexture("brace_right_end");
-        var middleBracketTexture : Texture = m_assetManager.getTexture("brace_center");
-        var fullBracketTexture : Texture = m_assetManager.getTexture("brace_full");
+        var leftBracketTexture : Texture = m_assetManager.getTexture("assets/ui/bar_model/bracket_left_edge.png");
+        var rightBracketTexture : Texture = m_assetManager.getTexture("assets/ui/bar_model/bracket_right_edge.png");
+        var middleBracketTexture : Texture = m_assetManager.getTexture("assets/ui/bar_model/bracket_middle.png");
+        var fullBracketTexture : Texture = m_assetManager.getTexture("assets/ui/bar_model/bracket_full.png");
         
         var blankTexturePadding : Float = 12;
-        var blankTexture : Texture = m_assetManager.getTexture("wildcard");
+        var blankTexture : Texture = m_assetManager.getTexture("assets/card/wildcard.png");
         var blankNineSliceGrid : Rectangle = new Rectangle(blankTexturePadding, blankTexturePadding, blankTexture.width - 2 * blankTexturePadding, blankTexture.height - 2 * blankTexturePadding);
         
-        var dottedLineCornerTexture : Texture = m_assetManager.getTexture("dotted_line_corner");
-        var dottedLineSegmentTexture : Texture = m_assetManager.getTexture("dotted_line_segment");
+        var dottedLineCornerTexture : Texture = m_assetManager.getTexture("assets/ui/bar_model/dotted_line_corner.png");
+        var dottedLineSegmentTexture : Texture = m_assetManager.getTexture("assets/ui/bar_model/dotted_line_segment.png");
         
         // Look at the expression symbol map for styling properties
         // Color text inside segment differently than outside
@@ -308,7 +305,7 @@ class BarModelView extends Sprite
         if (barLabel.numImages > 1) 
         {
             var labelImageContainer : Sprite = new Sprite();
-            var i : Int;
+            var i : Int = 0;
             for (i in 0...barLabel.numImages){
                 var cardSymbol : DisplayObject = m_expressionSymbolMap.getCardFromSymbolValue(barLabel.value);
                 labelImageContainer.addChild(cardSymbol);
@@ -321,26 +318,26 @@ class BarModelView extends Sprite
         }
         
         var barLabelView : BarLabelView = new BarLabelView(
-        barLabel, 
-        symbolData.fontName, 
-        fontColor, 
-        leftBracketTexture, 
-        rightBracketTexture, 
-        middleBracketTexture, 
-        fullBracketTexture, 
-        symbolData.abbreviatedName, 
-        labelImage, 
-        symbolData.symbolTextureName != null, 
-        hiddenLabelImage
+			barLabel, 
+			symbolData.fontName, 
+			fontColor, 
+			leftBracketTexture, 
+			rightBracketTexture, 
+			middleBracketTexture, 
+			fullBracketTexture, 
+			symbolData.abbreviatedName, 
+			labelImage, 
+			symbolData.symbolTextureName != null, 
+			hiddenLabelImage
         );
         return barLabelView;
     }
     
     public function createBarComparisonView(barComparison : BarComparison) : BarComparisonView
     {
-        var comparisonLeftTexture : Texture = m_assetManager.getTexture("comparison_left");
-        var comparisonRightTexture : Texture = m_assetManager.getTexture("comparison_right");
-        var comparisonFullTexture : Texture = m_assetManager.getTexture("comparison_full");
+        var comparisonLeftTexture : Texture = m_assetManager.getTexture("assets/ui/bar_model/comparison_left.png");
+        var comparisonRightTexture : Texture = m_assetManager.getTexture("assets/ui/bar_model/comparison_right.png");
+        var comparisonFullTexture : Texture = m_assetManager.getTexture("assets/ui/bar_model/comparison_full.png");
         var threeSlicePadding : Float = 28;
 		// TODO: this image was replaced from the feathers library and will probably need to be fixed
         var threeSliceComparisonTexture : Texture = Texture.fromTexture(comparisonFullTexture);
@@ -369,14 +366,14 @@ class BarModelView extends Sprite
     {
         var matchingSegmentView : BarSegmentView = null;
         var numBarWholeViews : Int = m_barWholeViews.length;
-        var i : Int;
-        var barWholeView : BarWholeView;
+        var i : Int = 0;
+        var barWholeView : BarWholeView = null;
         for (i in 0...numBarWholeViews){
             barWholeView = m_barWholeViews[i];
             
-            var j : Int;
+            var j : Int = 0;
             var numSegmentViews : Int = barWholeView.segmentViews.length;
-            var barSegmentView : BarSegmentView;
+            var barSegmentView : BarSegmentView = null;
             for (j in 0...numSegmentViews){
                 barSegmentView = barWholeView.segmentViews[j];
                 if (barSegmentView.data.id == segmentId) 
@@ -399,14 +396,14 @@ class BarModelView extends Sprite
     {
         var matchingBarLabelView : BarLabelView = null;
         var numBarWholeViews : Int = m_barWholeViews.length;
-        var i : Int;
-        var barWholeView : BarWholeView;
+        var i : Int = 0;
+        var barWholeView : BarWholeView = null;
         for (i in 0...numBarWholeViews){
             barWholeView = m_barWholeViews[i];
             
-            var j : Int;
+            var j : Int = 0;
             var numBarLabelViews : Int = barWholeView.labelViews.length;
-            var barLabelView : BarLabelView;
+            var barLabelView : BarLabelView = null;
             for (j in 0...numBarLabelViews){
                 barLabelView = barWholeView.labelViews[j];
                 if (barLabelView.data.id == labelId) 
@@ -427,10 +424,10 @@ class BarModelView extends Sprite
     
     public function getBarWholeViewById(barWholeId : String) : BarWholeView
     {
-        var matchingBarWholeView : BarWholeView;
-        var i : Int;
+        var matchingBarWholeView : BarWholeView = null;
+        var i : Int = 0;
         var numBarWholeViews : Int = m_barWholeViews.length;
-        var barWholeView : BarWholeView;
+        var barWholeView : BarWholeView = null;
         for (i in 0...numBarWholeViews){
             barWholeView = m_barWholeViews[i];
             if (barWholeView.data.id == barWholeId) 
@@ -445,10 +442,10 @@ class BarModelView extends Sprite
     
     public function getVerticalBarLabelViewById(verticalBarLabelId : String) : BarLabelView
     {
-        var matchingBarLabelView : BarLabelView;
-        var i : Int;
+        var matchingBarLabelView : BarLabelView = null;
+        var i : Int = 0;
         var numVerticalBarLabelViews : Int = m_verticalLabelViews.length;
-        var verticalBarLabelView : BarLabelView;
+        var verticalBarLabelView : BarLabelView = null;
         for (i in 0...numVerticalBarLabelViews){
             verticalBarLabelView = m_verticalLabelViews[i];
             if (verticalBarLabelView.data.id == verticalBarLabelId) 
@@ -495,7 +492,7 @@ class BarModelView extends Sprite
     public function checkAllBarSegmentsFitInView(barModelData : BarModelData) : Bool
     {
         // We first need to calculate the segment value of the longest total bar
-        var i : Int;
+        var i : Int = 0;
         var numBars : Int = barModelData.barWholes.length;
         var maxBarValue : Float = 0;
         for (i in 0...numBars){
@@ -505,12 +502,10 @@ class BarModelView extends Sprite
             {
                 maxBarValue = barValue;
             }
-        }  // out to fit the entire horizontal space of the bar    // Figure out the pixels per unit value if the longest total bar were to stretch  
-        
-        
-        
-        
-        
+        }  
+		
+		// Figure out the pixels per unit value if the longest total bar were to stretch  
+        // out to fit the entire horizontal space of the bar
         var maxViewSpace : Float = this.getConstraints().width;
         var maxPixelsPerUnit : Float = maxViewSpace / maxBarValue;
         
@@ -571,10 +566,9 @@ class BarModelView extends Sprite
             
             // Center may change the bounds as well
             this.recalculateBounds();
-        }  // Dispatch event letting other objects know that the view has finished drawing and laying out the objects  
-        
-        
-        
+        } 
+		
+		// Dispatch event letting other objects know that the view has finished drawing and laying out the objects  
         if (doDispatchEvent) 
         {
             dispatchEventWith(GameEvent.BAR_MODEL_AREA_REDRAWN);
@@ -594,13 +588,13 @@ class BarModelView extends Sprite
         var shownSegmentStack : Array<BarSegmentView> = new Array<BarSegmentView>();
         
         // The redraw function needs to first draw unscaled versions of the bars and their segments.
-        var i : Int;
+        var i : Int = 0;
         var numBarWholesViews : Int = this.getBarWholeViews().length;
         for (i in 0...numBarWholesViews){
             var barWholeView : BarWholeView = this.getBarWholeViews()[i];
             var xSegmentOffset : Float = 0;
             
-            var j : Int;
+            var j : Int = 0;
             var numSegmentViews : Int = barWholeView.segmentViews.length;
             
             // If bar whole should be group together hidden segments as one, then first re-order
@@ -618,9 +612,9 @@ class BarModelView extends Sprite
                     {
                         shownSegmentStack.push(barSegmentView);
                     }
-                }  // Re-order both the view and the backing data lists of the segments  
-                
-                
+                } 
+				
+				// Re-order both the view and the backing data lists of the segments  
                 barWholeView.data.barSegments = new Array<BarSegment>();
 				barWholeView.segmentViews = new Array<BarSegmentView>();
                 while (shownSegmentStack.length > 0)
@@ -636,32 +630,27 @@ class BarModelView extends Sprite
                     barWholeView.data.barSegments.push(barSegmentView.data);
                     barWholeView.segmentViews.push(barSegmentView);
                 }
-            }  // resize and reposition the segments contained in this view  
-            
-            
-            
+            }
+			
+			// resize and reposition the segments contained in this view  
             for (j in 0...numSegmentViews){
                 var barSegmentView : BarSegmentView = barWholeView.segmentViews[j];
                 barSegmentView.resize(this.unitLength, this.unitHeight);
                 barSegmentView.x = xSegmentOffset;
                 xSegmentOffset += barSegmentView.width;
-            }  // Its length requires looking at the other bar to compare against    // Add the comparison view if it exists, it goes at the edge of the bar  
-            
-            
-            
-            
-            
+            }  
+			
+			// Add the comparison view if it exists, it goes at the edge of the bar  
+            // Its length requires looking at the other bar to compare against
             if (barWholeView.comparisonView != null) 
             {
                 barWholeView.comparisonView.x = xSegmentOffset;
                 barWholeView.comparisonView.y = -10;
-            }  // However they cannot be fully positioned yet, as this may require knowledge about other bars first    // The horizontal labels can be drawn after the segments have been created.  
-            
-            
-            
-            
-            
-            var barLabelView : BarLabelView;
+            }  
+			
+			// The horizontal labels can be drawn after the segments have been created.  
+            // However they cannot be fully positioned yet, as this may require knowledge about other bars first
+            var barLabelView : BarLabelView = null;
             var numLabelViews : Int = barWholeView.labelViews.length;
             for (j in 0...numLabelViews){
                 barLabelView = barWholeView.labelViews[j];
@@ -669,7 +658,7 @@ class BarModelView extends Sprite
                 // Need to get the segment widths in order to calculate the label length
                 // Combine the lengths of all segments between the start and end of the label
                 // Note that label length also depends on whether the bar is scaled.
-                var k : Int;
+                var k : Int = 0;
                 var labelLength : Float = 0;
                 var startSegmentIndex : Int = barLabelView.data.startSegmentIndex;
                 var endSegmentIndex : Int = barLabelView.data.endSegmentIndex;
@@ -679,14 +668,11 @@ class BarModelView extends Sprite
                 
                 barLabelView.rescaleAndRedraw(labelLength, -1, 1.0, 1.0);
             }
-        }  // First orient the labels on the bars    // and even their scaling within each whole bar.    // Once we have done a first pass creating all the bars and horizontal labels we need to determine their positioning  
-        
-        
-        
-        
-        
-        
-        
+        }  
+		
+		// Once we have done a first pass creating all the bars and horizontal labels we need to determine their positioning  
+		// and even their scaling within each whole bar. 
+        // First orient the labels on the bars 
         for (i in 0...m_barWholeViews.length){
             var barWholeView = m_barWholeViews[i];
             m_objectLayer.addChild(barWholeView);
@@ -710,10 +696,9 @@ class BarModelView extends Sprite
                     yOffsetLabel += barLabelView.height;
                 }
                 j--;
-            }  // Shift down all the segments by the new y-offset that was caused by the top labels  
-            
-            
-            
+            }  
+			
+			// Shift down all the segments by the new y-offset that was caused by the top labels  
             if (numTopLabels > 0) 
             {
                 yOffsetLabel += 5;
@@ -722,10 +707,9 @@ class BarModelView extends Sprite
             var numSegmentViews = barWholeView.segmentViews.length;
             for (j in 0...numSegmentViews){
                 barWholeView.segmentViews[j].y = yOffsetLabel;
-            }  // Position all of the labels that go underneath the bar segment  
-            
-            
-            
+            }  
+			
+			// Position all of the labels that go underneath the bar segment  
             yOffsetLabel += barWholeView.segmentViews[0].height;
             for (j in 0...numLabelViews){
                 var barLabelView = barWholeView.labelViews[j];
@@ -758,10 +742,9 @@ class BarModelView extends Sprite
                     yOffsetLabel += barLabelView.height;
                 }
             }
-        }  // Second pass orients the bars (with the labels attached to them) RELATIVE to each other  
-        
-        
-        
+        }
+		
+		// Second pass orients the bars (with the labels attached to them) RELATIVE to each other  
         var yOffsetBar : Float = topBarPadding;
         var boundingRectangleBuffer : Rectangle = new Rectangle();
         for (i in 0...m_barWholeViews.length){
@@ -784,18 +767,15 @@ class BarModelView extends Sprite
             }
             
             yOffsetBar += boundingRectangleBuffer.height + gap;
-        }  // so scripts have fast access to them.    // Since the common case is that these items don't change, calculate them on a refresh    // Set up the bounding hit areas of segments and labels for the bars  
-        
-        
-        
-        
-        
-        
-        
+        }  
+		
+		// Set up the bounding hit areas of segments and labels for the bars  
+		// Since the common case is that these items don't change, calculate them on a refresh
+        // so scripts have fast access to them.
         for (i in 0...m_barWholeViews.length){
             var barWholeView = m_barWholeViews[i];
             
-            var segmentView : BarSegmentView;
+            var segmentView : BarSegmentView = null;
             var segmentViews : Array<BarSegmentView> = barWholeView.segmentViews;
             var numSegmentViews = segmentViews.length;
             for (j in 0...numSegmentViews){
@@ -810,7 +790,7 @@ class BarModelView extends Sprite
                         );
             }
             
-            var labelView : BarLabelView;
+            var labelView : BarLabelView = null;
             var labelViews : Array<BarLabelView> = barWholeView.labelViews;
             for (j in 0...labelViews.length){
                 labelView = labelViews[j];
@@ -822,17 +802,14 @@ class BarModelView extends Sprite
                         boundingRectangleBuffer.width,
                         boundingRectangleBuffer.height
                         );
-            }  // Refresh drawing of the bar to handle displaying the image of the hidden pieces being grouped together  
-            
-            
-            
+            }
+			
+			// Refresh drawing of the bar to handle displaying the image of the hidden pieces being grouped together  
             barWholeView.redraw();
-        }  // length of the bar comparison view within each bar    // It is only after the segment bounds have been determined that we can properly determine the position and  
-        
-        
-        
-        
-        
+        }  
+		
+		// It is only after the segment bounds have been determined that we can properly determine the position and  
+        // length of the bar comparison view within each bar
         var numBarWholeViews : Int = m_barWholeViews.length;
         for (i in 0...numBarWholeViews){
             var barWholeView = m_barWholeViews[i];
@@ -841,7 +818,7 @@ class BarModelView extends Sprite
             var barComparisonView : BarComparisonView = barWholeView.comparisonView;
             if (barComparisonView != null) 
             {
-                var barWholeViewToCompare : BarWholeView;
+                var barWholeViewToCompare : BarWholeView = null;
                 for (j in 0...numBarWholeViews){
                     barWholeViewToCompare = m_barWholeViews[j];
                     if (barWholeViewToCompare.data.id == barComparisonView.data.barWholeIdComparedTo) 
@@ -853,10 +830,9 @@ class BarModelView extends Sprite
                         barComparisonView.y = referenceSegmentView.y + (referenceSegmentView.rigidBody.boundingRectangle.height - barComparisonView.height) * 0.5;
                         break;
                     }
-                }  // Set bounds for the comparison after it is done being positioned  
-                
-                
-                
+                }
+				
+				// Set bounds for the comparison after it is done being positioned  
                 barWholeView.comparisonView.lineGraphicDisplayContainer.getBounds(this, boundingRectangleBuffer);
                 barWholeView.comparisonView.rigidBody.boundingRectangle.setTo(
                         boundingRectangleBuffer.x,
@@ -865,16 +841,12 @@ class BarModelView extends Sprite
                         boundingRectangleBuffer.height
                         );
             }
-        }  // The starting x offset should be the length of the longest bar    // The vertical bars should stack from left to right    // the items.    // Create and add the vertical labels, their position changes depending on the vertical position of all  
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        }  
+		
+		// Create and add the vertical labels, their position changes depending on the vertical position of all  
+		// the items. 
+		// The vertical bars should stack from left to right
+        // The starting x offset should be the length of the longest bar
         var startingXOffsetForVertical : Float = 0;
         for (i in 0...numBarWholesViews){
             var barWholeView = m_barWholeViews[i];
@@ -906,10 +878,9 @@ class BarModelView extends Sprite
             m_objectLayer.addChild(barLabelView);
             
             verticalBarXOffset += barLabelView.width;
-        }  // Set up the bounding hit areas for the vertical labels  
-        
-        
-        
+        } 
+		
+		// Set up the bounding hit areas for the vertical labels  
         for (i in 0...m_verticalLabelViews.length){
             var labelView = m_verticalLabelViews[i];
             labelView.lineGraphicDisplayContainer.getBounds(this, boundingRectangleBuffer);
@@ -937,35 +908,38 @@ class BarModelView extends Sprite
         while (m_verticalLabelViews.length > 0)
         {
             m_verticalLabelViews.pop().removeFromParent(true);
-        }  // The redraw function needs to first draw unscaled versions of the bars and their segments.  
-        
-        
-        
-        var i : Int;
+        } 
+		
+		// The redraw function needs to first draw unscaled versions of the bars and their segments.  
+        var i : Int = 0;
         var numBarWholes : Int = m_barModelData.barWholes.length;
-        var segmentTexture : Texture = m_assetManager.getTexture("card_background_square");
+        var segmentTexture : Texture = m_assetManager.getTexture("assets/card/card_background_square.png");
         var nineSlicePadding : Float = 8;
         var nineSliceTexture : Texture = Texture.fromTexture(segmentTexture, 
-        new Rectangle(nineSlicePadding, 
-        nineSlicePadding, 
-        segmentTexture.width - 2 * nineSlicePadding, 
-        segmentTexture.height - 2 * nineSlicePadding
-        )
+			new Rectangle(nineSlicePadding, 
+				nineSlicePadding, 
+				segmentTexture.width - 2 * nineSlicePadding, 
+				segmentTexture.height - 2 * nineSlicePadding
+			)
         );
         
         var blankTexturePadding : Float = 12;
-        var blankTexture : Texture = m_assetManager.getTexture("wildcard");
-        var blankNineSliceGrid : Rectangle = new Rectangle(blankTexturePadding, blankTexturePadding, blankTexture.width - 2 * blankTexturePadding, blankTexture.height - 2 * blankTexturePadding);
+        var blankTexture : Texture = m_assetManager.getTexture("assets/card/wildcard.png");
+        var blankNineSliceGrid : Rectangle = new Rectangle(blankTexturePadding,
+			blankTexturePadding,
+			blankTexture.width - 2 * blankTexturePadding,
+			blankTexture.height - 2 * blankTexturePadding
+		);
         
-        var dottedLineCornerTexture : Texture = m_assetManager.getTexture("dotted_line_corner");
-        var dottedLineSegmentTexture : Texture = m_assetManager.getTexture("dotted_line_segment");
+        var dottedLineCornerTexture : Texture = m_assetManager.getTexture("assets/ui/bar_model/dotted_line_corner.png");
+        var dottedLineSegmentTexture : Texture = m_assetManager.getTexture("assets/ui/bar_model/dotted_line_segment.png");
         
         for (i in 0...numBarWholes){
             var barWhole : BarWhole = m_barModelData.barWholes[i];
             
             // Draw and re-position the segments contained in this view
-            var j : Int;
-            var barSegment : BarSegment;
+            var j : Int = 0;
+            var barSegment : BarSegment = null;
             var numSegments : Int = barWhole.barSegments.length;
             var barWholeHiddenImage : DottedRectangle = new DottedRectangle(blankTexture, blankNineSliceGrid, 1, dottedLineCornerTexture, dottedLineSegmentTexture);
             var barWholeView : BarWholeView = new BarWholeView(barWhole, barWholeHiddenImage);
@@ -974,18 +948,16 @@ class BarModelView extends Sprite
                 
                 var hiddenSegment : DottedRectangle = new DottedRectangle(blankTexture, blankNineSliceGrid, 1, dottedLineCornerTexture, dottedLineSegmentTexture);
                 var barSegmentView : BarSegmentView = new BarSegmentView(
-                barSegment, 
-                nineSliceTexture, 
-                segmentTexture, 
-                hiddenSegment
+					barSegment, 
+					nineSliceTexture, 
+					segmentTexture, 
+					hiddenSegment
                 );
                 barWholeView.addSegmentView(barSegmentView);
-            }  // Its length requires looking at the other bar to compare against    // Add the comparison view if it exists, it goes at the edge of the bar  
-            
-            
-            
-            
-            
+            }  
+			
+			// Add the comparison view if it exists, it goes at the edge of the bar  
+            // Its length requires looking at the other bar to compare against
             var barComparison : BarComparison = barWhole.barComparison;
             if (barComparison != null) 
             {
@@ -997,23 +969,19 @@ class BarModelView extends Sprite
             
             // The horizontal labels can be drawn after the segments have been created.
             // However they cannot be fully positioned yet, as this may require knowledge about other bars first
-            var barLabel : BarLabel;
+            var barLabel : BarLabel = null;
             var numLabels : Int = barWhole.barLabels.length;
             for (j in 0...numLabels){
                 barLabel = barWhole.barLabels[j];
                 var barLabelView : BarLabelView = this.createBarLabelView(barLabel);
                 barWholeView.addLabelView(barLabelView);
             }
-        }  // The starting x offset should be the length of the longest bar    // The vertical bars should stack from left to right    // the items.    // Create and add the vertical labels, their position changes depending on the vertical position of all  
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        }  
+		
+		// Create and add the vertical labels, their position changes depending on the vertical position of all  
+		// the items. 
+		// The vertical bars should stack from left to right
+        // The starting x offset should be the length of the longest bar
         var numVerticalBars : Int = m_barModelData.verticalBarLabels.length;
         for (i in 0...numVerticalBars){
             var barLabel = m_barModelData.verticalBarLabels[i];
@@ -1021,10 +989,9 @@ class BarModelView extends Sprite
             m_objectLayer.addChild(barLabelView);
             
             m_verticalLabelViews.push(barLabelView);
-        }  // After all views are created then layout again  
-        
-        
-        
+        }
+		
+		// After all views are created then layout again  
         this.layout();
     }
     
@@ -1094,15 +1061,15 @@ class BarModelView extends Sprite
      */
     private function recalculateBounds() : Void
     {
-        var i : Int;
+        var i : Int = 0;
         var boundingRectangleBuffer : Rectangle = new Rectangle();
         for (i in 0...m_barWholeViews.length){
             var barWholeView : BarWholeView = m_barWholeViews[i];
             
-            var segmentView : BarSegmentView;
+            var segmentView : BarSegmentView = null;
             var segmentViews : Array<BarSegmentView> = barWholeView.segmentViews;
             var numSegmentViews : Int = segmentViews.length;
-            var j : Int;
+            var j : Int = 0;
             for (j in 0...numSegmentViews){
                 segmentView = segmentViews[j];
                 barWholeView.addChild(segmentView);  // Make sure segment view is added as part of the stage  
@@ -1115,7 +1082,7 @@ class BarModelView extends Sprite
                         );
             }
             
-            var labelView : BarLabelView;
+            var labelView : BarLabelView = null;
             var labelViews : Array<BarLabelView> = barWholeView.labelViews;
             for (j in 0...labelViews.length){
                 labelView = labelViews[j];

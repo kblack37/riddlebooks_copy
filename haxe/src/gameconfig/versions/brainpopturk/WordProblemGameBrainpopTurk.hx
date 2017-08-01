@@ -322,7 +322,7 @@ class WordProblemGameBrainpopTurk extends WordProblemGameBase
         // of URLLoader.
         var tokens : Array<Dynamic> = data.split("\n");
         trace(tokens.length + " lines!");
-        var i : Int;
+        var i : Int = 0;
         for (i in 1...tokens.length - 1){
             
             var tokens2 : Array<Dynamic> = tokens[i].split(":");
@@ -511,7 +511,7 @@ class WordProblemGameBrainpopTurk extends WordProblemGameBase
                 {
                     m_playerStatsAndSaveData.useAiHints = true;
                     //For debugging may want to load maps from files to eliminate server dependency
-                    var progIndex : Int;
+                    var progIndex : Int = 0;
                     var requiredMapsToLoad : Int = AiPolicyHintSelector.NUM_PROGRESSION_INDICIES;
                     waitForAdditionalResources = requiredMapsToLoad > 0;
                     var mapsFinished : Int = 0;
@@ -1020,7 +1020,7 @@ class WordProblemGameBrainpopTurk extends WordProblemGameBase
     private function onSaveData() : Dynamic
     {
         // In sequence, iterate through the important node names and figure out which ones are complete
-        var i : Int;
+        var i : Int = 0;
         var completedNodeNames : Array<Dynamic> = [];
         var numImportantNames : Int = m_importantNodeNamesForUser.length;
         for (i in 0...numImportantNames){

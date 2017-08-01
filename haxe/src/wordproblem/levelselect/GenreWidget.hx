@@ -3,10 +3,9 @@ package wordproblem.levelselect;
 import starling.events.EventDispatcher;
 import wordproblem.levelselect.LevelSetSelector;
 
-import flash.geom.Point;
-import flash.geom.Rectangle;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
 import flash.text.TextFormat;
-import flash.utils.Dictionary;
 
 import cgs.audio.Audio;
 import cgs.internationalization.StringTable;
@@ -75,7 +74,7 @@ class GenreWidget extends Sprite
      * In the level select screen we need to be able to map the button or hit area that
      * was clicked to some identifier for the level to go to.
      */
-    private var m_buttonToLevelNode : Dictionary<EventDispatcher, ICgsLevelNode>;
+    private var m_buttonToLevelNode : Map<EventDispatcher, ICgsLevelNode>;
     
     /**
      * The layout algorithm to use for buttons.
@@ -86,7 +85,7 @@ class GenreWidget extends Sprite
     /**
      * In each chapter we have a button to go to the last unplayed level
      */
-    private var m_buttonToChapterNode : Dictionary<EventDispatcher, ICgsLevelPack>;
+    private var m_buttonToChapterNode : Map<EventDispatcher, ICgsLevelPack>;
     
     /**
      * This is a ui component that encapsulates the level selection and information relating to the genre
@@ -153,7 +152,7 @@ class GenreWidget extends Sprite
      * key: String node name
      * value: Level Component
      */
-    private var m_levelNodeNameToLevelComponent : Dictionary<String, LevelComponent>;
+    private var m_levelNodeNameToLevelComponent : Map<String, LevelComponent>;
     
     /**
      * A map coming from the world+chapter data source that links the world name to
@@ -295,9 +294,9 @@ class GenreWidget extends Sprite
      */
     public function setGenre(genreLevelPack : GenreLevelPack, chapterIndex : Int, levelIndex : Int = -1) : Void
     {
-		function cleanButtonDictionary(dictionary : Dictionary<EventDispatcher, Dynamic>) : Void
+		function cleanButtonDictionary(dictionary : Map<EventDispatcher, Dynamic>) : Void
         {
-            var dictionaryKey : Dynamic;
+            var dictionaryKey : Dynamic = null;
             for (dictionaryKey in Reflect.fields(dictionary))
             {
                 var button : Button = try cast(dictionaryKey, Button) catch(e:Dynamic) null;
@@ -313,7 +312,7 @@ class GenreWidget extends Sprite
         }
         else 
         {
-            m_buttonToLevelNode = new Dictionary();
+            m_buttonToLevelNode = new Map();
         }  // Clean out the chapter buttons  
         
         
@@ -324,7 +323,7 @@ class GenreWidget extends Sprite
         }
         else 
         {
-            m_buttonToChapterNode = new Dictionary();
+            m_buttonToChapterNode = new Map();
         }
         
 		// Remove previous egg image
@@ -337,7 +336,7 @@ class GenreWidget extends Sprite
 		// Go through every level component and create a quick mapping from the level node name to the component  
 		// This is so we don't need to loop through every component every time we draw the level buttons
         // to see if a reward should be attached
-        m_levelNodeNameToLevelComponent = new Dictionary();
+        m_levelNodeNameToLevelComponent = new Map();
         var levelComponents : Array<Component> = m_playerItemInventory.componentManager.getComponentListForType(LevelComponent.TYPE_ID);
         var numComponents : Int = levelComponents.length;
         for (i in 0...numComponents){
@@ -385,11 +384,11 @@ class GenreWidget extends Sprite
         // the genre description to always appear at that left area
         
         // Draw the pages for each chapter
-        var page : Sprite;
+        var page : Sprite = null;
         var outPagesBuffer : Array<Sprite> = new Array<Sprite>();
         var numChapters : Int = chapterNodes.length;
-        var chapter : ICgsLevelPack;
-        var i : Int;
+        var chapter : ICgsLevelPack = null;
+        var i : Int = 0;
         var startingPageIndicesAtChapter : Array<Int> = new Array<Int>();
         var pagesInLastChapter : Int = 0;
         for (i in 0...numChapters){
@@ -575,8 +574,8 @@ class GenreWidget extends Sprite
 			titleText, 
 			titleTextFormat.font, 
 			titleTextFormat.size, 
-			try cast(titleTextFormat.color, Int) catch(e:Dynamic) null
-        );
+			try cast(titleTextFormat.color, Int) catch (e:Dynamic) 0
+			);
         titleTextField.hAlign = HAlign.CENTER;
         titleTextField.x = 0;
         page.addChild(titleTextField);
@@ -596,7 +595,7 @@ class GenreWidget extends Sprite
 			flavorText, 
 			flavorTextFormat.font, 
 			flavorTextFormat.size, 
-			try cast(flavorTextFormat.color, Int) catch(e:Dynamic) null
+			try cast(flavorTextFormat.color, Int) catch(e:Dynamic) 0
         );
         flavorTextField.x = (pageWidth - flavorTextField.width) * 0.5;
         flavorTextField.y = 50;
@@ -607,7 +606,7 @@ class GenreWidget extends Sprite
         // Need to find all prizes that can be awarded in this genre in the title page
         var levelComponents : Array<Component> = m_playerItemInventory.componentManager.getComponentListForType(LevelComponent.TYPE_ID);
         var numComponents : Int = levelComponents.length;
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...numComponents){
             var levelComponent : LevelComponent = try cast(levelComponents[i], LevelComponent) catch(e:Dynamic) null;
             if (levelComponent.genre == genreLevelPack.getThemeId()) 
@@ -646,7 +645,7 @@ class GenreWidget extends Sprite
             var numTextures : Int = prizeTexturesInGenre.length;
             var textureGap : Float = 18;
             var totalWidth : Float = 0;
-            var texture : Texture;
+            var texture : Texture = null;
             for (i in 0...numTextures){
                 texture = prizeTexturesInGenre[i];
                 totalWidth += texture.width;
@@ -830,7 +829,7 @@ class GenreWidget extends Sprite
         var pagesRequired : Int = Math.ceil(levelNodes.length * 1.0 / levelButtonsPerPage);
         var buttons : Array<DisplayObject> = new Array<DisplayObject>();
         
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...pagesRequired){
             var page : Sprite = new Sprite();
             
@@ -895,10 +894,10 @@ class GenreWidget extends Sprite
 			/* Level button drawing */  
 			// Draw level buttons for the page, the values range from index offset
 			// to the offset+maxButtonsPerPage
-            var j : Int;
+            var j : Int = 0;
             var startingPageOffset : Int = i * levelButtonsPerPage;
             var limit : Int = startingPageOffset + Std.int(Math.min(levelButtonsPerPage, levelNodes.length - startingPageOffset));
-            var levelNode : ICgsLevelNode;
+            var levelNode : ICgsLevelNode = null;
             for (j in startingPageOffset...limit){
                 levelNode = levelNodes[j];
                 

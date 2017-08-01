@@ -69,10 +69,10 @@ class ShimmerAnimation implements IAnimatable
     public function play(viewsToShimmer : Array<DisplayObject>,
             canvasToAdd : DisplayObjectContainer) : Void
     {
-        var i : Int;
-        var viewToShimmer : DisplayObject;
+        var i : Int = 0;
+        var viewToShimmer : DisplayObject = null;
         var viewToShimmerBounds : Rectangle = new Rectangle();
-        var emitter : Emitter;
+        var emitter : Emitter = null;
         var numViewsToShimmer : Int = viewsToShimmer.length;
         for (i in 0...numViewsToShimmer){
             viewToShimmer = viewsToShimmer[i];
@@ -110,8 +110,8 @@ class ShimmerAnimation implements IAnimatable
     
     public function advanceTime(time : Float) : Void
     {
-        var i : Int;
-        var emitter : Emitter;
+        var i : Int = 0;
+        var emitter : Emitter = null;
         var numEmitters : Int = m_activeShimmerEmitters.length;
         for (i in 0...numEmitters){
             emitter = m_activeShimmerEmitters[i];
@@ -130,7 +130,7 @@ class ShimmerAnimation implements IAnimatable
         var circleBounds : Rectangle = particleAtlas.getRegion(Resources.PARTICLE_CIRCLE);
         var bubbleBounds : Rectangle = particleAtlas.getRegion(Resources.PARTICLE_BUBBLE);
         
-        var shimmerEmitter : Emitter;
+        var shimmerEmitter : Emitter = null;
         var boundsCenterX : Float = bounds.left + bounds.width / 2;
         var boundsCenterY : Float = bounds.top + bounds.height / 2;
         var radius : Float = bounds.width * 0.6;

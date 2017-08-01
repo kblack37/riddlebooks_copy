@@ -1,8 +1,8 @@
 package;
 
 import dragonbox.common.tests.MathUtilTest;
+import openfl.display.Sprite;
 import starling.core.Starling;
-import starling.display.Sprite;
 
 /**
  * ...
@@ -20,7 +20,7 @@ class TestMain extends Sprite {
 		var mathUtilTests = new MathUtilTest();
 		mathUtilTests.runTests();
 		
-		test_starling = new Starling(TestApp, stage);
+		test_starling = new Starling(TestApp, this.stage);
 		test_starling.start();
 	}
 

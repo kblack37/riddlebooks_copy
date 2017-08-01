@@ -125,8 +125,8 @@ class BaseRevealItemScript extends BaseBufferEventScript
 		
 		// At the start reveal initial items based on player progress or if the data json was overriden  
         var numEntities : Int = m_possibleEntityIdsRevealed.length;
-        var i : Int;
-        var entityId : String;
+        var i : Int = 0;
+        var entityId : String = null;
         for (i in 0...numEntities){
             entityId = m_possibleEntityIdsRevealed[i];
             
@@ -158,8 +158,8 @@ class BaseRevealItemScript extends BaseBufferEventScript
 			m_itemInventory.outNewRewardItemIds = new Array<String>();
             
             var numEntities : Int = m_possibleEntityIdsRevealed.length;
-            var i : Int;
-            var entityId : String;
+            var i : Int = 0;
+            var entityId : String = null;
             for (i in 0...numEntities){
                 entityId = m_possibleEntityIdsRevealed[i];
                 if (shouldRevealItem(entityId)) 

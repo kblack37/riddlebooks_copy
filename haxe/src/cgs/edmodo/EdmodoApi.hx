@@ -504,7 +504,7 @@ class EdmodoApi
                 var groupIds : Array<Dynamic> = _dataManager.parseJsonGroupData(try cast(groupData, Array</*AS3HX WARNING no type*/>) catch(e:Dynamic) null);
                 
                 var user : EdmodoUserData = _dataManager.getUserData(userRequest.userToken);
-                var currGroup : EdmodoGroupData;
+                var currGroup : EdmodoGroupData = null;
                 for (groupId in groupIds)
                 {
                     currGroup = _dataManager.getGroupData(groupId);
@@ -805,7 +805,7 @@ class EdmodoApi
         };
         
         var recipients : Array<Dynamic> = [];
-        var idObject : Dynamic;
+        var idObject : Dynamic = null;
         for (userID in userIDs)
         {
             idObject = {

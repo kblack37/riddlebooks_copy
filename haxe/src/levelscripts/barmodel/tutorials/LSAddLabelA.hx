@@ -674,7 +674,7 @@ class LSAddLabelA extends BaseCustomLevelScript
     private function showCreateLabelB() : Void
     {
         // Create dialog on the bar segment telling to drag underneath
-        var id : String;
+        var id : String = null;
         if (m_barModelArea.getBarModelData().barWholes.length > 0) 
         {
             var firstBar : BarWhole = m_barModelArea.getBarModelData().barWholes[0];

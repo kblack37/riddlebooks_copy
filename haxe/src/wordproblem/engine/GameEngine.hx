@@ -227,8 +227,8 @@ class GameEngine extends Sprite implements IGameEngine
      */
     public function getTermAreaContent(ids : Array<String>, outNodes : Array<ExpressionNode>) : Bool
     {
-        var i : Int;
-        var id : String;
+        var i : Int = 0;
+        var id : String = null;
         
         if (ids.length > 0) 
         {
@@ -308,8 +308,8 @@ class GameEngine extends Sprite implements IGameEngine
         }
         var renderComponents : Array<Component> = m_uiComponentManager.getComponentListForType(RenderableComponent.TYPE_ID);
         var numComponents : Int = renderComponents.length;
-        var i : Int;
-        var renderComponent : RenderableComponent;
+        var i : Int = 0;
+        var renderComponent : RenderableComponent = null;
         for (i in 0...numComponents){
             renderComponent = try cast(renderComponents[i], RenderableComponent) catch(e:Dynamic) null;
             if (Std.is(renderComponent.view, classDefinition)) 
@@ -326,8 +326,8 @@ class GameEngine extends Sprite implements IGameEngine
         var renderComponents : Array<Component> = m_uiComponentManager.getComponentListForType(RenderableComponent.TYPE_ID);
         var numComponents : Int = renderComponents.length;
         var matchedEntityId : String = null;
-        var i : Int;
-        var renderComponent : RenderableComponent;
+        var i : Int = 0;
+        var renderComponent : RenderableComponent = null;
         for (i in 0...numComponents){
             renderComponent = try cast(renderComponents[i], RenderableComponent) catch(e:Dynamic) null;
             if (renderComponent.view == displayObject) 
@@ -348,9 +348,9 @@ class GameEngine extends Sprite implements IGameEngine
     
     public function setDeckAreaContent(expressions : Array<String>, hidden : Array<Bool>, attemptMergeSymbols : Bool) : Bool
     {
-        var widget : BaseTermWidget;
-        var expression : String;
-        var expressionComponent : ExpressionComponent;
+        var widget : BaseTermWidget = null;
+        var expression : String = null;
+        var expressionComponent : ExpressionComponent = null;
         var entitiesToRemove : Array<DisplayObject> = new Array<DisplayObject>();
         
         // Compare the new set of symbols requested with the ones already on the board
@@ -423,11 +423,11 @@ class GameEngine extends Sprite implements IGameEngine
         
         
         
-        var node : ExpressionNode;
-        var renderComponent : RenderableComponent;
+        var node : ExpressionNode = null;
+        var renderComponent : RenderableComponent = null;
         var entitiesToAdd : Array<DisplayObject> = new Array<DisplayObject>();
-        var entityIdToAdd : String;
-        var i : Int;
+        var entityIdToAdd : String = null;
+        var i : Int = 0;
         for (i in 0...expressions.length){
             expression = expressions[i];
             entityIdToAdd = expression;
@@ -536,7 +536,7 @@ class GameEngine extends Sprite implements IGameEngine
         
         roots.push(rootTracker);
         
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...termAreaIdList.length){
             var termAreaWidget : TermAreaWidget = try cast((try cast(m_uiComponentManager.getComponentFromEntityIdAndType(
                     termAreaIdList[i],
@@ -598,7 +598,7 @@ class GameEngine extends Sprite implements IGameEngine
                         RenderableComponent.TYPE_ID
                         ), RenderableComponent) catch(e:Dynamic) null;
                 
-                var i : Int;
+                var i : Int = 0;
                 for (i in 0...parentAttributes.children.length){
                                     if (parentAttributes.children[i] == attributesForId) 
                                     {
@@ -623,7 +623,7 @@ class GameEngine extends Sprite implements IGameEngine
      */
     private function getWidgetFromId(id : String, rootAttribute : WidgetAttributesComponent) : WidgetAttributesComponent
     {
-        var matchingAttributes : WidgetAttributesComponent;
+        var matchingAttributes : WidgetAttributesComponent = null;
         if (rootAttribute != null) 
         {
             if (rootAttribute.entityId == id) 
@@ -632,7 +632,7 @@ class GameEngine extends Sprite implements IGameEngine
             }
             else if (rootAttribute.children != null) 
             {
-                var i : Int;
+                var i : Int = 0;
                 var numWidgetChildren : Int = rootAttribute.children.length;
                 for (i in 0...numWidgetChildren){
                     matchingAttributes = getWidgetFromId(id, rootAttribute.children[i]);
@@ -685,7 +685,7 @@ class GameEngine extends Sprite implements IGameEngine
         // Perform layout on widgets
         this.layoutWidgets();
         
-        var i : Int;
+        var i : Int = 0;
         var documentNodes : Array<DocumentNode> = currentLevel.getRootDocumentNodes();
         for (i in 0...documentNodes.length){
             this.redrawPageViewAtIndex(i, documentNodes[i]);
@@ -754,13 +754,13 @@ class GameEngine extends Sprite implements IGameEngine
      */
     public function exit() : Void
     {
-        var i : Int;
+        var i : Int = 0;
         
         // Walk the list of widgets and dispose all of them
         // Do not dispose of this main state however
         var widgetAttributesList : Array<Component> = m_uiComponentManager.getComponentListForType(WidgetAttributesComponent.TYPE_ID);
-        var widgetAttributes : WidgetAttributesComponent;
-        var renderComponent : RenderableComponent;
+        var widgetAttributes : WidgetAttributesComponent = null;
+        var renderComponent : RenderableComponent = null;
         for (i in 0...widgetAttributesList.length){
             widgetAttributes = try cast(widgetAttributesList[i], WidgetAttributesComponent) catch(e:Dynamic) null;
             
@@ -827,9 +827,9 @@ class GameEngine extends Sprite implements IGameEngine
                 );
         var numWidgets : Int = widgetAttributeComponents.length;
         var valueMap : Map<String, Float> = new Map<String, Float>();
-        var i : Int;
-        var widgetAttributeComponent : WidgetAttributesComponent;
-        var renderComponent : RenderableComponent;
+        var i : Int = 0;
+        var widgetAttributeComponent : WidgetAttributesComponent = null;
+        var renderComponent : RenderableComponent = null;
         for (i in 0...numWidgets){
             widgetAttributeComponent = try cast(widgetAttributeComponents[i], WidgetAttributesComponent) catch(e:Dynamic) null;
             
@@ -933,9 +933,9 @@ class GameEngine extends Sprite implements IGameEngine
                 WidgetAttributesComponent.TYPE_ID
                 );
         var numWidgets : Int = widgetAttributeComponents.length;
-        var i : Int;
-        var widgetAttributeComponent : WidgetAttributesComponent;
-        var renderComponent : RenderableComponent;
+        var i : Int = 0;
+        var widgetAttributeComponent : WidgetAttributesComponent = null;
+        var renderComponent : RenderableComponent = null;
         for (i in 0...numWidgets){
             widgetAttributeComponent = try cast(widgetAttributeComponents[i], WidgetAttributesComponent) catch(e:Dynamic) null;
             renderComponent = try cast(m_uiComponentManager.getComponentFromEntityIdAndType(widgetId, RenderableComponent.TYPE_ID), RenderableComponent) catch(e:Dynamic) null;
@@ -982,8 +982,8 @@ class GameEngine extends Sprite implements IGameEngine
     {
 		valuesBuffer = new Array<String>();
         getDynamicValues(expressionRoot, valuesBuffer);
-        var j : Int;
-        var outputValue : String;
+        var j : Int = 0;
+        var outputValue : String = null;
         for (j in 0...valuesBuffer.length){
             outputValue = valuesBuffer[j];
             if (!outValueMap.exists(outputValue)) 
@@ -1025,7 +1025,7 @@ class GameEngine extends Sprite implements IGameEngine
      */
     private function createWidgets(widgetAttributeRoot : WidgetAttributesComponent) : DisplayObject
     {
-        var widget : DisplayObject;
+        var widget : DisplayObject  = null;
         if (widgetAttributeRoot != null) 
         {
             var widgetType : String = widgetAttributeRoot.widgetType;
@@ -1165,8 +1165,8 @@ class GameEngine extends Sprite implements IGameEngine
             
             if (widgetAttributeRoot.children != null) 
             {
-                var i : Int;
-                var widgetChild : DisplayObject;
+                var i : Int = 0;
+                var widgetChild : DisplayObject = null;
                 var numWidgetChildren : Int = widgetAttributeRoot.children.length;
                 for (i in 0...numWidgetChildren){
                     widgetChild = createWidgets(widgetAttributeRoot.children[i]);
@@ -1213,7 +1213,7 @@ class GameEngine extends Sprite implements IGameEngine
         // This fires an event only when both term areas are in a ready state
         var termAreas : Array<DisplayObject> = this.getUiEntitiesByClass(TermAreaWidget);
         var termAreasReady : Bool = true;
-        var i : Int;
+        var i : Int = 0;
         var numTermAreas : Int = termAreas.length;
         for (i in 0...numTermAreas){
             var termArea : TermAreaWidget = try cast(termAreas[i], TermAreaWidget) catch(e:Dynamic) null;

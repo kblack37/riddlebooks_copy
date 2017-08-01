@@ -99,24 +99,23 @@ class BarSegment
             n : this.numeratorValue,
             d : this.denominatorValue,
             color : "0x" + Std.string(color),
-
         };
         return serializedObject;
     }
     
     public function deserialize(data : Dynamic) : Void
     {
-        if (data.exists("id")) 
+        if (Reflect.hasField(data, "id")) 
         {
             this.id = data.id;
         }
         
-        if (data.exists("n")) 
+        if (Reflect.hasField(data, "n")) 
         {
             this.numeratorValue = data.n;
         }
         
-        if (data.exists("d")) 
+        if (Reflect.hasField(data, "d")) 
         {
             this.denominatorValue = data.d;
         }

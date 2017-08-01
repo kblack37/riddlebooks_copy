@@ -343,15 +343,15 @@ class NumberlineCompareTargetAnimator implements IFractionAnimator
         // Emphasis data
         var winnerValue : Float = VisualizationUtilities.compareByComparisonType(comparisonType, first.fraction, second.fraction, details);
         var winnerExists : Bool = winnerValue != 0;
-        var winningView : CgsFractionView;
-        var winningModule : LineFractionModule;
-        var winningSegmentHolder : Sprite;
-        var winningSegment : Sprite;
-        var winningNR : NumberRenderer;
-        var winningGlowLine : Sprite;
-        var winningGlowDot : Sprite;
-        var winningGlowLineFinalPosition : Point;
-        var winningGlowDotFinalPosition : Point;
+        var winningView : CgsFractionView = null;
+        var winningModule : LineFractionModule = null;
+        var winningSegmentHolder : Sprite = null;
+        var winningSegment : Sprite = null;
+        var winningNR : NumberRenderer = null;
+        var winningGlowLine : Sprite = null;
+        var winningGlowDot : Sprite = null;
+        var winningGlowLineFinalPosition : Point = null;
+        var winningGlowDotFinalPosition : Point = null;
         if (winnerExists)
         {
             // Setup winning view

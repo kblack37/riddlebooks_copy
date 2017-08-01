@@ -84,7 +84,7 @@ class ChangeCursorScript extends BaseBufferEventScript
         
         
         var equippableObjectsOwned : Array<Component> = m_playerItemInventory.componentManager.getComponentListForType(EquippableComponent.TYPE_ID);
-        var i : Int;
+        var i : Int = 0;
         var numEquippablesOwned : Int = equippableObjectsOwned.length;
         for (i in 0...numEquippablesOwned){
             var equippableComponent : EquippableComponent = try cast(equippableObjectsOwned[i], EquippableComponent) catch(e:Dynamic) null;

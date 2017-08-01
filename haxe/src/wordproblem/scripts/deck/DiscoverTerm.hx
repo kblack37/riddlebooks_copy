@@ -75,10 +75,10 @@ class DiscoverTerm extends BaseGameScript
             var expressionComponents : Array<Component> = m_deckWidget.componentManager.getComponentListForType(ExpressionComponent.TYPE_ID);
             var numExpressionsInDeck : Int = expressionComponents.length;
             
-            var expressionComponent : ExpressionComponent;
+            var expressionComponent : ExpressionComponent = null;
             var hiddenExpressionComponent : ExpressionComponent = null;
             var doAddNewExpressionValue : Bool = true;
-            var i : Int;
+            var i : Int = 0;
             for (i in 0...numExpressionsInDeck){
                 expressionComponent = try cast(expressionComponents[i], ExpressionComponent) catch(e:Dynamic) null;
                 if (expressionComponent.expressionString == expressionValueDragged) 

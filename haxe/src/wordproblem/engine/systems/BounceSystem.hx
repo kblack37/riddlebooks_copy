@@ -26,8 +26,8 @@ class BounceSystem extends BaseSystemScript
     {
         var components : Array<Component> = componentManager.getComponentListForType(BounceComponent.TYPE_ID);
         var numBounceComponents : Int = components.length;
-        var i : Int;
-        var bounceComponent : BounceComponent;
+        var i : Int = 0;
+        var bounceComponent : BounceComponent = null;
         for (i in 0...numBounceComponents){
             bounceComponent = try cast(components[i], BounceComponent) catch(e:Dynamic) null;
             

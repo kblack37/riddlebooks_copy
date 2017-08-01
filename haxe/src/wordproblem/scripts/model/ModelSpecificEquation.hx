@@ -106,7 +106,7 @@ class ModelSpecificEquation extends BaseGameScript
      */
     public function setTermValueAliases(value : String, aliases : Array<String>) : Void
     {
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...aliases.length){
             Reflect.setField(m_aliasValueToTermMap, Std.string(aliases[i]), value);
         }
@@ -245,7 +245,7 @@ class ModelSpecificEquation extends BaseGameScript
      */
     public function getAtLeastOneSetComplete() : Bool
     {
-        var i : Int;
+        var i : Int = 0;
         var idToEquationHasBeenModeled : Dynamic = { };
         for (i in 0...m_equations.length){
             var equation : ExpressionComponent = m_equations[i];
@@ -257,7 +257,7 @@ class ModelSpecificEquation extends BaseGameScript
         for (i in 0...numEquationSets){
             var allEquationsInSetModeled : Bool = true;
             var equationSetIds : Array<String> = m_equationSets[i];
-            var j : Int;
+            var j : Int = 0;
             for (j in 0...equationSetIds.length){
                 var equationId : String = equationSetIds[j];
                 if (!Reflect.field(idToEquationHasBeenModeled, equationId)) 
@@ -279,7 +279,7 @@ class ModelSpecificEquation extends BaseGameScript
     
     public function getNumberEquationsLeftToModel() : Int
     {
-        var i : Int;
+        var i : Int = 0;
         var numEquationsLeftToModel : Int = 0;
         var numEquationsToModel : Int = m_equations.length;
         for (i in 0...numEquationsToModel){
@@ -427,7 +427,7 @@ class ModelSpecificEquation extends BaseGameScript
             m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.VALIDATE_EQUATION_MODEL, false, loggingDetails);
             
             // Provide visual feedback of whether the equation was correct or not
-            var i : Int;
+            var i : Int = 0;
             var color : Int = ((solvedEquation)) ? 0x00FF00 : 0xFF0000;
             for (i in 0...m_termAreas.length){
                 m_termAreas[i].fadeOutBackground(color);

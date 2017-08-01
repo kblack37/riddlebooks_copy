@@ -480,7 +480,7 @@ class WordProblemSelectState extends BaseState
     override public function exit(toState : Dynamic) : Void
     {
         // Clean up the background images
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...m_cachedDataObjectsForLevelSelect.length){
             var bgImage : Image = try cast(m_cachedDataObjectsForLevelSelect[i].hoverBackgroundImage, Image) catch(e:Dynamic) null;
             bgImage.dispose();
@@ -534,8 +534,8 @@ class WordProblemSelectState extends BaseState
         {
             // Check if the player has their mouse over one of the hit areas
             // AND the mouse is not blocked by any upper layer
-            var i : Int;
-            var hitArea : Rectangle;
+            var i : Int = 0;
+            var hitArea : Rectangle = null;
             var hitAnArea : Bool = false;
             for (i in 0...m_cachedDataObjectsForLevelSelect.length){
                 var cachedDataForSection : Dynamic = m_cachedDataObjectsForLevelSelect[i];

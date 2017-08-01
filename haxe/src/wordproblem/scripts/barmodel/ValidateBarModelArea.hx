@@ -118,7 +118,7 @@ class ValidateBarModelArea extends BaseBarModelScript
      */
     public function setTermValueAliases(value : String, aliases : Array<String>) : Void
     {
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...aliases.length){
             Reflect.setField(m_aliasValueToTermMap, Std.string(aliases[i]), value);
         }
@@ -230,7 +230,7 @@ class ValidateBarModelArea extends BaseBarModelScript
             var currentModelDecomposed : DecomposedBarModelData = new DecomposedBarModelData(currentModelSnapshot);
             if (currentModelDecomposed.detectedLabelValueConflict.length == 0) 
             {
-                var i : Int;
+                var i : Int = 0;
                 var numModels : Int = m_referenceBarModels.length;
                 for (i in 0...numModels){
                     // Compare the user created model at that time to reference model.

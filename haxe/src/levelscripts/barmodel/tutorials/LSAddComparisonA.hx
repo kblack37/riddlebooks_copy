@@ -148,7 +148,7 @@ class LSAddComparisonA extends BaseCustomLevelScript
             if (m_progressControl.getProgress() == 1 && m_isBarModelSetup) 
             {
                 var barComparisonFound : Bool = false;
-                var i : Int;
+                var i : Int = 0;
                 for (i in 0...barWholes.length){
                     if (barWholes[i].barComparison != null) 
                     {
@@ -788,7 +788,7 @@ class LSAddComparisonA extends BaseCustomLevelScript
         var targetId : String = null;
         var barModelArea : BarModelAreaWidget = try cast(m_gameEngine.getUiEntity("barModelArea"), BarModelAreaWidget) catch(e:Dynamic) null;
         var barWholes : Array<BarWhole> = barModelArea.getBarModelData().barWholes;
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...barWholes.length){
             var barWhole : BarWhole = barWholes[i];
             if (barWhole.barLabels.length > 0) 

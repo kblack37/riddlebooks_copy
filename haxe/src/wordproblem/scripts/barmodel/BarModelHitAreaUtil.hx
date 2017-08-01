@@ -35,14 +35,14 @@ class BarModelHitAreaUtil
         var pointIsInSegmentView : Bool = false;
         var targetBarSegmentIndex : Int = -1;
         var barWholeViews : Array<BarWholeView> = barModelView.getBarWholeViews();
-        var i : Int;
-        var barWholeView : BarWholeView;
+        var i : Int = 0;
+        var barWholeView : BarWholeView = null;
         var numBarWholeViews : Int = barWholeViews.length;
         for (i in 0...numBarWholeViews){
             barWholeView = barWholeViews[i];
             
-            var j : Int;
-            var barSegmentView : BarSegmentView;
+            var j : Int = 0;
+            var barSegmentView : BarSegmentView = null;
             var barSegmentViews : Array<BarSegmentView> = barWholeView.segmentViews;
             var numBarSegmentViews : Int = barSegmentViews.length;
             for (j in 0...numBarSegmentViews){
@@ -74,8 +74,8 @@ class BarModelHitAreaUtil
     {
         var matchingBarLabelId : String = null;
         var barWhole : BarWhole = barModelView.getBarWholeViews()[targetBarWholeIndex].data;
-        var i : Int;
-        var barLabel : BarLabel;
+        var i : Int = 0;
+        var barLabel : BarLabel = null;
         var numLabels : Int = barWhole.barLabels.length;
         for (i in 0...numLabels){
             barLabel = barWhole.barLabels[i];
@@ -113,8 +113,8 @@ class BarModelHitAreaUtil
         var hitElement : Bool = false;
         var barWholeViews : Array<BarWholeView> = barModelView.getBarWholeViews();
         var numBarWholeViews : Int = barWholeViews.length;
-        var i : Int;
-        var barWholeView : BarWholeView;
+        var i : Int = 0;
+        var barWholeView : BarWholeView = null;
         for (i in 0...numBarWholeViews){
             barWholeView = barWholeViews[i];
             
@@ -183,8 +183,8 @@ class BarModelHitAreaUtil
     {
         var hitElement : Bool = false;
         var numSegmentViews : Int = segmentViews.length;
-        var j : Int;
-        var segmentView : BarSegmentView;
+        var j : Int = 0;
+        var segmentView : BarSegmentView = null;
         for (j in 0...numSegmentViews){
             segmentView = segmentViews[j];
             if (segmentView.rigidBody.boundingRectangle.containsPoint(localPoint)) 
@@ -207,8 +207,8 @@ class BarModelHitAreaUtil
             rectBuffer : Rectangle) : Bool
     {
         var numBarLabelViews : Int = barLabelViews.length;
-        var barLabelView : BarLabelView;
-        var j : Int;
+        var barLabelView : BarLabelView = null;
+        var j : Int = 0;
         for (j in 0...numBarLabelViews){
             barLabelView = barLabelViews[j];
             if (barLabelView.rigidBody.boundingRectangle.containsPoint(localPoint)) 

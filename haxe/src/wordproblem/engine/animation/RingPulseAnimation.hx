@@ -73,7 +73,7 @@ class RingPulseAnimation implements IAnimatable implements IDisposable
     
     public function advanceTime(time : Float) : Void
     {
-        var i : Int;
+        var i : Int = 0;
         var numTweens : Int = m_activeTweens.length;
         for (i in 0...numTweens){
             m_activeTweens[i].advanceTime(time);
@@ -83,7 +83,7 @@ class RingPulseAnimation implements IAnimatable implements IDisposable
     public function reset(xPosition : Float, yPosition : Float, displayContainer : DisplayObjectContainer, color : Int) : Void
     {
         // Interrupt currently playing tweens
-        var i : Int;
+        var i : Int = 0;
         var numTweens : Int = m_activeTweens.length;
         for (i in 0...numTweens){
             (try cast(m_activeTweens[i].target, Image) catch(e:Dynamic) null).removeFromParent(true);

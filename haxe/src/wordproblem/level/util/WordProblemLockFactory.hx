@@ -37,7 +37,7 @@ class WordProblemLockFactory //implements ICgsLockFactory
             return null;
         }
         
-        var lock : ICgsLevelLock;
+        var lock : ICgsLevelLock = null;
         
         // Get the lock storage for this type, creating the storage if this is a new type
         if (!m_lockStorage.exists(lockType)) 

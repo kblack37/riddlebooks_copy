@@ -246,13 +246,13 @@ class GridAddAnimator implements IFractionAnimator
         }
         
         // Change Denominator Ticks
-        var segmentSpriteOfFirst : Sprite;
-        var segmentSpriteOfSecond : Sprite;
-        var combinedTickSprite : Sprite;
-        var tickSpritesForFirst : Array<Sprite>;
-        var tickSpritesForSecond : Array<Sprite>;
+        var segmentSpriteOfFirst : Sprite = null;
+        var segmentSpriteOfSecond : Sprite = null;
+        var combinedTickSprite : Sprite = null;
+        var tickSpritesForFirst : Array<Sprite> = null;
+        var tickSpritesForSecond : Array<Sprite> = null;
         var tickMidpointLocation : Point = new Point(newFirstPosition.x - firstModule.totalWidth / 2 + firstModule.unitWidth / 2, newSecondPosition.y + ((newFirstPosition.y - newSecondPosition.y) / 2));
-        var aTickSprite : Sprite;
+        var aTickSprite : Sprite = null;
         if (doChangeDenom)
         {
             // Create segment sprite to come off of the first

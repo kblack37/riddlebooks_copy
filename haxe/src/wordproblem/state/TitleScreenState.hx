@@ -333,7 +333,7 @@ class TitleScreenState extends BaseState
             function() : Void
             {
                 // Re-enable visibility of flash stage objects
-                var i : Int;
+                var i : Int = 0;
                 for (i in 0...m_flashStageObjects.length){
                     m_flashStageObjects[i].visible = true;
                 }
@@ -349,7 +349,7 @@ class TitleScreenState extends BaseState
         {
             // On autologin remove all ui pieces from view as they are not
             // interactable anyways
-            var i : Int;
+            var i : Int = 0;
             for (i in 0...m_flashStageObjects.length){
                 m_flashStageObjects[i].visible = false;
             }
@@ -394,8 +394,8 @@ class TitleScreenState extends BaseState
         
         
         var renderComponents : Array<Component> = m_componentManager.getComponentListForType(RenderableComponent.TYPE_ID);
-        var renderComponent : RenderableComponent;
-        var i : Int;
+        var renderComponent : RenderableComponent = null;
+        var i : Int = 0;
         var components : Int = renderComponents.length;
         for (i in 0...components){
             renderComponent = try cast(renderComponents[i], RenderableComponent) catch(e:Dynamic) null;

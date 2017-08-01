@@ -105,8 +105,8 @@ class ShowBarModelHitAreas extends BaseBarModelScript
                     var segmentTexture : Texture = m_assetManager.getTexture("dotted_line_segment");
                     
                     var hitAreas : Array<Rectangle> = m_hitAreaScript.getActiveHitAreas();
-                    var i : Int;
-                    var hitArea : Rectangle;
+                    var i : Int = 0;
+                    var hitArea : Rectangle = null;
                     var numHitAreas : Int = hitAreas.length;
                     for (i in 0...numHitAreas){
                         hitArea = hitAreas[i];

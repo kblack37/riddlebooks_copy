@@ -176,9 +176,9 @@ class LevelSelectCharacterSequence extends ScriptNode
         {
             // Remove and stop the characters when setting to inactive
             var textureAtlasComponents : Array<Component> = m_characterComponentManager.getComponentListForType(RenderableComponent.TYPE_ID);
-            var textureAtlasComponent : RenderableComponent;
+            var textureAtlasComponent : RenderableComponent = null;
             var components : Int = textureAtlasComponents.length;
-            var i : Int;
+            var i : Int = 0;
             for (i in 0...components){
                 textureAtlasComponent = try cast(textureAtlasComponents[i], RenderableComponent) catch(e:Dynamic) null;
                 

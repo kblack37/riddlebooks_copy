@@ -41,7 +41,7 @@ class ArrowDrawingSystem extends BaseSystemScript
     {
         var arrowComponents : Array<Component> = componentManager.getComponentListForType(ArrowComponent.TYPE_ID);
         var numArrowComponents : Int = arrowComponents.length;
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...numArrowComponents){
             var arrowComponent : ArrowComponent = try cast(arrowComponents[i], ArrowComponent) catch(e:Dynamic) null;
             var entityId : String = arrowComponent.entityId;
@@ -74,7 +74,7 @@ class ArrowDrawingSystem extends BaseSystemScript
                         RenderableListComponent.TYPE_ID
                         ), RenderableListComponent) catch(e:Dynamic) null;
                 
-                var j : Int;
+                var j : Int = 0;
                 var views : Array<DisplayObject> = renderListComponent.views;
                 for (j in 0...views.length){
                     drawAndPositionArrow(arrowComponent, views[j]);

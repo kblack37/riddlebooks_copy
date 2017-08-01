@@ -64,16 +64,16 @@ class RemoveLabelOnSegment extends BaseBarModelScript implements IRemoveBarEleme
                 // Delete the label
                 var barWholes : Array<BarWhole> = m_barModelArea.getBarModelData().barWholes;
                 var numBarWholes : Int = barWholes.length;
-                var i : Int;
-                var barWhole : BarWhole;
+                var i : Int = 0;
+                var barWhole : BarWhole = null;
                 var foundMatchingLabel : Bool = false;
                 for (i in 0...numBarWholes){
                     barWhole = barWholes[i];
                     
                     var barLabels : Array<BarLabel> = barWhole.barLabels;
                     var numBarLabels : Int = barLabels.length;
-                    var j : Int;
-                    var barLabel : BarLabel;
+                    var j : Int = 0;
+                    var barLabel : BarLabel = null;
                     for (j in 0...numBarLabels){
                         barLabel = barLabels[j];
                         if (barLabel.id == hitBarLabelView.data.id) 
@@ -99,11 +99,11 @@ class RemoveLabelOnSegment extends BaseBarModelScript implements IRemoveBarEleme
                             popOffTween.onComplete = function() : Void
                                     {
                                         removedLabelView.removeFromParent(true);
-                                        Starling.juggler.remove(popOffTween);
+                                        Starling.current.juggler.remove(popOffTween);
                                     };
                             
                             m_gameEngine.getSprite().stage.addChild(removedLabelView);
-                            Starling.juggler.add(popOffTween);
+                            Starling.current.juggler.add(popOffTween);
                             
                             var previousModelDataSnapshot : BarModelData = m_barModelArea.getBarModelData().clone();
                             barWhole.barLabels.splice(j, 1);
@@ -145,7 +145,7 @@ class RemoveLabelOnSegment extends BaseBarModelScript implements IRemoveBarEleme
                 {
                     m_hitBarLabelView.setBracketAndDescriptionAlpha(0.3);
                     //m_ringPulseAnimation.reset(m_localMouseBuffer.x, m_localMouseBuffer.y, m_barModelArea, 0xFF0000);
-                    //Starling.juggler.add(m_ringPulseAnimation);
+                    //Starling.current.juggler.add(m_ringPulseAnimation);
                     status = ScriptStatus.SUCCESS;
                 }
             }
@@ -173,12 +173,12 @@ class RemoveLabelOnSegment extends BaseBarModelScript implements IRemoveBarEleme
         var hitLabel : BarLabelView = null;
         var barWholeViews : Array<BarWholeView> = m_barModelArea.getBarWholeViews();
         var numBarWholeViews : Int = barWholeViews.length;
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...numBarWholeViews){
             var barLabelViews : Array<BarLabelView> = barWholeViews[i].labelViews;
             var numBarLabelViews : Int = barLabelViews.length;
-            var j : Int;
-            var barLabelView : BarLabelView;
+            var j : Int = 0;
+            var barLabelView : BarLabelView = null;
             for (j in 0...numBarLabelViews){
                 barLabelView = barLabelViews[j];
                 

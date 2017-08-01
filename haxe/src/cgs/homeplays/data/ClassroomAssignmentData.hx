@@ -82,7 +82,7 @@ class ClassroomAssignmentData
     private function get_unassignedStudents() : Array<Dynamic>
     {
         var unassignStudents : Array<Dynamic> = [];
-        var studentIdx : Int;
+        var studentIdx : Int = 0;
         for (student/* AS3HX WARNING could not determine type for var: student exp: EField(EIdent(_classroom),students) type: null */ in _classroom.students)
         {
             studentIdx = Lambda.indexOf(_students, student);

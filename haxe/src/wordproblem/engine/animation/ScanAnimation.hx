@@ -123,8 +123,8 @@ class ScanAnimation implements IAnimatable
         
         // Assuming the dimensions of the views do not change,
         // we cache the width and the expected width of the texture
-        var i : Int;
-        var view : DisplayObject;
+        var i : Int = 0;
+        var view : DisplayObject = null;
         for (i in 0...views.length){
             view = views[i];
             

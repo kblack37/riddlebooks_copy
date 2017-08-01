@@ -332,7 +332,7 @@ class HighlightProblemPartsScript extends BaseProblemCreateScript
         for (i in 0...barWholeViews.length){
             var barWholeView : BarWholeView = barWholeViews[i];
             var barSegmentViews : Array<BarSegmentView> = barWholeView.segmentViews;
-            var j : Int;
+            var j : Int = 0;
             for (j in 0...barSegmentViews.length){
                 var barSegmentView : BarSegmentView = barSegmentViews[j];
                 if (Lambda.indexOf(elementIds, barSegmentView.data.id) >= 0) 

@@ -7,7 +7,6 @@ import dragonbox.common.expressiontree.WildCardNode;
 import dragonbox.common.math.util.MathUtil;
 import dragonbox.common.math.vectorspace.IVectorSpace;
 import dragonbox.common.math.vectorspace.RealsVectorSpace;
-import dragonbox.common.system.Map;
 
 import starling.events.EventDispatcher;
 
@@ -78,7 +77,7 @@ class ExpressionTree extends EventDispatcher
         var initialXPositions : Array<Float> = xPositions.copy();
         var initialYPositions : Array<Float> = yPositions.copy();
         
-        var i : Int;
+        var i : Int = 0;
         var numNodesToAdd : Int = operators.length;
         for (i in 0...numNodesToAdd){
             var addedNode : ExpressionNode = _addLeafNode(
@@ -153,7 +152,7 @@ class ExpressionTree extends EventDispatcher
             yPosition : Float) : ExpressionNode
     {
         // If new symbol is part of a wild card we use the wild card creation function to parse it out
-        var i : Int;
+        var i : Int = 0;
         var createWildCard : Bool = false;
         var wildCardSymbols : Array<String> = WildCardNode.WILD_CARD_SYMBOLS;
         for (i in 0...wildCardSymbols.length){
@@ -368,7 +367,7 @@ class ExpressionTree extends EventDispatcher
         
         
         
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...topMostNodeTiltRightA.length){
             var newChild : ExpressionNode = topMostNodeTiltRightA[i];
             var newParent : ExpressionNode = bottomMostNodeTiltRightA[i];
@@ -1032,9 +1031,9 @@ class ExpressionTree extends EventDispatcher
                     
                     // If the additive root has a parentheses we apply the operator directly on it
                     // Also do this if the root is just a leaf.
-                    var nodeToAttachTo : ExpressionNode;
-                    var operatorToAttachTo : String;
-                    var attachToLeft : Bool;
+                    var nodeToAttachTo : ExpressionNode = null;
+                    var operatorToAttachTo : String = null;
+                    var attachToLeft : Bool = false;
                     
                     // If the root is in parentheses OR it is not a division we apply the operation
                     // directly on the root.
@@ -1085,16 +1084,12 @@ class ExpressionTree extends EventDispatcher
                     }
                     
                     _addLeafNode(operatorToAttachTo, nodeToDistribute.data, attachToLeft, nodeToAttachTo, 0, 0);
-                }  // the distributed value (the target node no longer has the parens in this case)    // Edge case the target is a single node with parens, the paren needs to expand to fit in    // TODO: NEED TO FIX THIS may not be the correct spot to do so.    // Put the parentheses back  
-                
-                
-                
-                
-                
-                
-                
-                
-                
+                }
+				
+				// Put the parentheses back  
+				// TODO: NEED TO FIX THIS may not be the correct spot to do so.
+				// Edge case the target is a single node with parens, the paren needs to expand to fit in
+                // the distributed value (the target node no longer has the parens in this case)
                 if (additiveRoots.length == 1) 
                 {
                     targetNode.parent.wrapInParentheses = true;
@@ -1102,10 +1097,9 @@ class ExpressionTree extends EventDispatcher
                 else 
                 {
                     targetNode.wrapInParentheses = true;
-                }  // Prune the node to distribute  
-                
-                
-                
+                }  
+				
+				// Prune the node to distribute  
                 _removeNode(nodeToDistribute);
                 
                 this.dispatchEventWith(ExpressionTreeEvent.DISTRIBUTE);
@@ -1250,20 +1244,15 @@ class ExpressionTree extends EventDispatcher
         if (variablesA == null || variablesB == null) 
         {
             return false;
-        }  // literals    // Also it is important that we strip out any negative values in the variables and apply them to the    // in the numerator and denominator of each group. The tallies for both need to exactly match    // identical. A simple way to do this with our current assumptions is to keep a tally of the symbols    // Need to check whether the structure of the variables in both groups are semantically  
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        var numeratorTallyMap : Map = new Map();
-        var denominatorTallyMap : Map = new Map();
+        }
+		
+		// Need to check whether the structure of the variables in both groups are semantically  
+		// identical. A simple way to do this with our current assumptions is to keep a tally of the symbols
+		// in the numerator and denominator of each group. The tallies for both need to exactly match
+		// Also it is important that we strip out any negative values in the variables and apply them to the
+        // literals
+        var numeratorTallyMap : Map<String, Int> = new Map();
+        var denominatorTallyMap : Map<String, Int> = new Map();
         var leafNodesA : Array<ExpressionNode> = new Array<ExpressionNode>();
         ExpressionUtil.getLeafNodes(variablesA, leafNodesA);
         
@@ -1281,36 +1270,33 @@ class ExpressionTree extends EventDispatcher
             
             if (ExpressionUtil.isNodePartOfDenominator(vectorSpace, variablesA)) 
             {
-                if (denominatorTallyMap.contains(leafData)) 
+                if (denominatorTallyMap.exists(leafData)) 
                 {
                     var denomTally : Int = denominatorTallyMap.get(leafData);
-                    denominatorTallyMap.put(leafData, denomTally + 1);
+                    denominatorTallyMap.set(leafData, denomTally + 1);
                 }
                 else 
                 {
-                    denominatorTallyMap.put(leafData, 1);
+                    denominatorTallyMap.set(leafData, 1);
                 }
             }
             else 
             {
-                if (numeratorTallyMap.contains(leafData)) 
+                if (numeratorTallyMap.exists(leafData)) 
                 {
                     var numeratorTally : Int = numeratorTallyMap.get(leafData);
-                    numeratorTallyMap.put(leafData, numeratorTally + 1);
+                    numeratorTallyMap.set(leafData, numeratorTally + 1);
                 }
                 else 
                 {
-                    numeratorTallyMap.put(leafData, 1);
+                    numeratorTallyMap.set(leafData, 1);
                 }
             }
-        }  // If we find a symbol in this group that wasn't in the other then we can exit early    // For each symbol we take away one from the tally to indicate a match was found    // Look through the numerator and denominator symbols in the other group.  
-        
-        
-        
-        
-        
-        
-        
+        }
+		
+		// Look through the numerator and denominator symbols in the other group.  
+		// For each symbol we take away one from the tally to indicate a match was found
+        // If we find a symbol in this group that wasn't in the other then we can exit early
         var variableStructureMatches : Bool = true;
         var leafNodesB : Array<ExpressionNode> = new Array<ExpressionNode>();
         ExpressionUtil.getLeafNodes(variablesB, leafNodesB);
@@ -1329,10 +1315,10 @@ class ExpressionTree extends EventDispatcher
             
             if (ExpressionUtil.isNodePartOfDenominator(vectorSpace, variablesA)) 
             {
-                if (denominatorTallyMap.contains(leafData)) 
+                if (denominatorTallyMap.exists(leafData)) 
                 {
                     var denomTally = denominatorTallyMap.get(leafData);
-                    denominatorTallyMap.put(leafData, denomTally - 1);
+                    denominatorTallyMap.set(leafData, denomTally - 1);
                 }
                 else 
                 {
@@ -1342,10 +1328,10 @@ class ExpressionTree extends EventDispatcher
             }
             else 
             {
-                if (numeratorTallyMap.contains(leafData)) 
+                if (numeratorTallyMap.exists(leafData)) 
                 {
                     var numeratorTally = numeratorTallyMap.get(leafData);
-                    numeratorTallyMap.put(leafData, numeratorTally - 1);
+                    numeratorTallyMap.set(leafData, numeratorTally - 1);
                 }
                 else 
                 {
@@ -1358,7 +1344,7 @@ class ExpressionTree extends EventDispatcher
         if (variableStructureMatches) 
         {
             // If they match then all the keys in the maps should have a tally of zero
-            var numeratorSymbols : Array<Dynamic> = numeratorTallyMap.getKeys();
+            var numeratorSymbols = numeratorTallyMap.keys();
             for (numeratorSymbol in numeratorSymbols)
             {
                 var numeratorTally = numeratorTallyMap.get(numeratorSymbol);
@@ -1369,7 +1355,7 @@ class ExpressionTree extends EventDispatcher
                 }
             }
             
-            var denominatorSymbols : Array<Dynamic> = denominatorTallyMap.getKeys();
+            var denominatorSymbols = denominatorTallyMap.keys();
             for (denominatorSymbol in denominatorSymbols)
             {
                 var denomTally = denominatorTallyMap.get(denominatorSymbol);

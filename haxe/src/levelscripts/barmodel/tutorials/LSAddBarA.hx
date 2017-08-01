@@ -733,7 +733,7 @@ class LSAddBarA extends BaseCustomLevelScript
         // Figure out the texture of the food item to use and draw multiple copies to paste on the page
         var textArea : TextAreaWidget = try cast(m_gameEngine.getUiEntity("textArea"), TextAreaWidget) catch(e:Dynamic) null;
         var containerViews : Array<DocumentView> = textArea.getDocumentViewsByClass("food", null, 2);
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...containerViews.length){
             // Create image of the food
             var foodTexture : Texture = m_temporaryTextureControl.getDisposableTexture(m_food);

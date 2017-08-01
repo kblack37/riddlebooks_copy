@@ -58,7 +58,7 @@ class NodeChildrenStatusLock implements ICgsLevelLock
         {
             var levelPack : ICgsLevelPack = try cast(levelNode, ICgsLevelPack) catch(e:Dynamic) null;
             var childrenNodes : Array<ICgsLevelNode> = levelPack.nodes;
-            var i : Int;
+            var i : Int = 0;
             var numChildren : Int = childrenNodes.length;
             for (i in 0...numChildren){
                 var childMatches : Bool = LevelNodeStatuses.getNodeMatchesStatus(childrenNodes[i], m_unlockStatus);

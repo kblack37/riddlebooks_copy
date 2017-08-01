@@ -112,7 +112,7 @@ class XSprite
 		 */
     public static function forEachButtonState(btn : SimpleButton, hitTestState : Bool, func : Function) : Void
     {
-        var states : Array<Dynamic>;
+        var states : Array<Dynamic> = null;
         if (hitTestState) {
             states = [btn.upState, btn.overState, btn.downState, btn.hitTestState];
         }

@@ -158,10 +158,10 @@ class EquationSolver
         getAdditiveTerms(root.right, rightTerms);
         
         // Search thru b1 -> b4 terms by checking pairwise: [b1, b2], [b1, b3], [b1, b4], [b2, b3], [b2, b4], [b3, b4]
-        var i : Int;
-        var j : Int;
-        var termOne : ExpressionNode;
-        var termTwo : ExpressionNode;
+        var i : Int = 0;
+        var j : Int = 0;
+        var termOne : ExpressionNode = null;
+        var termTwo : ExpressionNode = null;
         for (i in 0...leftTerms.length - 1){
             termOne = leftTerms[i];
             if (termOne.isOperator()) {  // || termOne.removedFromTree) {  
@@ -278,8 +278,8 @@ class EquationSolver
             }
             var numeratorNodes : Array<ExpressionNode> = new Array<ExpressionNode>();
             ExpressionUtil.getLeafNodes(additiveTerm.left, numeratorNodes);
-            var numTerm : ExpressionNode;
-            var denomTerm : ExpressionNode;
+            var numTerm : ExpressionNode = null;
+            var denomTerm : ExpressionNode = null;
             for (numTerm in numeratorNodes){
                 if (keyOnly && !isKey(numTerm)) {
                     continue;
@@ -318,7 +318,7 @@ class EquationSolver
         var moves : Int = 2;
         
         var keyOnLeftSide : Bool = containsKey(root.left);
-        var gatherNode : ExpressionNode;
+        var gatherNode : ExpressionNode = null;
         if (keyOnLeftSide) {
             gatherNode = root.left;
         }
@@ -329,7 +329,7 @@ class EquationSolver
         var additiveTerms : Array<ExpressionNode> = new Array<ExpressionNode>();
         var additiveTermsWithKey : Array<ExpressionNode> = new Array<ExpressionNode>();
         var additiveFactors : Array<ExpressionNode> = new Array<ExpressionNode>();
-        var keyTerm : ExpressionNode;
+        var keyTerm : ExpressionNode = null;
         getAdditiveTerms(gatherNode, additiveTerms);
         for (i in 0...additiveTerms.length){
             var term : ExpressionNode = additiveTerms[i];
@@ -501,7 +501,7 @@ class EquationSolver
         
         var keyOnLeftSide : Bool = containsKey(root.left);
         var keyOnRightSide : Bool = containsKey(root.right);
-        var gatherNode : ExpressionNode;
+        var gatherNode : ExpressionNode = null;
         if (keyOnLeftSide) {
             gatherNode = root.left;
         }
@@ -521,7 +521,7 @@ class EquationSolver
         for (subTerm in termsToSubtract){
             // Add (-b) to both sides = one move, eliminate b from left side = 2 moves
             // NOTE: if B contains more than a leaf Node - i.e. b1/b2, etc - this is not a valid move in the game
-            var subtractNode : ExpressionNode;
+            var subtractNode : ExpressionNode = null;
             if (!keyOnLeftSide) {
                 subtractNode = root.left;
             }
@@ -611,7 +611,7 @@ class EquationSolver
         if (keyOnLeftSide && keyOnRightSide) {
             throw new Error("ExpressionTreeUtility.divideBothSidesByKeyCoefficient():\n\rUnexpected Key is found on both sides: " + Std.string(root));
         }
-        var gatherNode : ExpressionNode;
+        var gatherNode : ExpressionNode = null;
         if (keyOnLeftSide) {
             gatherNode = root.left;
         }

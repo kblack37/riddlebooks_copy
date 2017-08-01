@@ -1,8 +1,6 @@
 package wordproblem.engine.widget;
 
 
-import flash.utils.Dictionary;
-
 import dragonbox.common.dispose.IDisposable;
 
 import starling.display.Sprite;
@@ -47,7 +45,7 @@ class BookWidget extends Sprite implements IDisposable
     /**
      * Map from the sprite object to it's fixed width
      */
-    private var m_pageToWidthMap : Dictionary<String, Float>;
+    private var m_pageToWidthMap : Map<String, Float>;
     
     public function new(firstPageOnLeft : Bool)
     {
@@ -56,7 +54,7 @@ class BookWidget extends Sprite implements IDisposable
         m_leftPageStack = new Array<Sprite>();
         m_rightPageStack = new Array<Sprite>();
         m_currentPageIndexVisibleOnRight = 0;
-        m_pageToWidthMap = new Dictionary();
+        m_pageToWidthMap = new Map();
         
         m_firstPageOnLeft = firstPageOnLeft;
     }
@@ -133,8 +131,8 @@ class BookWidget extends Sprite implements IDisposable
             var delta : Int = Std.int((pageIndex - m_currentPageIndexVisibleOnRight) / 2);
             
             // Re-arrange the stacks such that new pages are on top and visible
-            var stackToPopFrom : Array<Sprite>;
-            var stackToPushTo : Array<Sprite>;
+            var stackToPopFrom : Array<Sprite> = null;
+            var stackToPushTo : Array<Sprite> = null;
             if (delta < 0) 
             {
                 stackToPopFrom = m_leftPageStack;
@@ -226,7 +224,7 @@ class BookWidget extends Sprite implements IDisposable
         // Need to remove previous pages
 		function removePages(pageStack : Array<Sprite>) : Void
         {
-            var page : Sprite;
+            var page : Sprite = null;
             for (page in pageStack)
             {
                 page.removeFromParent();
@@ -239,7 +237,7 @@ class BookWidget extends Sprite implements IDisposable
         if (m_leftPageStack.length > 0) 
         {
             var leftPage : Sprite = m_leftPageStack[m_leftPageStack.length - 1];
-            leftPage.x = try cast(-1 * Reflect.field(m_pageToWidthMap, Std.string(leftPage)), Float) catch(e:Dynamic) null;
+            leftPage.x = try cast(-1 * Reflect.field(m_pageToWidthMap, Std.string(leftPage)), Float) catch(e:Dynamic) 0;
             addChild(leftPage);
         }
         

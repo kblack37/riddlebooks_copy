@@ -45,7 +45,7 @@ class WordProblemGameStateBrainpopTurk extends WordProblemGameState
             var currentLevelNode : WordProblemLevelLeaf = try cast(m_levelManager.getNodeByName(currentLevelId), WordProblemLevelLeaf) catch(e:Dynamic) null;
             var outChapterNodes : Array<ChapterLevelPack> = new Array<ChapterLevelPack>();
             getChapterNodes(outChapterNodes, m_levelManager.currentLevelProgression);
-            var i : Int;
+            var i : Int = 0;
             var indexOfCurrentSetInSequence : Int = -1;
             var numSetsToShow : Int = outChapterNodes.length;
             for (i in 0...numSetsToShow){
@@ -75,7 +75,7 @@ class WordProblemGameStateBrainpopTurk extends WordProblemGameState
             {
                 var children : Array<ICgsLevelNode> = (try cast(levelNode, ICgsLevelPack) catch(e:Dynamic) null).nodes;
                 var numChildren : Int = children.length;
-                var i : Int;
+                var i : Int = 0;
                 for (i in 0...numChildren){
                     getChapterNodes(outChapterNodes, children[i]);
                 }
@@ -86,7 +86,7 @@ class WordProblemGameStateBrainpopTurk extends WordProblemGameState
     private function isLevelInPack(levelPack : ICgsLevelPack, level : WordProblemLevelLeaf) : Bool
     {
         var levelInPack : Bool = false;
-        var i : Int;
+        var i : Int = 0;
         var numLevelsInPack : Int = levelPack.nodes.length;
         for (i in 0...numLevelsInPack){
             var childNode : ICgsLevelNode = levelPack.nodes[i];

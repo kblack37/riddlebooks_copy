@@ -34,7 +34,7 @@ class ObjectivesFactory
             outObjectives = new Array<BaseObjective>();
         }
         
-        var i : Int;
+        var i : Int = 0;
         var numObjectives : Int = objectives.length;
         for (i in 0...numObjectives){
             

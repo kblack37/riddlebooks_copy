@@ -32,7 +32,7 @@ class HintSelectorNode
      */
     public function visit() : Void
     {
-        var i : Int;
+        var i : Int = 0;
         var numChildren : Int = m_children.length;
         for (i in 0...numChildren){
             m_children[i].visit();
@@ -70,7 +70,7 @@ class HintSelectorNode
         }
         else 
         {
-            var i : Int;
+            var i : Int = 0;
             for (i in 0...m_children.length){
                 hint = m_children[i].getHint();
                 if (hint != null) 
@@ -85,7 +85,7 @@ class HintSelectorNode
     
     public function dispose() : Void
     {
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...m_children.length){
             m_children[i].dispose();
         }

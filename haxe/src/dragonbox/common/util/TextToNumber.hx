@@ -67,7 +67,7 @@ class TextToNumber
         // NUMBER = (onesValues | oneOffTens | COMPOUND) + (optional) magnitudeValues + (optional) NUMBER with smaller magnitude
         var numberToReturn : Float = Math.NaN;
         var words : Array<Dynamic> = (new EReg('\\s+', "")).split(text);
-        var i : Int;
+        var i : Int = 0;
         var numWords : Int = words.length;
         
         // First pass is to just try to use the built-in parse method and see if a number

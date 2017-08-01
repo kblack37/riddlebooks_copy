@@ -82,7 +82,7 @@ class CreditsWidget extends Sprite
 			centerForGameScienceText, 
 			textFormat.font, 
 			22, 
-			try cast(textFormat.color, Int) catch(e:Dynamic) null
+			try cast(textFormat.color, Int) catch(e:Dynamic) 0
         );
         centerForGameScienceTextField.x = (backgroundContainerWidth - centerForGameScienceTextField.width) * 0.5;
         centerForGameScienceTextField.y = 50;

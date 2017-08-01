@@ -155,7 +155,7 @@ class GenericModelLevelScript extends BaseCustomLevelScript
         // If a high priority one returns success, we don't need to visit the ones
         // The important thing is that each of these scripts listen for event but cannot do anything until the next call to visit
         // if they never execute on that visit then they should never attempt to perform the action
-        var newGameScript : BaseGameScript;
+        var newGameScript : BaseGameScript = null;
         var termAreaPrioritySelector : PrioritySelector = new PrioritySelector();
         super.pushChild(termAreaPrioritySelector);
         
@@ -270,8 +270,8 @@ class GenericModelLevelScript extends BaseCustomLevelScript
         var numDocumentViewsMatchingClass : Int = m_documentViewsMatchingHideableClass.length;
         
         // Hide all but the first one
-        var documentViewMatchingClass : DocumentView;
-        var i : Int;
+        var documentViewMatchingClass : DocumentView = null;
+        var i : Int = 0;
         for (i in 1...numDocumentViewsMatchingClass){
             documentViewMatchingClass = m_documentViewsMatchingHideableClass[i];
             documentViewMatchingClass.alpha = 0.1;

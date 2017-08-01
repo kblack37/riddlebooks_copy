@@ -256,7 +256,7 @@ class EdmodoUserData
         if (Reflect.hasField(data, "groups"))
         {
             _groups = new Array<EdmodoUserGroupData>();
-            var groupData : EdmodoUserGroupData;
+            var groupData : EdmodoUserGroupData = null;
             for (groupDataObj/* AS3HX WARNING could not determine type for var: groupDataObj exp: EField(EIdent(data),groups) type: null */ in data.groups)
             {
                 groupData = new EdmodoUserGroupData();

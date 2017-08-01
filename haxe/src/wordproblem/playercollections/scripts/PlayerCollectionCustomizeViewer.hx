@@ -163,7 +163,7 @@ class PlayerCollectionCustomizeViewer extends PlayerCollectionViewer
         
         var customizableTypeIds : Array<String> = new Array<String>();
         var numCustomizables : Int = m_customizables.length;
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...numCustomizables){
             var customizableTypeData : Dynamic = m_customizables[i];
             customizableTypeIds.push(customizableTypeData.id);
@@ -216,7 +216,7 @@ class PlayerCollectionCustomizeViewer extends PlayerCollectionViewer
                 m_globalPointBuffer.x = m_mouseState.mousePositionThisFrame.x;
                 m_globalPointBuffer.y = m_mouseState.mousePositionThisFrame.y;
                 var numItemButtons : Int = m_activeItemsButtonsInPage.length;
-                var i : Int;
+                var i : Int = 0;
                 for (i in 0...numItemButtons){
                     var button : CustomizableItemButton = m_activeItemsButtonsInPage[i];
                     button.getBounds(m_canvasContainer.stage, m_boundsBuffer);
@@ -248,7 +248,7 @@ class PlayerCollectionCustomizeViewer extends PlayerCollectionViewer
         
         var categoryIdsForPage : Array<String> = m_customizableCategoriesPages[pageIndex];
         var numCategories : Int = categoryIdsForPage.length;
-        var i : Int;
+        var i : Int = 0;
         var xOffset : Float = (800 - buttonWidth) * 0.5;
         var yOffset : Float = m_titleText.y + m_titleText.height;
         var nineSliceRectangle : Rectangle = new Rectangle(8, 8, 16, 16);
@@ -354,7 +354,7 @@ class PlayerCollectionCustomizeViewer extends PlayerCollectionViewer
         
         var itemIdsForPage : Array<String> = m_customizableItemIdsPages[pageIndex];
         var numItems : Int = itemIdsForPage.length;
-        var i : Int;
+        var i : Int = 0;
         var yOffset : Float = 60;
         var spanningWidth : Float = 800;
         var spanningHeight : Float = 400;
@@ -439,7 +439,7 @@ class PlayerCollectionCustomizeViewer extends PlayerCollectionViewer
 							measuringText.text,
 							textFormat.font,
 							textFormat.size,
-							try cast(textFormat.color, Int) catch(e:Dynamic) null);
+							try cast(textFormat.color, Int) catch(e:Dynamic) 0);
 						askText.hAlign = HAlign.LEFT;
 						mainDisplayContainer.addChild(askText);
 						
@@ -456,7 +456,7 @@ class PlayerCollectionCustomizeViewer extends PlayerCollectionViewer
 							displayedPrice, 
 							textFormat.font,
 							textFormat.size,
-							try cast(textFormat.color, Int) catch(e:Dynamic) null);
+							try cast(textFormat.color, Int) catch(e:Dynamic) 0);
 						priceText.x = coin.x + coin.width + 10;
 						mainDisplayContainer.addChild(priceText);
 						

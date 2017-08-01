@@ -156,7 +156,7 @@ class PlayerCollectionsState extends BaseState
         
         var selectedTexture : Texture = m_assetManager.getTexture("button_white");
         var selectedScale9Texture : Texture = Texture.fromTexture(selectedTexture, new Rectangle(8, 8, 16, 16));
-        var i : Int;
+        var i : Int = 0;
         var fontSize : Int = 20;
         for (i in 0...buttonLabels.length){
             var categoryButtonWidth : Float = 170;

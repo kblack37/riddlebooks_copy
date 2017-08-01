@@ -61,8 +61,8 @@ class FireworksAnimation implements IAnimatable
         
         // Setting up fireworks using Dragon Box animation system
         var textureInitializer : Initializer = new TextureUVInitializer([starBounds, diamondBounds], sourceBounds);
-        var colorInitializer : Initializer;
-        var scaleInitializer : Initializer;
+        var colorInitializer : Initializer = null;
+        var scaleInitializer : Initializer = null;
         var ageAction : Action = new Age(easeInExpo);
         var moveAction : Action = new Move();
         var dragAction : Action = new DragForce(0.5);
@@ -179,8 +179,8 @@ class FireworksAnimation implements IAnimatable
             m_timeCount += time;
         }
         
-        var i : Int;
-        var emitter : Emitter;
+        var i : Int = 0;
+        var emitter : Emitter = null;
         for (i in 0...m_burstEmitters.length){
             emitter = m_burstEmitters[i];
             

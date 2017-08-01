@@ -120,7 +120,7 @@ class DismissCharacterOnClickProcess extends ScriptNode
             {
                 var characterComponentManager : ComponentManager = m_characterController.getComponentManager();
                 var calloutComponents : Array<Component> = characterComponentManager.getComponentListForType(CalloutComponent.TYPE_ID);
-                var i : Int;
+                var i : Int = 0;
                 var hitCallout : Bool = false;
                 var numCallouts : Int = calloutComponents.length;
                 for (i in 0...numCallouts){
@@ -160,7 +160,7 @@ class DismissCharacterOnClickProcess extends ScriptNode
     {
         var characterComponentManager : ComponentManager = m_characterController.getComponentManager();
         var calloutComponents : Array<Component> = characterComponentManager.getComponentListForType(CalloutComponent.TYPE_ID);
-        var i : Int;
+        var i : Int = 0;
         var hitCallout : Bool = false;
         var numCallouts : Int = calloutComponents.length;
         for (i in 0...numCallouts){

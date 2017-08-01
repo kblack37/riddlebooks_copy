@@ -143,15 +143,15 @@ class ReplaceHiddenBarLabel extends BaseBarModelScript
         // Go through all hidden labels that are contained within a bar
         var barWholeViews : Array<BarWholeView> = m_barModelArea.getBarWholeViews();
         var numBarWholeViews : Int = barWholeViews.length;
-        var i : Int;
-        var barWholeView : BarWholeView;
+        var i : Int = 0;
+        var barWholeView : BarWholeView = null;
         for (i in 0...numBarWholeViews){
             barWholeView = barWholeViews[i];
             
             var barLabelViews : Array<BarLabelView> = barWholeView.labelViews;
             var numBarLabelViews : Int = barLabelViews.length;
-            var j : Int;
-            var barLabelView : BarLabelView;
+            var j : Int = 0;
+            var barLabelView : BarLabelView = null;
             for (j in 0...numBarLabelViews){
                 barLabelView = barLabelViews[j];
                 if (barLabelView.data.hiddenValue != null) 
@@ -184,12 +184,12 @@ class ReplaceHiddenBarLabel extends BaseBarModelScript
         // to a bar.
         var foundBar : Bool = false;
         var numBarWholes : Int = barModelData.barWholes.length;
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...numBarWholes){
             var barLabels : Array<BarLabel> = barModelData.barWholes[i].barLabels;
             var numBarLabels : Int = barLabels.length;
-            var j : Int;
-            var barLabel : BarLabel;
+            var j : Int = 0;
+            var barLabel : BarLabel = null;
             for (j in 0...numBarLabels){
                 barLabel = barLabels[j];
                 if (barLabel.id == barLabelId) 
@@ -209,7 +209,7 @@ class ReplaceHiddenBarLabel extends BaseBarModelScript
         if (!foundBar) 
         {
             var numVerticalLabels : Int = barModelData.verticalBarLabels.length;
-            var verticalBarLabel : BarLabel;
+            var verticalBarLabel : BarLabel = null;
             for (i in 0...numVerticalLabels){
                 verticalBarLabel = barModelData.verticalBarLabels[i];
                 if (verticalBarLabel.id == barLabelId) 

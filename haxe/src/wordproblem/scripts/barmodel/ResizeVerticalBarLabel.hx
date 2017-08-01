@@ -89,19 +89,21 @@ class ResizeVerticalBarLabel extends BaseBarModelScript
         {
             // On a mouse down check that the player has hit within an area of label edge, this initiates a drag
             // The horizontal labels have priority over the verical labels
-            as3hx.Compat.setArrayLength(m_outParamsBuffer, 0);
+			m_outParamsBuffer = new Array<Dynamic>();
             m_globalMouseBuffer.setTo(m_mouseState.mousePositionThisFrame.x, m_mouseState.mousePositionThisFrame.y);
             m_barModelArea.globalToLocal(m_globalMouseBuffer, m_localMouseBuffer);
-            
+			
+            var barWholeViews : Array<BarWholeView> = new Array<BarWholeView>();
+			var localY : Float = 0.0;
             if (m_previewBarLabelView != null) 
             {
                 // Do not let the label go past the first or last bar whole edges
-                var barWholeViews : Array<BarWholeView> = m_barModelArea.getBarWholeViews();
+                barWholeViews = m_barModelArea.getBarWholeViews();
                 var segmentsOfFirstBar : Array<BarSegmentView> = barWholeViews[0].segmentViews;
                 var segmentsOfLastBar : Array<BarSegmentView> = barWholeViews[barWholeViews.length - 1].segmentViews;
                 var topEdgeYLimit : Float = segmentsOfFirstBar[0].rigidBody.boundingRectangle.top;
                 var bottomEdgeYLimit : Float = segmentsOfLastBar[0].rigidBody.boundingRectangle.bottom;
-                var localY : Float = m_localMouseBuffer.y;
+                localY = m_localMouseBuffer.y;
                 if (m_localMouseBuffer.y < topEdgeYLimit) 
                 {
                     localY = topEdgeYLimit;
@@ -118,10 +120,10 @@ class ResizeVerticalBarLabel extends BaseBarModelScript
                 if (m_outParamsBuffer.length > 0) 
                 {
                     var originalBarLabelView : BarLabelView = try cast(m_outParamsBuffer[0], BarLabelView) catch(e:Dynamic) null;
-                    m_draggingTopEdge = try cast(m_outParamsBuffer[1], Bool) catch(e:Dynamic) null;
+                    m_draggingTopEdge = try cast(m_outParamsBuffer[1], Bool) catch(e:Dynamic) false;
                     m_localMousePressAnchorY = m_localMouseBuffer.y;
                     
-                    barWholeViews = m_barModelArea.getBarWholeViews();
+                    var barWholeViews = m_barModelArea.getBarWholeViews();
                     
                     var segmentViewOfStartingBar : BarSegmentView = barWholeViews[originalBarLabelView.data.startSegmentIndex].segmentViews[0];
                     var segmentViewOfEndingBar : BarSegmentView = barWholeViews[originalBarLabelView.data.endSegmentIndex].segmentViews[0];
@@ -141,7 +143,7 @@ class ResizeVerticalBarLabel extends BaseBarModelScript
                     
                     // Show a small pulse on hit of the label
                     m_ringPulseAnimation.reset(m_localMouseBuffer.x, m_localMouseBuffer.y, m_barModelArea, 0x00FF00);
-                    Starling.juggler.add(m_ringPulseAnimation);
+                    Starling.current.juggler.add(m_ringPulseAnimation);
                     
                     m_previewBarLabelView.addButtonImagesToEdges(m_assetManager.getTexture("card_background_circle"));
                     m_previewBarLabelView.colorEdgeButton(m_draggingTopEdge, 0x00FF00, 1.0);
@@ -187,7 +189,7 @@ class ResizeVerticalBarLabel extends BaseBarModelScript
                 
                 getClosestSegmentIndexToPoint(m_localMouseBuffer.x, localY, m_outParamsBuffer);
                 var closestBarIndex : Int = Std.parseInt(m_outParamsBuffer[0]);
-                var distanceFromBar : Float = try cast(m_outParamsBuffer[1], Float) catch(e:Dynamic) null;
+                var distanceFromBar : Float = try cast(m_outParamsBuffer[1], Float) catch(e:Dynamic) 0;
                 var distanceThreshold : Float = 20;
                 
                 // If do not allow for a label to span nothing
@@ -221,7 +223,7 @@ class ResizeVerticalBarLabel extends BaseBarModelScript
                     // Mouse-y combined with the delta on press combine to give the position where one edge should be
                     // The other edge is defined by the pivot
                     var edgeAY : Float = m_yDeltaFromDragEdge + localY;
-                    newLabelLength = Math.abs(edgeAY - m_localLabelPivotY);
+                    var newLabelLength = Math.abs(edgeAY - m_localLabelPivotY);
                     
                     // Do not allow bar to squish into nothing at the very top or bottom (i.e. when it cannot cross the pivot)
                     // If the ends of the label span just one bar and that bar is at the very end then the label should not get
@@ -263,7 +265,7 @@ class ResizeVerticalBarLabel extends BaseBarModelScript
             {
                 status = ScriptStatus.SUCCESS;
                 
-                originalBarLabelView = getBarLabelViewFromId(m_previewBarLabelView.data.id, m_barModelArea.getVerticalBarLabelViews());
+                var originalBarLabelView = getBarLabelViewFromId(m_previewBarLabelView.data.id, m_barModelArea.getVerticalBarLabelViews());
                 
                 // Don't redraw if the indices did not change
                 if (originalBarLabelView.data.startSegmentIndex != m_previewBarLabelView.data.startSegmentIndex ||
@@ -274,14 +276,12 @@ class ResizeVerticalBarLabel extends BaseBarModelScript
                     resizeVerticalBarLabel(originalBarLabelView.data, m_previewBarLabelView.data.startSegmentIndex, m_previewBarLabelView.data.endSegmentIndex);
                     m_eventDispatcher.dispatchEventWith(GameEvent.BAR_MODEL_AREA_CHANGE, false, {
                                 previousSnapshot : previousModelDataSnapshot
-
                             });
                     m_barModelArea.redraw();
                     
                     // Log resizing of a label across the whole bars
                     m_eventDispatcher.dispatchEventWith(AlgebraAdventureLoggingConstants.RESIZE_VERTICAL_LABEL, false, {
                                 barModel : m_barModelArea.getBarModelData().serialize()
-
                             });
                 }
                 
@@ -331,12 +331,12 @@ class ResizeVerticalBarLabel extends BaseBarModelScript
     private function getClosestSegmentIndexToPoint(localX : Float, localY : Float, outParams : Array<Dynamic>) : Void
     {
         // The edges to snap to are the top and bottoms of each individual bar
-        var barWholeView : BarWholeView;
+        var barWholeView : BarWholeView = null;
         var barWholeViews : Array<BarWholeView> = m_barModelArea.getBarWholeViews();
         var closestSegmentIndex : Int = -1;
         var closestDistance : Float = 0;
         
-        var i : Int;
+        var i : Int = 0;
         var numBars : Int = barWholeViews.length;
         for (i in 0...numBars){
             barWholeView = barWholeViews[i];
@@ -376,8 +376,8 @@ class ResizeVerticalBarLabel extends BaseBarModelScript
      */
     private function checkLabelEdgeHitPoint(point : Point, labelViews : Array<BarLabelView>, outParams : Array<Dynamic>) : Void
     {
-        var i : Int;
-        var labelView : BarLabelView;
+        var i : Int = 0;
+        var labelView : BarLabelView = null;
         var numLabelViews : Int = labelViews.length;
         for (i in 0...numLabelViews){
             labelView = labelViews[i];
@@ -431,8 +431,8 @@ class ResizeVerticalBarLabel extends BaseBarModelScript
     private function getBarLabelViewFromId(barLabelId : String, barLabelViews : Array<BarLabelView>) : BarLabelView
     {
         var matchingBarLabelView : BarLabelView = null;
-        var i : Int;
-        var barLabelView : BarLabelView;
+        var i : Int = 0;
+        var barLabelView : BarLabelView = null;
         var numBarLabelViews : Int = barLabelViews.length;
         for (i in 0...numBarLabelViews){
             barLabelView = barLabelViews[i];
@@ -449,7 +449,7 @@ class ResizeVerticalBarLabel extends BaseBarModelScript
     private function onRingPulseAnimationComplete() : Void
     {
         // Make sure animation isn't showing
-        Starling.juggler.remove(m_ringPulseAnimation);
+        Starling.current.juggler.remove(m_ringPulseAnimation);
     }
     
     private function onBarModelRedrawn(event : Event) : Void
@@ -464,8 +464,8 @@ class ResizeVerticalBarLabel extends BaseBarModelScript
         var buttonTexture : Texture = m_assetManager.getTexture("card_background_circle");
         var verticalBarViews : Array<BarLabelView> = barModelView.getVerticalBarLabelViews();
         var numVerticalBarViews : Int = verticalBarViews.length;
-        var i : Int;
-        var verticalBarView : BarLabelView;
+        var i : Int = 0;
+        var verticalBarView : BarLabelView = null;
         for (i in 0...numVerticalBarViews){
             verticalBarView = verticalBarViews[i];
             

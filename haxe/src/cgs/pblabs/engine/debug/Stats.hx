@@ -138,7 +138,7 @@ class Stats extends Sprite
             msPrev = timer;
             mem = as3hx.Compat.parseFloat((System.totalMemory * 0.000000954).toFixed(3));
             
-            var fpsGraph : Int;
+            var fpsGraph : Int = 0;
             if (stage != null)
             {
                 fpsGraph = Math.min(50, 50 / stage.frameRate * fps);

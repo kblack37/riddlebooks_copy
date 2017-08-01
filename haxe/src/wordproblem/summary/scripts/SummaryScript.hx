@@ -494,13 +494,13 @@ class SummaryScript extends BaseBufferEventScript
 			var textFormat : TextFormat = new TextFormat(GameFonts.DEFAULT_FONT_NAME, 20, 0xFFFFFF);
 			var levelUpTextContent : String = "Good Effort! You reached level " + newLevel + "!";
 			measuringText.text = levelUpTextContent;
-			var levelUpText : TextField = new TextField(400, Std.int(measuringText.textHeight + 5), levelUpTextContent, textFormat.font, textFormat.size, try cast(textFormat.color, Int) catch (e:Dynamic) null);
+			var levelUpText : TextField = new TextField(400, Std.int(measuringText.textHeight + 5), levelUpTextContent, textFormat.font, textFormat.size, try cast(textFormat.color, Int) catch (e:Dynamic) 0);
 			levelUpText.vAlign = VAlign.TOP;
 			levelUpContainer.addChild(levelUpText);
 
 			var coinsEarnedTextContent : String = "+ " + coinsForLevelup;
 			measuringText.text = coinsEarnedTextContent;
-			var coinsEarnedText : TextField = new TextField(100, 40, coinsEarnedTextContent, textFormat.font, 32, try cast(textFormat.color, Int) catch (e:Dynamic) null);
+			var coinsEarnedText : TextField = new TextField(100, 40, coinsEarnedTextContent, textFormat.font, 32, try cast(textFormat.color, Int) catch (e:Dynamic) 0);
 			coinsEarnedText.hAlign = HAlign.LEFT;
 
 			coinsEarnedText.y = levelUpText.y + levelUpText.height + 50;

@@ -5,9 +5,6 @@ import wordproblem.engine.barmodel.view.ResizeableBarPieceView;
 import flash.geom.Rectangle;
 import flash.text.TextFormat;
 
-//import feathers.display.Scale3Image;
-//import feathers.textures.Scale3Textures;
-
 import starling.display.DisplayObject;
 import starling.display.DisplayObjectContainer;
 import starling.display.Image;

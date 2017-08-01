@@ -207,9 +207,9 @@ class SnapManager implements IDisposable
             // Doing a dumb method of several iterations
             // First iteration checks for wild cards, since they take the highest priority for snaps
             // Iterate through every leaf widget and apply a distance function check to see if a snap applies
-            var i : Int;
-            var widgetCandidate : BaseTermWidget;
-            var widgetCandidateBounds : Rectangle;
+            var i : Int = 0;
+            var widgetCandidate : BaseTermWidget = null;
+            var widgetCandidateBounds : Rectangle = null;
             var numLeafWidgets : Int = m_widgetCandidates.length;
             for (i in 0...numLeafWidgets){
                 widgetCandidate = m_widgetCandidates[i];
@@ -442,12 +442,12 @@ class SnapManager implements IDisposable
         
         // Look at the current state of the widgets and sort based on snapping priority
         // Do an insertion sort on the regex set based on priority
-        var i : Int;
-        var currentWidget : BaseTermWidget;
-        var currentBounds : Rectangle;
-        var prevWidget : BaseTermWidget;
-        var prevBounds : Rectangle;
-        var holeIndex : Int;
+        var i : Int = 0;
+        var currentWidget : BaseTermWidget = null;
+        var currentBounds : Rectangle = null;
+        var prevWidget : BaseTermWidget = null;
+        var prevBounds : Rectangle = null;
+        var holeIndex : Int = 0;
         var numWidgets : Int = m_widgetCandidates.length;
         for (i in 1...numWidgets){
             prevWidget = m_widgetCandidates[i - 1];

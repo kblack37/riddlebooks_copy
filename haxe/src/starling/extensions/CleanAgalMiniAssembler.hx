@@ -67,7 +67,7 @@ class CleanAgalMiniAssembler //extends AGALMiniAssembler
         var shaderStrings : Array<Dynamic> = [];
         var pieces : Array<Dynamic> = contents.split(SHADER_FILE_DELIMITER);
         
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...pieces.length){
             shaderStrings.push(removeComments(pieces[i]));
         }

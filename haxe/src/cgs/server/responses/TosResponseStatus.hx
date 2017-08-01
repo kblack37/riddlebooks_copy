@@ -38,7 +38,7 @@ class TosResponseStatus extends CgsResponseStatus
         if (Reflect.hasField(_data, "r_data"))
         {
             var tosData : Array<Dynamic> = _data.r_data;
-            var tosItem : TosItemData;
+            var tosItem : TosItemData = null;
             for (tosDataObj in tosData)
             {
                 tosItem = new TosItemData();

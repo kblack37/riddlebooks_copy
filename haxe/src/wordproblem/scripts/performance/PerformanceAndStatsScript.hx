@@ -120,8 +120,8 @@ class PerformanceAndStatsScript extends BaseBufferEventScript
         // At this point we can terminate any further recording of the objectives
         // in the level.
         var objectives : Array<BaseObjective> = m_gameEngine.getCurrentLevel().objectives;
-        var objective : BaseObjective;
-        var i : Int;
+        var objective : BaseObjective = null;
+        var i : Int = 0;
         var numObjectives : Int = objectives.length;
         for (i in 0...numObjectives){
             objective = objectives[i];

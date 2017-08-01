@@ -346,7 +346,7 @@ class AddNewUnitBar extends BaseBarModelScript implements IHitAreaScript
     {
         var newBarWhole : BarWhole = new BarWhole(true, id);
         
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...numSegments){
             var newBarSegment : BarSegment = new BarSegment(numeratorValuePerSegment, denominatorValuePerSegment, color, null);
             newBarWhole.barSegments.push(newBarSegment);

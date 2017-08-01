@@ -170,11 +170,11 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
         var defaultHintsXml : FastXML = new FastXML(Type.createInstance(default_barmodel_hints, []));
         var barModelHintBlocks : FastXMLList = defaultHintsXml.node.elements.innerData("barmodelhints");
         var labelIdToHintXmlElement : Dynamic = { };
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...barModelHintBlocks.length()){
             var barModelHintBlock : FastXML = barModelHintBlocks.get(i);
             var hintElements : FastXMLList = barModelHintBlock.node.elements.innerData("hint");
-            var j : Int;
+            var j : Int = 0;
             for (j in 0...hintElements.length()){
                 // Create the mapping from label to step based on the selected block
                 var hintElement : FastXML = hintElements.get(j);
@@ -869,7 +869,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
                 var userCountForValue : Int = ((userTally.exists(barLabelValue))) ? Reflect.field(userTally, barLabelValue) : 0;
                 if (userCountForValue != referenceCountForValue) 
                 {
-                    var description : String;
+                    var description : String = null;
                     if (m_incorrectTallyOfLabeledBoxesCounter == 0) 
                     {
                         if (userCountForValue > referenceCountForValue) 
@@ -1164,7 +1164,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
                 mistakeFound = true;
                 
                 // Gradually reveal more information about the hint as the user continues to input wrong answers
-                var missingDifferenceContent : String;
+                var missingDifferenceContent : String = null;
                 m_incorrectDifferenceCounter++;
                 
                 if (m_incorrectDifferenceCounter > 2) 
@@ -1904,19 +1904,19 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
             // This is a structural detail, we need to look through all the labels
             // Check if they span the correct number of boxes AND that all those boxes
             // are equal sizes
-            var i : Int;
+            var i : Int = 0;
             var barWholes : Array<BarWhole> = userModel.barWholes;
             for (i in 0...barWholes.length){
                 var barWhole : BarWhole = barWholes[i];
                 var barLabels : Array<BarLabel> = barWhole.barLabels;
                 var barSegments : Array<BarSegment> = barWhole.barSegments;
-                var j : Int;
+                var j : Int = 0;
                 for (j in 0...barLabels.length){
                     var barLabel : BarLabel = barLabels[j];
                     if (barLabel.value == labelValue && (barLabel.endSegmentIndex - barLabel.startSegmentIndex + 1) == expectedNumGroups) 
                     {
                         // Make sure all the segments this bar covers have the same value
-                        var segmentIndex : Int;
+                        var segmentIndex : Int = 0;
                         var referenceSegmentAmount : Float = -1;
                         var allSegmentsEqualSize : Bool = true;
                         for (segmentIndex in barLabel.startSegmentIndex...barLabel.endSegmentIndex + 1){
@@ -2041,7 +2041,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
         if (labelToValue.exists(totalLabelName)) 
         {
             var numOtherLabels : Int = otherLabelNames.length;
-            var i : Int;
+            var i : Int = 0;
             var otherLabelSum : Float = 0;
             for (i in 0...numOtherLabels){
                 var otherLabel : String = otherLabelNames[i];

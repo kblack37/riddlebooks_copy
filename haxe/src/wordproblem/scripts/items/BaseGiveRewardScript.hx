@@ -96,7 +96,7 @@ class BaseGiveRewardScript extends BaseBufferEventScript
         // From list of candidate, random rewards find which ones the player already has.
         // They should not be given again
         m_availableLevelUpRewards = new Array<String>();
-        var i : Int;
+        var i : Int = 0;
         var numPossibleRandomRewards : Int = LEVEL_UP_REWARDS.length;
         for (i in 0...numPossibleRandomRewards){
             var itemId : String = LEVEL_UP_REWARDS[i];
@@ -125,7 +125,7 @@ class BaseGiveRewardScript extends BaseBufferEventScript
         
         // Need to map the reward id to the item id/item ids so we can add the appropriate
         // data structures into the player's inventory
-        var i : Int;
+        var i : Int = 0;
         var numRewards : Int = m_rewardsData.length;
         for (i in 0...numRewards){
             var rewardData : Dynamic = m_rewardsData[i];
@@ -190,10 +190,10 @@ class BaseGiveRewardScript extends BaseBufferEventScript
             var levelChange : Int = currentLevel - prevLevel;
             
             // For each level gained, give a random collectable from the level pool
-            var i : Int;
+            var i : Int = 0;
             for (i in 0...levelChange){
                 var numCollectablesToGive : Int = 2;
-                var j : Int;
+                var j : Int = 0;
                 for (j in 0...numCollectablesToGive){
                     if (m_availableLevelUpRewards.length > 0) 
                     {
@@ -232,8 +232,8 @@ class BaseGiveRewardScript extends BaseBufferEventScript
     private function checkAndAddItemsToInventory(rewardsData : Array<Dynamic>, outItemIds : Array<String> = null) : Void
     {
         var numEntities : Int = rewardsData.length;
-        var i : Int;
-        var entityId : String;
+        var i : Int = 0;
+        var entityId : String = null;
         for (i in 0...numEntities){
             entityId = rewardsData[i].id;
             

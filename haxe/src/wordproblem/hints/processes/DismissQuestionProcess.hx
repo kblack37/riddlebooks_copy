@@ -139,7 +139,7 @@ class DismissQuestionProcess extends ScriptNode
         if (indexOfAnswer > -1) 
         {
             var isCorrect : Bool = m_answerCorrect[indexOfAnswer];
-            var icon : Image;
+            var icon : Image = null;
             if (isCorrect) 
             {
                 // Make button look correct (change color to green and add a check)

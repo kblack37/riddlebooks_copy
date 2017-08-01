@@ -5,8 +5,6 @@ import haxe.xml.Fast;
 import wordproblem.engine.level.LevelRules;
 import wordproblem.engine.level.WordProblemLevelData;
 
-import flash.utils.Dictionary;
-
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.math.vectorspace.IVectorSpace;
@@ -36,7 +34,7 @@ class LevelCompiler
      * The purpose of this is to provide levels with a menu of predefined ui configurations. Thus a level
      * xml just needs to define the layout name rather than re-specifying the entire ui xml structure.
      */
-    private var m_predefinedLayoutMap : Dictionary<String, WidgetAttributesComponent>;
+    private var m_predefinedLayoutMap : Map<String, WidgetAttributesComponent>;
     
     public function new(expressionCompiler : IExpressionTreeCompiler, predefinedLayoutData : String)
     {
@@ -44,9 +42,9 @@ class LevelCompiler
         
         // Parse out layout options
         // Each option should have a name, levels can pick a predefined layout by referencing this name
-        m_predefinedLayoutMap = new Dictionary();
+        m_predefinedLayoutMap = new Map();
         var predefinedLayoutXML : Fast = new Fast(Xml.parse(predefinedLayoutData));
-        var predefinedLayoutList = predefinedLayoutXML.nodes.layout;
+        var predefinedLayoutList = predefinedLayoutXML.node.layouts.nodes.layout;
         for (predefinedLayout in predefinedLayoutList){
             var layoutName : String = Std.string(predefinedLayout.att.name);
             Reflect.setField(m_predefinedLayoutMap, layoutName, parseWidgetLayout(predefinedLayout));
@@ -88,7 +86,7 @@ class LevelCompiler
     {
         var levelId : Int = -1;
 		var fastLevelConfig = new Fast(levelConfig);
-        if (fastLevelConfig.has.id) 
+        if (levelConfig.exists("id")) 
         {
             levelId = Std.parseInt(fastLevelConfig.att.id);
         }
@@ -103,7 +101,7 @@ class LevelCompiler
         // Parse out the variable symbols to use
         var vectorSpace : RealsVectorSpace = m_expressionCompiler.getVectorSpace();
         var symbolBindings : Array<SymbolData> = new Array<SymbolData>();
-        var symbolBindingsList = fastLevelConfig.nodes.symbols;
+        var symbolBindingsList = fastLevelConfig.node.symbols.nodes.symbol;
         for (symbolBinding in symbolBindingsList)
         {
             // Treat empty string as same as null for some values
@@ -115,7 +113,7 @@ class LevelCompiler
             var symbolTexture : String = symbolBinding.has.symbolTexture ? 
 				symbolBinding.att.symbolTexture : null;
             var symbolBackgroundTexturePositive : String = symbolBinding.has.backgroundTexturePositive ? 
-				symbolBinding.att.backGroundTexturePositive : "card_background_square";
+				symbolBinding.att.backgroundTexturePositive : "card_background_square";
             if (symbolBackgroundTexturePositive == "") 
             {
                 symbolBackgroundTexturePositive = "card_background_square";
@@ -208,7 +206,7 @@ class LevelCompiler
         // Parse out the style json and apply the styles to the problem
         // Config should have provided default styles.
         // HACK: For now, if one of the three genres automatically use a default styling
-        var cssObject : Dynamic;
+        var cssObject : Dynamic = null;
         var styleXML : Fast = fastLevelConfig.node.style;
         var defaultStyle : String = config.getDefaultTextStyle();
         var styleData : String = ((styleXML != null)) ? styleXML.innerData : defaultStyle;
@@ -235,8 +233,8 @@ class LevelCompiler
 		// * pick an existing ui layout from a predefined list without an override (add a name attribute)
 		// * do nothing which just picks the default layout
         // Parse layout data and other miscellaneous assets needed by the level
-        var layoutXML : Fast = fastLevelConfig.node.layout;
-        var layoutData : WidgetAttributesComponent;
+        var layoutXML : Fast = fastLevelConfig.hasNode.layout ? fastLevelConfig.node.layout : null;
+        var layoutData : WidgetAttributesComponent = null;
         if (layoutXML != null) 
         {
             if (layoutXML.has.name) 
@@ -255,12 +253,12 @@ class LevelCompiler
             // To facilitate this, we search for an override tag. Components with a matching id
             // will take on the new values specified in the override. This does not affect the
             // layout structure though.
-            var overrideLayoutAttributes : Fast = fastLevelConfig.node.overrideLayoutAttritubes;
+            var overrideLayoutAttributes : Fast = fastLevelConfig.node.overrideLayoutAttributes;
             if (overrideLayoutAttributes != null) 
             {
                 if (overrideLayoutAttributes.has.name) 
                 {
-                    layoutData = getLayoutFromName(Std.string(overrideLayoutAttributes.att.name)).clone(vectorSpace);
+                    layoutData = getLayoutFromName(overrideLayoutAttributes.att.name).clone(vectorSpace);
                 }
                 else 
                 {
@@ -324,7 +322,7 @@ class LevelCompiler
                 else if (resourceType == "audio") 
                 {
                     var audioSource : String = resourceXML.att.src;
-                    var audioType : String = resourcesXML.att.type;
+                    var audioType : String = resourceXML.att.type;
                     var audioData : Dynamic = {
                         type : audioType,
                         src : audioSource,
@@ -343,16 +341,14 @@ class LevelCompiler
             { }
 			
 		// Check if the level overrides the default card rendering attributes.  
-        var cardXML : Fast = fastLevelConfig.node.cardAttributes;
         var defaultCardAttributes : CardAttributes = CardAttributes.DEFAULT_CARD_ATTRIBUTES;
-        var cardAttributes : CardAttributes = ((cardXML != null)) ? 
-        parseCardAttributes(cardXML, defaultCardAttributes) : defaultCardAttributes;
+        var cardAttributes : CardAttributes = fastLevelConfig.hasNode.cardAttributes ? 
+			parseCardAttributes(fastLevelConfig.node.cardAttributes, defaultCardAttributes) : defaultCardAttributes;
         
         // Parse the level rules, see what initial values need to be overridden
-        var rulesXml : Fast = fastLevelConfig.node.rules;
         var defaultRules : LevelRules = config.getDefaultLevelRules();
-        var levelRules : LevelRules = ((rulesXml != null)) ? 
-        LevelRules.createRulesFromXml(rulesXml, defaultRules) : defaultRules;
+        var levelRules : LevelRules = fastLevelConfig.hasNode.rules ? 
+			LevelRules.createRulesFromXml(fastLevelConfig.node.rules, defaultRules) : defaultRules;
         
         var levelData : WordProblemLevelData = new WordProblemLevelData(
 			levelId, 
@@ -380,10 +376,9 @@ class LevelCompiler
         // Parse out objectives that have been manually defined in a level
         // Objectives are not only goals the player can view at the end, but they are also
         // thesholds to determine satisfactory completion.
-        var objectivesXml : Fast = fastLevelConfig.node.objectives;
-        if (objectivesXml != null) 
+        if (fastLevelConfig.hasNode.objectives) 
         {
-            ObjectivesFactory.getObjectivesFromXml(objectivesXml, levelData.objectives);
+            ObjectivesFactory.getObjectivesFromXml(fastLevelConfig.node.objectives, levelData.objectives);
         }
 		
 		// Objectives are bound to a particular level, they are polled from the logic in the script node.  
@@ -477,7 +472,7 @@ class LevelCompiler
         {
             var childrenAttributes : Array<WidgetAttributesComponent> = new Array<WidgetAttributesComponent>();
             var childElements = xml.elements;
-            var childAttributes : WidgetAttributesComponent;
+            var childAttributes : WidgetAttributesComponent = null;
             for (childElement in childElements){
                 childAttributes = this.parseWidgetLayout(childElement);
                 childAttributes.parent = widgetAttributes;
@@ -499,7 +494,7 @@ class LevelCompiler
     private function getWidgetAttributeComponent(rootComponent : WidgetAttributesComponent,
             idToFind : String) : WidgetAttributesComponent
     {
-        var component : WidgetAttributesComponent;
+        var component : WidgetAttributesComponent = null;
         if (rootComponent != null) 
         {
             if (rootComponent.entityId == idToFind) 
@@ -508,7 +503,7 @@ class LevelCompiler
             }
             else if (rootComponent.children != null) 
             {
-                var i : Int;
+                var i : Int = 0;
                 for (i in 0...rootComponent.children.length){
                     component = getWidgetAttributeComponent(rootComponent.children[i], idToFind);
                     if (component != null) 

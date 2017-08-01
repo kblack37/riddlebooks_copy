@@ -73,7 +73,7 @@ class BarModelLevelCreator
         {
             var hintsList : Array<Dynamic> = customHintJsonData.hints;
             var numHints : Int = hintsList.length;
-            var i : Int;
+            var i : Int = 0;
             for (i in 0...numHints){
                 var hintData : Dynamic = hintsList[i];
                 var problemId : Int = hintData.id;
@@ -793,7 +793,7 @@ class BarModelLevelCreator
             referenceEquation.set("value", Reflect.field(documentIdToExpressionNameMap, "c"));
             codeRoot.addChild(referenceEquation);
             
-            var equationSetElement : Xml;
+            var equationSetElement : Xml = null;
             var equationSets : Array<Xml> = createEquationCombinationPairs(["1", "2", "3"]);
             for (equationSetElement in equationSets)
             {
@@ -1535,8 +1535,8 @@ class BarModelLevelCreator
     private function createEquationCombinationPairs(equationIds : Array<Dynamic>) : Array<Xml>
     {
         var equationSets : Array<Xml> = new Array<Xml>();
-        var i : Int;
-        var j : Int;
+        var i : Int = 0;
+        var j : Int = 0;
         var numIds : Int = equationIds.length;
         for (i in 0...numIds){
             for (j in i + 1...numIds){
@@ -1829,7 +1829,7 @@ class BarModelLevelCreator
         var referenceModel : Xml = Xml.parse("<referenceModel/>");
         var barWhole : Xml = Xml.parse("<barWhole/>");
         var numSegments : Int = Reflect.field(docIdToNumericValue, numPartsId);
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...numSegments){
             var segment : Xml = Xml.parse("<barSegment />");
             segment.set("value", Reflect.field(docIdToNumericValue, singlePartValueId));
@@ -1867,7 +1867,7 @@ class BarModelLevelCreator
         var barWhole : Xml = Xml.parse("<barWhole/>");
         barWhole.set("id", numPartsId);
         var numSegments : Int = Reflect.field(docIdToNumericValue, numPartsId);
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...numSegments){
             var segment : Xml = Xml.parse("<barSegment/>");
             segment.set("value", Reflect.field(docIdToNumericValue, singlePartValueId));
@@ -1925,7 +1925,7 @@ class BarModelLevelCreator
         var barWhole : Xml = Xml.parse("<barWhole/>");
         barWhole.set("id", denominatorId);
         var numSegments : Int = Reflect.field(docIdToNumericValue, denominatorId);
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...numSegments){
             var segment : Xml = Xml.parse("<barSegment/>");
             segment.set("value", "1");

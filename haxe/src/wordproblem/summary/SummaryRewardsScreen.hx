@@ -3,7 +3,6 @@ package wordproblem.summary;
 
 import flash.geom.Rectangle;
 import flash.text.TextFormat;
-import flash.utils.Dictionary;
 
 import cgs.internationalization.StringTable;
 
@@ -73,7 +72,7 @@ class SummaryRewardsScreen extends Layer
      * Key: String id of the object
      * Value: Object with extra data of how to render the additional popup
      */
-    private var m_renderComponentIdToData : Dictionary<String, Dynamic>;
+    private var m_renderComponentIdToData : Map<String, Dynamic>;
     
     /**
      * Between a new draw call and before a reset call we need to keep track of the textures of rewards
@@ -83,7 +82,7 @@ class SummaryRewardsScreen extends Layer
      * key: name of texture
      * value: true if texture was a TextureAtlas, false otherwise
      */
-    private var m_itemTextureNamesUsedBuffer : Dictionary<String, Bool>;
+    private var m_itemTextureNamesUsedBuffer : Map<String, Bool>;
     
     /**
      * This is the list of all display objects that are the visual representation of the rewards
@@ -137,8 +136,8 @@ class SummaryRewardsScreen extends Layer
         m_playerItemInventory = playerItemInventory;
         m_itemDataSource = itemDataSource;
         m_assetManager = assetManager;
-        m_renderComponentIdToData = new Dictionary();
-        m_itemTextureNamesUsedBuffer = new Dictionary();
+        m_renderComponentIdToData = new Map();
+        m_itemTextureNamesUsedBuffer = new Map();
         m_rewardButtonsInCurrentPage = new Array<BaseRewardButton>();
         m_rewardButtonHitBuffer = new Rectangle();
         m_rewardDataModels = new Array<Dynamic>();
@@ -210,8 +209,8 @@ class SummaryRewardsScreen extends Layer
         if (m_activeRewardsDetailScreen == null && this.stage != null) 
         {
             // Only check the buttons visible on the currently active page
-            var buttonMouseIsOverThisFrame : BaseRewardButton;
-            var i : Int;
+            var buttonMouseIsOverThisFrame : BaseRewardButton = null;
+            var i : Int = 0;
             var numRewards : Int = m_rewardButtonsInCurrentPage.length;
             for (i in 0...numRewards){
                 // Go through and set the hit areas after layout is finished
@@ -302,7 +301,7 @@ class SummaryRewardsScreen extends Layer
         }
         */
         
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...newRewardItemIds.length){
             // New items are intially hidden as presents
             // This hidden property is so we know whether the player has seen what the item

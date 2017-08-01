@@ -245,7 +245,7 @@ class LevelSetSelector extends Sprite
         }
         
         var buttonsToLayout : Array<DisplayObject> = new Array<DisplayObject>();
-        var i : Int;
+        var i : Int = 0;
         for (i in startingLevelIndex...endLevelIndex){
             // Draw button for this level
             var levelButton : Button = WidgetUtil.createButtonFromImages(

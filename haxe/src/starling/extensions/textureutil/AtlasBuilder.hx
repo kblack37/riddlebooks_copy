@@ -34,10 +34,10 @@ class AtlasBuilder
         var atlasBitmap : BitmapData = new BitmapData(width, height, true, 0x0);
         var packer : MaxRectPacker = new MaxRectPacker(width, height);
         var atlasText : String = "";
-        var bitmap : Bitmap;
-        var name : String;
-        var rect : Rectangle;
-        var subText : String;
+        var bitmap : Bitmap = null;
+        var name : String = null;
+        var rect : Rectangle = null;
+        var subText : String = null;
         var m : Matrix = new Matrix();
         
         for (i in 0...bitmapList.length){
@@ -93,10 +93,10 @@ class AtlasBuilder
         var cardAtlasTexture : RenderTexture = new RenderTexture(width, height, true, scale);
         var packer : MaxRectPacker = new MaxRectPacker(width, height);
         var atlasText : String = "";
-        var image : DisplayObject;
-        var textureName : String;
-        var rect : Rectangle;
-        var subText : String;
+        var image : DisplayObject = null;
+        var textureName : String = null;
+        var rect : Rectangle = null;
+        var subText : String = null;
         var m : Matrix = new Matrix();
         
         for (i in 0...images.length){

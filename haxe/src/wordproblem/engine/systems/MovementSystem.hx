@@ -45,7 +45,7 @@ class MovementSystem extends BaseSystemScript
     {
         var moveComponents : Array<Component> = componentManager.getComponentListForType(MoveableComponent.TYPE_ID);
         var numComponents : Int = moveComponents.length;
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...numComponents){
             var moveComponent : MoveableComponent = try cast(moveComponents[i], MoveableComponent) catch(e:Dynamic) null;
             if (moveComponent.isActive) 

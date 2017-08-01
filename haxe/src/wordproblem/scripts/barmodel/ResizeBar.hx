@@ -63,8 +63,8 @@ class ResizeBar extends BaseBarModelScript
                 
                 // Check if the mouse is pressed near one of the edges of a segment
                 var barWholeViews : Array<BarWholeView> = m_barModelArea.getBarWholeViews();
-                var barWholeView : BarWholeView;
-                var i : Int;
+                var barWholeView : BarWholeView = null;
+                var i : Int = 0;
                 var numBarWholeViews : Int = barWholeViews.length;
                 var edgeHitArea : Rectangle = new Rectangle();
                 for (i in 0...numBarWholeViews){
@@ -74,8 +74,8 @@ class ResizeBar extends BaseBarModelScript
                     // Check the left most edge of the first segment
                     if (segmentViews.length > 0) 
                     {
-                        var segmentView : BarSegmentView;
-                        var j : Int;
+                        var segmentView : BarSegmentView = null;
+                        var j : Int = 0;
                         var numSegmentViews : Int = segmentViews.length;
                         for (j in 0...numSegmentViews){
                             segmentView = segmentViews[j];

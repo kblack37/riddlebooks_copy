@@ -243,7 +243,7 @@ class TextAreaWidget extends Sprite implements IBaseWidget
     public function getDocumentIdToExpressionMap() : Dynamic
     {
         var expressionComponents : Array<Component> = this.componentManager.getComponentListForType(ExpressionComponent.TYPE_ID);
-        var i : Int;
+        var i : Int = 0;
         var documentIdToExpressionMap : Dynamic = { };
         for (i in 0...expressionComponents.length){
             var expressionComponent : ExpressionComponent = try cast(expressionComponents[i], ExpressionComponent) catch(e:Dynamic) null;
@@ -389,7 +389,7 @@ class TextAreaWidget extends Sprite implements IBaseWidget
             // If we repeat we initially create as many background texture display block as needed,
             // otherwise we just create one
             var numTexturesNeeded : Int = Std.int(((m_backgroundRepeat)) ? Math.ceil(m_viewPort.height / pageTextureHeight) + 1 : 1);
-            var i : Int;
+            var i : Int = 0;
             for (i in 0...numTexturesNeeded){
                 var backgroundImage : Image = new Image(m_pageTexture);
                 m_backgroundImageStack.push(backgroundImage);
@@ -681,8 +681,8 @@ class TextAreaWidget extends Sprite implements IBaseWidget
         
         
         var numPages : Int = m_textPages.length;
-        var i : Int;
-        var textPage : DocumentView;
+        var i : Int = 0;
+        var textPage : DocumentView = null;
         for (i in 0...numPages){
             textPage = m_textPages[i];
             textPage.visit();
@@ -739,7 +739,7 @@ class TextAreaWidget extends Sprite implements IBaseWidget
     {
         // Right now we just pick the first visible node
         var documentViews : Array<DocumentView> = this.getDocumentViewsAtPageIndexById(documentId);
-        var i : Int;
+        var i : Int = 0;
         var numViews : Int = documentViews.length;
         for (i in 0...numViews){
             var documentView : DocumentView = documentViews[i];
@@ -793,7 +793,7 @@ class TextAreaWidget extends Sprite implements IBaseWidget
                 var minIndexClippedBottom : Int = -1;
                 var gapAtTop : Bool = false;
                 var gapAtBottom : Bool = false;
-                var i : Int;
+                var i : Int = 0;
                 for (i in 0...numIterations){
                     var image : Image = m_backgroundImageStack[i];
                     image.y += scrollDelta;
@@ -825,8 +825,8 @@ class TextAreaWidget extends Sprite implements IBaseWidget
                     }
                 }
                 
-                var clippedImage : Image;
-                var shiftAmountY : Float;
+                var clippedImage : Image = null;
+                var shiftAmountY : Float = 0.0;
                 if (maxIndexClippedTop >= 0) 
                 {
                     shiftAmountY = (maxIndexClippedTop + 2) * imageHeight;
@@ -898,7 +898,7 @@ class TextAreaWidget extends Sprite implements IBaseWidget
         var expressionComponents : Array<Component> = this.componentManager.getComponentListForType(ExpressionComponent.TYPE_ID);
         var numComponents : Int = expressionComponents.length;
         var targetDocIds : Array<Dynamic> = [];
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...numComponents){
             targetDocIds.push((try cast(expressionComponents[i], ExpressionComponent) catch(e:Dynamic) null).entityId);
         }
@@ -1019,7 +1019,7 @@ class TextAreaWidget extends Sprite implements IBaseWidget
             m_componentManager.addComponentToEntity(mouseComponent);
         }
         
-        var i : Int;
+        var i : Int = 0;
         var childViews : Array<DocumentView> = view.childViews;
         for (i in 0...childViews.length){
             _addComponentsForDocumentView(childViews[i]);

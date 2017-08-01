@@ -111,7 +111,7 @@ class NewNotificationScreen extends Sprite
         starPositions.push(new Point(540, 550));
         
         
-        var i : Int;
+        var i : Int = 0;
         var numStars : Int = starPositions.length;
         var starTexture : Texture = assetManager.getTexture("star_small_white");
         var randomGenerator : PMPRNG = PMPRNG.createGen(null);
@@ -260,7 +260,7 @@ class NewNotificationScreen extends Sprite
         m_juggler.purge();
         
         // Remove all star images and their associated tweens
-        var i : Int;
+        var i : Int = 0;
         var numStars : Int = m_starImages.length;
         for (i in 0...numStars){
             m_starImages[i].removeFromParent(true);

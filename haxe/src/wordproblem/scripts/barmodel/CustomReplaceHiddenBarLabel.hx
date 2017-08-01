@@ -154,15 +154,15 @@ class CustomReplaceHiddenBarLabel extends BaseBarModelScript
         // Iterate through every bar label (including verticals) and check if a hidden portion is selected
         var barWholeViews : Array<BarWholeView> = m_barModelArea.getBarWholeViews();
         var numBarWholeViews : Int = barWholeViews.length;
-        var i : Int;
-        var barWholeView : BarWholeView;
+        var i : Int = 0;
+        var barWholeView : BarWholeView = null;
         for (i in 0...numBarWholeViews){
             barWholeView = barWholeViews[i];
             
             var barLabelViews : Array<BarLabelView> = barWholeView.labelViews;
             var numBarLabelViews : Int = barLabelViews.length;
-            var j : Int;
-            var barLabelView : BarLabelView;
+            var j : Int = 0;
+            var barLabelView : BarLabelView = null;
             for (j in 0...numBarLabelViews){
                 barLabelView = barLabelViews[j];
                 

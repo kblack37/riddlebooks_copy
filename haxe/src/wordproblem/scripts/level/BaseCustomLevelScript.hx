@@ -231,7 +231,7 @@ class BaseCustomLevelScript extends BaseGameScript
             
             super.iterateThroughBufferedEvents();
             var numChildren : Int = m_children.length;
-            var i : Int;
+            var i : Int = 0;
             while (i < numChildren){
                 m_children[i].visit();
                 
@@ -291,7 +291,7 @@ class BaseCustomLevelScript extends BaseGameScript
     private function getBooleanList(size : Int, value : Bool) : Array<Bool>
     {
         var booleanList : Array<Bool> = new Array<Bool>();
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...size){
             booleanList.push(value);
         }
@@ -445,8 +445,8 @@ class BaseCustomLevelScript extends BaseGameScript
         var deckComponentManager : ComponentManager = (try cast(m_gameEngine.getUiEntity("deckArea"), DeckWidget) catch(e:Dynamic) null).componentManager;
         var expressionComponents : Array<Component> = deckComponentManager.getComponentListForType(ExpressionComponent.TYPE_ID);
         var numComponents : Int = expressionComponents.length;
-        var i : Int;
-        var expressionComponent : ExpressionComponent;
+        var i : Int = 0;
+        var expressionComponent : ExpressionComponent = null;
         for (i in 0...numComponents){
             expressionComponent = try cast(expressionComponents[i], ExpressionComponent) catch(e:Dynamic) null;
             if (!expressionComponent.hasBeenModeled) 
@@ -537,7 +537,7 @@ class BaseCustomLevelScript extends BaseGameScript
         // Add the target view to the parent
         var pageIndex : Int = ((param.exists("pageIndex"))) ? param.pageIndex : -1;
         var targetDocumentViews : Array<DocumentView> = textArea.getDocumentViewsAtPageIndexById(documentId, null, pageIndex);
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...targetDocumentViews.length){
             var targetDocumentView : DocumentView = targetDocumentViews[i];
             if (targetDocumentView.node.getIsVisible() != visible) 
@@ -581,7 +581,7 @@ class BaseCustomLevelScript extends BaseGameScript
         for (documentId in ids)
         {
             var targetDocumentViews : Array<DocumentView> = textArea.getDocumentViewsAtPageIndexById(documentId, null, pageIndex);
-            var i : Int;
+            var i : Int = 0;
             for (i in 0...targetDocumentViews.length){
                 var targetDocumentView : DocumentView = targetDocumentViews[i];
                 targetDocumentView.node.setSelectable(selectable, true);

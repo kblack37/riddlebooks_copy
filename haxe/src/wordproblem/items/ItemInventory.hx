@@ -105,8 +105,8 @@ class ItemInventory
     public function loadInitialItems(playerItemList : Array<Dynamic>) : Void
     {
         var numPlayerItems : Int = playerItemList.length;
-        var instanceId : String;
-        var i : Int;
+        var instanceId : String = null;
+        var i : Int = 0;
         for (i in 0...numPlayerItems){
             instanceId = playerItemList[i];
             this.createItemFromBlueprint(instanceId);
@@ -154,7 +154,7 @@ class ItemInventory
         // need to remember which ones were actually given via this cache)
         var itemIds : Array<Dynamic> = [];
         var itemIdComponents : Array<Component> = this.componentManager.getComponentListForType(ItemIdComponent.TYPE_ID);
-        var i : Int;
+        var i : Int = 0;
         var numComponents : Int = itemIdComponents.length;
         for (i in 0...numComponents){
             var itemIdComponent : ItemIdComponent = try cast(itemIdComponents[i], ItemIdComponent) catch(e:Dynamic) null;
@@ -192,7 +192,7 @@ class ItemInventory
                 itemIds = [];
             }
             
-            var i : Int;
+            var i : Int = 0;
             var numIds : Int = itemIds.length;
             for (i in 0...numIds){
                 // For each id, make sure a blueprint is created for the item

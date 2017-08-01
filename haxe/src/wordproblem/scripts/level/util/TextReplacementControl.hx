@@ -63,7 +63,7 @@ class TextReplacementControl
         var textArea : TextAreaWidget = try cast(m_gameEngine.getUiEntity("textArea"), TextAreaWidget) catch(e:Dynamic) null;
         textArea.getDocumentViewsAtPageIndexById(documentId, m_outDocumentViewBuffer);
         
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...m_outDocumentViewBuffer.length){
             var documentView : DocumentView = m_outDocumentViewBuffer[i];
             if (Std.is(documentView, ImageView)) 
@@ -93,7 +93,7 @@ class TextReplacementControl
             var terminalViewsInLine : Array<Array<DocumentView>> = new Array<Array<DocumentView>>();
             var terminalViews : Array<DocumentView> = new Array<DocumentView>();
             blankSpace.getDocumentViewLeaves(terminalViews);
-            var i : Int;
+            var i : Int = 0;
             var numTerminalViews : Int = terminalViews.length;
             var currentLine : Int = -1;
             for (i in 0...numTerminalViews){
@@ -119,7 +119,7 @@ class TextReplacementControl
             var boundsBuffer : Rectangle = new Rectangle();
             for (i in 0...terminalViewsInLine.length){
                 terminalViews = terminalViewsInLine[i];
-                var j : Int;
+                var j : Int = 0;
                 var boundsForLine : Rectangle = new Rectangle();
                 for (j in 0...terminalViews.length){
                     var terminalView = terminalViews[j];
@@ -270,7 +270,7 @@ class TextReplacementControl
     {
         var textArea : TextAreaWidget = try cast(m_gameEngine.getUiEntity("textArea"), TextAreaWidget) catch(e:Dynamic) null;
         var documentViewsToReplace : Array<DocumentView> = new Array<DocumentView>();
-        var i : Int;
+        var i : Int = 0;
         var numDocumentIds : Int = documentIdsToReplace.length;
         for (i in 0...numDocumentIds){
             textArea.getDocumentViewsAtPageIndexById(documentIdsToReplace[i], documentViewsToReplace, pageIndex);
@@ -301,7 +301,7 @@ class TextReplacementControl
         if (viewsMatchingClass.length > 0) 
         {
             var contentToReplaceWith : Array<Xml> = new Array<Xml>();
-            var i : Int;
+            var i : Int = 0;
             for (i in 0...viewsMatchingClass.length){
                 var view : DocumentView = viewsMatchingClass[i];
                 var options : String = view.node.getText();
@@ -312,7 +312,7 @@ class TextReplacementControl
                     options = StringTools.replace(options, " ", "");
                 }
                 var pairs : Array<Dynamic> = options.split("&");
-                var j : Int;
+                var j : Int = 0;
                 var replacementContentText : String = "";
                 for (j in 0...pairs.length){
                     var keyValuePair : Array<Dynamic> = pairs[j].split("=");
@@ -344,7 +344,7 @@ class TextReplacementControl
         }
         
         var targetPageRootNode : DocumentNode = textArea.getPageViews()[pageIndex].node;
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...documentViewsToReplace.length){
             // Parse new content and then attach the new nodes to the existing document model
             var documentViewToReplace : DocumentView = documentViewsToReplace[i];

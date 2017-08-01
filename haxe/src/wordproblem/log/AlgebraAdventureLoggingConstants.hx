@@ -14,7 +14,7 @@ class AlgebraAdventureLoggingConstants
     // Game information
     public static inline var SKEY : String = "4047346551f969e5c329dd2eececbcd8";
 	// TODO: uncomment once cgs library is finished
-    public static var SKEY_HASH : SkeyHashVersion = null; //GameServerData.skeyHashVersion;
+    public static var SKEY_HASH : SkeyHashVersion = SKEY_HASH; //GameServerData.skeyHashVersion;
     public static inline var GAME_NAME : String = "wordproblems";
     public static inline var GAME_ID : Int = 17;
     

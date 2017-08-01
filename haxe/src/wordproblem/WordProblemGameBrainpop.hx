@@ -477,7 +477,7 @@ class WordProblemGameBrainpop extends WordProblemGameBase
         
         var genreToTutorialLevelList : Dynamic = { };
         var levelChildren : Array<Dynamic> = levelObject.children;
-        var i : Int;
+        var i : Int = 0;
         var numChildren : Int = levelChildren.length;
         for (i in 0...numChildren){
             // The special tutorial sets are formatted with a name that looks like

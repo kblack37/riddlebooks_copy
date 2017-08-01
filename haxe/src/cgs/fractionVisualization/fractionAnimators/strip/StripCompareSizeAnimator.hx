@@ -245,10 +245,10 @@ class StripCompareSizeAnimator implements IFractionAnimator
         // Emphasis data
         var winnerValue : Float = VisualizationUtilities.compareByComparisonType(comparisonType, first.fraction, second.fraction, details);
         var winnerExists : Bool = winnerValue != 0;
-        var winningView : CgsFractionView;
-        var winningModule : StripFractionModule;
-        var winningGlowLine : Sprite;
-        var winningGlowFinalPosition : Point;
+        var winningView : CgsFractionView = null;
+        var winningModule : StripFractionModule = null;
+        var winningGlowLine : Sprite = null;
+        var winningGlowFinalPosition : Point = null;
         if (winnerExists)
         {
             // Setup winning view

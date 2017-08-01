@@ -115,8 +115,8 @@ class EquationToInventory extends BaseGameScript
         var entityId : String = data.entityId;
         var components : Array<Dynamic> = data.components;
         var numComponents : Int = components.length;
-        var i : Int;
-        var componentObject : Dynamic;
+        var i : Int = 0;
+        var componentObject : Dynamic = null;
         for (i in 0...numComponents){
             componentObject = components[i];
             

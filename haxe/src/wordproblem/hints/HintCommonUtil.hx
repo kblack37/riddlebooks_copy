@@ -92,7 +92,7 @@ class HintCommonUtil
         if (decomposedPlayerBarModel.detectedLabelValueConflict.length == 0) 
         {
             var mismatchesFound : Array<Array<Dynamic>> = new Array<Array<Dynamic>>();
-            var i : Int;
+            var i : Int = 0;
             var numReferenceModels : Int = referenceModels.length;
             var smallestMismatchSet : Array<Dynamic> = null;
             for (i in 0...numReferenceModels){
@@ -286,7 +286,7 @@ class HintCommonUtil
                         {
 							function getNumSegmentsCoveredByVerticalLabel(label : BarLabel, barModelData : BarModelData) : Int
                             {
-                                var i : Int;
+                                var i : Int = 0;
                                 var numSegments : Int = 0;
                                 for (i in label.startSegmentIndex...label.endSegmentIndex + 1){
                                     var segmentsInBarWhole : Int = barModelData.barWholes[i].barSegments.length;
@@ -569,7 +569,7 @@ class HintCommonUtil
             // translate the expression value to document ids
             // Also highlight the spot the text area with the missing label
             var expressionComponents : Array<Component> = textArea.componentManager.getComponentListForType(ExpressionComponent.TYPE_ID);
-            var i : Int;
+            var i : Int = 0;
             var documentIds : Array<String> = new Array<String>();
             for (i in 0...expressionComponents.length){
                 var expressionComponent : ExpressionComponent = try cast(expressionComponents[i], ExpressionComponent) catch(e:Dynamic) null;
@@ -649,8 +649,8 @@ class HintCommonUtil
         measuringTextField.defaultTextFormat = buttonTextFormat;
         var gap : Float = 10;
         var sidePadding : Float = 15;
-        var buttonHeight : Float;
-        var buttonWidth : Float;
+        var buttonHeight : Float = 0.0;
+        var buttonWidth : Float = 0.0;
         var totalButtonWidthOfRow : Float = 0;
         
         var buttonContainer : Sprite = new Sprite();

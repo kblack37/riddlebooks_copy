@@ -95,7 +95,7 @@ class StateMachine extends Sprite implements IStateMachine
     public function getStateInstance(state : Dynamic) : IState
     {
         var stateToReturn : IState = null;
-        var i : Int;
+        var i : Int = 0;
         var numStates : Int = this.states.length;
         for (i in 0...numStates){
             var stateToCompare : IState = this.states[i];

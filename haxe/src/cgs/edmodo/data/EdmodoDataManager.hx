@@ -75,7 +75,7 @@ class EdmodoDataManager implements IEdmodoDataProvider
         
         var userTokens : Array<Dynamic> = [];
         var currUserToken : String = "";
-        var userData : EdmodoUserData;
+        var userData : EdmodoUserData = null;
         for (userDataObj in users)
         {
             userData = new EdmodoUserData();
@@ -120,7 +120,7 @@ class EdmodoDataManager implements IEdmodoDataProvider
     {
         var userTokens : Array<Dynamic> = [];
         var currUserToken : String = "";
-        var userData : EdmodoUserData;
+        var userData : EdmodoUserData = null;
         for (userDataObj in users)
         {
             if (Reflect.hasField(_users, userDataObj.user_token))
@@ -158,9 +158,9 @@ class EdmodoDataManager implements IEdmodoDataProvider
     public function parseJsonGroupData(groups : Array<Dynamic>, userToken : String = null) : Array<Dynamic>
     {
         var groupIds : Array<Dynamic> = [];
-        var groupOwners : Array<Dynamic>;
-        var groupData : EdmodoGroupData;
-        var userData : EdmodoUserData;
+        var groupOwners : Array<Dynamic> = null;
+        var groupData : EdmodoGroupData = null;
+        var userData : EdmodoUserData = null;
         for (groupDataObj in groups)
         {
             //Does this group already exist.

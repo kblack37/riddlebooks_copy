@@ -1,5 +1,6 @@
 package wordproblem.engine.barmodel.animation;
 
+import haxe.Constraints.Function;
 
 import starling.animation.IAnimatable;
 import starling.animation.Tween;
@@ -42,7 +43,7 @@ class RemoveResizeableBarPieceAnimation implements IAnimatable
         // Figure out how many pixels it will take to go from the current length to a new minimum
         m_shrinkVelocityPixelPerSecond = Math.max(1200, (resizeableBarView.pixelLength - m_endPixelLength) / 0.5);
         m_barPieceViewToRemove = resizeableBarView;
-        Starling.juggler.add(this);
+        Starling.current.juggler.add(this);
         
         var thisAnimation : IAnimatable = this;
         m_fallTween = new Tween(m_barPieceViewToRemove, 0.7);
@@ -51,7 +52,7 @@ class RemoveResizeableBarPieceAnimation implements IAnimatable
         m_fallTween.animate("y", m_barPieceViewToRemove.y + 300);
         m_fallTween.onComplete = function() : Void
                 {
-                    Starling.juggler.remove(thisAnimation);
+                    Starling.current.juggler.remove(thisAnimation);
                     if (m_onComplete != null) 
                     {
                         m_onComplete();

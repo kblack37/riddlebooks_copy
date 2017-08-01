@@ -99,7 +99,7 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
                 {
                     var children : Array<ICgsLevelNode> = (try cast(levelNode, ICgsLevelPack) catch(e:Dynamic) null).nodes;
                     var numChildren : Int = children.length;
-                    var i : Int;
+                    var i : Int = 0;
                     for (i in 0...numChildren){
                         separateChapterAndLevelNodes(outChapterNodes, outLevelNodesWithoutChapter, children[i]);
                     }
@@ -128,7 +128,7 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
             {
                 var children : Array<ICgsLevelNode> = (try cast(levelNode, ICgsLevelPack) catch(e:Dynamic) null).nodes;
                 var numChildren : Int = children.length;
-                var i : Int;
+                var i : Int = 0;
                 for (i in 0...numChildren){
                     getLevelNodes(outLevelNodes, children[i]);
                 }
@@ -488,17 +488,17 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
         for (genreLevelPack in genreLevelPacks)
         {
             WordProblemCgsLevelManager.separateChapterAndLevelNodes(chapterNodesInGenre, levelNodesWithoutChapterInGenre, genreLevelPack);
-            var i : Int;
+            var i : Int = 0;
             var numChapterNodes : Int = chapterNodesInGenre.length;
-            var chapterLevelPack : ChapterLevelPack;
+            var chapterLevelPack : ChapterLevelPack = null;
             for (i in 0...numChapterNodes){
                 chapterLevelPack = chapterNodesInGenre[i];
                 chapterLevelPack.index = i;
                 
                 // Set parent genre and chapter for levels in a chapter
                 WordProblemCgsLevelManager.getLevelNodes(levelNodesInChapter, chapterLevelPack);
-                var j : Int;
-                var levelNodeInChapter : WordProblemLevelLeaf;
+                var j : Int = 0;
+                var levelNodeInChapter : WordProblemLevelLeaf = null;
                 var numLevelNodesInChapter : Int = levelNodesInChapter.length;
                 for (j in 0...numLevelNodesInChapter){
                     levelNodeInChapter = levelNodesInChapter[j];
@@ -513,7 +513,7 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
 			
 			// Set parent genre and index for levels without a chapter  
             var numLevelNodesWithoutChapter : Int = levelNodesWithoutChapterInGenre.length;
-            var levelLeafWithoutChapter : WordProblemLevelLeaf;
+            var levelLeafWithoutChapter : WordProblemLevelLeaf = null;
             for (i in 0...numLevelNodesWithoutChapter){
                 levelLeafWithoutChapter = try cast(levelNodesWithoutChapterInGenre[i], WordProblemLevelLeaf) catch(e:Dynamic) null;
                 levelLeafWithoutChapter.index = i;
@@ -684,7 +684,7 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
                 // Iterate through the start of the edge list and check for ones where the starting
                 // node is in one we are currently in.
                 // If a node in the path contains outgoing edges, update all the condition objects
-                var i : Int;
+                var i : Int = 0;
                 var numEdges : Int = m_nodeEdges.length;
                 var closestAncestorWithASpecifiedEdge : ICgsLevelNode = null;
                 for (i in 0...numEdges){
@@ -693,7 +693,7 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
                     var startNodeIdForEdge : String = edgeObject.startId;
                     
                     // Check if an edges matches one of the set the current level node is contained within
-                    var j : Int;
+                    var j : Int = 0;
                     for (j in 0...numNodesContainingThisLevel){
                         // If an edge is outgoing from a set, we test whether we should take this edge
                         var nodeContainingLevel : ICgsLevelNode = nodesContainingCurrentLevel[j];
@@ -708,7 +708,7 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
                                 if (edgeObject.exists("conditions")) 
                                 {
                                     var conditionsData : Array<Dynamic> = edgeObject.conditions;
-                                    var k : Int;
+                                    var k : Int = 0;
                                     for (k in 0...conditionsData.length){
                                         conditionsList.push(createCondition(conditionsData[k]));
                                     }
@@ -875,7 +875,7 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
         // Iterate through the start of the edge list and check for ones where the starting
         // node is in one we are currently in.
         // If a node in the path contains outgoing edges, update all the condition objects
-        var i : Int;
+        var i : Int = 0;
         var numEdges : Int = m_nodeEdges.length;
         var closestAncestorWithASpecifiedEdge : ICgsLevelNode = null;
         for (i in 0...numEdges){
@@ -884,8 +884,8 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
             
             // Check if an edges matches one of the set the current level node is contained within
             var numNodesToCheckEdges : Int = nodesContainingCurrentLevel.length;
-            var j : Int;
-            var k : Int;
+            var j : Int = 0;
+            var k : Int = 0;
             for (j in 0...numNodesToCheckEdges){
                 // If an edge is outgoing from a set, we test whether we should take this edge
                 var nodeContainingLevel : ICgsLevelNode = nodesContainingCurrentLevel[j];
@@ -1208,8 +1208,8 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
             if (selectionPolicy == LevelNodeActions.PICK_RANDOM_UNCOMPLETED_LEVEL) 
             {
                 var candidateNodes : Array<ICgsLevelNode> = new Array<ICgsLevelNode>();
-                var i : Int;
-                var childNode : ICgsLevelNode;
+                var i : Int = 0;
+                var childNode : ICgsLevelNode = null;
                 for (i in 0...childNodes.length){
                     childNode = childNodes[i];
                     if (!childNode.isComplete) 
@@ -1276,8 +1276,8 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
         else 
         {
             var children : Array<ICgsLevelNode> = root.nodes;
-            var i : Int;
-            var child : ICgsLevelNode;
+            var i : Int = 0;
+            var child : ICgsLevelNode = null;
             for (i in 0...children.length){
                 child = children[i];
                 
@@ -1357,7 +1357,7 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
     private function edgeConditionsPassed(conditions : Array<ICondition>) : Bool
     {
         var allConditionsPassed : Bool = true;
-        var i : Int;
+        var i : Int = 0;
         var numConditions : Int = conditions.length;
         for (i in 0...numConditions){
             var condition : ICondition = conditions[i];
@@ -1753,7 +1753,7 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
      */
     public function getNextLevel(presentLevel : ICgsLevelLeaf = null) : ICgsLevelLeaf
     {
-        var result : ICgsLevelLeaf;
+        var result : ICgsLevelLeaf = null;
         if (presentLevel == null) 
         {
             result = m_rootLevelProgression.firstLeaf;
@@ -1780,7 +1780,7 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
      */
     public function getPrevLevel(presentLevel : ICgsLevelLeaf = null) : ICgsLevelLeaf
     {
-        var result : ICgsLevelLeaf;
+        var result : ICgsLevelLeaf = null;
         if (presentLevel == null) 
         {
             result = m_rootLevelProgression.firstLeaf;

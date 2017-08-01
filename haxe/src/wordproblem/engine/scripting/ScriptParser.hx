@@ -16,6 +16,7 @@ import wordproblem.engine.scripting.graph.selector.ConcurrentSelector;
 import wordproblem.engine.scripting.graph.selector.SequenceSelector;
 import wordproblem.player.PlayerStatsAndSaveData;
 import wordproblem.resource.AssetManager;
+import wordproblem.scripts.level.GenericBarModelLevelScript;
 import wordproblem.scripts.level.GenericModelLevelScript;
 
 class ScriptParser
@@ -49,7 +50,7 @@ class ScriptParser
      */
     public function parse(xml : Xml) : ScriptNode
     {
-        var rootScript : ScriptNode;
+        var rootScript : ScriptNode = null;
         
         var allNodeElements = (new Fast(xml)).elements;
         
@@ -64,7 +65,7 @@ class ScriptParser
     
     private function createNode(nodeElement : Fast) : ScriptNode
     {
-        var rootNode : ScriptNode;
+        var rootNode : ScriptNode = null;
         var nodeType : String = nodeElement.name;
         
         // Figure out the type of node to construct, this will affect the location of the
@@ -88,10 +89,10 @@ class ScriptParser
             if (nodeElement.has.id) 
             {
                 var fullyQualifiedName : String = nodeElement.att.id;
-                var scriptClass : Class<Dynamic> = Type.getClass(Type.resolveClass(fullyQualifiedName));
+                var scriptClass = Type.resolveClass(fullyQualifiedName);
                 //HACK: Pass in additional data to bar model level script
                 if (fullyQualifiedName == GENERIC_BAR_MODEL_LEVEL_SCRIPT_NAME) {
-                    rootNode = try cast(Type.createInstance(scriptClass, [m_engine, m_compiler, m_assetManager, m_playerStatsAndSaveData, m_levelManager]), ScriptNode) catch(e:Dynamic) null;
+                    rootNode = try cast(Type.createInstance(scriptClass, [m_engine, m_compiler, m_assetManager, m_playerStatsAndSaveData, m_levelManager, null, true]), ScriptNode) catch(e:Dynamic) null;
                 }
                 else {
                     rootNode = try cast(Type.createInstance(scriptClass, [m_engine, m_compiler, m_assetManager, m_playerStatsAndSaveData]), ScriptNode) catch(e:Dynamic) null;
@@ -102,7 +103,7 @@ class ScriptParser
                 if (nodeElement.elements.hasNext()) 
                 {
 					var list = nodeElement.elements;
-                    rootNode.setExtraData(list);
+					if (rootNode != null) rootNode.setExtraData(list);
                 }
             }
             else 
@@ -111,7 +112,7 @@ class ScriptParser
                 var data : Dynamic = haxe.Json.parse(dataElement.innerData);
                 
                 // Append hint data
-                var i : Int;
+                var i : Int = 0;
                 var variableHints : Array<Dynamic> = [];
                 var variableHintElements = nodeElement.nodes.variableHint;
 				for (variableHintElement in variableHintElements) {

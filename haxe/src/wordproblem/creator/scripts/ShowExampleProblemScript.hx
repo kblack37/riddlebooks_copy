@@ -108,7 +108,7 @@ class ShowExampleProblemScript extends BaseProblemCreateScript
         
         // Assume the problem is composed of several paragraphs, each of these paragraphs should
         // go into their own text block
-        var i : Int;
+        var i : Int = 0;
         var paragraphElements : FastXMLList = exampleProblemXml.node.elements.innerData("p");
         for (i in 0...paragraphElements.length()){
             // Add new text block per paragraph

@@ -175,14 +175,15 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
             // While dragging, check if the mouse is over the hit area representing the edge of a segment
             // We should blink the segment to tell the player something can happen
             var targetHitAreaIndex : Int = -1;
-            if ((mouseState.leftMouseDraggedThisFrame || mouseState.leftMouseDown) && m_widgetDragSystem.getWidgetSelected()) 
+            if ((mouseState.leftMouseDraggedThisFrame || mouseState.leftMouseDown) && m_widgetDragSystem.getWidgetSelected() != null) 
             {
                 m_showHitAreas = true;
                 var hitAreas : Array<Rectangle> = getActiveHitAreas();
                 var numHitAreas : Int = hitAreas.length;
-                var i : Int;
+                var i : Int = 0;
+				var hitArea : Rectangle = null;
                 for (i in 0...numHitAreas){
-                    var hitArea : Rectangle = hitAreas[i];
+                    hitArea = hitAreas[i];
                     if (hitArea.containsPoint(m_localMouseBuffer)) 
                     {
                         targetHitAreaIndex = i;
@@ -227,7 +228,7 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
                             // If only one gesture is valid on the current segment, apply the preview of that gesture
                             if (numValidGestures == 1) 
                             {
-                                gestureScript = m_gestures[lastValidGestureIndex];
+                                var gestureScript = m_gestures[lastValidGestureIndex];
                                 gestureScript.showPreview(m_widgetDragSystem.getWidgetSelected(), m_widgetDragSystem.getExtraParams(), targetBarWhole.id);
                                 m_gesturePreviewWithoutMenu = gestureScript;
                             }
@@ -295,11 +296,10 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
         while (m_hitAreas.length > 0)
         {
             m_hitAreaPool.push(m_hitAreas.pop());
-        }  // Reset hit area to bar whole index  
-        
-        
-        
-        as3hx.Compat.setArrayLength(m_hitAreaIndexToBarWholeIndex, 0);
+        }  
+		
+		// Reset hit area to bar whole index  
+		m_hitAreaIndexToBarWholeIndex = new Array<Int>();
         
         // The hit areas for adding to edge are governed by these rules:
         // Should appear on the rightmost edge
@@ -311,8 +311,8 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
         // Find the rightmost edge to serve as the limit to extend the other bars to
         var furthestRightEdgeX : Float = 0;
         var barWholeViews : Array<BarWholeView> = m_barModelArea.getBarWholeViews();
-        var i : Int;
-        var barWholeView : BarWholeView;
+        var i : Int = 0;
+        var barWholeView : BarWholeView = null;
         var numBarWholeViews : Int = barWholeViews.length;
         var longestBarValue : Float = 0;
         for (i in 0...numBarWholeViews){
@@ -343,7 +343,7 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
             }
             else 
             {
-                segmentViews = barWholeView.segmentViews;
+                var segmentViews = barWholeView.segmentViews;
                 var hitAreaX : Float = 0;
                 var hitAreaY : Float = 0;
                 var hitAreaWidth : Float = 0;
@@ -352,7 +352,7 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
                 {
                     // The right edge of the last segment view acts as the anchor point
                     var lastSegmentViewBounds : Rectangle = segmentViews[segmentViews.length - 1].rigidBody.boundingRectangle;
-                    rightEdgeX = lastSegmentViewBounds.right;
+                    var rightEdgeX = lastSegmentViewBounds.right;
                     
                     hitAreaX = lastSegmentViewBounds.right - xOffsetIntoBox;
                     hitAreaY = lastSegmentViewBounds.top;
@@ -363,10 +363,9 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
                 if (hitAreaWidth < hitBoxMinimumWidth) 
                 {
                     hitAreaWidth = hitBoxMinimumWidth;
-                }  // Grab a rectangle from the pool  
-                
-                
-                
+                }  
+				
+				// Grab a rectangle from the pool  
                 var segmentHitArea : Rectangle = ((m_hitAreaPool.length > 0)) ? m_hitAreaPool.pop() : new Rectangle();
                 segmentHitArea.setTo(hitAreaX, hitAreaY, hitAreaWidth, hitAreaHeight);
                 m_hitAreas.push(segmentHitArea);
@@ -411,14 +410,12 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
             {
                 allowAddComparison = true;
             }
-        }  // Get the bar with the greatest value    // We are assuming that each bar on a line has its own hit area  
-        
-        
-        
-        
-        
+        }
+		
+		// We are assuming that each bar on a line has its own hit area  
+        // Get the bar with the greatest value
         var barWholes : Array<BarWhole> = m_barModelArea.getBarModelData().barWholes;
-        var i : Int;
+        var i : Int = 0;
         var maxBarWholeValue : Float = -1;
         for (i in 0...barWholes.length){
             var barValue : Float = barWholes[i].getValue();
@@ -429,7 +426,7 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
         }
         
         for (i in 0...hitAreas.length){
-            barValue = barWholes[i].getValue();
+            var barValue = barWholes[i].getValue();
             var mainIcon : DisplayObject = null;
             var hitArea : Rectangle = hitAreas[i];
             if (allowAddComparison && allowAddNewSegment) 
@@ -452,7 +449,7 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
             }
             else if (allowAddNewSegment) 
             {
-                addIcon = new Image(m_assetManager.getTexture("add"));
+                var addIcon = new Image(m_assetManager.getTexture("add"));
                 mainIcon = addIcon;
             }
             
@@ -535,7 +532,7 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
             blinkTween.repeatCount = 0;
             blinkTween.reverse = true;
             blinkTween.fadeTo(0.3);
-            Starling.juggler.add(blinkTween);
+            Starling.current.juggler.add(blinkTween);
             m_currentMouseOverHitAreaTween = blinkTween;
             
             // Add the add/subtract icon
@@ -574,7 +571,7 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
         
         if (m_currentMouseOverHitAreaTween != null) 
         {
-            Starling.juggler.remove(m_currentMouseOverHitAreaTween);
+            Starling.current.juggler.remove(m_currentMouseOverHitAreaTween);
             m_currentMouseOverHitAreaTween = null;
         }
     }
@@ -604,7 +601,7 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
                 mouseOutRadialOption, 
                 clickRadialOption, 
                 drawMenuSegment, 
-                disposeMenuSegment, 
+                disposeMenuSegment
                 );
     }
     
@@ -616,7 +613,7 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
             var droppedObject : BaseTermWidget = param.widget;
             var hitAreas : Array<Rectangle> = getActiveHitAreas();
             var numHitAreas : Int = hitAreas.length;
-            var i : Int;
+            var i : Int = 0;
             var hitAreaIndex : Int = -1;
             for (i in 0...numHitAreas){
                 var hitArea : Rectangle = hitAreas[i];
@@ -691,8 +688,8 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
                         // the 60x60 space in the middle
                         var termWidget : BaseTermWidget = new SymbolTermWidget(
                         new ExpressionNode(m_expressionCompiler.getVectorSpace(), value), 
-                        m_gameEngine.getExpressionSymbolResources(), 
-                        m_assetManager, 
+							m_gameEngine.getExpressionSymbolResources(), 
+							m_assetManager
                         );
                         var targetScaleY : Float = 60 / termWidget.height;
                         var targetScaleX : Float = 60 / termWidget.width;
@@ -701,7 +698,6 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
                         
                         m_gameEngine.dispatchEventWith(GameEvent.OPEN_RADIAL_OPTIONS, false, {
                                     display : m_radialMenuControl.getRadialMenuContainer()
-
                                 });
                     }
                 }
@@ -727,7 +723,7 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
         icon.x = Math.cos(rotation + arcLength * 0.5) * (outerRadius - radiusDelta * 0.5);
         icon.y = Math.sin(rotation + arcLength * 0.5) * (outerRadius - radiusDelta * 0.5);
         
-        var outerTexture : Texture;
+        var outerTexture : Texture = null;
         var outlineThickness : Float = 2;
         if (mode == "up") 
         {

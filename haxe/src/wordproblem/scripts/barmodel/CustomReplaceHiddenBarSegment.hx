@@ -146,15 +146,15 @@ class CustomReplaceHiddenBarSegment extends BaseBarModelScript
         // Iterate through every bar and check if a hidden portion is selected
         var barWholeViews : Array<BarWholeView> = m_barModelArea.getBarWholeViews();
         var numBarWholeViews : Int = barWholeViews.length;
-        var i : Int;
-        var barWholeView : BarWholeView;
+        var i : Int = 0;
+        var barWholeView : BarWholeView = null;
         for (i in 0...numBarWholeViews){
             barWholeView = barWholeViews[i];
             
             var barSegmentViews : Array<BarSegmentView> = barWholeView.segmentViews;
             var numBarSegmentViews : Int = barSegmentViews.length;
-            var j : Int;
-            var barSegmentView : BarSegmentView;
+            var j : Int = 0;
+            var barSegmentView : BarSegmentView = null;
             for (j in 0...numBarSegmentViews){
                 barSegmentView = barSegmentViews[j];
                 

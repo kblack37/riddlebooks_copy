@@ -116,7 +116,7 @@ class HelpScreenViewer extends ScriptNode
         m_categoryButtons = new Array<Button>();
         var whiteButtonTexture : Texture = assetManager.getTexture("button_white");
         var whiteScale9Texture : Texture = Texture.fromTexture(whiteButtonTexture, new Rectangle(8, 8, 16, 16));
-        var i : Int;
+        var i : Int = 0;
         var fontSize : Int = 20;
         var categoryButtonWidth : Float = 170;
         var categoryButtonHeight : Float = 40;

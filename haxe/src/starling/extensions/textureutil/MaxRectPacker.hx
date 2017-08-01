@@ -71,8 +71,8 @@ class MaxRectPacker
             height : Float) : Rectangle
     {
         var score : Int = Std.int(Math.pow(2, 30));
-        var areaFit : Float;
-        var r : Rectangle;
+        var areaFit : Float = 0.0;
+        var r : Rectangle = null;
         var bestNode : Rectangle = new Rectangle();
         
         var i : Int = 0;
@@ -101,7 +101,7 @@ class MaxRectPacker
     private function splitFreeNode(freeNode : Rectangle,
             usedNode : Rectangle) : Bool
     {
-        var newNode : Rectangle;
+        var newNode : Rectangle = null;
         // Test with SAT if the rectangles even intersect.
         if (usedNode.x >= freeNode.x + freeNode.width ||
             usedNode.x + usedNode.width <= freeNode.x ||
@@ -155,7 +155,7 @@ class MaxRectPacker
         var i : Int = 0;
         var j : Int = 0;
         var len : Int = freeRectangles.length;
-        var tmpRect : Rectangle;
+        var tmpRect : Rectangle = null;
         var tmpRect2 : Rectangle;
         while (i < len)
         {

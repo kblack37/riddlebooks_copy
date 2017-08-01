@@ -50,7 +50,7 @@ class CurvedText extends Sprite
         
         // Target text needs to be decomposed into individual characters and manually
         // repositioned along the curve
-        var i : Int;
+        var i : Int = 0;
         var numCharacters : Int = text.length;
         var xOffset : Float = 0.0;
         var totalCharacterWidth : Float = 0;
@@ -66,8 +66,8 @@ class CurvedText extends Sprite
                     heightForSingleCharacter, 
                     character, 
                     textFormat.font, 
-                    try cast(textFormat.size, Float) catch(e:Dynamic) null, 
-                    try cast(textFormat.color, Int) catch(e:Dynamic) null, 
+                    try cast(textFormat.size, Float) catch(e:Dynamic) 0, 
+                    try cast(textFormat.color, Int) catch(e:Dynamic) 0, 
                     true
                 );
                 textField.pivotX = textField.width * 0.5;
@@ -130,7 +130,7 @@ class CurvedText extends Sprite
     {
         super.dispose();
         
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...m_textFieldsForCharacters.length){
             var textField : TextField = m_textFieldsForCharacters[i];
             if (textField != null) 

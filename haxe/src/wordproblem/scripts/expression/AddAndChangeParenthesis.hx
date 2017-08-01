@@ -578,10 +578,10 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
         // Right paren cannot move to left of original location
         
         // Iterate through all possible pieces that are laid out horizontally
-        var i : Int;
+        var i : Int = 0;
         var numWidgetsCanMoveParenthesisTo : Int = m_widgetsParenthesisCanMoveTo.length;
-        var termWidget : BaseTermWidget;
-        var termWidgetBounds : Rectangle;
+        var termWidget : BaseTermWidget = null;
+        var termWidgetBounds : Rectangle = null;
         
         if (movingLeftParen && m_localPointBuffer.x <= m_xAnchoredAtRightEdge) 
         {
@@ -679,8 +679,8 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
         // Add a new paren at that point
         // Check which term is underneath the dragged object, wrap parens around it
         var termWidgetUnderPoint : Bool = false;
-        var termArea : TermAreaWidget;
-        var i : Int;
+        var termArea : TermAreaWidget = null;
+        var i : Int = 0;
         for (i in 0...m_termAreas.length){
             termArea = m_termAreas[i];
             

@@ -87,7 +87,7 @@ class PrepopulateBarModel extends BaseBarModelScript
             var textArea : TextAreaWidget = try cast(textAreas[0], TextAreaWidget) catch(e:Dynamic) null;
             var barModelArea : BarModelAreaWidget = try cast(barModelViews[0], BarModelAreaWidget) catch(e:Dynamic) null;
             var expressionComponents : Array<Component> = textArea.componentManager.getComponentListForType(ExpressionComponent.TYPE_ID);
-            var i : Int;
+            var i : Int = 0;
             var documentIdToExpressionMap : Dynamic = { };
             for (i in 0...expressionComponents.length){
                 var expressionComponent : ExpressionComponent = try cast(expressionComponents[i], ExpressionComponent) catch(e:Dynamic) null;

@@ -113,7 +113,7 @@ class ExpressionPickerWidget extends Sprite implements IDisposable
     public function addExpressions(expressions : Array<String>) : Void
     {
         // Create a button entry for the new expression
-        var i : Int;
+        var i : Int = 0;
         var numTotalExpressions : Int = expressions.length;
         var columnsRequired : Float = ((m_numItemsPerColumnLimit > 0)) ? 
         Math.ceil(numTotalExpressions / m_numItemsPerColumnLimit) : 
@@ -153,8 +153,8 @@ class ExpressionPickerWidget extends Sprite implements IDisposable
     public function pickExpressionContainerUnderPoint(globalX : Float, globalY : Float) : ExpressionContainer
     {
         var expressionContainerUnderPoint : ExpressionContainer = null;
-        var i : Int;
-        var expressionContainer : ExpressionContainer;
+        var i : Int = 0;
+        var expressionContainer : ExpressionContainer = null;
         var numExpressionContainers : Int = m_expressionContainers.length;
         for (i in 0...numExpressionContainers){
             expressionContainer = m_expressionContainers[i];
@@ -266,8 +266,8 @@ class ExpressionPickerWidget extends Sprite implements IDisposable
     private function layout() : Void
     {
         // Center contents within the total width and height
-        var i : Int;
-        var expressionContainer : ExpressionContainer;
+        var i : Int = 0;
+        var expressionContainer : ExpressionContainer = null;
         var numExpressionContainers : Int = m_expressionContainers.length;
         var itemInColumnCounter : Int = 0;
         var yOffset : Float = 0;

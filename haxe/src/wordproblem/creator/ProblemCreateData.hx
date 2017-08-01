@@ -90,7 +90,7 @@ class ProblemCreateData
         {
             // Get all of the paragraph elements (these will represent the text blocks)
             var paragraphElements : FastXMLList = prepopulatedTextElement.node.elements.innerData("p");
-            var i : Int;
+            var i : Int = 0;
             var numParagraphs : Int = paragraphElements.length();
             for (i in 0...numParagraphs){
                 m_prepopulatedTextBlocks.push(paragraphElements.get(i));

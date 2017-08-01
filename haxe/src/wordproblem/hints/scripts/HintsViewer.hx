@@ -316,7 +316,7 @@ class HintsViewer extends ScriptNode implements IShowableScript
 		m_lockedHints = new Array<HintScript>();
 		m_unlockedHints = new Array<HintScript>();
         
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...m_availableHints.length){
             var hintScript : HintScript = m_availableHints[i];
             if (hintScript.unlocked) 
@@ -472,7 +472,7 @@ class HintsViewer extends ScriptNode implements IShowableScript
         // -the list of locked hints is ordered so the first ones are more important to show
         // -the first 'useful' hint will be the most helpful
         var bestNextHint : HintScript = null;
-        var i : Int;
+        var i : Int = 0;
         var totalLockedHints : Int = m_lockedHints.length;
         for (i in 0...totalLockedHints){
             var hintScript : HintScript = m_lockedHints[i];

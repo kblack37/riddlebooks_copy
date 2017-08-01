@@ -232,7 +232,7 @@ class TipsViewer extends ScriptNode implements IShowableScript
             assetManager : AssetManager,
             screenBounds : Rectangle) : IShowableScript
     {
-        var tipScript : IShowableScript;
+        var tipScript : IShowableScript = null;
         if (tipName == TipsViewer.SUBTRACT_WITH_BOXES) 
         {
             tipScript = new AddNewBarComparisonTip(expressionSymbolMap, canvasContainer, simulatedMouseState, simulatedTimer, assetManager, screenBounds, tipName);
@@ -378,7 +378,7 @@ class TipsViewer extends ScriptNode implements IShowableScript
         var rows : Int = 4;
         
         var namesInCurrentPage : Array<String> = m_namesPerPage[m_currentPageIndex];
-        var i : Int;
+        var i : Int = 0;
         var namesInPage : Int = namesInCurrentPage.length;
         var yOffset : Float = 50;
         var calculatedHorizontalGap : Float = (m_screenWidth - columns * buttonWidth) / (columns + 1);

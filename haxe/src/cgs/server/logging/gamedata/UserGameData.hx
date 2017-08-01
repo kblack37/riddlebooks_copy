@@ -97,8 +97,8 @@ class UserGameData
 		 */
     public function parseUserGameData(data : Array<Dynamic>) : Void
     {
-        var key : String;
-        var rawData : Dynamic;
+        var key : String = null;
+        var rawData : Dynamic = null;
         for (dataChunk in data)
         {
             key = dataChunk.u_data_id;

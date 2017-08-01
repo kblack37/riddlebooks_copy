@@ -140,10 +140,10 @@ class DeckWidget extends ScrollGridWidget implements IDisposable implements IBas
             widgetB : BaseTermWidget) : Void
     {
         var renderComponentList : Array<DisplayObject> = super.getObjects();
-        var indexA : Int;
-        var indexB : Int;
-        var i : Int;
-        var widget : BaseTermWidget;
+        var indexA : Int = 0;
+        var indexB : Int = 0;
+        var i : Int = 0;
+        var widget : BaseTermWidget = null;
         for (component in renderComponentList){
             widget = try cast(component, BaseTermWidget) catch(e:Dynamic) null;
             if (widget == widgetA) 
@@ -176,7 +176,7 @@ class DeckWidget extends ScrollGridWidget implements IDisposable implements IBas
             return;
         }
         
-        var i : Int;
+        var i : Int = 0;
         var numEntitiesToAdd : Int = entitiesToAdd.length;
 		componentsToAddBuffer = new Array<DisplayObject>();
         for (i in 0...numEntitiesToAdd){
@@ -198,8 +198,8 @@ class DeckWidget extends ScrollGridWidget implements IDisposable implements IBas
             
             // Get the render component currently in the scrolling grid that matches the
             // entity id to remove.
-            var j : Int;
-            var existingObject : DisplayObject;
+            var j : Int = 0;
+            var existingObject : DisplayObject = null;
             for (j in 0...numExistingObjects){
                 existingObject = existingObjects[j];
                 if (existingObject == viewToRemove) 
@@ -260,8 +260,8 @@ class DeckWidget extends ScrollGridWidget implements IDisposable implements IBas
         var previousCoordinates : Array<Point> = new Array<Point>();
         var renderComponents : Array<DisplayObject> = super.getObjects();
         var numComponents : Int = renderComponents.length;
-        var i : Int;
-        var renderView : DisplayObject;
+        var i : Int = 0;
+        var renderView : DisplayObject = null;
         for (i in 0...numComponents){
             renderView = renderComponents[i];
             if (renderView.parent == null) 
@@ -283,8 +283,8 @@ class DeckWidget extends ScrollGridWidget implements IDisposable implements IBas
             newCoordinates.push(new Point(renderView.x, renderView.y));
         }
         
-        var previousCoordinate : Point;
-        var newCoordinate : Point;
+        var previousCoordinate : Point = null;
+        var newCoordinate : Point = null;
         var animationsToPlay : Int = numComponents;
 		// Any object that does not have a previous position is presumed to be new and in which case  
         // a fade in animation will be played for it    
@@ -301,8 +301,8 @@ class DeckWidget extends ScrollGridWidget implements IDisposable implements IBas
                 // we grab the renderer and immediately add it to the widget.
                 // Do not do this for the last one as that will be added via an animation.
                 var numEntitiesToAddQueued : Int = m_entitiesToAddQueue.length;
-                var entitiesToAddPending : Array<DisplayObject>;
-                var j : Int;
+                var entitiesToAddPending : Array<DisplayObject> = null;
+                var j : Int = 0;
                 for (i in 0...numEntitiesToAddQueued){
                     entitiesToAddPending = m_entitiesToAddQueue[i];
                     if (i < numEntitiesToAddQueued - 1) 
@@ -319,7 +319,7 @@ class DeckWidget extends ScrollGridWidget implements IDisposable implements IBas
 				// Remove all components that were queued except for the most recent one 
 				// as that will be removed via the animation
                 var numEnititiesToRemoveQueued : Int = m_entitiesToRemoveQueue.length;
-                var entitiesToRemovePending : Array<DisplayObject>;
+                var entitiesToRemovePending : Array<DisplayObject> = null;
                 for (i in 0...numEnititiesToRemoveQueued){
                     entitiesToRemovePending = m_entitiesToRemoveQueue[i];
                     if (i < numEnititiesToRemoveQueued - 1) 
@@ -361,7 +361,7 @@ class DeckWidget extends ScrollGridWidget implements IDisposable implements IBas
             previousCoordinate = previousCoordinates[i];
             newCoordinate = newCoordinates[i];
             
-            var tween : Tween;
+            var tween : Tween = null;
             if (previousCoordinate == null) 
             {
                 var scaleDuration : Float = 0.25;
@@ -538,9 +538,9 @@ class DeckWidget extends ScrollGridWidget implements IDisposable implements IBas
         
         
         var rigidBodyComponents : Array<Component> = m_componentManager.getComponentListForType(RigidBodyComponent.TYPE_ID);
-        var rigidBodyComponent : RigidBodyComponent;
-        var i : Int;
-        var renderComponent : RenderableComponent;
+        var rigidBodyComponent : RigidBodyComponent = null;
+        var i : Int = 0;
+        var renderComponent : RenderableComponent = null;
         for (i in 0...rigidBodyComponents.length){
             rigidBodyComponent = try cast(rigidBodyComponents[i], RigidBodyComponent) catch(e:Dynamic) null;
             renderComponent = try cast(m_componentManager.getComponentFromEntityIdAndType(rigidBodyComponent.entityId, RenderableComponent.TYPE_ID), RenderableComponent) catch(e:Dynamic) null;

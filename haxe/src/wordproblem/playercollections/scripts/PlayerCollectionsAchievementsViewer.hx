@@ -117,7 +117,7 @@ class PlayerCollectionsAchievementsViewer extends PlayerCollectionViewer
     {
         var itemsInCurrentPage : Array<String> = new Array<String>();
         var totalAchievements : Int = inList.length;
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...totalAchievements){
             if (itemsInCurrentPage.length >= itemsPerPage) 
             {
@@ -141,7 +141,7 @@ class PlayerCollectionsAchievementsViewer extends PlayerCollectionViewer
         
         // Create and layout the buttons for the achievements in the page
         var achievementIdsInPage : Array<String> = m_achievementsPerPage[pageIndex];
-        var i : Int;
+        var i : Int = 0;
         var numAchievementIdsInPage : Int = achievementIdsInPage.length;
         for (i in 0...numAchievementIdsInPage){
             var achievementData : Dynamic = m_playerAchievementsModel.getAchievementDetailsFromId(achievementIdsInPage[i]);
@@ -160,7 +160,7 @@ class PlayerCollectionsAchievementsViewer extends PlayerCollectionViewer
     
     private function clearAchievementButtons() : Void
     {
-        var i : Int;
+        var i : Int = 0;
         var numButtons : Int = m_activeAchievementButtons.length;
         for (i in 0...numButtons){
             var achievementButton : PlayerAchievementButton = m_activeAchievementButtons[i];

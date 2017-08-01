@@ -35,7 +35,7 @@ class GroupTermWidget extends BaseTermWidget
     {
         super(node, assetManager);
         
-        var textureName : String;
+        var textureName : String = null;
         this.mainGraphicBounds = new Rectangle(0, 0, 0, 0);
         
         if (node.isSpecificOperator(vectorSpace.getDivisionOperator())) 

@@ -404,7 +404,7 @@ class AddTerm extends BaseTermAreaScript
                     var nodeGlobalBuffer : Point = new Point();
                     var nodeLocalBuffer : Point = new Point();
                     ExpressionUtil.getAdditiveTerms(root, additiveTermNodes);
-                    var additiveTerm : ExpressionNode;
+                    var additiveTerm : ExpressionNode = null;
                     for (i in 0...additiveTermNodes.length){
                         additiveTerm = additiveTermNodes[i];
                         nodeLocalBuffer.setTo(additiveTerm.position.x, additiveTerm.position.y);
@@ -581,9 +581,9 @@ class AddTerm extends BaseTermAreaScript
         // to be created
         
         var vectorSpace : RealsVectorSpace = m_expressionCompiler.getVectorSpace();
-        var nodeToAttachTo : ExpressionNode;
-        var attachToLeft : Bool;
-        var operatorToUse : String;
+        var nodeToAttachTo : ExpressionNode = null;
+        var attachToLeft : Bool = false;
+        var operatorToUse : String = null;
         for (groupRoot in groupRoots)
         {
             // Exclude the root containing the specified node that accepted the expectedValue
@@ -737,7 +737,7 @@ class AddTerm extends BaseTermAreaScript
         var startPoint : Point = new Point();
         var resultPoint : Point = new Point();
         var numNodesToAdd : Int = data.length;
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...numNodesToAdd){
             startPoint.setTo(dropLocationsX[i], dropLocationsY[i]);
             termArea.globalToLocal(startPoint, resultPoint);

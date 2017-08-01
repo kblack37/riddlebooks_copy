@@ -80,9 +80,13 @@ class AiPolicyHintSelector extends HintSelectorNode
 		}
 	}
 
-	public function AiPolicyHintSelector(gameEngine:IGameEngine, validateBarModelArea:ValidateBarModelArea,
-										 modelType:String, qid : Int, characterController:HelperCharacterController, textviewFactory:TextViewFactory, assetManager:AssetManager, textParser:TextParser, levelManager:WordProblemCgsLevelManager, playerStats:PlayerStatsAndSaveData)
+	public function new(gameEngine:IGameEngine, validateBarModelArea:ValidateBarModelArea,
+						modelType:String, qid : Int, characterController:HelperCharacterController,
+						textviewFactory:TextViewFactory, assetManager:AssetManager,
+						textParser:TextParser, levelManager:WordProblemCgsLevelManager,
+						playerStats:PlayerStatsAndSaveData)
 	{
+		super();
 		m_gameEngine = gameEngine;
 		m_characterController = characterController;
 		m_textViewFactory = textviewFactory;
@@ -484,7 +488,7 @@ class AiPolicyHintSelector extends HintSelectorNode
 		var lastClassTimes : Int = 0;
 		if (lastClass != null)
 		{
-			lastClassTimes = try cast(m_playerStatsAndSaveData.getPlayerDecision(LAST_CLASS_TIMES_PREFIX + m_qid), Int) catch (e : Dynamic) null;
+			lastClassTimes = try cast(m_playerStatsAndSaveData.getPlayerDecision(LAST_CLASS_TIMES_PREFIX + m_qid), Int) catch (e : Dynamic) 0;
 		}
 
 		var hintsUsed : Int = 1;

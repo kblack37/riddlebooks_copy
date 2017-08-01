@@ -1,8 +1,7 @@
 package wordproblem.levelselect.scripts;
 
 
-import flash.geom.Rectangle;
-import flash.utils.Dictionary;
+import openfl.geom.Rectangle;
 import openfl.Vector;
 
 import starling.animation.Juggler;
@@ -63,7 +62,7 @@ class DrawItemsOnShelves extends ScriptNode
      * 
      * Maps from entity id to an integer state value
      */
-    private var m_previousStateValue : Dictionary<String, Int>;
+    private var m_previousStateValue : Map<String, Int>;
     
     /**
      * Buffer to store which textures were active on the last update frame.
@@ -72,7 +71,7 @@ class DrawItemsOnShelves extends ScriptNode
      * key: texture name
      * value: true if texture atlas, false otherwise
      */
-    private var m_activeTextureNamesOnLastFrame : Dictionary<String, Bool>;
+    private var m_activeTextureNamesOnLastFrame : Map<String, Bool>;
     
     /**
      * Buffer to store active textures on the current pass
@@ -80,7 +79,7 @@ class DrawItemsOnShelves extends ScriptNode
      * key: texture name
      * value: true if texture atlas, false otherwise
      */
-    private var m_activeTextureNamesOnCurrentFrame : Dictionary<String, Bool>;
+    private var m_activeTextureNamesOnCurrentFrame : Map<String, Bool>;
     
     public function new(levelSelectState : WordProblemSelectState,
             playerItemInventory : ItemInventory,
@@ -97,10 +96,10 @@ class DrawItemsOnShelves extends ScriptNode
         m_itemDataSource = itemDataSource;
         m_assetManager = assetManager;
         m_spriteSheetJuggler = spriteSheetJuggler;
-        m_previousStateValue = new Dictionary();
+        m_previousStateValue = new Map();
         
-        m_activeTextureNamesOnLastFrame = new Dictionary();
-        m_activeTextureNamesOnCurrentFrame = new Dictionary();
+        m_activeTextureNamesOnLastFrame = new Map();
+        m_activeTextureNamesOnCurrentFrame = new Map();
     }
     
     override public function visit() : Int
@@ -120,8 +119,8 @@ class DrawItemsOnShelves extends ScriptNode
 			// Clear out all currently visible views  
             var renderComponents : Array<Component> = m_playerItemInventory.componentManager.getComponentListForType(RenderableComponent.TYPE_ID);
             var numRenderComponents : Int = renderComponents.length;
-            var renderComponent : RenderableComponent;
-            var i : Int;
+            var renderComponent : RenderableComponent = null;
+            var i : Int = 0;
             for (i in 0...numRenderComponents){
                 renderComponent = try cast(renderComponents[i], RenderableComponent) catch(e:Dynamic) null;
                 if (renderComponent.view != null) 
@@ -141,8 +140,8 @@ class DrawItemsOnShelves extends ScriptNode
     {
         var renderComponents : Array<Component> = componentManager.getComponentListForType(RenderableComponent.TYPE_ID);
         var numRenderComponents : Int = renderComponents.length;
-        var renderComponent : RenderableComponent;
-        var i : Int;
+        var renderComponent : RenderableComponent = null;
+        var i : Int = 0;
         for (i in 0...numRenderComponents){
             renderComponent = try cast(renderComponents[i], RenderableComponent) catch(e:Dynamic) null;
             
@@ -352,7 +351,7 @@ class DrawItemsOnShelves extends ScriptNode
             // Found a texture that can be released
             if (!m_activeTextureNamesOnCurrentFrame.exists(textureName)) 
             {
-                var isTextureAtlas : Bool = try cast(Reflect.field(m_activeTextureNamesOnLastFrame, textureName), Bool) catch(e:Dynamic) null;
+                var isTextureAtlas : Bool = try cast(Reflect.field(m_activeTextureNamesOnLastFrame, textureName), Bool) catch(e:Dynamic) false;
                 if (isTextureAtlas) 
                 {
                     m_assetManager.removeTextureAtlas(textureName, true);
@@ -367,7 +366,7 @@ class DrawItemsOnShelves extends ScriptNode
         }
 		
 		// swap the current frame buffer to be the last frame buffer  
-        var swapBuffer : Dictionary<String, Bool> = m_activeTextureNamesOnLastFrame;
+        var swapBuffer : Map<String, Bool> = m_activeTextureNamesOnLastFrame;
         m_activeTextureNamesOnLastFrame = m_activeTextureNamesOnCurrentFrame;
         m_activeTextureNamesOnCurrentFrame = swapBuffer;
     }

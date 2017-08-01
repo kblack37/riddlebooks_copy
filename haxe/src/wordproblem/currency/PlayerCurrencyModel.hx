@@ -102,7 +102,7 @@ class PlayerCurrencyModel
     public function getTotalCoinsEarnedSinceLastLevel() : Int
     {
         var totalEarned : Int = 0;
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...coinsEarnedForObjectives.length){
             totalEarned += coinsEarnedForObjectives[i];
         }

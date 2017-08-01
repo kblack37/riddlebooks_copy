@@ -106,7 +106,7 @@ class Polygon extends DisplayObject
     /** Creates the required vertex- and index data and uploads it to the GPU. */
     private function setupVertices() : Void
     {
-        var i : Int;
+        var i : Int = 0;
         
         // create vertices
         

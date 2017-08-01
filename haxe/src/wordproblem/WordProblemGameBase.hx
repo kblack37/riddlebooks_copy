@@ -262,7 +262,7 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
             case "createUsers":
                 var numUsers : Int = Std.parseInt(args[0]);
                 var usernamePrefix : String = args[1];
-                var i : Int;
+                var i : Int = 0;
                 for (i in 0...numUsers){
                     var playtestName : String = usernamePrefix + i;
                     m_logger.getCgsApi().registerUser(
@@ -548,7 +548,7 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
                                         new Rectangle(80.35, 84.15, 160.7, 168.35), new Rectangle(56.45, 59.15, 112.9, 118.3), new Rectangle(74, 77.75, 148, 155.5), 
                                         new Rectangle(0, 0, 119, 108.2), new Rectangle(0, 0, 107, 118.9), new Rectangle(0, 0, 120, 110.5), new Rectangle(0, 0, 120, 118.95)];
                                 
-                                var i : Int;
+                                var i : Int = 0;
                                 for (i in 0...flaTextureClass.length){
                                     var generatedTexture : Texture = FlashResourceUtil.getTextureFromFlashClass(flaTextureClass[i], null, flaTextureScale[i], flaTextureBoxes[i]);
                                     m_assetManager.addTexture(Type.getClassName(flaTextureClass[i]), generatedTexture);
@@ -930,7 +930,7 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
     private function resetClientData() : Void
     {
         var users : Array<ICgsUser> = m_logger.getCgsApi().userManager.userList;
-        var cache : ICgsUserCache;
+        var cache : ICgsUserCache = null;
         if (users.length > 0) 
         {
             cache = try cast(users[0], ICgsUserCache) catch(e:Dynamic) null;

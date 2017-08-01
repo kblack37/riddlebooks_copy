@@ -176,7 +176,7 @@ class AddNewVerticalLabel extends BaseBarModelScript implements IHitAreaScript
         var rightBracketTexture : Texture = m_assetManager.getTexture("brace_right_end");
         var middleBracketTexture : Texture = m_assetManager.getTexture("brace_center");
         var fullBracketTexture : Texture = m_assetManager.getTexture("brace_full");
-        var i : Int;
+        var i : Int = 0;
         var numHitAreas : Int = hitAreas.length;
         for (i in 0...numHitAreas){
             var hitArea : Rectangle = hitAreas[i];
@@ -211,7 +211,7 @@ class AddNewVerticalLabel extends BaseBarModelScript implements IHitAreaScript
             // The longest end defines the a left most limit
             var longestBarIndex : Int = -1;
             var longestRightXEdge : Float = 0;
-            var i : Int;
+            var i : Int = 0;
             for (i in 0...numBarWholeViews){
                 var barWholeView : BarWholeView = barWholeViews[i];
                 var segmentViews : Array<BarSegmentView> = barWholeView.segmentViews;

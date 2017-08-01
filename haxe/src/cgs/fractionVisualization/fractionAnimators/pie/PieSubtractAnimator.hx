@@ -181,7 +181,7 @@ class PieSubtractAnimator implements IFractionAnimator
 			**/
         
         // generic counter
-        var i : Int;
+        var i : Int = 0;
         
         // Fraction Views
         var fractionViews : Array<CgsFractionView> = Reflect.field(details, Std.string(CgsFVConstants.CLONE_VIEWS_KEY));
@@ -580,7 +580,7 @@ class PieSubtractAnimator implements IFractionAnimator
         // go from the index of the first circle with partial sectors to the end of the list
         for (i in startingIndex...{
             timingCounter++;
-            var layerIndexOfFirstSector : Float;
+            var layerIndexOfFirstSector : Float = 0.0;
             // establish insertion point for first sector then all other are
             // inserted at that point (so below each previous)
             // This prevents sectors from passing under each other
@@ -610,7 +610,7 @@ class PieSubtractAnimator implements IFractionAnimator
         var durationOfSecondSectors : Float = timingOfSecondSectors * 2;
         
         var forwardCounter : Float = -1;
-        var layerIndexOfSecondSector : Float;
+        var layerIndexOfSecondSector : Float = 0.0;
         var indexOfFirstSectorToBeNulled : Float = firstAllSectors.length;
         
         //Exception if first is all whole numbers, Running center has shifted over one.  Need to shift back
@@ -1383,8 +1383,8 @@ class PieSubtractAnimator implements IFractionAnimator
         {
             var paramsForSprites : Dynamic = null;  // example: {foregroundColor:0xffffff, tickColor: 0x6600cc };  
             var allSprites : Array<Sprite> = module.duplicateAllSprites(partitionsPerDenom, paramsForSprites, true, true);
-            var partitionFadeInAndPulseTween : GTween;
-            var partitionBackToSizeTween : GTween;
+            var partitionFadeInAndPulseTween : GTween = null;
+            var partitionBackToSizeTween : GTween = null;
             
             var partitionTime : Float = unitDuration / 4;
             var moveTime : Float = unitDuration / 4;

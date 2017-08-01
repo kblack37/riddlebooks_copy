@@ -361,7 +361,7 @@ class AddNewLabelOnSegment extends BaseBarModelScript implements ICardOnSegmentS
             
             
             var segmentIndexToBarOnTop : Array<Bool> = new Array<Bool>();
-            var i : Int;
+            var i : Int = 0;
             var numBarWholes : Int = barWholes.length;
             for (i in 0...numBarWholes){
                 var barWhole : BarWhole = barWholes[i];
@@ -370,7 +370,7 @@ class AddNewLabelOnSegment extends BaseBarModelScript implements ICardOnSegmentS
 				segmentIndexToBarOnTop = new Array<Bool>();
                 var barSegments : Array<BarSegment> = barWhole.barSegments;
                 var numSegments : Int = barSegments.length;
-                var j : Int;
+                var j : Int = 0;
                 for (j in 0...numSegments){
                     segmentIndexToBarOnTop.push(false);
                 }  // The sizes of these remain fixed    // Determine which segments actually do have a label on top.  

@@ -113,7 +113,7 @@ class CgsAchievementManager implements ICgsAchievementManager
 		 */
     private function getSave() : Dynamic
     {
-        var result : Dynamic;
+        var result : Dynamic = null;
         if (m_user.saveExists(ACHIEVEMENT_LIST_KEY) && m_user.getSave(ACHIEVEMENT_LIST_KEY) != null)
         {
             result = m_user.getSave(ACHIEVEMENT_LIST_KEY);

@@ -106,7 +106,7 @@ class ShowEquationAnswerHint extends HintScript
             var referenceSet : Array<String> = allEquationSets[0];
             var allEquations : Array<ExpressionComponent> = m_modelSpecificEquation.getEquations();
             var numEquations : Int = allEquations.length;
-            var i : Int;
+            var i : Int = 0;
             var numEquationIds : Int = referenceSet.length;
             
             // We get the very first unmodeled equation from the first set as the answer.
@@ -190,7 +190,7 @@ class ShowEquationAnswerHint extends HintScript
             {
                 var referenceSet : Array<String> = allEquationSets[0];
                 var numEquationIds : Int = referenceSet.length;
-                var i : Int;
+                var i : Int = 0;
                 var yOffset : Float = textField.height;
                 for (i in 0...numEquationIds){
                     var equation : ExpressionComponent = this.getEquationFromId(referenceSet[i]);
@@ -228,7 +228,7 @@ class ShowEquationAnswerHint extends HintScript
         var matchingEquation : ExpressionComponent = null;
         var allEquations : Array<ExpressionComponent> = m_modelSpecificEquation.getEquations();
         var numEquations : Int = allEquations.length;
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...numEquations){
             var equation : ExpressionComponent = allEquations[i];
             if (equation.entityId == id) 

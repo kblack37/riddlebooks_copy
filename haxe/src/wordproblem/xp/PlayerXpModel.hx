@@ -138,7 +138,7 @@ class PlayerXpModel
     {
         var playerLevel : Int = 0;
         var remainingXp : Int = 0;
-        var i : Int;
+        var i : Int = 0;
         var numLevels : Int = m_totalExperiencePerLevel.length;
         for (i in 1...numLevels){
             var totalXpForLevel : Int = m_totalExperiencePerLevel[i];

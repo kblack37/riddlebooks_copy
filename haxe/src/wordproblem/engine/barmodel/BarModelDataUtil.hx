@@ -18,11 +18,11 @@ class BarModelDataUtil
     public static function stretchHorizontalBrackets(barModelData : BarModelData) : Void
     {
         var barWholes : Array<BarWhole> = barModelData.barWholes;
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...barWholes.length){
             var barWhole : BarWhole = barWholes[i];
             var barLabels : Array<BarLabel> = barWhole.barLabels;
-            var j : Int;
+            var j : Int = 0;
             for (j in 0...barLabels.length){
                 var barLabel : BarLabel = barLabels[j];
                 if (barLabel.bracketStyle == BarLabel.BRACKET_STRAIGHT) 
@@ -41,7 +41,7 @@ class BarModelDataUtil
     {
         var numBarWholes : Int = barModelData.barWholes.length;
         var verticalLabels : Array<BarLabel> = barModelData.verticalBarLabels;
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...verticalLabels.length){
             var verticalLabel : BarLabel = verticalLabels[i];
             verticalLabel.startSegmentIndex = 0;

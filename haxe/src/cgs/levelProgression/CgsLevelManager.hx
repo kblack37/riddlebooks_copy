@@ -563,7 +563,7 @@ class CgsLevelManager implements ICgsLevelManager
 		 */
     public function getNextLevel(presentLevel : ICgsLevelLeaf = null) : ICgsLevelLeaf
     {
-        var result : ICgsLevelLeaf;
+        var result : ICgsLevelLeaf = null;
         if (presentLevel == null)
         {
             result = m_currentLevelProgression.firstLeaf;
@@ -588,7 +588,7 @@ class CgsLevelManager implements ICgsLevelManager
 		 */
     public function getPrevLevel(presentLevel : ICgsLevelLeaf = null) : ICgsLevelLeaf
     {
-        var result : ICgsLevelLeaf;
+        var result : ICgsLevelLeaf = null;
         if (presentLevel == null)
         {
             result = m_currentLevelProgression.firstLeaf;

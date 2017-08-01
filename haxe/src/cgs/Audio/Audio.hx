@@ -395,7 +395,7 @@ class Audio
 		**/
     private function playRandomBackgroundLoop() : Void
     {
-        var loop : Sound;
+        var loop : Sound = null;
         
         // Look for some background sounds to play
         if (_currentBackgroundType != null && _currentBackgroundType.sounds.length >= 1)
@@ -474,7 +474,7 @@ class Audio
 		**/
     private function playRandomMusicLoop() : Void
     {
-        var loop : Sound;
+        var loop : Sound = null;
         
         // Look for some music to play
         if (_currentMusicType != null && _currentMusicType.sounds.length >= 1)
@@ -561,8 +561,8 @@ class Audio
             var soundUrls : Array<Dynamic> = musicType.urls;
             var sounds : Array<Dynamic> = musicType.sounds;
             var numSounds : Int = soundUrls.length;
-            var i : Int;
-            var soundUrl : String;
+            var i : Int = 0;
+            var soundUrl : String = null;
             for (i in 0...numSounds)
             {
                 soundUrl = soundUrls[i];
@@ -599,8 +599,8 @@ class Audio
             // Play the sfx!
             if (sfxMt != null)
             {
-                var sfxSt : SoundTransform;
-                var sfxChannel : SoundChannel;
+                var sfxSt : SoundTransform = null;
+                var sfxChannel : SoundChannel = null;
                 
                 // Pan the sound if required and specified
                 if (_musicTypes.usePanning && distFromMid >= -1 && distFromMid <= 1)
@@ -613,7 +613,7 @@ class Audio
                 }
                 
                 // Pick a sound to play
-                var sfxSound : Sound;
+                var sfxSound : Sound = null;
                 if (sfxMt.sounds.length == 1)
                 {
                     // Only one option, lets choose it!
@@ -679,7 +679,7 @@ class Audio
 		**/
     public function stopSfx(type : String) : Void
     {
-        var sfxChannel : SoundChannel;
+        var sfxChannel : SoundChannel = null;
         var found : Bool = false;
         
         // Look though the looped sounds for the one we want to kill
@@ -735,7 +735,7 @@ class Audio
                 var sfxSt : SoundTransform = new SoundTransform(sfxMt.volume);
                 
                 // Pick a sound to play
-                var sfxSound : Sound;
+                var sfxSound : Sound = null;
                 if (sfxMt.sounds.length == 1)
                 {
                     // Only one option, lets choose it!
@@ -747,7 +747,7 @@ class Audio
                     if (sfxMt.sounds.length > 1)
                     {
                         // Many options! Randomly select between different sfx for this type
-                        var randomLoop : Int;
+                        var randomLoop : Int = 0;
                         do
                         {
                             randomLoop = Std.int(Math.random() * sfxMt.symbols.length);

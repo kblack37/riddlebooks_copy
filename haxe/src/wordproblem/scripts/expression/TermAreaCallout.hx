@@ -65,9 +65,9 @@ class TermAreaCallout extends BaseTermAreaScript
             var mouseState : MouseState = m_gameEngine.getMouseState();
             
             var numTermAreas : Int = m_termAreas.length;
-            var pickedWidget : BaseTermWidget;
-            var i : Int;
-            var termArea : TermAreaWidget;
+            var pickedWidget : BaseTermWidget = null;
+            var i : Int = 0;
+            var termArea : TermAreaWidget = null;
             for (i in 0...numTermAreas){
                 termArea = m_termAreas[i];
                 
@@ -115,7 +115,7 @@ class TermAreaCallout extends BaseTermAreaScript
                                     name, 
                                     m_measuringTextFormat.font, 
                                     m_measuringTextFormat.size, 
-                                    try cast(m_measuringTextFormat.color, Int) catch(e:Dynamic) null
+                                    try cast(m_measuringTextFormat.color, Int) catch(e:Dynamic) 0
                                     );
                             termArea.componentManager.addComponentToEntity(calloutComponent);
                             

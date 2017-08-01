@@ -258,7 +258,7 @@ class BarToCard extends BaseBarModelScript
 		m_outParamsBuffer = new Array<Dynamic>();
         
         var hitExpressionValue : String = null;
-		var hitElement : Dynamic;
+		var hitElement : Dynamic = { };
         if (BarModelHitAreaUtil.getBarElementUnderPoint(m_outParamsBuffer, barModelArea, barModelPoint, m_boundsBuffer, prioritizeLabels)) 
         {
             hitElement = m_outParamsBuffer[0];
@@ -284,7 +284,7 @@ class BarToCard extends BaseBarModelScript
                     // If a segment has a no-bracket label it takes the value of that label
                     // Look through all labels and fetch ones that lie exactly on top
                     var barLabelViews : Array<BarLabelView> = hitBarView.labelViews;
-                    var i : Int;
+                    var i : Int = 0;
                     var numBarLabelViews : Int = barLabelViews.length;
                     var segmentMatchedSingleLabel : Bool = false;
                     for (i in 0...numBarLabelViews){

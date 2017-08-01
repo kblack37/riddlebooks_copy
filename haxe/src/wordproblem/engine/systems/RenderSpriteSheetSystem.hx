@@ -47,8 +47,8 @@ class RenderSpriteSheetSystem
         // First get all components that have been tagged with a spritesheet
         var spriteSheetComponents : Array<Component> = componentManager.getComponentListForType(RenderSpriteSheetComponent.TYPE_ID);
         var numComponents : Int = spriteSheetComponents.length;
-        var i : Int;
-        var spriteSheetComponent : RenderSpriteSheetComponent;
+        var i : Int = 0;
+        var spriteSheetComponent : RenderSpriteSheetComponent = null;
         for (i in 0...numComponents){
             spriteSheetComponent = try cast(spriteSheetComponents[i], RenderSpriteSheetComponent) catch(e:Dynamic) null;
             
@@ -103,8 +103,8 @@ class RenderSpriteSheetSystem
                 // we update the visual component of it. (Not clear how to detect this)
                 
                 // Update the x,y position of the texture
-                var imageContainer : Sprite;
-                var subImage : Image;
+                var imageContainer : Sprite = null;
+                var subImage : Image = null;
                 if (spriteSheetComponent.view == null) 
                 {
                     imageContainer = new Sprite();

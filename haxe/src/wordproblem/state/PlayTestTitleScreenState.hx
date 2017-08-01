@@ -173,8 +173,8 @@ class PlayTestTitleScreenState extends BaseState
         
         
         var renderComponents : Array<Component> = m_componentManager.getComponentListForType(RenderableComponent.TYPE_ID);
-        var renderComponent : RenderableComponent;
-        var i : Int;
+        var renderComponent : RenderableComponent = null;
+        var i : Int = 0;
         var components : Int = renderComponents.length;
         for (i in 0...components){
             renderComponent = try cast(renderComponents[i], RenderableComponent) catch(e:Dynamic) null;

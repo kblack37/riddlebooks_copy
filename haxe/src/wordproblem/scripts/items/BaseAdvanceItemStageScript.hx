@@ -74,8 +74,8 @@ class BaseAdvanceItemStageScript extends BaseBufferEventScript
     {
         var currentGrowInStageComponents : Array<Component> = m_itemInventory.componentManager.getComponentListForType(CurrentGrowInStageComponent.TYPE_ID);
         var numComponents : Int = currentGrowInStageComponents.length;
-        var i : Int;
-        var currentGrowInStageComponent : CurrentGrowInStageComponent;
+        var i : Int = 0;
+        var currentGrowInStageComponent : CurrentGrowInStageComponent = null;
         for (i in 0...numComponents){
             currentGrowInStageComponent = try cast(currentGrowInStageComponents[i], CurrentGrowInStageComponent) catch(e:Dynamic) null;
             
@@ -123,8 +123,8 @@ class BaseAdvanceItemStageScript extends BaseBufferEventScript
             
             var currentGrowInStageComponents : Array<Component> = m_itemInventory.componentManager.getComponentListForType(CurrentGrowInStageComponent.TYPE_ID);
             var numComponents : Int = currentGrowInStageComponents.length;
-            var i : Int;
-            var currentGrowInStageComponent : CurrentGrowInStageComponent;
+            var i : Int = 0;
+            var currentGrowInStageComponent : CurrentGrowInStageComponent = null;
             for (i in 0...numComponents){
                 currentGrowInStageComponent = try cast(currentGrowInStageComponents[i], CurrentGrowInStageComponent) catch(e:Dynamic) null;
                 

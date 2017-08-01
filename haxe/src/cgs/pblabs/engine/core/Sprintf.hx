@@ -64,8 +64,8 @@ package cgs.pblabs.engine.core;
             
             if (c == "%")
             {
-                var next : Dynamic;
-                var str : String;
+                var next : Dynamic = null;
+                var str : String = null;
                 var pastFieldWidth : Bool = false;
                 var pastFlags : Bool = false;
                 

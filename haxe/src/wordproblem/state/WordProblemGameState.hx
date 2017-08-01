@@ -261,7 +261,7 @@ class WordProblemGameState extends BaseState implements IConsoleInterfacable
             {
                 var expressionComponents : Array<Component> = (try cast(m_gameEngine.getUiEntity("deckArea"), DeckWidget) catch(e:Dynamic) null).componentManager.getComponentListForType(ExpressionComponent.TYPE_ID);
                 var discoverTerm : DiscoverTerm = try cast(m_preBakedScript.getNodeById("DiscoverTerm"), DiscoverTerm) catch(e:Dynamic) null;
-                var i : Int;
+                var i : Int = 0;
                 for (i in 0...expressionComponents.length){
                     var expressionComponent : ExpressionComponent = try cast(expressionComponents[i], ExpressionComponent) catch(e:Dynamic) null;
                     if (!expressionComponent.hasBeenModeled) 

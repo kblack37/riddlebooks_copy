@@ -180,7 +180,7 @@ class PieMultiplyAnimator implements IFractionAnimator
 			**/
         
         //generic counter for loops
-        var i : Int;
+        var i : Int = 0;
         
         // for special placement of first fraction.  Assume width is 600 x 800
         var assumedScreenSize : Point = new Point(800, 600);
@@ -429,9 +429,9 @@ class PieMultiplyAnimator implements IFractionAnimator
         // Begin flying denominator and pulsing here
         var paramsForSprites : Dynamic = null;  // example: {foregroundColor:0xffffff, tickColor: 0x6600cc };  
         var partialSprites : Array<Sprite> = firstModule.duplicateAllSprites(second.fraction.denominator, paramsForSprites, true, true);
-        var partitionFadeInTween : GTween;
-        var partitionFadeInAndPulseTween : GTween;
-        var partitionBackToSizeTween : GTween;
+        var partitionFadeInTween : GTween = null;
+        var partitionFadeInAndPulseTween : GTween = null;
+        var partitionBackToSizeTween : GTween = null;
         
         // this is for a single pulse
         var durationOfPartition : Float = changeDenom_unitDuration / 4;
@@ -819,7 +819,7 @@ class PieMultiplyAnimator implements IFractionAnimator
         
         mergeStep.addCallback(cumulativeMergeTiming, finalizeEquation, [true], finalizeEquation, [false]);
         
-        var fade : GTween;
+        var fade : GTween = null;
         // fade or move flying daggers
         if (!doSimplify)
         {

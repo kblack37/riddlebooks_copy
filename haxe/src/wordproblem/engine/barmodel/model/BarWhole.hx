@@ -83,8 +83,8 @@ class BarWhole
             endSegmentIndex = barSegments.length - 1;
         }
         
-        var i : Int;
-        var barSegment : BarSegment;
+        var i : Int = 0;
+        var barSegment : BarSegment = null;
         var totalValue : Float = 0;
         for (i in startSegmentIndex...endSegmentIndex + 1){
             barSegment = barSegments[i];
@@ -97,16 +97,16 @@ class BarWhole
     public function clone() : BarWhole
     {
         var barWholeClone : BarWhole = new BarWhole(this.displayHiddenSegments, this.id);
-        var i : Int;
+        var i : Int = 0;
         var numSegments : Int = this.barSegments.length;
-        var barSegment : BarSegment;
+        var barSegment : BarSegment = null;
         for (i in 0...numSegments){
             barSegment = this.barSegments[i];
             barWholeClone.barSegments.push(barSegment.clone());
         }
         
         var numLabels : Int = this.barLabels.length;
-        var barLabel : BarLabel;
+        var barLabel : BarLabel = null;
         for (i in 0...numLabels){
             barLabel = this.barLabels[i];
             barWholeClone.barLabels.push(barLabel.clone());
@@ -130,7 +130,7 @@ class BarWhole
     public function serialize() : Dynamic
     {
         var serializedSegments : Array<Dynamic> = [];
-        var i : Int;
+        var i : Int = 0;
         var numSegments : Int = this.barSegments.length;
         for (i in 0...numSegments){
             serializedSegments.push(this.barSegments[i].serialize());
@@ -146,7 +146,6 @@ class BarWhole
             id : this.id,
             s : serializedSegments,
             l : serializedLabels,
-
         };
         
         if (this.barComparison != null) 
@@ -160,7 +159,7 @@ class BarWhole
     public function deserialize(data : Dynamic) : Void
     {
         var segmentData : Array<Dynamic> = data.s;
-        var i : Int;
+        var i : Int = 0;
         var numSegments : Int = segmentData.length;
         for (i in 0...numSegments){
             var barSegment : BarSegment = new BarSegment(0, 0, 0xFFFFFF, null);
@@ -176,7 +175,7 @@ class BarWhole
             this.barLabels.push(barLabel);
         }
         
-        if (data.exists("c")) 
+        if (Reflect.hasField(data, "c")) 
         {
             var barComparison : BarComparison = new BarComparison("", "", 0);
             barComparison.deserialize(data.c);

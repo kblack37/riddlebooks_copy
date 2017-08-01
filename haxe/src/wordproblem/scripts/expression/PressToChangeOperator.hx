@@ -59,7 +59,7 @@ class PressToChangeOperator extends BaseTermAreaScript
             m_globalBuffer.x = m_mouseState.mousePositionThisFrame.x;
             m_globalBuffer.y = m_mouseState.mousePositionThisFrame.y;
             
-            var i : Int;
+            var i : Int = 0;
             var numTermAreas : Int = m_termAreas.length;
             var operatorUnderPoint : GroupTermWidget = null;
 			var termArea : TermAreaWidget = null;

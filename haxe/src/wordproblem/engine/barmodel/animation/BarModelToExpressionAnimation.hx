@@ -38,7 +38,7 @@ class BarModelToExpressionAnimation implements IAnimatable
             scaleFactor : Float,
             outTotalBoundsBuffer : Rectangle = null) : Image
     {
-        var i : Int;
+        var i : Int = 0;
         var numViews : Int = barModelViews.length;
         var barModelViewBounds : Array<Rectangle> = new Array<Rectangle>();
         var totalBoundsBuffer : Rectangle = new Rectangle();
@@ -193,7 +193,7 @@ class BarModelToExpressionAnimation implements IAnimatable
     
     public function dispose() : Void
     {
-        var i : Int;
+        var i : Int = 0;
         var numImages : Int = m_barModelCopyImages.length;
         for (i in 0...numImages){
             var barModelCopyImage : Image = m_barModelCopyImages[i];
@@ -209,7 +209,7 @@ class BarModelToExpressionAnimation implements IAnimatable
         var numMappings : Int = m_barModelToExpressionMappings.length;
         for (i in 0...numMappings){
             var mappingObject : Dynamic = m_barModelToExpressionMappings[i];
-            var j : Int;
+            var j : Int = 0;
             var barModelViews : Array<DisplayObject> = mappingObject.barModelViews;
             for (j in 0...barModelViews.length){
                 barModelViews[j].alpha = 1.0;
@@ -248,7 +248,7 @@ class BarModelToExpressionAnimation implements IAnimatable
         var image : Image = BarModelToExpressionAnimation.convertBarModelViewsToSingleImage(barModelViews, m_displayContainer, m_barModelView.scaleFactor, totalBoundsBuffer);
         
         // Make original views transparent
-        var i : Int;
+        var i : Int = 0;
         var numViews : Int = barModelViews.length;
         for (i in 0...numViews){
             var barModelView : DisplayObject = barModelViews[i];
@@ -293,8 +293,8 @@ class BarModelToExpressionAnimation implements IAnimatable
         // and the target term view
         // For the point translation to work correctly, the object must have been added to the display hierarchy
         var globalSubexpressionAnchor : Point = subexpressionView.getWidgetRoot().localToGlobal(originPoint);
-        var subexpressionBoundsForComparison : Rectangle;
-        var targetExpressionBoundsForComparison : Rectangle;
+        var subexpressionBoundsForComparison : Rectangle = null;
+        var targetExpressionBoundsForComparison : Rectangle = null;
         if (Std.is(subexpressionView.getWidgetRoot(), GroupTermWidget)) 
         {
             var graphicsBounds : Rectangle = (try cast(subexpressionView.getWidgetRoot(), GroupTermWidget) catch(e:Dynamic) null).mainGraphicBounds;

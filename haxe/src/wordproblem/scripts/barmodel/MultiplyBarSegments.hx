@@ -98,14 +98,14 @@ class MultiplyBarSegments extends BaseBarModelScript implements IHitAreaScript
     {
         var status : Int = ScriptStatus.FAIL;
         m_showHitAreas = false;
-        if (super.m_ready && m_isActive) 
+        if (this.m_ready && m_isActive) 
         {
             // Convert mouse coordinate reference to that of the bar model
             var mouseState : MouseState = m_gameEngine.getMouseState();
             m_globalMouseBuffer.setTo(mouseState.mousePositionThisFrame.x, mouseState.mousePositionThisFrame.y);
             m_barModelArea.globalToLocal(m_globalMouseBuffer, m_localMouseBuffer);
             
-            as3hx.Compat.setArrayLength(m_outParamsBuffer, 0);
+			m_outParamsBuffer = new Array<Dynamic>();
             if (m_eventTypeBuffer.length > 0) 
             {
                 var data : Dynamic = m_eventParamBuffer[0];
@@ -119,7 +119,7 @@ class MultiplyBarSegments extends BaseBarModelScript implements IHitAreaScript
                     
                     var barIndex : Int = Std.parseInt(m_outParamsBuffer[0]);
                     var barWholeView : BarWholeView = m_barModelArea.getBarWholeViews()[barIndex];
-                    var numCopies : Int = parseInt(releasedExpressionNode.data);
+                    var numCopies : Int = Std.parseInt(releasedExpressionNode.data);
                     
                     // Get whether the copies would fit nicely in the view port, if not then do not allow the action
                     if (this.checkIfBarCopiesWouldFit(m_barModelArea.getBarModelData(), barWholeView.data, numCopies)) 
@@ -136,7 +136,6 @@ class MultiplyBarSegments extends BaseBarModelScript implements IHitAreaScript
                         
                         m_gameEngine.dispatchEventWith(GameEvent.BAR_MODEL_AREA_CHANGE, false, {
                                     previousSnapshot : previousModelDataSnapshot
-
                                 });
                         m_barModelArea.redraw();
                         status = ScriptStatus.SUCCESS;
@@ -145,7 +144,6 @@ class MultiplyBarSegments extends BaseBarModelScript implements IHitAreaScript
                         m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.MULTIPLY_BAR, false, {
                                     barModel : m_barModelArea.getBarModelData().serialize(),
                                     value : releasedExpressionNode.data,
-
                                 });
                     }
                 }
@@ -155,15 +153,15 @@ class MultiplyBarSegments extends BaseBarModelScript implements IHitAreaScript
             else if (m_widgetDragSystem.getWidgetSelected() != null && Std.is(m_widgetDragSystem.getWidgetSelected(), SymbolTermWidget)) 
             {
                 var draggedNode : ExpressionNode = m_widgetDragSystem.getWidgetSelected().getNode();
-                numCopies = parseInt(draggedNode.data);
+                var numCopies = Std.parseInt(draggedNode.data);
                 
                 if (this.nodeHasValidNumber(draggedNode)) 
                 {
                     m_showHitAreas = true;
                     if (getMouseInHitAreas(m_outParamsBuffer)) 
                     {
-                        barIndex = Std.parseInt(m_outParamsBuffer[0]);
-                        barWholeView = m_barModelArea.getBarWholeViews()[barIndex];
+                        var barIndex = Std.parseInt(m_outParamsBuffer[0]);
+                        var barWholeView = m_barModelArea.getBarWholeViews()[barIndex];
                         
                         // Get whether the copies would fit nicely in the view port, if not then do not allow the preview
                         if (this.checkIfBarCopiesWouldFit(m_barModelArea.getBarModelData(), barWholeView.data, numCopies)) 
@@ -174,11 +172,11 @@ class MultiplyBarSegments extends BaseBarModelScript implements IHitAreaScript
                             {
                                 var previewView : BarModelView = m_barModelArea.getPreviewView(true);
                                 
-                                newSegmentColor = barWholeView.segmentViews[0].data.color;
+                                var newSegmentColor = barWholeView.segmentViews[0].data.color;
                                 
                                 // Generate ids for the new segments so we can apply visuals to them
-                                as3hx.Compat.setArrayLength(m_previewIds, 0);
-                                var i : Int;
+								m_previewIds = new Array<String>();
+                                var i : Int = 0;
                                 var numNewSegmentsToCreate : Int = barWholeView.segmentViews.length * (numCopies - 1);
                                 for (i in 0...numNewSegmentsToCreate){
                                     var newSegmentId : String = PREVIEW_ID_PREFIX + i;
@@ -203,7 +201,7 @@ class MultiplyBarSegments extends BaseBarModelScript implements IHitAreaScript
                                 
                                 // Apply a blink to all added segment copies
                                 for (i in 0...m_previewIds.length){
-                                    newSegmentId = m_previewIds[i];
+                                    var newSegmentId = m_previewIds[i];
                                     
                                     // Make sure old blink parts are removed
                                     m_barModelArea.componentManager.removeAllComponentsFromEntity(m_previewIds[i]);
@@ -247,13 +245,13 @@ class MultiplyBarSegments extends BaseBarModelScript implements IHitAreaScript
             m_didActivatePreview = false;
             
             // Remove generated preview segment ids
-            var i : Int;
+            var i : Int = 0;
             for (i in 0...m_previewIds.length){
                 m_barModelArea.componentManager.removeAllComponentsFromEntity(m_previewIds[i]);
             }
         }
         
-        as3hx.Compat.setArrayLength(m_previewIds, 0);
+		m_previewIds = new Array<String>();
     }
     
     public function getActiveHitAreas() : Array<Rectangle>
@@ -294,7 +292,7 @@ class MultiplyBarSegments extends BaseBarModelScript implements IHitAreaScript
         var hitAreaWidth : Float = m_barModelArea.leftBarPadding;
         var hitAreaHeight : Float = 50;
         
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...numBarWholeViews){
             var hitArea : Rectangle = m_hitAreaPool.getRectangle();
             var segmentViews : Array<BarSegmentView> = barWholeViews[i].segmentViews;
@@ -312,7 +310,7 @@ class MultiplyBarSegments extends BaseBarModelScript implements IHitAreaScript
         var numberValid : Bool = false;
         if (ExpressionUtil.isNodeNumeric(node) && !node.isNegative()) 
         {
-            var value : Float = parseInt(node.data);
+            var value : Float = Std.parseInt(node.data);
             numberValid = (value > 1 && value < MAX_ALLOWABLE_UNITS);
         }
         return numberValid;
@@ -327,7 +325,7 @@ class MultiplyBarSegments extends BaseBarModelScript implements IHitAreaScript
         this.calculateHitAreas();
         
         var inhitArea : Bool = false;
-        var i : Int;
+        var i : Int = 0;
         var numHitAreas : Int = m_addBarCopiesHitAreas.length;
         for (i in 0...numHitAreas){
             if (m_addBarCopiesHitAreas[i].containsPoint(m_localMouseBuffer)) 
@@ -349,7 +347,7 @@ class MultiplyBarSegments extends BaseBarModelScript implements IHitAreaScript
     {
         // We want to duplicate the bar segments
         var barSegments : Array<BarSegment> = barWhole.barSegments;
-        var i : Int;
+        var i : Int = 0;
         var numSegmentsOriginally : Int = barSegments.length;
         var numNewSegmentsToCreate : Int = (numCopies - 1) * numSegmentsOriginally;
         for (i in 0...numNewSegmentsToCreate){
@@ -363,18 +361,13 @@ class MultiplyBarSegments extends BaseBarModelScript implements IHitAreaScript
             var newBarSegment : BarSegment = new BarSegment(
             segmentToCopy.numeratorValue, segmentToCopy.denominatorValue, segmentToCopy.color, segmentToCopy.hiddenValue, newSegmentId);
             barSegments.push(newBarSegment);
-        }  // is always attached to the shorter bar.    // If this is detected than the comparison must be removed because we are under the assumption the comparison    // To do this we check if the value of the target bar exceed the value of the other one    // it must be deleted OR comparison no longer is attached to a single bar    // If the addition of the new segment causes the comparison to no longer be correct,  
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        }
+		
+		// If the addition of the new segment causes the comparison to no longer be correct,  
+		// it must be deleted OR comparison no longer is attached to a single bar  
+		// To do this we check if the value of the target bar exceed the value of the other one 
+		// If this is detected than the comparison must be removed because we are under the assumption the comparison
+        // is always attached to the shorter bar.
         if (barWhole.barComparison != null) 
         {
             var otherBarWhole : BarWhole = barModelData.getBarWholeById(barWhole.barComparison.barWholeIdComparedTo);

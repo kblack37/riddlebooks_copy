@@ -55,7 +55,7 @@ class PrepopulateTextScript extends BaseProblemCreateScript
             currentLevel.currentlySelectedBackgroundData["highlightColors"] : null;
             var stylePropertiesForBarModelType : Dynamic = barModelTypeDrawer.getStyleObjectForType(barModelType, highlightColorsForBarPart);
             
-            var i : Int;
+            var i : Int = 0;
             var numBlocks : Int = paragraphElements.length;
             var availableVerticalSpace : Float = textArea.getConstraints().height;
             for (i in 0...paragraphElements.length){

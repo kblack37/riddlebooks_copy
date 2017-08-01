@@ -223,9 +223,9 @@ class AddNewBarComparison extends BaseBarModelScript implements IHitAreaScript i
         // For each individual bar, the hit area starts at the edge of the end and
         // extends to the edge of the longest bar
         var barWholeViews : Array<BarWholeView> = m_barModelArea.getBarWholeViews();
-        var i : Int;
+        var i : Int = 0;
         var numBarWholeViews : Int = barWholeViews.length;
-        var barWholeView : BarWholeView;
+        var barWholeView : BarWholeView = null;
         
         // First find the end of the longest bar, the is the rightmost limit for all bars
         var longestBarViewIndex : Int = -1;
@@ -278,9 +278,9 @@ class AddNewBarComparison extends BaseBarModelScript implements IHitAreaScript i
         var doAddComparison : Bool = false;
         calculateHitAreas();
         
-        var i : Int;
+        var i : Int = 0;
         var numHitAreas : Int = m_hitAreas.length;
-        var hitArea : Rectangle;
+        var hitArea : Rectangle = null;
         var barWholeViews : Array<BarWholeView> = m_barModelArea.getBarWholeViews();
         var numBarWholeViews : Int = barWholeViews.length;
         for (i in 0...numHitAreas){
@@ -294,7 +294,7 @@ class AddNewBarComparison extends BaseBarModelScript implements IHitAreaScript i
                 // which one is closest to the current mouse x.
                 // The mouse x must also be to the left of that edge and right of the current bar's
                 // right edge (i.e. can only compare with bars longer than it)
-                var j : Int;
+                var j : Int = 0;
                 var closestBarIndex : Int = -1;
                 var closestDistance : Float = 0;
                 for (j in 0...numBarWholeViews){

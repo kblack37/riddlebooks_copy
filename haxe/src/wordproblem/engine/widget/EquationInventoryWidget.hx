@@ -173,8 +173,8 @@ class EquationInventoryWidget extends Sprite
             
             var renderComponents : Array<RenderableComponent> = null;  // m_scrollArea.getObjects();  
             var numComponents : Int = renderComponents.length;
-            var i : Int;
-            var item : DisplayObject;
+            var i : Int = 0;
+            var item : DisplayObject = null;
             var numRemainingToAnimate : Int = numComponents;
             
             // If we want to expand out, the background should stretch out first

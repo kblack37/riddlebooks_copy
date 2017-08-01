@@ -65,8 +65,8 @@ class RemoveBarComparison extends BaseBarModelScript implements IRemoveBarElemen
             // Search for the bar whole with the matching id and then remove the comparison
             var barWholes : Array<BarWhole> = m_barModelArea.getBarModelData().barWholes;
             var numBarWholes : Int = barWholes.length;
-            var i : Int;
-            var barWhole : BarWhole;
+            var i : Int = 0;
+            var barWhole : BarWhole = null;
             for (i in 0...numBarWholes){
                 barWhole = barWholes[i];
                 if (barWhole.barComparison != null && barWhole.barComparison.id == hitBarComparisonView.data.id) 
@@ -118,7 +118,7 @@ class RemoveBarComparison extends BaseBarModelScript implements IRemoveBarElemen
             m_globalMouseBuffer.setTo(mouseState.mousePositionThisFrame.x, mouseState.mousePositionThisFrame.y);
             m_barModelArea.globalToLocal(m_globalMouseBuffer, m_localMouseBuffer);
             
-            as3hx.Compat.setArrayLength(m_outParamsBuffer, 0);
+			m_outParamsBuffer = new Array<Dynamic>();
             if (mouseState.leftMousePressedThisFrame) 
             {
                 if (checkHitBarComparison(m_outParamsBuffer)) 
@@ -159,8 +159,8 @@ class RemoveBarComparison extends BaseBarModelScript implements IRemoveBarElemen
         var outBounds : Rectangle = new Rectangle();
         var barWholeViews : Array<BarWholeView> = m_barModelArea.getBarWholeViews();
         var numBarWholeViews : Int = barWholeViews.length;
-        var i : Int;
-        var barWholeView : BarWholeView;
+        var i : Int = 0;
+        var barWholeView : BarWholeView = null;
         for (i in 0...numBarWholeViews){
             barWholeView = barWholeViews[i];
             

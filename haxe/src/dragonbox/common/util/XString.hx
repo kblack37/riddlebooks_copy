@@ -45,7 +45,7 @@ import flash.geom.Point;
         var containsDecimal : Bool = false;
         var isNumber : Bool = true;
         var numCharacters : Int = value.length;
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...numCharacters){
             var char : String = value.charAt(i);
             if (char == ".") 

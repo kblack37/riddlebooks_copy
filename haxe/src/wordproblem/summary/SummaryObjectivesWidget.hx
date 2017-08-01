@@ -127,7 +127,7 @@ class SummaryObjectivesWidget extends Sprite
         
         var objectiveYOffset : Float = 0;
         var numObjectives : Int = objectives.length;
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...numObjectives){
             // Get all the pieces need to contruct the objective display and
             // perform a preliminary layout

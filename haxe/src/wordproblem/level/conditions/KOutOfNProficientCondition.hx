@@ -69,7 +69,7 @@ class KOutOfNProficientCondition implements ICondition
         var numProficient : Int = 0;
         if (m_n > 0) 
         {
-            var i : Int;
+            var i : Int = 0;
             for (i in 0...m_wasLevelProficientHistory.length){
                 if (m_wasLevelProficientHistory[i]) 
                 {
@@ -176,7 +176,7 @@ class KOutOfNProficientCondition implements ICondition
             var lastLevelProficientlyCompleted : Bool = true;
             if (stats.endType == LevelEndTypes.SOLVED_ON_OWN) 
             {
-                var i : Int;
+                var i : Int = 0;
                 var numObjectives : Int = objectives.length;
                 for (i in 0...numObjectives){
                     var objective : BaseObjective = objectives[i];

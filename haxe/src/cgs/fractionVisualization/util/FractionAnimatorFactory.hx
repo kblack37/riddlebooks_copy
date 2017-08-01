@@ -65,7 +65,7 @@ class FractionAnimatorFactory
 		 */
     public function getAnimatorInstance(typeID : String) : IFractionAnimator
     {
-        var result : IFractionAnimator;
+        var result : IFractionAnimator = null;
         
         // Get the animator storage for this type, creating the storage if this is a new type
         if (!m_animatorStorage.exists(typeID))
@@ -98,7 +98,7 @@ class FractionAnimatorFactory
 		 */
     private function generateAnimatorInstance(typeID : String) : IFractionAnimator
     {
-        var result : IFractionAnimator;
+        var result : IFractionAnimator = null;
         
         switch (typeID)
         {

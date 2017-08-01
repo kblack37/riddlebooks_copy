@@ -266,7 +266,7 @@ class TextToCard extends BaseGameScript
             // Each entity in the text component manager can bind to a single expression from the level script
             var components : Array<Component> = m_textArea.componentManager.getComponentListForType(ExpressionComponent.TYPE_ID);
             var numComponents : Int = components.length;
-            var i : Int;
+            var i : Int = 0;
             for (i in 0...numComponents){
                 var expressionComponent : ExpressionComponent = try cast(components[i], ExpressionComponent) catch(e:Dynamic) null;
                 var documentIdBoundToExpression : String = expressionComponent.entityId;
@@ -300,9 +300,9 @@ class TextToCard extends BaseGameScript
             var outChildViews : Array<DocumentView> = new Array<DocumentView>();
             view.getDocumentViewLeaves(outChildViews);
             
-            var resultBounds : Rectangle;
+            var resultBounds : Rectangle = null;
             var canvasToAddTo : DisplayObjectContainer = view.parent;
-            var childView : DocumentView;
+            var childView : DocumentView = null;
             var currentLineNumber : Int = -1;
             var currentLineBounds : Rectangle = null;
             var lines : Array<Rectangle> = new Array<Rectangle>();
@@ -630,8 +630,8 @@ class TextToCard extends BaseGameScript
         var viewIds : Array<String> = new Array<String>();
         this.getIdsContainingView(view, viewIds);
         
-        var i : Int;
-        var mouseComponent : MouseInteractableComponent;
+        var i : Int = 0;
+        var mouseComponent : MouseInteractableComponent = null;
         for (i in 0...viewIds.length){
             mouseComponent = try cast(m_textArea.componentManager.getComponentFromEntityIdAndType(
                             viewIds[i],

@@ -128,7 +128,7 @@ class HighlightTextHintSelector extends HintSelectorNode
                     for (labelName in Reflect.fields(decomposedReference.labelValueToType))
                     {
                         var isLabelInDeck : Bool = false;
-                        var i : Int;
+                        var i : Int = 0;
                         for (i in 0...expressionsInDeck.length){
                             var expressionInDeck : ExpressionComponent = try cast(expressionsInDeck[i], ExpressionComponent) catch(e:Dynamic) null;
                             if (expressionInDeck.expressionString == labelName) 

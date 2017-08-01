@@ -149,7 +149,7 @@ class TextureUtil
         outCoordinates.push(outerRadius * sin);
         
         
-        var i : Int;
+        var i : Int = 0;
         var numCoordinates : Int = innerCoordinates.length;
         shape.graphics.moveTo(innerCoordinates[0], innerCoordinates[1]);
         for (i in 0...numCoordinates){

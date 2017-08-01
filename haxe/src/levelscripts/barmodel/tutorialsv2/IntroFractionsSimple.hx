@@ -564,7 +564,7 @@ class IntroFractionsSimple extends BaseCustomLevelScript
                     symbolDataForUnknown.name = expressionDataForTotal.unknown_name;
                     
                     // Set up the reference model
-                    var i : Int;
+                    var i : Int = 0;
                     var referenceBarWhole : BarWhole = new BarWhole(false);
                     for (i in 0...m_denominatorValueA){
                         var barSegment : BarSegment = new BarSegment(1, 1, 0xFFFFFFFF, null);
@@ -876,7 +876,7 @@ class IntroFractionsSimple extends BaseCustomLevelScript
         as3hx.Compat.setArrayLength(m_segmentIdsToEmphasize, 0);
         var startIndex : Int = ((resizeRightEdge)) ? 0 : totalSegments - numSegments;
         var endIndex : Int = startIndex + numSegments;
-        var i : Int;
+        var i : Int = 0;
         for (i in startIndex...endIndex){
             var barSegment : BarSegment = targetBarWhole.barSegments[i];
             m_segmentIdsToEmphasize.push(barSegment.id);

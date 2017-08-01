@@ -2,8 +2,6 @@ package wordproblem.engine.component;
 
 import flash.errors.Error;
 
-import dragonbox.common.system.Map;
-
 /**
 	 * The layout of components can be thought of as being in a columns with entities acting as rows.
  * Its purpose is to manage the aggregation of properties to be applied to any game object, which
@@ -21,7 +19,7 @@ class ComponentManager
 		 * Key: String component type
 		 * Value: Vector of the components matching that type
 		 */
-    private var m_componentTypeToComponentsList : Map;
+    private var m_componentTypeToComponentsList : Map<String, Array<Component>>;
     
     /**
 		 * A mapping from component type to a mapping of entity ids to components
@@ -29,7 +27,7 @@ class ComponentManager
 		 * Key: String component type
 		 * Value: Map with key=entityId and value=component object of matching type
 		 */
-    private var m_componentTypeToEntityComponentMap : Map;
+    private var m_componentTypeToEntityComponentMap : Map<String, Map<String, Component>>;
     
     /**
      * Remember which component types have had backing structures already created for it.
@@ -53,7 +51,7 @@ class ComponentManager
      */
     public function clear() : Void
     {
-        for (componentType/* AS3HX WARNING could not determine type for var: componentType exp: ECall(EField(EIdent(m_componentTypeToComponentsList),getKeys),[]) type: null */ in m_componentTypeToComponentsList.getKeys())
+        for (componentType in m_componentTypeToComponentsList.keys())
         {
             var componentsForType : Array<Component> = m_componentTypeToComponentsList.get(componentType);
             while (componentsForType.length > 0)
@@ -62,8 +60,8 @@ class ComponentManager
                 componentToRemove.dispose();
             }
             
-            var entityComponentMap : Map = m_componentTypeToEntityComponentMap.get(componentType);
-            entityComponentMap.clear();
+            var entityComponentMap : Map<String, Component> = m_componentTypeToEntityComponentMap.get(componentType);
+            entityComponentMap = new Map<String, Component>();
         }
     }
     
@@ -75,7 +73,7 @@ class ComponentManager
      */
     public function hasComponentType(componentType : String) : Bool
     {
-        return m_componentTypeToComponentsList.contains(componentType);
+        return m_componentTypeToComponentsList.exists(componentType);
     }
     
     /**
@@ -93,7 +91,7 @@ class ComponentManager
         return m_componentTypeToComponentsList.get(componentType);
     }
     
-    public function getComponentTypeToEntityComponentMap() : Map
+    public function getComponentTypeToEntityComponentMap() : Map<String, Map<String, Component>>
     {
         return m_componentTypeToEntityComponentMap;
     }
@@ -109,7 +107,7 @@ class ComponentManager
             initStructuresForComponentType(componentType);
         }
         
-        var entityToComponentMap : Map = m_componentTypeToEntityComponentMap.get(componentType);
+        var entityToComponentMap : Map<String, Component> = m_componentTypeToEntityComponentMap.get(componentType);
         return entityToComponentMap.get(entityId);
     }
     
@@ -129,20 +127,19 @@ class ComponentManager
             initStructuresForComponentType(componentType);
         }
         
-        var entityToComponentMap : Map = m_componentTypeToEntityComponentMap.get(componentType);
+        var entityToComponentMap : Map<String, Component> = m_componentTypeToEntityComponentMap.get(componentType);
         if (entityToComponentMap == null) 
         {
             throw new Error("wordproblem.engine.component.ComponentManager::Missing component type " + componentType);
-        }  // Discard old component if it exists  
-        
-        
-        
-        if (entityToComponentMap.contains(entityId)) 
+        }  
+		
+		// Discard old component if it exists  
+        if (entityToComponentMap.exists(entityId)) 
         {
             removeComponentFromEntity(entityId, componentType);
         }
         
-        entityToComponentMap.put(entityId, component);
+        entityToComponentMap.set(entityId, component);
         var componentList : Array<Component> = m_componentTypeToComponentsList.get(componentType);
         componentList.push(component);
     }
@@ -153,7 +150,7 @@ class ComponentManager
     public function removeComponentFromEntity(entityId : String, componentType : String) : Void
     {
         var success : Bool = false;
-        var entityToComponentMap : Map = m_componentTypeToEntityComponentMap.get(componentType);
+        var entityToComponentMap : Map<String, Component> = m_componentTypeToEntityComponentMap.get(componentType);
         if (entityToComponentMap != null) 
         {
             var componentToRemove : Component = entityToComponentMap.get(entityId);
@@ -180,17 +177,17 @@ class ComponentManager
      */
     public function removeAllComponentsFromEntity(entityIdToRemove : String) : Void
     {
-        var componentType : String;
-        var componentList : Array<Component>;
-        var entityComponentMap : Map;
-        for (componentType/* AS3HX WARNING could not determine type for var: componentType exp: ECall(EField(EIdent(m_componentTypeToComponentsList),getKeys),[]) type: null */ in m_componentTypeToComponentsList.getKeys())
+        var componentType : String = null;
+        var componentList : Array<Component> = null;
+        var entityComponentMap : Map<String, Component> = null;
+        for (componentType in m_componentTypeToComponentsList.keys())
         {
             componentList = m_componentTypeToComponentsList.get(componentType);
             entityComponentMap = m_componentTypeToEntityComponentMap.get(componentType);
             
-            var entityId : String;
-            var componentToRemove : Component;
-            for (entityId/* AS3HX WARNING could not determine type for var: entityId exp: ECall(EField(EIdent(entityComponentMap),getKeys),[]) type: null */ in entityComponentMap.getKeys())
+            var entityId : String = null;
+            var componentToRemove : Component = null;
+            for (entityId in entityComponentMap.keys())
             {
                 // Need to delete from both maps, assume each entity has at most one
                 // of each component type
@@ -212,16 +209,11 @@ class ComponentManager
      */
     public function getEntityIds(outEntityIds : Array<String>) : Void
     {
-        var componentTypes : Array<Dynamic> = m_componentTypeToComponentsList.getKeys();
-        var numTypes : Int = componentTypes.length;
-        var i : Int;
-        for (i in 0...numTypes){
-            var entityMap : Map = m_componentTypeToEntityComponentMap.get(componentTypes[i]);
-            var entities : Array<Dynamic> = entityMap.getKeys();
-            var numEntities : Int = entities.length;
-            var j : Int;
-            for (j in 0...numEntities){
-                var entityId : String = entities[j];
+        var componentTypes = m_componentTypeToComponentsList.keys();
+        for (componentType in componentTypes) {
+            var entityMap : Map<String, Component> = m_componentTypeToEntityComponentMap.get(componentType);
+            var entities = entityMap.keys();
+            for (entityId in entities) {
                 if (Lambda.indexOf(outEntityIds, entityId) == -1) 
                 {
                     outEntityIds.push(entityId);
@@ -233,7 +225,7 @@ class ComponentManager
     private function initStructuresForComponentType(type : String) : Void
     {
         Reflect.setField(m_activeComponentTypes, type, true);
-        m_componentTypeToComponentsList.put(type, new Array<Component>());
-        m_componentTypeToEntityComponentMap.put(type, new Map());
+        m_componentTypeToComponentsList.set(type, new Array<Component>());
+        m_componentTypeToEntityComponentMap.set(type, new Map());
     }
 }

@@ -108,7 +108,7 @@ class BarLabelView extends ResizeableBarPieceView
             hiddenImage : DottedRectangle)
     {
         super();
-        
+		
         // If the label length is below some threshold, use the unscaled texture
         var bracketColor : Int = barLabel.color;
         m_unscaledBracketImage = new Image(unscaledBracketTexture);
@@ -144,10 +144,9 @@ class BarLabelView extends ResizeableBarPieceView
             m_bracketMiddle = midImage;
             m_bracketLineA = lineA;
             m_bracketLineB = lineB;
-        }  // Determine whether an image should be used instead of text to mark the label  
-        
-        
-        
+        }  
+		
+		// Determine whether an image should be used instead of text to mark the label  
         m_descriptionImage = descriptionImage;
         if (descriptionImage != null) 
         {
@@ -417,7 +416,7 @@ class BarLabelView extends ResizeableBarPieceView
                     
                     // Scale each individual image and calculate the gap between images such that all is evenly spaced
                     var imageGap : Float = (boundingWidth - totalSpanningWidth * targetScale) / (descriptionImageContainer.numChildren + 1);
-                    var i : Int;
+                    var i : Int = 0;
                     var imageY : Float = boundingHeight * 0.5;
                     for (i in 0...descriptionImageContainer.numChildren){
                         sampleImage = descriptionImageContainer.getChildAt(i);
@@ -500,7 +499,7 @@ class BarLabelView extends ResizeableBarPieceView
                 nameToShow, 
                 m_measuringTextfield.defaultTextFormat.font, 
                 fontSize, 
-                try cast(m_measuringTextfield.defaultTextFormat.color, Int) catch(e:Dynamic) null
+                try cast(m_measuringTextfield.defaultTextFormat.color, Int) catch(e:Dynamic) 0
                 );
                 m_descriptionTextfield = descriptionTextField;
                 m_descriptionTextfield.x = (boundingWidth - m_descriptionTextfield.width) * 0.5;
@@ -630,7 +629,7 @@ class BarLabelView extends ResizeableBarPieceView
     private function getButtonImageFromPool(buttonTexture : Texture) : Image
     {
         // TODO: On discard return the image to the pool
-        var buttonImage : Image;
+        var buttonImage : Image = null;
         if (m_resizeEdgeButtonPool.length == 0) 
         {
             buttonImage = new Image(buttonTexture);

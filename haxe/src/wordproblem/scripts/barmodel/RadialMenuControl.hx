@@ -6,6 +6,8 @@ import flash.geom.Point;
 import dragonbox.common.dispose.IDisposable;
 import dragonbox.common.ui.MouseState;
 
+import haxe.Constraints.Function;
+
 import starling.animation.Transitions;
 import starling.animation.Tween;
 import starling.core.Starling;
@@ -210,7 +212,7 @@ class RadialMenuControl implements IDisposable
                 
                 if (m_separatingAngles.length >= 2) 
                 {
-                    var i : Int;
+                    var i : Int = 0;
                     var numAngles : Int = m_separatingAngles.length - 1;
                     for (i in 0...numAngles){
                         // Note that there is the wrap around from 2*pi back to zero we need
@@ -295,8 +297,8 @@ class RadialMenuControl implements IDisposable
             canvas : DisplayObjectContainer) : Void
     {
         m_enabledGestures = enabledGestures;
-        as3hx.Compat.setArrayLength(m_separatingAngles, 0);
-        as3hx.Compat.setArrayLength(m_radialMenuSegments, 0);
+		m_separatingAngles = new Array<Float>();
+		m_radialMenuSegments = new Array<DisplayObject>();
         m_radialMenuContainer = new Layer();
         
         /*
@@ -314,7 +316,7 @@ class RadialMenuControl implements IDisposable
         var radPerSegment : Float = Math.PI * 2 / numOptions;
         var rotationOffset : Float = -Math.PI / 2 - radPerSegment / 2;
         m_separatingAngles.push((Math.PI * 3 - radPerSegment) * 0.5);
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...numOptions){
             // Need to draw and get back three versions of the image
             m_radialMenuSegments.push(m_drawSegment(i, rotationOffset, radPerSegment, "up"));
@@ -357,7 +359,7 @@ class RadialMenuControl implements IDisposable
                 {
                     isOpen = true;
                 };
-        Starling.juggler.add(popOpenTween);
+        Starling.current.juggler.add(popOpenTween);
     }
     
     public function close() : Void
@@ -378,21 +380,20 @@ class RadialMenuControl implements IDisposable
                     
                     // Need to properly dispose of all the elements in each list
                     // (Very important to do this since textures use up valuable graphics memory)
-                    disposeSegments(m_radialMenuSegments, "up");
-                    disposeSegments(m_radialMenuSegmentsOver, "over");
-                    disposeSegments(m_radialMenuSegmentsDisabled, "disabled");
-                    
-                    function disposeSegments(segments : Array<DisplayObject>, mode : String) : Void
+					function disposeSegments(segments : Array<DisplayObject>, mode : String) : Void
                     {
                         for (segment in segments)
                         {
                             m_disposeSegment(segment, mode);
                         }
                         
-                        as3hx.Compat.setArrayLength(segments, 0);
+						segments = new Array<DisplayObject>();
                     };
+                    disposeSegments(m_radialMenuSegments, "up");
+                    disposeSegments(m_radialMenuSegmentsOver, "over");
+                    disposeSegments(m_radialMenuSegmentsDisabled, "disabled");
                 };
-        Starling.juggler.add(closeTween);
+        Starling.current.juggler.add(closeTween);
     }
     
     // An external script is responsible for specifying the actual draw

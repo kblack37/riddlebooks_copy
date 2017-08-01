@@ -53,8 +53,8 @@ class ComponentFactory
     {
         var entities : Array<Dynamic> = try cast(data, Array<Dynamic>) catch(e:Dynamic) null;
         
-        var i : Int;
-        var item : Dynamic;
+        var i : Int = 0;
+        var item : Dynamic = null;
         var numItems : Int = entities.length;
         for (i in 0...numItems){
             item = entities[i];
@@ -74,7 +74,7 @@ class ComponentFactory
         // this manager.
         var entityId : String = data.entityId;
         var components : Array<Dynamic> = data.components;
-        var i : Int;
+        var i : Int = 0;
         var numComponents : Int = components.length;
         for (i in 0...numComponents){
             componentManager.addComponentToEntity(this.createComponent(entityId, components[i]));
@@ -173,11 +173,8 @@ class ComponentFactory
     {
         var entityIdToComponentList : Map<String, Array<Component>> = new Map<String, Array<Component>>();
         
-        var enityToComponentMaps : Array<Dynamic> = componentManager.getComponentTypeToEntityComponentMap().getValues();
-        var numMaps : Int = enityToComponentMaps.length;
-        var i : Int;
-        for (i in 0...numMaps){
-            var entityToComponentMap : Map<Dynamic, Dynamic> = enityToComponentMaps[i];
+        var entityToComponentMaps = componentManager.getComponentTypeToEntityComponentMap().iterator();
+        for (entityToComponentMap in entityToComponentMaps) {
             var components = entityToComponentMap.iterator();
             for (component in components){
                 var entityId : String = component.entityId;
@@ -190,18 +187,16 @@ class ComponentFactory
                     Reflect.setField(entityIdToComponentList, entityId, [component]);
                 }
             }
-        }  // Go through the dictionary and convert it to the object form  
-        
-        
-        
+        }
+		
+		// Go through the dictionary and convert it to the object form  
         var serializedItems : Array<Dynamic> = [];
-        var componentList : Array<Component>;
+        var componentList : Array<Component> = null;
         for (entityId in Reflect.fields(entityIdToComponentList))
         {
             var entityObject : Dynamic = {
                 entityId : entityId,
                 components : [],
-
             };
             componentList = Reflect.field(entityIdToComponentList, entityId);
             var numComponents = componentList.length;

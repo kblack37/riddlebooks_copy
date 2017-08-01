@@ -167,7 +167,7 @@ class GestureAndTextTip extends ScriptNode implements IShowableScript
         
         var titleTextfield : TextField = new TextField(Std.int(maxTitleWidth), Std.int(measuringText.textHeight + 10), 
 			m_titleText, 
-			textFormat.font, textFormat.size, try cast(textFormat.color, Int) catch(e:Dynamic) null);
+			textFormat.font, textFormat.size, try cast(textFormat.color, Int) catch(e:Dynamic) 0);
 		titleTextfield.y = titleY;
 		titleTextfield.x = titleX;
 		titleTextfield.vAlign = VAlign.TOP;
@@ -181,7 +181,7 @@ class GestureAndTextTip extends ScriptNode implements IShowableScript
         measuringText.text = m_descriptionText;
         
         var descriptionTextField : TextField = new TextField(Std.int(measuringText.width), Std.int(measuringText.textHeight + 10), m_descriptionText, 
-			textFormat.font, 26, try cast(textFormat.color, Int) catch(e:Dynamic) null);
+			textFormat.font, 26, try cast(textFormat.color, Int) catch(e:Dynamic) 0);
         descriptionTextField.vAlign = VAlign.TOP;
         var scale9Padding : Float = 12;
         

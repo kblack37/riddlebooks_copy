@@ -95,7 +95,7 @@ class UpdateAndSaveAchievements extends BaseBufferEventScript
         // We replace the string value to the actual function object
         var achievementIds : Array<String> = m_achievementsModel.getAchievementIds();
         var numAchievements : Int = achievementIds.length;
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...numAchievements){
             var achievementData : Dynamic = m_achievementsModel.getAchievementDetailsFromId(achievementIds[i]);
             
@@ -150,7 +150,7 @@ class UpdateAndSaveAchievements extends BaseBufferEventScript
     {
         var achievementIds : Array<String> = m_achievementsModel.getAchievementIds();
         var numAchievements : Int = achievementIds.length;
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...numAchievements){
             var achievementData : Dynamic = m_achievementsModel.getAchievementDetailsFromId(achievementIds[i]);
             
@@ -226,7 +226,7 @@ class UpdateAndSaveAchievements extends BaseBufferEventScript
     {
         var missingCollectable : Bool = false;
         var requiredRewardIds : Array<String> = BaseGiveRewardScript.LEVEL_UP_REWARDS;
-        var i : Int;
+        var i : Int = 0;
         var numRewardIds : Int = requiredRewardIds.length;
         for (i in 0...numRewardIds){
             if (m_playerItemInventory.componentManager.getComponentFromEntityIdAndType(requiredRewardIds[i], ItemIdComponent.TYPE_ID) == null) 

@@ -84,12 +84,12 @@ class UserLoggingRequest extends DataRequest
     
     private function handlePageLoads(response : CgsResponseStatus) : Void
     {
-        var userPageloads : Array<PageLoadData>;
+        var userPageloads : Array<PageLoadData> = null;
         var userPageloadsMap : Dictionary = new Dictionary();
         var pageloads : Array<Dynamic> = response.data;
         
-        var currPageload : PageLoadData;
-        var currUid : String;
+        var currPageload : PageLoadData = null;
+        var currUid : String = null;
         var userCount : Int = 0;
         for (pageloadObj in pageloads)
         {
@@ -130,7 +130,7 @@ class UserLoggingRequest extends DataRequest
     
     private function loadUserLoggingData(loadPageLoads : Bool = false) : Void
     {
-        var questRequest : UserQuestDataRequest;
+        var questRequest : UserQuestDataRequest = null;
         for (uid in _uids)
         {
             if (loadPageLoads)
@@ -184,7 +184,7 @@ class UserLoggingRequest extends DataRequest
     
     private function handleGameActionsLoaded(response : CgsResponseStatus) : Void
     {
-        var currAction : GameAction;
+        var currAction : GameAction = null;
         var actions : Array<GameAction> = new Array<GameAction>();
         
         var data : Array<Dynamic> = response.data;
@@ -258,7 +258,7 @@ class UserLoggingRequest extends DataRequest
     
     private function testAllUserDataLoaded() : Void
     {
-        var currLogData : UserLoggingData;
+        var currLogData : UserLoggingData = null;
         for (uid in _uids)
         {
             currLogData = _userLoggingData[uid];

@@ -164,7 +164,7 @@ class ExpressionContainer extends Sprite implements IDisposable
     
     private function createBackgroundImage(textureName : String, assetManager : AssetManager) : DisplayObject
     {
-        var backgroundImage : DisplayObject;
+        var backgroundImage : DisplayObject = null;
         if (textureName != null) 
         {
             var texture : Texture = assetManager.getTexture(textureName);

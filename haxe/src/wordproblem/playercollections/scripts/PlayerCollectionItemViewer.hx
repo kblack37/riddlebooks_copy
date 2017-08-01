@@ -4,7 +4,6 @@ import wordproblem.playercollections.scripts.PlayerCollectionViewer;
 
 import flash.geom.Point;
 import flash.geom.Rectangle;
-import flash.utils.Dictionary;
 
 import dragonbox.common.ui.MouseState;
 import dragonbox.common.util.ListUtil;
@@ -56,7 +55,7 @@ class PlayerCollectionItemViewer extends PlayerCollectionViewer
     private var m_collectionInformation : Array<Dynamic>;
     
     /** Used to allow faster lookup of category information */
-    private var m_categoryIdToCollectionObjectMap : Dictionary<String, Dynamic>;
+    private var m_categoryIdToCollectionObjectMap : Map<String, Dynamic>;
     private var m_playerInventory : ItemInventory;
     private var m_itemDataSource : ItemDataSource;
     
@@ -112,7 +111,7 @@ class PlayerCollectionItemViewer extends PlayerCollectionViewer
         super(canvasContainer, assetManager, mouseState, buttonColorData, id, isActive);
         
         m_collectionInformation = collectionInformation;
-        m_categoryIdToCollectionObjectMap = new Dictionary();
+        m_categoryIdToCollectionObjectMap = new Map();
         m_playerInventory = playerInventory;
         m_itemDataSource = itemDataSource;
         m_collectionCategoriesPages = new Array<Array<String>>();
@@ -139,7 +138,7 @@ class PlayerCollectionItemViewer extends PlayerCollectionViewer
             if (m_currentViewLevel == PlayerCollectionItemViewer.VIEW_LEVEL_CATEGORIES) 
             {
                 var categoryButtonIndexContainingPoint : Int = -1;
-                var i : Int;
+                var i : Int = 0;
                 var numButtons : Int = m_activeCategoryButtons.length;
                 for (i in 0...numButtons){
                     var categoryButton : PlayerCollectionCategoryButton = m_activeCategoryButtons[i];
@@ -297,10 +296,10 @@ class PlayerCollectionItemViewer extends PlayerCollectionViewer
         
         // Do some initial pre-processing of collection type information
         var playerItemIdComponents : Array<Component> = m_playerInventory.componentManager.getComponentListForType(ItemIdComponent.TYPE_ID);
-        var i : Int;
+        var i : Int = 0;
         var numCollectionTypes : Int = m_collectionInformation.length;
         var categoryIdList : Array<String> = new Array<String>();
-        var collectionCategory : Dynamic;
+        var collectionCategory : Dynamic = null;
         for (i in 0...numCollectionTypes){
             collectionCategory = m_collectionInformation[i];
             
@@ -311,14 +310,14 @@ class PlayerCollectionItemViewer extends PlayerCollectionViewer
             // This will inform us what items the player has left to earn in a collection
             // In the type map we also cache whether the player has earned that item already
             // in a new array (use the instance id)
-            var j : Int;
+            var j : Int = 0;
             var itemIdsEarned : Array<Dynamic> = [];
             var numItemIdsInTypeEarned : Int = 0;
             var numItemIds : Int = itemIds.length;
             for (j in 0...numItemIds){
                 var itemId : String = itemIds[j];
-                var k : Int;
-                var itemIdComponent : ItemIdComponent;
+                var k : Int = 0;
+                var itemIdComponent : ItemIdComponent = null;
                 var numPlayerItemIds : Int = playerItemIdComponents.length;
                 for (k in 0...numPlayerItemIds){
                     itemIdComponent = try cast(playerItemIdComponents[k], ItemIdComponent) catch(e:Dynamic) null;
@@ -372,7 +371,7 @@ class PlayerCollectionItemViewer extends PlayerCollectionViewer
         var buttonWidth : Float = 400;
         var buttonHeight : Float = 70;
         var categoriesForPage : Array<String> = m_collectionCategoriesPages[pageIndex];
-        var i : Int;
+        var i : Int = 0;
         var numCategoriesForPage : Int = categoriesForPage.length;
         for (i in 0...numCategoriesForPage){
             var categoryId : String = categoriesForPage[i];
@@ -426,7 +425,7 @@ class PlayerCollectionItemViewer extends PlayerCollectionViewer
         var typicalWidth : Float = categoryInformationObject.typicalWidth;
         var typicalHeight : Float = categoryInformationObject.typicalHeight;
         
-        var i : Int;
+        var i : Int = 0;
         var numItemsForPage : Int = categoryItemsForPage.length;
         for (i in 0...numItemsForPage){
             var itemId : String = categoryItemsForPage[i];

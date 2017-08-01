@@ -231,9 +231,9 @@ class StripMultiplyAnimator implements IFractionAnimator
         // Change First Denominator Data
         var firstDenom_multiplierHolder : Sprite;
         var firstDenom_multiplier : TextField;
-        var newFirstSegmentHolder : Sprite;
-        var newFirstSegments : Array<Sprite>;
-        var newFirstSegmentGroupPositions : Array<Point>;
+        var newFirstSegmentHolder : Sprite = null;
+        var newFirstSegments : Array<Sprite> = null;
+        var newFirstSegmentGroupPositions : Array<Point> = null;
         var numTicksPerFirstSegment : Float = firstMultiplier;
         var numOtherFirstSegments : Float = (firstModule.numBaseUnits * finalFirstFraction.denominator) - numTicksPerFirstSegment;
         var numOtherFirstSegmentGroups : Float = (firstModule.numBaseUnits * origFirstFraction.denominator) - 1;
@@ -275,7 +275,7 @@ class StripMultiplyAnimator implements IFractionAnimator
             // Compute explosion position according to segment index and the unit index from the center of the explosion
             var explodedSegmentIndexFromCenter : Int = as3hx.Compat.parseInt(explodedSegmentIndex - explosionCenterOffset);  // For computing distance between segments  
             var explodedUnitIndex : Int = Math.floor(explodedSegmentIndex / first.fraction.denominator);
-            var explodedUnitIndexFromCenter : Float;  // For computing distance between units  
+            var explodedUnitIndexFromCenter : Float = 0.0;  // For computing distance between units  
             if (firstModule.numTotalUnits % 2 == 0)
             {
                 // Even number of units, center is between to units
@@ -352,7 +352,7 @@ class StripMultiplyAnimator implements IFractionAnimator
             }
             
             // Setup the drop segments
-            var dropSegments : Array<Sprite>;
+            var dropSegments : Array<Sprite> = null;
             var dropSegmentDestinations : Array<Point> = new Array<Point>();
             var dropSegmentWidth : Float = resultModule.unitWidth / resultFraction.denominator;
             dropSegments = firstModule.drawSegmentsForDrop(resultFraction, resultModule.numBaseUnits, result.foregroundColor);

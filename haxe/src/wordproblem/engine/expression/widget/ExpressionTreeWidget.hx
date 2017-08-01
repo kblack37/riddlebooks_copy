@@ -13,7 +13,6 @@ import dragonbox.common.expressiontree.ExpressionUtil;
 import dragonbox.common.expressiontree.WildCardNode;
 import dragonbox.common.math.util.MathUtil;
 import dragonbox.common.math.vectorspace.IVectorSpace;
-import dragonbox.common.system.Map;
 
 import starling.display.DisplayObject;
 import starling.display.Image;
@@ -89,7 +88,7 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
      * In order to quickly search for widgets during updates we will link them to an id,
      * each created node instance has a unique id.
      */
-    private var m_nodeIdToWidgetMap : Map;
+    private var m_nodeIdToWidgetMap : Map<Int, BaseTermWidget>;
     
     /**
      * Since it is possible that all the terms in a widget will not fit the borders
@@ -251,7 +250,7 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
      */
     public function setTree(tree : ExpressionTree) : Void
     {
-        for (widget/* AS3HX WARNING could not determine type for var: widget exp: ECall(EField(EIdent(m_nodeIdToWidgetMap),getValues),[]) type: null */ in m_nodeIdToWidgetMap.getValues())
+        for (widget in m_nodeIdToWidgetMap.iterator())
         {
             if (widget.parent != null) 
             {
@@ -292,7 +291,7 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
             _getWidgetsToDelete(m_widgetRoot, treeRoot, widgetsToDelete, forceDelete);
         }
         
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...widgetsToDelete.length){
             var widgetToRemove : BaseTermWidget = widgetsToDelete[i];
             widgetToRemove.removeChildWidgets();
@@ -317,7 +316,7 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
         for (i in 0...widgetsToCreate.length){
             var nodeToCreateWidgetFor : ExpressionNode = widgetsToCreate[i];
             
-            var addedNodeWidget : BaseTermWidget;
+            var addedNodeWidget : BaseTermWidget = null;
             if (nodeToCreateWidgetFor.isLeaf()) 
             {
                 if (Std.is(nodeToCreateWidgetFor, WildCardNode)) 
@@ -345,7 +344,7 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
                 m_assetManager);
                 addedNodeWidget = groupWidget;
             }
-            m_nodeIdToWidgetMap.put(nodeToCreateWidgetFor.id, addedNodeWidget);
+            m_nodeIdToWidgetMap.set(nodeToCreateWidgetFor.id, addedNodeWidget);
         }  // Create widget for root if it doesn't exist already  
         
         
@@ -378,7 +377,7 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
     }
     
     private function _getWidgetsToCreate(node : ExpressionNode,
-            existingNodeIdsMap : Map,
+            existingNodeIdsMap : Map<Int, BaseTermWidget>,
             outNodesToCreate : Array<ExpressionNode>,
             createAll : Bool) : Void
     {
@@ -389,7 +388,7 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
             _getWidgetsToCreate(node.left, existingNodeIdsMap, outNodesToCreate, createAll);
             _getWidgetsToCreate(node.right, existingNodeIdsMap, outNodesToCreate, createAll);
             
-            if (createAll || !existingNodeIdsMap.contains(node.id)) 
+            if (createAll || !existingNodeIdsMap.exists(node.id)) 
             {
                 outNodesToCreate.push(node);
             }
@@ -599,7 +598,7 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
             if (widget.getNode().wrapInParentheses) 
             {
                 var numParenthesisChildren : Int = widget.m_parenthesesCanvas.numChildren;
-                var i : Int;
+                var i : Int = 0;
                 for (i in 0...numParenthesisChildren){
                     var parenthesisImage : DisplayObject = widget.m_parenthesesCanvas.getChildAt(i);
                     parenthesisImage.getBounds(this, pickedParenthesisBounds);
@@ -659,7 +658,7 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
             localPoint : Point,
             allowPickOperator : Bool) : BaseTermWidget
     {
-        var pickedWidget : BaseTermWidget;
+        var pickedWidget : BaseTermWidget = null;
         if (Std.is(widget, SymbolTermWidget)) 
         {
             var widgetBounds : Rectangle = widget.rigidBodyComponent.boundingRectangle;

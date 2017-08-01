@@ -3,11 +3,6 @@ package wordproblem.engine.barmodel.view;
 
 import dragonbox.common.dispose.IDisposable;
 
-//import feathers.display.Scale3Image;
-//import feathers.display.Scale9Image;
-//import feathers.textures.Scale3Textures;
-//import feathers.textures.Scale9Textures;
-
 import starling.display.DisplayObject;
 import starling.display.Image;
 import starling.display.Sprite;
@@ -80,13 +75,11 @@ class BarSegmentView extends Sprite implements IDisposable
         if (targetWidth < 3) 
         {
             targetWidth = 3;
-        }  // However should scale horizontally with 3-slice    // If segment height less than slice padding, should also not scale vertically.  
-        
-        
-        
-        
-        
-        var segmentImage : DisplayObject;
+        }
+		
+		// If segment height less than slice padding, should also not scale vertically.  		
+		// However should scale horizontally with 3-slice
+        var segmentImage : DisplayObject = null;
         if (data.hiddenValue != null) 
         {
             m_hiddenImage.resize(targetWidth, height, 12, 2);

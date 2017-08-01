@@ -50,7 +50,7 @@ class HintScript extends ScriptNode
     override public function visit() : Int
     {
         // Execute children scripts
-        var i : Int;
+        var i : Int = 0;
         var numChildren : Int = m_children.length;
         for (i in 0...numChildren){
             m_children[i].visit();

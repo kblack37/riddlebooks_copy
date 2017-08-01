@@ -91,7 +91,7 @@ class CurrencyCounter extends Sprite
         measuringText.defaultTextFormat = textFormat;
         var targetSize : Int = Std.int(measuringText.resizeToDimensions(textfieldWidth, textfieldHeight, "" + Std.int(Math.pow(2, 3))));
         m_currencyText = new OutlinedTextField(textfieldWidth, textfieldHeight, 
-                textFormat.font, targetSize, try cast(textFormat.color, Int) catch(e:Dynamic) null, 0xFFFFFF);
+                textFormat.font, targetSize, try cast(textFormat.color, Int) catch(e:Dynamic) 0, 0xFFFFFF);
         
         // Add another layer
         var extraBackgroundPadding : Float = textMaxHeight * 0.1;

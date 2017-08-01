@@ -350,7 +350,7 @@ class WordProblemLevelLeaf extends WordProblemLevelNode implements ICgsLevelLeaf
      */
     public function hasLock(lockType : String, keyData : Dynamic) : Bool
     {
-        var result : Bool;
+        var result : Bool = false;
         for (lock in m_levelLocks)
         {
             if (lock.lockType == lockType && lock.doesKeyMatch(keyData)) 
@@ -367,7 +367,7 @@ class WordProblemLevelLeaf extends WordProblemLevelNode implements ICgsLevelLeaf
      */
     public function editLock(lockType : String, oldKeyData : Dynamic, newKeyData : Dynamic) : Bool
     {
-        var result : Bool;
+        var result : Bool = false;
         if (removeLock(lockType, oldKeyData)) 
         {
             addLock(lockType, newKeyData);
@@ -381,7 +381,7 @@ class WordProblemLevelLeaf extends WordProblemLevelNode implements ICgsLevelLeaf
      */
     public function removeLock(lockType : String, keyData : Dynamic) : Bool
     {
-        var result : Bool;
+        var result : Bool = false;
         for (lock in m_levelLocks)
         {
             if (lock.lockType == lockType && lock.doesKeyMatch(keyData)) 
@@ -472,8 +472,8 @@ class WordProblemLevelLeaf extends WordProblemLevelNode implements ICgsLevelLeaf
             // recursive loop. Need to directly modify the completion value of nodes sharing the same save name.
             var levelNodes : Array<WordProblemLevelLeaf> = new Array<WordProblemLevelLeaf>();
             WordProblemCgsLevelManager.getLevelNodes(levelNodes, m_levelManager.currentLevelProgression);
-            var levelNode : WordProblemLevelLeaf;
-            var i : Int;
+            var levelNode : WordProblemLevelLeaf = null;
+            var i : Int = 0;
             var numLevelNodes : Int = levelNodes.length;
             for (i in 0...numLevelNodes){
                 levelNode = levelNodes[i];

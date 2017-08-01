@@ -10,8 +10,7 @@ import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
 
-import feathers.controls.Button;
-
+import starling.display.Button;
 import starling.display.DisplayObject;
 import starling.display.DisplayObjectContainer;
 import starling.display.Image;
@@ -83,10 +82,8 @@ class ShowTipFromLink extends BaseGameScript
         var closeWidth : Float = 40;
         var closeIconTexture : Texture = assetManager.getTexture("wrong");
         var closeIcon : Image = new Image(closeIconTexture);
-        m_closeButton = new Button();
-        m_closeButton.defaultSkin = closeIcon;
-        m_closeButton.defaultIcon = closeIcon;
-        m_closeButton.scaleWhenHovering = 1.2;
+        m_closeButton = new Button(closeIcon.texture);
+        m_closeButton.scaleWhenOver = 1.2;
         m_closeButton.scaleWhenDown = 0.8;
         m_closeButton.width = m_closeButton.height = closeWidth;
         m_closeButton.addEventListener(Event.TRIGGERED, onCloseClicked);

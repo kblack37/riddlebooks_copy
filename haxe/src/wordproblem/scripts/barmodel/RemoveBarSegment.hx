@@ -222,14 +222,14 @@ class RemoveBarSegment extends BaseBarModelScript implements IRemoveBarElement
         
         var foundSegment : Bool = false;
         var numBarWholes : Int = barWholes.length;
-        var barWhole : BarWhole;
-        var i : Int;
+        var barWhole : BarWhole = null;
+        var i : Int = 0;
         for (i in 0...numBarWholes){
             barWhole = barWholes[i];
             var barSegments : Array<BarSegment> = barWhole.barSegments;
             var numBarSegments : Int = barSegments.length;
-            var j : Int;
-            var barSegment : BarSegment;
+            var j : Int = 0;
+            var barSegment : BarSegment = null;
             for (j in 0...numBarSegments){
                 barSegment = barSegments[j];
                 if (barSegment.id == barSegmentId) 
@@ -286,8 +286,8 @@ class RemoveBarSegment extends BaseBarModelScript implements IRemoveBarElement
             segmentIndexRemoved : Int) : Void
     {
         var barWholes : Array<BarWhole> = barModelData.barWholes;
-        var i : Int;
-        var barWhole : BarWhole;
+        var i : Int = 0;
+        var barWhole : BarWhole = null;
         var numBarWholes : Int = barWholes.length;
         var barWholeWithRemovedSegment : BarWhole = null;
         for (i in 0...numBarWholes){
@@ -351,7 +351,7 @@ class RemoveBarSegment extends BaseBarModelScript implements IRemoveBarElement
     private function readjustLabelsFromDeletedIndex(barLabels : Array<BarLabel>, segmentIndexRemoved : Int) : Void
     {
         var numBarLabels : Int = barLabels.length;
-        var barLabel : BarLabel;
+        var barLabel : BarLabel = null;
         var i : Int = 0;
         while (i < numBarLabels) {
             barLabel = barLabels[i];

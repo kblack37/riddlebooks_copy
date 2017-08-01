@@ -85,7 +85,7 @@ class DeckCallout extends BaseGameScript
                 var hitObject : BaseTermWidget = try cast(m_deckArea.getObjectUnderPoint(m_globalMouseBuffer.x, m_globalMouseBuffer.y), BaseTermWidget) catch(e:Dynamic) null;
                 var components : Array<Component> = m_deckArea.componentManager.getComponentListForType(RenderableComponent.TYPE_ID);
                 var numComponents : Int = components.length;
-                var i : Int;
+                var i : Int = 0;
                 for (i in 0...numComponents){
                     var renderComponent : RenderableComponent = try cast(components[i], RenderableComponent) catch(e:Dynamic) null;
                     var deckEntityId : String = renderComponent.entityId;
@@ -172,7 +172,7 @@ class DeckCallout extends BaseGameScript
 								symbolName, 
 								textFormat.font, 
 								textFormat.size, 
-								try cast(textFormat.color, Int) catch(e:Dynamic) null
+								try cast(textFormat.color, Int) catch(e:Dynamic) 0
                             );
                             var calloutComponent : CalloutComponent = new CalloutComponent(deckEntityId);
                             calloutComponent.backgroundTexture = "button_white";

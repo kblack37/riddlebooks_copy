@@ -64,7 +64,7 @@ class HighlightBarModelThenTextProcess extends ScriptNode
             
             
             var textComponentManager : ComponentManager = m_textArea.componentManager;
-            var i : Int;
+            var i : Int = 0;
             var numDocumentIds : Int = m_documentIds.length;
             for (i in 0...numDocumentIds){
                 var documentId : String = m_documentIds[i];
@@ -83,7 +83,7 @@ class HighlightBarModelThenTextProcess extends ScriptNode
         // First determine if the doc id maps to an expression that is already present in the bar model
         // area
         var textComponentManager : ComponentManager = m_textArea.componentManager;
-        var i : Int;
+        var i : Int = 0;
         var numDocumentIds : Int = m_documentIds.length;
         for (i in 0...numDocumentIds){
             var foundBarViewForDocId : Bool = false;

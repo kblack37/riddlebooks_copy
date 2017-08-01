@@ -519,7 +519,7 @@ class EditableTextArea extends Layer
         
         var secondsElapsed : Float = time.currentDeltaSeconds;
         var numBlocks : Int = m_textBlocks.length;
-        var blockIndex : Int;
+        var blockIndex : Int = 0;
         for (blockIndex in 0...numBlocks){
             if (m_refreshHighlightPending[blockIndex]) 
             {
@@ -543,7 +543,7 @@ class EditableTextArea extends Layer
                     
                     
                     var highlightIdsToDelete : Dynamic = { };
-                    var i : Int;
+                    var i : Int = 0;
                     var numHighlights : Int = orderedHighlightIds.length;
                     for (i in 0...numHighlights){
                         highlightId = orderedHighlightIds[i];
@@ -578,7 +578,7 @@ class EditableTextArea extends Layer
                         
                         
                         
-                        var j : Int;
+                        var j : Int = 0;
                         for (j in 0...i){
                             var otherHighlightId : String = orderedHighlightIds[j];
                             if (!highlightIdsToDelete.exists(otherHighlightId)) 
@@ -660,7 +660,7 @@ class EditableTextArea extends Layer
         // This data is not stored within the original text field since we do not want to contaminate
         // the original. The extra textfield is used to create the transitory html tagged version
         // of the text that other scripts can fetch to apply transformations to it.
-        var i : Int;
+        var i : Int = 0;
         var temporaryTextBlocks : Array<TextField> = new Array<TextField>();
         var numTextBlocks : Int = m_textBlocks.length;
         for (i in 0...numTextBlocks){
@@ -711,7 +711,7 @@ class EditableTextArea extends Layer
         }
         
         var textUnderPoint : Bool = false;
-        var i : Int;
+        var i : Int = 0;
         var numTextBlocks : Int = m_textBlocks.length;
         for (i in 0...numTextBlocks){
             var textBlock : TextField = m_textBlocks[i];
@@ -892,7 +892,7 @@ class EditableTextArea extends Layer
         // modifies the text.
         var wordProperties : Array<Dynamic> = divideContentsIntoWordIndices(textBlockIndex);
         var numWords : Int = wordProperties.length;
-        var i : Int;
+        var i : Int = 0;
         var startWordIndex : Int = 0;
         var endWordIndex : Int = 0;
         for (i in 0...numWords){
@@ -998,7 +998,7 @@ class EditableTextArea extends Layer
         {
             var outHighlights : Array<DisplayObject> = new Array<DisplayObject>();
             var numBlocks : Int = m_textBlocks.length;
-            var i : Int;
+            var i : Int = 0;
             for (i in 0...numBlocks){
                 var textBlock : TextField = m_textBlocks[i];
                 if (textBlock.text.length > 0) 
@@ -1061,7 +1061,7 @@ class EditableTextArea extends Layer
         // For each line we draw a box (there is always at least one line)
         // IMPORTANT a line might contain whitespace at the very start or end
         // DO NOT include that whitespace, we adjust indices if they are on white space
-        var i : Int;
+        var i : Int = 0;
         for (i in startLineIndex...endLineIndex + 1){
             var validLineToHighlight : Bool = true;
             var knownFirstCharIndexInLine : Int = textBlock.getLineOffset(i);
@@ -1138,7 +1138,7 @@ class EditableTextArea extends Layer
             
             // Remove all previous display objects
             var displayPieces : Array<DisplayObject> = textObject.display;
-            var j : Int;
+            var j : Int = 0;
             for (j in 0...displayPieces.length){
                 var displayPiece : DisplayObject = displayPieces[j];
                 displayPiece.removeFromParent(true);
@@ -1162,7 +1162,7 @@ class EditableTextArea extends Layer
         
         var contents : String = m_textBlocks[blockIndex].text;
         var numCharacters : Int = contents.length;
-        var i : Int;
+        var i : Int = 0;
         var lastCharacterIsWhiteSpace : Bool = true;
         for (i in 0...numCharacters){
             var character : String = contents.charAt(i);

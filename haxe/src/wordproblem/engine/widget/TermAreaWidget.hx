@@ -409,15 +409,15 @@ class TermAreaWidget extends ExpressionTreeWidget implements IBaseWidget
         // For every entity id in the current manager, check if there is a matching
         // entity within the term area widget
         var numEntityIds : Int = entityIds.length;
-        var entityId : String;
-        var i : Int;
+        var entityId : String = null;
+        var i : Int = 0;
         for (i in 0...numEntityIds){
             entityId = entityIds[i];
             
             var numTermAreaEntities : Int = outWidgetLeaves.length;
             var foundMatch : Bool = false;
-            var termAreaEntity : BaseTermWidget;
-            var j : Int;
+            var termAreaEntity : BaseTermWidget = null;
+            var j : Int = 0;
             for (j in 0...numTermAreaEntities){
                 termAreaEntity = outWidgetLeaves[j];
                 if (Std.string(termAreaEntity.getNode().id) == entityId) 

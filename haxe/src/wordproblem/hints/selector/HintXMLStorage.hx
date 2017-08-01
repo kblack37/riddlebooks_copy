@@ -1,10 +1,11 @@
 package wordproblem.hints.selector;
+import haxe.xml.Fast;
 
 
 class HintXMLStorage
 {
     // The hint information is formatted as xml
-    private var m_hintData : FastXML;
+    private var m_hintData : Fast;
     
     /**
      * Map from step id to list of hint xml elements.
@@ -12,21 +13,19 @@ class HintXMLStorage
      */
     private var m_stepIdToHintElementList : Dynamic;
     
-    public function new(hintData : FastXML)
+    public function new(hintData : Fast)
     {
         m_hintData = hintData;
         
         m_stepIdToHintElementList = { };
-        var childHints : FastXMLList = hintData.node.children.innerData();
-        var numChildren : Int = childHints.length();
-        var i : Int;
-        for (i in 0...numChildren){
-            var childHint : FastXML = childHints.get(i);
-            var stepId : Int = parseInt(childHint.node.attribute.innerData("step"));
+        var childHints = hintData.elements;
+		for (childHint in childHints) {
+            var stepId : Int = Std.parseInt(childHint.att.step);
             if (!m_stepIdToHintElementList.exists(stepId)) 
-                            {
-                                m_stepIdToHintElementList[stepId] = new Array<FastXML>();
-                            }(try cast(m_stepIdToHintElementList[stepId], Array/*Vector.<T> call?*/) catch(e:Dynamic) null).push(childHint);
+            {
+                m_stepIdToHintElementList[stepId] = new Array<Fast>();
+            }
+			(try cast(m_stepIdToHintElementList[stepId], Array<Dynamic>) catch(e:Dynamic) null).push(childHint);
         }
     }
     
@@ -49,7 +48,7 @@ class HintXMLStorage
             // If possible, look at the params act as a filter.
             // For example a param, might include the bar model pattern name 'a1', 'b1', 'unk'
             // used to indicate which element is missing
-            var hintElementsForStep : Array<FastXML> = m_stepIdToHintElementList[stepId];
+            var hintElementsForStep : Array<Fast> = m_stepIdToHintElementList[stepId];
             if (hintElementsForStep.length > 0) 
             {
                 
@@ -66,8 +65,8 @@ class HintXMLStorage
                     {
                         var existingLabelParts : Array<Dynamic> = Reflect.field(filterData, "existingLabelParts");
                         for (i in 0...hintElementsForStep.length){
-                            var candidateHint : FastXML = hintElementsForStep[i];
-                            if (candidateHint.node.exists.innerData("@existingBar")) 
+                            var candidateHint : Fast = hintElementsForStep[i];
+                            if (candidateHint.has.existingBar) 
                             {
                                 var partNamePrefix : String = candidateHint.att.existingBar;
                                 for (barLabelPartName in existingLabelParts)
@@ -91,8 +90,8 @@ class HintXMLStorage
                     else if (filterData.exists("targetMissingDocId")) 
                     {
                         for (i in 0...hintElementsForStep.length){
-                            candidateHint = hintElementsForStep[i];
-                            if (candidateHint.exists("@targetMissingDocId") &&
+                            var candidateHint = hintElementsForStep[i];
+                            if (candidateHint.has.targetMissingDocId &&
                                 Std.string(candidateHint.att.targetMissingDocId) == Reflect.field(filterData, "targetMissingDocId")) 
                             {
                                 indexForStep = i;
@@ -104,26 +103,24 @@ class HintXMLStorage
                             }
                         }
                     }
-                }  // Randomly pick from list if no filter  
-                
-                
-                
+                }  
+				
+				// Randomly pick from list if no filter  
                 if (indexForStep < 0) 
                 {
                     indexForStep = Math.floor(Math.random() * hintElementsForStep.length);
                 }
                 
-                var hintElementToUse : FastXML = hintElementsForStep[indexForStep];
+                var hintElementToUse : Fast = hintElementsForStep[indexForStep];
                 hintData = { };
                 
-                var text : String = Std.string(hintElementToUse.node.text.innerData());
+                var text : String = Std.string(hintElementToUse.innerData);
                 text = replaceParamsWithValues(text, params);
                 Reflect.setField(hintData, "descriptionContent", text);
                 
-                var attributes : FastXMLList = hintElementToUse.node.attributes.innerData();
-                for (i in 0...attributes.length()){
-                    var attributeName : String = attributes.get(i).node.name.innerData();
-                    var attributeValue : String = hintElementToUse.node.attribute.innerData(attributeName);
+                var attributes = hintElementToUse.x.attributes();
+                for (attributeName in attributes) {
+                    var attributeValue : String = hintElementToUse.att.resolve(attributeName);
                     if (attributeValue.indexOf("$") > -1) 
                     {
                         attributeValue = replaceParamsWithValues(attributeValue, params);
@@ -140,13 +137,13 @@ class HintXMLStorage
     {
         if (params != null) 
         {
-            var i : Int;
+            var i : Int = 0;
             for (i in 0...params.length){
                 //var paramReplaceString:String = "\$" + i;
                 //var pattern:RegExp = new RegExp(/ /.source + paramReplaceString, 'g');
                 var pattern : String = "\\$" + i;
                 var patternRegex : EReg = new EReg(pattern, "g");
-                valueString = valueString.replace(patternRegex, params[i]);
+				valueString = patternRegex.replace(valueString, params[i]);
             }
         }
         

@@ -88,7 +88,7 @@ class CacheFlushStatus
 
 		saved = _dataResponses.get(key);
         
-        return saved == null ? false : saved;
+        return saved;
     }
     
     /**

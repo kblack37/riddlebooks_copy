@@ -76,7 +76,7 @@ class ParticleRenderer extends DisplayObject
      * Each particle is formed by six indices, each triplet forms half of
      * the quad
      */
-    private var m_indexData : Vector<Int>;
+    private var m_indexData : Vector<UInt>;
     
     /**
      * Index buffer needed by stage3d
@@ -133,7 +133,7 @@ class ParticleRenderer extends DisplayObject
         m_sourceTexture = sourceTexture;
         
         m_vertexData = new VertexData(0);
-        m_indexData = new Vector<Int>();
+        m_indexData = new Vector<UInt>();
         m_numParticlesToRender = -1;
 		
 		m_alpha = new Vector<Float>(4);
@@ -216,15 +216,15 @@ class ParticleRenderer extends DisplayObject
         var numParticlesProcessed : Int = 0;
         var vertexId : Int = 0;
         var indexId : Int = 0;
-        var x : Float;
-        var y : Float;
-        var xOffset : Float;
-        var yOffset : Float;
-        var rotation : Float;
-        var scale : Float;
-        var color : Int;
-        var alpha : Float;
-        var i : Int;
+        var x : Float = 0.0;
+        var y : Float = 0.0;
+        var xOffset : Float = 0.0;
+        var yOffset : Float = 0.0;
+        var rotation : Float = 0.0;
+        var scale : Float = 0.0;
+        var color : Int = 0;
+        var alpha : Float = 0.0;
+        var i : Int = 0;
         var numEmitters : Int = m_emitters.length;
         var numSpacesForParticles : Int = Std.int(m_vertexData.numVertices / 4);
         for (i in 0...numEmitters){

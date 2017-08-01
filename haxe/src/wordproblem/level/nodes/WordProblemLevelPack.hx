@@ -107,7 +107,7 @@ class WordProblemLevelPack extends WordProblemLevelNode implements ICgsLevelPack
         
         // First parse all the common data (all this code below is copied staight from common)
         // The reasone
-        var node : ICgsLevelNode;
+        var node : ICgsLevelNode = null;
         var previousLevel : ICgsLevelLeaf = prevLevel;
         var previousNode : ICgsLevelNode = null;  // The first node created by the level pack will never need a previousNode since it is locked by the level pack  
         
@@ -256,7 +256,7 @@ class WordProblemLevelPack extends WordProblemLevelNode implements ICgsLevelPack
         // Right now we only care about saving the completion status of the node
         // (Used for cases where we cannot calculate whether a pack is 'mastered' from state
         // of current nodes because mastery was based on completion of unknown set of child levels)
-		var saveValuesChanged : Bool;
+		var saveValuesChanged : Bool = false;
         if (nodeLabel == this.nodeLabel) 
         {
             var newCompletionValue : Int = Reflect.field(data, LevelNodeSaveKeys.COMPLETION_VALUE);
@@ -346,7 +346,7 @@ class WordProblemLevelPack extends WordProblemLevelNode implements ICgsLevelPack
      */
     private function get_firstLeaf() : ICgsLevelLeaf
     {
-        var result : ICgsLevelLeaf;
+        var result : ICgsLevelLeaf = null;
         if (m_levelData.length > 0) 
         {
             var firstNode : ICgsLevelNode = m_levelData[0];
@@ -367,7 +367,7 @@ class WordProblemLevelPack extends WordProblemLevelNode implements ICgsLevelPack
      */
     private function get_lastLeaf() : ICgsLevelLeaf
     {
-        var result : ICgsLevelLeaf;
+        var result : ICgsLevelLeaf = null;
         if (m_levelData.length > 0) 
         {
             var lastNode : ICgsLevelNode = m_levelData[m_levelData.length - 1];
@@ -825,7 +825,7 @@ class WordProblemLevelPack extends WordProblemLevelNode implements ICgsLevelPack
      */
     public function hasLock(lockType : String, keyData : Dynamic) : Bool
     {
-        var result : Bool;
+        var result : Bool = false;
         for (lock in m_packLocks)
         {
             if (lock.lockType == lockType && lock.doesKeyMatch(keyData)) 
@@ -842,7 +842,7 @@ class WordProblemLevelPack extends WordProblemLevelNode implements ICgsLevelPack
      */
     public function editLock(lockType : String, oldKeyData : Dynamic, newKeyData : Dynamic) : Bool
     {
-        var result : Bool;
+        var result : Bool = false;
         if (removeLock(lockType, oldKeyData)) 
         {
             addLock(lockType, newKeyData);
@@ -856,7 +856,7 @@ class WordProblemLevelPack extends WordProblemLevelNode implements ICgsLevelPack
      */
     public function removeLock(lockType : String, keyData : Dynamic) : Bool
     {
-        var result : Bool;
+        var result : Bool = false;
         for (lock in m_packLocks)
         {
             if (lock.lockType == lockType && lock.doesKeyMatch(keyData)) 
@@ -950,7 +950,7 @@ class WordProblemLevelPack extends WordProblemLevelNode implements ICgsLevelPack
      */
     public function getNextLevel(aNodeLabel : Int = -1) : ICgsLevelLeaf
     {
-        var result : ICgsLevelLeaf;
+        var result : ICgsLevelLeaf = null;
         
         // Find the node with the given label, get the level that comes after it (if any).
         if (aNodeLabel >= 0) 
@@ -1012,7 +1012,7 @@ class WordProblemLevelPack extends WordProblemLevelNode implements ICgsLevelPack
      */
     public function getPrevLevel(aNodeLabel : Int = -1) : ICgsLevelLeaf
     {
-        var result : ICgsLevelLeaf;
+        var result : ICgsLevelLeaf = null;
         
         // Find the node with the given label, get the level that comes before it (if any).
         if (aNodeLabel >= 0) 

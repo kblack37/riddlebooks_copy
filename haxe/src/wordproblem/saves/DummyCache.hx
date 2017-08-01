@@ -72,7 +72,7 @@ class DummyCache implements ICgsUserCache
     
     public function saveExists(property : String) : Bool
     {
-        return m_dummyMap.exists(property);
+		return Reflect.hasField(m_dummyMap, property);
     }
     
     public function setSave(property : String, val : Dynamic, flush : Bool = true) : Bool

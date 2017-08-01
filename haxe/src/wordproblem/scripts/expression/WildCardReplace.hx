@@ -88,8 +88,8 @@ class WildCardReplace extends BaseTermAreaScript
             {
                 var draggedWidget : BaseTermWidget = m_widgetDragSystem.getWidgetSelected();
                 
-                var i : Int;
-                var termArea : TermAreaWidget;
+                var i : Int = 0;
+                var termArea : TermAreaWidget = null;
                 for (i in 0...m_termAreas.length){
                     termArea = m_termAreas[i];
                     
@@ -98,8 +98,8 @@ class WildCardReplace extends BaseTermAreaScript
                     
                     var numHitWidgets : Int = m_pickedWidgetBuffer.length;
                     var pickedWildCardWidgetForFrame : BaseTermWidget = null;
-                    var pickedWidget : BaseTermWidget;
-                    var j : Int;
+                    var pickedWidget : BaseTermWidget = null;
+                    var j : Int = 0;
                     for (j in 0...numHitWidgets){
                         pickedWidget = m_pickedWidgetBuffer[j];
                         if (Std.is(pickedWidget.getNode(), WildCardNode)) 

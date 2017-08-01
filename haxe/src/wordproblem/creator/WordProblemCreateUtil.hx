@@ -104,7 +104,7 @@ class WordProblemCreateUtil
         var numCharacters : Int = untaggedContent.length;
         var startCharacterIndexOfWord : Int = 0;
         var inMiddleOfWord : Bool = false;
-        var charIndex : Int;
+        var charIndex : Int = 0;
         for (charIndex in 0...numCharacters){
             var characterAtIndex : String = untaggedContent.charAt(charIndex);
             if (characterAtIndex.search(new EReg('[\\s\\n\\r]', "")) != -1) 
@@ -293,7 +293,7 @@ class WordProblemCreateUtil
         }
         
         var childElements : FastXMLList = element.node.children.innerData();
-        var i : Int;
+        var i : Int = 0;
         var numChildren : Int = childElements.length();
         for (i in 0...numChildren){
             var childElement : FastXML = childElements.get(i);
@@ -316,7 +316,7 @@ class WordProblemCreateUtil
         var problemText : String = "";
         var childElms : FastXMLList = probxml.node.children.innerData();
         
-        var i : Int;
+        var i : Int = 0;
         var numChildren : Int = childElms.length();
         for (i in 0...numChildren){
             if (childElms.get(i).node.name.innerData() == "p") 
@@ -337,7 +337,7 @@ class WordProblemCreateUtil
         else 
         {
             var paraChildren : FastXMLList = paraElm.node.children.innerData();
-            var i : Int;
+            var i : Int = 0;
             var numChildren : Int = paraChildren.length();
             for (i in 0...numChildren){
                 paraText += spanText(paraChildren.get(i), elementIdToAliasName);
@@ -392,7 +392,7 @@ class WordProblemCreateUtil
             {
                 // this is span that is just a wrapper for text and other tagged elements
                 var spanChildren : FastXMLList = spanElm.node.children.innerData();
-                var j : Int;
+                var j : Int = 0;
                 var spanChildLength : Int = spanChildren.length();
                 for (j in 0...spanChildLength){
                     spanTxt += spanText(spanChildren.get(j), elementIdToAliasName);

@@ -30,7 +30,7 @@ class RequestDependencyManager
     
     public function isReady(completeRequestIds : IntMap<Bool>) : Bool
     {
-        var requestSuccess : Bool;
+        var requestSuccess : Bool = false;
         for (context in _requestDependencies)
         {
             if (!completeRequestIds.exists(context.requestId))
