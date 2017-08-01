@@ -163,7 +163,7 @@ class AddParenthesisTip extends TermAreaTip
     
     private function setUpExpression() : Void
     {
-        m_termArea.setTree(new ExpressionTree(m_expressionCompiler.getVectorSpace(), m_expressionCompiler.compile("a+b").head));
+        m_termArea.setTree(new ExpressionTree(m_expressionCompiler.getVectorSpace(), m_expressionCompiler.compile("a+b")));
         m_termArea.redrawAfterModification();
     }
     

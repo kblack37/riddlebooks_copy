@@ -10,7 +10,7 @@ import cgs.server.logging.messages.Message;
 import cgs.server.logging.messages.QuestMessage;
 import cgs.server.logging.messages.ScoreMessage;
 import cgs.server.logging.messages.UserFeedbackMessage;
-import cgs.http.responses.ResponseStatus;
+import cgs.server.responses.ResponseStatus;
 import cgs.server.logging.quests.QuestLogger;
 import haxe.ds.IntMap;
 import cgs.server.logging.requests.CallbackRequest;
@@ -18,15 +18,15 @@ import cgs.server.logging.requests.IServerRequest;
 import cgs.server.logging.requests.RequestDependency;
 import haxe.ds.StringMap;
 import cgs.server.logging.requests.ServerRequest;
-//import cgs.server.requests.IUrlRequest;
+import cgs.server.requests.IUrlRequest;
 import cgs.server.responses.CgsResponseStatus;
 import cgs.server.responses.CgsUserResponse;
 import cgs.server.responses.ResponseStatus;
 import cgs.server.utils.INtpTime;
 import cgs.user.ICgsUserProperties;
 import cgs.user.ICgsUser;
-//import cgs.server.logging.ICgsServerApi;
-//
+import cgs.server.logging.ICgsServerApi;
+
 
 /**
  * Class responsible for handling all logging

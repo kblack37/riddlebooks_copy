@@ -164,7 +164,7 @@ class DocumentNode
     public function getShouldInheritProperty(propertyName : String) : Bool
     {
         var shouldInherit : Bool = true;
-        if (m_shouldInheritProperty.exists(propertyName)) 
+        if (Reflect.hasField(m_shouldInheritProperty, propertyName)) 
         {
             shouldInherit = Reflect.field(m_shouldInheritProperty, propertyName);
         }

@@ -8,7 +8,7 @@ class MathUtil
 {
     public static function greatestCommonDivisor(valueA : Int, valueB : Int) : Int
     {
-        var divisor : Int;
+        var divisor : Int = 0;
         if (valueB == 0) 
         {
             divisor = valueA;
@@ -95,7 +95,7 @@ class MathUtil
     {
         // Just sum up the length of several lines at different points in the curve
         var length : Float = 0;
-        var i : Int;
+        var i : Int = 0;
         var prevPointBuffer : Point = new Point();
         var pointBuffer : Point = new Point();
         for (i in 0...(steps + 1)){

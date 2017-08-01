@@ -162,7 +162,7 @@ class TestCreatedLevelScreen extends Sprite
         optionsBackground.height = numButtons * buttonHeight + (numButtons - 1) * buttonGap + 2 * sidePadding;
         optionsBackground.width = buttonWidth + sidePadding * 2;
         
-        var i : Int;
+        var i : Int = 0;
         var xOffset : Float = (optionsBackground.width - buttonWidth) * 0.5;
         var yOffset : Float = sidePadding;
         for (i in 0...numButtons){

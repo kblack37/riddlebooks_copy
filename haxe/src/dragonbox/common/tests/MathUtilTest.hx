@@ -226,9 +226,7 @@ class MathUtilTest
 		
 		return passed;
 	}
-	
-	// TODO: finish this once you know what a vertical slope is represented as
-	// TODO: fix the function in MathUtil
+
 	public function runCalculateNormalSlopeToCubicBezierPointTests() : Bool {
 		var passed : Bool = true;
 		

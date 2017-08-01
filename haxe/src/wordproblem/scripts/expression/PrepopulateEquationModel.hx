@@ -41,11 +41,11 @@ class PrepopulateEquationModel extends BaseTermAreaScript
         if (problemData.prepopulateEquationData != null && problemData.prepopulateEquationData.exists("side")) 
         {
             var termAreaNameToPopulate : String = "";
-            var side : String = problemData.prepopulateEquationData["side"];
+            var side : String = Reflect.field(problemData.prepopulateEquationData, "side");
             
             // The type of value that can be added is either a number or a variable
             var valueType : String = ((problemData.prepopulateEquationData.exists("value"))) ? 
-            problemData.prepopulateEquationData["value"] : "number";
+            Reflect.field(problemData.prepopulateEquationData, "value") : "number";
             if (side == "left") 
             {
                 termAreaNameToPopulate = "leftTermArea";
@@ -138,7 +138,7 @@ class PrepopulateEquationModel extends BaseTermAreaScript
                 var termsInSmaller : Int = 0;
                 for (docId in Reflect.fields(documentIdToExpressionMap))
                 {
-                    var expressionValue : String = documentIdToExpressionMap[docId];
+                    var expressionValue : String = Reflect.field(documentIdToExpressionMap, docId);
                     if (docId.indexOf("b") == 0) 
                     {
                         termsInLarger++;

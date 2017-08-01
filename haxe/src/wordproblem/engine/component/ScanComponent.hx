@@ -38,7 +38,7 @@ class ScanComponent extends Component
     
     override public function deserialize(data : Dynamic) : Void
     {
-        var color : Int = parseInt(data.color, 16);
+        var color : Int = Std.parseInt(data.color);
         var velocity : Float = data.velocity;
         var width : Float = data.width;
         var delay : Float = data.delay;

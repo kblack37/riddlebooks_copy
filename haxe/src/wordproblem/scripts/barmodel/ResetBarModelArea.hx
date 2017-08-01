@@ -6,8 +6,7 @@ import cgs.audio.Audio;
 
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 
-import feathers.controls.Button;
-
+import starling.display.Button;
 import starling.events.Event;
 
 import wordproblem.callouts.TooltipControl;

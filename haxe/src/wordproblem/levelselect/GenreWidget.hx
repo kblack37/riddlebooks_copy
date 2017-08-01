@@ -1,27 +1,22 @@
 package wordproblem.levelselect;
 
+import starling.events.EventDispatcher;
 import wordproblem.levelselect.LevelSetSelector;
 
-import flash.geom.Point;
-import flash.geom.Rectangle;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
 import flash.text.TextFormat;
-import flash.utils.Dictionary;
 
 import cgs.audio.Audio;
 import cgs.internationalization.StringTable;
-import cgs.levelprogression.nodes.ICgsLevelNode;
-import cgs.levelprogression.nodes.ICgsLevelPack;
+import cgs.levelProgression.nodes.ICgsLevelNode;
+import cgs.levelProgression.nodes.ICgsLevelPack;
 
 import dragonbox.common.ui.MouseState;
 
-import feathers.controls.Button;
-import feathers.controls.text.TextFieldTextRenderer;
-import feathers.core.ITextRenderer;
-import feathers.display.Scale9Image;
-import feathers.layout.TiledRowsLayout;
-import feathers.layout.ViewPortBounds;
-import feathers.textures.Scale9Textures;
+import haxe.Constraints.Function;
 
+import starling.display.Button;
 import starling.display.DisplayObject;
 import starling.display.Image;
 import starling.display.Sprite;
@@ -79,17 +74,18 @@ class GenreWidget extends Sprite
      * In the level select screen we need to be able to map the button or hit area that
      * was clicked to some identifier for the level to go to.
      */
-    private var m_buttonToLevelNode : Dictionary;
+    private var m_buttonToLevelNode : Map<EventDispatcher, ICgsLevelNode>;
     
     /**
      * The layout algorithm to use for buttons.
      */
-    private var m_buttonLayout : TiledRowsLayout;
+    // TODO: this layout will likely need to be fixed
+	//private var m_buttonLayout : HorizontalGridLayout;
     
     /**
      * In each chapter we have a button to go to the last unplayed level
      */
-    private var m_buttonToChapterNode : Dictionary;
+    private var m_buttonToChapterNode : Map<EventDispatcher, ICgsLevelPack>;
     
     /**
      * This is a ui component that encapsulates the level selection and information relating to the genre
@@ -156,7 +152,7 @@ class GenreWidget extends Sprite
      * key: String node name
      * value: Level Component
      */
-    private var m_levelNodeNameToLevelComponent : Dictionary;
+    private var m_levelNodeNameToLevelComponent : Map<String, LevelComponent>;
     
     /**
      * A map coming from the world+chapter data source that links the world name to
@@ -166,9 +162,9 @@ class GenreWidget extends Sprite
     //private var m_worldsInfo:Object;
     //private var m_chaptersInfo:Object;
     
-    private inline var levelButtonsPerPage : Int = 9;
-    private inline var m_screenWidth : Float = 800;
-    private inline var m_screenHeight : Float = 600;
+    private inline static var levelButtonsPerPage : Int = 9;
+    private inline static var m_screenWidth : Int = 800;
+    private inline static var m_screenHeight : Int = 600;
     
     /**
      * Allow user to view and plays that are nested in a level set. Mostly
@@ -204,7 +200,7 @@ class GenreWidget extends Sprite
         var iconScaleTarget : Float = (closeButtonHeight * 0.8) / homeIcon.height;
         homeIcon.scaleX = homeIcon.scaleY = iconScaleTarget;
         m_closeButton = WidgetUtil.createGenericColoredButton(assetManager, homeButtonColor, null, null);
-        m_closeButton.defaultIcon = homeIcon;
+        m_closeButton.upState = homeIcon.texture;
         m_closeButton.width = closeButtonWidth;
         m_closeButton.height = closeButtonHeight;
         m_closeButton.addEventListener(Event.TRIGGERED, onCloseTriggered);
@@ -242,17 +238,18 @@ class GenreWidget extends Sprite
         m_nextPageHitArea.scaleWhenDown = m_previousPageHitArea.scaleWhenDown;
         m_nextPageHitArea.addEventListener(Event.TRIGGERED, onNextTriggered);
         
-        m_buttonLayout = new TiledRowsLayout();
-        m_buttonLayout.useSquareTiles = true;
-        m_buttonLayout.padding = 10;
-        m_buttonLayout.verticalGap = 25;
-        m_buttonLayout.horizontalGap = 25;
-        m_buttonLayout.paging = TiledRowsLayout.PAGING_NONE;
-        m_buttonLayout.tileHorizontalAlign = TiledRowsLayout.TILE_HORIZONTAL_ALIGN_LEFT;
-        m_buttonLayout.tileVerticalAlign = TiledRowsLayout.TILE_VERTICAL_ALIGN_TOP;
-        m_buttonLayout.horizontalAlign = TiledRowsLayout.HORIZONTAL_ALIGN_LEFT;
-        m_buttonLayout.verticalAlign = TiledRowsLayout.VERTICAL_ALIGN_TOP;
-        m_buttonLayout.useVirtualLayout = false;
+		// TODO: uncomment when layout replacement is designed
+        //m_buttonLayout = new HorizontalGridLayout();
+        //m_buttonLayout.useSquareTiles = true;
+        //m_buttonLayout.padding = 10;
+        //m_buttonLayout.verticalGap = 25;
+        //m_buttonLayout.horizontalGap = 25;
+        //m_buttonLayout.paging = TiledRowsLayout.PAGING_NONE;
+        //m_buttonLayout.tileHorizontalAlign = TiledRowsLayout.TILE_HORIZONTAL_ALIGN_LEFT;
+        //m_buttonLayout.tileVerticalAlign = TiledRowsLayout.TILE_VERTICAL_ALIGN_TOP;
+        //m_buttonLayout.horizontalAlign = TiledRowsLayout.HORIZONTAL_ALIGN_LEFT;
+        //m_buttonLayout.verticalAlign = TiledRowsLayout.VERTICAL_ALIGN_TOP;
+        //m_buttonLayout.useVirtualLayout = false;
         
         m_levelSetSelector = new LevelSetSelector(m_screenWidth, m_screenHeight, m_assetManager, 
                 onLevelSelectedFromSelector, onDismissLevelSetSelector);
@@ -297,6 +294,17 @@ class GenreWidget extends Sprite
      */
     public function setGenre(genreLevelPack : GenreLevelPack, chapterIndex : Int, levelIndex : Int = -1) : Void
     {
+		function cleanButtonDictionary(dictionary : Map<EventDispatcher, Dynamic>) : Void
+        {
+            var dictionaryKey : Dynamic = null;
+            for (dictionaryKey in Reflect.fields(dictionary))
+            {
+                var button : Button = try cast(dictionaryKey, Button) catch(e:Dynamic) null;
+                button.removeEventListeners();
+                button.dispose();
+            }
+        };  
+		
         // Clean out level buttons
         if (m_buttonToLevelNode != null) 
         {
@@ -304,7 +312,7 @@ class GenreWidget extends Sprite
         }
         else 
         {
-            m_buttonToLevelNode = new Dictionary();
+            m_buttonToLevelNode = new Map();
         }  // Clean out the chapter buttons  
         
         
@@ -315,36 +323,20 @@ class GenreWidget extends Sprite
         }
         else 
         {
-            m_buttonToChapterNode = new Dictionary();
+            m_buttonToChapterNode = new Map();
         }
         
-        function cleanButtonDictionary(dictionary : Dictionary) : Void
-        {
-            var dictionaryKey : Dynamic;
-            for (dictionaryKey in Reflect.fields(dictionary))
-            {
-                var button : Button = try cast(dictionaryKey, Button) catch(e:Dynamic) null;
-                button.removeEventListeners();
-                button.dispose();
-                ;
-            }
-        }  // Remove previous egg image  ;
-        
-        
-        
+		// Remove previous egg image
         if (m_currentImageForGenre != null) 
         {
             m_currentImageForGenre.removeFromParent(true);
             m_currentImageForGenre = null;
-        }  // to see if a reward should be attached    // This is so we don't need to loop through every component every time we draw the level buttons    // Go through every level component and create a quick mapping from the level node name to the component  
-        
-        
-        
-        
-        
-        
-        
-        m_levelNodeNameToLevelComponent = new Dictionary();
+        }		
+		
+		// Go through every level component and create a quick mapping from the level node name to the component  
+		// This is so we don't need to loop through every component every time we draw the level buttons
+        // to see if a reward should be attached
+        m_levelNodeNameToLevelComponent = new Map();
         var levelComponents : Array<Component> = m_playerItemInventory.componentManager.getComponentListForType(LevelComponent.TYPE_ID);
         var numComponents : Int = levelComponents.length;
         for (i in 0...numComponents){
@@ -392,18 +384,18 @@ class GenreWidget extends Sprite
         // the genre description to always appear at that left area
         
         // Draw the pages for each chapter
-        var page : Sprite;
+        var page : Sprite = null;
         var outPagesBuffer : Array<Sprite> = new Array<Sprite>();
         var numChapters : Int = chapterNodes.length;
-        var chapter : ICgsLevelPack;
-        var i : Int;
+        var chapter : ICgsLevelPack = null;
+        var i : Int = 0;
         var startingPageIndicesAtChapter : Array<Int> = new Array<Int>();
         var pagesInLastChapter : Int = 0;
         for (i in 0...numChapters){
             chapter = chapterNodes[i];
             
             var outLevelNodesToDisplay : Array<ICgsLevelNode> = new Array<ICgsLevelNode>();
-            for (childNode/* AS3HX WARNING could not determine type for var: childNode exp: EField(EIdent(chapter),nodes) type: null */ in chapter.nodes)
+            for (childNode in chapter.nodes)
             {
                 _getDisplayableNodes(outLevelNodesToDisplay, childNode);
             }
@@ -412,18 +404,16 @@ class GenreWidget extends Sprite
             {
                 book.addPage(new Sprite(), 0);
                 book.addPage(page, pageWidth);
-            }  // Remember which page belongs to which chapter  
-            
-            
-            
+            }
+			
+			// Remember which page belongs to which chapter  
             startingPageIndicesAtChapter.push(pagesInLastChapter);
             pagesInLastChapter += outPagesBuffer.length;
             
-            as3hx.Compat.setArrayLength(outPagesBuffer, 0);
-        }  // Draw the pages for the levels with no attached chapter  
-        
-        
-        
+			outPagesBuffer = new Array<Sprite>();
+        }
+		
+		// Draw the pages for the levels with no attached chapter  
         var levelNodesBuffer : Array<ICgsLevelNode> = new Array<ICgsLevelNode>();
         for (node in levelNodesWithoutChapter)
         {
@@ -434,10 +424,9 @@ class GenreWidget extends Sprite
         {
             book.addPage(new Sprite(), 0);
             book.addPage(page, pageWidth);
-        }  // Horizontally center the book on the screen  
-        
-        
-        
+        }
+		
+		// Horizontally center the book on the screen  
         book.x = m_screenWidth * 0.5;
         
         // The book needs to line up with the book image baked into the background
@@ -534,7 +523,7 @@ class GenreWidget extends Sprite
                 if (levelLeafNodes.length > 0) 
                 {
                     // Assume set number is just baked into the label
-                    var setNumber : Int = parseInt((try cast(event.target, Button) catch(e:Dynamic) null).label);
+                    var setNumber : Int = Std.parseInt((try cast(event.target, Button) catch(e:Dynamic) null).text);
                     var chapterNumber : Int = levelLeafNodes[0].parentChapterLevelPack.index + 1;
                     var data : Dynamic = getLevelSelectSectionMatchingGenre(levelLeafNodes[0].parentGenreLevelPack.getThemeId());
                     setDescription = data.title + ": " + chapterNumber + "-" + setNumber;
@@ -566,7 +555,7 @@ class GenreWidget extends Sprite
     {
         // Draw the information screen of the cover
         var data : Dynamic = getLevelSelectSectionMatchingGenre(genreLevelPack.getThemeId());
-        var fontColor : Int = parseInt(data.textStyle.color, 16);
+        var fontColor : Int = Std.parseInt(data.textStyle.color);
         var fontName : String = data.textStyle.font;
         var page : Sprite = new Sprite();
         
@@ -580,13 +569,13 @@ class GenreWidget extends Sprite
         measuringText.width = pageWidth;
         measuringText.text = titleText;
         var titleTextField : TextField = new TextField(
-        measuringText.width, 
-        measuringText.textHeight + 20, 
-        titleText, 
-        titleTextFormat.font, 
-        Std.parseInt(titleTextFormat.size), 
-        try cast(titleTextFormat.color, Int) catch(e:Dynamic) null, 
-        );
+			Std.int(measuringText.width), 
+			Std.int(measuringText.textHeight + 20), 
+			titleText, 
+			titleTextFormat.font, 
+			titleTextFormat.size, 
+			try cast(titleTextFormat.color, Int) catch (e:Dynamic) 0
+			);
         titleTextField.hAlign = HAlign.CENTER;
         titleTextField.x = 0;
         page.addChild(titleTextField);
@@ -601,12 +590,12 @@ class GenreWidget extends Sprite
         measuringText.text = flavorText;
         
         var flavorTextField : TextField = new TextField(
-        measuringText.width + 10, 
-        measuringText.textHeight + 20, 
-        flavorText, 
-        flavorTextFormat.font, 
-        Std.parseInt(flavorTextFormat.size), 
-        try cast(flavorTextFormat.color, Int) catch(e:Dynamic) null, 
+			Std.int(measuringText.width + 10), 
+			Std.int(measuringText.textHeight + 20), 
+			flavorText, 
+			flavorTextFormat.font, 
+			flavorTextFormat.size, 
+			try cast(flavorTextFormat.color, Int) catch(e:Dynamic) 0
         );
         flavorTextField.x = (pageWidth - flavorTextField.width) * 0.5;
         flavorTextField.y = 50;
@@ -617,7 +606,7 @@ class GenreWidget extends Sprite
         // Need to find all prizes that can be awarded in this genre in the title page
         var levelComponents : Array<Component> = m_playerItemInventory.componentManager.getComponentListForType(LevelComponent.TYPE_ID);
         var numComponents : Int = levelComponents.length;
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...numComponents){
             var levelComponent : LevelComponent = try cast(levelComponents[i], LevelComponent) catch(e:Dynamic) null;
             if (levelComponent.genre == genreLevelPack.getThemeId()) 
@@ -656,7 +645,7 @@ class GenreWidget extends Sprite
             var numTextures : Int = prizeTexturesInGenre.length;
             var textureGap : Float = 18;
             var totalWidth : Float = 0;
-            var texture : Texture;
+            var texture : Texture = null;
             for (i in 0...numTextures){
                 texture = prizeTexturesInGenre[i];
                 totalWidth += texture.width;
@@ -692,7 +681,7 @@ class GenreWidget extends Sprite
         
         var numItemIds : Int = itemIdComponents.length;
         for (i in 0...numItemIds){
-            itemIdComponent = try cast(itemIdComponents[i], ItemIdComponent) catch(e:Dynamic) null;
+            var itemIdComponent = try cast(itemIdComponents[i], ItemIdComponent) catch(e:Dynamic) null;
             
             // Check to see if this item matches the appropriate genre, on the first match break out
             var itemId : String = itemIdComponent.itemId;
@@ -760,19 +749,27 @@ class GenreWidget extends Sprite
                             var totalCompletedInGenre : Int = genreLevelPack.numLevelLeafsCompleted;
                             var remainingLevels : Int = numLevelsToReachFinalStage - totalCompletedInGenre;
                             
-                            var remainingLevelsText : String = StringTable.lookup("get_x_more_hatch").replace("$1", Std.string(remainingLevels));
+							// TODO: uncomment once cgs library is finished
+							var remainingLevelsText : String = StringTools.replace("" /*StringTable.lookup("get_x_more_hatch")*/, "$1", Std.string(remainingLevels));
                             var remainingLevelsUntilHatchingTextField : TextField = new TextField(
-                            290, 50, 
-                            remainingLevelsText, 
-                            GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF);
+								290, 50, 
+								remainingLevelsText, 
+								GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF);
                             remainingLevelsUntilHatchingTextField.x = 21;
                             remainingLevelsUntilHatchingTextField.y = 0;
                             
                             // Draw the text over a black background
                             var nineSlicePadding : Float = 8;
                             var backgroundTexture : Texture = m_assetManager.getTexture("button_white");
-                            var backgroundImage : Scale9Image = new Scale9Image(new Scale9Textures(
-                            backgroundTexture, new Rectangle(nineSlicePadding, nineSlicePadding, backgroundTexture.width - 2 * nineSlicePadding, backgroundTexture.height - 2 * nineSlicePadding)));
+                            var backgroundImage : Image = new Image(Texture.fromTexture(
+								backgroundTexture, 
+								new Rectangle(
+									nineSlicePadding,
+									nineSlicePadding,
+									backgroundTexture.width - 2 * nineSlicePadding,
+									backgroundTexture.height - 2 * nineSlicePadding)
+								)
+							);
                             backgroundImage.color = 0x000000;
                             backgroundImage.alpha = 0.5;
                             backgroundImage.width = remainingLevelsUntilHatchingTextField.width;
@@ -817,34 +814,34 @@ class GenreWidget extends Sprite
         // Get the texutures names used to render the buttons for each level
         var data : Dynamic = getLevelSelectSectionMatchingGenre(genreLevelPack.getThemeId());
         var textStyleData : Dynamic = data.textStyle;
-        var fontColor : Int = parseInt(textStyleData.color, 16);
+        var fontColor : Int = Std.parseInt(textStyleData.color);
         var levelUnlockedTexturePrefix : String = data.levelUnlockedTexture;
         var levelLockedTexturePrefix : String = data.levelLockedTexture;
         
         // Set the view port for the buttons
         var viewPortHeight : Float = 600;
         var viewPortWidth : Float = 350;
-        var viewBounds : ViewPortBounds = new ViewPortBounds();
-        viewBounds.maxHeight = viewPortHeight;
-        viewBounds.maxWidth = viewPortWidth;
+        var viewBounds : Rectangle = new Rectangle();
+        viewBounds.height = viewPortHeight;
+        viewBounds.width = viewPortWidth;
         
         // Create a pages containing an x number of buttons each
         var pagesRequired : Int = Math.ceil(levelNodes.length * 1.0 / levelButtonsPerPage);
         var buttons : Array<DisplayObject> = new Array<DisplayObject>();
         
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...pagesRequired){
             var page : Sprite = new Sprite();
             
             /* Chapter information drawing */
             
             // Specific data about a chapter is encoded in a separate file
-            var chapterTitleText : TextField = new TextField(pageWidth, 30, "", GameFonts.DEFAULT_FONT_NAME, 32, fontColor);
+            var chapterTitleText : TextField = new TextField(Std.int(pageWidth), 30, "", GameFonts.DEFAULT_FONT_NAME, 32, fontColor);
             chapterTitleText.hAlign = HAlign.CENTER;
             chapterTitleText.text = Std.string(chapterIndex);
             page.addChild(chapterTitleText);
             
-            var underlineText : TextField = new TextField(pageWidth, 30, "___________________________", GameFonts.DEFAULT_FONT_NAME, 24, fontColor);
+            var underlineText : TextField = new TextField(Std.int(pageWidth), 30, "___________________________", GameFonts.DEFAULT_FONT_NAME, 24, fontColor);
             underlineText.y += 13;
             page.addChild(underlineText);
             
@@ -857,9 +854,10 @@ class GenreWidget extends Sprite
             // Organize the section devoted to showing the number of stars earned.
             var starTextWidth : Float = 170;
             
-            var starText : String = StringTable.lookup("m_out_n_earned");
-            starText = starText.replace("$1", Std.string(chapterLevelPack.numLevelLeafsCompleted));
-            starText = starText.replace("$2", Std.string(chapterLevelPack.numTotalLevelLeafs));
+			// TODO: uncomment once cgs library is finished
+            var starText : String = "";// StringTable.lookup("m_out_n_earned");
+			starText = StringTools.replace(starText, "$1", Std.string(chapterLevelPack.numLevelLeafsCompleted));
+			starText = StringTools.replace(starText, "$2", Std.string(chapterLevelPack.numTotalLevelLeafs));
             var starInformationText : TextField = new TextField(270, 30, starText, GameFonts.DEFAULT_FONT_NAME, 20, fontColor);
             starsTotalWidth += starInformationText.width;
             
@@ -886,24 +884,20 @@ class GenreWidget extends Sprite
             if (levelPack != null && levelPack.descriptionData != null) 
             {
                 var sidePadding : Int = 50;
-                var chapterDescriptionText : TextField = new TextField(pageWidth - sidePadding * 2, 100, 
-                levelPack.descriptionData.description, GameFonts.DEFAULT_FONT_NAME, 20, fontColor);
-                chapterDescriptionText.x = sidePadding;
-                chapterDescriptionText.y = 23 + starInformationText.y;
+                var chapterDescriptionText : TextField = new TextField(Std.int(pageWidth - sidePadding * 2), 100, 
+					levelPack.descriptionData.description, GameFonts.DEFAULT_FONT_NAME, 20, fontColor);
+				chapterDescriptionText.x = sidePadding;
+				chapterDescriptionText.y = 23 + starInformationText.y;
                 page.addChild(chapterDescriptionText);
-            }  // to the offset+maxButtonsPerPage    // Draw level buttons for the page, the values range from index offset    /* Level button drawing */  
-            
-            
-            
-            
-            
-            
-            
-            
-            var j : Int;
+            }
+			
+			/* Level button drawing */  
+			// Draw level buttons for the page, the values range from index offset
+			// to the offset+maxButtonsPerPage
+            var j : Int = 0;
             var startingPageOffset : Int = i * levelButtonsPerPage;
-            var limit : Int = startingPageOffset + Math.min(levelButtonsPerPage, levelNodes.length - startingPageOffset);
-            var levelNode : ICgsLevelNode;
+            var limit : Int = startingPageOffset + Std.int(Math.min(levelButtonsPerPage, levelNodes.length - startingPageOffset));
+            var levelNode : ICgsLevelNode = null;
             for (j in startingPageOffset...limit){
                 levelNode = levelNodes[j];
                 
@@ -934,9 +928,14 @@ class GenreWidget extends Sprite
                 {
                     var problemCreateTexture : Texture = m_assetManager.getTexture("button_white");
                     var padding : Float = 8;
-                    var problemCreateButtonImage : Scale9Image = new Scale9Image(new Scale9Textures(
-                    problemCreateTexture, 
-                    new Rectangle(padding, padding, problemCreateTexture.width - 2 * padding, problemCreateTexture.height - 2 * padding)));
+                    var problemCreateButtonImage : Image = new Image(Texture.fromTexture(
+						problemCreateTexture, 
+						new Rectangle(padding,
+							padding,
+							problemCreateTexture.width - 2 * padding,
+							problemCreateTexture.height - 2 * padding)
+						)
+					);
                     problemCreateButtonImage.color = 0xFF0000;
                     buttonBackgroundImage = problemCreateButtonImage;
                 }
@@ -945,23 +944,22 @@ class GenreWidget extends Sprite
                 buttonBackgroundImage.height = 70;
                 buttonUpSkinContainer.addChildAt(buttonBackgroundImage, 0);
                 
+				// TODO: uncomment this when a suitable button replacement is found
                 // Select icons to paste on top of the button background
-                var labelFactory : Function = function() : ITextRenderer
-                {
-                    var textRenderer : TextFieldTextRenderer = new TextFieldTextRenderer();
-                    var fontName : String = GameFonts.DEFAULT_FONT_NAME;
-                    textRenderer.embedFonts = GameFonts.getFontIsEmbedded(fontName);
-                    textRenderer.textFormat = new TextFormat(fontName, 18, 0x000000);
-                    return textRenderer;
-                };
+                //var labelFactory : Function = function() : ITextRenderer
+                //{
+                    //var textRenderer : TextFieldTextRenderer = new TextFieldTextRenderer();
+                    //var fontName : String = GameFonts.DEFAULT_FONT_NAME;
+                    //textRenderer.embedFonts = GameFonts.getFontIsEmbedded(fontName);
+                    //textRenderer.textFormat = new TextFormat(fontName, 18, 0x000000);
+                    //return textRenderer;
+                //};
                 
-                var levelButton : Button = new Button();
-                levelButton.defaultSkin = buttonUpSkinContainer;
+                var levelButton : Button = new Button((try cast(buttonBackgroundImage, Image) catch (e : Dynamic) null).texture, " " + (j + 1) + " ");
                 // Extra spaces needed because for some reason if the swf gets scaled down from native
                 // resolution, this text gets cutoff.
-                levelButton.label = " " + (j + 1) + " ";
-                levelButton.labelFactory = labelFactory;
-                levelButton.scaleWhenHovering = 1.05;
+                //levelButton.labelFactory = labelFactory;
+                levelButton.scaleWhenOver = 1.05;
                 levelButton.scaleWhenDown = 0.95;
                 
                 // Draw the star or lock icon
@@ -996,7 +994,7 @@ class GenreWidget extends Sprite
                     lockImage.y = (buttonBackgroundImage.height - lockImage.height) * 0.5;
                     levelButton.addChild(lockImage);
                     
-                    levelButton.isEnabled = false;
+                    levelButton.enabled = false;
                 }
                 
                 
@@ -1105,8 +1103,9 @@ class GenreWidget extends Sprite
             
             viewBounds.x = 35;
             viewBounds.y = 170;
-            m_buttonLayout.layout(buttons, viewBounds);
-            as3hx.Compat.setArrayLength(buttons, 0);
+			// TODO: this layout will likely need to be fixed
+            //m_buttonLayout.layout(buttons, viewBounds);
+			buttons = new Array<DisplayObject>();
             
             outPages.push(page);
         }

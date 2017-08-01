@@ -45,8 +45,8 @@ class ExpressionPicking extends BaseGameScript
             }
             
             var mouseState : MouseState = m_gameEngine.getMouseState();
-            var i : Int;
-            var expressionPicker : ExpressionPickerWidget;
+            var i : Int = 0;
+            var expressionPicker : ExpressionPickerWidget = null;
             var numPickers : Int = m_expressionPickers.length;
             for (i in 0...numPickers){
                 expressionPicker = m_expressionPickers[i];

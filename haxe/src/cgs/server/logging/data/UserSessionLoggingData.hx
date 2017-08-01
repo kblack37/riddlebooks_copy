@@ -123,8 +123,8 @@ class UserSessionLoggingData
             _orderedSessionLogs.push(action);
         }
         
-        var orderedQuestActions : Array<Dynamic>;
-        var startData : QuestStartEndData;
+        var orderedQuestActions : Array<Dynamic> = null;
+        var startData : QuestStartEndData = null;
         for (quest in _quests)
         {
             startData = quest.startData;
@@ -169,7 +169,7 @@ class UserSessionLoggingData
     
     private function validateQuestActions() : Void
     {
-        var values : Array<Dynamic>;
+        var values : Array<Dynamic> = null;
         for (questActions/* AS3HX WARNING could not determine type for var: questActions exp: EIdent(_orderedQuestActionsMap) type: Dictionary */ in _orderedQuestActionsMap)
         {
             values = validateSequenceIds(questActions, "questActionSequenceId");

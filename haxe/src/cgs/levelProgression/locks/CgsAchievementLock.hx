@@ -158,7 +158,7 @@ class CgsAchievementLock implements ICgsLevelLock
 		 */
     public function doesKeyMatch(keyData : Dynamic) : Bool
     {
-        var result : Bool;
+        var result : Bool = false;
         if (keyData == null)
         {
             result = m_unlockAchievement == null;

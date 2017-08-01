@@ -1,9 +1,8 @@
 package wordproblem.level.util;
 
-
-import cgs.levelprogression.ICgsLevelManager;
-import cgs.levelprogression.locks.ICgsLevelLock;
-import cgs.levelprogression.util.ICgsLockFactory;
+import cgs.levelProgression.ICgsLevelManager;
+import cgs.levelProgression.locks.ICgsLevelLock;
+import cgs.levelProgression.util.ICgsLockFactory;
 
 import wordproblem.level.locks.IndefiniteLock;
 import wordproblem.level.locks.NodeChildrenStatusLock;
@@ -16,7 +15,7 @@ import wordproblem.level.locks.NodeStatusLock;
  * For example we want locks based on progress within dragonbox, those locks are created in
  * this factory.
  */
-class WordProblemLockFactory implements ICgsLockFactory
+class WordProblemLockFactory //implements ICgsLockFactory
 {
     private var m_lockStorage : Dynamic;
     private var m_levelManager : ICgsLevelManager;
@@ -24,7 +23,7 @@ class WordProblemLockFactory implements ICgsLockFactory
     public function new(levelManager : ICgsLevelManager)
     {
         m_levelManager = levelManager;
-        m_lockStorage = new Dynamic();
+        m_lockStorage = { };
     }
     
     /**
@@ -38,7 +37,7 @@ class WordProblemLockFactory implements ICgsLockFactory
             return null;
         }
         
-        var lock : ICgsLevelLock;
+        var lock : ICgsLevelLock = null;
         
         // Get the lock storage for this type, creating the storage if this is a new type
         if (!m_lockStorage.exists(lockType)) 
@@ -75,7 +74,7 @@ class WordProblemLockFactory implements ICgsLockFactory
     public function recycleLock(lock : ICgsLevelLock) : Void
     {
         lock.reset();
-        m_lockStorage[lock.lockType].push(lock);
+		Reflect.field(m_lockStorage, lock.lockType).push(lock);
     }
     
     private function generateLockInstance(lockType : String) : ICgsLevelLock

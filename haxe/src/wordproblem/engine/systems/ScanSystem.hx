@@ -23,8 +23,8 @@ class ScanSystem extends BaseSystemScript
     override public function update(componentManager : ComponentManager) : Void
     {
         var scanComponents : Array<Component> = componentManager.getComponentListForType(ScanComponent.TYPE_ID);
-        var i : Int;
-        var scanComponent : ScanComponent;
+        var i : Int = 0;
+        var scanComponent : ScanComponent = null;
         var numComponents : Int = scanComponents.length;
         for (i in 0...numComponents){
             scanComponent = try cast(scanComponents[i], ScanComponent) catch(e:Dynamic) null;
@@ -53,7 +53,7 @@ class ScanSystem extends BaseSystemScript
                     scanComponent.color, 
                     scanComponent.velocity, 
                     scanComponent.width, 
-                    scanComponent.delay, 
+                    scanComponent.delay
                     );
                     animation.play(childViewsAsDisplayObject);
                     scanComponent.animation = animation;

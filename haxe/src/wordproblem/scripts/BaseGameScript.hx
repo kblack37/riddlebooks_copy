@@ -88,7 +88,7 @@ class BaseGameScript extends BaseBufferEventScript
         if (!param.exists("completed")) 
         {
             var duration : Float = param.duration;
-            Starling.juggler.delayCall(function() : Void
+            Starling.current.juggler.delayCall(function() : Void
                     {
                         Reflect.setField(param, "completed", true);
                     },

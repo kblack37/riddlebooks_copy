@@ -10,6 +10,8 @@ import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.ui.MouseState;
 
+import haxe.Constraints.Function;
+
 import starling.display.DisplayObject;
 import starling.display.DisplayObjectContainer;
 import starling.display.Image;
@@ -102,7 +104,7 @@ class AddNewBarSegment extends BaseBarModelScript implements IHitAreaScript impl
         m_showHitAreas = false;
         if (m_ready && m_isActive) 
         {
-            as3hx.Compat.setArrayLength(m_outParamsBuffer, 0);
+			m_outParamsBuffer = new Array<Dynamic>();
             
             var mouseState : MouseState = m_gameEngine.getMouseState();
             m_globalMouseBuffer.setTo(mouseState.mousePositionThisFrame.x, mouseState.mousePositionThisFrame.y);
@@ -134,7 +136,7 @@ class AddNewBarSegment extends BaseBarModelScript implements IHitAreaScript impl
                 m_showHitAreas = true;
                 if (checkHitArea(m_outParamsBuffer)) 
                 {
-                    targetBarWhole = try cast(m_outParamsBuffer[0], BarWhole) catch(e:Dynamic) null;
+                    var targetBarWhole = try cast(m_outParamsBuffer[0], BarWhole) catch(e:Dynamic) null;
                     
                     // This check shows the preview if either it was not showing already OR a lower priority
                     // script had activated it but we want to overwrite it.
@@ -201,8 +203,8 @@ class AddNewBarSegment extends BaseBarModelScript implements IHitAreaScript impl
             this.calculateHitAreas();
             var barWholeViews : Array<BarWholeView> = m_barModelArea.getBarWholeViews();
             var numHitAreas : Int = m_addNewBarSegmentHitAreas.length;
-            var i : Int;
-            var hitArea : Rectangle;
+            var i : Int = 0;
+            var hitArea : Rectangle = null;
             for (i in 0...numHitAreas){
                 hitArea = m_addNewBarSegmentHitAreas[i];
                 if (hitArea.containsPoint(m_localMouseBuffer)) 
@@ -257,8 +259,8 @@ class AddNewBarSegment extends BaseBarModelScript implements IHitAreaScript impl
         }
         
         var barWholeViews : Array<BarWholeView> = m_barModelArea.getBarWholeViews();
-        var i : Int;
-        var barWholeView : BarWholeView;
+        var i : Int = 0;
+        var barWholeView : BarWholeView = null;
         var numBarWholeViews : Int = barWholeViews.length;
         for (i in 0...numBarWholeViews){
             barWholeView = barWholeViews[i];
@@ -299,7 +301,7 @@ class AddNewBarSegment extends BaseBarModelScript implements IHitAreaScript impl
             labelOnTop : String,
             id : String = null) : Void
     {
-        var value : Float = parseFloat(data);
+        var value : Float = Std.parseFloat(data);
         var barSegmentWidth : Float = 0;
         
         // Make non-numeric values into segments of unit one by default

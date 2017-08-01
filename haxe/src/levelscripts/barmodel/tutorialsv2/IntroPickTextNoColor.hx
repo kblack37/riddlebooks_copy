@@ -1003,7 +1003,7 @@ class IntroPickTextNoColor extends BaseCustomLevelScript
     private function showAddBarToEnd() : Void
     {
         // The dialog should point the right end of the box
-        var id : String;
+        var id : String = null;
         if (m_barModelArea.getBarWholeViews().length > 0) 
         {
             var barWholeView : BarWholeView = m_barModelArea.getBarWholeViews()[0];

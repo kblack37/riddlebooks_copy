@@ -1,6 +1,5 @@
 package wordproblem.state;
 
-
 import cgs.audio.Audio;
 
 import dragonbox.common.console.IConsole;
@@ -13,8 +12,7 @@ import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
 import dragonbox.common.util.XString;
 
-import feathers.controls.Button;
-
+import starling.display.Button;
 import starling.display.DisplayObject;
 import starling.display.Sprite;
 import starling.events.Event;
@@ -263,7 +261,7 @@ class WordProblemGameState extends BaseState implements IConsoleInterfacable
             {
                 var expressionComponents : Array<Component> = (try cast(m_gameEngine.getUiEntity("deckArea"), DeckWidget) catch(e:Dynamic) null).componentManager.getComponentListForType(ExpressionComponent.TYPE_ID);
                 var discoverTerm : DiscoverTerm = try cast(m_preBakedScript.getNodeById("DiscoverTerm"), DiscoverTerm) catch(e:Dynamic) null;
-                var i : Int;
+                var i : Int = 0;
                 for (i in 0...expressionComponents.length){
                     var expressionComponent : ExpressionComponent = try cast(expressionComponents[i], ExpressionComponent) catch(e:Dynamic) null;
                     if (!expressionComponent.hasBeenModeled) 
@@ -383,7 +381,7 @@ class WordProblemGameState extends BaseState implements IConsoleInterfacable
         {
             // Play default music, if we want genre specific default then some other
             // script should have populated the audio to load field in the level data
-            m_audioDriver.playMusic("bg_level_music");
+			m_audioDriver.playMusic("bg_level_music");
         }
         
         m_helpScreenViewer = new HelpScreenViewer(m_gameEngine, m_assetManager, [], this, onHelpClose, m_buttonColorData);
@@ -401,7 +399,7 @@ class WordProblemGameState extends BaseState implements IConsoleInterfacable
         m_preBakedScript.dispose();
         
         // Kill the background music
-        m_audioDriver.reset();
+		m_audioDriver.reset();
         
         // Make sure game is unpaused
         setPaused(false);

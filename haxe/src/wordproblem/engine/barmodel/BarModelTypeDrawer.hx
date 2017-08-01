@@ -53,7 +53,7 @@ class BarModelTypeDrawer
 
                     };
         }
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...partIds.length){
             var partId : String = partIds[i];
             var partProperties : BarModelTypeDrawerProperties = new BarModelTypeDrawerProperties();
@@ -712,7 +712,7 @@ class BarModelTypeDrawer
         
         
         
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...idsMatchingPrefix.length){
             var idMatchingPrefix : String = idsMatchingPrefix[i];
             var segmentStyle : BarModelTypeDrawerProperties = Reflect.field(styleObject, idMatchingPrefix);
@@ -1228,7 +1228,7 @@ class BarModelTypeDrawer
             outValueNameToIds : Dynamic) : Void
     {
         var barWhole : BarWhole = new BarWhole(false);
-        var i : Int;
+        var i : Int = 0;
         
         // Single bar has some boxes shaded
         var totalPartsProps : BarModelTypeDrawerProperties = Reflect.field(styleObject, totalPartsId);
@@ -1296,7 +1296,7 @@ class BarModelTypeDrawer
         var shadedPartsProps : BarModelTypeDrawerProperties = Reflect.field(styleObject, shadedPartsId);
         var shadedParts : Int = parseInt(shadedPartsProps.value);
         var barWhole : BarWhole = new BarWhole(false);
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...totalParts){
             var color : Int = ((i < shadedParts)) ? shadedPartsProps.color : 0xFFFFFF;
             barWhole.barSegments.push(new BarSegment(1, 1, color, null));
@@ -1579,7 +1579,7 @@ class BarModelTypeDrawer
             color : Int = 0xFFFFFF) : BarWhole
     {
         var barWhole : BarWhole = new BarWhole(false, id);
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...numParts){
             barWhole.barSegments.push(new BarSegment(valuePerSegment, 1, color, null));
         }

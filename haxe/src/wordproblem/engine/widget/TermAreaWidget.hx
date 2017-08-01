@@ -2,9 +2,10 @@ package wordproblem.engine.widget;
 
 
 import flash.geom.Rectangle;
+import starling.display.Image;
 
-import feathers.display.Scale9Image;
-import feathers.textures.Scale9Textures;
+//import feathers.display.Scale9Image;
+//import feathers.textures.Scale9Textures;
 
 import starling.animation.Tween;
 import starling.core.Starling;
@@ -89,7 +90,7 @@ class TermAreaWidget extends ExpressionTreeWidget implements IBaseWidget
      * Use a scale9 image to prevent background distortion when resizing the term
      * areas
      */
-    private var m_bgImage : Scale9Image;
+    private var m_bgImage : Image;
     
     public function new(tree : ExpressionTree,
             expressionSymbolResources : ExpressionSymbolMap,
@@ -108,7 +109,7 @@ class TermAreaWidget extends ExpressionTreeWidget implements IBaseWidget
         var imageCenterY : Float = 20;
         var imageCenterWidth : Float = backgroundTexture.width - imageCenterX * 2;
         var imageCenterHeight : Float = backgroundTexture.height - imageCenterY * 2;
-        var bgImage : Scale9Image = new Scale9Image(new Scale9Textures(backgroundTexture, new Rectangle(imageCenterX, imageCenterY, imageCenterWidth, imageCenterHeight)));
+        var bgImage : Image = new Image(Texture.fromTexture(backgroundTexture, new Rectangle(imageCenterX, imageCenterY, imageCenterWidth, imageCenterHeight)));
         m_bgImage = bgImage;
         
         super(tree, expressionSymbolResources, assetManager, constraintWidth, constraintHeight, allowConstraintPadding);
@@ -187,7 +188,7 @@ class TermAreaWidget extends ExpressionTreeWidget implements IBaseWidget
     public function showPreview(value : Bool) : Void
     {
         // Copy properties of this widget to the preview so they line up correctly
-        m_previewExpressionTreeWidget.setConstraints(this.getConstraintsWidth(), this.getConstraintsHeight(), super.m_allowConstraintPadding, false);
+        m_previewExpressionTreeWidget.setConstraints(this.getConstraintsWidth(), this.getConstraintsHeight(), this.m_allowConstraintPadding, false);
         
         if (value) 
         {
@@ -276,16 +277,22 @@ class TermAreaWidget extends ExpressionTreeWidget implements IBaseWidget
         // Shift contents of current tree to match the positions in the preview
         var cardShiftComplete : Bool = false;
         var cardShiftAnimation : CardShiftAnimation = new CardShiftAnimation();
-        cardShiftAnimation.play(this, m_previewExpressionTreeWidget, onShiftComplete, duration);
-        function onShiftComplete() : Void
+		var scaleImageComplete : Bool = false;
+		function checkAnimationComplete() : Void
+        {
+            if (cardShiftComplete && scaleImageComplete) 
+            {
+                setConstraints(constraintWidth, constraintHeight, allowConstraintPadding, true);
+            }
+        };
+		function onShiftComplete() : Void
         {
             cardShiftComplete = true;
             checkAnimationComplete();
-        }  // While the shifting is occuring also apply a scale to the bg image of the current tree  ;
+        };
+        cardShiftAnimation.play(this, m_previewExpressionTreeWidget, onShiftComplete, duration);
         
-        
-        
-        var scaleImageComplete : Bool = false;
+		// While the shifting is occuring also apply a scale to the bg image of the current tree
         var tween : Tween = new Tween(m_bgImage, duration);
         tween.animate("width", constraintWidth);
         tween.animate("height", constraintHeight);
@@ -294,21 +301,14 @@ class TermAreaWidget extends ExpressionTreeWidget implements IBaseWidget
                     scaleImageComplete = true;
                     checkAnimationComplete();
                 };
-        Starling.juggler.add(tween);
+        Starling.current.juggler.add(tween);
         
         var moveTween : Tween = new Tween(this, duration);
         moveTween.animate("x", newX);
         moveTween.animate("y", newY);
-        Starling.juggler.add(moveTween);
+        Starling.current.juggler.add(moveTween);
         
         // At the end we actaully reset the constraints of the tree
-        function checkAnimationComplete() : Void
-        {
-            if (cardShiftComplete && scaleImageComplete) 
-            {
-                setConstraints(constraintWidth, constraintHeight, allowConstraintPadding, true);
-            }
-        };
     }
     
     /**
@@ -366,7 +366,7 @@ class TermAreaWidget extends ExpressionTreeWidget implements IBaseWidget
     {
         // Need to interpolate the color from the given starting value back to its original color
         m_colorChangeAnimation.play(color, 0xFFFFFF, 1.0, m_bgImage);
-        Starling.juggler.add(m_colorChangeAnimation);
+        Starling.current.juggler.add(m_colorChangeAnimation);
     }
     
     public function redrawAfterModification(triggeredByUndo : Bool = false) : Void
@@ -409,15 +409,15 @@ class TermAreaWidget extends ExpressionTreeWidget implements IBaseWidget
         // For every entity id in the current manager, check if there is a matching
         // entity within the term area widget
         var numEntityIds : Int = entityIds.length;
-        var entityId : String;
-        var i : Int;
+        var entityId : String = null;
+        var i : Int = 0;
         for (i in 0...numEntityIds){
             entityId = entityIds[i];
             
             var numTermAreaEntities : Int = outWidgetLeaves.length;
             var foundMatch : Bool = false;
-            var termAreaEntity : BaseTermWidget;
-            var j : Int;
+            var termAreaEntity : BaseTermWidget = null;
+            var j : Int = 0;
             for (j in 0...numTermAreaEntities){
                 termAreaEntity = outWidgetLeaves[j];
                 if (Std.string(termAreaEntity.getNode().id) == entityId) 
@@ -453,12 +453,12 @@ class TermAreaWidget extends ExpressionTreeWidget implements IBaseWidget
         
         var numNewWidgets : Int = outWidgetLeaves.length;
         for (i in 0...numNewWidgets){
-            termAreaEntity = outWidgetLeaves[i];
+            var termAreaEntity = outWidgetLeaves[i];
             
             // Only base component we need to create for it is the render component
             entityId = Std.string(termAreaEntity.getNode().id);
             
-            renderComponent = new RenderableComponent(entityId);
+            var renderComponent = new RenderableComponent(entityId);
             renderComponent.view = termAreaEntity;
             m_componentManager.addComponentToEntity(renderComponent);
         }

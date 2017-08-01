@@ -5,11 +5,6 @@ import wordproblem.engine.expression.SymbolData;
 import flash.geom.Rectangle;
 import flash.text.TextFormat;
 
-import dragonbox.common.system.Map;
-
-//import feathers.display.Scale9Image;
-//import feathers.textures.Scale9Textures;
-
 import starling.display.DisplayObject;
 import starling.display.Image;
 import starling.display.Sprite;
@@ -35,7 +30,7 @@ class ExpressionSymbolMap
      * Key: symbol value
      * Value: struct data
      */
-    private var m_idToSymbolDataMap : Map;
+    private var m_idToSymbolDataMap : Map<String, SymbolData>;
     
     /**
      * Map to deal with cases where we need to create symbols generated as the level
@@ -45,7 +40,7 @@ class ExpressionSymbolMap
      * Key: symbol value
      * Value: the texture for that value
      */
-    private var m_idToDynamicTextureMap : Map;
+    private var m_idToDynamicTextureMap : Map<String, Texture>;
     
     /**
      * Name of the positive background texture to use for cards
@@ -67,13 +62,15 @@ class ExpressionSymbolMap
         
         m_measuringTextField = new MeasuringTextField();
         m_measuringTextField.defaultTextFormat = new TextFormat();
+		
+		m_defaultCardAttributes = CardAttributes.DEFAULT_CARD_ATTRIBUTES;
     }
     
     public function getSymbolDataFromValue(value : String) : SymbolData
     {
         // If symbol data does not exist for a requested value,
         // then create one with defaults
-        if (!m_idToSymbolDataMap.contains(value)) 
+        if (!m_idToSymbolDataMap.exists(value)) 
         {
             this.createDefaultSymbolDataForValue(value);
         }
@@ -100,7 +97,7 @@ class ExpressionSymbolMap
         var operatorNames : Array<String> = ["+", "/", "=", "*", "-"];
         
         // Dispose the dynamic textures
-        var dynamicTextureKeys : Array<Dynamic> = m_idToDynamicTextureMap.getKeys();
+        var dynamicTextureKeys = m_idToDynamicTextureMap.keys();
         for (key in dynamicTextureKeys)
         {
             var texture : Texture = m_idToDynamicTextureMap.get(key);
@@ -114,7 +111,7 @@ class ExpressionSymbolMap
             m_idToDynamicTextureMap.remove(key);
         }
         
-        m_idToSymbolDataMap.clear();
+        m_idToSymbolDataMap = new Map();
     }
     
     /**
@@ -137,33 +134,42 @@ class ExpressionSymbolMap
             
             // Add textures here to dynamic map, this is a bit of a hack as the call to get a card display
             // will also create a new texture
-            m_idToSymbolDataMap.put(symbolStruct.value, symbolStruct);
-        }  // The defaults are to use a single embedded static image    // Add in operator symbols to the atlas if they haven't already been specified  
-        
-        
-        
-        
-        
+            m_idToSymbolDataMap.set(symbolStruct.value, symbolStruct);
+        }  
+		
+		// Add in operator symbols to the atlas if they haven't already been specified  
+        // The defaults are to use a single embedded static image
         var operatorNames : Array<String> = ["+", "/", "=", "*", "-"];
-        var operatorTextures : Array<String> = ["add", "divide_bar", "equal", "multiply_x", "subtract"];
+        var operatorTextures : Array<String> = ["assets/operators/plus.png",
+			"assets/operators/divide_bar.png",
+			"assets/operators/equal.png",
+			"assets/operators/multiply_x.png",
+			"assets/operators/subtract.png"
+		];
         for (i in 0...operatorNames.length){
             var operatorName : String = operatorNames[i];
-            if (!m_idToSymbolDataMap.contains(operatorName)) 
+            if (!m_idToSymbolDataMap.exists(operatorName)) 
             {
                 // Create dummy data for the operator values
                 var operatorData : SymbolData = new SymbolData(operatorName, operatorName, 
                 null, operatorTextures[i], null, 0xFFFFFF, null);
-                m_idToSymbolDataMap.put(operatorName, operatorData);
+                m_idToSymbolDataMap.set(operatorName, operatorData);
             }
-        }  // It is disposing it later that does not have desired effect.    // The wierd thing is that disposing atlas at this point seems to free memory fine.    // The easy fix is to just avoid creating these atlases    // performed. (Go to 10 generated levels and skip them, eventually get Error #3691 Resource limit reached)    // TODO: This atlas is causing us to run out of texture memory after several level skips are  
-    }
+        }  
+		
+		// TODO: This atlas is causing us to run out of texture memory after several level skips are  
+		// performed. (Go to 10 generated levels and skip them, eventually get Error #3691 Resource limit reached)
+		// The easy fix is to just avoid creating these atlases 
+		// The wierd thing is that disposing atlas at this point seems to free memory fine.
+		// It is disposing it later that does not have desired effect.
+	}
     
     /**
      * Used if for whatever reason we need to add symbols after level initialization
      */
     public function addSymbol(symbolData : SymbolData) : Void
     {
-        m_idToSymbolDataMap.put(symbolData.value, symbolData);
+        m_idToSymbolDataMap.set(symbolData.value, symbolData);
     }
     
     /**
@@ -196,8 +202,8 @@ class ExpressionSymbolMap
         
         // First check if the value was dynamically created as the level was running
         // it would be present in the special reserved texture map
-        var cardTexture : Texture;
-        if (m_idToDynamicTextureMap.contains(value)) 
+        var cardTexture : Texture = null;
+        if (m_idToDynamicTextureMap.exists(value)) 
         {
             cardTexture = try cast(m_idToDynamicTextureMap.get(value), Texture) catch(e:Dynamic) null;
         }
@@ -206,7 +212,7 @@ class ExpressionSymbolMap
         else 
         {
             // We need to create that symbol on the fly with default settings
-            if (!m_idToSymbolDataMap.contains(value)) 
+            if (!m_idToSymbolDataMap.exists(value)) 
             {
                 this.createDefaultSymbolDataForValue(value);
             }
@@ -219,9 +225,9 @@ class ExpressionSymbolMap
             Std.int(cardObject.width), 
             Std.int(cardObject.height)
             );
-            
+			
             renderTexture.draw(cardObject);
-            m_idToDynamicTextureMap.put(value, renderTexture);
+            m_idToDynamicTextureMap.set(value, renderTexture);
             cardTexture = renderTexture;
         }
         cardObject = new Image(cardTexture);
@@ -241,12 +247,10 @@ class ExpressionSymbolMap
         
         // Go through all existing symbol data objects in this original and copy them over
         // into the clone;
-        var idValues : Array<Dynamic> = m_idToSymbolDataMap.getKeys();
-        var i : Int;
-        var numValues : Int = idValues.length;
+        var idValues = m_idToSymbolDataMap.keys();
         var symbolsToCopy : Array<SymbolData> = new Array<SymbolData>();
-        for (i in 0...numValues){
-            var symbolData : SymbolData = m_idToSymbolDataMap.get(idValues[i]);
+        for (idValue in idValues) {
+            var symbolData : SymbolData = m_idToSymbolDataMap.get(idValue);
             if (symbolData != null) 
             {
                 symbolsToCopy.push(symbolData.clone());
@@ -280,27 +284,27 @@ class ExpressionSymbolMap
             measuringTextField.text = symbolData.abbreviatedName;
             
             symbolTextField = new TextField(
-            Std.int(measuringTextField.textWidth + 20), 
-            Std.int(measuringTextField.textHeight + 10), 
-            symbolData.abbreviatedName, 
-            symbolData.fontName, 
-            symbolData.fontSize, 
-            symbolData.fontColor
+				Std.int(measuringTextField.textWidth + 20), 
+				Std.int(measuringTextField.textHeight + 10), 
+				symbolData.abbreviatedName, 
+				symbolData.fontName, 
+				symbolData.fontSize, 
+				symbolData.fontColor
             );
             symbolTextField.hAlign = HAlign.CENTER;
+			trace(measuringTextField.textWidth + ", " + measuringTextField.textHeight);
             
             cardContainer.addChild(symbolTextField);
             scaleBackgroundToFitTextWidth = symbolTextField.width;
-        }  // Draw the background  
-        
-        
-        
+        }  
+		
+		// Draw the background  
         if (symbolData.backgroundTextureName != null) 
         {
             var backgroundTexture : Texture = m_assetManager.getTexture(symbolData.backgroundTextureName);
             var backgroundOriginalWidth : Float = backgroundTexture.width;
             var backgroundOriginalHeight : Float = backgroundTexture.height;
-            var backgroundImage : DisplayObject;
+            var backgroundImage : DisplayObject = null;
             if (scaleBackgroundToFitTextWidth > backgroundOriginalWidth) 
             {
 				// TODO: these were replaced from the feathers library straight to the starling library;
@@ -308,8 +312,12 @@ class ExpressionSymbolMap
                 // If the background needs to be expanded, then we need to do a nine-slice on the background
                 var nineScalePadding : Float = 8;
                 var scale9Background : Image = new Image(Texture.fromTexture(
-                backgroundTexture, 
-                new Rectangle(nineScalePadding, nineScalePadding, backgroundOriginalWidth - 2 * nineScalePadding, backgroundOriginalHeight - 2 * nineScalePadding)
+					backgroundTexture, 
+					new Rectangle(nineScalePadding,
+						nineScalePadding,
+						backgroundOriginalWidth - 2 * nineScalePadding,
+						backgroundOriginalHeight - 2 * nineScalePadding
+					)
                 ));
                 scale9Background.color = symbolData.backgroundColor;
                 scale9Background.width = scaleBackgroundToFitTextWidth;
@@ -329,12 +337,10 @@ class ExpressionSymbolMap
                 symbolTextField.x = Math.floor((backgroundImage.width - symbolTextField.width) * 0.5);
                 symbolTextField.y = Math.floor((backgroundImage.height - symbolTextField.height) * 0.5);
             }
-        }  // the text as the only distinguishing feature for the card    // Get the texture for the symbol if it exists, otherwise we rely just on  
-        
-        
-        
-        
-        
+        }  
+		
+		// Get the texture for the symbol if it exists, otherwise we rely just on  
+        // the text as the only distinguishing feature for the card 
         if (symbolData.symbolTextureName != null) 
         {
             // IMPORTANT: The symbol atlas if more for prototype levels
@@ -348,24 +354,20 @@ class ExpressionSymbolMap
             {
                 symbolImage.x = Math.floor((cardContainer.width - symbolTexture.width) * 0.5);
                 symbolImage.y = Math.floor((cardContainer.height - symbolTexture.height) * 0.5);
-            }  // Apply tint to the symbol image if specified  
-            
-            
-            
+            }  
+			
+			// Apply tint to the symbol image if specified  
             if (symbolData.useSymbolTextureColor) 
             {
                 symbolImage.color = symbolData.symbolTextureColor;
             }
             
             cardContainer.addChild(symbolImage);
-        }  // we need to shift the entire object over    // visible graphic is outside the rect whose top left is at (0,0) so    // Render text will cut off drawing parts of the card if any part of the  
-        
-        
-        
-        
-        
-        
-        
+        }  
+		
+		// Render text will cut off drawing parts of the card if any part of the  
+		// visible graphic is outside the rect whose top left is at (0,0) so 
+        // we need to shift the entire object over
         var rect : Rectangle = cardContainer.getBounds(cardContainer);
         
         var wrapper : Sprite = new Sprite();
@@ -386,7 +388,7 @@ class ExpressionSymbolMap
      */
     public function resetTextureForValue(value : String) : Void
     {
-        if (m_idToDynamicTextureMap.contains(value)) 
+        if (m_idToDynamicTextureMap.exists(value)) 
         {
             // Need to be very careful with disposing textures, possible the game still
             // has this image displayed somewhere. Need to be sure no extra display parts
@@ -406,16 +408,16 @@ class ExpressionSymbolMap
         
         // Create new symbol data for the dummy object
         var symbolData : SymbolData = new SymbolData(
-        value, 
-        value, 
-        value, 
-        null, 
-        backgroundToUse, 
-        0xFFFFFF, 
-        m_defaultCardAttributes.defaultFontName
+			value, 
+			value, 
+			value, 
+			null, 
+			backgroundToUse, 
+			0xFFFFFF, 
+			m_defaultCardAttributes.defaultFontName
         );
         symbolData.fontColor = ((isNegative)) ? m_defaultCardAttributes.defaultNegativeTextColor : m_defaultCardAttributes.defaultPositiveTextColor;
         symbolData.fontSize = m_defaultCardAttributes.defaultFontSize;
-        m_idToSymbolDataMap.put(value, symbolData);
+        m_idToSymbolDataMap.set(value, symbolData);
     }
 }

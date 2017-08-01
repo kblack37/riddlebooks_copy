@@ -127,15 +127,13 @@ class InputWindow extends MovieClip
             {
                 if (m_inputField.text.length > 0) 
                 {
-                    m_inputField.text = m_inputField.text.slice(0, m_inputField.length - 1);
+                    m_inputField.text = m_inputField.text.substr(0, m_inputField.length - 1);
                 }
             }
             default:
                 {
                     // Syntax highlighting :)  For each of these strings to recieve valid input
                     m_inputField.appendText(String.fromCharCode(e.charCode));
-                    
-                    break;
                 }
         }
         

@@ -46,7 +46,7 @@ class FractionModuleFactory
 		 */
     public function getModuleInstance(typeID : String) : IFractionModule
     {
-        var result : IFractionModule;
+        var result : IFractionModule = null;
         
         // Get the module storage for this type, creating the storage if this is a new type
         if (!m_moduleStorage.exists(typeID))
@@ -79,7 +79,7 @@ class FractionModuleFactory
 		 */
     private function generateModuleInstance(typeID : String) : IFractionModule
     {
-        var result : IFractionModule;
+        var result : IFractionModule = null;
         
         switch (typeID)
         {

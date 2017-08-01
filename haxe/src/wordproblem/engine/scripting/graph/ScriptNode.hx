@@ -2,6 +2,7 @@ package wordproblem.engine.scripting.graph;
 
 
 import dragonbox.common.dispose.IDisposable;
+import haxe.xml.Fast;
 
 class ScriptNode implements IDisposable
 {
@@ -69,7 +70,7 @@ class ScriptNode implements IDisposable
      * 
      * This is a prototype that should be overridden by each subclass.
      */
-    public function setExtraData(data : Dynamic) : Void
+    public function setExtraData(data : Iterator<Fast>) : Void
     {
     }
     
@@ -109,7 +110,7 @@ class ScriptNode implements IDisposable
         if (index >= 0 && index < m_children.length) 
         {
             var totalChildren : Int = m_children.length;
-            var i : Int;
+            var i : Int = 0;
             i = totalChildren - 1;
             while (i > index){
                 m_children[i] = m_children[i - 1];
@@ -163,7 +164,7 @@ class ScriptNode implements IDisposable
      */
     public function reset() : Void
     {
-        var i : Int;
+        var i : Int = 0;
         var numChildren : Int = m_children.length;
         for (i in 0...numChildren){
             m_children[i].reset();
@@ -197,7 +198,7 @@ class ScriptNode implements IDisposable
         }
         else 
         {
-            var i : Int;
+            var i : Int = 0;
             var numChildren : Int = m_children.length;
             for (i in 0...numChildren){
                 targetNode = m_children[i]._getNodeById(id);
@@ -239,7 +240,7 @@ class ScriptNode implements IDisposable
      */
     public function dispose() : Void
     {
-        var i : Int;
+        var i : Int = 0;
         var numChildren : Int = m_children.length;
         for (i in 0...numChildren){
             m_children[i].dispose();

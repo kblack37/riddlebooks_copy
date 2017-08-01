@@ -7,8 +7,7 @@ import cgs.audio.Audio;
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 
-import feathers.controls.Button;
-
+import starling.display.Button;
 import starling.display.DisplayObject;
 import starling.events.Event;
 
@@ -114,12 +113,12 @@ class ResetTermArea extends BaseGameScript
             {
                 if (m_startingExpressions.length > 0 && m_startingExpressions[0] != null) 
                 {
-                    leftRoot = m_expressionCompiler.compile(m_startingExpressions[0]).head;
+                    leftRoot = m_expressionCompiler.compile(m_startingExpressions[0]);
                 }
                 
                 if (m_startingExpressions.length > 1 && m_startingExpressions[1] != null) 
                 {
-                    rightRoot = m_expressionCompiler.compile(m_startingExpressions[1]).head;
+                    rightRoot = m_expressionCompiler.compile(m_startingExpressions[1]);
                 }
             }
             undoTermArea.resetHistory(false, leftRoot, rightRoot);
@@ -132,14 +131,14 @@ class ResetTermArea extends BaseGameScript
         }
         
         var termAreas : Array<DisplayObject> = m_gameEngine.getUiEntitiesByClass(TermAreaWidget);
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...termAreas.length){
             // Check if there an initial expression a term area should reset to.
             // If none it becomes empty.
             var expressionRoot : ExpressionNode = null;
             if (m_startingExpressions != null && i < m_startingExpressions.length && m_startingExpressions[i] != null) 
             {
-                expressionRoot = m_expressionCompiler.compile(m_startingExpressions[i]).head;
+                expressionRoot = m_expressionCompiler.compile(m_startingExpressions[i]);
             }
             
             var termArea : TermAreaWidget = try cast(termAreas[i], TermAreaWidget) catch(e:Dynamic) null;

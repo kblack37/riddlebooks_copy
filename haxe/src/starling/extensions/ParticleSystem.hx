@@ -242,7 +242,7 @@ class ParticleSystem extends DisplayObject implements IAnimatable
     public function advanceTime(passedTime : Float) : Void
     {
         var particleIndex : Int = 0;
-        var particle : Particle;
+        var particle : Particle = null;
         
         // advance existing particles
         
@@ -306,13 +306,13 @@ class ParticleSystem extends DisplayObject implements IAnimatable
         
         
         var vertexID : Int = 0;
-        var color : Int;
-        var alpha : Float;
-        var rotation : Float;
-        var x : Float;
-        var y : Float;
-        var xOffset : Float;
-        var yOffset : Float;
+        var color : Int = 0;
+        var alpha : Float = 0.0;
+        var rotation : Float = 0.0;
+        var x : Float = 0.0;
+        var y : Float = 0.0;
+        var xOffset : Float = 0.0;
+        var yOffset : Float = 0.0;
         var textureWidth : Float = mTexture.width;
         var textureHeight : Float = mTexture.height;
         
@@ -410,7 +410,7 @@ class ParticleSystem extends DisplayObject implements IAnimatable
         if (mNumParticles + count > capacity) 
             raiseCapacity(mNumParticles + count - capacity);
         
-        var p : Particle;
+        var p : Particle = null;
         for (i in 0...count){
             p = mParticles[mNumParticles + i];
             initParticle(p);

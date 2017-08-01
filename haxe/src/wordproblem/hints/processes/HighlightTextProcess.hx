@@ -39,7 +39,7 @@ class HighlightTextProcess extends ScriptNode
         if (!value) 
         {
             var textComponentManager : ComponentManager = m_textArea.componentManager;
-            var i : Int;
+            var i : Int = 0;
             var numDocumentIds : Int = m_documentIds.length;
             for (i in 0...numDocumentIds){
                 var documentId : String = m_documentIds[i];
@@ -55,7 +55,7 @@ class HighlightTextProcess extends ScriptNode
     {
         // Process can finish on a single frame
         var textComponentManager : ComponentManager = m_textArea.componentManager;
-        var i : Int;
+        var i : Int = 0;
         var numDocumentIds : Int = m_documentIds.length;
         for (i in 0...numDocumentIds){
             var documentId : String = m_documentIds[i];
@@ -63,9 +63,9 @@ class HighlightTextProcess extends ScriptNode
                 textComponentManager.getComponentFromEntityIdAndType(documentId, RenderableComponent.TYPE_ID) != null) 
             {
                 var highlightComponent : HighlightComponent = new HighlightComponent(
-                documentId, 
-                m_highlightColor, 
-                m_animationPeriodSeconds, 
+					documentId, 
+					m_highlightColor, 
+					m_animationPeriodSeconds
                 );
                 textComponentManager.addComponentToEntity(highlightComponent);
             }

@@ -9,6 +9,8 @@ import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.ui.MouseState;
 
+import haxe.Constraints.Function;
+
 import starling.display.DisplayObjectContainer;
 import starling.display.Image;
 import starling.events.EventDispatcher;
@@ -137,7 +139,7 @@ class AddNewBar extends BaseBarModelScript implements IHitAreaScript
                     m_barModelArea.showPreview(false);
                     m_didActivatePreview = false;
                     
-                    labelOnTopValue = null;
+                    var labelOnTopValue = null;
                     if (Std.is(releasedWidget, SymbolTermWidget)) 
                     {
                         labelOnTopValue = releasedExpressionNode.data;
@@ -184,8 +186,8 @@ class AddNewBar extends BaseBarModelScript implements IHitAreaScript
                     // script had activated it but we want to overwrite it.
                     if (!m_barModelArea.getPreviewShowing() || !m_didActivatePreview) 
                     {
-                        releasedWidget = m_widgetDragSystem.getWidgetSelected();
-                        releasedExpressionNode = releasedWidget.getNode();
+                        var releasedWidget = m_widgetDragSystem.getWidgetSelected();
+                        var releasedExpressionNode = releasedWidget.getNode();
                         
                         var previewView : BarModelView = m_barModelArea.getPreviewView(true);
                         var extraDragParams : Dynamic = m_widgetDragSystem.getExtraParams();
@@ -291,7 +293,7 @@ class AddNewBar extends BaseBarModelScript implements IHitAreaScript
      */
     private function checkHitArea() : Bool
     {
-        as3hx.Compat.setArrayLength(m_hitAreas, 0);
+		m_hitAreas = new Array<Rectangle>();
         var doAddNewBar : Bool = false;
         
         // Check if the number of whole bars is below the limit
@@ -304,10 +306,11 @@ class AddNewBar extends BaseBarModelScript implements IHitAreaScript
             var barWholeViews : Array<BarWholeView> = m_barModelArea.getBarWholeViews();
             
             // Calculate the hit areas, size depends on whether there are existing bars
+			var barWholeViewBounds : Rectangle = null;
             if (barWholeViews.length > 0) 
             {
                 var lastBarWholeView : BarWholeView = barWholeViews[barWholeViews.length - 1];
-                var barWholeViewBounds : Rectangle = lastBarWholeView.getBounds(m_barModelArea);
+                barWholeViewBounds = lastBarWholeView.getBounds(m_barModelArea);
                 
                 // HACK: Hit area looks nicer if there is some side padding and if it doesn't intersect with
                 // the add horizontal label hit area
@@ -356,7 +359,7 @@ class AddNewBar extends BaseBarModelScript implements IHitAreaScript
             labelValueOnTop : String,
             id : String = null) : Void
     {
-        var value : Float = parseFloat(data);
+        var value : Float = Std.parseFloat(data);
         
         // Any non numeric cards default to a unit of 1
         // (This value can be set in the extra data field of a level file)

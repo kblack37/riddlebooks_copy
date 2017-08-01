@@ -3,9 +3,6 @@ package wordproblem.playercollections.items;
 
 import flash.geom.Rectangle;
 
-import feathers.display.Scale9Image;
-import feathers.textures.Scale9Textures;
-
 import starling.display.DisplayObject;
 import starling.display.Image;
 import starling.display.Sprite;
@@ -22,8 +19,8 @@ class PlayerCollectionItemButton extends Sprite
 {
     public var selected(never, set) : Bool;
 
-    private var m_normalBackground : Scale9Image;
-    private var m_selectedBackground : Scale9Image;
+    private var m_normalBackground : Image;
+    private var m_selectedBackground : Image;
     
     private var m_itemId : String;
     private var m_locked : Bool;
@@ -51,16 +48,16 @@ class PlayerCollectionItemButton extends Sprite
         m_locked = locked;
         m_assetManager = assetManager;
         
-        var scale9Texture : Scale9Textures = new Scale9Textures(
-        assetManager.getTexture("button_white"), 
-        new Rectangle(8, 8, 16, 16), 
+        var scale9Texture : Texture = Texture.fromTexture(
+			assetManager.getTexture("button_white"), 
+			new Rectangle(8, 8, 16, 16)
         );
-        m_normalBackground = new Scale9Image(scale9Texture);
+        m_normalBackground = new Image(scale9Texture);
         m_normalBackground.color = defaultColor;
         m_normalBackground.width = width;
         m_normalBackground.height = height;
         
-        m_selectedBackground = new Scale9Image(scale9Texture);
+        m_selectedBackground = new Image(scale9Texture);
         m_selectedBackground.color = overColor;
         m_selectedBackground.width = width;
         m_selectedBackground.height = height;

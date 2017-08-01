@@ -99,9 +99,9 @@ class RestrictCardAmount extends BaseGameScript
         var deckWidget : DeckWidget = try cast(m_gameEngine.getUiEntity("deckArea"), DeckWidget) catch(e:Dynamic) null;
         
         // First get all cards
-        var i : Int;
+        var i : Int = 0;
         var numTermAreas : Int = m_termAreas.length;
-        var termAreaWidget : TermAreaWidget;
+        var termAreaWidget : TermAreaWidget = null;
         for (i in 0...numTermAreas){
             termAreaWidget = m_termAreas[i];
             termAreaWidget.getWidgetLeaves(m_outWidgetLeaves);
@@ -113,14 +113,14 @@ class RestrictCardAmount extends BaseGameScript
         
         var numTotalCards : Int = m_outWidgetLeaves.length;
         var numCardsWithLimit : Int = m_values.length;
-        var value : String;
-        var limit : Int;
+        var value : String = null;
+        var limit : Int = 0;
         for (i in 0...numCardsWithLimit){
             value = m_values[i];
             limit = m_limits[i];
             
-            var j : Int;
-            var baseTermWidget : BaseTermWidget;
+            var j : Int = 0;
+            var baseTermWidget : BaseTermWidget = null;
             var numCardsWithSameValue : Int = 0;
             for (j in 0...numTotalCards){
                 baseTermWidget = m_outWidgetLeaves[j];

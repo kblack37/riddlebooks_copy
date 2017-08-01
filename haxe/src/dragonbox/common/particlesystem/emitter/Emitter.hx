@@ -78,7 +78,7 @@ class Emitter implements IDisposable
     public function start() : Void
     {
         var particlesToCreate : Int = m_clock.start(this);
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...particlesToCreate){
             createParticle();
         }  // Initialize all activities  
@@ -120,7 +120,7 @@ class Emitter implements IDisposable
     
     public function removeActions() : Void
     {
-        as3hx.Compat.setArrayLength(m_actions, 0);
+		m_actions = new Array<Action>();
     }
     
     public function addInitializer(initializer : Initializer) : Void
@@ -130,7 +130,7 @@ class Emitter implements IDisposable
     
     public function removeAllInitializers() : Void
     {
-        as3hx.Compat.setArrayLength(m_initializers, 0);
+        m_initializers = new Array<Initializer>();
     }
     
     public function addActivity(activity : Activity) : Void
@@ -140,7 +140,7 @@ class Emitter implements IDisposable
     
     public function removeAllActivities() : Void
     {
-        as3hx.Compat.setArrayLength(m_activities, 0);
+        m_activities = new Array<Activity>();
     }
     
     private function get_x() : Float
@@ -180,9 +180,9 @@ class Emitter implements IDisposable
         
         var initializer : Initializer = null;
         var i : Int = 0;
-        var classNameOfInitializer : String;
+        var classNameOfInitializer : String = null;
         for (i in 0...m_initializers.length){
-            classNameOfInitializer = Type.getClassName(m_initializers[i]);
+            classNameOfInitializer = Type.getClassName(Type.getClass(m_initializers[i]));
             if (classNameOfInitializer == classNameToSearch) 
             {
                 initializer = m_initializers[i];
@@ -207,7 +207,7 @@ class Emitter implements IDisposable
         // Check if we need to create a new set of particles based
         // on this emitter's clock
         var particlesToCreate : Int = m_clock.update(this, secondsElapsed);
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...particlesToCreate){
             createParticle();
         }  // Apply activities to this emitter  
@@ -219,28 +219,24 @@ class Emitter implements IDisposable
             m_activities[i].update(this, secondsElapsed);
         }
         
-        var particle : Particle;
-        for (i in 0...m_deadParticleIndex){
+        var particle : Particle = null;
+		var i = 0;
+		while (i < m_deadParticleIndex) {
             particle = m_particles[i];
             
             // Apply the list of actions to each of the particles
             var numActions : Int = m_actions.length;
-            var j : Int;
+            var j : Int = 0;
             for (j in 0...numActions){
                 var action : Action = m_actions[j];
                 action.update(this, particle, secondsElapsed);
-            }  // exceeding some lifetime limit    // Conditions for particle death include entering/exiting some bounding zone or    // to the inactive half of the vector    // If so we need to reorganize the particle list swapping out the dead ones    // Go through each particle after all operators have been applied and see if it is dead.  
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
+            }
+			
+			// Go through each particle after all operators have been applied and see if it is dead.  
+            // If so we need to reorganize the particle list swapping out the dead ones
+			// to the inactive half of the vector
+			// Conditions for particle death include entering/exiting some bounding zone or
+			// exceeding some lifetime limit
             if (particle.isDead) 
             {
                 // The last alive particle is just to the left of the current dead
@@ -264,7 +260,7 @@ class Emitter implements IDisposable
      */
     private function createParticle() : Void
     {
-        var particle : Particle;
+        var particle : Particle = null;
         if (m_particles.length <= m_deadParticleIndex) 
         {
             particle = new Particle();
@@ -281,7 +277,7 @@ class Emitter implements IDisposable
         this.initializeParticle(particle);
         
         var numInitializers : Int = m_initializers.length;
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...numInitializers){
             var initializer : Initializer = m_initializers[i];
             initializer.initialize(this, particle);

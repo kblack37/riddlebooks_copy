@@ -80,7 +80,7 @@ class EmphasizeAnimation implements IAnimatable
     
     public function advanceTime(time : Float) : Void
     {
-        var i : Int;
+        var i : Int = 0;
         var numEmitters : Int = m_activeEmphasizeEmitters.length;
         for (i in 0...numEmitters){
             m_activeEmphasizeEmitters[i].update(time);

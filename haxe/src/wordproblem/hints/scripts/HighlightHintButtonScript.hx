@@ -7,8 +7,6 @@ import flash.geom.Rectangle;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.time.Time;
 
-import feathers.controls.Callout;
-
 import starling.display.DisplayObject;
 
 import wordproblem.callouts.CalloutCreator;
@@ -242,8 +240,10 @@ class HighlightHintButtonScript extends BaseGameScript
         // The highlighting of the hint button can just be a basic callout box
         var calloutHeight : Int = 50;
         var globalHintBounds : Rectangle = m_gameEngine.getUiEntity("hintButton").getBounds(m_gameEngine.getSprite());
+		// TODO: this was replaced from the feathers Callout.DIRECTION_ and will
+		// need to be replaced when the callout system is
         var calloutOrientation : String = ((globalHintBounds.y > calloutHeight * 2)) ? 
-        Callout.DIRECTION_UP : Callout.DIRECTION_DOWN;
+		"up" : "down";
         
         // Player can dismiss the callout by clicking on the text bubble
         // (necessary since the tool tip will annoyingly obscure the text sometimes)

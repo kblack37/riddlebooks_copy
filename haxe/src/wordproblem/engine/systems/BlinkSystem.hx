@@ -23,8 +23,8 @@ class BlinkSystem extends BaseSystemScript
     {
         var blinkComponents : Array<Component> = componentManager.getComponentListForType(BlinkComponent.TYPE_ID);
         var numBlinkComponents : Int = blinkComponents.length;
-        var i : Int;
-        var blinkComponent : BlinkComponent;
+        var i : Int = 0;
+        var blinkComponent : BlinkComponent = null;
         for (i in 0...numBlinkComponents){
             blinkComponent = try cast(blinkComponents[i], BlinkComponent) catch(e:Dynamic) null;
             
@@ -40,7 +40,7 @@ class BlinkSystem extends BaseSystemScript
                 blinkTween.repeatCount = 0;
                 blinkTween.reverse = true;
                 blinkTween.animate("alpha", blinkComponent.minAlpha);
-                Starling.juggler.add(blinkTween);
+                Starling.current.juggler.add(blinkTween);
                 
                 blinkComponent.tween = blinkTween;
             }

@@ -1,7 +1,9 @@
 package wordproblem.achievements.scripts;
 
 
-import cgs.levelprogression.nodes.ICgsLevelNode;
+import cgs.levelProgression.nodes.ICgsLevelNode;
+
+import haxe.Constraints.Function;
 
 import starling.display.DisplayObjectContainer;
 
@@ -93,12 +95,15 @@ class UpdateAndSaveAchievements extends BaseBufferEventScript
         // We replace the string value to the actual function object
         var achievementIds : Array<String> = m_achievementsModel.getAchievementIds();
         var numAchievements : Int = achievementIds.length;
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...numAchievements){
             var achievementData : Dynamic = m_achievementsModel.getAchievementDetailsFromId(achievementIds[i]);
             
             // Public function are properties just like a variable
-            var completionFunction : Function = this[Reflect.field(achievementData, "function")];
+			// TODO: not sure what a good conversion for this line is, haxe will
+			// likely still interpret it as a string
+			//var completionFunction : Function = this[Reflect.field(achievementData, "function")];
+            var completionFunction : Function = Reflect.field(achievementData, "function");
             
             // Replace string name with actual function object
             Reflect.setField(achievementData, "function", completionFunction);
@@ -106,7 +111,7 @@ class UpdateAndSaveAchievements extends BaseBufferEventScript
             // At the very start of the game we do an intial pass through every achievement and see which
             // ones we should mark as complete.
             // However, we do not want to show the notification on the screen
-            achievementData.isComplete = completionFunction.apply(null, achievementData.params);
+            achievementData.isComplete = completionFunction(null, achievementData.params);
         }
         
         gameEngine.addEventListener(GameEvent.LEVEL_SOLVED, bufferEvent);
@@ -122,12 +127,12 @@ class UpdateAndSaveAchievements extends BaseBufferEventScript
             var achievementId : String = m_achievementIdsToShowNotificationsFor.shift();
             var achievementData : Dynamic = m_achievementsModel.getAchievementDetailsFromId(achievementId);
             m_currentAchievementUnlockedAnimation = new AchievementUnlockedAnimation(
-                    m_achievementCanvas, 
-                    400, 80, 
-                    achievementData, 
-                    m_assetManager, 
-                    onAchievementUnlockedComplete, 
-                    );
+                m_achievementCanvas, 
+                400, 80, 
+                achievementData, 
+                m_assetManager, 
+                onAchievementUnlockedComplete
+            );
         }
         
         return ScriptStatus.SUCCESS;
@@ -145,7 +150,7 @@ class UpdateAndSaveAchievements extends BaseBufferEventScript
     {
         var achievementIds : Array<String> = m_achievementsModel.getAchievementIds();
         var numAchievements : Int = achievementIds.length;
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...numAchievements){
             var achievementData : Dynamic = m_achievementsModel.getAchievementDetailsFromId(achievementIds[i]);
             
@@ -155,7 +160,7 @@ class UpdateAndSaveAchievements extends BaseBufferEventScript
             {
                 var completionFunction : Function = Reflect.field(achievementData, "function");
                 var params : Array<Dynamic> = Reflect.field(achievementData, "params");
-                var result : Bool = completionFunction.apply(this, params);
+                var result : Bool = completionFunction(this, params);
                 
                 Reflect.setField(achievementData, "isComplete", result);
                 
@@ -221,7 +226,7 @@ class UpdateAndSaveAchievements extends BaseBufferEventScript
     {
         var missingCollectable : Bool = false;
         var requiredRewardIds : Array<String> = BaseGiveRewardScript.LEVEL_UP_REWARDS;
-        var i : Int;
+        var i : Int = 0;
         var numRewardIds : Int = requiredRewardIds.length;
         for (i in 0...numRewardIds){
             if (m_playerItemInventory.componentManager.getComponentFromEntityIdAndType(requiredRewardIds[i], ItemIdComponent.TYPE_ID) == null) 

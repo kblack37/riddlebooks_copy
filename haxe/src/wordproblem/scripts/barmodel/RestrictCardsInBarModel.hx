@@ -59,7 +59,7 @@ class RestrictCardsInBarModel extends BaseBarModelScript
      */
     public function setTermValuesManuallyDisabled(termValues : Array<String>) : Void
     {
-        as3hx.Compat.setArrayLength(m_termValuesManuallyDisabled, 0);
+		m_termValuesManuallyDisabled = new Array<String>();
         
         if (termValues != null) 
         {
@@ -80,7 +80,7 @@ class RestrictCardsInBarModel extends BaseBarModelScript
      */
     public function setTermValuesToIgnore(termValues : Array<String>) : Void
     {
-        as3hx.Compat.setArrayLength(m_termValuesToIgnore, 0);
+		m_termValuesToIgnore = new Array<String>();
         
         if (termValues != null) 
         {
@@ -135,7 +135,7 @@ class RestrictCardsInBarModel extends BaseBarModelScript
     private function checkValuesToApplyRestrictions(forceSetToValue : Bool, forceValue : Bool = false) : Void
     {
         // Iterate through the labels that have been used
-        as3hx.Compat.setArrayLength(m_termValuesAndNamesUsedBuffer, 0);
+		m_termValuesAndNamesUsedBuffer = new Array<String>();
         
         if (m_barModelArea == null) 
         {
@@ -168,10 +168,9 @@ class RestrictCardsInBarModel extends BaseBarModelScript
             {
                 m_termValuesAndNamesUsedBuffer.push(barLabel.value);
             }
-        }  // Add in the manually restricted elements  
-        
-        
-        
+        } 
+		
+		// Add in the manually restricted elements  
         for (manuallyRestrictedTerm in m_termValuesManuallyDisabled)
         {
             m_termValuesAndNamesUsedBuffer.push(manuallyRestrictedTerm);
@@ -181,7 +180,7 @@ class RestrictCardsInBarModel extends BaseBarModelScript
         
         
         
-        as3hx.Compat.setArrayLength(m_outUiEntityBuffer, 0);
+		m_outUiEntityBuffer = new Array<DisplayObject>();
         m_gameEngine.getUiEntitiesByClass(DeckWidget, m_outUiEntityBuffer);
         if (m_outUiEntityBuffer.length > 0 && Std.is(m_outUiEntityBuffer[0], DeckWidget)) 
         {
@@ -196,30 +195,28 @@ class RestrictCardsInBarModel extends BaseBarModelScript
                 }
                 deckWidget.toggleSymbolEnabled(!expressionUsedInBarModel, expressionComponent.expressionString);
             }
-        }  // then disable it. Otherwise re-enable it    // If an expression is draggable from the text and is used somewhere in the bar model as a name,  
-        
-        
-        
-        
-        
-        as3hx.Compat.setArrayLength(m_outUiEntityBuffer, 0);
+        }
+		
+		// If an expression is draggable from the text and is used somewhere in the bar model as a name,  
+        // then disable it. Otherwise re-enable it 
+		m_outUiEntityBuffer = new Array<DisplayObject>();
         m_gameEngine.getUiEntitiesByClass(TextAreaWidget, m_outUiEntityBuffer);
         if (m_outUiEntityBuffer.length > 0 && Std.is(m_outUiEntityBuffer[0], TextAreaWidget)) 
         {
             var textAreaWidget : TextAreaWidget = try cast(m_outUiEntityBuffer[0], TextAreaWidget) catch(e:Dynamic) null;
-            expressionComponents = textAreaWidget.componentManager.getComponentListForType(ExpressionComponent.TYPE_ID);
+            var expressionComponents = textAreaWidget.componentManager.getComponentListForType(ExpressionComponent.TYPE_ID);
             for (i in 0...expressionComponents.length){
-                expressionComponent = try cast(expressionComponents[i], ExpressionComponent) catch(e:Dynamic) null;
+                var expressionComponent = try cast(expressionComponents[i], ExpressionComponent) catch(e:Dynamic) null;
                 
                 var expressionValue : String = expressionComponent.expressionString;
                 if (Lambda.indexOf(m_termValuesToIgnore, expressionValue) < 0) 
                 {
-                    expressionUsedInBarModel = Lambda.indexOf(m_termValuesAndNamesUsedBuffer, expressionValue) >= 0;
+                    var expressionUsedInBarModel = Lambda.indexOf(m_termValuesAndNamesUsedBuffer, expressionValue) >= 0;
                     if (forceSetToValue) 
                     {
                         expressionUsedInBarModel = forceValue;
                     }
-                    as3hx.Compat.setArrayLength(m_outDocumentViewsBuffer, 0);
+					m_outDocumentViewsBuffer = new Array<DocumentView>();
                     textAreaWidget.getDocumentViewsAtPageIndexById(expressionComponent.entityId, m_outDocumentViewsBuffer);
                     for (documentView in m_outDocumentViewsBuffer)
                     {

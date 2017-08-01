@@ -444,7 +444,7 @@ class LSTextDiscoverA extends BaseCustomLevelScript
     {
         // The second animal can be anything except the first
         var prunedAnimalList : Array<String> = new Array<String>();
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...m_animalsList.length){
             if (m_animalsList[i] != m_animalA) 
             {

@@ -9,8 +9,8 @@ import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.ExpressionUtil;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 
-import feathers.display.Scale9Image;
-import feathers.textures.Scale9Textures;
+//import feathers.display.Scale9Image;
+//import feathers.textures.Scale9Textures;
 
 import starling.animation.Transitions;
 import starling.animation.Tween;
@@ -49,7 +49,7 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
     private var m_parenthesisButton : Layer;
     
     // Stuff related to the drawing of the button
-    private var m_buttonBackground : Scale9Image;
+    private var m_buttonBackground : Image;
     
     /**
      * A copy of the left paren to show when the player is dragging an edge
@@ -214,7 +214,7 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
         if (m_ready && m_isActive) 
         {
             m_globalPointBuffer.setTo(m_mouseState.mousePositionThisFrame.x, m_mouseState.mousePositionThisFrame.y);
-            as3hx.Compat.setArrayLength(m_outParamsBuffer, 0);
+            m_outParamsBuffer = new Array<Dynamic>();
             
             // Checking for hit on one of the parenthesis
             super.iterateThroughBufferedEvents();
@@ -223,7 +223,7 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
             // they are adding a brand new parenthesis to one of the term areas
             if (m_draggedWholeParenthesis.parent != null) 
             {
-                as3hx.Compat.setArrayLength(m_outParamsBuffer, 0);
+				m_outParamsBuffer = new Array<Dynamic>();
                 if (m_mouseState.leftMouseReleasedThisFrame) 
                 {
                     m_draggedWholeParenthesis.removeFromParent();
@@ -249,8 +249,8 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
                     if (this.getTermWidgetUnderPoint(m_globalPointBuffer, m_outParamsBuffer)) 
                     {
                         // Show preview of what the expression would look like with the new parenthesis
-                        widgetToAddParenthesisTo = try cast(m_outParamsBuffer[0], BaseTermWidget) catch(e:Dynamic) null;
-                        termArea = try cast(m_outParamsBuffer[1], TermAreaWidget) catch(e:Dynamic) null;
+                        var widgetToAddParenthesisTo = try cast(m_outParamsBuffer[0], BaseTermWidget) catch(e:Dynamic) null;
+                        var termArea = try cast(m_outParamsBuffer[1], TermAreaWidget) catch(e:Dynamic) null;
                         
                         if (widgetToAddParenthesisTo != m_hoveredWidgetToAddWholeParenthesisTo) 
                         {
@@ -342,7 +342,7 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
                 }
                 else if (m_mouseState.leftMouseDraggedThisFrame) 
                 {
-                    as3hx.Compat.setArrayLength(m_outParamsBuffer, 0);
+					m_outParamsBuffer = new Array<Dynamic>();
                     
                     // Update the position of the dragged left/right paren image
                     // The coordinates should be relative to the canvas
@@ -403,7 +403,7 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
                     var parenTween : Tween = new Tween(m_draggedWholeParenthesis, 0.4, Transitions.EASE_OUT);
                     m_draggedWholeParenthesis.scaleX = m_draggedWholeParenthesis.scaleY = 0.0;
                     parenTween.scaleTo(1.0);
-                    Starling.juggler.add(parenTween);
+                    Starling.current.juggler.add(parenTween);
                     
                     // Change color to active
                     m_buttonBackground.color = m_activeColor;
@@ -464,11 +464,10 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
                 }
                 
                 targetRootToGetCandidates = divisionWidgetTracker;
-            }  // Get all pieces that are not horizontal fractions  
-            
-            
-            
-            as3hx.Compat.setArrayLength(m_widgetsParenthesisCanMoveTo, 0);
+            }
+			
+			// Get all pieces that are not horizontal fractions
+			m_widgetsParenthesisCanMoveTo = new Array<BaseTermWidget>();
             getWidgetsParenthesisCanMoveTo(targetRootToGetCandidates, m_termAreaWithParenthesisToMove, m_widgetsParenthesisCanMoveTo);
             
             var rightMostWidget : BaseTermWidget = baseTermWidget;
@@ -515,10 +514,10 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
         
         var backgroundTexture : Texture = m_assetManager.getTexture("card_background_square");
         var cornerPadding : Float = 8;
-        m_buttonBackground = new Scale9Image(new Scale9Textures(
+        m_buttonBackground = new Image(Texture.fromTexture(
                 backgroundTexture, 
-                new Rectangle(cornerPadding, cornerPadding, backgroundTexture.width - 2 * cornerPadding, backgroundTexture.height - 2 * cornerPadding), 
-                ));
+                new Rectangle(cornerPadding, cornerPadding, backgroundTexture.width - 2 * cornerPadding, backgroundTexture.height - 2 * cornerPadding)
+        ));
         m_buttonBackground.color = m_inactiveColor;
         m_buttonBackground.width = parenthesisButtonWidth;
         m_buttonBackground.height = parenthesisButtonHeight;
@@ -579,10 +578,10 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
         // Right paren cannot move to left of original location
         
         // Iterate through all possible pieces that are laid out horizontally
-        var i : Int;
+        var i : Int = 0;
         var numWidgetsCanMoveParenthesisTo : Int = m_widgetsParenthesisCanMoveTo.length;
-        var termWidget : BaseTermWidget;
-        var termWidgetBounds : Rectangle;
+        var termWidget : BaseTermWidget = null;
+        var termWidgetBounds : Rectangle = null;
         
         if (movingLeftParen && m_localPointBuffer.x <= m_xAnchoredAtRightEdge) 
         {
@@ -633,8 +632,8 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
                 {
                     // Since we are going from right to left in this search the previous one
                     // is actually to the right
-                    prevTermWidget = m_widgetsParenthesisCanMoveTo[i + 1];
-                    prevBounds = prevTermWidget.rigidBodyComponent.boundingRectangle;
+                    var prevTermWidget = m_widgetsParenthesisCanMoveTo[i + 1];
+                    var prevBounds = prevTermWidget.rigidBodyComponent.boundingRectangle;
                     
                     m_hitBoundsBuffer.setTo(termWidgetBounds.x, termWidgetBounds.y, prevBounds.left - termWidgetBounds.left, termWidgetBounds.height);
                     if (m_hitBoundsBuffer.containsPoint(m_localPointBuffer)) 
@@ -680,8 +679,8 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
         // Add a new paren at that point
         // Check which term is underneath the dragged object, wrap parens around it
         var termWidgetUnderPoint : Bool = false;
-        var termArea : TermAreaWidget;
-        var i : Int;
+        var termArea : TermAreaWidget = null;
+        var i : Int = 0;
         for (i in 0...m_termAreas.length){
             termArea = m_termAreas[i];
             

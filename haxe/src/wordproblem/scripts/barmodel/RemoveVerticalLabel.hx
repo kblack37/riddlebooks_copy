@@ -65,8 +65,8 @@ class RemoveVerticalLabel extends BaseBarModelScript implements IRemoveBarElemen
                 // Remove on drag out
                 var verticalBarLabels : Array<BarLabel> = m_barModelArea.getBarModelData().verticalBarLabels;
                 var numVerticalBarLabels : Int = verticalBarLabels.length;
-                var i : Int;
-                var verticalBarLabel : BarLabel;
+                var i : Int = 0;
+                var verticalBarLabel : BarLabel = null;
                 for (i in 0...numVerticalBarLabels){
                     verticalBarLabel = verticalBarLabels[i];
                     if (verticalBarLabel.id == hitBarLabelView.data.id) 
@@ -136,7 +136,7 @@ class RemoveVerticalLabel extends BaseBarModelScript implements IRemoveBarElemen
                 {
                     m_hitBarLabelView.setBracketAndDescriptionAlpha(0.3);
                     m_ringPulseAnimation.reset(m_localMouseBuffer.x, m_localMouseBuffer.y, m_barModelArea, 0xFF0000);
-                    Starling.juggler.add(m_ringPulseAnimation);
+                    Starling.current.juggler.add(m_ringPulseAnimation);
                     status = ScriptStatus.SUCCESS;
                 }
             }
@@ -166,8 +166,8 @@ class RemoveVerticalLabel extends BaseBarModelScript implements IRemoveBarElemen
         var hitLabel : BarLabelView = null;
         var verticalBarLabelViews : Array<BarLabelView> = m_barModelArea.getVerticalBarLabelViews();
         var numVerticalBarLabels : Int = verticalBarLabelViews.length;
-        var i : Int;
-        var verticalBarLabelView : BarLabelView;
+        var i : Int = 0;
+        var verticalBarLabelView : BarLabelView = null;
         for (i in 0...numVerticalBarLabels){
             verticalBarLabelView = verticalBarLabelViews[i];
             
@@ -198,6 +198,6 @@ class RemoveVerticalLabel extends BaseBarModelScript implements IRemoveBarElemen
     private function onRingPulseAnimationComplete() : Void
     {
         // Make sure animation isn't showing
-        Starling.juggler.remove(m_ringPulseAnimation);
+        Starling.current.juggler.remove(m_ringPulseAnimation);
     }
 }

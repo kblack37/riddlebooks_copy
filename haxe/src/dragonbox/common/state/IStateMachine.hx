@@ -6,6 +6,8 @@ import dragonbox.common.dispose.IDisposable;
 import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
 
+import haxe.Constraints.Function;
+
 interface IStateMachine extends ISprite extends IDisposable
 {
 

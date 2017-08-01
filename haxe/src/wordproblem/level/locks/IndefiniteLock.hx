@@ -1,7 +1,6 @@
 package wordproblem.level.locks;
 
-
-import cgs.levelprogression.locks.ICgsLevelLock;
+import cgs.levelProgression.locks.ICgsLevelLock;
 
 /**
  * An indefinite lock can only be unlocked by the programmer going into the

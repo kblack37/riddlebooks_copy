@@ -91,7 +91,7 @@ class Condition
         _id = dataObj.cond_id;
         
         _variables = new Array<Variable>();
-        var variable : Variable;
+        var variable : Variable = null;
         var vars : Array<Dynamic> = dataObj.vars;
         for (varObj in vars)
         {

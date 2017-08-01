@@ -86,8 +86,8 @@ class BufferedMessage extends BaseQuestMessage implements IQuestMessage
     
     override public function updateClientTimeStamp() : Void
     {
-        var currAction : IClientAction;
-        var currTimeStamp : Float;
+        var currAction : IClientAction = null;
+        var currTimeStamp : Float = 0.0;
         for (idx in 0..._questActions.length)
         {
             currAction = _questActions[idx];

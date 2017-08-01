@@ -62,6 +62,48 @@ class NewItemScreen extends Sprite
         
         var rewardIconComponent : RewardIconComponent = try cast(itemDataSource.getComponentFromEntityIdAndType(itemId, RewardIconComponent.TYPE_ID), RewardIconComponent) catch(e:Dynamic) null;
         m_itemTextureName = rewardIconComponent.textureName;
+		
+		// Item appears near the middle of the screen
+		function showItem() : Void
+		{
+			// From the id of the item, get the name of the item and create an image
+			var rewardIconTexture : Texture = assetManager.getTextureWithReferenceCount(m_itemTextureName);
+			var itemImage : Image = new Image(rewardIconTexture);
+			itemImage.pivotX = rewardIconTexture.width * 0.5;
+			itemImage.pivotY = rewardIconTexture.height * 0.5;
+			itemImage.x = totalScreenWidth * 0.5;
+			itemImage.y = totalScreenHeight * 0.5;
+			addChild(itemImage);
+			
+			var itemImagePopIn : Tween = new Tween(itemImage, 0.4, Transitions.EASE_IN_OUT);
+			itemImage.scaleX = itemImage.scaleY = 0.0;
+			itemImage.alpha = 0.5;
+			var desiredScale : Float = 200 / rewardIconTexture.height;
+			itemImagePopIn.animate("scaleX", desiredScale);
+			itemImagePopIn.animate("scaleY", desiredScale);
+			itemImagePopIn.animate("alpha", 1.0);
+			itemImagePopIn.onComplete = function() : Void
+            {
+				// Have reward gently float up and down
+				var upDownTween : Tween = new Tween(itemImage, 1.0);
+				upDownTween.animate("y", itemImage.y - 10);
+				upDownTween.repeatCount = 0;
+				upDownTween.reverse = true;
+				addRewardDetailTween(upDownTween);
+			};
+			addRewardDetailTween(itemImagePopIn);
+			
+			var nameComponent : NameComponent = try cast(itemDataSource.getComponentFromEntityIdAndType(itemId, NameComponent.TYPE_ID), NameComponent) catch(e:Dynamic) null;
+			var prizeDescriptionText : TextField = new TextField(400, 60, nameComponent.name, GameFonts.DEFAULT_FONT_NAME, 32, 0xFFFFFF);
+			prizeDescriptionText.pivotX = prizeDescriptionText.width * 0.5;
+			prizeDescriptionText.x = 400;
+			prizeDescriptionText.y = itemImage.y + 110;  // Need to make sure the description floats about the dismiss button, else it is hidden  
+			prizeDescriptionText.alpha = 0.0;
+			addChild(prizeDescriptionText);
+			var textTween : Tween = new Tween(prizeDescriptionText, 0.7);
+			textTween.animate("alpha", 1.0);
+			addRewardDetailTween(textTween);
+		};
         
         if (data.hidden) 
         {
@@ -139,48 +181,6 @@ class NewItemScreen extends Sprite
         newPrizeText.x = (totalScreenWidth - newPrizeText.width) * 0.5;
         newPrizeText.y = totalScreenHeight * 0.15;
         addChild(newPrizeText);
-        
-        // Item appears near the middle of the screen
-        function showItem() : Void
-        {
-            // From the id of the item, get the name of the item and create an image
-            var rewardIconTexture : Texture = assetManager.getTextureWithReferenceCount(m_itemTextureName);
-            var itemImage : Image = new Image(rewardIconTexture);
-            itemImage.pivotX = rewardIconTexture.width * 0.5;
-            itemImage.pivotY = rewardIconTexture.height * 0.5;
-            itemImage.x = totalScreenWidth * 0.5;
-            itemImage.y = totalScreenHeight * 0.5;
-            addChild(itemImage);
-            
-            var itemImagePopIn : Tween = new Tween(itemImage, 0.4, Transitions.EASE_IN_OUT);
-            itemImage.scaleX = itemImage.scaleY = 0.0;
-            itemImage.alpha = 0.5;
-            var desiredScale : Float = 200 / rewardIconTexture.height;
-            itemImagePopIn.animate("scaleX", desiredScale);
-            itemImagePopIn.animate("scaleY", desiredScale);
-            itemImagePopIn.animate("alpha", 1.0);
-            itemImagePopIn.onComplete = function() : Void
-                    {
-                        // Have reward gently float up and down
-                        var upDownTween : Tween = new Tween(itemImage, 1.0);
-                        upDownTween.animate("y", itemImage.y - 10);
-                        upDownTween.repeatCount = 0;
-                        upDownTween.reverse = true;
-                        addRewardDetailTween(upDownTween);
-                    };
-            addRewardDetailTween(itemImagePopIn);
-            
-            var nameComponent : NameComponent = try cast(itemDataSource.getComponentFromEntityIdAndType(itemId, NameComponent.TYPE_ID), NameComponent) catch(e:Dynamic) null;
-            var prizeDescriptionText : TextField = new TextField(400, 60, nameComponent.name, GameFonts.DEFAULT_FONT_NAME, 32, 0xFFFFFF);
-            prizeDescriptionText.pivotX = prizeDescriptionText.width * 0.5;
-            prizeDescriptionText.x = 400;
-            prizeDescriptionText.y = itemImage.y + 110;  // Need to make sure the description floats about the dismiss button, else it is hidden  
-            prizeDescriptionText.alpha = 0.0;
-            addChild(prizeDescriptionText);
-            var textTween : Tween = new Tween(prizeDescriptionText, 0.7);
-            textTween.animate("alpha", 1.0);
-            addRewardDetailTween(textTween);
-        };
     }
     
     override public function dispose() : Void
@@ -188,7 +188,7 @@ class NewItemScreen extends Sprite
         super.dispose();
         while (m_rewardDetailsActiveTweens.length > 0)
         {
-            Starling.juggler.remove(m_rewardDetailsActiveTweens.pop());
+            Starling.current.juggler.remove(m_rewardDetailsActiveTweens.pop());
         }
         
         super.removeChildren(0, -1, true);
@@ -200,6 +200,6 @@ class NewItemScreen extends Sprite
     private function addRewardDetailTween(tween : Tween) : Void
     {
         m_rewardDetailsActiveTweens.push(tween);
-        Starling.juggler.add(tween);
+        Starling.current.juggler.add(tween);
     }
 }

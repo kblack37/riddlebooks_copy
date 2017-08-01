@@ -46,7 +46,7 @@ class TextureUtil
         displayObject.y = 0;
         
         // Draw a copy of the dragged view
-        var renderTexture : RenderTexture = new RenderTexture(displayObject.width * scaleFactor, displayObject.height * scaleFactor, false);
+        var renderTexture : RenderTexture = new RenderTexture(Std.int(displayObject.width * scaleFactor), Std.int(displayObject.height * scaleFactor), false);
         var matrix : Matrix = new Matrix(scaleFactor, 0, 0, scaleFactor, tx, ty);
         renderTexture.draw(displayObject, matrix);
         var viewCopy : Image = new Image(renderTexture);
@@ -140,8 +140,8 @@ class TextureUtil
         
         
         
-        cos = Math.cos(startAngleRad + radToFill);
-        sin = Math.sin(startAngleRad + radToFill);
+        var cos = Math.cos(startAngleRad + radToFill);
+        var sin = Math.sin(startAngleRad + radToFill);
         innerCoordinates.push(innerRadius * cos);
         innerCoordinates.push(innerRadius * sin);
         
@@ -149,20 +149,20 @@ class TextureUtil
         outCoordinates.push(outerRadius * sin);
         
         
-        var i : Int;
+        var i : Int = 0;
         var numCoordinates : Int = innerCoordinates.length;
         shape.graphics.moveTo(innerCoordinates[0], innerCoordinates[1]);
         for (i in 0...numCoordinates){
-            innerX = innerCoordinates[i];
-            innerY = innerCoordinates[i + 1];
+            var innerX = innerCoordinates[i];
+            var innerY = innerCoordinates[i + 1];
             shape.graphics.lineTo(innerX, innerY);
         }  // Outer loop, goes backwards  
         
         
         
         for (i in numCoordinates - 1...0){
-            outerX = outCoordinates[i - 1];
-            outerY = outCoordinates[i];
+            var outerX = outCoordinates[i - 1];
+            var outerY = outCoordinates[i];
             shape.graphics.lineTo(outerX, outerY);
         }  // Close at start of inner  
         
@@ -174,7 +174,7 @@ class TextureUtil
             diameter += outlineThickness;
         }
         
-        var bitmapData : BitmapData = new BitmapData(diameter, diameter, true, 0x00000000);
+        var bitmapData : BitmapData = new BitmapData(Std.int(diameter), Std.int(diameter), true, 0x00000000);
         bitmapData.draw(shape, new Matrix(1, 0, 0, 1, outerRadius, outerRadius));
         var texture : Texture = Texture.fromBitmapData(bitmapData, false);
         bitmapData.dispose();

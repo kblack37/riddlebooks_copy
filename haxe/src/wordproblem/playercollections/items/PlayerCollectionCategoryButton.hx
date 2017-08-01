@@ -4,12 +4,10 @@ package wordproblem.playercollections.items;
 import flash.geom.Rectangle;
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
+import starling.textures.Texture;
 
 import dragonbox.common.util.XColor;
 import dragonbox.common.util.XTextField;
-
-import feathers.display.Scale9Image;
-import feathers.textures.Scale9Textures;
 
 import starling.display.DisplayObject;
 import starling.display.Image;
@@ -28,8 +26,8 @@ class PlayerCollectionCategoryButton extends Sprite
 
     private var m_categoryInformationObject : Dynamic;
     
-    private var m_normalBackground : Scale9Image;
-    private var m_selectedBackground : Scale9Image;
+    private var m_normalBackground : Image;
+    private var m_selectedBackground : Image;
     
     public function new(categoryInformationObject : Dynamic,
             assetManager : AssetManager,
@@ -41,14 +39,14 @@ class PlayerCollectionCategoryButton extends Sprite
         
         m_categoryInformationObject = categoryInformationObject;
         
-        var scale9Texture : Scale9Textures = new Scale9Textures(
-        assetManager.getTexture("button_white"), 
-        new Rectangle(8, 8, 16, 16), 
+        var scale9Texture : Texture = Texture.fromTexture(
+			assetManager.getTexture("button_white"), 
+			new Rectangle(8, 8, 16, 16)
         );
-        m_normalBackground = new Scale9Image(scale9Texture);
+        m_normalBackground = new Image(scale9Texture);
         m_normalBackground.color = upColor;
         
-        m_selectedBackground = new Scale9Image(scale9Texture);
+        m_selectedBackground = new Image(scale9Texture);
         m_selectedBackground.color = XColor.shadeColor(upColor, 0.3);
         
         var totalWidth : Float = width;
@@ -68,7 +66,7 @@ class PlayerCollectionCategoryButton extends Sprite
         
         var itemsEarned : Int = categoryInformationObject.numItemsEarned;
         var itemsTotal : Int = categoryInformationObject.itemIds.length;
-        var categoryProgressTextfield : TextField = new TextField(170, height, itemsEarned + "/" + itemsTotal, GameFonts.DEFAULT_FONT_NAME, 32, 0xFFFFFF);
+        var categoryProgressTextfield : TextField = new TextField(170, Std.int(height), itemsEarned + "/" + itemsTotal, GameFonts.DEFAULT_FONT_NAME, 32, 0xFFFFFF);
         categoryProgressTextfield.x = categoryNameImage.x + categoryNameImage.width;
         addChild(categoryProgressTextfield);
     }

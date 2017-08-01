@@ -58,13 +58,13 @@ class TemporaryTextureControl implements IDisposable
     
     public function dispose() : Void
     {
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...m_textureNamesToDispose.length){
             var textureName : String = m_textureNamesToDispose[i];
             m_assetManager.removeTexture(textureName, true);
         }
         
-        as3hx.Compat.setArrayLength(m_textureNamesToDispose, 0);
+		m_textureNamesToDispose = new Array<String>();
         
         // Delete all temp image saved within here
         for (id in Reflect.fields(m_savedImages))
@@ -101,7 +101,6 @@ class TemporaryTextureControl implements IDisposable
             var savedImage : Image = try cast(Reflect.field(m_savedImages, id), Image) catch(e:Dynamic) null;
             savedImage.removeFromParent(true);
             savedImage.texture.dispose();
-            ;
         }
     }
 }

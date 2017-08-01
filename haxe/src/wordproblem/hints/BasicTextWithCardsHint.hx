@@ -74,7 +74,7 @@ class BasicTextWithCardsHint extends BasicTextAndCharacterHint
             var documentIdInMainTextToTermValue : Dynamic = { };
             var textAreaWidget : TextAreaWidget = try cast(m_gameEngine.getUiEntity("textArea"), TextAreaWidget) catch(e:Dynamic) null;
             var expressionComponents : Array<Component> = textAreaWidget.componentManager.getComponentListForType(ExpressionComponent.TYPE_ID);
-            var i : Int;
+            var i : Int = 0;
             for (i in 0...expressionComponents.length){
                 var expressionComponent : ExpressionComponent = try cast(expressionComponents[i], ExpressionComponent) catch(e:Dynamic) null;
                 documentIdInMainTextToTermValue[expressionComponent.entityId] = expressionComponent.expressionString;
@@ -111,7 +111,7 @@ class BasicTextWithCardsHint extends BasicTextAndCharacterHint
         else 
         {
             var childElements : FastXMLList = content.node.children.innerData();
-            var i : Int;
+            var i : Int = 0;
             var numChildren : Int = childElements.length();
             for (i in 0...numChildren){
                 element = _getElementWithId(childElements.get(i), id);

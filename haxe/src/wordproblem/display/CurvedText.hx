@@ -43,14 +43,14 @@ class CurvedText extends Sprite
         var measuringTextField : MeasuringTextField = new MeasuringTextField();
         measuringTextField.defaultTextFormat = textFormat;
         measuringTextField.text = "W";
-        var widthForSingleCharacter : Float = measuringTextField.textWidth;
-        var heightForSingleCharacter : Float = measuringTextField.textHeight + 3;
+        var widthForSingleCharacter : Int = Std.int(measuringTextField.textWidth);
+        var heightForSingleCharacter : Int = Std.int(measuringTextField.textHeight + 3);
         
         var xOffsets : Array<Float> = new Array<Float>();
         
         // Target text needs to be decomposed into individual characters and manually
         // repositioned along the curve
-        var i : Int;
+        var i : Int = 0;
         var numCharacters : Int = text.length;
         var xOffset : Float = 0.0;
         var totalCharacterWidth : Float = 0;
@@ -62,14 +62,14 @@ class CurvedText extends Sprite
             if (character != " ") 
             {
                 textField = new TextField(
-                        widthForSingleCharacter + 6, 
-                        heightForSingleCharacter, 
-                        character, 
-                        textFormat.font, 
-                        try cast(textFormat.size, Float) catch(e:Dynamic) null, 
-                        try cast(textFormat.color, Int) catch(e:Dynamic) null, 
-                        true, 
-                        );
+                    widthForSingleCharacter + 6, 
+                    heightForSingleCharacter, 
+                    character, 
+                    textFormat.font, 
+                    try cast(textFormat.size, Float) catch(e:Dynamic) 0, 
+                    try cast(textFormat.color, Int) catch(e:Dynamic) 0, 
+                    true
+                );
                 textField.pivotX = textField.width * 0.5;
                 textField.pivotY = textField.height * 0.5;
             }
@@ -78,10 +78,9 @@ class CurvedText extends Sprite
             m_textFieldsForCharacters.push(textField);
             xOffset += widthForSingleCharacter;
             totalCharacterWidth += widthForSingleCharacter;
-        }  // We approximate the length of the curve and compare to total character width  
-        
-        
-        
+        }  
+		
+		// We approximate the length of the curve and compare to total character width  
         var curveLength : Float = MathUtil.calculateCubicBezierLength(controlPointA, controlPointB, controlPointC, controlPointD, 50);
         var deltaLength : Float = curveLength - totalCharacterWidth;
         var startingOffsetPropotion : Float = (deltaLength * 0.5) / curveLength;
@@ -94,7 +93,7 @@ class CurvedText extends Sprite
             var t : Float = xOffset / curveLength + startingOffsetPropotion;
             MathUtil.calculateCubicBezierPoint(t, controlPointA, controlPointB, controlPointC, controlPointD, pointLocation);
             
-            textField = m_textFieldsForCharacters[i];
+            var textField = m_textFieldsForCharacters[i];
             if (textField != null) 
             {
                 textField.x = pointLocation.x;
@@ -131,7 +130,7 @@ class CurvedText extends Sprite
     {
         super.dispose();
         
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...m_textFieldsForCharacters.length){
             var textField : TextField = m_textFieldsForCharacters[i];
             if (textField != null) 
@@ -140,6 +139,6 @@ class CurvedText extends Sprite
             }
         }
         
-        as3hx.Compat.setArrayLength(m_textFieldsForCharacters, 0);
+		m_textFieldsForCharacters = new Array<TextField>();
     }
 }

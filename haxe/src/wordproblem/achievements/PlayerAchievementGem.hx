@@ -1,5 +1,6 @@
 package wordproblem.achievements;
 
+import haxe.Constraints.Function;
 
 import starling.animation.Transitions;
 import starling.animation.Tween;
@@ -89,16 +90,16 @@ class PlayerAchievementGem extends Sprite
                     var expandDuration : Float = duration * 0.5;
                     var fillExpand : Tween = new Tween(m_filledImage, expandDuration, Transitions.EASE_OUT_BOUNCE);
                     fillExpand.scaleTo(1);
-                    Starling.juggler.add(fillExpand);
+                    Starling.current.juggler.add(fillExpand);
                     
                     m_trophyImage.scaleX = m_trophyImage.scaleY = 0.0;
                     m_gemContainer.addChild(m_trophyImage);
                     var trophyExpand : Tween = new Tween(m_trophyImage, expandDuration, Transitions.EASE_OUT_BOUNCE);
                     trophyExpand.scaleTo(1);
                     trophyExpand.onComplete = onComplete;
-                    Starling.juggler.add(trophyExpand);
+                    Starling.current.juggler.add(trophyExpand);
                 };
-        Starling.juggler.add(centerShrink);
+        Starling.current.juggler.add(centerShrink);
     }
     
     private function getCenteredImage(colorName : String, suffix : String, assetManager : AssetManager) : Image

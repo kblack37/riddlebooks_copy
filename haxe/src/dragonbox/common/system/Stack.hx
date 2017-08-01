@@ -48,7 +48,7 @@ class Stack
     {
         var popped : Array<Dynamic> = new Array<Dynamic>();
         
-        var object : Dynamic;
+        var object : Dynamic = null;
         while (peek().id != id)
         {
             object = pop();

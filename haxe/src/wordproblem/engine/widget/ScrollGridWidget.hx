@@ -249,7 +249,7 @@ class ScrollGridWidget extends Sprite
                 
                 
                 
-                var i : Int;
+                var i : Int = 0;
                 var numObjects : Int = m_objects.length;
                 for (i in 0...numObjects){
                     var displayObject : DisplayObject = m_objects[i];
@@ -336,8 +336,8 @@ class ScrollGridWidget extends Sprite
         if (m_viewPort.containsPoint(m_localPointBuffer)) 
         {
             var renderComponents : Array<DisplayObject> = this.getObjects();
-            var i : Int;
-            var renderComponent : DisplayObject;
+            var i : Int = 0;
+            var renderComponent : DisplayObject = null;
             var numObjects : Int = renderComponents.length;
             for (i in 0...numObjects){
                 renderComponent = renderComponents[i];
@@ -391,7 +391,7 @@ class ScrollGridWidget extends Sprite
     
     public function batchAddRemove(objectsToAdd : Array<DisplayObject>, objectsToRemove : Array<DisplayObject>, layoutImmediately : Bool) : Void
     {
-        var i : Int;
+        var i : Int = 0;
         if (objectsToAdd != null) 
         {
             for (i in 0...objectsToAdd.length){
@@ -401,7 +401,7 @@ class ScrollGridWidget extends Sprite
         
         if (objectsToRemove != null) 
         {
-            var objectToRemove : DisplayObject;
+            var objectToRemove : DisplayObject = null;
             for (i in 0...objectsToRemove.length){
                 this.removeObject(objectsToRemove[i], false);
             }
@@ -430,10 +430,10 @@ class ScrollGridWidget extends Sprite
         
         
         
-        var i : Int;
-        var actualObject : DisplayObject;
+        var i : Int = 0;
+        var actualObject : DisplayObject = null;
         var numActualObjects : Int = m_objects.length;
-        as3hx.Compat.setArrayLength(m_dummyBoundsBuffer, 0);
+		m_dummyBoundsBuffer = new Array<Rectangle>();
         for (i in 0...numActualObjects){
             actualObject = m_objects[i];
             
@@ -464,11 +464,11 @@ class ScrollGridWidget extends Sprite
         var xOffset : Float = m_gap + m_viewPort.x;
         var yOffset : Float = 0;
         for (i in 0...numActualObjects){
-            dummyBounds = m_dummyBoundsBuffer[i];
+            var dummyBounds = m_dummyBoundsBuffer[i];
             dummyBounds.x = xOffset;
             
             // If the object spills over the horizontal limit, then reset to a new row
-            if (dummyBounds.right > Int.MAX_VALUE) 
+            if (dummyBounds.right > Math.pow(2, 30)) 
             {
                 // Place the object as the first item in the next row.
                 xOffset = m_gap;
@@ -496,10 +496,10 @@ class ScrollGridWidget extends Sprite
             // For a row find the max height of the bounds, attempt to center all objects
             var numItemsInRow : Int = itemsPerRow[i];
             var lastItemInRowIndex : Int = currentItemIndex + numItemsInRow;
-            var j : Int;
+            var j : Int = 0;
             var maxHeightInRow : Float = 0;
             for (j in currentItemIndex...lastItemInRowIndex){
-                dummyBounds = m_dummyBoundsBuffer[j];
+                var dummyBounds = m_dummyBoundsBuffer[j];
                 if (dummyBounds.height > maxHeightInRow) 
                 {
                     maxHeightInRow = dummyBounds.height;
@@ -507,7 +507,7 @@ class ScrollGridWidget extends Sprite
             }
             
             for (j in currentItemIndex...lastItemInRowIndex){
-                dummyBounds = m_dummyBoundsBuffer[j];
+                var dummyBounds = m_dummyBoundsBuffer[j];
                 dummyBounds.y = (maxHeightInRow - dummyBounds.height) * 0.5 + (m_viewPort.height - maxHeightInRow) * 0.5 + m_viewPort.y;
             }
             
@@ -530,16 +530,16 @@ class ScrollGridWidget extends Sprite
         {
             currentItemIndex = 0;
             for (i in 0...numRows){
-                numItemsInRow = itemsPerRow[i];
+                var numItemsInRow = itemsPerRow[i];
                 var firstItemInRow : Rectangle = m_dummyBoundsBuffer[currentItemIndex];
                 
-                lastItemInRowIndex = currentItemIndex + numItemsInRow - 1;
+                var lastItemInRowIndex = currentItemIndex + numItemsInRow - 1;
                 var lastItemInRow : Rectangle = m_dummyBoundsBuffer[lastItemInRowIndex];
                 var totalRowWidth : Float = lastItemInRow.right - firstItemInRow.left + m_gap * 2;
                 xOffset = (m_viewPort.width - totalRowWidth) * 0.5;
                 
                 for (j in currentItemIndex...lastItemInRowIndex + 1){
-                    dummyBounds = m_dummyBoundsBuffer[j];
+                    var dummyBounds = m_dummyBoundsBuffer[j];
                     dummyBounds.x += xOffset;
                 }
                 currentItemIndex += numItemsInRow;
@@ -558,7 +558,7 @@ class ScrollGridWidget extends Sprite
         
         for (i in 0...numActualObjects){
             actualObject = m_objects[i];
-            dummyBounds = m_dummyBoundsBuffer[i];
+            var dummyBounds = m_dummyBoundsBuffer[i];
             
             // If the object has changed its pivot then we need to re-adjust the coordinates again
             actualObject.x = dummyBounds.x;

@@ -4,7 +4,6 @@ import wordproblem.playercollections.scripts.PlayerCollectionViewer;
 
 import flash.geom.Point;
 import flash.geom.Rectangle;
-import flash.utils.Dictionary;
 
 import dragonbox.common.ui.MouseState;
 import dragonbox.common.util.ListUtil;
@@ -56,7 +55,7 @@ class PlayerCollectionItemViewer extends PlayerCollectionViewer
     private var m_collectionInformation : Array<Dynamic>;
     
     /** Used to allow faster lookup of category information */
-    private var m_categoryIdToCollectionObjectMap : Dictionary;
+    private var m_categoryIdToCollectionObjectMap : Map<String, Dynamic>;
     private var m_playerInventory : ItemInventory;
     private var m_itemDataSource : ItemDataSource;
     
@@ -112,7 +111,7 @@ class PlayerCollectionItemViewer extends PlayerCollectionViewer
         super(canvasContainer, assetManager, mouseState, buttonColorData, id, isActive);
         
         m_collectionInformation = collectionInformation;
-        m_categoryIdToCollectionObjectMap = new Dictionary();
+        m_categoryIdToCollectionObjectMap = new Map();
         m_playerInventory = playerInventory;
         m_itemDataSource = itemDataSource;
         m_collectionCategoriesPages = new Array<Array<String>>();
@@ -139,7 +138,7 @@ class PlayerCollectionItemViewer extends PlayerCollectionViewer
             if (m_currentViewLevel == PlayerCollectionItemViewer.VIEW_LEVEL_CATEGORIES) 
             {
                 var categoryButtonIndexContainingPoint : Int = -1;
-                var i : Int;
+                var i : Int = 0;
                 var numButtons : Int = m_activeCategoryButtons.length;
                 for (i in 0...numButtons){
                     var categoryButton : PlayerCollectionCategoryButton = m_activeCategoryButtons[i];
@@ -172,7 +171,7 @@ class PlayerCollectionItemViewer extends PlayerCollectionViewer
             else if (m_currentViewLevel == PlayerCollectionItemViewer.VIEW_LEVEL_ITEMS_IN_CATEGORY) 
             {
                 var itemButtonIndexContainingPoint : Int = -1;
-                numButtons = m_activeItemButtons.length;
+                var numButtons = m_activeItemButtons.length;
                 for (i in 0...numButtons){
                     var itemButton : PlayerCollectionItemButton = m_activeItemButtons[i];
                     itemButton.getBounds(m_canvasContainer, m_localBoundsBuffer);
@@ -191,7 +190,7 @@ class PlayerCollectionItemViewer extends PlayerCollectionViewer
                 {
                     if (m_mouseState.leftMousePressedThisFrame) 
                     {
-                        itemButton = m_activeItemButtons[itemButtonIndexContainingPoint];
+                        var itemButton = m_activeItemButtons[itemButtonIndexContainingPoint];
                         if (!itemButton.getLocked()) 
                         {
                             itemButton.selected = false;
@@ -297,10 +296,10 @@ class PlayerCollectionItemViewer extends PlayerCollectionViewer
         
         // Do some initial pre-processing of collection type information
         var playerItemIdComponents : Array<Component> = m_playerInventory.componentManager.getComponentListForType(ItemIdComponent.TYPE_ID);
-        var i : Int;
+        var i : Int = 0;
         var numCollectionTypes : Int = m_collectionInformation.length;
         var categoryIdList : Array<String> = new Array<String>();
-        var collectionCategory : Dynamic;
+        var collectionCategory : Dynamic = null;
         for (i in 0...numCollectionTypes){
             collectionCategory = m_collectionInformation[i];
             
@@ -311,14 +310,14 @@ class PlayerCollectionItemViewer extends PlayerCollectionViewer
             // This will inform us what items the player has left to earn in a collection
             // In the type map we also cache whether the player has earned that item already
             // in a new array (use the instance id)
-            var j : Int;
+            var j : Int = 0;
             var itemIdsEarned : Array<Dynamic> = [];
             var numItemIdsInTypeEarned : Int = 0;
             var numItemIds : Int = itemIds.length;
             for (j in 0...numItemIds){
                 var itemId : String = itemIds[j];
-                var k : Int;
-                var itemIdComponent : ItemIdComponent;
+                var k : Int = 0;
+                var itemIdComponent : ItemIdComponent = null;
                 var numPlayerItemIds : Int = playerItemIdComponents.length;
                 for (k in 0...numPlayerItemIds){
                     itemIdComponent = try cast(playerItemIdComponents[k], ItemIdComponent) catch(e:Dynamic) null;
@@ -359,7 +358,7 @@ class PlayerCollectionItemViewer extends PlayerCollectionViewer
         clearCategoryItemsView(true);
         clearCategoryView();
         clearItemView();
-        as3hx.Compat.setArrayLength(m_collectionCategoriesPages, 0);
+		m_collectionCategoriesPages = new Array<Array<String>>();
         
         m_currentViewLevel = -1;
     }
@@ -372,7 +371,7 @@ class PlayerCollectionItemViewer extends PlayerCollectionViewer
         var buttonWidth : Float = 400;
         var buttonHeight : Float = 70;
         var categoriesForPage : Array<String> = m_collectionCategoriesPages[pageIndex];
-        var i : Int;
+        var i : Int = 0;
         var numCategoriesForPage : Int = categoriesForPage.length;
         for (i in 0...numCategoriesForPage){
             var categoryId : String = categoriesForPage[i];
@@ -381,19 +380,22 @@ class PlayerCollectionItemViewer extends PlayerCollectionViewer
             var categoryInformationObject : Dynamic = Reflect.field(m_categoryIdToCollectionObjectMap, categoryId);
             
             var button : PlayerCollectionCategoryButton = new PlayerCollectionCategoryButton(
-            categoryInformationObject, m_assetManager, buttonWidth, buttonHeight, m_buttonColorData.getUpButtonColor(), 
+				categoryInformationObject,
+				m_assetManager,
+				buttonWidth,
+				buttonHeight,
+				m_buttonColorData.getUpButtonColor()
             );
             m_activeCategoryButtons.push(button);
-        }  // Need to now layout the category buttons  
-        
-        
-        
+        }
+		
+		// Need to now layout the category buttons  
         var gap : Float = 12;
         var xOffset : Float = (800 - buttonWidth) * 0.5;
         var yOffset : Float = m_titleText.y + m_titleText.height;
         var numButtons : Int = m_activeCategoryButtons.length;
         for (i in 0...numButtons){
-            button = m_activeCategoryButtons[i];
+            var button = m_activeCategoryButtons[i];
             button.x = xOffset;
             button.y = yOffset;
             m_canvasContainer.addChild(button);
@@ -423,7 +425,7 @@ class PlayerCollectionItemViewer extends PlayerCollectionViewer
         var typicalWidth : Float = categoryInformationObject.typicalWidth;
         var typicalHeight : Float = categoryInformationObject.typicalHeight;
         
-        var i : Int;
+        var i : Int = 0;
         var numItemsForPage : Int = categoryItemsForPage.length;
         for (i in 0...numItemsForPage){
             var itemId : String = categoryItemsForPage[i];
@@ -447,18 +449,18 @@ class PlayerCollectionItemViewer extends PlayerCollectionViewer
             // Render item differently if the item was earned by player or not (show lock if not)
             var earnedItem : Bool = Lambda.indexOf(allInstanceIds, itemId) >= 0;
             var button : PlayerCollectionItemButton = new PlayerCollectionItemButton(textureName, itemId, !earnedItem, m_assetManager, 
-            typicalWidth, typicalHeight, 
-            m_buttonColorData.getUpButtonColor(), 
-            XColor.shadeColor(m_buttonColorData.getUpButtonColor(), 0.3), 
-            );
+				typicalWidth, typicalHeight, 
+				m_buttonColorData.getUpButtonColor(), 
+				XColor.shadeColor(m_buttonColorData.getUpButtonColor(), 0.3)
+			);
             m_activeItemButtons.push(button);
-        }  // Need to now layout the category buttons  
-        
-        
-        
+        }
+		
+		// Need to now layout the category buttons  
         var columns : Int = categoryInformationObject.columnsPerPage;
-        var rows : Int = categoryInformationObject.rowsPerPage;  // Fill in by column order  
-        
+        var rows : Int = categoryInformationObject.rowsPerPage;
+		
+		// Fill in by column order  
         var spanningWidth : Float = 800;
         var spanningHeight : Float = 400;
         var calculatedHorizontalGap : Float = (spanningWidth - columns * typicalWidth) / (columns + 1);
@@ -467,9 +469,9 @@ class PlayerCollectionItemViewer extends PlayerCollectionViewer
         var yOffset : Float = m_titleText.height;
         var numButtons : Int = m_activeItemButtons.length;
         for (i in 0...numButtons){
-            var rowIndex : Int = i / columns;
+            var rowIndex : Int = Std.int(i / columns);
             var columnIndex : Int = i % columns;
-            button = m_activeItemButtons[i];
+            var button = m_activeItemButtons[i];
             button.x = columnIndex * typicalWidth + calculatedHorizontalGap * (columnIndex + 1);
             button.y = rowIndex * typicalHeight + calculatedVerticalGap * (rowIndex + 1) + yOffset;
             m_canvasContainer.addChild(button);
@@ -498,7 +500,7 @@ class PlayerCollectionItemViewer extends PlayerCollectionViewer
         {
             categoryButton.removeFromParent(true);
         }
-        as3hx.Compat.setArrayLength(m_activeCategoryButtons, 0);
+		m_activeCategoryButtons = new Array<PlayerCollectionCategoryButton>();
     }
     
     private function changeToCategoryItemsView(categoryInformationObject : Dynamic) : Void
@@ -512,9 +514,10 @@ class PlayerCollectionItemViewer extends PlayerCollectionViewer
             // Set title to name of category
             m_titleText.text = categoryInformationObject.id;
             
-            var itemsPerPage : Int = categoryInformationObject.columnsPerPage * categoryInformationObject.rowsPerPage;
+            var itemsPerPage : Int = Std.int(categoryInformationObject.columnsPerPage * categoryInformationObject.rowsPerPage);
+			var categoryInformationObjectItemIds : Array<Dynamic> = try cast(categoryInformationObject.itemIds, Array<Dynamic>) catch (e : Dynamic) null;
             var itemIdsInCategory : Array<String> = new Array<String>();
-            for (itemId/* AS3HX WARNING could not determine type for var: itemId exp: EField(EIdent(categoryInformationObject),itemIds) type: null */ in categoryInformationObject.itemIds)
+            for (itemId in categoryInformationObjectItemIds)
             {
                 itemIdsInCategory.push(itemId);
             }
@@ -547,8 +550,8 @@ class PlayerCollectionItemViewer extends PlayerCollectionViewer
             {
                 itemButton.removeFromParent(true);
             }
-            as3hx.Compat.setArrayLength(m_activeItemButtons, 0);
-            as3hx.Compat.setArrayLength(m_collectionItemPages, 0);
+			m_activeItemButtons = new Array<PlayerCollectionItemButton>();
+			m_collectionItemPages = new Array<Array<String>>();
             
             // undo button is no longer needed
             m_backButton.removeFromParent();
@@ -576,13 +579,13 @@ class PlayerCollectionItemViewer extends PlayerCollectionViewer
         // Assuming the item texture was drawn in the category screen
         var textureDataObject : Dynamic = textureComponent.textureCollection[0];
         m_activeItemScreen = new PlayerCollectionItemScreen(
-                textureDataObject.textureName, 
-                nameComponent.name, 
-                ((descriptionComponent != null)) ? descriptionComponent.desc : "", 
-                600, 
-                400, 
-                m_assetManager, 
-                );
+            textureDataObject.textureName, 
+            nameComponent.name, 
+            ((descriptionComponent != null)) ? descriptionComponent.desc : "", 
+            600, 
+            400, 
+            m_assetManager
+        );
         m_activeItemScreen.x = 100;
         m_activeItemScreen.y = m_titleText.y + m_titleText.height + 10;
         m_canvasContainer.addChild(m_activeItemScreen);

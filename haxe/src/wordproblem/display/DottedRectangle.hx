@@ -3,8 +3,8 @@ package wordproblem.display;
 
 import flash.geom.Rectangle;
 
-import feathers.display.Scale9Image;
-import feathers.textures.Scale9Textures;
+//import feathers.display.Scale9Image;
+//import feathers.textures.Scale9Textures;
 
 import starling.display.Image;
 import starling.display.Sprite;
@@ -20,7 +20,9 @@ class DottedRectangle extends Sprite
     /**
      * Reference to a scalable version of the background
      */
-    private var m_backgroundNineSliceImage : Scale9Image;
+	// TODO: this was a Scale9Image from the feathers library and will
+	// probably have to be fixed
+    private var m_backgroundNineSliceImage : Image;
     
     /**
      * Reference to background texture that has no nine slice
@@ -71,7 +73,7 @@ class DottedRectangle extends Sprite
             
             if (textureScalingGrid != null) 
             {
-                m_backgroundNineSliceImage = new Scale9Image(new Scale9Textures(backgroundRegularTexture, textureScalingGrid));
+                m_backgroundNineSliceImage = new Image(Texture.fromTexture(backgroundRegularTexture, textureScalingGrid));
             }
         }
     }
@@ -100,8 +102,12 @@ class DottedRectangle extends Sprite
         
         
         if (m_backgroundNineSliceImage != null &&
-            m_backgroundNineSliceImage.textures.scale9Grid.left * 2 <= width &&
-            m_backgroundNineSliceImage.textures.scale9Grid.top * 2 <= height) 
+			// TODO: this conversion from a Scale9Image to a starling image
+			// is probably not correct and will need to be fixed
+			m_backgroundNineSliceImage.texture.width * 2 <= width &&
+			m_backgroundNineSliceImage.texture.height * 2 <= height)
+            //m_backgroundNineSliceImage.textures.scale9Grid.left * 2 <= width &&
+            //m_backgroundNineSliceImage.textures.scale9Grid.top * 2 <= height) 
         {
             m_backgroundNineSliceImage.width = width;
             m_backgroundNineSliceImage.height = height;
@@ -166,7 +172,7 @@ class DottedRectangle extends Sprite
         m_dottedLineImages.push(bottomRightCorner);
         
         
-        var i : Int;
+        var i : Int = 0;
         var xOffset : Float = cornerTextureWidth + newHorizontalSpacing;
         var yTop : Float = 0;
         var yBottom : Float = height - lineTextureHeight;

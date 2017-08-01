@@ -18,12 +18,13 @@ class SfxToggleButton extends AudioButton
             assetManager : AssetManager,
             color : Int)
     {
-        super(width, height, textFormatUp, textFormatHover, assetManager, StringTable.lookup("sfx") + ":", color);
+		// TODO: uncomment once cgs library is fixed
+        super(width, height, textFormatUp, textFormatHover, assetManager, /*StringTable.lookup("sfx") + ":"*/ "", color);
         
         // Adjust sfx based on the saved value
         if (m_localSharedObject.data.exists("sfx")) 
         {
-            Audio.instance.sfxOn = m_localSharedObject.data["sfx"];
+            Audio.instance.sfxOn = m_localSharedObject.data.sfx;
         }
         
         this.redrawLabel(Audio.instance.sfxOn);
@@ -45,7 +46,7 @@ class SfxToggleButton extends AudioButton
         this.redrawLabel(Audio.instance.sfxOn);
         
         // Save value to shared object
-        m_localSharedObject.data["sfx"] = audioDriver.sfxOn;
+        m_localSharedObject.data.sfx = audioDriver.sfxOn;
         m_localSharedObject.flush();
     }
 }

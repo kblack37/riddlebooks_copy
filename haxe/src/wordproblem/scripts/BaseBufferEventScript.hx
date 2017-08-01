@@ -43,15 +43,15 @@ class BaseBufferEventScript extends ScriptNode
     override public function reset() : Void
     {
         // Make sure buffers are cleared on each visit frame
-        as3hx.Compat.setArrayLength(m_eventTypeBuffer, 0);
-        as3hx.Compat.setArrayLength(m_eventParamBuffer, 0);
+		m_eventTypeBuffer = new Array<String>();
+		m_eventParamBuffer = new Array<Dynamic>();
     }
     
     private function iterateThroughBufferedEvents() : Void
     {
         if (m_eventTypeBuffer.length > 0) 
         {
-            var i : Int;
+            var i : Int = 0;
             var numEvents : Int = m_eventTypeBuffer.length;
             for (i in 0...numEvents){
                 var eventType : String = m_eventTypeBuffer[i];
@@ -59,8 +59,8 @@ class BaseBufferEventScript extends ScriptNode
                 processBufferedEvent(eventType, eventParam);
             }
             
-            as3hx.Compat.setArrayLength(m_eventTypeBuffer, 0);
-            as3hx.Compat.setArrayLength(m_eventParamBuffer, 0);
+			m_eventTypeBuffer = new Array<String>();
+			m_eventParamBuffer = new Array<Dynamic>();
         }
     }
     

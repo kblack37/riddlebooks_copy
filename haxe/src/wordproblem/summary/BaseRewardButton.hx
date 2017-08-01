@@ -49,7 +49,7 @@ class BaseRewardButton extends Sprite
         m_glowTween.animate("scaleX", newScale);
         m_glowTween.animate("scaleY", newScale);
         m_glowTween.animate("alpha", 0.8);
-        Starling.juggler.add(m_glowTween);
+        Starling.current.juggler.add(m_glowTween);
     }
     
     /**
@@ -67,6 +67,6 @@ class BaseRewardButton extends Sprite
     {
         super.dispose();
         
-        Starling.juggler.remove(m_glowTween);
+        Starling.current.juggler.remove(m_glowTween);
     }
 }

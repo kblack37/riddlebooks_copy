@@ -398,8 +398,8 @@ class UrlRequestHandler implements IUrlRequestHandler
         var requestCount : Int = 0;
         
         var currTime : Int = Math.round(haxe.Timer.stamp() * 1000);
-        var currRequestTime : Int;
-        var timeout : Int;
+        var currRequestTime : Int = 0;
+        var timeout : Int = 0;
 		var request : IUrlRequest; 
         for (request in _timeoutRequests.keys())
         {
@@ -454,7 +454,7 @@ class UrlRequestHandler implements IUrlRequestHandler
             completedRequests.push(requestId);
         }
         
-        var requestData : Dynamic;
+        var requestData : Dynamic = null;
         
         //Save pending requests.
         var pendingRequests : Array<IUrlRequest> = [];
@@ -483,7 +483,7 @@ class UrlRequestHandler implements IUrlRequestHandler
     
     private function getRequestsObjectData(requests : Array<IUrlRequest>) : Array<Dynamic>
     {
-        var requestData : Dynamic;
+        var requestData : Dynamic = null;
         
         //Save delayed requests.
         var requestsArray : Array<Dynamic> = [];

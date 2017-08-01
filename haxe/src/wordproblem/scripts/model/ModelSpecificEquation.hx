@@ -2,6 +2,7 @@ package wordproblem.scripts.model;
 
 
 import cgs.audio.Audio;
+import dragonbox.common.math.vectorspace.RealsVectorSpace;
 
 import dragonbox.common.expressiontree.EquationSolver;
 import dragonbox.common.expressiontree.ExpressionNode;
@@ -9,11 +10,10 @@ import dragonbox.common.expressiontree.ExpressionUtil;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.math.vectorspace.IVectorSpace;
 
-import feathers.controls.Button;
-
 import starling.animation.Transitions;
 import starling.animation.Tween;
 import starling.core.Starling;
+import starling.display.Button;
 import starling.display.DisplayObject;
 import starling.display.DisplayObjectContainer;
 import starling.display.Image;
@@ -88,7 +88,7 @@ class ModelSpecificEquation extends BaseGameScript
         m_equationSolver = new EquationSolver();
         m_equations = new Array<ExpressionComponent>();
         m_equationSets = new Array<Array<String>>();
-        m_aliasValueToTermMap = new Dynamic();
+        m_aliasValueToTermMap = { };
     }
     
     /**
@@ -106,7 +106,7 @@ class ModelSpecificEquation extends BaseGameScript
      */
     public function setTermValueAliases(value : String, aliases : Array<String>) : Void
     {
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...aliases.length){
             Reflect.setField(m_aliasValueToTermMap, Std.string(aliases[i]), value);
         }
@@ -120,17 +120,7 @@ class ModelSpecificEquation extends BaseGameScript
      */
     public function deleteTermValueAlias(value : String = null) : Void
     {
-        if (value == null) 
-        {
-            for (key in Reflect.fields(m_aliasValueToTermMap))
-            {
-                ;
-            }
-        }
-        else if (m_aliasValueToTermMap.exists(value)) 
-        {
-            ;
-        }
+
     }
     
     override public function setIsActive(value : Bool) : Void
@@ -163,7 +153,7 @@ class ModelSpecificEquation extends BaseGameScript
             
             if (Std.is(m_checkEquationButton, Button)) 
             {
-                (try cast(m_checkEquationButton, Button) catch(e:Dynamic) null).isEnabled = value;
+                (try cast(m_checkEquationButton, Button) catch(e:Dynamic) null).enabled = value;
             }
         }
     }
@@ -204,11 +194,11 @@ class ModelSpecificEquation extends BaseGameScript
      */
     public function addEquation(id : String, decompiledEquation : String, strictMatch : Bool, addToSetOfOne : Bool = false) : Void
     {
-        var expressionRoot : ExpressionNode = m_expressionCompiler.compile(decompiledEquation).head;
+        var expressionRoot : ExpressionNode = m_expressionCompiler.compile(decompiledEquation);
         var equationComponent : ExpressionComponent = new ExpressionComponent(
-        id, 
-        decompiledEquation, 
-        expressionRoot, 
+			id, 
+			decompiledEquation, 
+			expressionRoot
         );
         equationComponent.strictMatch = strictMatch;
         
@@ -220,7 +210,6 @@ class ModelSpecificEquation extends BaseGameScript
         
         m_gameEngine.dispatchEventWith(GameEvent.ADD_NEW_EQUATION, false, {
                     expression : expressionRoot
-
                 });
     }
     
@@ -246,8 +235,8 @@ class ModelSpecificEquation extends BaseGameScript
      */
     public function resetEquations() : Void
     {
-        as3hx.Compat.setArrayLength(m_equations, 0);
-        as3hx.Compat.setArrayLength(m_equationSets, 0);
+		m_equations = new Array<ExpressionComponent>();
+		m_equationSets = new Array<Array<String>>();
     }
     
     /**
@@ -256,11 +245,11 @@ class ModelSpecificEquation extends BaseGameScript
      */
     public function getAtLeastOneSetComplete() : Bool
     {
-        var i : Int;
+        var i : Int = 0;
         var idToEquationHasBeenModeled : Dynamic = { };
         for (i in 0...m_equations.length){
             var equation : ExpressionComponent = m_equations[i];
-            idToEquationHasBeenModeled[equation.entityId] = equation.hasBeenModeled;
+			Reflect.setField(idToEquationHasBeenModeled, equation.entityId, equation.hasBeenModeled);
         }
         
         var oneSetComplete : Bool = false;
@@ -268,7 +257,7 @@ class ModelSpecificEquation extends BaseGameScript
         for (i in 0...numEquationSets){
             var allEquationsInSetModeled : Bool = true;
             var equationSetIds : Array<String> = m_equationSets[i];
-            var j : Int;
+            var j : Int = 0;
             for (j in 0...equationSetIds.length){
                 var equationId : String = equationSetIds[j];
                 if (!Reflect.field(idToEquationHasBeenModeled, equationId)) 
@@ -290,7 +279,7 @@ class ModelSpecificEquation extends BaseGameScript
     
     public function getNumberEquationsLeftToModel() : Int
     {
-        var i : Int;
+        var i : Int = 0;
         var numEquationsLeftToModel : Int = 0;
         var numEquationsToModel : Int = m_equations.length;
         for (i in 0...numEquationsToModel){
@@ -330,7 +319,7 @@ class ModelSpecificEquation extends BaseGameScript
          */
         
         // Log equation changed
-        var loggingDetails : Dynamic = new Dynamic();
+        var loggingDetails : Dynamic = { };
         var givenEquation : ExpressionNode = m_gameEngine.getExpressionFromTermAreas();
         
         // Build result
@@ -358,12 +347,11 @@ class ModelSpecificEquation extends BaseGameScript
         //log the button click first before checking the equation modeling.
         m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.EQUALS_CLICKED_EVENT, false, {
                     buttonName : "EqualsButton"
-
                 });
         
         var currentLevel : WordProblemLevelData = m_gameEngine.getCurrentLevel();
         var allEquationsModeled : Bool = (this.getNumberEquationsLeftToModel() == 0);
-        var vectorSpace : IVectorSpace = m_expressionCompiler.getVectorSpace();
+        var vectorSpace : RealsVectorSpace = m_expressionCompiler.getVectorSpace();
         
         if (!allEquationsModeled) 
         {
@@ -439,7 +427,7 @@ class ModelSpecificEquation extends BaseGameScript
             m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.VALIDATE_EQUATION_MODEL, false, loggingDetails);
             
             // Provide visual feedback of whether the equation was correct or not
-            var i : Int;
+            var i : Int = 0;
             var color : Int = ((solvedEquation)) ? 0x00FF00 : 0xFF0000;
             for (i in 0...m_termAreas.length){
                 m_termAreas[i].fadeOutBackground(color);
@@ -463,7 +451,7 @@ class ModelSpecificEquation extends BaseGameScript
             var startingScaleFactor : Float = endingScaleFactor * 3;
             targetIcon.scaleX = targetIcon.scaleY = startingScaleFactor;
             targetIcon.alpha = 0.0;
-            if (modelEquationButton.parent) 
+            if (modelEquationButton.parent != null) 
             {
                 modelEquationButton.parent.addChild(targetIcon);
             }
@@ -481,9 +469,9 @@ class ModelSpecificEquation extends BaseGameScript
                                 {
                                     targetIcon.removeFromParent(true);
                                 };
-                        Starling.juggler.add(fadeOutTween);
+                        Starling.current.juggler.add(fadeOutTween);
                     };
-            Starling.juggler.add(fadeInTween);
+            Starling.current.juggler.add(fadeInTween);
             
             //Provide audio feedback too.
             if (solvedEquation) 
@@ -506,7 +494,7 @@ class ModelSpecificEquation extends BaseGameScript
      *      The equation that was modeled, null if none
      */
     public function checkEquationIsCorrect(rootToCheckAgainst : ExpressionNode,
-            vectorSpace : IVectorSpace,
+            vectorSpace : RealsVectorSpace,
             ignoreAlreadyModeled : Bool) : ExpressionComponent
     {
         // It is possible to model and submit something like x=
@@ -551,11 +539,12 @@ class ModelSpecificEquation extends BaseGameScript
                 if (!equationToModel.hasBeenModeled || !ignoreAlreadyModeled) 
                 {
                     var goalRoot : ExpressionNode = equationToModel.root;
+					var equationsEqual : Bool = false;
                     if (equationToModel.strictMatch) 
                     {
                         // We force that the simplifying assumption that the left side of the goal equation
                         // is always just a definition variable
-                        var equationsEqual : Bool = ExpressionUtil.getExpressionsStructurallyEquivalent(
+                        equationsEqual = ExpressionUtil.getExpressionsStructurallyEquivalent(
                                 goalRoot,
                                 rootToCheck,
                                 true,
@@ -588,7 +577,7 @@ class ModelSpecificEquation extends BaseGameScript
         {
             if (m_aliasValueToTermMap.exists(node.data)) 
             {
-                node.data = m_aliasValueToTermMap[node.data];
+                node.data = Reflect.field(m_aliasValueToTermMap, node.data);
             }
             replaceAliasValues(node.left);
             replaceAliasValues(node.right);

@@ -362,7 +362,7 @@ class CgsLevelLeaf extends CGSObject implements ICgsLevelLeaf
 		 */
     public function hasLock(lockType : String, keyData : Dynamic) : Bool
     {
-        var result : Bool;
+        var result : Bool = false;
         for (lock in m_levelLocks)
         {
             if (lock.lockType == lockType && lock.doesKeyMatch(keyData))
@@ -379,7 +379,7 @@ class CgsLevelLeaf extends CGSObject implements ICgsLevelLeaf
 		 */
     public function editLock(lockType : String, oldKeyData : Dynamic, newKeyData : Dynamic) : Bool
     {
-        var result : Bool;
+        var result : Bool = false;
         if (removeLock(lockType, oldKeyData))
         {
             addLock(lockType, newKeyData);
@@ -393,7 +393,7 @@ class CgsLevelLeaf extends CGSObject implements ICgsLevelLeaf
 		 */
     public function removeLock(lockType : String, keyData : Dynamic) : Bool
     {
-        var result : Bool;
+        var result : Bool = false;
         for (lock in m_levelLocks)
         {
             if (lock.lockType == lockType && lock.doesKeyMatch(keyData))

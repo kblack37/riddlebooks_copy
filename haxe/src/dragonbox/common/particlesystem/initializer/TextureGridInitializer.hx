@@ -67,7 +67,7 @@ class TextureGridInitializer extends Initializer
         particle.textureWidthUV = 1.0 / m_columns;
         particle.textureLeftU = columnIndex * particle.textureWidthUV;
         
-        var rowIndex : Int = m_particleIndex / m_columns;
+        var rowIndex : Int = Std.int(m_particleIndex / m_columns);
         particle.yPosition = m_particleBounds.height * rowIndex;
         particle.textureHeightPixels = m_particleBounds.height;
         particle.textureHeightUV = 1.0 / m_rows;

@@ -43,7 +43,7 @@ class ServerRequestResender
         //Parse all of the server requests that need to be resent.
         _completedRequestIds = new Array<Int>();
         var prevRequestIds : Int = data.completed_request_ids;
-        var newRequestId : Int;
+        var newRequestId : Int = 0;
         for (prevRequestId/* AS3HX WARNING could not determine type for var: prevRequestId exp: EIdent(prevRequestIds) type: Int */ in prevRequestIds)
         {
             newRequestId = getNewRequestId(prevRequestId);
@@ -62,7 +62,7 @@ class ServerRequestResender
     
     private function getNewRequestId(prevRequestId : Int) : Int
     {
-        var newRequestId : Int;
+        var newRequestId : Int = 0;
         if (_remappedRequestIds.exists(prevRequestId))
         {
             newRequestId = _remappedRequestIds[prevRequestId];
@@ -84,11 +84,11 @@ class ServerRequestResender
             return;
         }
         
-        var newRequestId : Int;
+        var newRequestId : Int = 0;
         var currRequestClass : Class<Dynamic>;
-        var currRequest : IUrlRequest;
-        var className : String;
-        var currRequestData : Dynamic;
+        var currRequest : IUrlRequest = null;
+        var className : String = null;
+        var currRequestData : Dynamic = null;
         for (dataObj in requestData)
         {
             className = dataObj.class_name;

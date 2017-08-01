@@ -1,6 +1,8 @@
 package cgs.teacherportal;
+#if js
 import js.Browser;
 import js.html.Window;
+#end
 import cgs.teacherportal.IExternalComm;
 
 

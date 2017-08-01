@@ -5,8 +5,9 @@ import flash.text.TextFormat;
 
 import cgs.audio.Audio;
 
-import feathers.controls.Button;
+import haxe.Constraints.Function;
 
+import starling.display.Button;
 import starling.display.DisplayObject;
 import starling.display.Image;
 import starling.display.Quad;

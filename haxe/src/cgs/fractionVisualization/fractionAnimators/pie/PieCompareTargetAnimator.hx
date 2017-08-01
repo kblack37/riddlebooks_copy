@@ -227,13 +227,13 @@ class PieCompareTargetAnimator implements IFractionAnimator
         // Emphasis data
         var winnerValue : Float = VisualizationUtilities.compareByComparisonType(comparisonType, first.fraction, second.fraction, details);
         var winnerExists : Bool = winnerValue != 0;
-        var winningView : CgsFractionView;
-        var winningModule : PieFractionModule;
+        var winningView : CgsFractionView = null;
+        var winningModule : PieFractionModule = null;
         // var winningSegmentHolder:Sprite;
-        var winningSegment : Sprite;
-        var winningNR : NumberRenderer;
-        var winningPosition : Point;
-        var winningGlowFinalPosition : Point;
+        var winningSegment : Sprite = null;
+        var winningNR : NumberRenderer = null;
+        var winningPosition : Point = null;
+        var winningGlowFinalPosition : Point = null;
         if (winnerExists)
         {
             // Setup winning view

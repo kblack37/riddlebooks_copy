@@ -110,14 +110,14 @@ class EquationSolver
         if (TRACE_STEPS) {trace("Final 0's removed:" + Std.string(rootCopy));
         }
         
-        if (TRACE_STEPS) {trace("Total number of moves: " + Std.parseFloat(assocMoves + reduceMoves + cancelMoves + removeZeroesMoves + multiplyMoves + subtractNonKeyMoves + subtractNonKeyMoves2 + subtractKeyMoves + cancelTwoMoves + removeTwoMoves + divideMoves + finalReduceMoves + finalCancelMoves + finalRemoveZeroesMoves));
+        if (TRACE_STEPS) {trace("Total number of moves: " + (assocMoves + reduceMoves + cancelMoves + removeZeroesMoves + multiplyMoves + subtractNonKeyMoves + subtractNonKeyMoves2 + subtractKeyMoves + cancelTwoMoves + removeTwoMoves + divideMoves + finalReduceMoves + finalCancelMoves + finalRemoveZeroesMoves));
         }  // At this point X should be alone  
         
         if (keyOnLeftSide) {
             return rootCopy;
         }
         else {  //swap right and left  
-            left = rootCopy.left;
+            var left = rootCopy.left;
             rootCopy.left = rootCopy.right;
             rootCopy.right = left;
             return rootCopy;
@@ -158,10 +158,10 @@ class EquationSolver
         getAdditiveTerms(root.right, rightTerms);
         
         // Search thru b1 -> b4 terms by checking pairwise: [b1, b2], [b1, b3], [b1, b4], [b2, b3], [b2, b4], [b3, b4]
-        var i : Int;
-        var j : Int;
-        var termOne : ExpressionNode;
-        var termTwo : ExpressionNode;
+        var i : Int = 0;
+        var j : Int = 0;
+        var termOne : ExpressionNode = null;
+        var termTwo : ExpressionNode = null;
         for (i in 0...leftTerms.length - 1){
             termOne = leftTerms[i];
             if (termOne.isOperator()) {  // || termOne.removedFromTree) {  
@@ -221,14 +221,14 @@ class EquationSolver
             if (termToCheck.data == root.vectorSpace.getDivisionOperator()) {
                 ExpressionUtil.getLeafNodes(termToCheck.left, allLeafNodes);
             }
-            else if (termToCheck.data == root.vectorSpace.getMultiplicationOperator())                 { }
-            else if (termToCheck.data == root.vectorSpace.zero()) {
+            else if (termToCheck.data == root.vectorSpace.getMultiplicationOperator()) { }
+            else if (Std.parseFloat(termToCheck.data) == root.vectorSpace.zero()) {
                 removeMe = true;
             }
             
             if (allLeafNodes.length > 0) {
                 for (leafNode in allLeafNodes){
-                    if (leafNode.data == root.vectorSpace.zero()) {
+                    if (Std.parseFloat(leafNode.data) == root.vectorSpace.zero()) {
                         removeMe = true;
                         break;
                     }
@@ -278,8 +278,8 @@ class EquationSolver
             }
             var numeratorNodes : Array<ExpressionNode> = new Array<ExpressionNode>();
             ExpressionUtil.getLeafNodes(additiveTerm.left, numeratorNodes);
-            var numTerm : ExpressionNode;
-            var denomTerm : ExpressionNode;
+            var numTerm : ExpressionNode = null;
+            var denomTerm : ExpressionNode = null;
             for (numTerm in numeratorNodes){
                 if (keyOnly && !isKey(numTerm)) {
                     continue;
@@ -318,7 +318,7 @@ class EquationSolver
         var moves : Int = 2;
         
         var keyOnLeftSide : Bool = containsKey(root.left);
-        var gatherNode : ExpressionNode;
+        var gatherNode : ExpressionNode = null;
         if (keyOnLeftSide) {
             gatherNode = root.left;
         }
@@ -329,7 +329,7 @@ class EquationSolver
         var additiveTerms : Array<ExpressionNode> = new Array<ExpressionNode>();
         var additiveTermsWithKey : Array<ExpressionNode> = new Array<ExpressionNode>();
         var additiveFactors : Array<ExpressionNode> = new Array<ExpressionNode>();
-        var keyTerm : ExpressionNode;
+        var keyTerm : ExpressionNode = null;
         getAdditiveTerms(gatherNode, additiveTerms);
         for (i in 0...additiveTerms.length){
             var term : ExpressionNode = additiveTerms[i];
@@ -397,7 +397,7 @@ class EquationSolver
                     // Don't remove the last term if we've removed all the rest (have to leave at least one)
                     break;
                 }
-                if (numeratorNodes[i].data == root.vectorSpace.identity()) {
+                if (Std.parseFloat(numeratorNodes[i].data) == root.vectorSpace.identity()) {
                     // Simplify 1*a -> a, one move
                     ExpressionUtil.removeNode(root, numeratorNodes[i]);
                     onesRemoved++;
@@ -501,7 +501,7 @@ class EquationSolver
         
         var keyOnLeftSide : Bool = containsKey(root.left);
         var keyOnRightSide : Bool = containsKey(root.right);
-        var gatherNode : ExpressionNode;
+        var gatherNode : ExpressionNode = null;
         if (keyOnLeftSide) {
             gatherNode = root.left;
         }
@@ -521,7 +521,7 @@ class EquationSolver
         for (subTerm in termsToSubtract){
             // Add (-b) to both sides = one move, eliminate b from left side = 2 moves
             // NOTE: if B contains more than a leaf Node - i.e. b1/b2, etc - this is not a valid move in the game
-            var subtractNode : ExpressionNode;
+            var subtractNode : ExpressionNode = null;
             if (!keyOnLeftSide) {
                 subtractNode = root.left;
             }
@@ -611,7 +611,7 @@ class EquationSolver
         if (keyOnLeftSide && keyOnRightSide) {
             throw new Error("ExpressionTreeUtility.divideBothSidesByKeyCoefficient():\n\rUnexpected Key is found on both sides: " + Std.string(root));
         }
-        var gatherNode : ExpressionNode;
+        var gatherNode : ExpressionNode = null;
         if (keyOnLeftSide) {
             gatherNode = root.left;
         }

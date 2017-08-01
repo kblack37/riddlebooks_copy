@@ -47,8 +47,8 @@ class TextureUVInitializer extends Initializer
         m_textureHeightsUV = new Array<Float>();
         
         // Convert each texture region to a set of uv coordinates
-        var i : Int;
-        var region : Rectangle;
+        var i : Int = 0;
+        var region : Rectangle = null;
         var sourceWidth : Float = textureSourceRegion.width;
         var sourceHeight : Float = textureSourceRegion.height;
         for (i in 0...textureRegions.length){

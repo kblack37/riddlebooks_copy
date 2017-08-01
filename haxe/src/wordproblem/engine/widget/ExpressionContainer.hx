@@ -1,13 +1,15 @@
 package wordproblem.engine.widget;
 
 
+import dragonbox.common.math.vectorspace.RealsVectorSpace;
 import flash.geom.Rectangle;
+import starling.display.Image;
 
 import dragonbox.common.dispose.IDisposable;
 import dragonbox.common.math.vectorspace.IVectorSpace;
 
-import feathers.display.Scale9Image;
-import feathers.textures.Scale9Textures;
+//import feathers.display.Scale9Image;
+//import feathers.textures.Scale9Textures;
 
 import starling.display.DisplayObject;
 import starling.display.Quad;
@@ -47,12 +49,12 @@ class ExpressionContainer extends Sprite implements IDisposable
      */
     private var m_expressionTreeWidget : ExpressionTreeWidget;
     
-    private var m_vectorSpace : IVectorSpace;
+    private var m_vectorSpace : RealsVectorSpace;
     private var m_expressionResources : ExpressionSymbolMap;
     
     private var m_bgLayer : Sprite;
     
-    public function new(vectorSpace : IVectorSpace,
+    public function new(vectorSpace : RealsVectorSpace,
             assetManager : AssetManager,
             expressionSymbolResources : ExpressionSymbolMap,
             equation : ExpressionComponent,
@@ -86,7 +88,7 @@ class ExpressionContainer extends Sprite implements IDisposable
         expressionSymbolResources, 
         assetManager, 
         maxWidth, 
-        maxHeight * 0.9, 
+        maxHeight * 0.9
         );
         expressionTreeWidget.refreshNodes(true, true);
         expressionTreeWidget.buildTreeWidget();
@@ -162,13 +164,14 @@ class ExpressionContainer extends Sprite implements IDisposable
     
     private function createBackgroundImage(textureName : String, assetManager : AssetManager) : DisplayObject
     {
-        var backgroundImage : DisplayObject;
+        var backgroundImage : DisplayObject = null;
         if (textureName != null) 
         {
             var texture : Texture = assetManager.getTexture(textureName);
             var bgPadding : Float = 15;
-            var scale9Texture : Scale9Textures = new Scale9Textures(texture, new Rectangle(bgPadding, bgPadding, texture.width - 2 * bgPadding, texture.height - 2 * bgPadding));
-            backgroundImage = new Scale9Image(scale9Texture);
+			// TODO: these were textures from the feathers library and may need to be fixed
+            var scale9Texture : Texture = Texture.fromTexture(texture, new Rectangle(bgPadding, bgPadding, texture.width - 2 * bgPadding, texture.height - 2 * bgPadding));
+            backgroundImage = new Image(scale9Texture);
         }
         else 
         {

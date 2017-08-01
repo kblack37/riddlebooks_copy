@@ -39,7 +39,7 @@ class CardAttributes
     }
     
     public static var DEFAULT_CARD_ATTRIBUTES : CardAttributes = new CardAttributes(
-        "card_background_square", 0xFFFFFF, 0x000000, 
-        "card_background_square_neg", 0xFFFFFF, 0xFFFFFF, 
+        "assets/card/card_background_square.png", 0xFFFFFF, 0x000000, 
+        "assets/card/card_background_square_neg.png", 0xFFFFFF, 0xFFFFFF, 
         22, "Verdana");
 }

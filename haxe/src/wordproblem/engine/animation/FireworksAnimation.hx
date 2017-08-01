@@ -1,7 +1,7 @@
 package wordproblem.engine.animation;
 
 
-import flash.display3d.Context3DBlendFactor;
+import openfl.display3D.Context3DBlendFactor;
 import flash.geom.Rectangle;
 
 import dragonbox.common.particlesystem.action.Accelerate;
@@ -61,8 +61,8 @@ class FireworksAnimation implements IAnimatable
         
         // Setting up fireworks using Dragon Box animation system
         var textureInitializer : Initializer = new TextureUVInitializer([starBounds, diamondBounds], sourceBounds);
-        var colorInitializer : Initializer;
-        var scaleInitializer : Initializer;
+        var colorInitializer : Initializer = null;
+        var scaleInitializer : Initializer = null;
         var ageAction : Action = new Age(easeInExpo);
         var moveAction : Action = new Move();
         var dragAction : Action = new DragForce(0.5);
@@ -92,15 +92,15 @@ class FireworksAnimation implements IAnimatable
         for (i in 0...NUM_EMITTERS){
             // Set location - randomly, but evenly on the left and right
             var anOffsetMultiplier : Int = offsetMultipliers.splice(Math.floor(Math.random() * offsetMultipliers.length), 1)[0];
-            var burstX : Int = (Math.random() * 400) + (anOffsetMultiplier * 400);
-            var burstY : Int = 50 + Math.random() * 450;
+            var burstX : Int = Std.int((Math.random() * 400) + (anOffsetMultiplier * 400));
+            var burstY : Int = Std.int(50 + Math.random() * 450);
             
             // Set the color - randomly from hsv color space
             colorInitializer = new ColorInitializer(
-                    XColor.getDistributedHsvColor(Math.random()), 
-                    XColor.getDistributedHsvColor(Math.random()), 
-                    false, 
-                    );
+                XColor.getDistributedHsvColor(Math.random()), 
+                XColor.getDistributedHsvColor(Math.random()), 
+                false
+            );
             
             // Set the size of the particles in this firework
             scaleInitializer = new ScaleInitializer(0.2 + Math.random() * 0.8, 0.2 + Math.random() * 0.8, false, 0.2 + Math.random() * 0.8, 0.2 + Math.random() * 0.8);
@@ -157,7 +157,7 @@ class FireworksAnimation implements IAnimatable
      */
     public function play(canvasToAddTo : DisplayObjectContainer) : Void
     {
-        Starling.juggler.add(this);
+        Starling.current.juggler.add(this);
         
         canvasToAddTo.addChild(m_fireworksRenderer);
     }
@@ -179,8 +179,8 @@ class FireworksAnimation implements IAnimatable
             m_timeCount += time;
         }
         
-        var i : Int;
-        var emitter : Emitter;
+        var i : Int = 0;
+        var emitter : Emitter = null;
         for (i in 0...m_burstEmitters.length){
             emitter = m_burstEmitters[i];
             

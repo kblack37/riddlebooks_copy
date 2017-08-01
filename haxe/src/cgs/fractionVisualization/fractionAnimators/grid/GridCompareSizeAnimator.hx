@@ -243,10 +243,10 @@ class GridCompareSizeAnimator implements IFractionAnimator
         // Emphasis
         var winnerValue : Float = VisualizationUtilities.compareByComparisonType(comparisonType, first.fraction, second.fraction, details);
         var winnerExists : Bool = winnerValue != 0;
-        var winningView : CgsFractionView;
-        var winningModule : GridFractionModule;
-        var winningGlowLine : Sprite;
-        var winningGlowFinalPosition : Point;
+        var winningView : CgsFractionView = null;
+        var winningModule : GridFractionModule = null;
+        var winningGlowLine : Sprite = null;
+        var winningGlowFinalPosition : Point = null;
         if (winnerExists)
         {
             // Setup winning view

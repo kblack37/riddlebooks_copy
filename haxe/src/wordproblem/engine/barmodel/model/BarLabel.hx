@@ -110,7 +110,7 @@ class BarLabel
         this.hiddenValue = hiddenValue;
         this.numImages = 1;
         
-        this.id = ((id == null)) ? Std.string(Identifiable.getId(1)) : id;
+        this.id = ((id == null)) ? Std.string(Identifiable.getId()) : id;
         this.color = color;
         m_displayedName = value;
     }
@@ -125,7 +125,7 @@ class BarLabel
         this.isAboveSegment, 
         this.bracketStyle, 
         this.hiddenValue, 
-        this.id, 
+        this.id
         );
         barLabelClone.numImages = this.numImages;
         return barLabelClone;
@@ -154,14 +154,13 @@ class BarLabel
             e : this.endSegmentIndex,
             o : orientation,
             dn : m_displayedName,
-
         };
         return serializedObject;
     }
     
     public function deserialize(data : Dynamic) : Void
     {
-        this.id = id;
+        this.id = data.id;
         this.value = data.v;
         this.startSegmentIndex = data.s;
         this.endSegmentIndex = data.e;
@@ -176,7 +175,7 @@ class BarLabel
             this.bracketStyle = BarLabel.BRACKET_STRAIGHT;
         }
         
-        if (data.exists("dn")) 
+        if (Reflect.hasField(data, "dn")) 
         {
             m_displayedName = data.dn;
         }

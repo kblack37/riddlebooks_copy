@@ -6,8 +6,9 @@ import flash.text.TextFormat;
 import cgs.audio.Audio;
 import cgs.internationalization.StringTable;
 
-import feathers.controls.Button;
+import haxe.Constraints.Function;
 
+import starling.display.Button;
 import starling.display.Image;
 import starling.display.Quad;
 import starling.display.Sprite;
@@ -59,14 +60,15 @@ class CreditsWidget extends Sprite
         var textFormat : TextFormat = new TextFormat(GameFonts.DEFAULT_FONT_NAME, 18, 0xFFFFFF);
         measuringTextField.defaultTextFormat = textFormat;
         
-        var titleText : String = StringTable.lookup("credits");
+		// TODO: uncomment once cgs library is finished
+        var titleText : String = ""; // StringTable.lookup("credits");
         var titleTextField : TextField = new TextField(
-        300, 
-        70, 
-        titleText, 
-        textFormat.font, 
-        36, 
-        0x3399FF, 
+			300, 
+			70, 
+			titleText, 
+			textFormat.font, 
+			36, 
+			0x3399FF
         );
         titleTextField.underline = true;
         titleTextField.x = (backgroundContainerWidth - titleTextField.width) * 0.5;
@@ -75,12 +77,12 @@ class CreditsWidget extends Sprite
         
         var centerForGameScienceText : String = "Produced by the Center for Game Science at the University of Washington";
         var centerForGameScienceTextField : TextField = new TextField(
-        450, 
-        100, 
-        centerForGameScienceText, 
-        textFormat.font, 
-        22, 
-        try cast(textFormat.color, Int) catch(e:Dynamic) null, 
+			450, 
+			100, 
+			centerForGameScienceText, 
+			textFormat.font, 
+			22, 
+			try cast(textFormat.color, Int) catch(e:Dynamic) 0
         );
         centerForGameScienceTextField.x = (backgroundContainerWidth - centerForGameScienceTextField.width) * 0.5;
         centerForGameScienceTextField.y = 50;
@@ -95,7 +97,8 @@ class CreditsWidget extends Sprite
         // Add button to close this screen
         var backButton : Button = WidgetUtil.createGenericColoredButton(
                 assetManager, buttonColor,
-                StringTable.lookup("back"),
+				// TODO: uncomment once cgs library is finished
+                "", //StringTable.lookup("back"),
                 new TextFormat(GameFonts.DEFAULT_FONT_NAME, 24, 0xFFFFFF),
                 new TextFormat(GameFonts.DEFAULT_FONT_NAME, 24, 0xFFFFFF)
                 );

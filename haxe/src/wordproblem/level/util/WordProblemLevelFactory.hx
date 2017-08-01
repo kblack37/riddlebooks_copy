@@ -3,10 +3,10 @@ package wordproblem.level.util;
 import flash.errors.Error;
 
 import cgs.cache.ICgsUserCache;
-import cgs.levelprogression.ICgsLevelManager;
-import cgs.levelprogression.nodes.ICgsLevelNode;
-import cgs.levelprogression.util.ICgsLevelFactory;
-import cgs.levelprogression.util.ICgsLockFactory;
+import cgs.levelProgression.ICgsLevelManager;
+import cgs.levelProgression.nodes.ICgsLevelNode;
+import cgs.levelProgression.util.ICgsLevelFactory;
+import cgs.levelProgression.util.ICgsLockFactory;
 import cgs.user.ICgsUserManager;
 
 import wordproblem.level.nodes.ChapterLevelPack;
@@ -49,7 +49,7 @@ class WordProblemLevelFactory implements ICgsLevelFactory
         m_levelManager = levelManager;
         m_userManager = userManager;
         m_nextLabel = 1;
-        m_levelNodeStorage = new Dynamic();
+        m_levelNodeStorage = { };
         m_cache = cache;
         
         m_defaultLevelType = WordProblemLevelLeaf.NODE_TYPE;
@@ -106,7 +106,7 @@ class WordProblemLevelFactory implements ICgsLevelFactory
      */
     public function getNodeInstance(typeID : String) : ICgsLevelNode
     {
-        var result : ICgsLevelNode;
+        var result : ICgsLevelNode = null;
         
         // Get the node storage for this type, creating the storage if this is a new type
         if (!m_levelNodeStorage.exists(typeID)) 
@@ -145,7 +145,7 @@ class WordProblemLevelFactory implements ICgsLevelFactory
      */
     private function generateNodeInstance(typeID : String, nodeLabel : Int) : ICgsLevelNode
     {
-        var result : ICgsLevelNode;
+        var result : ICgsLevelNode = null;
         
         // List out our custom nodes here
         // In the data file the key fields are named 'levelType' for leaf nodes

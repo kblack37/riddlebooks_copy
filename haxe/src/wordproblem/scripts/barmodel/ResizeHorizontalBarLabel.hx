@@ -105,17 +105,19 @@ class ResizeHorizontalBarLabel extends BaseBarModelScript
         {
             // On a mouse down check that the player has hit within an area of label edge, this initiates a drag
             // The horizontal labels have priority over the verical labels
-            as3hx.Compat.setArrayLength(m_outParamsBuffer, 0);
+			m_outParamsBuffer = new Array<Dynamic>();
             m_globalMouseBuffer.setTo(m_mouseState.mousePositionThisFrame.x, m_mouseState.mousePositionThisFrame.y);
             m_barModelArea.globalToLocal(m_globalMouseBuffer, m_localMouseBuffer);
-            
+            var segmentViews : Array<BarSegmentView> = null;
+			var localX : Float = 0;
+			
             if (m_previewBarLabelView != null) 
             {
                 // Do not let the label go past the first or last segment edges
-                var segmentViews : Array<BarSegmentView> = m_targetBarWholeView.segmentViews;
+                segmentViews = m_targetBarWholeView.segmentViews;
                 var leftEdgeXLimit : Float = segmentViews[0].rigidBody.boundingRectangle.left;
                 var rightEdgeXLimit : Float = segmentViews[segmentViews.length - 1].rigidBody.boundingRectangle.right;
-                var localX : Float = m_localMouseBuffer.x;
+                localX = m_localMouseBuffer.x;
                 if (m_localMouseBuffer.x < leftEdgeXLimit) 
                 {
                     localX = leftEdgeXLimit;
@@ -129,8 +131,8 @@ class ResizeHorizontalBarLabel extends BaseBarModelScript
             if (m_mouseState.leftMousePressedThisFrame) 
             {
                 var barWholeViews : Array<BarWholeView> = m_barModelArea.getBarWholeViews();
-                var i : Int;
-                var barWholeView : BarWholeView;
+                var i : Int = 0;
+                var barWholeView : BarWholeView = null;
                 var numBarWholeViews : Int = barWholeViews.length;
                 for (i in 0...numBarWholeViews){
                     barWholeView = barWholeViews[i];
@@ -139,12 +141,12 @@ class ResizeHorizontalBarLabel extends BaseBarModelScript
                     if (m_outParamsBuffer.length > 0) 
                     {
                         var originalTargetBarLabelView : BarLabelView = try cast(m_outParamsBuffer[0], BarLabelView) catch(e:Dynamic) null;
-                        m_draggingLeftEdge = try cast(m_outParamsBuffer[1], Bool) catch(e:Dynamic) null;
+                        m_draggingLeftEdge = try cast(m_outParamsBuffer[1], Bool) catch(e:Dynamic) false;
                         m_originalLabelViewDraggedEdgeX = ((m_draggingLeftEdge)) ? 
                                 originalTargetBarLabelView.x : 
                                 originalTargetBarLabelView.x + originalTargetBarLabelView.rigidBody.boundingRectangle.width;
                         m_targetBarWholeView = barWholeView;
-                        segmentViews = m_targetBarWholeView.segmentViews;
+                        var segmentViews = m_targetBarWholeView.segmentViews;
                         m_localLabelPivotX = ((m_draggingLeftEdge)) ? 
                                 segmentViews[originalTargetBarLabelView.data.endSegmentIndex].rigidBody.boundingRectangle.right : 
                                 segmentViews[originalTargetBarLabelView.data.startSegmentIndex].rigidBody.boundingRectangle.left;
@@ -161,7 +163,7 @@ class ResizeHorizontalBarLabel extends BaseBarModelScript
                         
                         // Show a small pulse on hit of the label
                         m_ringPulseAnimation.reset(m_localMouseBuffer.x, m_localMouseBuffer.y, m_barModelArea, 0x00FF00);
-                        Starling.juggler.add(m_ringPulseAnimation);
+                        Starling.current.juggler.add(m_ringPulseAnimation);
                         
                         m_previewBarLabelView.addButtonImagesToEdges(m_assetManager.getTexture("card_background_circle"));
                         m_previewBarLabelView.colorEdgeButton(m_draggingLeftEdge, 0x00FF00, 1.0);
@@ -206,7 +208,7 @@ class ResizeHorizontalBarLabel extends BaseBarModelScript
                     // Convert the press and drag point to appear
                     m_localMousePressAnchorX = m_localLabelPivotX - (m_localMousePressAnchorX - m_localLabelPivotX);
                     
-                    transformedPivotX = (m_localLabelPivotX - m_targetBarWholeView.x);
+                    var transformedPivotX = (m_localLabelPivotX - m_targetBarWholeView.x);
                     m_originalLabelViewDraggedEdgeX = (transformedPivotX) - (m_originalLabelViewDraggedEdgeX - transformedPivotX);
                     
                     // Change the color of the dragged button
@@ -218,7 +220,7 @@ class ResizeHorizontalBarLabel extends BaseBarModelScript
                 
                 getClosestSegmentIndexToCurrentMouse(localX, m_localMouseBuffer.y, m_outParamsBuffer);
                 var closestSegmentIndex : Int = Std.parseInt(m_outParamsBuffer[0]);
-                var distanceFromSegment : Float = try cast(m_outParamsBuffer[1], Float) catch(e:Dynamic) null;
+                var distanceFromSegment : Float = try cast(m_outParamsBuffer[1], Float) catch(e:Dynamic) 0;
                 
                 // If do not allow for a label to span nothing
                 var validSpan : Bool = (m_draggingLeftEdge && closestSegmentIndex <= m_previewBarLabelView.data.endSegmentIndex) ||
@@ -256,14 +258,14 @@ class ResizeHorizontalBarLabel extends BaseBarModelScript
                     var deltaX : Float = m_localMousePressAnchorX - localX;
                     
                     // Apply the difference to the original length of the label
-                    originalTargetBarLabelView = getBarLabelViewFromId(m_previewBarLabelView.data.id, m_barModelArea.getBarWholeViews());
-                    endSegmentIndex = originalTargetBarLabelView.data.endSegmentIndex;
-                    startSegmentIndex = originalTargetBarLabelView.data.startSegmentIndex;
-                    startSegmentBounds = segmentViews[startSegmentIndex].rigidBody.boundingRectangle;
-                    endSegmentBounds = segmentViews[endSegmentIndex].rigidBody.boundingRectangle;
+                    var originalTargetBarLabelView = getBarLabelViewFromId(m_previewBarLabelView.data.id, m_barModelArea.getBarWholeViews());
+                    var endSegmentIndex = originalTargetBarLabelView.data.endSegmentIndex;
+                    var startSegmentIndex = originalTargetBarLabelView.data.startSegmentIndex;
+                    var startSegmentBounds = segmentViews[startSegmentIndex].rigidBody.boundingRectangle;
+                    var endSegmentBounds = segmentViews[endSegmentIndex].rigidBody.boundingRectangle;
                     
                     var originalSpanningWidth : Float = endSegmentBounds.right - startSegmentBounds.left;
-                    newLabelLength = ((m_draggingLeftEdge)) ? originalSpanningWidth + deltaX : originalSpanningWidth - deltaX;
+                    var newLabelLength = ((m_draggingLeftEdge)) ? originalSpanningWidth + deltaX : originalSpanningWidth - deltaX;
                     
                     // This should fail in the instance where the label is spanning just one segment that is at the very
                     // end of the bar and the drag tries to make the span even smaller.
@@ -307,7 +309,7 @@ class ResizeHorizontalBarLabel extends BaseBarModelScript
                 
                 // Check if the changes applied to the preview differ from the original bar
                 // Do not dispatch event if the indices do not change
-                originalTargetBarLabelView = getBarLabelViewFromId(m_previewBarLabelView.data.id, m_barModelArea.getBarWholeViews());
+                var originalTargetBarLabelView = getBarLabelViewFromId(m_previewBarLabelView.data.id, m_barModelArea.getBarWholeViews());
                 if (originalTargetBarLabelView.data.startSegmentIndex != m_previewBarLabelView.data.startSegmentIndex ||
                     originalTargetBarLabelView.data.endSegmentIndex != m_previewBarLabelView.data.endSegmentIndex) 
                 {
@@ -380,14 +382,14 @@ class ResizeHorizontalBarLabel extends BaseBarModelScript
     private function getClosestSegmentIndexToCurrentMouse(localX : Float, localY : Float, outParams : Array<Dynamic>) : Void
     {
         // Horizontal means that we should be snapping to the edges of segment
-        var segmentView : BarSegmentView;
+        var segmentView : BarSegmentView = null;
         var segmentViews : Array<BarSegmentView> = m_targetBarWholeView.segmentViews;
         var closestSegmentIndex : Int = -1;
         var closestDistance : Float = 0;
         
         // We need to check for every segment edge (to allow for one edge to roll over into another)
         // Dragging the left side of the label means we are searching for a new start
-        var i : Int;
+        var i : Int = 0;
         var numSegments : Int = segmentViews.length;
         for (i in 0...numSegments){
             segmentView = segmentViews[i];
@@ -428,8 +430,8 @@ class ResizeHorizontalBarLabel extends BaseBarModelScript
      */
     private function checkLabelEdgeHitPoint(point : Point, labelViews : Array<BarLabelView>, outParams : Array<Dynamic>) : Void
     {
-        var i : Int;
-        var labelView : BarLabelView;
+        var i : Int = 0;
+        var labelView : BarLabelView = null;
         var numLabelViews : Int = labelViews.length;
         for (i in 0...numLabelViews){
             labelView = labelViews[i];
@@ -487,12 +489,12 @@ class ResizeHorizontalBarLabel extends BaseBarModelScript
     private function getBarLabelViewFromId(barLabelId : String, barWholeViews : Array<BarWholeView>) : BarLabelView
     {
         var matchingBarLabelView : BarLabelView = null;
-        var i : Int;
-        var barWholeView : BarWholeView;
+        var i : Int = 0;
+        var barWholeView : BarWholeView = null;
         var numBarWholeViews : Int = barWholeViews.length;
         for (i in 0...numBarWholeViews){
             barWholeView = barWholeViews[i];
-            var j : Int;
+            var j : Int = 0;
             var barLabelViews : Array<BarLabelView> = barWholeView.labelViews;
             var numBarLabelViews : Int = barLabelViews.length;
             for (j in 0...numBarLabelViews){
@@ -515,7 +517,7 @@ class ResizeHorizontalBarLabel extends BaseBarModelScript
     private function onRingPulseAnimationComplete() : Void
     {
         // Make sure animation isn't showing
-        Starling.juggler.remove(m_ringPulseAnimation);
+        Starling.current.juggler.remove(m_ringPulseAnimation);
     }
     
     private function onBarModelRedrawn(event : Event) : Void
@@ -531,13 +533,13 @@ class ResizeHorizontalBarLabel extends BaseBarModelScript
         var buttonTexture : Texture = m_assetManager.getTexture("card_background_circle");
         var barWholeViews : Array<BarWholeView> = barModelView.getBarWholeViews();
         var numBarWholeViews : Int = barWholeViews.length;
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...numBarWholeViews){
             var barLabelViews : Array<BarLabelView> = barWholeViews[i].labelViews;
             var numBarLabelViews : Int = barLabelViews.length;
-            var j : Int;
-            var barLabelView : BarLabelView;
-            var barLabelViewBounds : Rectangle;
+            var j : Int = 0;
+            var barLabelView : BarLabelView = null;
+            var barLabelViewBounds : Rectangle = null;
             for (j in 0...numBarLabelViews){
                 barLabelView = barLabelViews[j];
                 if (barLabelView.data.bracketStyle != BarLabel.BRACKET_NONE) 

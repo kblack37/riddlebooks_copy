@@ -54,8 +54,8 @@ class SimplifyNumbers extends BaseTermAreaScript
                     m_gameEngine.getSprite().addChild(widget);
                     
                     // Make sure the origin term area matches the one the mouse is over
-                    var i : Int;
-                    var termArea : TermAreaWidget;
+                    var i : Int = 0;
+                    var termArea : TermAreaWidget = null;
                     for (i in 0...m_termAreas.length){
                         termArea = m_termAreas[i];
                         if (termArea.containsObject(widget)) 

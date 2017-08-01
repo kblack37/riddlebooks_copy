@@ -4,7 +4,6 @@ package wordproblem.player;
 import flash.display.BitmapData;
 import flash.geom.Point;
 import flash.ui.Mouse;
-import flash.ui.MouseCursorData;
 
 import wordproblem.engine.component.Component;
 import wordproblem.engine.component.EquippableComponent;
@@ -85,7 +84,7 @@ class ChangeCursorScript extends BaseBufferEventScript
         
         
         var equippableObjectsOwned : Array<Component> = m_playerItemInventory.componentManager.getComponentListForType(EquippableComponent.TYPE_ID);
-        var i : Int;
+        var i : Int = 0;
         var numEquippablesOwned : Int = equippableObjectsOwned.length;
         for (i in 0...numEquippablesOwned){
             var equippableComponent : EquippableComponent = try cast(equippableObjectsOwned[i], EquippableComponent) catch(e:Dynamic) null;
@@ -118,11 +117,12 @@ class ChangeCursorScript extends BaseBufferEventScript
             assetName = registrationName;
         }
         
-        var customCursor : BitmapData = m_assetManager.getBitmapData(assetName);
-        var cursorData : MouseCursorData = new MouseCursorData();
-        cursorData.hotSpot = new Point();
-        cursorData.data = [customCursor];
-        Mouse.registerCursor(registrationName, cursorData);
+		// TODO: is this function necessary with the way openFL handles custom cursors?
+        //var customCursor : BitmapData = m_assetManager.getBitmapData(assetName);
+        //var cursorData : MouseCursorData = new MouseCursorData();
+        //cursorData.hotSpot = new Point();
+        //cursorData.data = [customCursor];
+        //Mouse.registerCursor(registrationName, cursorData);
         
         Reflect.setField(m_registeredCursorNames, registrationName, true);
     }

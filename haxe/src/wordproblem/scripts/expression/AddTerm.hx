@@ -1,5 +1,6 @@
 package wordproblem.scripts.expression;
 
+import dragonbox.common.math.vectorspace.RealsVectorSpace;
 import wordproblem.scripts.expression.BaseTermAreaScript;
 
 import flash.geom.Point;
@@ -99,8 +100,8 @@ class AddTerm extends BaseTermAreaScript
                     levelRules, 
                     m_expressionCompiler.getVectorSpace(), 
                     m_assetManager, 
-                    expressionSymbolMap, 
-                    ));
+                    expressionSymbolMap
+            ));
         }
         
         this.setIsActive(true);
@@ -126,7 +127,7 @@ class AddTerm extends BaseTermAreaScript
         super.dispose();
         if (m_additionPreviewTween != null) 
         {
-            Starling.juggler.remove(m_additionPreviewTween);
+            Starling.current.juggler.remove(m_additionPreviewTween);
         }
         m_additionPreviewImage.removeFromParent(true);
     }
@@ -165,10 +166,10 @@ class AddTerm extends BaseTermAreaScript
             if (draggedWidget != null && canPerformAddition()) 
             {
                 for (i in 0...numTermAreas){
-                    termArea = m_termAreas[i];
+                    var termArea = m_termAreas[i];
                     if (termArea.isInteractable && termArea.containsPoint(m_globalMouseBuffer)) 
                     {
-                        snapManager = m_snapManagers[i];
+                        var snapManager = m_snapManagers[i];
                         
                         // If no snap and mouse is in a term area then we want to give feed back that the
                         // current orientation will cause an add to occur
@@ -195,7 +196,7 @@ class AddTerm extends BaseTermAreaScript
                     m_additionPreviewTween.scaleTo(scaleUpFactor);
                     m_additionPreviewTween.reverse = true;
                     m_additionPreviewTween.repeatCount = 0;
-                    Starling.juggler.add(m_additionPreviewTween);
+                    Starling.current.juggler.add(m_additionPreviewTween);
                     
                     m_additionPreviewCanvas.addChild(m_additionPreviewImage);
                 }  // Convert the global mouse point to the reference frame of the canvas    // The addition preview should be positioned just around the mouse  
@@ -210,7 +211,7 @@ class AddTerm extends BaseTermAreaScript
             }
             else if (!showAddPreviewForFrame && m_additionPreviewTween != null) 
             {
-                Starling.juggler.remove(m_additionPreviewTween);
+                Starling.current.juggler.remove(m_additionPreviewTween);
                 m_additionPreviewImage.removeFromParent();
                 m_additionPreviewImage.scaleX = m_additionPreviewImage.scaleY = 1.0;
                 m_additionPreviewTween = null;
@@ -238,15 +239,15 @@ class AddTerm extends BaseTermAreaScript
         m_additionPreviewCanvas = m_gameEngine.getSprite();
         m_expressionSymbolMap = m_gameEngine.getExpressionSymbolResources();
         
-        for (i in 0...super.m_termAreas.length){
-            var termArea : TermAreaWidget = super.m_termAreas[i];
+        for (i in 0...this.m_termAreas.length){
+            var termArea : TermAreaWidget = this.m_termAreas[i];
             m_snapManagers.push(new SnapManager(
                     termArea, 
                     m_gameEngine.getCurrentLevel().getLevelRules(), 
                     m_expressionCompiler.getVectorSpace(), 
                     m_assetManager, 
-                    m_expressionSymbolMap, 
-                    ));
+                    m_expressionSymbolMap
+            ));
         }
         
         this.setIsActive(m_isActive);
@@ -326,7 +327,7 @@ class AddTerm extends BaseTermAreaScript
             snapManager : SnapManager) : Bool
     {
         var addSuccessful : Bool = false;
-        var vectorSpace : IVectorSpace = m_expressionCompiler.getVectorSpace();
+        var vectorSpace : RealsVectorSpace = m_expressionCompiler.getVectorSpace();
         
         // If we are in the bounds of the hit area and we were not snapped
         // to anything then we perform an addition
@@ -369,7 +370,7 @@ class AddTerm extends BaseTermAreaScript
             // to anything then we perform an addition
             if (snapManager.getWidgetAcceptingSnap() != null) 
             {
-                operator = snapManager.getOperatorForSnap();
+                var operator = snapManager.getOperatorForSnap();
                 var attachToLeft : Bool = snapManager.getSnapToLeft();
                 var nodeSnappedTo : ExpressionNode = snapManager.getWidgetAcceptingSnap().getNode();
                 snapManager.clearAll();
@@ -383,13 +384,13 @@ class AddTerm extends BaseTermAreaScript
                         nodeSnappedTo,
                         attachToLeft,
                         false
-                        );
+                );
             }
             else if (hitTermArea.isInteractable && canPerformAddition()) 
             {
-                addSuccessful = true;
-                nodeSnappedTo = null;
-                attachToLeft = true;
+                var addSuccessful = true;
+                var nodeSnappedTo = null;
+                var attachToLeft = true;
                 
                 // When adding a new node, we may end up having to place the new node in between
                 // others. This is mostly to handle when the equation is inline.
@@ -403,7 +404,7 @@ class AddTerm extends BaseTermAreaScript
                     var nodeGlobalBuffer : Point = new Point();
                     var nodeLocalBuffer : Point = new Point();
                     ExpressionUtil.getAdditiveTerms(root, additiveTermNodes);
-                    var additiveTerm : ExpressionNode;
+                    var additiveTerm : ExpressionNode = null;
                     for (i in 0...additiveTermNodes.length){
                         additiveTerm = additiveTermNodes[i];
                         nodeLocalBuffer.setTo(additiveTerm.position.x, additiveTerm.position.y);
@@ -502,7 +503,7 @@ class AddTerm extends BaseTermAreaScript
                 
                 // Fill all groups with wildcards in other term areas
                 for (i in 0...m_termAreas.length){
-                    termArea = m_termAreas[i];
+                    var termArea = m_termAreas[i];
                     
                     if (termArea != hitTermArea) 
                     {
@@ -547,7 +548,7 @@ class AddTerm extends BaseTermAreaScript
                 
                 // Add wild card to the side opposite to that which the new card was just added
                 for (i in 0...m_termAreas.length){
-                    termArea = m_termAreas[i];
+                    var termArea = m_termAreas[i];
                     if (termArea != hitTermArea) 
                     {
                         this.addNode(
@@ -579,10 +580,10 @@ class AddTerm extends BaseTermAreaScript
         // Like the latex compiler, the incoming data needs to be formatted properly in order for wild cards
         // to be created
         
-        var vectorSpace : IVectorSpace = m_expressionCompiler.getVectorSpace();
-        var nodeToAttachTo : ExpressionNode;
-        var attachToLeft : Bool;
-        var operatorToUse : String;
+        var vectorSpace : RealsVectorSpace = m_expressionCompiler.getVectorSpace();
+        var nodeToAttachTo : ExpressionNode = null;
+        var attachToLeft : Bool = false;
+        var operatorToUse : String = null;
         for (groupRoot in groupRoots)
         {
             // Exclude the root containing the specified node that accepted the expectedValue
@@ -698,10 +699,7 @@ class AddTerm extends BaseTermAreaScript
         
         
         var pointBuffer : Point = termArea.globalToLocal(globalMousePoint);
-        termArea.getTree().addEventListener(ExpressionTreeEvent.ADD, onAddedNode);
-        termArea.getTree().addLeafNode(operator, data, attachToLeft, nodeToAttach, pointBuffer.x, pointBuffer.y);
-        
-        function onAddedNode(event : Event, data : Dynamic) : Void
+		function onAddedNode(event : Event, data : Dynamic) : Void
         {
             termArea.getTree().removeEventListener(ExpressionTreeEvent.ADD, onAddedNode);
             if (animate) 
@@ -714,13 +712,15 @@ class AddTerm extends BaseTermAreaScript
                         m_expressionSymbolMap,
                         m_assetManager,
                         termArea.redrawAfterModification
-                        );
+                );
             }
             else 
             {
                 termArea.redrawAfterModification();
             }
         };
+        termArea.getTree().addEventListener(ExpressionTreeEvent.ADD, onAddedNode);
+        termArea.getTree().addLeafNode(operator, data, attachToLeft, nodeToAttach, pointBuffer.x, pointBuffer.y);
     }
     
     public function addNodeBatch(termArea : TermAreaWidget,
@@ -737,7 +737,7 @@ class AddTerm extends BaseTermAreaScript
         var startPoint : Point = new Point();
         var resultPoint : Point = new Point();
         var numNodesToAdd : Int = data.length;
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...numNodesToAdd){
             startPoint.setTo(dropLocationsX[i], dropLocationsY[i]);
             termArea.globalToLocal(startPoint, resultPoint);

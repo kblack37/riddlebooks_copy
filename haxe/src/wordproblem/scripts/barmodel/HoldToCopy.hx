@@ -178,7 +178,7 @@ class HoldToCopy extends BaseBarModelScript
         // Text indicator for hold to copy appears as a thought bubble
         var textWidth : Float = 150;
         var textHeight : Float = 40;
-        var descriptionText : TextField = new TextField(textWidth, textHeight, "Hold to Copy", "Verdana", 20, 0x000000);
+        var descriptionText : TextField = new TextField(Std.int(textWidth), Std.int(textHeight), "Hold to Copy", "Verdana", 20, 0x000000);
         var background : Image = new Image(m_assetManager.getTexture("thought_bubble"));
         background.scaleX = textWidth / background.width;
         background.scaleY = (textHeight * 2) / background.height;
@@ -206,7 +206,7 @@ class HoldToCopy extends BaseBarModelScript
         if (!value && m_ready) 
         {
             // On set inactive, do a complete reset of all running state elements
-            Starling.juggler.remove(m_holdToCopyDescriptionTween);
+            Starling.current.juggler.remove(m_holdToCopyDescriptionTween);
             
             if (m_holdToCopyDescription != null) 
             {
@@ -265,7 +265,7 @@ class HoldToCopy extends BaseBarModelScript
             m_canvas.globalToLocal(m_globalBuffer, m_localBuffer);
             if (m_mouseState.leftMousePressedThisFrame) 
             {
-                as3hx.Compat.setArrayLength(m_outParams, 0);
+				m_outParams = new Array<Dynamic>();
                 m_originPoint.x = m_localBuffer.x;
                 m_originPoint.y = m_localBuffer.y;
                 if (BarModelHitAreaUtil.getBarElementUnderPoint(m_outParams, m_barModelArea, m_localBuffer, m_rectBuffer, false)) 
@@ -293,7 +293,7 @@ class HoldToCopy extends BaseBarModelScript
                         m_holdToCopyDescription.alpha = 0.0;
                         m_holdToCopyDescriptionTween.reset(m_holdToCopyDescription, 0.3);
                         m_holdToCopyDescriptionTween.animate("alpha", 1.0);
-                        Starling.juggler.add(m_holdToCopyDescriptionTween);
+                        Starling.current.juggler.add(m_holdToCopyDescriptionTween);
                     }  // Must iterate through every type of view    // Remember need to pair it with a valid render component    // Add a blink to the element so it is clear what is being copied  
                     
                     
@@ -356,12 +356,10 @@ class HoldToCopy extends BaseBarModelScript
                     m_barModelArea.componentManager.addComponentToEntity(renderComponent);
                     
                     Audio.instance.playSfx("card_flip");
-                }  // This data may need to be used later    // Buffer what elements were hit in the transform script  
-                
-                
-                
-                
-                
+                } 
+				
+				// Buffer what elements were hit in the transform script  
+                // This data may need to be used later
                 m_hitExpressionValue = m_barToCard.bufferHitElementsAtPoint(m_localBuffer, m_barModelArea, false);
             }
             else if (m_mouseState.leftMouseDraggedThisFrame && m_fillInProgress) 
@@ -427,7 +425,7 @@ class HoldToCopy extends BaseBarModelScript
                 
                 
                 
-                Starling.juggler.remove(m_holdToCopyDescriptionTween);
+                Starling.current.juggler.remove(m_holdToCopyDescriptionTween);
             }
             
             if (m_mouseState.leftMouseDown && m_fillInProgress && this.allowCopy) 
@@ -484,7 +482,7 @@ class HoldToCopy extends BaseBarModelScript
                     fadeoutCompletedTween.scaleTo(2.0);
                     fadeoutCompletedTween.onCompleteArgs = [completedImage];
                     fadeoutCompletedTween.onComplete = onFadeCompletedRingComplete;
-                    Starling.juggler.add(fadeoutCompletedTween);
+                    Starling.current.juggler.add(fadeoutCompletedTween);
                     
                     Audio.instance.playSfx("text2card");
                 }

@@ -26,8 +26,8 @@ class BounceSystem extends BaseSystemScript
     {
         var components : Array<Component> = componentManager.getComponentListForType(BounceComponent.TYPE_ID);
         var numBounceComponents : Int = components.length;
-        var i : Int;
-        var bounceComponent : BounceComponent;
+        var i : Int = 0;
+        var bounceComponent : BounceComponent = null;
         for (i in 0...numBounceComponents){
             bounceComponent = try cast(components[i], BounceComponent) catch(e:Dynamic) null;
             
@@ -50,7 +50,7 @@ class BounceSystem extends BaseSystemScript
                 bounceTween.reverse = true;
                 bounceTween.repeatCount = 0;
                 bounceComponent.tween = bounceTween;
-                Starling.juggler.add(bounceComponent.tween);
+                Starling.current.juggler.add(bounceComponent.tween);
             }  // Check if the given entity has a mouse component    // If the user drags on the view, the bounce should be interuppted  
             
             
@@ -66,14 +66,14 @@ class BounceSystem extends BaseSystemScript
                 // If selected AND is playing then stop
                 if (mouseComponent.selectedThisFrame && !bounceComponent.paused) 
                 {
-                    Starling.juggler.remove(bounceComponent.tween);
+                    Starling.current.juggler.remove(bounceComponent.tween);
                     bounceComponent.resetToOriginalPosition();
                     bounceComponent.paused = true;
                 }
                 // If not selected AND not playing then start
                 else if (!mouseComponent.selectedThisFrame && bounceComponent.paused) 
                 {
-                    Starling.juggler.add(bounceComponent.tween);
+                    Starling.current.juggler.add(bounceComponent.tween);
                     bounceComponent.paused = false;
                 }
             }

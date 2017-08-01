@@ -1,9 +1,8 @@
 package wordproblem.level.locks;
 
-
-import cgs.levelprogression.ICgsLevelManager;
-import cgs.levelprogression.locks.ICgsLevelLock;
-import cgs.levelprogression.nodes.ICgsLevelNode;
+import cgs.levelProgression.ICgsLevelManager;
+import cgs.levelProgression.locks.ICgsLevelLock;
+import cgs.levelProgression.nodes.ICgsLevelNode;
 
 import wordproblem.level.LevelNodeStatuses;
 

@@ -2,38 +2,40 @@ package starling.extensions;
 
 import flash.errors.Error;
 
-import com.adobe.utils.AGALMiniAssembler;
+//import com.adobe.utils.AGALMiniAssembler;
 
-import flash.display3d.Context3DProgramType;
+import openfl.display3D.Context3DProgramType;
 import flash.utils.ByteArray;
+
+// TODO: uncomment this once dependencies are figured out
 
 /**
  * This assembler allows for comments embedded in the agal source.
  * Useful mainly when the shader code is in a separate file
  */
-class CleanAgalMiniAssembler extends AGALMiniAssembler
+class CleanAgalMiniAssembler //extends AGALMiniAssembler
 {
     private static inline var SHADER_FILE_DELIMITER : String = "#";
     private static var REGEXP_LINE_BREAKER : EReg = new EReg('[\\f\\n\\r\\v;]+', "g");
     private static var COMMENT : EReg = new EReg('\\/\\/[^\\n]*\\n', "g");
-    
+    //
     public static var instance : CleanAgalMiniAssembler = new CleanAgalMiniAssembler();
-    
+    //
     public function new(debugging : Bool = false)
     {
-        super(debugging);
+        //super(debugging);
     }
-    
-    /**
-     * Assemble contents of a shader file into its shader programs.
-     * Expects the file to contain the vertex shader instructions first
-     * followed by the fragment shader instructions.
-     * 
-     * @param contents
-     *      The raw string of the instructions for the shader
-     * @return
-     *      An array of byte arrays that were part of the shader
-     */
+    //
+    ///**
+     //* Assemble contents of a shader file into its shader programs.
+     //* Expects the file to contain the vertex shader instructions first
+     //* followed by the fragment shader instructions.
+     //* 
+     //* @param contents
+     //*      The raw string of the instructions for the shader
+     //* @return
+     //*      An array of byte arrays that were part of the shader
+     //*/
     public function getProgramBytesFromString(contents : String) : Array<Dynamic>
     {
         // Split the contents at the vertex/fragment delimit
@@ -51,31 +53,32 @@ class CleanAgalMiniAssembler extends AGALMiniAssembler
         
         return shaderBytes;
     }
-    
-    /**
-     * Get the raw strings representing a shader
-     * 
-     * @param contents
-     *      The shader file string contents     
-     * @return
-     *      An array of strings containing just raw instructions
-     */
+    //
+    ///**
+     //* Get the raw strings representing a shader
+     //* 
+     //* @param contents
+     //*      The shader file string contents     
+     //* @return
+     //*      An array of strings containing just raw instructions
+     //*/
     public function getStringsFromFile(contents : String) : Array<Dynamic>
     {
         var shaderStrings : Array<Dynamic> = [];
         var pieces : Array<Dynamic> = contents.split(SHADER_FILE_DELIMITER);
         
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...pieces.length){
             shaderStrings.push(removeComments(pieces[i]));
         }
         
         return shaderStrings;
     }
-    
-    override public function assemble(mode : String, source : String, version : Int = 1, ignorelimits : Bool = false) : ByteArray
+	
+    /*override*/ public function assemble(mode : String, source : String, version : Int = 1, ignorelimits : Bool = false) : ByteArray
     {
-        return super.assemble(mode, removeComments(source), version, ignorelimits);
+        //return super.assemble(mode, removeComments(source), version, ignorelimits);
+		return new ByteArray();
     }
     
     public function removeComments(source : String) : String
@@ -90,8 +93,8 @@ class CleanAgalMiniAssembler extends AGALMiniAssembler
             start = source.indexOf("/*");
         }
         
-        source = source.replace(REGEXP_LINE_BREAKER, "\n");
-        source = source.replace(COMMENT, "");
+		source = REGEXP_LINE_BREAKER.replace(source, "\n");
+		source = COMMENT.replace(source, "");
         return source;
     }
 }

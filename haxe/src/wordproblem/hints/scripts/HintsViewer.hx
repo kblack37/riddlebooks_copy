@@ -6,11 +6,9 @@ import flash.geom.Rectangle;
 
 import cgs.internationalization.StringTable;
 
-import feathers.controls.Button;
-import feathers.textures.Scale9Textures;
-
 import starling.animation.Tween;
 import starling.core.Starling;
+import starling.display.Button;
 import starling.display.DisplayObject;
 import starling.display.DisplayObjectContainer;
 import starling.display.Image;
@@ -40,8 +38,8 @@ import wordproblem.resource.AssetManager;
  */
 class HintsViewer extends ScriptNode implements IShowableScript
 {
-    private inline var NO_HINTS_AVAILABLE : String = "Sorry, I don't have any help right now!";
-    private inline var NO_HINTS_UNLOCKED : String = "Click the button below to ask for help!";
+    private inline static var NO_HINTS_AVAILABLE : String = "Sorry, I don't have any help right now!";
+    private inline static var NO_HINTS_UNLOCKED : String = "Click the button below to ask for help!";
     
     private var m_gameEngine : IGameEngine;
     private var m_assetManager : AssetManager;
@@ -154,7 +152,7 @@ class HintsViewer extends ScriptNode implements IShowableScript
         m_unlockedHints = new Array<HintScript>();
         
         var whiteButtonTexture : Texture = assetManager.getTexture("button_white");
-        var whiteScale9Texture : Scale9Textures = new Scale9Textures(whiteButtonTexture, new Rectangle(8, 8, 16, 16));
+        var whiteScale9Texture : Texture = Texture.fromTexture(whiteButtonTexture, new Rectangle(8, 8, 16, 16));
         
         var lightbulbIconMaxHeight : Float = 60;
         
@@ -172,7 +170,8 @@ class HintsViewer extends ScriptNode implements IShowableScript
         lightbulbIcon.x = (starBurst.width - lightbulbIcon.width) * 0.5;
         lightbulbIcon.y = (starBurst.height - lightbulbIcon.height) * 0.5;
         
-        var newHintText : TextField = new TextField(starBurst.width, 30, StringTable.lookup("new_hint"), GameFonts.DEFAULT_FONT_NAME, 20, 0xFFFFFF);
+		// TODO: uncomment once cgs library is ported
+        var newHintText : TextField = new TextField(Std.int(starBurst.width), 30, /*StringTable.lookup("new_hint")*/ "", GameFonts.DEFAULT_FONT_NAME, 20, 0xFFFFFF);
         newHintText.hAlign = HAlign.RIGHT;
         newHintText.y = lightbulbIcon.y + lightbulbIcon.height;
         newHintText.x = 0;
@@ -180,12 +179,12 @@ class HintsViewer extends ScriptNode implements IShowableScript
         var newHintSkinContainer : Sprite = new Sprite();
         newHintSkinContainer.addChild(starBurst);
         newHintSkinContainer.addChild(lightbulbIcon);
-        newHintSkinContainer.addChild(newHintText);
+        //newHintSkinContainer.addChild(newHintText);
         
-        m_newHintButton = new Button();
+		// TODO: this image will likely need to be fixed
+        m_newHintButton = new Button(lightbulbTexture);
         m_newHintButton.width = newHintSkinContainer.width;
         m_newHintButton.height = newHintSkinContainer.height;
-        m_newHintButton.defaultSkin = newHintSkinContainer;
         m_newHintButton.scaleWhenDown = 0.9;
         m_newHintButton.addEventListener(Event.TRIGGERED, onNewHintClicked);
         m_newHintButton.addEventListener(TouchEvent.TOUCH, onNewHintTouched);
@@ -195,10 +194,9 @@ class HintsViewer extends ScriptNode implements IShowableScript
         var showIcon : Image = new Image(showIconTexture);
         showIcon.scaleX = showIcon.scaleY = showHintWidth * 0.9 / showIconTexture.height;
         
-        m_showHintButton = new Button();
-        m_showHintButton.defaultSkin = showIcon;
+        m_showHintButton = new Button(showIconTexture);
         m_showHintButton.width = m_showHintButton.height = showHintWidth;
-        m_showHintButton.scaleWhenHovering = 1.1;
+        m_showHintButton.scaleWhenOver = 1.1;
         m_showHintButton.scaleWhenDown = 0.9;
         m_showHintButton.addEventListener(Event.TRIGGERED, onShowHintClicked);
         
@@ -283,8 +281,8 @@ class HintsViewer extends ScriptNode implements IShowableScript
         m_canvas.addChild(m_thoughtBubbleMain);
         
         m_leftScrollButton.x = 0;
-        m_leftScrollButton.y = (m_thoughtBubbleHeight - m_leftScrollButton.defaultSkin.height) * 0.5;
-        m_rightScrollButton.x = m_width - m_rightScrollButton.defaultSkin.width;
+        m_leftScrollButton.y = (m_thoughtBubbleHeight - m_leftScrollButton.upState.height) * 0.5;
+        m_rightScrollButton.x = m_width - m_rightScrollButton.upState.width;
         m_rightScrollButton.y = m_leftScrollButton.y;
         
         // Randomly pick one of the characters
@@ -305,7 +303,7 @@ class HintsViewer extends ScriptNode implements IShowableScript
         
         m_newHintButton.x = m_width - m_newHintButton.width - 100;
         m_newHintButton.y = m_pageIndicatorText.y - 20;
-        //m_canvas.addChild(m_newHintButton);
+        m_canvas.addChild(m_newHintButton);
         
         m_canvas.addChild(m_descriptionContainer);
         
@@ -315,10 +313,10 @@ class HintsViewer extends ScriptNode implements IShowableScript
         m_showHintButton.y = m_thoughtBubbleMain.y + m_thoughtBubbleHeight * 0.5 - m_showHintButton.height * 1.4;
         
         // Parse out what hints are currently viewable
-        as3hx.Compat.setArrayLength(m_lockedHints, 0);
-        as3hx.Compat.setArrayLength(m_unlockedHints, 0);
+		m_lockedHints = new Array<HintScript>();
+		m_unlockedHints = new Array<HintScript>();
         
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...m_availableHints.length){
             var hintScript : HintScript = m_availableHints[i];
             if (hintScript.unlocked) 
@@ -329,22 +327,19 @@ class HintsViewer extends ScriptNode implements IShowableScript
             {
                 m_lockedHints.push(hintScript);
             }
-        }  // (Although there should always be some generic hints)    // If no hints are visible, say none are available  
-        
-        
-        
-        
-        
+        }
+		
+		// If no hints are visible, say none are available  
+        // (Although there should always be some generic hints)
         if (m_unlockedHints.length == 0) 
         {
             if (m_noHintDescription == null) 
             {
                 var contentWidth : Float = m_thoughtBubbleMain.width * 0.75;
                 var contentHeight : Float = m_thoughtBubbleMain.height * 0.64;
-                m_noHintDescription = new TextField(contentWidth, contentHeight, 
-                        "", 
-                        GameFonts.DEFAULT_FONT_NAME, 28, 0, 
-                        );
+                m_noHintDescription = new TextField(Std.int(contentWidth), Std.int(contentHeight), 
+                        "", GameFonts.DEFAULT_FONT_NAME, 28, 0
+                );
             }
             
             m_noHintDescription.text = ((m_availableHints.length > 0)) ? NO_HINTS_UNLOCKED : NO_HINTS_AVAILABLE;
@@ -363,7 +358,7 @@ class HintsViewer extends ScriptNode implements IShowableScript
         
         
         
-        Starling.juggler.add(m_expandContractThoughtBubble);
+        Starling.current.juggler.add(m_expandContractThoughtBubble);
     }
     
     public function hide() : Void
@@ -387,7 +382,7 @@ class HintsViewer extends ScriptNode implements IShowableScript
         
         
         
-        Starling.juggler.remove(m_expandContractThoughtBubble);
+        Starling.current.juggler.remove(m_expandContractThoughtBubble);
     }
     
     private function showHintAtIndex(index : Int) : Void
@@ -424,10 +419,9 @@ class HintsViewer extends ScriptNode implements IShowableScript
             {
                 m_canvas.removeChild(m_showHintButton);
             }
-        }  // If no new hints are available, disable it and make transparent  
-        
-        
-        
+        }  
+		
+		// If no new hints are available, disable it and make transparent
         var newHintEnabled : Bool = false;
         for (lockedHint in m_lockedHints)
         {
@@ -437,7 +431,7 @@ class HintsViewer extends ScriptNode implements IShowableScript
             }
         }
         
-        m_newHintButton.isEnabled = newHintEnabled;
+        m_newHintButton.enabled = newHintEnabled;
         if (newHintEnabled) 
         {
             m_newHintButton.alpha = 1.0;
@@ -453,7 +447,7 @@ class HintsViewer extends ScriptNode implements IShowableScript
             // Kill the animation on the button if playing
             if (m_newHintStarBurstTween != null) 
             {
-                Starling.juggler.remove(m_newHintStarBurstTween);
+                Starling.current.juggler.remove(m_newHintStarBurstTween);
                 m_newHintStarBurstTween = null;
             }
         }  // If more than one hint unlocked then show the scroll button.  
@@ -478,7 +472,7 @@ class HintsViewer extends ScriptNode implements IShowableScript
         // -the list of locked hints is ordered so the first ones are more important to show
         // -the first 'useful' hint will be the most helpful
         var bestNextHint : HintScript = null;
-        var i : Int;
+        var i : Int = 0;
         var totalLockedHints : Int = m_lockedHints.length;
         for (i in 0...totalLockedHints){
             var hintScript : HintScript = m_lockedHints[i];
@@ -508,18 +502,18 @@ class HintsViewer extends ScriptNode implements IShowableScript
     private function onNewHintTouched(event : TouchEvent) : Void
     {
         var hoverTouch : Touch = event.getTouch(m_newHintButton, TouchPhase.HOVER);
-        var iconToAnimate : DisplayObject = (try cast(m_newHintButton.defaultSkin, Sprite) catch(e:Dynamic) null).getChildAt(0);
-        if (m_newHintStarBurstTween == null && m_newHintButton.isEnabled) 
+        var iconToAnimate : DisplayObject = (try cast(m_newHintButton.upState, Sprite) catch(e:Dynamic) null).getChildAt(0);
+        if (m_newHintStarBurstTween == null && m_newHintButton.enabled) 
         {
             m_newHintStarBurstTween = new Tween(iconToAnimate, 3);
             m_newHintStarBurstTween.animate("rotation", Math.PI * 2);
             m_newHintStarBurstTween.repeatCount = 0;
-            Starling.juggler.add(m_newHintStarBurstTween);
+            Starling.current.juggler.add(m_newHintStarBurstTween);
         }
         else if (hoverTouch == null && m_newHintStarBurstTween != null) 
         {
             iconToAnimate.rotation = 0.0;
-            Starling.juggler.remove(m_newHintStarBurstTween);
+            Starling.current.juggler.remove(m_newHintStarBurstTween);
             m_newHintStarBurstTween = null;
         }
     }

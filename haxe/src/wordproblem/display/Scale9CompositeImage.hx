@@ -6,7 +6,7 @@ import starling.display.Sprite;
 
 class Scale9CompositeImage extends Sprite
 {
-    public function new()
+    public function new(args : Array<Dynamic>)
     {
         super();
         
@@ -21,7 +21,7 @@ class Scale9CompositeImage extends Sprite
     
     override private function set_width(value : Float) : Float
     {
-        var i : Int;
+        var i : Int = 0;
         var numChildren : Int = this.numChildren;
         for (i in 0...numChildren){
             this.getChildAt(i).width = value;
@@ -31,7 +31,7 @@ class Scale9CompositeImage extends Sprite
     
     override private function set_height(value : Float) : Float
     {
-        var i : Int;
+        var i : Int = 0;
         var numChildren : Int = this.numChildren;
         for (i in 0...numChildren){
             this.getChildAt(i).height = value;

@@ -5,11 +5,12 @@ import flash.text.TextFormat;
 
 import cgs.internationalization.StringTable;
 
-import feathers.controls.Button;
+import haxe.Constraints.Function;
 
 import starling.animation.Juggler;
 import starling.animation.Transitions;
 import starling.animation.Tween;
+import starling.display.Button;
 import starling.display.DisplayObject;
 import starling.display.Image;
 import starling.display.Quad;
@@ -106,15 +107,16 @@ class SummaryWidget extends Layer
         if (allowExit) 
         {
             exitButton = WidgetUtil.createGenericColoredButton(
-                            m_assetManager,
-                            m_buttonColorData.getUpButtonColor(),
-                            StringTable.lookup("exit"),
-                            new TextFormat(GameFonts.DEFAULT_FONT_NAME, 
-                            16, 
-                            0xFFFFFF, 
-                            ),
-                            null
-                            );
+                m_assetManager,
+                m_buttonColorData.getUpButtonColor(),
+                // TODO: uncomment when cgs library is finished
+				"",//StringTable.lookup("exit"),
+                new TextFormat(GameFonts.DEFAULT_FONT_NAME, 
+                    16, 
+                    0xFFFFFF
+                ),
+                null
+            );
             exitButton.width = 80;
             exitButton.height = 30;
             exitButton.pivotX = exitButton.width * 0.5;
@@ -125,15 +127,17 @@ class SummaryWidget extends Layer
         nextButton = WidgetUtil.createGenericColoredButton(
                         m_assetManager,
                         m_buttonColorData.getUpButtonColor(),
-                        StringTable.lookup("next"),
+						// TODO: uncomment when cgs library is finished
+                        "",//StringTable.lookup("next"),
                         new TextFormat(GameFonts.DEFAULT_FONT_NAME, 32, 0xFFFFFF),
                         null
                         );
         var nextIcon : Image = new Image(assetManager.getTexture("arrow_yellow_icon"));
         nextIcon.scaleX = nextIcon.scaleY = 1.5;
-        nextButton.defaultIcon = nextIcon;
-        nextButton.iconPosition = Button.ICON_POSITION_RIGHT;
-        nextButton.iconOffsetX = -50;
+        nextButton.upState = nextIcon.texture;
+		// TODO: uncomment when a suitable button replacement is found
+        //nextButton.iconPosition = Button.ICON_POSITION_RIGHT;
+        //nextButton.iconOffsetX = -50;
         nextButton.width = 250;
         nextButton.height = 70;
         nextButton.pivotX = nextButton.width * 0.5;
@@ -148,27 +152,9 @@ class SummaryWidget extends Layer
         if (exitButton != null) 
         {
             WidgetUtil.changeColorForGenericButton(exitButton, m_buttonColorData.getUpButtonColor());
-        }  // Have the background slam downward  
-        
-        
-        
-        addChild(m_obscuringBackground);
-        addChild(m_backgroundImage);
-        m_backgroundImage.y = -800;
-        var backgroundAppearTween : Tween = new Tween(m_backgroundImage, 0.7, Transitions.EASE_OUT_ELASTIC);
-        backgroundAppearTween.animate("y", 0);
-        backgroundAppearTween.onComplete = backgroundAppearTweenComplete;
-        m_juggler.add(backgroundAppearTween);
-        
-        // Next and exit buttons are initially not visible
-        if (exitButton != null) 
-        {
-            addChild(exitButton);
-            exitButton.visible = false;
         }
-        addChild(nextButton);
-        nextButton.visible = false;
-        
+		
+		// Have the background slam downward  
         function backgroundAppearTweenComplete() : Void
         {
             // Show buttons
@@ -187,6 +173,23 @@ class SummaryWidget extends Layer
                 onSlideComplete();
             }
         };
+        
+        addChild(m_obscuringBackground);
+        addChild(m_backgroundImage);
+        m_backgroundImage.y = -800;
+        var backgroundAppearTween : Tween = new Tween(m_backgroundImage, 0.7, Transitions.EASE_OUT_ELASTIC);
+        backgroundAppearTween.animate("y", 0);
+        backgroundAppearTween.onComplete = backgroundAppearTweenComplete;
+        m_juggler.add(backgroundAppearTween);
+        
+        // Next and exit buttons are initially not visible
+        if (exitButton != null) 
+        {
+            addChild(exitButton);
+            exitButton.visible = false;
+        }
+        addChild(nextButton);
+        nextButton.visible = false;
     }
     
     /**

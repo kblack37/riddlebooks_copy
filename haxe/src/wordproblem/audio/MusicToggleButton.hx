@@ -18,12 +18,13 @@ class MusicToggleButton extends AudioButton
             assetManager : AssetManager,
             color : Int)
     {
-        super(width, height, textFormatUp, textFormatHover, assetManager, StringTable.lookup("music") + ":", color);
+		// TODO: uncomment once cgs library is fixed
+        super(width, height, textFormatUp, textFormatHover, assetManager, /*StringTable.lookup("music") + ":"*/ "", color);
         
         // Adjust music based on the saved value
         if (m_localSharedObject.data.exists("music")) 
         {
-            Audio.instance.musicOn = m_localSharedObject.data["music"];
+            Audio.instance.musicOn = m_localSharedObject.data.music;
         }
         
         this.redrawLabel(Audio.instance.musicOn);
@@ -45,7 +46,7 @@ class MusicToggleButton extends AudioButton
         this.redrawLabel(Audio.instance.musicOn);
         
         // Save value to shared object
-        m_localSharedObject.data["music"] = audioDriver.musicOn;
+        m_localSharedObject.data.music = audioDriver.musicOn;
         m_localSharedObject.flush();
     }
 }

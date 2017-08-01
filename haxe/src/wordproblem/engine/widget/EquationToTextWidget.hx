@@ -59,7 +59,7 @@ class EquationToTextWidget extends Sprite
             m_textField.removeFromParent(true);
         }
         
-        m_textField = new TextField(m_maxWidth, m_maxHeight, text, m_defaultTextFormat.font, targetFontSize, try cast(m_defaultTextFormat.color, Int) catch(e:Dynamic) null);
+        m_textField = new TextField(Std.int(m_maxWidth), Std.int(m_maxHeight), text, m_defaultTextFormat.font, targetFontSize, try cast(m_defaultTextFormat.color, Int) catch(e:Dynamic) 0);
         addChild(m_textField);
         
         m_currentEquationRoot = root;

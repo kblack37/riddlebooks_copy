@@ -1,7 +1,8 @@
 package wordproblem.saves;
 
-
 import cgs.cache.ICgsUserCache;
+
+import haxe.Constraints.Function;
 
 import wordproblem.level.LevelNodeCompletionValues;
 import wordproblem.level.LevelNodeSaveKeys;
@@ -30,7 +31,7 @@ class DummyCache implements ICgsUserCache
     private function getCompletionObject(value : Int) : Dynamic
     {
         var save : Dynamic = { };
-        save[LevelNodeSaveKeys.COMPLETION_VALUE] = value;
+		Reflect.setField(save, LevelNodeSaveKeys.COMPLETION_VALUE, value);
         return save;
     }
     
@@ -71,11 +72,12 @@ class DummyCache implements ICgsUserCache
     
     public function saveExists(property : String) : Bool
     {
-        return m_dummyMap.exists(property);
+		return Reflect.hasField(m_dummyMap, property);
     }
     
     public function setSave(property : String, val : Dynamic, flush : Bool = true) : Bool
     {
-        return Reflect.setField(m_dummyMap, property, val);
+        Reflect.setField(m_dummyMap, property, val);
+		return Reflect.field(m_dummyMap, property) == val;
     }
 }

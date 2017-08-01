@@ -660,7 +660,7 @@ class LSAddSegmentsA extends BaseCustomLevelScript
     {
         var textArea : TextAreaWidget = try cast(m_gameEngine.getUiEntity("textArea"), TextAreaWidget) catch(e:Dynamic) null;
         var containerViews : Array<DocumentView> = textArea.getDocumentViewsByClass("henchmen", null, 2);
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...containerViews.length){
             var enemyTexture : Texture = m_temporaryTextureControl.getDisposableTexture(m_henchmenSelected);
             var image : Image = new Image(enemyTexture);
@@ -735,9 +735,9 @@ class LSAddSegmentsA extends BaseCustomLevelScript
             targetBarWhole.barLabels.push(newBarLabel);
             
             // Stretch the previous label to fit the new segment
-            var i : Int;
+            var i : Int = 0;
             var numBarLabels : Int = targetBarWhole.barLabels.length;
-            var barLabel : BarLabel;
+            var barLabel : BarLabel = null;
             for (i in 0...numBarLabels){
                 barLabel = targetBarWhole.barLabels[i];
                 if (barLabel.bracketStyle == BarLabel.BRACKET_STRAIGHT) 
@@ -774,7 +774,7 @@ class LSAddSegmentsA extends BaseCustomLevelScript
     private function showAddBarToEnd() : Void
     {
         // The dialog should point the right end of the box
-        var id : String;
+        var id : String = null;
         if (m_barModelArea.getBarWholeViews().length > 0) 
         {
             var barWholeView : BarWholeView = m_barModelArea.getBarWholeViews()[0];

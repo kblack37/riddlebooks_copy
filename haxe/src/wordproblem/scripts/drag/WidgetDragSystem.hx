@@ -7,6 +7,8 @@ import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.ui.MouseState;
 
+import haxe.Constraints.Function;
+
 import starling.display.DisplayObject;
 import starling.display.DisplayObjectContainer;
 import starling.events.EventDispatcher;
@@ -229,13 +231,14 @@ class WidgetDragSystem extends BaseGameScript
         // For dragging bars, be able to accept a custom texture since we don't
         // want to show the number
         m_disposeCustomCallback = disposeCustomCallback;
+		var widgetCopy : BaseTermWidget = null;
         if (customDisplay == null) 
         {
             // create a copy of the widget that can be dragged around the board
             var widgetCopy : BaseTermWidget = new SymbolTermWidget(
             node, 
             m_expressionSymbolMap, 
-            m_assetManager, 
+            m_assetManager
             );
         }
         else 

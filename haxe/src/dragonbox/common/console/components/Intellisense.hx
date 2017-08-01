@@ -38,7 +38,7 @@ class Intellisense extends MovieClip
     public function populate(items : Array<String>) : Void
     {
         m_items = items;
-        m_selection = Math.max(0, Math.min(m_selection, m_items.length - 1));
+        m_selection = Std.int(Math.max(0, Math.min(m_selection, m_items.length - 1)));
         
         repaint();
     }
@@ -46,14 +46,14 @@ class Intellisense extends MovieClip
     public function selectNext() : Void
     {
         deselect(m_selection);
-        m_selection = Math.min(m_selection + 1, m_items.length - 1);
+        m_selection = Std.int(Math.min(m_selection + 1, m_items.length - 1));
         select(m_selection);
     }
     
     public function selectPrevious() : Void
     {
         deselect(m_selection);
-        m_selection = Math.max(0, m_selection - 1);
+        m_selection = Std.int(Math.max(0, m_selection - 1));
         select(m_selection);
     }
     

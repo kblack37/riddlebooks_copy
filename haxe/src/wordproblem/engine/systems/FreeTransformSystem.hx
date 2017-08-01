@@ -32,13 +32,13 @@ class FreeTransformSystem extends BaseSystemScript
     
     override public function update(componentManager : ComponentManager) : Void
     {
-        var transformComponent : TransformComponent;
+        var transformComponent : TransformComponent = null;
         
         // Check if movement, rotation, or scale properties have requested an update
-        var i : Int;
+        var i : Int = 0;
         var rotatableComponents : Array<Component> = componentManager.getComponentListForType(RotatableComponent.TYPE_ID);
         var numRotatableComponents : Int = rotatableComponents.length;
-        var rotatableComponent : RotatableComponent;
+        var rotatableComponent : RotatableComponent = null;
         for (i in 0...numRotatableComponents){
             rotatableComponent = try cast(rotatableComponents[i], RotatableComponent) catch(e:Dynamic) null;
             if (rotatableComponent.isActive && !rotatableComponent.requestHandled) 
@@ -62,7 +62,7 @@ class FreeTransformSystem extends BaseSystemScript
                     rotateTween.onCompleteArgs = [rotateTween, rotatableComponent];
                     rotateTween.animate("rotation", rotatableComponent.targetRotation);
                     
-                    Starling.juggler.add(rotateTween);
+                    Starling.current.juggler.add(rotateTween);
                 }
                 
                 rotatableComponent.requestHandled = true;
@@ -71,7 +71,7 @@ class FreeTransformSystem extends BaseSystemScript
         
         var moveableComponents : Array<Component> = componentManager.getComponentListForType(MoveableComponent.TYPE_ID);
         var numMoveableComponents : Int = moveableComponents.length;
-        var moveableComponent : MoveableComponent;
+        var moveableComponent : MoveableComponent = null;
         for (i in 0...numMoveableComponents){
             moveableComponent = try cast(moveableComponents[i], MoveableComponent) catch(e:Dynamic) null;
             if (moveableComponent.isActive && !moveableComponent.requestHandled) 
@@ -99,7 +99,7 @@ class FreeTransformSystem extends BaseSystemScript
                     moveTween.animate("x", moveableComponent.targetX);
                     moveTween.animate("y", moveableComponent.targetY);
                     
-                    Starling.juggler.add(moveTween);
+                    Starling.current.juggler.add(moveTween);
                 }
                 
                 moveableComponent.requestHandled = true;
@@ -112,7 +112,7 @@ class FreeTransformSystem extends BaseSystemScript
         // Put back tween
         if (tween != null) 
         {
-            Starling.juggler.remove(tween);
+            Starling.current.juggler.remove(tween);
             m_tweenPool.push(tween);
         }  // Set component to not active  
         
@@ -125,7 +125,7 @@ class FreeTransformSystem extends BaseSystemScript
     {
         if (tween != null) 
         {
-            Starling.juggler.remove(tween);
+            Starling.current.juggler.remove(tween);
             m_tweenPool.push(tween);
         }
         

@@ -38,8 +38,8 @@ class BarModelData
     
     public function clear() : Void
     {
-        this.barWholes.length = 0;
-        this.verticalBarLabels.length = 0;
+		barWholes = new Array<BarWhole>();
+		verticalBarLabels = new Array<BarLabel>();
     }
     
     /**
@@ -58,17 +58,17 @@ class BarModelData
         m_elementIdToOldValueRestoreMap = { };
         
         // Data values we care about are only contained in the labels and bar comparison
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...barWholes.length){
             var barWhole : BarWhole = barWholes[i];
             var barLabels : Array<BarLabel> = barWhole.barLabels;
-            var j : Int;
+            var j : Int = 0;
             for (j in 0...barLabels.length){
                 var barLabel : BarLabel = barLabels[j];
                 var labelValue : String = barLabel.value;
                 if (aliasToTermMap.exists(labelValue)) 
                 {
-                    m_elementIdToOldValueRestoreMap[barLabel.id] = labelValue;
+                    m_elementIdToOldValueRestoreMap[Std.parseInt(barLabel.id)] = labelValue;
                     barLabel.value = Reflect.field(aliasToTermMap, labelValue);
                 }
             }
@@ -79,19 +79,19 @@ class BarModelData
                 var comparisonValue : String = barComparison.value;
                 if (aliasToTermMap.exists(comparisonValue)) 
                 {
-                    m_elementIdToOldValueRestoreMap[barComparison.id] = comparisonValue;
+                    m_elementIdToOldValueRestoreMap[Std.parseInt(barComparison.id)] = comparisonValue;
                     barComparison.value = Reflect.field(aliasToTermMap, comparisonValue);
                 }
             }
         }
         
         for (i in 0...verticalBarLabels.length){
-            barLabel = verticalBarLabels[i];
-            labelValue = barLabel.value;
+            var barLabel = verticalBarLabels[i];
+            var labelValue = barLabel.value;
             if (aliasToTermMap.exists(labelValue)) 
             {
-                m_elementIdToOldValueRestoreMap[barLabel.id] = labelValue;
-                barLabel.value = aliasToTermMap[labelValue];
+                m_elementIdToOldValueRestoreMap[Std.parseInt(barLabel.id)] = labelValue;
+                barLabel.value = aliasToTermMap[Std.parseInt(labelValue)];
             }
         }
     }
@@ -103,16 +103,16 @@ class BarModelData
     {
         if (m_elementIdToOldValueRestoreMap != null) 
         {
-            var i : Int;
+            var i : Int = 0;
             for (i in 0...barWholes.length){
                 var barWhole : BarWhole = barWholes[i];
                 var barLabels : Array<BarLabel> = barWhole.barLabels;
-                var j : Int;
+                var j : Int = 0;
                 for (j in 0...barLabels.length){
                     var barLabel : BarLabel = barLabels[j];
                     if (m_elementIdToOldValueRestoreMap.exists(barLabel.id)) 
                     {
-                        barLabel.value = m_elementIdToOldValueRestoreMap[barLabel.id];
+                        barLabel.value = m_elementIdToOldValueRestoreMap[Std.parseInt(barLabel.id)];
                     }
                 }
                 
@@ -122,16 +122,16 @@ class BarModelData
                     var comparisonValue : String = barComparison.value;
                     if (m_elementIdToOldValueRestoreMap.exists(barComparison.id)) 
                     {
-                        barComparison.value = m_elementIdToOldValueRestoreMap[barComparison.id];
+                        barComparison.value = m_elementIdToOldValueRestoreMap[Std.parseInt(barComparison.id)];
                     }
                 }
             }
             
             for (i in 0...verticalBarLabels.length){
-                barLabel = verticalBarLabels[i];
-                if (m_elementIdToOldValueRestoreMap.exists(barLabel.id)) 
+                var barLabel = verticalBarLabels[i];
+                if (m_elementIdToOldValueRestoreMap.exists(Std.parseInt(barLabel.id))) 
                 {
-                    barLabel.value = m_elementIdToOldValueRestoreMap[barLabel.id];
+                    barLabel.value = m_elementIdToOldValueRestoreMap[Std.parseInt(barLabel.id)];
                 }
             }
         }
@@ -147,13 +147,13 @@ class BarModelData
     {
         var matchingBarSegment : BarSegment = null;
         var numBarWholes : Int = barWholes.length;
-        var barWhole : BarWhole;
-        var i : Int;
+        var barWhole : BarWhole = null;
+        var i : Int = 0;
         for (i in 0...numBarWholes){
             barWhole = barWholes[i];
-            var j : Int;
+            var j : Int = 0;
             var numBarSegments : Int = barWhole.barSegments.length;
-            var barSegment : BarSegment;
+            var barSegment : BarSegment = null;
             for (j in 0...numBarSegments){
                 barSegment = barWhole.barSegments[j];
                 if (barSegment.id == barSegmentId) 
@@ -221,13 +221,13 @@ class BarModelData
     {
         var matchingBarLabel : BarLabel = null;
         var numBarWholes : Int = barWholes.length;
-        var barWhole : BarWhole;
-        var i : Int;
+        var barWhole : BarWhole = null;
+        var i : Int = 0;
         for (i in 0...numBarWholes){
             barWhole = barWholes[i];
-            var j : Int;
+            var j : Int = 0;
             var numBarLabels : Int = barWhole.barLabels.length;
-            var barLabel : BarLabel;
+            var barLabel : BarLabel = null;
             for (j in 0...numBarLabels){
                 barLabel = barWhole.barLabels[j];
                 if (barLabel.id == barLabelId) 
@@ -250,8 +250,8 @@ class BarModelData
     {
         var matchingBarWhole : BarWhole = null;
         var numBarWholes : Int = barWholes.length;
-        var barWhole : BarWhole;
-        var i : Int;
+        var barWhole : BarWhole = null;
+        var i : Int = 0;
         for (i in 0...numBarWholes){
             barWhole = barWholes[i];
             if (barWhole.id == barWholeId) 
@@ -267,7 +267,7 @@ class BarModelData
     public function getMaxBarUnitValue() : Float
     {
         var numBarWholes : Int = this.barWholes.length;
-        var i : Int;
+        var i : Int = 0;
         var maxBarUnitValue : Float = 0;
         for (i in 0...numBarWholes){
             var barWhole : BarWhole = this.barWholes[i];
@@ -291,13 +291,22 @@ class BarModelData
      */
     public function replaceLabelValuesWithVisibleNames(expressionSymbolMap : ExpressionSymbolMap) : Void
     {
-        var i : Int;
-        var barWhole : BarWhole;
+        var i : Int = 0;
+        var barWhole : BarWhole = null;
         var numBarWholes : Int = barWholes.length;
+		function replaceNameForLabel(barLabel : BarLabel) : Void
+        {
+            var symbolDataForValue : SymbolData = expressionSymbolMap.getSymbolDataFromValue(barLabel.value);
+            if (symbolDataForValue.abbreviatedName != null || symbolDataForValue.abbreviatedName != "") 
+            {
+                barLabel.value = symbolDataForValue.abbreviatedName;
+            }
+        };
+		
         for (i in 0...numBarWholes){
             barWhole = barWholes[i];
             var numLabels : Int = barWhole.barLabels.length;
-            var j : Int;
+            var j : Int = 0;
             for (j in 0...numLabels){
                 replaceNameForLabel(barWhole.barLabels[j]);
             }
@@ -307,15 +316,6 @@ class BarModelData
         for (i in 0...numVerticalBarLabels){
             replaceNameForLabel(verticalBarLabels[i]);
         }
-        
-        function replaceNameForLabel(barLabel : BarLabel) : Void
-        {
-            var symbolDataForValue : SymbolData = expressionSymbolMap.getSymbolDataFromValue(barLabel.value);
-            if (symbolDataForValue.abbreviatedName != null || symbolDataForValue.abbreviatedName != "") 
-            {
-                barLabel.value = symbolDataForValue.abbreviatedName;
-            }
-        };
     }
     
     /**
@@ -327,8 +327,8 @@ class BarModelData
         var barModelDataClone : BarModelData = new BarModelData();
         
         // Copy the whole bars
-        var i : Int;
-        var barWhole : BarWhole;
+        var i : Int = 0;
+        var barWhole : BarWhole = null;
         var numBarWholes : Int = barWholes.length;
         for (i in 0...numBarWholes){
             barWhole = barWholes[i];
@@ -337,7 +337,7 @@ class BarModelData
         
         
         
-        var barLabel : BarLabel;
+        var barLabel : BarLabel = null;
         var numVerticalBarLabels : Int = verticalBarLabels.length;
         for (i in 0...numVerticalBarLabels){
             barLabel = verticalBarLabels[i];
@@ -356,7 +356,7 @@ class BarModelData
      */
     public function serialize() : Dynamic
     {
-        var i : Int;
+        var i : Int = 0;
         var serializedBarWholes : Array<Dynamic> = [];
         var numBarWholes : Int = this.barWholes.length;
         for (i in 0...numBarWholes){
@@ -372,7 +372,6 @@ class BarModelData
         var serializedObject : Dynamic = {
             bwl : serializedBarWholes,
             vll : serializedBarWholeLabels,
-
         };
         
         return serializedObject;
@@ -380,10 +379,10 @@ class BarModelData
     
     public function deserialize(data : Dynamic) : Void
     {
-        if (data.exists("bwl")) 
+        if (Reflect.hasField(data, "bwl")) 
         {
             var barWholesData : Array<Dynamic> = data.bwl;
-            var i : Int;
+            var i : Int = 0;
             var numBarWholes : Int = barWholesData.length;
             for (i in 0...numBarWholes){
                 var barWhole : BarWhole = new BarWhole(false);
@@ -392,7 +391,7 @@ class BarModelData
             }
         }
         
-        if (data.exists("vll")) 
+        if (Reflect.hasField(data, "vll")) 
         {
             var verticalLabelsData : Array<Dynamic> = data.vll;
             var numVerticalLabels : Int = verticalLabelsData.length;
@@ -415,7 +414,7 @@ class BarModelData
     public function getMinimumValueSegment() : BarSegment
     {
         var barSegmentWithMinValue : BarSegment = null;
-        var minValue : Float = Int.MAX_VALUE;
+        var minValue : Float = Math.pow(2, 30);
         for (i in 0...this.barWholes.length){
             var barWhole : BarWhole = this.barWholes[i];
             var barSegments : Array<BarSegment> = barWhole.barSegments;

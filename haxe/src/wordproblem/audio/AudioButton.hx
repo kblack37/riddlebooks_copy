@@ -4,8 +4,7 @@ package wordproblem.audio;
 import flash.net.SharedObject;
 import flash.text.TextFormat;
 
-import feathers.controls.Button;
-
+import starling.display.Button;
 import starling.display.DisplayObject;
 import starling.display.Image;
 import starling.display.Sprite;
@@ -59,10 +58,12 @@ class AudioButton extends Sprite
         
         m_mainButton.width = width;
         m_mainButton.height = height;
-        m_mainButton.label = labelValue;
-        m_mainButton.iconPosition = Button.ICON_POSITION_RIGHT;
+        m_mainButton.text = labelValue;
+		// TODO: this was replaced from the feathers library button and
+		// will probably have to be fixed
+        //m_mainButton.iconPosition = Button.ICON_POSITION_RIGHT;
         m_mainButton.addEventListener(Event.TRIGGERED, onClick);
-        m_mainButton.iconOffsetX = onIcon.width * -1;
+        //m_mainButton.iconOffsetX = onIcon.width * -1;
         
         var preferencesSharedObject : SharedObject = SharedObject.getLocal("preferences");
         m_localSharedObject = preferencesSharedObject;
@@ -88,11 +89,11 @@ class AudioButton extends Sprite
     {
         if (value) 
         {
-            m_mainButton.defaultIcon = m_onIcon;
+            m_mainButton.upState = m_onIcon.texture;
         }
         else 
         {
-            m_mainButton.defaultIcon = m_offIcon;
+            m_mainButton.upState = m_offIcon.texture;
         }
     }
     

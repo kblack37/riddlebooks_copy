@@ -55,7 +55,7 @@ class UserLoggingData
     private function get_validatedSessions() : Array<UserSessionLoggingData>
     {
         var sessions : Array<UserSessionLoggingData> = new Array<UserSessionLoggingData>();
-        var sessionLogging : UserSessionLoggingData;
+        var sessionLogging : UserSessionLoggingData = null;
         for (currSessionId in Reflect.fields(_pageloadMap))
         {
             sessionLogging = new UserSessionLoggingData(currSessionId);
@@ -107,8 +107,8 @@ class UserLoggingData
     {
         if (pageloads != null)
         {
-            var currSessionId : String;
-            var sessionPageloads : Array<PageLoadData>;
+            var currSessionId : String = null;
+            var sessionPageloads : Array<PageLoadData> = null;
             for (pageload in pageloads)
             {
                 _pageloads.push(pageload);
@@ -133,7 +133,7 @@ class UserLoggingData
     {
         if (data != null)
         {
-            var sessionQuests : Array<QuestData>;
+            var sessionQuests : Array<QuestData> = null;
             for (questData in data)
             {
                 _quests.push(questData);
@@ -157,7 +157,7 @@ class UserLoggingData
     {
         if (data != null)
         {
-            var sessionActions : Array<GameAction>;
+            var sessionActions : Array<GameAction> = null;
             for (gameAction in data)
             {
                 _actions.push(gameAction);

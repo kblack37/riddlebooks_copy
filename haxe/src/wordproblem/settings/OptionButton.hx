@@ -1,10 +1,10 @@
 package wordproblem.settings;
 
-
-import feathers.controls.Button;
+import haxe.Constraints.Function;
 
 import starling.animation.Tween;
 import starling.core.Starling;
+import starling.display.Button;
 import starling.display.DisplayObject;
 import starling.display.Image;
 import starling.display.Sprite;
@@ -45,9 +45,11 @@ class OptionButton extends Sprite
         var optionsIcon : Image = new Image(assetManager.getTexture("gear_yellow_icon"));
         optionsIcon.pivotX = optionsIcon.width * 0.5;
         optionsIcon.pivotY = optionsIcon.height * 0.5;
-        m_button.defaultIcon = optionsIcon;
-        m_button.iconOffsetX = optionsIcon.pivotX;
-        m_button.iconOffsetY = optionsIcon.pivotY;
+        m_button.upState = optionsIcon.texture;
+		// TODO: this was changed from the feathers library button and will
+		// probably need to be fixed
+        //m_button.iconOffsetX = optionsIcon.pivotX;
+        //m_button.iconOffsetY = optionsIcon.pivotY;
         
         m_button.addEventListener(Event.TRIGGERED, onButtonClicked);
         m_button.addEventListener(TouchEvent.TOUCH, onButtonTouched);
@@ -77,19 +79,19 @@ class OptionButton extends Sprite
     private function onButtonTouched(event : TouchEvent) : Void
     {
         var hoverTouch : Touch = event.getTouch(m_button, TouchPhase.HOVER);
-        var gearIconToAnimate : DisplayObject = m_button.defaultIcon;
+        var gearIconToAnimate : DisplayObject = try cast(m_button.upState, DisplayObject) catch (e : Dynamic) null;
         if (hoverTouch != null && m_optionsButtonIconTween == null) 
         {
             var iconTween : Tween = new Tween(gearIconToAnimate, 2);
             iconTween.animate("rotation", Math.PI * 2);
             iconTween.repeatCount = 0;
-            Starling.juggler.add(iconTween);
+            Starling.current.juggler.add(iconTween);
             m_optionsButtonIconTween = iconTween;
         }
         else if (hoverTouch == null && m_optionsButtonIconTween != null) 
         {
             gearIconToAnimate.rotation = 0.0;
-            Starling.juggler.remove(m_optionsButtonIconTween);
+            Starling.current.juggler.remove(m_optionsButtonIconTween);
             m_optionsButtonIconTween = null;
         }
     }

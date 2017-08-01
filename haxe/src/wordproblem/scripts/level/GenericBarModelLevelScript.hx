@@ -1,11 +1,13 @@
 package wordproblem.scripts.level;
 
-import wordproblem.scripts.level.PMPRNG;
+import haxe.xml.Fast;
 
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.time.Time;
 import dragonbox.common.util.PMPRNG;
 import dragonbox.common.util.XColor;
+
+import haxe.Constraints.Function;
 
 import starling.core.Starling;
 import starling.display.DisplayObject;
@@ -169,7 +171,7 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
      * If level has them, this is the block of data for custom hints.
      * The HintXMLStorage class is what does the parsing of it
      */
-    private var m_customHintsXMLBlock : FastXML;
+    private var m_customHintsXMLBlock : Fast;
     
     /*
      * Needed to get KOfNProficient for ai hint system
@@ -316,59 +318,51 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
         m_gameEngine.removeEventListener(GameEvent.BAR_MODEL_CORRECT, bufferEvent);
     }
     
-    override public function setExtraData(data : Dynamic) : Void
+    override public function setExtraData(data : Iterator<Fast>) : Void
     {
         // For this intro script the extra data we input are the pages for the dynamic dialog
-        var extraXMLList : FastXMLList = try cast(data, FastXMLList) catch(e:Dynamic) null;
-        var numElements : Int = extraXMLList.length();
-        
-        var i : Int;var j : Int;var k : Int;var m : Int;
-        var elementXML : FastXML;
-        for (i in 0...numElements){
-            elementXML = extraXMLList.get(i);
-            if (elementXML.node.name.innerData() == "deck") 
+        for (elementXML in data){
+            if (elementXML.name == "deck") 
             {
                 var deckValue : String = elementXML.att.value;
                 m_deckValues.push(deckValue);
             }
-            else if (elementXML.node.name.innerData() == "documentToCard") 
+            else if (elementXML.name == "documentToCard") 
             {
                 var documentId : String = elementXML.att.documentId;
                 m_documentIds.push(documentId);
                 var documentIdCardValue : String = elementXML.att.value;
                 m_documentIdCardValues.push(documentIdCardValue);
             }
-            else if (elementXML.node.name.innerData() == "barNormalizingFactor") 
+            else if (elementXML.name == "barNormalizingFactor") 
             {
-                m_barNormalizingFactor = parseFloat(elementXML.att.value);
+                m_barNormalizingFactor = Std.parseFloat(elementXML.att.value);
             }
-            else if (elementXML.node.name.innerData() == "referenceModel") 
+            else if (elementXML.name == "referenceModel") 
             {
                 var referenceModel : BarModelData = new BarModelData();
-                var referenceModelElements : FastXMLList = elementXML.node.children.innerData();
-                for (j in 0...referenceModelElements.length()){
-                    var newBarLabel : BarLabel;
-                    var referenceModelElement : FastXML = referenceModelElements.get(j);
-                    if (referenceModelElement.node.name.innerData() == "barWhole") 
+                var referenceModelElements = elementXML.elements;
+                for (referenceModelElement in referenceModelElements){
+                    var newBarLabel : BarLabel = null;
+                    if (referenceModelElement.name == "barWhole") 
                     {
-                        var barWholeElements : FastXMLList = referenceModelElement.node.children.innerData();
-                        var barWholeId : String = ((referenceModelElement.node.exists.innerData("@id"))) ? referenceModelElement.att.id : null;
+						var barWholeElements = referenceModelElement.elements;
+                        var barWholeId : String = referenceModelElement.has.id ? referenceModelElement.att.id : null;
                         var barWhole : BarWhole = new BarWhole(true, barWholeId);
-                        for (k in 0...barWholeElements.length()){
-                            var barWholeElement : FastXML = barWholeElements.get(k);
-                            if (barWholeElement.node.name.innerData() == "barSegment") 
+                        for (barWholeElement in barWholeElements){
+                            if (barWholeElement.name == "barSegment") 
                             {
                                 var numSegments : Int = 1;
-                                if (barWholeElement.node.exists.innerData("@repeat")) 
+                                if (barWholeElement.has.repeat) 
                                 {
-                                    numSegments = barWholeElement.att.repeat;
+                                    numSegments = Std.parseInt(barWholeElement.att.repeat);
                                 }
                                 
-                                for (m in 0...numSegments){
-                                    var barSegmentValue : Float = ((barWholeElement.node.exists.innerData("@value"))) ? parseFloat(barWholeElement.att.value) : 1;
+                                for (i in 0...numSegments){
+                                    var barSegmentValue : Float = barWholeElement.has.value ? Std.parseFloat(barWholeElement.att.value) : 1;
                                     var newBarSegment : BarSegment = new BarSegment(barSegmentValue, m_barNormalizingFactor, 0xFFFFFFFF, null);
                                     barWhole.barSegments.push(newBarSegment);
-                                    if (barWholeElement.node.exists.innerData("@label")) 
+                                    if (barWholeElement.has.label) 
                                     {
                                         var barSegmentIndex : Int = barWhole.barSegments.length - 1;
                                         newBarLabel = new BarLabel(barWholeElement.att.label, barSegmentIndex, barSegmentIndex, true, false, BarLabel.BRACKET_NONE, null);
@@ -376,13 +370,18 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
                                     }
                                 }
                             }
-                            else if (barWholeElement.node.name.innerData() == "bracket") 
+                            else if (barWholeElement.name == "bracket") 
                             {
                                 newBarLabel = new BarLabel(barWholeElement.att.value, 
-                                        as3hx.Compat.parseInt(barWholeElement.att.start), as3hx.Compat.parseInt(barWholeElement.att.end), true, false, BarLabel.BRACKET_STRAIGHT, null);
+                                        Std.parseInt(barWholeElement.att.start),
+										Std.parseInt(barWholeElement.att.end),
+										true,
+										false,
+										BarLabel.BRACKET_STRAIGHT,
+										null);
                                 barWhole.barLabels.unshift(newBarLabel);
                             }
-                            else if (barWholeElement.node.name.innerData() == "barCompare") 
+                            else if (barWholeElement.name == "barCompare") 
                             {
                                 var newBarComp : BarComparison = new BarComparison(barWholeElement.att.value, barWholeElement.att.compTo, 0);
                                 barWhole.barComparison = newBarComp;
@@ -390,10 +389,15 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
                         }
                         referenceModel.barWholes.push(barWhole);
                     }
-                    else if (referenceModelElement.node.name.innerData() == "verticalBracket") 
+                    else if (referenceModelElement.name == "verticalBracket") 
                     {
                         newBarLabel = new BarLabel(referenceModelElement.att.value, 
-                                as3hx.Compat.parseInt(referenceModelElement.att.start), as3hx.Compat.parseInt(referenceModelElement.att.end), false, false, BarLabel.BRACKET_STRAIGHT, null);
+                                Std.parseInt(referenceModelElement.att.start),
+								Std.parseInt(referenceModelElement.att.end),
+								false,
+								false,
+								BarLabel.BRACKET_STRAIGHT,
+								null);
                         referenceModel.verticalBarLabels.push(newBarLabel);
                     }
                 }
@@ -401,11 +405,10 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
                 
                 // Default, any bar comparisons in a reference will need to point to the end of the bar
                 var barWholesInReference : Array<BarWhole> = referenceModel.barWholes;
-                for (j in 0...barWholesInReference.length){
-                    barWhole = barWholesInReference[j];
+                for (barWhole in barWholesInReference){
                     if (barWhole.barComparison != null) 
                     {
-                        newBarComp = barWhole.barComparison;
+                        var newBarComp = barWhole.barComparison;
                         var barWholeToCompare : BarWhole = referenceModel.getBarWholeById(newBarComp.barWholeIdComparedTo);
                         if (barWholeToCompare != null) 
                         {
@@ -414,42 +417,41 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
                     }
                 }
             }
-            else if (elementXML.node.name.innerData() == "equation") 
+            else if (elementXML.name == "equation") 
             {
-                var equationId : String = ((elementXML.node.exists.innerData("@id"))) ? 
-                elementXML.att.id : m_equationIdCounter + "";
+                var equationId : String = elementXML.has.id ? elementXML.att.id : m_equationIdCounter + "";
                 var equationValue : String = elementXML.att.value;
                 Reflect.setField(m_idToDecompiledEquation, equationId, equationValue);
                 m_equationIdCounter++;
             }
-            else if (elementXML.node.name.innerData() == "equationSet") 
+            else if (elementXML.name == "equationSet") 
             {
-                var eqsXMLList : FastXMLList = elementXML.node.children.innerData();
+				var eqsXMLList = elementXML.elements;
                 var equationIdSet : Array<String> = new Array<String>();
-                for (j in 0...eqsXMLList.length()){
-                    if (eqsXMLList.get(j).node.name.innerData() == "equation") 
+                for (eqXML in eqsXMLList){
+                    if (eqXML.name == "equation") 
                     {
-                        equationId = eqsXMLList.get(j).att.id;
+                        var equationId = eqXML.att.id;
                         equationIdSet.push(equationId);
                     }
                 }
                 m_equationIdSets.push(equationIdSet);
             }
-            else if (elementXML.node.name.innerData() == "termValueToBarValue") 
+            else if (elementXML.name == "termValueToBarValue") 
             {
                 var termValue : String = elementXML.att.termValue;
-                var barValue : Float = parseFloat(elementXML.att.barValue);
+                var barValue : Float = Std.parseFloat(elementXML.att.barValue);
                 Reflect.setField(m_termValueToBarValue, termValue, barValue);
             }
-            else if (elementXML.node.name.innerData() == "defaultUnitValue") 
+            else if (elementXML.name == "defaultUnitValue") 
             {
                 var unitValue : String = elementXML.att.unitValue;
-                m_defaultUnitValue = parseFloat(unitValue);
+                m_defaultUnitValue = Std.parseFloat(unitValue);
             }
-            else if (elementXML.node.name.innerData() == "customHints") 
+            else if (elementXML.name == "customHints") 
             {
                 // The hint storage is responsible for parsing xml, we just save a copy
-                m_customHintsXMLBlock = elementXML.node.copy.innerData();
+                m_customHintsXMLBlock = new Fast(elementXML.x);
             }
         }
     }
@@ -495,17 +497,17 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
         for (referenceModel in m_referenceModels)
         {
             var segmentValueToColorMap : Dynamic = { };
-            for (barWhole/* AS3HX WARNING could not determine type for var: barWhole exp: EField(EIdent(referenceModel),barWholes) type: null */ in referenceModel.barWholes)
+            for (barWhole in referenceModel.barWholes)
             {
                 // Equal sized boxes may not have a single label on them to define their color, like the fraction problem
                 // The color to use is that of the number of equal boxes
                 var segmentValueToOccurencesMap : Dynamic = { };
-                for (barSegment/* AS3HX WARNING could not determine type for var: barSegment exp: EField(EIdent(barWhole),barSegments) type: null */ in barWhole.barSegments)
+                for (barSegment in barWhole.barSegments)
                 {
                     var segmentValue : String = Std.string(barSegment.getValue());
                     if (segmentValueToOccurencesMap.exists(segmentValue)) 
                     {
-                        Reflect.field(segmentValueToOccurencesMap, segmentValue)++;
+						Reflect.setField(segmentValueToOccurencesMap, segmentValue, Reflect.field(segmentValueToOccurencesMap, segmentValue) + 1);
                     }
                     else 
                     {
@@ -515,42 +517,40 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
                 
                 for (segmentValue in Reflect.fields(segmentValueToOccurencesMap))
                 {
-                    var numOccurrencesForValue : Int = segmentValueToOccurencesMap[segmentValue];
+                    var numOccurrencesForValue : Int = Reflect.field(segmentValueToOccurencesMap, segmentValue);
                     if (numOccurrencesForValue > 1) 
                     {
-                        dataForCard = m_gameEngine.getExpressionSymbolResources().getSymbolDataFromValue(Std.string(numOccurrencesForValue));
+                        var dataForCard = m_gameEngine.getExpressionSymbolResources().getSymbolDataFromValue(Std.string(numOccurrencesForValue));
                         if (dataForCard.useCustomBarColor) 
                         {
-                            segmentValueToColorMap[segmentValue] = dataForCard.customBarColor;
+                            Reflect.setField(segmentValueToColorMap, segmentValue, dataForCard.customBarColor);
                         }
                     }
                 }
                 
-                for (barLabel/* AS3HX WARNING could not determine type for var: barLabel exp: EField(EIdent(barWhole),barLabels) type: null */ in barWhole.barLabels)
+                for (barLabel in barWhole.barLabels)
                 {
-                    dataForCard = m_gameEngine.getExpressionSymbolResources().getSymbolDataFromValue(barLabel.value);
+                    var dataForCard = m_gameEngine.getExpressionSymbolResources().getSymbolDataFromValue(barLabel.value);
                     if (dataForCard.useCustomBarColor && barLabel.bracketStyle == BarLabel.BRACKET_NONE) 
                     {
                         var targetSegment : BarSegment = barWhole.barSegments[barLabel.startSegmentIndex];
-                        segmentValueToColorMap[Std.string(targetSegment.getValue())] = dataForCard.customBarColor;
+						Reflect.setField(segmentValueToColorMap, Std.string(targetSegment.getValue()), dataForCard.customBarColor);
                     }
-                }  // Apply the appropriate colors to the segments in the reference model  
-                
-                
-                
-                for (barSegment/* AS3HX WARNING could not determine type for var: barSegment exp: EField(EIdent(barWhole),barSegments) type: null */ in barWhole.barSegments)
+                }  
+				
+				// Apply the appropriate colors to the segments in the reference model  
+                for (barSegment in barWhole.barSegments)
                 {
-                    segmentValue = Std.string(barSegment.getValue());
+                    var segmentValue = Std.string(barSegment.getValue());
                     if (segmentValueToColorMap.exists(segmentValue)) 
                     {
-                        barSegment.color = segmentValueToColorMap[segmentValue];
+                        barSegment.color = Reflect.field(segmentValueToColorMap, segmentValue);
                     }
                 }
             }
-        }  // Add hints that would be applicable to every possible bar model level  
-        
-        
-        
+        }  
+		
+		// Add hints that would be applicable to every possible bar model level  
         var helperCharacterController : HelperCharacterController = new HelperCharacterController(
         m_gameEngine.getCharacterComponentManager(), 
         new CalloutCreator(m_textParser, m_textViewFactory));
@@ -564,6 +564,57 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
         highlightHintButton.overrideLevelReady();
         
         var hintSelector : HintSelectorNode = new HintSelectorNode();
+		
+		var highlighTextHintSelect : HighlightTextHintSelector = new HighlightTextHintSelector(m_gameEngine, 
+			m_assetManager, 
+			m_validateBarModelAreaScript,
+			helperCharacterController,
+			m_textParser,
+			m_textViewFactory
+        );
+		
+		// Hints about constructing the equation
+        var modelSpecificEquationScript : ModelSpecificEquation = try cast(this.getNodeById("ModelSpecificEquation"), ModelSpecificEquation) catch(e:Dynamic) null;
+        var expressionModelHint : ExpressionModelHintSelector = new ExpressionModelHintSelector(m_gameEngine,
+			m_assetManager,
+			helperCharacterController,
+			m_expressionCompiler,
+			modelSpecificEquationScript, 
+			200,
+			350
+        );
+		
+		// Read in the user configuration of whether custom hints should be used
+        var customHintsXML : Fast = ((m_playerStatsAndSaveData.useCustomHints)) ? m_customHintsXMLBlock : null;
+		var barModelType : String = m_gameEngine.getCurrentLevel().getBarModelType();
+		// If the bar model portion has not been solved yet
+        var showHintOnBarModelMistake : ShowHintOnBarModelMistake = new ShowHintOnBarModelMistake(m_gameEngine,
+			m_assetManager,
+			m_playerStatsAndSaveData,
+			m_validateBarModelAreaScript, 
+			helperCharacterController,
+			m_textParser,
+			m_textViewFactory,
+			barModelType,
+			customHintsXML
+		);
+		
+		var policySelector : AiPolicyHintSelector = null;
+        if (m_playerStatsAndSaveData.useAiHints && BarModelClassifier.isValidLevelType(barModelType)) {
+            var policySelector : AiPolicyHintSelector = new AiPolicyHintSelector(m_gameEngine,
+				m_validateBarModelAreaScript, 
+				barModelType,
+				m_gameEngine.getCurrentLevel().getId(),
+				m_helperCharacterController, 
+				m_textViewFactory,
+				m_assetManager,
+				m_textParser,
+				m_levelManager,
+				m_playerStatsAndSaveData
+			);
+            hintSelector.addChild(policySelector);
+        }
+		
         hintSelector.setCustomGetHintFunction(function() : HintScript
                 {
                     var hint : HintScript = highlighTextHintSelect.getHint();
@@ -591,37 +642,9 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
                     return hint;
                 }, null);
         
-        var highlighTextHintSelect : HighlightTextHintSelector = new HighlightTextHintSelector(m_gameEngine, 
-        m_assetManager, 
-        m_validateBarModelAreaScript, helperCharacterController, m_textParser, m_textViewFactory, 
-        );
         hintSelector.addChild(highlighTextHintSelect);
-        
-        // Hints about constructing the equation
-        var modelSpecificEquationScript : ModelSpecificEquation = try cast(this.getNodeById("ModelSpecificEquation"), ModelSpecificEquation) catch(e:Dynamic) null;
-        var expressionModelHint : ExpressionModelHintSelector = new ExpressionModelHintSelector(m_gameEngine, m_assetManager, helperCharacterController, m_expressionCompiler, modelSpecificEquationScript, 
-        200, 350, 
-        );
         hintSelector.addChild(expressionModelHint);
-        
-        // Read in the user configuration of whether custom hints should be used
-        var customHintsXML : FastXML = ((m_playerStatsAndSaveData.useCustomHints)) ? m_customHintsXMLBlock : null;
-        
-        var barModelType : String = m_gameEngine.getCurrentLevel().getBarModelType();
-        
-        // If the bar model portion has not been solved yet
-        var showHintOnBarModelMistake : ShowHintOnBarModelMistake = new ShowHintOnBarModelMistake(
-        m_gameEngine, m_assetManager, m_playerStatsAndSaveData, m_validateBarModelAreaScript, 
-        helperCharacterController, m_textParser, m_textViewFactory, barModelType, customHintsXML);
         hintSelector.addChild(showHintOnBarModelMistake);
-        
-        if (m_playerStatsAndSaveData.useAiHints && BarModelClassifier.isValidLevelType(barModelType)) {
-            var policySelector : AiPolicyHintSelector = new AiPolicyHintSelector(m_gameEngine, m_validateBarModelAreaScript, 
-            barModelType, m_gameEngine.getCurrentLevel().getId(), m_helperCharacterController, 
-            m_textViewFactory, m_assetManager, m_textParser, m_levelManager, m_playerStatsAndSaveData);
-            hintSelector.addChild(policySelector);
-        }
-        
         helpController.setRootHintSelectorNode(hintSelector);
         
         // Set up the target equations and equation sets needed to be solved
@@ -631,12 +654,10 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
             {
                 var equationString : String = Reflect.field(m_idToDecompiledEquation, equationId);
                 modelSpecificEquationScript.addEquation(equationId, equationString, false);
-            }  // one large set (i.e. player needs to solve all of the defined equations    // By default if no equation set is specified, every defined equation goes into  
-            
-            
-            
-            
-            
+            }
+			
+			// By default if no equation set is specified, every defined equation goes into  
+            // one large set (i.e. player needs to solve all of the defined equations
             if (m_equationIdSets.length == 0) 
             {
                 var defaultEquationIdSet : Array<String> = new Array<String>();
@@ -657,7 +678,7 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
         
         
         
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...m_documentIds.length){
             m_gameEngine.addTermToDocument(m_documentIdCardValues[i], m_documentIds[i]);
         }
@@ -695,7 +716,7 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
         m_gameEngine.addEventListener(GameEvent.BAR_MODEL_CORRECT, bufferEvent);
         
         currentLevel.termValueToBarModelValue = m_termValueToBarValue;
-        currentLevel.defaultUnitValue = m_defaultUnitValue;
+        currentLevel.defaultUnitValue = Std.int(m_defaultUnitValue);
         
         // Don't allow switching at the start
         m_switchModelScript.setIsActive(false);
@@ -789,7 +810,7 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
                 }));
         otherSequence.pushChild(new CustomVisitNode(function(param : Dynamic) : Int
                 {
-                    Starling.juggler.tween(uiContainer, 0.3, {
+                    Starling.current.juggler.tween(uiContainer, 0.3, {
                                 y : startingUiContainerY
 
                             });
@@ -828,7 +849,7 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
                 m_gameEngine.dispatchEventWith(GameEvent.LEVEL_SOLVED);
                 
                 // Wait for some short time before marking the level as totally complete
-                Starling.juggler.delayCall(function() : Void
+                Starling.current.juggler.delayCall(function() : Void
                         {
                             m_gameEngine.dispatchEventWith(GameEvent.LEVEL_COMPLETE);
                         },
@@ -872,10 +893,9 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
         {
             m_gameEngine.getUiEntity("parenthesisButton").visible = true;
             this.getNodeById("AddAndChangeParenthesis").setIsActive(true);
-        }  // Enter card only shows up after bar model created  
-        
-        
-        
+        }  
+		
+		// Enter card only shows up after bar model created  
         if (currentLevel.getLevelRules().allowCreateCard) 
         {
             var cardCreator : EnterNewCard = new EnterNewCard(m_gameEngine, m_expressionCompiler, m_assetManager, false, 3, "EnterNewCard");
@@ -883,7 +903,7 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
             cardCreator.overrideLevelReady();
         }
         
-        Starling.juggler.delayCall(
+        Starling.current.juggler.delayCall(
                 delayFunction,
                 0.2
                 );

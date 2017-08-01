@@ -1,13 +1,13 @@
 package wordproblem;
 
 import flash.errors.Error;
-import wordproblem.PREDEFINEDLAYOUTS;
+import haxe.xml.Fast;
+//import wordproblem.PREDEFINEDLAYOUTS;
 
 import flash.display.DisplayObjectContainer;
 import flash.display.Sprite;
 import flash.display.Stage;
 import flash.geom.Rectangle;
-
 
 import cgs.audio.Audio;
 import cgs.cache.ICgsUserCache;
@@ -260,9 +260,9 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
             case "start":
                 this.onGoToLevel(null, args[0]);
             case "createUsers":
-                var numUsers : Int = parseInt(args[0]);
+                var numUsers : Int = Std.parseInt(args[0]);
                 var usernamePrefix : String = args[1];
-                var i : Int;
+                var i : Int = 0;
                 for (i in 0...numUsers){
                     var playtestName : String = usernamePrefix + i;
                     m_logger.getCgsApi().registerUser(
@@ -355,8 +355,8 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
         // Read the total display resolution from the config file
         var width : Float = m_config.getWidth();
         var height : Float = m_config.getHeight();
-        Starling.current.stage.stageWidth = width;
-        Starling.current.stage.stageHeight = height;
+        Starling.current.stage.stageWidth = Std.int(width);
+        Starling.current.stage.stageHeight = Std.int(height);
         nativeFlashStage.frameRate = m_config.getFps();
         
         m_disablingStage3dQuad = new Quad(width, height, 0x000000);
@@ -365,10 +365,10 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
         
         // Only set up the simple load wait screen by default
         var loadingScreenState : WordProblemLoadingState = new WordProblemLoadingState(
-        m_stateMachine, 
-        m_config.getWidth(), 
-        m_config.getHeight(), 
-        m_assetManager, 
+			m_stateMachine, 
+			m_config.getWidth(), 
+			m_config.getHeight(), 
+			m_assetManager
         );
         m_stateMachine.register(loadingScreenState);
         
@@ -386,7 +386,8 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
         // Initialize the text strings embeded in the game
         // We need to pass in the embedded class containing the text data to the string table.
         // Create the engine after initial resources loaded
-        StringTable.initialize(gameConfig.getLocalizationClassForStringTable(), false);
+		// TODO: uncomment once cgs library is ported
+        //StringTable.initialize(gameConfig.getLocalizationClassForStringTable(), false);
         
         // While this process is taking place we should perhaps play some background movie
         // that we have hardcoded to embed. This movie thus becomes immediately available to use
@@ -401,7 +402,7 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
                     // At this point the game config is not fully populated.
                     // More fine grained configuration settings need to be loaded in later
                     // (i.e. logging parameters and possible locations for other resources)
-                    var configXml : FastXML = m_assetManager.getXml("config");
+                    var configXml : Xml = m_assetManager.getXml("config");
                     gameConfig.readConfigFromData(configXml);
                     GameFonts.DEFAULT_FONT_NAME = gameConfig.getDefaultFontFamily();
                     
@@ -421,8 +422,8 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
                     m_expressionCompiler = expressionCompiler;
                     
                     var levelCompiler : LevelCompiler = new LevelCompiler(
-                    expressionCompiler, 
-                    Std.string(Type.createInstance(PREDEFINED_LAYOUTS, [])), 
+						expressionCompiler, 
+						Std.string(Type.createInstance(PREDEFINED_LAYOUTS, []))
                     );
                     m_levelCompiler = levelCompiler;
                     
@@ -454,8 +455,9 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
                     m_assetManager.loadResourceBundles(startingBundles, null, function onComplete() : Void
                             {
                                 //onWaitHide();
-                                var audioXml : FastXML = m_assetManager.getXml("audio");
-                                if (audioXml != null) 
+								var audioXml : Xml = m_assetManager.getXml("audio");
+                                var fastAudioXml : Fast = new Fast(m_assetManager.getXml("audio"));
+                                if (fastAudioXml != null) 
                                 {
                                     // Initialize all non-streaming audio sources using the cgs common library
                                     var nonStreamingAudioLib : Audio = Audio.instance;
@@ -463,17 +465,17 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
                                     // Modify the url property of the xml to use the base path if specified
                                     if (resourcePathBase != null) 
                                     {
-                                        var audioTypes : FastXMLList = audioXml.node.child.innerData("type");
+										var audioTypes = fastAudioXml.nodes.type;
                                         for (audioType in audioTypes)
                                         {
-                                            var sounds : FastXMLList = audioType.node.child.innerData("sound");
+											var sounds = audioType.nodes.sounds;
                                             for (sound in sounds)
                                             {
-                                                if (sound.node.exists.innerData("@url")) 
+                                                if (sound.has.url) 
                                                 {
                                                     var url : String = sound.att.url;
                                                     url = m_assetManager.stripRelativePartsFromPath(url, resourcePathBase);
-                                                    sound.setAttribute("url", url);
+													sound.x.set("url", url);
                                                 }
                                             }
                                         }
@@ -486,24 +488,41 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
                                 
                                 // Game engine is the object that plays and renders the levels
                                 gameEngine = new GameEngine(
-                                        m_expressionCompiler, 
-                                        m_assetManager, 
-                                        m_expressionSymbolMap, 
-                                        width, 
-                                        height, 
-                                        m_mouseState, 
-                                        );
+                                    m_expressionCompiler, 
+                                    m_assetManager, 
+                                    m_expressionSymbolMap, 
+                                    width, 
+                                    height, 
+                                    m_mouseState
+                                );
                                 
                                 // For commonly re-used textures that are derived from a fla source
                                 // we need to specify the sampling box.
-                                var flaTextureClass : Array<Class<Dynamic>> = [Art_Brain, Art_StarBurst, Art_YellowArch, Art_YellowGlow, 
-                                        Art_BrainFrontBgA, Art_BrainFrontBgB, Art_BrainFrontBgC, Art_BrainLargeFront, 
-                                        Art_LockRed, 
-                                        Art_LockGrey, 
-                                        Art_GemBlueBlank, Art_GemBlueCenter, Art_GemBlueFilled, 
-                                        Art_GemGreenBlank, Art_GemGreenCenter, Art_GemGreenFilled, 
-                                        Art_GemOrangeBlank, Art_GemOrangeCenter, Art_GemOrangeFilled, 
-                                        Art_TrophyBronze, Art_TrophyGold, Art_TrophySilverLong, Art_TrophySilverShort];
+								// TODO: not sure if this is a correct conversion. previous was a list of
+								// unresolved class names
+                                var flaTextureClass : Array<Class<Dynamic>> = [Type.resolveClass("Art_Brain"), 
+										Type.resolveClass("Art_StarBurst"), 
+										Type.resolveClass("Art_YellowArch"),
+										Type.resolveClass("Art_YellowGlow"), 
+                                        Type.resolveClass("Art_BrainFrontBgA"),
+										Type.resolveClass("Art_BrainFrontBgB"), 
+										Type.resolveClass("Art_BrainFrontBgC"),
+										Type.resolveClass("Art_BrainLargeFront"), 
+                                        Type.resolveClass("Art_LockRed"), 
+                                        Type.resolveClass("Art_LockGrey"), 
+                                        Type.resolveClass("Art_GemBlueBlank"),
+										Type.resolveClass("Art_GemBlueCenter"),
+										Type.resolveClass("Art_GemBlueFilled"), 
+                                        Type.resolveClass("Art_GemGreenBlank"),
+										Type.resolveClass("Art_GemGreenCenter"),
+										Type.resolveClass("Art_GemGreenFilled"), 
+                                        Type.resolveClass("Art_GemOrangeBlank"),
+										Type.resolveClass("Art_GemOrangeCenter"),
+										Type.resolveClass("Art_GemOrangeFilled"), 
+                                        Type.resolveClass("Art_TrophyBronze"),
+										Type.resolveClass("Art_TrophyGold"),
+										Type.resolveClass("Art_TrophySilverLong"),
+										Type.resolveClass("Art_TrophySilverShort")];
                                 var flaTextureScale : Array<Float> = [1, 0.17, 1, 1, 
                                         1, 1, 1, 1, 
                                         0.4, 
@@ -529,7 +548,7 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
                                         new Rectangle(80.35, 84.15, 160.7, 168.35), new Rectangle(56.45, 59.15, 112.9, 118.3), new Rectangle(74, 77.75, 148, 155.5), 
                                         new Rectangle(0, 0, 119, 108.2), new Rectangle(0, 0, 107, 118.9), new Rectangle(0, 0, 120, 110.5), new Rectangle(0, 0, 120, 118.95)];
                                 
-                                var i : Int;
+                                var i : Int = 0;
                                 for (i in 0...flaTextureClass.length){
                                     var generatedTexture : Texture = FlashResourceUtil.getTextureFromFlashClass(flaTextureClass[i], null, flaTextureScale[i], flaTextureBoxes[i]);
                                     m_assetManager.addTexture(Type.getClassName(flaTextureClass[i]), generatedTexture);
@@ -658,8 +677,24 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
         
         // After the xml has been loaded, find the resources
         var levelResourceKeyName : String = "level_" + id;
-        var levelData : String = m_assetManager.getXml(levelResourceKeyName);
-        if (levelData == null) 
+        var levelData : String = m_assetManager.getXml(levelResourceKeyName).toString();
+		
+        function onLevelLoaded() : Void
+        {
+            // Once the level configurations have been loaded we can start the game.
+            var levelXml : Xml = m_assetManager.getXml(levelResourceKeyName);
+            if (levelXml == null) 
+            {
+                // Break out if we can't find the level data, show some error somewhere.
+                onLevelLoadError(id, src);
+            }
+            else 
+            {
+                startLevelFromXmlAndExtraData(id, levelXml, extraLevelProgressionData);
+            }
+        };
+        
+		if (levelData == null) 
         {
             if (src != null) 
             {
@@ -675,7 +710,7 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
             }
             else 
             {
-                m_levelCreator.loadLevelFromId(parseInt(id), function(problemXml : FastXML) : Void
+                m_levelCreator.loadLevelFromId(Std.parseInt(id), function(problemXml : Xml) : Void
                         {
                             m_assetManager.addXml(levelResourceKeyName, problemXml);
                             onLevelLoaded();
@@ -688,24 +723,9 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
             // from the asset manager.
             onLevelLoaded();
         }
-        
-        function onLevelLoaded() : Void
-        {
-            // Once the level configurations have been loaded we can start the game.
-            var levelXml : FastXML = m_assetManager.getXml(levelResourceKeyName);
-            if (levelXml == null) 
-            {
-                // Break out if we can't find the level data, show some error somewhere.
-                onLevelLoadError(id, src);
-            }
-            else 
-            {
-                startLevelFromXmlAndExtraData(id, levelXml, extraLevelProgressionData);
-            }
-        };
     }
     
-    private function startLevelFromXmlAndExtraData(id : String, levelXml : FastXML, extraLevelProgressionData : Dynamic = null) : Void
+    private function startLevelFromXmlAndExtraData(id : String, levelXml : Xml, extraLevelProgressionData : Dynamic = null) : Void
     {
         // Check if the level to start is bound to some genre
         // Get a reference to the level node object, check that it does belong to a genre
@@ -832,25 +852,34 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
                 numExtraResources++;
                 m_assetManager.enqueueWithName(imageSourceName, imageSourceName);
             }
-        }  // Texture atlas and audio can be directly loaded via starling's built-in asset manager functionality  
-        
-        
-        
-        for (audioDataPart/* AS3HX WARNING could not determine type for var: audioDataPart exp: ECall(EField(EIdent(problemData),getAudioData),[]) type: null */ in problemData.getAudioData())
+        }  
+		
+		// Texture atlas and audio can be directly loaded via starling's built-in asset manager functionality  
+        for (audioDataPart in problemData.getAudioData())
         {
             // Only load the audio if it is of a url type
             if (audioDataPart.type == "url") 
             {
                 var audioUrl : String = audioDataPart.src;
                 numExtraResources++;
-                m_assetManager.enqueue(audioUrl);
+                //m_assetManager.enqueue(audioUrl);
             }
         }
+		
+		function resourceBatchLoaded() : Void
+        {
+            if (extraResourcesLoaded) 
+            {
+                var params : Array<Dynamic> = new Array<Dynamic>();
+                params.push(problemData);
+                m_stateMachine.changeState(WordProblemGameState, params);
+            }
+        };
         
-        for (atlasList/* AS3HX WARNING could not determine type for var: atlasList exp: ECall(EField(EIdent(problemData),getTextureAtlasesToLoad),[]) type: null */ in problemData.getTextureAtlasesToLoad())
+        for (atlasList in problemData.getTextureAtlasesToLoad())
         {
             numExtraResources++;
-            m_assetManager.enqueue(atlasList[0], atlasList[1]);
+            //m_assetManager.enqueue(atlasList[0], atlasList[1]);
         }
         
         if (numExtraResources > 0) 
@@ -870,16 +899,6 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
             extraResourcesLoaded = true;
             resourceBatchLoaded();
         }
-        
-        function resourceBatchLoaded() : Void
-        {
-            if (extraResourcesLoaded) 
-            {
-                var params : Array<Dynamic> = new Array<Dynamic>();
-                params.push(problemData);
-                m_stateMachine.changeState(WordProblemGameState, params);
-            }
-        };
     }
     
     /**
@@ -911,7 +930,7 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
     private function resetClientData() : Void
     {
         var users : Array<ICgsUser> = m_logger.getCgsApi().userManager.userList;
-        var cache : ICgsUserCache;
+        var cache : ICgsUserCache = null;
         if (users.length > 0) 
         {
             cache = try cast(users[0], ICgsUserCache) catch(e:Dynamic) null;

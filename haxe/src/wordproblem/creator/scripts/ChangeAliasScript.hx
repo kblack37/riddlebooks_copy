@@ -390,7 +390,7 @@ class ChangeAliasScript extends BaseProblemCreateScript
         
         var propertiesForElement : BarModelTypeDrawerProperties = Reflect.field(m_styleAndDataForBarModel, elementId);
         var restrictions : Dynamic = propertiesForElement.restrictions;
-        var inputWidgetToUse : DisplayObject;
+        var inputWidgetToUse : DisplayObject = null;
         var usingNumberPadAsInput : Bool = true;
         if (restrictions.type == Int || restrictions.type == Float) 
         {

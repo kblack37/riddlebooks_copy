@@ -84,7 +84,7 @@ class AddNewUnitBar extends BaseBarModelScript implements IHitAreaScript
      */
     private var m_fixedDefaultUnitValue : Int;
     
-    private inline var PREVIEW_NEW_BAR_ID : String = "preview_unit_bar";
+    private inline static var PREVIEW_NEW_BAR_ID : String = "preview_unit_bar";
     
     public function new(gameEngine : IGameEngine,
             expressionCompiler : IExpressionTreeCompiler,
@@ -147,12 +147,12 @@ class AddNewUnitBar extends BaseBarModelScript implements IHitAreaScript
                 if (Std.is(releasedWidget, SymbolTermWidget) && checkHitArea(m_localMouseBuffer) && allowAddNewBar) 
                 {
                     if (ExpressionUtil.isNodeNumeric(releasedWidget.getNode()) &&
-                        parseFloat(releasedWidget.getNode().data) < AddNewUnitBar.MAX_ALLOWABLE_UNITS) 
+                        Std.parseFloat(releasedWidget.getNode().data) < AddNewUnitBar.MAX_ALLOWABLE_UNITS) 
                     {
                         m_barModelArea.showPreview(false);
                         m_didActivatePreview = false;
                         
-                        var numSegments : Int = parseInt(releasedWidget.getNode().data);
+                        var numSegments : Int = Std.parseInt(releasedWidget.getNode().data);
                         var targetNumeratorValue : Float = ((valuePerSegment > -1)) ? valuePerSegment : 1;
                         var targetDenominatorValue : Float = ((valuePerSegment > -1)) ? m_barModelArea.normalizingFactor : 1;
                         if (barWholeViews.length > 0) 
@@ -201,7 +201,7 @@ class AddNewUnitBar extends BaseBarModelScript implements IHitAreaScript
                 if (allowAddNewBar &&
                     ExpressionUtil.isNodeNumeric(draggedExpressionNode) &&
                     !draggedExpressionNode.isNegative() &&
-                    parseFloat(draggedExpressionNode.data) < AddNewUnitBar.MAX_ALLOWABLE_UNITS) 
+                    Std.parseFloat(draggedExpressionNode.data) < AddNewUnitBar.MAX_ALLOWABLE_UNITS) 
                 {
                     m_showHitAreas = true;
                     if (checkHitArea(m_localMouseBuffer)) 
@@ -210,18 +210,18 @@ class AddNewUnitBar extends BaseBarModelScript implements IHitAreaScript
                         // script had activated it but we want to overwrite it.
                         if (!m_barModelArea.getPreviewShowing() || !m_didActivatePreview) 
                         {
-                            targetNumeratorValue = ((valuePerSegment > -1)) ? valuePerSegment : 1;
-                            targetDenominatorValue = ((valuePerSegment > -1)) ? m_barModelArea.normalizingFactor : 1;
+                            var targetNumeratorValue = ((valuePerSegment > -1)) ? valuePerSegment : 1;
+                            var targetDenominatorValue = ((valuePerSegment > -1)) ? m_barModelArea.normalizingFactor : 1;
                             if (m_barModelArea.getBarWholeViews().length > 0) 
                             {
-                                referenceBar = m_barModelArea.getBarWholeViews()[0].data;
-                                referenceSegment = referenceBar.barSegments[0];
-                                targetNumeratorValue = referenceSegment.numeratorValue;
-                                targetDenominatorValue = referenceSegment.denominatorValue;
+                                var referenceBar = m_barModelArea.getBarWholeViews()[0].data;
+                                var referenceSegment = referenceBar.barSegments[0];
+                                targetNumeratorValue = Std.int(referenceSegment.numeratorValue);
+                                targetDenominatorValue = Std.int(referenceSegment.denominatorValue);
                             }
                             
                             var previewView : BarModelView = m_barModelArea.getPreviewView(true);
-                            numSegments = parseInt(draggedExpressionNode.data);
+                            var numSegments = Std.parseInt(draggedExpressionNode.data);
                             var extraDragParams : Dynamic = m_widgetDragSystem.getExtraParams();
                             var symbolDataForDragged : SymbolData = m_expressionSymbolMap.getSymbolDataFromValue(draggedExpressionNode.data);
                             if (extraDragParams != null && extraDragParams.exists("color")) 
@@ -346,7 +346,7 @@ class AddNewUnitBar extends BaseBarModelScript implements IHitAreaScript
     {
         var newBarWhole : BarWhole = new BarWhole(true, id);
         
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...numSegments){
             var newBarSegment : BarSegment = new BarSegment(numeratorValuePerSegment, denominatorValuePerSegment, color, null);
             newBarWhole.barSegments.push(newBarSegment);

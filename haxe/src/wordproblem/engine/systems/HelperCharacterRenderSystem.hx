@@ -1,8 +1,6 @@
 package wordproblem.engine.systems;
 
 
-import flash.utils.Dictionary;
-
 import starling.animation.Juggler;
 import starling.display.DisplayObject;
 import starling.display.DisplayObjectContainer;
@@ -42,7 +40,7 @@ class HelperCharacterRenderSystem extends BaseSystemScript
      * To detect changes on each visit, for each entity id we map to the state
      * value it was on the last visit.
      */
-    private var m_previousStateValue : Dictionary;
+    private var m_previousStateValue : Map<String, Int>;
     
     private var m_parentDisplay : DisplayObjectContainer;
     
@@ -54,7 +52,7 @@ class HelperCharacterRenderSystem extends BaseSystemScript
         
         m_assetManager = assetManager;
         m_spriteSheetJuggler = spriteSheetJuggler;
-        m_previousStateValue = new Dictionary();
+        m_previousStateValue = new Map();
         setParentDisplay(parentDisplay);
     }
     
@@ -68,8 +66,8 @@ class HelperCharacterRenderSystem extends BaseSystemScript
         // First get the render component, this is the canvas where the image of the character is saved
         var renderComponents : Array<Component> = componentManager.getComponentListForType(RenderableComponent.TYPE_ID);
         var numRenderComponents : Int = renderComponents.length;
-        var renderComponent : RenderableComponent;
-        var i : Int;
+        var renderComponent : RenderableComponent = null;
+        var i : Int = 0;
         for (i in 0...numRenderComponents){
             renderComponent = try cast(renderComponents[i], RenderableComponent) catch(e:Dynamic) null;
             if (renderComponent.isVisible) 
@@ -141,6 +139,11 @@ class HelperCharacterRenderSystem extends BaseSystemScript
                         m_spriteSheetJuggler.add(movieClip);
                     }
                     
+					var textureAtlasStateComponent : AnimatedTextureAtlasStateComponent = try cast(componentManager.getComponentFromEntityIdAndType(
+                            entityId,
+                            AnimatedTextureAtlasStateComponent.TYPE_ID
+                            ), AnimatedTextureAtlasStateComponent) catch(e:Dynamic) null;
+					
                     if (textureAtlasStateComponent != null) 
                     {
                         textureAtlasStateComponent.currentFrameCounter++;
@@ -167,7 +170,7 @@ class HelperCharacterRenderSystem extends BaseSystemScript
                     view.rotation = positionComponent.rotation;
                 }  // Re-add view  
                 
-                
+                var view : DisplayObject = renderComponent.view;
                 
                 if (view.parent == null || view.parent != m_parentDisplay) 
                 {
@@ -178,7 +181,6 @@ class HelperCharacterRenderSystem extends BaseSystemScript
             {
                 renderComponent.view.removeFromParent();
                 m_spriteSheetJuggler.remove(try cast(renderComponent.view, MovieClip) catch(e:Dynamic) null);
-                ;
             }
         }
     }

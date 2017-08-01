@@ -82,8 +82,8 @@ class CycleOperatorTip extends TermAreaTip
         var globalReferenceObject : DisplayObject = m_canvas.stage;
         var termAreaGlobalLocation : Point = m_termArea.localToGlobal(new Point(0, 0));
         var startMousePoint : Point = new Point(
-        termAreaGlobalLocation.x + 0.5 * m_termArea.getConstraintsWidth(), 
-        termAreaGlobalLocation.y - 25, 
+			termAreaGlobalLocation.x + 0.5 * m_termArea.getConstraintsWidth(), 
+			termAreaGlobalLocation.y - 25
         );
         
         // Need to identify the location of the plus sign (assume it is the root
@@ -91,13 +91,13 @@ class CycleOperatorTip extends TermAreaTip
         var operatorBounds : Rectangle = operatorWidget.rigidBodyComponent.boundingRectangle;
         var operatorGlobalLocation : Point = m_termArea.localToGlobal(new Point(operatorBounds.x, operatorBounds.y));
         var operatorMousePoint : Point = new Point(
-        operatorGlobalLocation.x + operatorBounds.width * 0.5, 
-        operatorGlobalLocation.y + operatorBounds.height * 0.5, 
+			operatorGlobalLocation.x + operatorBounds.width * 0.5, 
+			operatorGlobalLocation.y + operatorBounds.height * 0.5
         );
         
         var finalMousePoint : Point = new Point(
-        operatorMousePoint.x + 20, 
-        operatorMousePoint.y - 20, 
+			operatorMousePoint.x + 20, 
+			operatorMousePoint.y - 20
         );
         
         var mainAnimationEvents : Array<SequenceEvent> = new Array<SequenceEvent>();
@@ -130,7 +130,7 @@ class CycleOperatorTip extends TermAreaTip
     
     private function setupExpression() : Void
     {
-        m_termArea.setTree(new ExpressionTree(m_expressionCompiler.getVectorSpace(), m_expressionCompiler.compile("a+b").head));
+        m_termArea.setTree(new ExpressionTree(m_expressionCompiler.getVectorSpace(), m_expressionCompiler.compile("a+b")));
         m_termArea.redrawAfterModification(false);
     }
     

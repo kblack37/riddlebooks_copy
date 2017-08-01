@@ -55,7 +55,7 @@ class NumberRendererFactory
 		 */
     public function getNumberRendererInstance() : NumberRenderer
     {
-        var result : NumberRenderer;
+        var result : NumberRenderer = null;
         
         // Get a number renderer from storage
         if (m_numberRendererStorage.length > 0)

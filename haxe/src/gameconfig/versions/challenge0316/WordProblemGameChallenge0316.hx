@@ -613,7 +613,7 @@ class WordProblemGameChallenge0316 extends WordProblemGameBase
             var tempChildrenBuffer : Array<Dynamic> = new Array<Dynamic>();
             var children : Array<Dynamic> = levelObject.children;
             var numChildren : Int = children.length;
-            var i : Int;
+            var i : Int = 0;
             for (i in 0...numChildren){
                 var childElement : Dynamic = children[i];
                 var childAllowedForCondition : Bool = _preprocessLevels(childElement, userConditions);

@@ -59,7 +59,7 @@ class BarSegment
         this.color = color;
         this.hiddenValue = hiddenValue;
         
-        this.id = ((id == null)) ? Std.string(Identifiable.getId(1)) : id;
+        this.id = ((id == null)) ? Std.string(Identifiable.getId()) : id;
     }
     
     /**
@@ -80,7 +80,7 @@ class BarSegment
         this.denominatorValue, 
         this.color, 
         this.hiddenValue, 
-        this.id, 
+        this.id
         );
         return barSegmentClone;
     }
@@ -99,24 +99,23 @@ class BarSegment
             n : this.numeratorValue,
             d : this.denominatorValue,
             color : "0x" + Std.string(color),
-
         };
         return serializedObject;
     }
     
     public function deserialize(data : Dynamic) : Void
     {
-        if (data.exists("id")) 
+        if (Reflect.hasField(data, "id")) 
         {
             this.id = data.id;
         }
         
-        if (data.exists("n")) 
+        if (Reflect.hasField(data, "n")) 
         {
             this.numeratorValue = data.n;
         }
         
-        if (data.exists("d")) 
+        if (Reflect.hasField(data, "d")) 
         {
             this.denominatorValue = data.d;
         }

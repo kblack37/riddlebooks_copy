@@ -1,6 +1,6 @@
 package wordproblem.resource;
 
-import wordproblem.resource.ResourceClass;
+//import wordproblem.resource.ResourceClass;
 
 import flash.display.BitmapData;
 import flash.display.DisplayObject;
@@ -9,8 +9,8 @@ import flash.geom.Matrix;
 import flash.geom.Rectangle;
 
 
-
-import cgs.display.engine.avatar.Robot;
+// TODO: uncomment once cgs library is ported
+//import cgs.display.engine.avatar.Robot;
 
 import starling.textures.Texture;
 
@@ -39,7 +39,7 @@ class FlashResourceUtil
     public static function avatarDisplayToStarlingTexture(avatar : DisplayObject,
             viewport : Rectangle) : Texture
     {
-        var bitmapData : BitmapData = new BitmapData(viewport.width, viewport.height, true, 0x00FFFFFF);
+        var bitmapData : BitmapData = new BitmapData(Std.int(viewport.width), Std.int(viewport.height), true, 0x00FFFFFF);
         
         // Avatar registration point is near the feet, need to translate it
         // back to the top left
@@ -82,7 +82,9 @@ class FlashResourceUtil
         var texture : Texture = null;
         var objectToDraw : DisplayObject = Type.createInstance(resourceClass, []);
         
-        if (resourceClass == Robot) 
+		// TODO: not sure if this is a correct conversion
+		//if (resourceClass == Robot)
+        if (Type.getClassName(resourceClass) == "Robot") 
         {
             var robot : MovieClip = try cast(objectToDraw, MovieClip) catch(e:Dynamic) null;
             robot.gotoAndStop(params.frame);
@@ -95,7 +97,7 @@ class FlashResourceUtil
                 viewport = new Rectangle(objectToDraw.width * 0.5, objectToDraw.height * 0.5, objectToDraw.width, objectToDraw.height);
             }
             
-            var bitmapData : BitmapData = new BitmapData(viewport.width, viewport.height, true, 0x00FFFFFF);
+            var bitmapData : BitmapData = new BitmapData(Std.int(viewport.width), Std.int(viewport.height), true, 0x00FFFFFF);
             bitmapData.draw(objectToDraw, new Matrix(scaleFactor, 0, 0, scaleFactor, viewport.x, viewport.y));
             texture = Texture.fromBitmapData(bitmapData);
         }

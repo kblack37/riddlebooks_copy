@@ -94,13 +94,14 @@ class RemoveBarSegmentTip extends BarModelTip
         
         // The start location is above the bars
         var startDragLocation : Point = new Point(
-        barModelBounds.width * 0.5 + barModelBounds.x, barModelBounds.top - 20, 
+			barModelBounds.width * 0.5 + barModelBounds.x,
+			barModelBounds.top - 20
         );
         
         // The location where the first press occurs is in the middle of the first bar
         var finalDragLocation : Point = new Point(
-        globalPoint.x + localBounds.width * 0.5, 
-        globalPoint.y + localBounds.height * 0.5, 
+			globalPoint.x + localBounds.width * 0.5, 
+			globalPoint.y + localBounds.height * 0.5
         );
         
         var mainAnimationEvents : Array<SequenceEvent> = new Array<SequenceEvent>();

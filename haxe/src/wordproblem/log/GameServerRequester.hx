@@ -8,6 +8,8 @@ import flash.net.URLRequest;
 import flash.net.URLRequestMethod;
 import flash.net.URLVariables;
 
+import haxe.Constraints.Function;
+
 import wordproblem.AlgebraAdventureConfig;
 
 /**

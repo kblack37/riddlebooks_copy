@@ -10,8 +10,8 @@ import starling.animation.IAnimatable;
  */
 class CurrencyChangeAnimation implements IAnimatable
 {
-    private inline var m_defaultRate : Int = 200;
-    private inline var m_maxSeconds : Float = 5;
+    private inline static var m_defaultRate : Int = 200;
+    private inline static var m_maxSeconds : Float = 5;
     
     private var m_currencyCounter : CurrencyCounter;
     

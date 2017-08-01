@@ -29,8 +29,8 @@ class StageChangeAnimationComponent extends Component
         
         var objects : Array<Dynamic> = data.objects;
         var numObjects : Int = objects.length;
-        var i : Int;
-        var object : Dynamic;
+        var i : Int = 0;
+        var object : Dynamic = null;
         for (i in 0...numObjects){
             this.animationObjectCollection.push(objects[i]);
         }

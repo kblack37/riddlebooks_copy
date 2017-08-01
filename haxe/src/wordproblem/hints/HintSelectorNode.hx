@@ -1,5 +1,6 @@
 package wordproblem.hints;
 
+import haxe.Constraints.Function;
 
 /**
  * This node class encapsulates the proper selection of the a hint process base on the current
@@ -31,7 +32,7 @@ class HintSelectorNode
      */
     public function visit() : Void
     {
-        var i : Int;
+        var i : Int = 0;
         var numChildren : Int = m_children.length;
         for (i in 0...numChildren){
             m_children[i].visit();
@@ -65,11 +66,11 @@ class HintSelectorNode
         
         if (m_customGetHintFunction != null) 
         {
-            hint = m_customGetHintFunction.apply(null, m_customGetHintParameters);
+            hint = m_customGetHintFunction(m_customGetHintParameters);
         }
         else 
         {
-            var i : Int;
+            var i : Int = 0;
             for (i in 0...m_children.length){
                 hint = m_children[i].getHint();
                 if (hint != null) 
@@ -84,7 +85,7 @@ class HintSelectorNode
     
     public function dispose() : Void
     {
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...m_children.length){
             m_children[i].dispose();
         }

@@ -1,8 +1,7 @@
 package wordproblem.engine.component;
 
-
-import cgs.levelprogression.nodes.ICgsLevelLeaf;
-import cgs.levelprogression.nodes.ICgsLevelNode;
+import cgs.levelProgression.nodes.ICgsLevelLeaf;
+import cgs.levelProgression.nodes.ICgsLevelNode;
 
 /**
  * This level indicates that an entity is attached to a single particular level in the game

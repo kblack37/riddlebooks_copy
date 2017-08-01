@@ -734,7 +734,7 @@ class WordProblemGameChallengeDemo extends WordProblemGameBase
             var tempChildrenBuffer : Array<Dynamic> = new Array<Dynamic>();
             var children : Array<Dynamic> = levelObject.children;
             var numChildren : Int = children.length;
-            var i : Int;
+            var i : Int = 0;
             for (i in 0...numChildren){
                 var childElement : Dynamic = children[i];
                 var childAllowedForCondition : Bool = _preprocessLevels(childElement, userConditions);
@@ -979,7 +979,7 @@ class WordProblemGameChallengeDemo extends WordProblemGameBase
     private function onSaveData() : Dynamic
     {
         // In sequence, iterate through the important node names and figure out which ones are complete
-        var i : Int;
+        var i : Int = 0;
         var completedNodeNames : Array<Dynamic> = [];
         var numImportantNames : Int = m_importantNodeNamesForUser.length;
         for (i in 0...numImportantNames){

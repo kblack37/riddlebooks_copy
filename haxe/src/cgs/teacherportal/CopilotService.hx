@@ -755,7 +755,7 @@ class CopilotService implements IActivityLogger
         
         if (uid != null && uid.length > 0)
         {
-            var aUser : ICgsUser;
+            var aUser : ICgsUser = null;
             
             // Create a new user
             if (!_cgsApi.userManager.userExistsByUserId(uid))

@@ -509,7 +509,7 @@ class IntroAdvancedMultDiv extends BaseCustomLevelScript
                     
                     var referenceModel : BarModelData = new BarModelData();
                     var barWhole : BarWhole = new BarWhole(false, "larger");
-                    var i : Int;
+                    var i : Int = 0;
                     for (i in 0...m_multiplierValue){
                         barWhole.barSegments.push(new BarSegment(1, 1, 0xFFFFFFFF, null));
                     }

@@ -112,8 +112,8 @@ class DecomposedBarModelData
             
             for (labelValue in Reflect.fields(otherDecomposedBarModelData.labelToRatioOfTotalBoxes))
             {
-                var ratioInOther : Float = otherDecomposedBarModelData.labelToRatioOfTotalBoxes[labelValue];
-                var ratioInThis : Float = this.labelToRatioOfTotalBoxes[labelValue];
+                var ratioInOther : Float = otherDecomposedBarModelData.labelToRatioOfTotalBoxes[Std.parseInt(labelValue)];
+                var ratioInThis : Float = this.labelToRatioOfTotalBoxes[Std.parseInt(labelValue)];
                 if (Math.abs(ratioInOther - ratioInThis) > ERROR) 
                 {
                     labelsMatch = false;
@@ -150,12 +150,12 @@ class DecomposedBarModelData
     public function getEquivalencyScore(otherModel : DecomposedBarModelData) : Int
     {
         var equivalencyScore : Float = 0;
-        var i : Int;
+        var i : Int = 0;
         
         // Need to make a copy of the tallies in the other model, since
         // we will be modifying it need to keep track of of what things got consumed
-        var otherSegmentValues : Array<Float> = otherModel.normalizedBarSegmentValuesList.concat();
-        var otherSegmentTallies : Array<Int> = otherModel.normalizedBarSegmentValueTally.concat();
+        var otherSegmentValues : Array<Float> = otherModel.normalizedBarSegmentValuesList.concat(new Array<Float>());
+        var otherSegmentTallies : Array<Int> = otherModel.normalizedBarSegmentValueTally.concat(new Array<Int>());
         
         // For every bar segment in this:
         // find the closest equivalent value and continuously 'consume' tallies
@@ -193,7 +193,7 @@ class DecomposedBarModelData
                 {
                     // If values are the same don't do anything with the score
                     // Otherwise the values do not exactly match, the difference should be added to the score
-                    var talliesToConsume : Int = Math.min(otherSegmentTallies[indexOfClosestValue], numTallies);
+                    var talliesToConsume : Int = Std.int(Math.min(otherSegmentTallies[indexOfClosestValue], numTallies));
                     if (smallestValueDelta > DecomposedBarModelData.ERROR) 
                     {
                         equivalencyScore += (talliesToConsume * smallestValueDelta);
@@ -222,36 +222,31 @@ class DecomposedBarModelData
                     numTallies = 0;
                 }
             }
-        }  // These contribute to the score as a difference    // Check if there are any remaining segments in the other  
-        
-        
-        
-        
-        
-        numOtherUniqueSegmentValues = otherSegmentTallies.length;
+        }
+		
+		// Check if there are any remaining segments in the other  
+        // These contribute to the score as a difference
+        var numOtherUniqueSegmentValues = otherSegmentTallies.length;
         for (i in 0...numOtherUniqueSegmentValues){
             equivalencyScore += otherSegmentTallies[i];
-        }  // if a value is missing, add a fixed value to the score    // if value is in the other, the difference between the values is added to the score    // For every label value in this:  
-        
-        
-        
-        
-        
-        
-        
+        }
+		
+		// For every label value in this:  
+		// if value is in the other, the difference between the values is added to the score
+        // if a value is missing, add a fixed value to the score
         var labelValueToSegmentInOther : Dynamic = { };
         for (labelValue in Reflect.fields(otherModel.labelValueToNormalizedSegmentValue))
         {
-            Reflect.setField(labelValueToSegmentInOther, labelValue, otherModel.labelValueToNormalizedSegmentValue[labelValue]);
+            Reflect.setField(labelValueToSegmentInOther, labelValue, otherModel.labelValueToNormalizedSegmentValue[Std.parseInt(labelValue)]);
         }
         
         for (labelValue in Reflect.fields(this.labelValueToNormalizedSegmentValue))
         {
             if (labelValueToSegmentInOther.exists(labelValue)) 
             {
-                var thisLabelSegmentValue : Float = this.labelValueToNormalizedSegmentValue[labelValue];
-                var otherLabelSegmentValue : Float = labelValueToSegmentInOther[labelValue];
-                currentValueDelta = Math.abs(thisLabelSegmentValue - otherLabelSegmentValue);
+                var thisLabelSegmentValue : Float = this.labelValueToNormalizedSegmentValue[Std.parseInt(labelValue)];
+                var otherLabelSegmentValue : Float = labelValueToSegmentInOther[Std.parseInt(labelValue)];
+                var currentValueDelta = Math.abs(thisLabelSegmentValue - otherLabelSegmentValue);
                 if (currentValueDelta > DecomposedBarModelData.ERROR) 
                 {
                     equivalencyScore += currentValueDelta;
@@ -277,25 +272,22 @@ class DecomposedBarModelData
         
         
         
-        var barWholeDelta : Int = Math.abs(this.numBarWholes - otherModel.numBarWholes);
+        var barWholeDelta : Int = Std.int(Math.abs(this.numBarWholes - otherModel.numBarWholes));
         equivalencyScore += barWholeDelta * 5;
         
         // Check for differences in the label types for MATCHING values
         for (labelValue in Reflect.fields(this.labelValueToType))
         {
             if (otherModel.labelValueToType.exists(labelValue) &&
-                otherModel.labelValueToType[labelValue] != this.labelValueToType[labelValue]) 
+                otherModel.labelValueToType[Std.parseInt(labelValue)] != this.labelValueToType[Std.parseInt(labelValue)]) 
             {
                 equivalencyScore += 5;
             }
-        }  // (General equivalency check should not care about this since this is a structural property)    // Differentiation between horizontal, vertical, and comparison labels    // Have a map from label value to the label type  
-        
-        
-        
-        
-        
-        
-        
+        } 
+		
+		// Have a map from label value to the label type  
+		// Differentiation between horizontal, vertical, and comparison labels
+        // (General equivalency check should not care about this since this is a structural property)
         return Math.ceil(equivalencyScore);
     }
     
@@ -313,18 +305,18 @@ class DecomposedBarModelData
         // Once we figure out the min value we can figure out how all the parts of the model
         // fit relative to this value
         var barWholes : Array<BarWhole> = barModelData.barWholes;
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...barWholes.length){
             var barWhole : BarWhole = barWholes[i];
             var barSegments : Array<BarSegment> = barWhole.barSegments;
-            var j : Int;
+            var j : Int = 0;
             for (j in 0...barSegments.length){
                 var barSegment : BarSegment = barSegments[j];
                 var normalizedValue : Float = (barSegment.numeratorValue * segmentWithMinValue.denominatorValue) /
                 (barSegment.denominatorValue * segmentWithMinValue.numeratorValue);
                 
                 // Check if the normalized value is in the list
-                var k : Int;
+                var k : Int = 0;
                 var numNormalizedValues : Int = this.normalizedBarSegmentValuesList.length;
                 var foundExistingValue : Bool = false;
                 for (k in 0...numNormalizedValues){
@@ -343,10 +335,9 @@ class DecomposedBarModelData
                     this.normalizedBarSegmentValuesList.push(normalizedValue);
                     this.normalizedBarSegmentValueTally.push(1);
                 }
-            }  // Figure out how of the normalized segment does each label cover.  
-            
-            
-            
+            }
+			
+			// Figure out how of the normalized segment does each label cover.  
             var barLabels : Array<BarLabel> = barWhole.barLabels;
             for (j in 0...barLabels.length){
                 var barLabel : BarLabel = barLabels[j];
@@ -355,15 +346,15 @@ class DecomposedBarModelData
                 // Normalize the value
                 var normalizedLabelValue : Float = (labelSegmentValue * segmentWithMinValue.denominatorValue) / segmentWithMinValue.numeratorValue;
                 checkForLabelConflict(barLabel.value, normalizedLabelValue);
-                labelValueToNormalizedSegmentValue[barLabel.value] = normalizedLabelValue;
+                labelValueToNormalizedSegmentValue[Std.parseInt(barLabel.value)] = normalizedLabelValue;
                 
                 if (barLabel.bracketStyle == BarLabel.BRACKET_NONE) 
                 {
-                    this.labelValueToType[barLabel.value] = "n";
+                    this.labelValueToType[Std.parseInt(barLabel.value)] = "n";
                 }
                 else 
                 {
-                    this.labelValueToType[barLabel.value] = "h";
+                    this.labelValueToType[Std.parseInt(barLabel.value)] = "h";
                 }
             }
             
@@ -376,21 +367,18 @@ class DecomposedBarModelData
                     var comparisonSegmentValue : Float = otherBarWhole.getValue(0, barComparison.segmentIndexComparedTo) - barWhole.getValue();
                     
                     // Normalize the value
-                    normalizedLabelValue = (comparisonSegmentValue * segmentWithMinValue.denominatorValue) / segmentWithMinValue.numeratorValue;
+                    var normalizedLabelValue = (comparisonSegmentValue * segmentWithMinValue.denominatorValue) / segmentWithMinValue.numeratorValue;
                     checkForLabelConflict(barComparison.value, normalizedLabelValue);
-                    labelValueToNormalizedSegmentValue[barComparison.value] = normalizedLabelValue;
+                    labelValueToNormalizedSegmentValue[Std.parseInt(barComparison.value)] = normalizedLabelValue;
                     
-                    this.labelValueToType[barComparison.value] = "c";
+                    this.labelValueToType[Std.parseInt(barComparison.value)] = "c";
                 }
             }
-        }  // entire bars contained within the bounds of that label bracket.    // The total value for each of those labels is the sum of the values of the    // Check vertical labels in the reference  
-        
-        
-        
-        
-        
-        
-        
+        }
+		
+		// Check vertical labels in the reference  
+       	// The total value for each of those labels is the sum of the values of the 
+        // entire bars contained within the bounds of that label bracket.
         var verticalBarLabels : Array<BarLabel> = barModelData.verticalBarLabels;
         for (i in 0...verticalBarLabels.length){
             var verticalLabel : BarLabel = verticalBarLabels[i];
@@ -398,14 +386,14 @@ class DecomposedBarModelData
             var endIndex : Int = verticalLabel.endSegmentIndex;
             var totalValue : Float = 0;
             for (j in startIndex...endIndex + 1){
-                barWhole = barWholes[j];
+                var barWhole = barWholes[j];
                 totalValue += (barWhole.getValue() * segmentWithMinValue.denominatorValue) / segmentWithMinValue.numeratorValue;
             }
             
             checkForLabelConflict(verticalLabel.value, totalValue);
-            labelValueToNormalizedSegmentValue[verticalLabel.value] = totalValue;
+            labelValueToNormalizedSegmentValue[Std.parseInt(verticalLabel.value)] = totalValue;
             
-            this.labelValueToType[verticalLabel.value] = "v";
+            this.labelValueToType[Std.parseInt(verticalLabel.value)] = "v";
         }  // Used for new comparison, may want to delete all preceding code in the future    // HACK:  
         
         
@@ -439,7 +427,7 @@ class DecomposedBarModelData
         // segment or label simply as a percentage of this whole.
         //
         var totalBarValue : Float = 0.0;
-        var i : Int;
+        var i : Int = 0;
         var barWholes : Array<BarWhole> = barModelData.barWholes;
         for (barWhole in barWholes)
         {
@@ -454,9 +442,9 @@ class DecomposedBarModelData
             for (barLabel/* AS3HX WARNING could not determine type for var: barLabel exp: EField(EIdent(barWhole),barLabels) type: null */ in barWhole.barLabels)
             {
                 var labelSegmentAmount : Float = barWhole.getValue(barLabel.startSegmentIndex, barLabel.endSegmentIndex);
-                labelToRatioOfTotalBoxes[barLabel.value] = labelSegmentAmount / totalBarValue;
+                labelToRatioOfTotalBoxes[Std.parseInt(barLabel.value)] = labelSegmentAmount / totalBarValue;
                 
-                labelTermNameToSegmentAmount[barLabel.value] = labelSegmentAmount;
+                labelTermNameToSegmentAmount[Std.parseInt(barLabel.value)] = labelSegmentAmount;
             }
             
             var barComparison : BarComparison = barWhole.barComparison;
@@ -464,10 +452,10 @@ class DecomposedBarModelData
             {
                 // The comparison spans from the end of the bar containing the comparison, to a segment index in the other bar
                 var otherBarWhole : BarWhole = barModelData.getBarWholeById(barComparison.barWholeIdComparedTo);
-                labelSegmentAmount = (otherBarWhole.getValue(0, barComparison.segmentIndexComparedTo) - barWhole.getValue());
-                labelToRatioOfTotalBoxes[barComparison.value] = labelSegmentAmount / totalBarValue;
+                var labelSegmentAmount = (otherBarWhole.getValue(0, barComparison.segmentIndexComparedTo) - barWhole.getValue());
+                labelToRatioOfTotalBoxes[Std.parseInt(barComparison.value)] = labelSegmentAmount / totalBarValue;
                 
-                labelTermNameToSegmentAmount[barComparison.value] = labelSegmentAmount;
+                labelTermNameToSegmentAmount[Std.parseInt(barComparison.value)] = labelSegmentAmount;
             }
         }
         
@@ -477,9 +465,9 @@ class DecomposedBarModelData
             for (barWholeIndex in barLabel.startSegmentIndex...barLabel.endSegmentIndex + 1){
                 totalLabelValue += barWholes[barWholeIndex].getValue();
             }
-            labelToRatioOfTotalBoxes[barLabel.value] = totalLabelValue / totalBarValue;
+            labelToRatioOfTotalBoxes[Std.parseInt(barLabel.value)] = totalLabelValue / totalBarValue;
             
-            labelTermNameToSegmentAmount[barLabel.value] = totalLabelValue;
+            labelTermNameToSegmentAmount[Std.parseInt(barLabel.value)] = totalLabelValue;
         }  // Calculate the proportion of the bar segment value of a label compared to every other label.  
         
         
@@ -497,7 +485,7 @@ class DecomposedBarModelData
                 }
             }
             
-            this.labelProportions[labelTermName] = otherLabelProportions;
+            this.labelProportions[Std.parseInt(labelTermName)] = otherLabelProportions;
         }
     }
 }

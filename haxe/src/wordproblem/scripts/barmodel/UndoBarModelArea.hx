@@ -6,8 +6,7 @@ import cgs.internationalization.StringTable;
 
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 
-import feathers.controls.Button;
-
+import starling.display.Button;
 import starling.events.Event;
 
 import wordproblem.callouts.TooltipControl;
@@ -76,8 +75,9 @@ class UndoBarModelArea extends BaseBarModelScript
     {
         super.onLevelReady();
         
-        m_undoButton = try cast(m_gameEngine.getUiEntity("undoButton"), Button) catch(e:Dynamic) null;
-        m_tooltipControl = new TooltipControl(m_gameEngine, "undoButton", StringTable.lookup("undo"));
+        m_undoButton = try cast(m_gameEngine.getUiEntity("undoButton"), Button) catch (e:Dynamic) null;
+		// TODO: uncomment when cgs library is finished
+        m_tooltipControl = new TooltipControl(m_gameEngine, "undoButton", "" /*StringTable.lookup("undo")*/);
         
         this.setIsActive(m_isActive);
     }
@@ -87,7 +87,7 @@ class UndoBarModelArea extends BaseBarModelScript
      */
     public function resetHistory() : Void
     {
-        as3hx.Compat.setArrayLength(m_barModelDataHistory, 0);
+		m_barModelDataHistory = new Array<BarModelData>();
     }
     
     public function undo() : Void
@@ -110,7 +110,6 @@ class UndoBarModelArea extends BaseBarModelScript
         // Log that an undo was performed on the bar model
         m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.UNDO_BAR_MODEL, false, {
                     barModel : m_barModelArea.getBarModelData().serialize()
-
                 });
     }
     
@@ -128,6 +127,6 @@ class UndoBarModelArea extends BaseBarModelScript
     private function toggleUndoButtonEnabled(enabled : Bool) : Void
     {
         m_undoButton.alpha = ((enabled)) ? 1.0 : 0.4;
-        m_undoButton.isEnabled = enabled;
+        m_undoButton.enabled = enabled;
     }
 }

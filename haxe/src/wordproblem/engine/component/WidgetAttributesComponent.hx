@@ -160,8 +160,8 @@ class WidgetAttributesComponent extends Component
     {
         var sourceResult : String = null;
         var sourceList : Array<Dynamic> = m_sourceList;
-        var i : Int;
-        var sourceObject : Dynamic;
+        var i : Int = 0;
+        var sourceObject : Dynamic = null;
         for (i in 0...sourceList.length){
             sourceObject = sourceList[i];
             var sourceObjectToString : String = sourceObject.type + "(" + sourceObject.name + ")";

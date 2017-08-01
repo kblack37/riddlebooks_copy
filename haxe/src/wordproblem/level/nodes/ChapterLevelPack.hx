@@ -3,10 +3,10 @@ package wordproblem.level.nodes;
 import wordproblem.level.nodes.WordProblemLevelPack;
 
 import cgs.cache.ICgsUserCache;
-import cgs.levelprogression.ICgsLevelManager;
-import cgs.levelprogression.nodes.ICgsLevelNode;
-import cgs.levelprogression.util.ICgsLevelFactory;
-import cgs.levelprogression.util.ICgsLockFactory;
+import cgs.levelProgression.ICgsLevelManager;
+import cgs.levelProgression.nodes.ICgsLevelNode;
+import cgs.levelProgression.util.ICgsLevelFactory;
+import cgs.levelProgression.util.ICgsLockFactory;
 
 /**
  * Similar to the GenreLevelPack, the ChapterLevelPack is a way to categorize levels.

@@ -30,9 +30,8 @@ import flash.utils.Dictionary;
 
 import haxe.Constraints.Function;
 
-// TODO: uncomment these once cgs porting is done
-//import cgs.audio.IAudioResource;
-//import cgs.levelprogression.util.ICgsLevelResourceManager;
+import cgs.audio.IAudioResource;
+import cgs.levelProgression.util.ICgsLevelResourceManager;
 
 import starling.core.Starling;
 import starling.events.Event;
@@ -81,7 +80,7 @@ import wordproblem.resource.bundles.ResourceBundle;
  *  pause your game during that time; the AssetManager dispatches an "Event.TEXTURES_RESTORED"
  *  event when all textures have been restored.</p>
  */
-class AssetManager extends EventDispatcher //implements ICgsLevelResourceManager implements IAudioResource
+class AssetManager extends EventDispatcher implements ICgsLevelResourceManager implements IAudioResource
 {
     private var queue(get, never) : Array<Dynamic>;
     public var numQueuedAssets(get, never) : Int;
@@ -111,12 +110,12 @@ class AssetManager extends EventDispatcher //implements ICgsLevelResourceManager
     private var mIsLoading : Bool;
     private var mTimeoutID : Int;
     
-    private var mTextures : Dictionary<String, Texture>;
-    private var mAtlases : Dictionary<String, TextureAtlas>;
-    private var mSounds : Dictionary<String, Sound>;
-    private var mXmls : Dictionary < String, Fast>;
-    private var mObjects : Dictionary<String, Dynamic>;
-    private var mByteArrays : Dictionary<String, ByteArray>;
+    private var mTextures : Map<String, Texture>;
+    private var mAtlases : Map<String, TextureAtlas>;
+    private var mSounds : Map<String, Sound>;
+    private var mXmls : Map <String, Xml>;
+    private var mObjects : Map<String, Dynamic>;
+    private var mByteArrays : Map<String, ByteArray>;
     
     /**
      * We have a situation where there is a limit to the total size of textures that can be loaded
@@ -129,7 +128,7 @@ class AssetManager extends EventDispatcher //implements ICgsLevelResourceManager
      * Warning: keeping a copy of each bitmap data for every asset will probably leave a pretty
      * big memory foot print
      */
-    private var m_savedBitmapData : Dictionary<String, BitmapData>;
+    private var m_savedBitmapData : Map<String, BitmapData>;
     
     /**
      * For embedded texture atlas, we have the image and an xml that defines how to segment the image
@@ -140,7 +139,7 @@ class AssetManager extends EventDispatcher //implements ICgsLevelResourceManager
      * TextureAtlas object multiple times, in this case it needs the xml multiple times to segment
      * the image into regions.
      */
-    private var m_savedEmbeddedAtlasXml : Dictionary<String, Fast>;
+    private var m_savedEmbeddedAtlasXml : Map<String, Xml>;
     
     /**
      * Mapping from the id/name used to fetch a resource from this manager to a count of how
@@ -165,15 +164,15 @@ class AssetManager extends EventDispatcher //implements ICgsLevelResourceManager
         mScaleFactor = (scaleFactor > 0) ? scaleFactor : Starling.current.contentScaleFactor;
         mUseMipMaps = useMipmaps;
         mQueue = [];
-        mTextures = new Dictionary();
-        mAtlases = new Dictionary();
-        mSounds = new Dictionary();
-        mXmls = new Dictionary();
-        mObjects = new Dictionary();
-        mByteArrays = new Dictionary();
+        mTextures = new Map();
+        mAtlases = new Map();
+        mSounds = new Map();
+        mXmls = new Map();
+        mObjects = new Map();
+        mByteArrays = new Map();
         
-        m_savedBitmapData = new Dictionary();
-        m_savedEmbeddedAtlasXml = new Dictionary();
+        m_savedBitmapData = new Map();
+        m_savedEmbeddedAtlasXml = new Map();
         m_textureIdToUsageCount = { };
         
         resourcePathBase = pathBase;
@@ -286,10 +285,10 @@ class AssetManager extends EventDispatcher //implements ICgsLevelResourceManager
         // Keep track of all images to load in the array.
         // For initial simplicity we load them all in sequential order
         var bitmapIdsToLoad : Array<String> = new Array<String>();
-        var idToBitmapMap : Dictionary<String, Bitmap> = new Dictionary();
+        var idToBitmapMap : Map<String, Bitmap> = new Map();
         var numImages : Int = imagesToLoad.length;
-        var bitmap : Bitmap;
-        var bitmapId : String;
+        var bitmap : Bitmap = null;
+        var bitmapId : String = null;
         for (i in 0...numImages){
             var imageData : Dynamic = imagesToLoad[i];
             bitmapId = imageIds[i];
@@ -377,11 +376,11 @@ class AssetManager extends EventDispatcher //implements ICgsLevelResourceManager
     /** Disposes all contained textures. */
     public function dispose() : Void
     {
-        for (textureName in mTextures)
-        mTextures[textureName].dispose();
+        for (texture in mTextures)
+			texture.dispose();
         
-        for (atlasName in mAtlases)
-        mAtlases[atlasName].dispose();
+        for (atlas in mAtlases)
+			atlas.dispose();
     }
     
     /**
@@ -445,42 +444,10 @@ class AssetManager extends EventDispatcher //implements ICgsLevelResourceManager
         // ex.) the name 'button_up::ui_atlas' will attempt to grab the button texture
         // from the ui_atlas.
         var texture : Texture = null;
-		var bmpData : BitmapData = Assets.getBitmapData(name);
-		if (bmpData != null) texture = Texture.fromBitmapData(bmpData, false);
-		
-        //if (name.indexOf(atlasDelimiter) != -1) 
-        //{
-            //var namePieces : Array<Dynamic> = name.split(atlasDelimiter);
-            //var textureAtlas : TextureAtlas = this.getTextureAtlas(namePieces[1]);
-            //if (textureAtlas != null) 
-            //{
-                //texture = textureAtlas.getTexture(namePieces[0]);
-            //}
-        //}
-        //// If texture is not present, then check if it refers to a saved bitmap data
-        //else if (mTextures.exists(name)) 
-        //{
-            //texture = Reflect.field(mTextures, name);
-        //}
-        //else 
-        //{
-            //for (atlasName in mAtlases)
-            //{
-                //texture = mAtlases[atlasName].getTexture(name);
-                //if (texture != null) 
-                //{
-                    //break;
-                //}
-            //}
-        //}
-        //
-        //
-        //
-        //if (texture == null && m_savedBitmapData.exists(name)) 
-        //{
-            //texture = Texture.fromBitmapData(try cast(Reflect.field(m_savedBitmapData, name), BitmapData) catch(e:Dynamic) null, false);
-            //Reflect.setField(mTextures, name, texture);
-        //}
+		if (Assets.exists(name)) {
+			var bmpData : BitmapData = Assets.getBitmapData(name);
+			if (bmpData != null) texture = Texture.fromBitmapData(bmpData, false);
+		}
         
         return texture;
     }
@@ -506,8 +473,8 @@ class AssetManager extends EventDispatcher //implements ICgsLevelResourceManager
         
 		var resultVector = new Vector<String>();
 		
-        for (atlasName in mAtlases)
-			mAtlases[atlasName].getNames(prefix, resultVector);
+        for (atlas in mAtlases)
+			atlas.getNames(prefix, resultVector);
 		
 		for (e in resultVector) result.push(e);
         
@@ -570,13 +537,14 @@ class AssetManager extends EventDispatcher //implements ICgsLevelResourceManager
     }
     
     /** Returns an XML with a certain name, or null if it's not found. */
-    public function getXml(name : String) : Fast
+    public function getXml(name : String) : Xml
     {
-		var xml : Fast = null;
-		var text : String = Assets.getText(name);
-		if (text != null) xml = new Fast(Xml.parse(text));
+		var xml : Xml = null;
+		if (Assets.exists(name)) {
+			var text : String = Assets.getText(name);
+			if (text != null) xml = Xml.parse(text);
+		}
 		return xml;
-        //return Reflect.field(mXmls, name);
     }
     
     /** Returns all XML names that start with a certain string, sorted alphabetically. 
@@ -649,7 +617,7 @@ class AssetManager extends EventDispatcher //implements ICgsLevelResourceManager
     }
     
     /** Register an XML object under a certain name. It will be available right away. */
-    public function addXml(name : String, xml : Fast) : Void
+    public function addXml(name : String, xml : Xml) : Void
     {
         log("Adding XML '" + name + "'");
         
@@ -781,18 +749,18 @@ class AssetManager extends EventDispatcher //implements ICgsLevelResourceManager
         log("Purging all assets, emptying queue");
         purgeQueue();
         
-        for (textureName in mTextures)
-        mTextures[textureName].dispose();
+        for (texture in mTextures)
+			texture.dispose();
         
-        for (atlasName in mAtlases)
-        mAtlases[atlasName].dispose();
+        for (atlas in mAtlases)
+			atlas.dispose();
         
-        mTextures = new Dictionary();
-        mAtlases = new Dictionary();
-        mSounds = new Dictionary();
-        mXmls = new Dictionary();
-        mObjects = new Dictionary();
-        mByteArrays = new Dictionary();
+        mTextures = new Map();
+        mAtlases = new Map();
+        mSounds = new Map();
+        mXmls = new Map();
+        mObjects = new Map();
+        mByteArrays = new Map();
     }
     
     // queued adding
@@ -835,7 +803,7 @@ class AssetManager extends EventDispatcher //implements ICgsLevelResourceManager
             else if (Std.is(rawAsset, Class)) 
             {
                 var typeXml : FastXML = describeType(rawAsset);
-                var childNode : FastXML;
+                var childNode : FastXML = null;
                 
                 if (mVerbose) 
                     log("Looking for static embedded assets in '" +
@@ -913,7 +881,7 @@ class AssetManager extends EventDispatcher //implements ICgsLevelResourceManager
         if (mIsLoading) 
             throw new Error("The queue is already being processed");
         
-        var xmls : Array<Fast> = [];
+        var xmls : Array<Xml> = [];
         var numElements : Int = mQueue.length;
         var currentRatio : Float = 0.0;
         
@@ -932,24 +900,26 @@ class AssetManager extends EventDispatcher //implements ICgsLevelResourceManager
             // have to be available for other XMLs. Texture atlases are processed first:
             // that way, their textures can be referenced, too.
             
-            xmls.sort(function(a : Fast, b : Fast) : Int{
-                        return (a.hasNode.resolve("TextureAtlas")) ? -1 : 1;
+            xmls.sort(function(a : Xml, b : Xml) : Int{
+						var aFast : Fast = new Fast(a);
+                        return (aFast.hasNode.resolve("TextureAtlas")) ? -1 : 1;
                     });
             
             for (xml in xmls)
             {
-                var name : String;
-                var texture : Texture;
-                var rootNode : String = xml.name;
+				var fastXml = new Fast(xml);
+                var name : String = null;
+                var texture : Texture = null;
+                var rootNode : String = fastXml.name;
                 
                 if (rootNode == "TextureAtlas") 
                 {
                     // Do not create the atlas after load is finished, wait until a request is made
-                    name = getName(Std.string(xml.att.imagePath));
+                    name = getName(Std.string(fastXml.att.imagePath));
                     
                     if (m_savedBitmapData.exists(name)) 
                     {
-                        Reflect.setField(m_savedEmbeddedAtlasXml, name, xml);
+                        Reflect.setField(m_savedEmbeddedAtlasXml, name, fastXml);
                     }
                     else 
                     {
@@ -958,13 +928,13 @@ class AssetManager extends EventDispatcher //implements ICgsLevelResourceManager
                 }
                 else if (rootNode == "font") 
                 {
-                    name = getName(Std.string(xml.node.pages.node.page.att.file));
+                    name = getName(Std.string(fastXml.node.pages.node.page.att.file));
                     texture = getTexture(name);
                     
                     if (texture != null) 
                     {
                         log("Adding bitmap font '" + name + "'");
-                        TextField.registerBitmapFont(new BitmapFont(texture, xml.x), name);
+                        TextField.registerBitmapFont(new BitmapFont(texture, fastXml.x), name);
                         removeTexture(name, false);
                     }
                     else log("Cannot create bitmap font: texture '" + name + "' is missing.");
@@ -1013,13 +983,13 @@ class AssetManager extends EventDispatcher //implements ICgsLevelResourceManager
      * @param onComplete
      *      signature callback():void, called when asset is finished
      */
-    private function processRawAsset(name : String, rawAsset : Dynamic, xmls : Array<Fast>,
+    private function processRawAsset(name : String, rawAsset : Dynamic, xmls : Array<Xml>,
             onProgress : Function, onComplete : Void->Void) : Void
     {
 		function process(asset : Dynamic) : Void
         {
-            var texture : Texture;
-            var bytes : ByteArray;
+            var texture : Texture = null;
+            var bytes : ByteArray = null;
             
             if (!mIsLoading) 
             {
@@ -1082,10 +1052,10 @@ class AssetManager extends EventDispatcher //implements ICgsLevelResourceManager
                     onComplete();
                 }
             }
-            else if (Std.is(asset, Fast)) 
+            else if (Std.is(asset, Xml)) 
             {
-                var xml : Fast = try cast(asset, Fast) catch(e:Dynamic) null;
-                var rootNode : String = xml.name;
+                var xml : Xml = try cast(asset, Xml) catch(e:Dynamic) null;
+                var rootNode : String = new Fast(xml).name;
                 
                 if (rootNode == "TextureAtlas" || rootNode == "font") 
                     xmls.push(xml)
@@ -1210,7 +1180,7 @@ class AssetManager extends EventDispatcher //implements ICgsLevelResourceManager
     public function getName(rawAsset : Dynamic) : String
     {
         var matches : Array<Dynamic> = null;
-        var name : String;
+        var name : String = null;
         
         if (Std.is(rawAsset, String) || Std.is(rawAsset, FileReference)) 
         {
@@ -1274,7 +1244,7 @@ class AssetManager extends EventDispatcher //implements ICgsLevelResourceManager
         return false;
     }
     
-    private function getDictionaryKeys(dictionary : Dictionary<String, Dynamic>, prefix : String = "",
+    private function getDictionaryKeys(dictionary : Map<String, Dynamic>, prefix : String = "",
             result : Array<String> = null) : Array<String>
     {
         if (result == null)             result = [];
@@ -1306,7 +1276,7 @@ class AssetManager extends EventDispatcher //implements ICgsLevelResourceManager
     {
         // Chop off the relative portion, like ./ or ../ to remove relative references
         // To dumb strip that keeps going until we no longer see a . or /
-        var i : Int;
+        var i : Int = 0;
         var numCharacters : Int = url.length;
         var prevCharacter : String = null;
         var indexToStartSubstring : Int = -1;

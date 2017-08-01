@@ -69,7 +69,7 @@ class KOutOfNProficientCondition implements ICondition
         var numProficient : Int = 0;
         if (m_n > 0) 
         {
-            var i : Int;
+            var i : Int = 0;
             for (i in 0...m_wasLevelProficientHistory.length){
                 if (m_wasLevelProficientHistory[i]) 
                 {
@@ -92,8 +92,8 @@ class KOutOfNProficientCondition implements ICondition
     
     public function deserialize(data : Dynamic) : Void
     {
-        m_k = parseInt(data.k);
-        m_n = parseInt(data.n);
+        m_k = Std.parseInt(data.k);
+        m_n = Std.parseInt(data.n);
         m_objectiveClass = data.objectiveClass;
         
         if (data.exists("tagName")) 
@@ -148,7 +148,7 @@ class KOutOfNProficientCondition implements ICondition
     
     public function clearState() : Void
     {
-        as3hx.Compat.setArrayLength(m_wasLevelProficientHistory, 0);
+        m_wasLevelProficientHistory = new Array<Bool>();
         m_totalSuccessCount = 0;
     }
     
@@ -176,7 +176,7 @@ class KOutOfNProficientCondition implements ICondition
             var lastLevelProficientlyCompleted : Bool = true;
             if (stats.endType == LevelEndTypes.SOLVED_ON_OWN) 
             {
-                var i : Int;
+                var i : Int = 0;
                 var numObjectives : Int = objectives.length;
                 for (i in 0...numObjectives){
                     var objective : BaseObjective = objectives[i];

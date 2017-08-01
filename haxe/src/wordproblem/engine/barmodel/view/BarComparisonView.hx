@@ -5,9 +5,6 @@ import wordproblem.engine.barmodel.view.ResizeableBarPieceView;
 import flash.geom.Rectangle;
 import flash.text.TextFormat;
 
-import feathers.display.Scale3Image;
-import feathers.textures.Scale3Textures;
-
 import starling.display.DisplayObject;
 import starling.display.DisplayObjectContainer;
 import starling.display.Image;
@@ -33,7 +30,7 @@ class BarComparisonView extends ResizeableBarPieceView
     /**
      * The image that can scale without stretching/distorting. It is sliced into three parts
      */
-    private var m_scaledArrowImage : Scale3Image;
+    private var m_scaledArrowImage : Image;
     
     /**
      * The image with all pieces already pieces together
@@ -58,7 +55,7 @@ class BarComparisonView extends ResizeableBarPieceView
             fontName : String,
             fontColor : Int,
             symbolImage : DisplayObject,
-            threeSliceTexture : Scale3Textures,
+            threeSliceTexture : Texture,
             fullTexture : Texture)
     {
         super();
@@ -69,7 +66,7 @@ class BarComparisonView extends ResizeableBarPieceView
         addChild(lineGraphicDisplayContainer);
         
         var color : Int = data.color;
-        m_scaledArrowImage = new Scale3Image(threeSliceTexture);
+        m_scaledArrowImage = new Image(threeSliceTexture);
         m_scaledArrowImage.color = color;
         m_fullArrowImage = new Image(fullTexture);
         m_fullArrowImage.color = color;
@@ -81,12 +78,12 @@ class BarComparisonView extends ResizeableBarPieceView
             measuringTextField.text = labelName;
             
             var descriptionTextField : TextField = new TextField(
-            measuringTextField.textWidth + 15, 
-            measuringTextField.textHeight + 5, 
+            Std.int(measuringTextField.textWidth + 15), 
+            Std.int(measuringTextField.textHeight + 5), 
             labelName, 
             fontName, 
-            Std.parseInt(measuringTextField.defaultTextFormat.size), 
-            fontColor, 
+            measuringTextField.defaultTextFormat.size, 
+            fontColor
             );
             m_descriptionImage = descriptionTextField;
         }
@@ -105,7 +102,7 @@ class BarComparisonView extends ResizeableBarPieceView
         this.lineGraphicDisplayContainer.removeChildren();
         this.pixelLength = newLength;
         
-        var canScaleImage : Bool = newLength > (m_scaledArrowImage.textures.firstRegionSize * 2);
+        var canScaleImage : Bool = newLength > (m_scaledArrowImage.texture.nativeWidth * 2);
         if (canScaleImage) 
         {
             this.lineGraphicDisplayContainer.addChild(m_scaledArrowImage);
@@ -143,7 +140,9 @@ class BarComparisonView extends ResizeableBarPieceView
         {
             // Figure out scale amount indirectly applied
             var scaleAmount : Float = targetBounds.width / m_scaledArrowImage.width;
-            var endLength : Float = m_scaledArrowImage.textures.third.width * scaleAmount;
+			// TODO: this image was replaced from the feathers library and will probably
+			// need to be fixed
+            var endLength : Float = m_scaledArrowImage.texture.width * scaleAmount;
             
             // Shift rectangle over to the middle bounds
             outBounds.setTo(
@@ -157,7 +156,7 @@ class BarComparisonView extends ResizeableBarPieceView
         {
             // Each arrow is ~26 pixels long, total is ~72 pixels (middle is 20 pixels)
             var arrowWidth : Float = 26;
-            scaleAmount = m_fullArrowImage.width / targetBounds.width;
+            var scaleAmount = m_fullArrowImage.width / targetBounds.width;
             
             outBounds.setTo((targetBounds.x + targetBounds.width - arrowWidth) * scaleAmount,
                     targetBounds.y,

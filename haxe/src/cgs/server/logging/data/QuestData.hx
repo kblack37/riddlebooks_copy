@@ -163,7 +163,7 @@ class QuestData
         if (Std.is(data, Array))
         {
             var actions : Array<Dynamic> = try cast(data, Array<Dynamic>) catch(e:Dynamic) null;
-            var currAction : QuestAction;
+            var currAction : QuestAction = null;
             for (action in actions)
             {
                 currAction = new QuestAction();

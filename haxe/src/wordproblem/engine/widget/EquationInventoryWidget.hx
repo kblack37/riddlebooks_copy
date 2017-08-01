@@ -1,12 +1,9 @@
 package wordproblem.engine.widget;
 
+import starling.display.Button;
 import wordproblem.engine.widget.ScrollGridWidget;
 
 import flash.geom.Rectangle;
-
-import feathers.controls.Button;
-import feathers.display.Scale3Image;
-import feathers.textures.Scale3Textures;
 
 import starling.animation.Transitions;
 import starling.animation.Tween;
@@ -64,8 +61,8 @@ class EquationInventoryWidget extends Sprite
     private var m_scrollButtonDimensions : Rectangle;
     private var m_totalWidth : Float;
     private var m_totalHeight : Float;
-    private inline var m_backgroundDuration : Float = 0.5;
-    private inline var m_equationDuration : Float = 0.25;
+    private inline static var m_backgroundDuration : Float = 0.5;
+    private inline static var m_equationDuration : Float = 0.25;
     
     /**
      * The text displaying how many equations are contained within this widget.
@@ -87,8 +84,10 @@ class EquationInventoryWidget extends Sprite
         
         var padding : Float = 20;
         var texture : Texture = assetManager.getTexture("button_white");
-        var backgroundTexture : Scale3Textures = new Scale3Textures(texture, padding, texture.width - 2 * padding);
-        var backgroundImage : Scale3Image = new Scale3Image(backgroundTexture);
+		// TODO: this was replaced from the Scale3Texture from the feathers library
+		// and will probably need to be fixed
+        var backgroundTexture : Texture = Texture.fromTexture(texture, new Rectangle(padding, 0, texture.width - 2 * padding, texture.height));
+        var backgroundImage : Image = new Image(backgroundTexture);
         backgroundImage.color = 0xCCCCCC;
         m_backgroundInitialDimensions = new Rectangle(0, 0, texture.width, texture.height);
         m_background = backgroundImage;
@@ -98,7 +97,7 @@ class EquationInventoryWidget extends Sprite
                 false, 
                 null, 
                 null, 
-                true, 
+                true
                 );
         
         var scaleFactor : Float = 0.7;
@@ -174,8 +173,8 @@ class EquationInventoryWidget extends Sprite
             
             var renderComponents : Array<RenderableComponent> = null;  // m_scrollArea.getObjects();  
             var numComponents : Int = renderComponents.length;
-            var i : Int;
-            var item : DisplayObject;
+            var i : Int = 0;
+            var item : DisplayObject = null;
             var numRemainingToAnimate : Int = numComponents;
             
             // If we want to expand out, the background should stretch out first
@@ -185,33 +184,12 @@ class EquationInventoryWidget extends Sprite
                 
                 // Need to tween the scale factor
                 m_background.width = 0;
-                
-                Starling.juggler.tween(m_background, m_backgroundDuration, {
-                            onComplete : onBackgroundExpand,
-                            width : m_totalWidth,
-
-                        });
-                function onBackgroundExpand() : Void
+				function onBackgroundExpand() : Void
                 {
                     // On every update of the contents needs to get the dimensions of the visible area. Check if the change forces an update
                     // of whether the arrows should appear (i.e. some content is now hidden
                     var contentWidth : Float = m_scrollArea.getObjectTotalWidth();
-                    
-                    for (i in 0...numComponents){
-                        item = renderComponents[i].view;
-                        
-                        // Quickly pull out the background
-                        // The equations should not be visible
-                        // Once it is finished, each equation should scale up to pop in along with the buttons
-                        item.scaleX = item.scaleY = 0;
-                        Starling.juggler.tween(item, m_equationDuration, {
-                                    transition : Transitions.LINEAR,
-                                    onComplete : onEquationExpand,
-                                    scaleX : 1,
-                                    scaleY : 1,
-
-                                });
-                        function onEquationExpand() : Void
+					function onEquationExpand() : Void
                         {
                             numRemainingToAnimate--;
                             if (numRemainingToAnimate == 0) 
@@ -219,6 +197,20 @@ class EquationInventoryWidget extends Sprite
                                 m_isAnimating = false;
                             }
                         };
+						
+                    for (i in 0...numComponents){
+                        item = renderComponents[i].view;
+                        
+                        // Quickly pull out the background
+                        // The equations should not be visible
+                        // Once it is finished, each equation should scale up to pop in along with the buttons
+                        item.scaleX = item.scaleY = 0;
+                        Starling.current.juggler.tween(item, m_equationDuration, {
+                                    transition : Transitions.LINEAR,
+                                    onComplete : onEquationExpand,
+                                    scaleX : 1,
+                                    scaleY : 1,
+                                });
                     }
                     
                     if (numComponents == 0) 
@@ -235,42 +227,18 @@ class EquationInventoryWidget extends Sprite
                         addChild(m_scrollRightButton);
                     }
                 };
+				
+                Starling.current.juggler.tween(m_background, m_backgroundDuration, {
+                            onComplete : onBackgroundExpand,
+                            width : m_totalWidth,
+                });
             }
             else 
             {
-                for (i in 0...numComponents){
-                    item = renderComponents[i].view;
-                    // Quickly scale down the equations and then shift the background into the button
-                    Starling.juggler.tween(item, m_equationDuration, {
-                                transition : Transitions.LINEAR,
-                                onComplete : onEquationContract,
-                                scaleX : 0,
-                                scaleY : 0,
-
-                            });
-                }
-                
-                if (numComponents == 0) 
-                {
-                    onEquationContract();
-                }
-                
-                function onEquationContract() : Void
+				function onEquationContract() : Void
                 {
                     numRemainingToAnimate--;
-                    
-                    // One the equations are shrunk, the we will push the background back into the button
-                    if (numRemainingToAnimate <= 0) 
-                    {
-                        m_scrollArea.removeFromParent();
-                        
-                        Starling.juggler.tween(m_background, m_backgroundDuration, {
-                                    transition : Transitions.LINEAR,
-                                    onComplete : onBackgroundContract,
-                                    width : 0,
-
-                                });
-                        function onBackgroundContract() : Void
+					function onBackgroundContract() : Void
                         {
                             m_background.removeFromParent();
                             m_isAnimating = false;
@@ -282,8 +250,37 @@ class EquationInventoryWidget extends Sprite
                                 renderComponent.view.scaleY = 1;
                             }
                         };
+                    
+                    // One the equations are shrunk, the we will push the background back into the button
+                    if (numRemainingToAnimate <= 0) 
+                    {
+                        m_scrollArea.removeFromParent();
+                        
+                        Starling.current.juggler.tween(m_background, m_backgroundDuration, {
+                                    transition : Transitions.LINEAR,
+                                    onComplete : onBackgroundContract,
+                                    width : 0,
+                        });
                     }
                 };
+				
+                for (i in 0...numComponents){
+                    item = renderComponents[i].view;
+                    // Quickly scale down the equations and then shift the background into the button
+                    Starling.current.juggler.tween(item, m_equationDuration, {
+                                transition : Transitions.LINEAR,
+                                onComplete : onEquationContract,
+                                scaleX : 0,
+                                scaleY : 0,
+                    });
+                }
+                
+                if (numComponents == 0) 
+                {
+                    onEquationContract();
+                }
+                
+                
                 
                 m_scrollLeftButton.removeFromParent();
                 m_scrollRightButton.removeFromParent();
@@ -314,7 +311,7 @@ class EquationInventoryWidget extends Sprite
                 setExpanded(!m_isExpanded);
                 this.dispatchEventWith(GameEvent.EXPAND_INVENTORY_AREA, false, m_isExpanded);
                 
-                m_expandButton.defaultSkin = ((m_isExpanded)) ? m_expandIconOpen : m_expandIconClosed;
+                m_expandButton.upState = ((m_isExpanded)) ? m_expandIconOpen.texture : m_expandIconClosed.texture;
                 m_expandButton.filter = ((m_isExpanded)) ? BlurFilter.createGlow() : null;
             }
             else 
@@ -328,7 +325,7 @@ class EquationInventoryWidget extends Sprite
                             m_isAnimating = false;
                         };
                 
-                Starling.juggler.add(wiggleTween);
+                Starling.current.juggler.add(wiggleTween);
                 m_isAnimating = true;
             }
         }

@@ -13,11 +13,9 @@ import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
 import dragonbox.common.util.XColor;
 
-import feathers.controls.Button;
-import feathers.controls.ToggleButton;
-import feathers.display.Scale9Image;
-import feathers.textures.Scale9Textures;
+import haxe.Constraints.Function;
 
+import starling.display.Button;
 import starling.display.Image;
 import starling.display.Sprite;
 import starling.events.Event;
@@ -57,7 +55,8 @@ class PlayerCollectionsState extends BaseState
      * List of categories lining the top of the screen, player selects one to go to a particular
      * view.
      */
-    private var m_categoryButtons : Array<ToggleButton>;
+	// TODO: uncomment once a suitable toggle button replacement is found
+    //private var m_categoryButtons : Array<ToggleButton>;
     
     /**
      * This button is used to back out of the collections screen and back
@@ -152,44 +151,45 @@ class PlayerCollectionsState extends BaseState
         // Render the buttons for each category collection
         var buttonLabels : Array<String> = ["Stats", "Collectables", "Achievements", "Customize"];
         var buttonIconTextureNames : Array<String> = ["addition_icon", "cards_icon", "achievements_icon", "exclaimation_icon"];
-        m_categoryButtons = new Array<ToggleButton>();
+        // TODO: uncomment when a suitable toggle button replacement is found
+		//m_categoryButtons = new Array<ToggleButton>();
         
         var selectedTexture : Texture = m_assetManager.getTexture("button_white");
-        var selectedScale9Texture : Scale9Textures = new Scale9Textures(selectedTexture, new Rectangle(8, 8, 16, 16));
-        var i : Int;
+        var selectedScale9Texture : Texture = Texture.fromTexture(selectedTexture, new Rectangle(8, 8, 16, 16));
+        var i : Int = 0;
         var fontSize : Int = 20;
         for (i in 0...buttonLabels.length){
             var categoryButtonWidth : Float = 170;
             var categoryButtonHeight : Float = 40;
-            var categoryToggleButton : ToggleButton = try cast(WidgetUtil.createGenericColoredButton(
-                    m_assetManager,
-                    m_buttonColorData.getUpButtonColor(),
-                    buttonLabels[i],
-                    new TextFormat(GameFonts.DEFAULT_FONT_NAME, fontSize, 0xFFFFFF),
-                    new TextFormat(GameFonts.DEFAULT_FONT_NAME, fontSize, 0xFFFFFF),
-                    true
-                    ), ToggleButton) catch(e:Dynamic) null;
-            categoryToggleButton.isToggle = true;
-            m_categoryButtons.push(categoryToggleButton);
+			// TODO: uncomment when a suitable toggle button replacement is found
+            //var categoryToggleButton : ToggleButton = try cast(WidgetUtil.createGenericColoredButton(
+                    //m_assetManager,
+                    //m_buttonColorData.getUpButtonColor(),
+                    //buttonLabels[i],
+                    //new TextFormat(GameFonts.DEFAULT_FONT_NAME, fontSize, 0xFFFFFF),
+                    //new TextFormat(GameFonts.DEFAULT_FONT_NAME, fontSize, 0xFFFFFF),
+                    //true
+                    //), ToggleButton) catch(e:Dynamic) null;
+            //categoryToggleButton.isToggle = true;
+            //m_categoryButtons.push(categoryToggleButton);
             
             var categoryIconTexture : Texture = m_assetManager.getTexture(buttonIconTextureNames[i]);
             var iconScale : Float = (categoryButtonHeight * 0.9) / categoryIconTexture.height;
             var categoryIcon : Image = new Image(categoryIconTexture);
             categoryIcon.scaleX = categoryIcon.scaleY = iconScale;
-            categoryToggleButton.defaultIcon = categoryIcon;
-            categoryToggleButton.iconOffsetX = categoryIconTexture.width * iconScale * 0.6;
+            //categoryToggleButton.defaultIcon = categoryIcon;
+            //categoryToggleButton.iconOffsetX = categoryIconTexture.width * iconScale * 0.6;
             
             // Set a selection skin
-            var defaultSelectedImage : Scale9Image = new Scale9Image(selectedScale9Texture);
+            var defaultSelectedImage : Image = new Image(selectedScale9Texture);
             defaultSelectedImage.color = XColor.shadeColor(m_buttonColorData.getUpButtonColor(), 1.0);
-            categoryToggleButton.defaultSelectedSkin = defaultSelectedImage;
-            categoryToggleButton.defaultSelectedLabelProperties = {
-                        textFormat : new TextFormat(GameFonts.DEFAULT_FONT_NAME, fontSize, 0x000000, null, null, null, null, null, TextFormatAlign.CENTER)
-
-                    };
-            categoryToggleButton.width = categoryButtonWidth;
-            categoryToggleButton.height = categoryButtonHeight;
-            categoryToggleButton.addEventListener(Event.TRIGGERED, onCategorySelected);
+            //categoryToggleButton.defaultSelectedSkin = defaultSelectedImage;
+            //categoryToggleButton.defaultSelectedLabelProperties = {
+                //textFormat : new TextFormat(GameFonts.DEFAULT_FONT_NAME, fontSize, 0x000000, null, null, null, null, null, TextFormatAlign.CENTER)
+            //};
+            //categoryToggleButton.width = categoryButtonWidth;
+            //categoryToggleButton.height = categoryButtonHeight;
+            //categoryToggleButton.addEventListener(Event.TRIGGERED, onCategorySelected);
         }
         
         var backButtonWidth : Float = 60;
@@ -198,7 +198,7 @@ class PlayerCollectionsState extends BaseState
         var iconScaleTarget : Float = (backButtonHeight * 0.8) / homeIcon.height;
         homeIcon.scaleX = homeIcon.scaleY = iconScaleTarget;
         var backButton : Button = WidgetUtil.createGenericColoredButton(m_assetManager, m_buttonColorData.getUpButtonColor(), null, null);
-        backButton.defaultIcon = homeIcon;
+        backButton.upState = homeIcon.texture;
         backButton.width = backButtonWidth;
         backButton.height = backButtonHeight;
         backButton.x = m_background.width - backButtonWidth;
@@ -210,27 +210,28 @@ class PlayerCollectionsState extends BaseState
         addChild(m_backButton);
         m_backButton.addEventListener(Event.TRIGGERED, onBackButtonClicked);
         
-        var numCategories : Int = m_categoryButtons.length;
-        var totalButtonWidth : Float = 0;
-        var buttonGap : Float = 20;
-        for (i in 0...numCategories){
-            totalButtonWidth += m_categoryButtons[i].width;
-            if (i > 0) 
-            {
-                totalButtonWidth += buttonGap;
-            }
-        }
-        
-        var xOffset : Float = (800 - totalButtonWidth) * 0.5;
-        for (i in 0...numCategories){
-            var categoryButton : Button = m_categoryButtons[i];
-            categoryButton.x = xOffset;
-            xOffset += buttonGap + categoryButton.width;
-            addChild(categoryButton);
-        }
-        
-        changeToViewerFromSelectedButton(m_categoryButtons[1]);
-        m_categoryButtons[1].isSelected = true;
+		// TODO: uncomment when a suitable toggle button replacement is found
+        //var numCategories : Int = m_categoryButtons.length;
+        //var totalButtonWidth : Float = 0;
+        //var buttonGap : Float = 20;
+        //for (i in 0...numCategories){
+            //totalButtonWidth += m_categoryButtons[i].width;
+            //if (i > 0) 
+            //{
+                //totalButtonWidth += buttonGap;
+            //}
+        //}
+        //
+        //var xOffset : Float = (800 - totalButtonWidth) * 0.5;
+        //for (i in 0...numCategories){
+            //var categoryButton : Button = m_categoryButtons[i];
+            //categoryButton.x = xOffset;
+            //xOffset += buttonGap + categoryButton.width;
+            //addChild(categoryButton);
+        //}
+        //
+        //changeToViewerFromSelectedButton(m_categoryButtons[1]);
+        //m_categoryButtons[1].isSelected = true;
     }
     
     override public function exit(toState : Dynamic) : Void
@@ -241,12 +242,12 @@ class PlayerCollectionsState extends BaseState
         m_backButton.removeEventListener(Event.TRIGGERED, onBackButtonClicked);
         
         // Delete the category buttons (they will be recreated later if necessary)
-        for (categoryButton in m_categoryButtons)
-        {
-            categoryButton.removeEventListeners();
-            categoryButton.removeFromParent(true);
-        }
-        as3hx.Compat.setArrayLength(m_categoryButtons, 0);
+        //for (categoryButton in m_categoryButtons)
+        //{
+            //categoryButton.removeEventListeners();
+            //categoryButton.removeFromParent(true);
+        //}
+		//m_categoryButtons = new Array<ToggleButton>();
         
         // Clean up the active screen
         if (m_activeViewerScript != null) 
@@ -272,15 +273,16 @@ class PlayerCollectionsState extends BaseState
             // HACK:
             // We know we just need to refresh the colors of the top category buttons
             // and the home button
-            for (categoryButton in m_categoryButtons)
-            {
-                WidgetUtil.changeColorForGenericButton(categoryButton, m_lastEquippedColorValue);
-                
-                if (Std.is(categoryButton, ToggleButton)) 
-                {
-                    (try cast((try cast(categoryButton, ToggleButton) catch(e:Dynamic) null).defaultSelectedSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.shadeColor(m_buttonColorData.getUpButtonColor(), 1.0);
-                }
-            }
+			// TODO: uncomment when a suitable toggle button replacement is found
+            //for (categoryButton in m_categoryButtons)
+            //{
+                //WidgetUtil.changeColorForGenericButton(categoryButton, m_lastEquippedColorValue);
+                //
+                //if (Std.is(categoryButton, ToggleButton)) 
+                //{
+                    //(try cast((try cast(categoryButton, ToggleButton) catch(e:Dynamic) null).defaultSelectedSkin, Image) catch(e:Dynamic) null).color = XColor.shadeColor(m_buttonColorData.getUpButtonColor(), 1.0);
+                //}
+            //}
             WidgetUtil.changeColorForGenericButton(m_backButton, m_lastEquippedColorValue);
         }
     }
@@ -293,43 +295,45 @@ class PlayerCollectionsState extends BaseState
     
     private function onCategorySelected(event : Event) : Void
     {
+		// TODO: uncomment when a suitable toggle button replacement is found
         Audio.instance.playSfx("button_click");
-        var targetButton : Button = try cast(event.currentTarget, ToggleButton) catch(e:Dynamic) null;
-        changeToViewerFromSelectedButton(targetButton);
+        //var targetButton : Button = try cast(event.currentTarget, ToggleButton) catch(e:Dynamic) null;
+        //changeToViewerFromSelectedButton(targetButton);
     }
     
     private function changeToViewerFromSelectedButton(targetButton : Button) : Void
     {
         // BUG: For some reason setting isSelected to true removes the select state
         // Go through the buttons and set them to the correct selected/unselected value
-        for (categoryButton in m_categoryButtons)
-        {
-            if (targetButton != categoryButton) 
-            {
-                categoryButton.isEnabled = true;
-                categoryButton.isSelected = false;
-            }
-            else if (!categoryButton.isSelected) 
-            {
-                categoryButton.isEnabled = false;
-            }
-        }  // The index of the button will match the index of the script to execute  
-        
-        
-        
-        var targetIndex : Int = Lambda.indexOf(m_categoryButtons, try cast(targetButton, ToggleButton) catch(e:Dynamic) null);
-        var viewerScript : PlayerCollectionViewer = try cast(m_scriptRoot.getChildren()[targetIndex], PlayerCollectionViewer) catch(e:Dynamic) null;
+		// TODO: uncomment when a suitable toggle button replacement is found
+        //for (categoryButton in m_categoryButtons)
+        //{
+            //if (targetButton != categoryButton) 
+            //{
+                //categoryButton.isEnabled = true;
+                //categoryButton.isSelected = false;
+            //}
+            //else if (!categoryButton.isSelected) 
+            //{
+                //categoryButton.isEnabled = false;
+            //}
+        //}
+		
+		// The index of the button will match the index of the script to execute
+		// TODO: uncomment when a suitable toggle button replacement is found
+        //var targetIndex : Int = Lambda.indexOf(m_categoryButtons, try cast(targetButton, ToggleButton) catch(e:Dynamic) null);
+        //var viewerScript : PlayerCollectionViewer = try cast(m_scriptRoot.getChildren()[targetIndex], PlayerCollectionViewer) catch(e:Dynamic) null;
         
         // From the selected category, activate the appropriate screen if it is not already active
-        if (m_activeViewerScript != viewerScript) 
-        {
-            if (m_activeViewerScript != null) 
-            {
-                m_activeViewerScript.hide();
-            }
-            
-            viewerScript.show();
-            m_activeViewerScript = viewerScript;
-        }
+        //if (m_activeViewerScript != viewerScript) 
+        //{
+            //if (m_activeViewerScript != null) 
+            //{
+                //m_activeViewerScript.hide();
+            //}
+            //
+            //viewerScript.show();
+            //m_activeViewerScript = viewerScript;
+        //}
     }
 }

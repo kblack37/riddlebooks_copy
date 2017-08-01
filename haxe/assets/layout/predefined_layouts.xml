@@ -23,7 +23,8 @@
                 <button id="modelEquationButton" width="90" height="90" x="(root_width - modelEquationButton_width) / 2" y="deckArea_y+deckArea_height" src="embed(button_equals),embed(button_equals_click),embed(button_equals_mouseover),embed(button_equals_locked)"/>
                 <equationToText id="equationToText" width="600" height="50" x="80" y="leftTermArea_y + leftTermArea_height"/>
             </group>
-            <group>
+			<!-- Don't know what this group's id is supposed to be -->
+            <group id ="placeholder">
                 <button id="hintButton" x="20" y="deckAndTermContainer_y + 10" src="embed(button_hint_blue), embed(button_hint_orange), embed(button_hint_blue)"/>
                 <group id="parenthesisButton" x="80" y="deckAndTermContainer_y + 10"/>
                 <button id="undoButton" x="670" y="deckAndTermContainer_y + 6" src="embed(button_undo), embed(button_undo_click), embed(button_undo_mouseover), embed(button_undo)"/>

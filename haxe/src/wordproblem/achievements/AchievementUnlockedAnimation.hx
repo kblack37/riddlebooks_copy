@@ -10,8 +10,7 @@ import cgs.internationalization.StringTable;
 
 import dragonbox.common.dispose.IDisposable;
 
-import feathers.display.Scale9Image;
-import feathers.textures.Scale9Textures;
+import haxe.Constraints.Function;
 
 import starling.animation.Tween;
 import starling.core.Starling;
@@ -38,7 +37,7 @@ class AchievementUnlockedAnimation implements IDisposable
 {
     private var m_displayContainer : Sprite;
     private var m_achievementGem : PlayerAchievementGem;
-    private var m_achievementBackground : Scale9Image;
+    private var m_achievementBackground : Image;
     private var m_achievementName : OutlinedTextField;
     private var m_tweens : Array<Tween>;
     
@@ -65,10 +64,10 @@ class AchievementUnlockedAnimation implements IDisposable
         
         var achievementColor : String = achievementData.color;
         var achievementGem : PlayerAchievementGem = new PlayerAchievementGem(
-        achievementData.color, 
-        achievementData.trophyName, 
-        false, 
-        assetManager, 
+			achievementData.color, 
+			achievementData.trophyName, 
+			false, 
+			assetManager
         );
         achievementGem.pivotX = achievementGem.width * 0.5;
         achievementGem.pivotY = achievementGem.height * 0.5;
@@ -82,11 +81,13 @@ class AchievementUnlockedAnimation implements IDisposable
         arch.scaleX = arch.scaleY = 1.5;
         var topY : Float = -36;
         var startX : Float = 0;
-        var textA : CurvedText = new CurvedText(StringTable.lookup("new"), new TextFormat("Verdana", 14, 0x000000), 
+		// TODO: uncomment once cgs library is finished
+        var textA : CurvedText = new CurvedText("", /*StringTable.lookup("new"),*/ new TextFormat("Verdana", 14, 0x000000), 
         new Point(startX, topY + arch.width), new Point(startX, topY), new Point(arch.width + startX, topY), new Point(arch.width + startX, topY + arch.width));
         topY = -20;
         startX = 4;
-        var textB : CurvedText = new CurvedText(StringTable.lookup("achievement"), new TextFormat("Verdana", 14, 0x000000), 
+		// TODO: uncomment once cgs library is finished
+        var textB : CurvedText = new CurvedText("", /*StringTable.lookup("achievement"),*/ new TextFormat("Verdana", 14, 0x000000), 
         new Point(startX, topY + arch.width - 7), new Point(startX, topY), new Point(arch.width + startX, topY), new Point(arch.width + startX, topY + arch.width - 7));
         bannerContainer.addChild(arch);
         bannerContainer.addChild(textA);
@@ -97,7 +98,7 @@ class AchievementUnlockedAnimation implements IDisposable
         var textAndBgContainer : Sprite = new Sprite();
         var padding : Float = 8;
         var backgroundHeight : Float = maxHeight * 0.75;
-        m_achievementBackground = new Scale9Image(new Scale9Textures(backgroundTexture, 
+        m_achievementBackground = new Image(Texture.fromTexture(backgroundTexture, 
                 new Rectangle(padding, padding, backgroundTexture.width - padding * 2, backgroundTexture.height - padding * 2)));
         
         // Convert string colors to hex
@@ -131,7 +132,7 @@ class AchievementUnlockedAnimation implements IDisposable
                                 var backgroundExpandDuration : Float = 0.7;
                                 var shiftContainerTween : Tween = new Tween(m_displayContainer, backgroundExpandDuration);
                                 shiftContainerTween.animate("x", m_displayContainer.x - xDelta);
-                                Starling.juggler.add(shiftContainerTween);
+                                Starling.current.juggler.add(shiftContainerTween);
                                 
                                 var expandBackgroundTween : Tween = new Tween(m_achievementBackground, backgroundExpandDuration);
                                 expandBackgroundTween.animate("width", maxWidth);
@@ -146,14 +147,14 @@ class AchievementUnlockedAnimation implements IDisposable
                                             fadeAwayTween.animate("alpha", 0.0);
                                             fadeAwayTween.delay = 1.0;
                                             fadeAwayTween.onComplete = onComplete;
-                                            Starling.juggler.add(fadeAwayTween);
+                                            Starling.current.juggler.add(fadeAwayTween);
                                             m_tweens.push(fadeAwayTween);
                                         };
-                                Starling.juggler.add(expandBackgroundTween);
+                                Starling.current.juggler.add(expandBackgroundTween);
                             }
                             );
                 };
-        Starling.juggler.add(showGemTween);
+        Starling.current.juggler.add(showGemTween);
         m_tweens.push(showGemTween);
     }
     
@@ -163,7 +164,7 @@ class AchievementUnlockedAnimation implements IDisposable
         m_displayContainer.removeFromParent(true);
         while (m_tweens.length > 0)
         {
-            Starling.juggler.remove(m_tweens.pop());
+            Starling.current.juggler.remove(m_tweens.pop());
         }
     }
 }

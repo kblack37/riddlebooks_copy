@@ -1,5 +1,6 @@
 package wordproblem.engine.scripting.graph.action;
 
+import haxe.Constraints.Function;
 
 import wordproblem.engine.scripting.graph.ScriptNode;
 

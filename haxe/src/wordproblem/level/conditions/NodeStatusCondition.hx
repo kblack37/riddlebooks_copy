@@ -1,8 +1,7 @@
 package wordproblem.level.conditions;
 
-
-import cgs.levelprogression.ICgsLevelManager;
-import cgs.levelprogression.nodes.ICgsLevelNode;
+import cgs.levelProgression.ICgsLevelManager;
+import cgs.levelProgression.nodes.ICgsLevelNode;
 
 import wordproblem.level.LevelNodeStatuses;
 

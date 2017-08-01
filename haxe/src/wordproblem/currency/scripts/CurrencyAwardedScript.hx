@@ -50,7 +50,7 @@ class CurrencyAwardedScript extends BaseBufferEventScript
             // HACK: For each objective need to calculate the appropriate number of coins to give
             var currentLevel : WordProblemLevelData = m_gameEngine.getCurrentLevel();
             var objectives : Array<BaseObjective> = currentLevel.objectives;
-            var i : Int;
+            var i : Int = 0;
             for (i in 0...objectives.length){
                 var coinsForObjective : Int = 0;
                 var objective : BaseObjective = objectives[i];
@@ -75,7 +75,7 @@ class CurrencyAwardedScript extends BaseBufferEventScript
             m_playerXpModel.getLevelAndRemainingXpFromTotalXp(m_playerXpModel.totalXP, outXpData);
             var levelBefore : Int = outXpData[0];
             
-            as3hx.Compat.setArrayLength(outXpData, 0);
+			outXpData = new Array<Int>();
             m_playerXpModel.getLevelAndRemainingXpFromTotalXp(totalXpAfterLevel, outXpData);
             var levelAfter : Int = outXpData[0];
             

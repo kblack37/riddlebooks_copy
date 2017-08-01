@@ -101,8 +101,8 @@ class ChangeAndRemoveParenthesisTip extends TermAreaTip
         var rightParenImage : DisplayObject = leftTermWidget.m_parenthesesCanvas.getChildAt(1);
         var rightParenGlobalPosition : Point = leftTermWidget.m_parenthesesCanvas.localToGlobal(new Point(
                 rightParenImage.x, 
-                rightParenImage.y, 
-                ));
+                rightParenImage.y
+        ));
         // Note that the parenthesis coordinate is already placed on the center
         
         // The end point of the drag should be the addition operator
@@ -170,7 +170,7 @@ class ChangeAndRemoveParenthesisTip extends TermAreaTip
     
     private function setUpExpression() : Void
     {
-        m_termArea.setTree(new ExpressionTree(m_expressionCompiler.getVectorSpace(), m_expressionCompiler.compile("(a)+b").head));
+        m_termArea.setTree(new ExpressionTree(m_expressionCompiler.getVectorSpace(), m_expressionCompiler.compile("(a)+b")));
         m_termArea.redrawAfterModification();
     }
     

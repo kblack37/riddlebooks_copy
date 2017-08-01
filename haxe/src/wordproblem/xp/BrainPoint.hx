@@ -67,9 +67,9 @@ class BrainPoint extends Sprite
                     var rotateStarBurst : Tween = new Tween(starBurst, 8);
                     rotateStarBurst.repeatCount = 0;
                     rotateStarBurst.animate("rotation", 2 * Math.PI);
-                    Starling.juggler.add(rotateStarBurst);
+                    Starling.current.juggler.add(rotateStarBurst);
                 };
-        Starling.juggler.add(fadeInStarBurst);
+        Starling.current.juggler.add(fadeInStarBurst);
         m_tweens.push(fadeInStarBurst);
         
         var delayedGlow : Tween = new Tween(glow, 0.5);
@@ -83,10 +83,10 @@ class BrainPoint extends Sprite
                     shrinkGlow.delay = 0.5;
                     shrinkGlow.animate("scaleX", 0.7);
                     shrinkGlow.animate("scaleY", 0.7);
-                    Starling.juggler.add(shrinkGlow);
+                    Starling.current.juggler.add(shrinkGlow);
                     m_tweens.push(shrinkGlow);
                 };
-        Starling.juggler.add(delayedGlow);
+        Starling.current.juggler.add(delayedGlow);
         m_tweens.push(delayedGlow);
         
         var bannerText : CurvedText = new CurvedText(text, new TextFormat("Arial", 10, 0x000000), 
@@ -104,7 +104,7 @@ class BrainPoint extends Sprite
         
         for (tween in m_tweens)
         {
-            Starling.juggler.remove(tween);
+            Starling.current.juggler.remove(tween);
         }
     }
 }

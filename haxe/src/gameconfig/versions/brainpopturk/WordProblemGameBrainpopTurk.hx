@@ -15,11 +15,13 @@ import flash.system.Capabilities;
 import flash.utils.Timer;
 
 import cgs.cache.ICgsUserCache;
-import cgs.levelprogression.nodes.ICgsLevelNode;
+import cgs.levelProgression.nodes.ICgsLevelNode;
 import cgs.server.logging.CGSServerProps;
 
 import dragonbox.common.console.expression.MethodExpression;
 import dragonbox.common.state.IState;
+
+import haxe.Constraints.Function;
 
 import levelscripts.barmodel.tutorialsv2.TutorialV2Util;
 
@@ -34,7 +36,6 @@ import wordproblem.WordProblemGameBase;
 import wordproblem.account.ExternalIdAuthenticator;
 import wordproblem.achievements.PlayerAchievementsModel;
 import wordproblem.achievements.scripts.UpdateAndSaveAchievements;
-import wordproblem.brainpop.BrainpopApi;
 import wordproblem.currency.PlayerCurrencyModel;
 import wordproblem.currency.scripts.CurrencyAwardedScript;
 import wordproblem.engine.component.CurrentGrowInStageComponent;
@@ -115,7 +116,6 @@ class WordProblemGameBrainpopTurk extends WordProblemGameBase
     private var m_mainJuggler : Juggler;
     
     private var m_playerCurrencyModel : PlayerCurrencyModel;
-    private var m_brainpopApi : BrainpopApi;
     
     public function new()
     {
@@ -143,7 +143,7 @@ class WordProblemGameBrainpopTurk extends WordProblemGameBase
         {
             case "updateItemStage":
                 var entityId : String = args[0];
-                var newStatus : Int = parseInt(args[1]);
+                var newStatus : Int = Std.parseInt(args[1]);
                 var currentStageComponent : CurrentGrowInStageComponent = try cast(m_playerItemInventory.componentManager.getComponentFromEntityIdAndType(
                         entityId,
                         CurrentGrowInStageComponent.TYPE_ID
@@ -196,71 +196,73 @@ class WordProblemGameBrainpopTurk extends WordProblemGameBase
         var submitProblemRequest : URLRequest = new URLRequest(serverUrl);
         submitProblemRequest.data = variables;
         submitProblemRequest.method = URLRequestMethod.POST;
+		
+		// TODO: haxe requires that inline methods are defined before their use
+		// but both of these functions call the other - need to resolve
+		//function onLoaderError(e : flash.events.Event) : Void{
+            //timer.stop();
+            //timer.removeEventListener(TimerEvent.TIMER_COMPLETE, onLoaderError);
+            //urlLoader.removeEventListener(flash.events.Event.COMPLETE, loaderComplete);
+            //urlLoader.removeEventListener(flash.events.ErrorEvent.ERROR, onLoaderError);
+            //urlLoader.removeEventListener(flash.events.AsyncErrorEvent.ASYNC_ERROR, onLoaderError);
+            //urlLoader.removeEventListener(flash.events.NetStatusEvent.NET_STATUS, onLoaderError);
+            //urlLoader.removeEventListener(flash.events.SecurityErrorEvent.SECURITY_ERROR, onLoaderError);
+            //urlLoader.removeEventListener(flash.events.IOErrorEvent.IO_ERROR, onLoaderError);
+            //
+            //var browserVersion : String = "undetected";
+            //try{
+                //browserVersion = ExternalInterface.call("window.navigator.userAgent.toString");
+            //}            catch (err : Error){
+                //trace(err);
+            //}
+            //var systemIdString : String = "os: " + Capabilities.os + " version: " + Capabilities.version + " browser: " + browserVersion;
+            //m_assetManager.addObject(AiPolicyHintSelector.LOAD_ERROR_KEY + progressionIndex, "URLLoader error  " + systemIdString + " error text: " + Std.string(e));
+            //
+            //if (onCompleteCallback != null) 
+            //{
+                //onCompleteCallback();
+            //}
+        //};
+        //function loaderComplete(e : flash.events.Event) : Void
+        //{
+            //timer.stop();
+            //timer.removeEventListener(TimerEvent.TIMER_COMPLETE, onLoaderError);
+            //urlLoader.removeEventListener(flash.events.Event.COMPLETE, loaderComplete);
+            //urlLoader.removeEventListener(flash.events.ErrorEvent.ERROR, onLoaderError);
+            //urlLoader.removeEventListener(flash.events.AsyncErrorEvent.ASYNC_ERROR, onLoaderError);
+            //urlLoader.removeEventListener(flash.events.NetStatusEvent.NET_STATUS, onLoaderError);
+            //urlLoader.removeEventListener(flash.events.SecurityErrorEvent.SECURITY_ERROR, onLoaderError);
+            //urlLoader.removeEventListener(flash.events.IOErrorEvent.IO_ERROR, onLoaderError);
+            //
+            //
+            //try{
+                //var maps : Dynamic = haxe.Json.parse(urlLoader.data);
+                //loadPolicyMap(Reflect.field(Reflect.field(maps, "policy"), "model_detail"), progressionIndex);
+                //loadHintMap(Reflect.field(Reflect.field(maps, "hintDict"), "hint_dictionary"), progressionIndex);
+            //}            catch (err : Error){
+                //trace("Error parsing Maps!");
+                //m_assetManager.addObject(AiPolicyHintSelector.LOAD_ERROR_KEY + progressionIndex, "Error Parsing Maps! "
+                        //+ " Name? "
+                        //+ err.name
+                        //+ " Msg? "
+                        //+ err.message);
+            //}
+            //if (onCompleteCallback != null) 
+            //{
+                //onCompleteCallback();
+            //}
+        //};
+        //
+        //urlLoader.addEventListener(flash.events.Event.COMPLETE, loaderComplete);
+        //urlLoader.addEventListener(flash.events.ErrorEvent.ERROR, onLoaderError);
+        //urlLoader.addEventListener(flash.events.AsyncErrorEvent.ASYNC_ERROR, onLoaderError);
+        //urlLoader.addEventListener(flash.events.NetStatusEvent.NET_STATUS, onLoaderError);
+        //urlLoader.addEventListener(flash.events.SecurityErrorEvent.SECURITY_ERROR, onLoaderError);
+        //urlLoader.addEventListener(flash.events.IOErrorEvent.IO_ERROR, onLoaderError);
+        //urlLoader.load(submitProblemRequest);
         
-        urlLoader.addEventListener(flash.events.Event.COMPLETE, loaderComplete);
-        urlLoader.addEventListener(flash.events.ErrorEvent.ERROR, onLoaderError);
-        urlLoader.addEventListener(flash.events.AsyncErrorEvent.ASYNC_ERROR, onLoaderError);
-        urlLoader.addEventListener(flash.events.NetStatusEvent.NET_STATUS, onLoaderError);
-        urlLoader.addEventListener(flash.events.SecurityErrorEvent.SECURITY_ERROR, onLoaderError);
-        urlLoader.addEventListener(flash.events.IOErrorEvent.IO_ERROR, onLoaderError);
-        urlLoader.load(submitProblemRequest);
-        
-        timer.addEventListener(TimerEvent.TIMER_COMPLETE, onLoaderError);
+        //timer.addEventListener(TimerEvent.TIMER_COMPLETE, onLoaderError);
         timer.start();
-        
-        function loaderComplete(e : flash.events.Event) : Void
-        {
-            timer.stop();
-            timer.removeEventListener(TimerEvent.TIMER_COMPLETE, onLoaderError);
-            urlLoader.removeEventListener(flash.events.Event.COMPLETE, loaderComplete);
-            urlLoader.removeEventListener(flash.events.ErrorEvent.ERROR, onLoaderError);
-            urlLoader.removeEventListener(flash.events.AsyncErrorEvent.ASYNC_ERROR, onLoaderError);
-            urlLoader.removeEventListener(flash.events.NetStatusEvent.NET_STATUS, onLoaderError);
-            urlLoader.removeEventListener(flash.events.SecurityErrorEvent.SECURITY_ERROR, onLoaderError);
-            urlLoader.removeEventListener(flash.events.IOErrorEvent.IO_ERROR, onLoaderError);
-            
-            
-            try{
-                var maps : Dynamic = haxe.Json.parse(urlLoader.data);
-                loadPolicyMap(Reflect.field(Reflect.field(maps, "policy"), "model_detail"), progressionIndex);
-                loadHintMap(Reflect.field(Reflect.field(maps, "hintDict"), "hint_dictionary"), progressionIndex);
-            }            catch (err : Error){
-                trace("Error parsing Maps!");
-                m_assetManager.addObject(AiPolicyHintSelector.LOAD_ERROR_KEY + progressionIndex, "Error Parsing Maps! "
-                        + " Name? "
-                        + err.name
-                        + " Msg? "
-                        + err.message);
-            }
-            if (onCompleteCallback != null) 
-            {
-                onCompleteCallback();
-            }
-        };
-        function onLoaderError(e : flash.events.Event) : Void{
-            timer.stop();
-            timer.removeEventListener(TimerEvent.TIMER_COMPLETE, onLoaderError);
-            urlLoader.removeEventListener(flash.events.Event.COMPLETE, loaderComplete);
-            urlLoader.removeEventListener(flash.events.ErrorEvent.ERROR, onLoaderError);
-            urlLoader.removeEventListener(flash.events.AsyncErrorEvent.ASYNC_ERROR, onLoaderError);
-            urlLoader.removeEventListener(flash.events.NetStatusEvent.NET_STATUS, onLoaderError);
-            urlLoader.removeEventListener(flash.events.SecurityErrorEvent.SECURITY_ERROR, onLoaderError);
-            urlLoader.removeEventListener(flash.events.IOErrorEvent.IO_ERROR, onLoaderError);
-            
-            var browserVersion : String = "undetected";
-            try{
-                browserVersion = ExternalInterface.call("window.navigator.userAgent.toString");
-            }            catch (err : Error){
-                trace(err);
-            }
-            var systemIdString : String = "os: " + Capabilities.os + " version: " + Capabilities.version + " browser: " + browserVersion;
-            m_assetManager.addObject(AiPolicyHintSelector.LOAD_ERROR_KEY + progressionIndex, "URLLoader error  " + systemIdString + " error text: " + Std.string(e));
-            
-            if (onCompleteCallback != null) 
-            {
-                onCompleteCallback();
-            }
-        };
     }
     
     
@@ -271,12 +273,12 @@ class WordProblemGameBrainpopTurk extends WordProblemGameBase
         var loader : URLLoader = new URLLoader();
         loader.load(url);
         
-        loader.addEventListener(flash.events.Event.COMPLETE, loaderComplete);
-        function loaderComplete(e : flash.events.Event) : Void
+		function loaderComplete(e : flash.events.Event) : Void
         {
             loader.removeEventListener(flash.events.Event.COMPLETE, loaderComplete);
             callback(loader.data);
         };
+        loader.addEventListener(flash.events.Event.COMPLETE, loaderComplete);
     }
     
     private function loadMapsFromFiles() : Void
@@ -287,7 +289,7 @@ class WordProblemGameBrainpopTurk extends WordProblemGameBase
     
     private function loadPolicyMap(data : String, progressionIndex : Int) : Void
     {
-        var policyMap : Dynamic = new Dynamic();
+        var policyMap : Dynamic = { };
         // The output of the text file is available via the data property
         // of URLLoader.
         policyMap =haxe.Json.parse(data)  /* var tokens:Array = data.split("\n");
@@ -315,12 +317,12 @@ class WordProblemGameBrainpopTurk extends WordProblemGameBase
     }
     
     private function loadHintMap(data : String, progressionIndex : Int) : Void{
-        var hintMap : Dynamic = new Dynamic();
+        var hintMap : Dynamic = { };
         // The output of the text file is available via the data property
         // of URLLoader.
         var tokens : Array<Dynamic> = data.split("\n");
         trace(tokens.length + " lines!");
-        var i : Int;
+        var i : Int = 0;
         for (i in 1...tokens.length - 1){
             
             var tokens2 : Array<Dynamic> = tokens[i].split(":");
@@ -354,7 +356,7 @@ class WordProblemGameBrainpopTurk extends WordProblemGameBase
                 m_assetManager, 
                 onStartLevel, 
                 onNoNextLevel, 
-                !m_config.unlockAllLevels, 
+                !m_config.unlockAllLevels
                 );
         
         // For the challenge, a login might be required
@@ -371,7 +373,7 @@ class WordProblemGameBrainpopTurk extends WordProblemGameBase
             m_logger, 
             onContinueUserSelected, 
             onNewUserSelected, 
-            "", 
+            ""
             );
             titleScreenState.addEventListener(CommandEvent.WAIT_HIDE, onWaitHide);
             titleScreenState.addEventListener(CommandEvent.WAIT_SHOW, onWaitShow);
@@ -399,41 +401,9 @@ class WordProblemGameBrainpopTurk extends WordProblemGameBase
         {
             onUserAuthenticated();
         }
-        else if (useBrainPOPApi) 
-        {
-            m_brainpopApi = new BrainpopApi(
-                    m_logger, 
-                    m_config.getTeacherCode(), 
-                    m_config.getServerDeployment(), 
-                    m_config.getSaveDataToServer(), 
-                    m_config.getSaveDataKey(), 
-                    m_config.getUseHttps(), 
-                    m_nativeFlashStage, 
-                    this.stage);
-            
-            // At the start, check if login has occurred, if so we can immediately start the game
-            onWaitShow();
-            m_brainpopApi.checkLoginStatus(function(isLoggedIn : Bool, id : String) : Void
-                    {
-                        onWaitHide();
-                        if (isLoggedIn) 
-                        {
-                            m_brainpopApi.authenticateWithBrainpopId(id, onAuthenticateSuccessWithExternalId, onAuthenticateFailWithExternalId);
-                        }
-                        else 
-                        {
-                            // While at the title screen and waiting for the player to start the game, we start polling
-                            // for a login to brainpop
-                            m_brainpopApi.startCheckLoginPoll(3, function(id : String) : Void
-                                    {
-                                        m_brainpopApi.authenticateWithBrainpopId(id, onAuthenticateSuccessWithExternalId, onAuthenticateFailWithExternalId);
-                                    });
-                        }
-                    });
-        }
         // Since we are using this as part of Edmodo, need a case when the Edmodo login passes along the special id
         // through flash vars. Use this to perform the login
-        else if (m_nativeFlashStage.loaderInfo && m_nativeFlashStage.loaderInfo.parameters && m_nativeFlashStage.loaderInfo.parameters.exists("data")) 
+        else if (m_nativeFlashStage.loaderInfo != null && m_nativeFlashStage.loaderInfo.parameters != null && Reflect.hasField(m_nativeFlashStage.loaderInfo.parameters, "data"))
         {
             var externalData : Dynamic = haxe.Json.parse(m_nativeFlashStage.loaderInfo.parameters.data);
             if (externalData.exists("ext_id") && externalData.exists("ext_s_id")) 
@@ -463,58 +433,16 @@ class WordProblemGameBrainpopTurk extends WordProblemGameBase
     {
         // Attempt to login with the brainpop user first, if that fails then continue as a guest with the saved user id
         onWaitShow();
-        
-        if (m_brainpopApi != null) 
-        {
-            m_brainpopApi.stopCheckLoginPoll();
-            m_brainpopApi.checkLoginStatus(function(isLoggedIn : Bool, id : String) : Void
-                    {
-                        onWaitHide();
-                        if (isLoggedIn) 
-                        {
-                            m_brainpopApi.authenticateWithBrainpopId(id, onAuthenticateSuccessWithExternalId, onAuthenticateFailWithExternalId);
-                        }
-                        else 
-                        {
-                            var titleScreen : ExternalLoginTitleScreenState = try cast(m_stateMachine.getStateInstance(ExternalLoginTitleScreenState), ExternalLoginTitleScreenState) catch(e:Dynamic) null;
-                            titleScreen.continueGuestUser();
-                        }
-                    });
-        }
-        else 
-        {
-            var titleScreen : ExternalLoginTitleScreenState = try cast(m_stateMachine.getStateInstance(ExternalLoginTitleScreenState), ExternalLoginTitleScreenState) catch(e:Dynamic) null;
-            titleScreen.continueGuestUser();
-        }
+        var titleScreen : ExternalLoginTitleScreenState = try cast(m_stateMachine.getStateInstance(ExternalLoginTitleScreenState), ExternalLoginTitleScreenState) catch(e:Dynamic) null;
+        titleScreen.continueGuestUser();
     }
     
     private function onNewUserSelected() : Void
     {
         // Attempt to login with the brainpop user first, if that fails then continue as a new user
         onWaitShow();
-        
-        if (m_brainpopApi != null) 
-        {
-            m_brainpopApi.stopCheckLoginPoll();
-            m_brainpopApi.checkLoginStatus(function(isLoggedIn : Bool, id : String) : Void
-                    {
-                        onWaitHide();
-                        if (isLoggedIn) 
-                        {
-                            m_brainpopApi.authenticateWithBrainpopId(id, onAuthenticateSuccessWithExternalId, onAuthenticateFailWithExternalId);
-                        }
-                        else 
-                        {
-                            var titleScreen : ExternalLoginTitleScreenState = try cast(m_stateMachine.getStateInstance(ExternalLoginTitleScreenState), ExternalLoginTitleScreenState) catch(e:Dynamic) null;
-                            titleScreen.startNewGuestUser();
-                        }
-                    });
-        }
-        else 
-        {
-            var titleScreen : ExternalLoginTitleScreenState = try cast(m_stateMachine.getStateInstance(ExternalLoginTitleScreenState), ExternalLoginTitleScreenState) catch(e:Dynamic) null;
-            titleScreen.startNewGuestUser();
-        }
+        var titleScreen : ExternalLoginTitleScreenState = try cast(m_stateMachine.getStateInstance(ExternalLoginTitleScreenState), ExternalLoginTitleScreenState) catch(e:Dynamic) null;
+        titleScreen.startNewGuestUser();
     }
     
     private function onAuthenticateSuccessWithExternalId() : Void
@@ -583,10 +511,18 @@ class WordProblemGameBrainpopTurk extends WordProblemGameBase
                 {
                     m_playerStatsAndSaveData.useAiHints = true;
                     //For debugging may want to load maps from files to eliminate server dependency
-                    var progIndex : Int;
+                    var progIndex : Int = 0;
                     var requiredMapsToLoad : Int = AiPolicyHintSelector.NUM_PROGRESSION_INDICIES;
                     waitForAdditionalResources = requiredMapsToLoad > 0;
                     var mapsFinished : Int = 0;
+					function onMapLoaded() : Void
+                    {
+                        mapsFinished++;
+                        if (mapsFinished >= requiredMapsToLoad) 
+                        {
+                            goToGame();
+                        }
+                    };
                     for (progIndex in 0...requiredMapsToLoad){
                         try{
                             loadMapsFromDatabase(conditionId, progIndex, m_logger.getCgsUser().userId, onMapLoaded);
@@ -595,16 +531,9 @@ class WordProblemGameBrainpopTurk extends WordProblemGameBase
                             onMapLoaded();
                         }
                     }
-                    
-                    function onMapLoaded() : Void
-                    {
-                        mapsFinished++;
-                        if (mapsFinished >= requiredMapsToLoad) 
-                        {
-                            goToGame();
-                        }
-                    };
-                }  //loadMapsFromFiles();  
+                }
+				
+				//loadMapsFromFiles();  
             }
             
             if (!waitForAdditionalResources) 
@@ -740,7 +669,7 @@ class WordProblemGameBrainpopTurk extends WordProblemGameBase
         m_itemDataSource, 
         m_logger, 
         m_nativeFlashStage, 
-        buttonColorData, 
+        buttonColorData
         );
         wordProblemSelectState.addEventListener(CommandEvent.GO_TO_LEVEL, onGoToLevel);
         wordProblemSelectState.addEventListener(CommandEvent.SIGN_OUT, onSignOut);
@@ -760,7 +689,7 @@ class WordProblemGameBrainpopTurk extends WordProblemGameBase
         m_config, 
         m_console, 
         buttonColorData, 
-        m_levelManager, 
+        m_levelManager
         );
         wordProblemGameState.addEventListener(CommandEvent.WAIT_HIDE, onWaitHide);
         wordProblemGameState.addEventListener(CommandEvent.WAIT_SHOW, onWaitShow);
@@ -791,7 +720,7 @@ class WordProblemGameBrainpopTurk extends WordProblemGameBase
                 m_levelManager.goToNextLevel();
             }
         }, 
-        buttonColorData, 
+        buttonColorData
         );
         m_stateMachine.register(playerCollectionState);
         
@@ -803,7 +732,7 @@ class WordProblemGameBrainpopTurk extends WordProblemGameBase
                 m_playerItemInventory, 
                 m_itemDataSource, 
                 m_assetManager, 
-                m_mainJuggler, 
+                m_mainJuggler
                 ));
         
         // Add scripts that have logic that operate across several levels.
@@ -911,7 +840,7 @@ class WordProblemGameBrainpopTurk extends WordProblemGameBase
                     var tween : Tween = new Tween(nextState.getSprite(), 0.3, Transitions.EASE_OUT);
                     tween.animate("x", 0);
                     tween.onComplete = finishCallback;
-                    Starling.juggler.add(tween);
+                    Starling.current.juggler.add(tween);
                 }
                 );
     }
@@ -980,8 +909,6 @@ class WordProblemGameBrainpopTurk extends WordProblemGameBase
                 "fraction_of_larger_difference");
         importantNodeNames.push(
                 "fraction_of_larger_sum_difference");
-        importantNodeNames.push(
-                );
         
         
         return importantNodeNames;
@@ -1014,7 +941,7 @@ class WordProblemGameBrainpopTurk extends WordProblemGameBase
         {
             var repairedNodeValues : Bool = false;
             for (i in 0...maxIndexOfCompletedNode + 1){
-                nodeNameCompleted = m_importantNodeNamesForUser[i];
+                var nodeNameCompleted = m_importantNodeNamesForUser[i];
                 var nodeThatShouldBeComplete : ICgsLevelNode = m_levelManager.getNodeByName(nodeNameCompleted);
                 if (nodeThatShouldBeComplete != null) 
                 {
@@ -1022,7 +949,7 @@ class WordProblemGameBrainpopTurk extends WordProblemGameBase
                     {
                         // Need to fix this node to get the right completion value
                         var newLevelStatus : Dynamic = { };
-                        newLevelStatus[LevelNodeSaveKeys.COMPLETION_VALUE] = LevelNodeCompletionValues.PLAYED_SUCCESS;
+						Reflect.setField(newLevelStatus, LevelNodeSaveKeys.COMPLETION_VALUE, LevelNodeCompletionValues.PLAYED_SUCCESS);
                         nodeThatShouldBeComplete.updateNode(nodeThatShouldBeComplete.nodeLabel, newLevelStatus);
                         repairedNodeValues = true;
                     }
@@ -1093,7 +1020,7 @@ class WordProblemGameBrainpopTurk extends WordProblemGameBase
     private function onSaveData() : Dynamic
     {
         // In sequence, iterate through the important node names and figure out which ones are complete
-        var i : Int;
+        var i : Int = 0;
         var completedNodeNames : Array<Dynamic> = [];
         var numImportantNames : Int = m_importantNodeNamesForUser.length;
         for (i in 0...numImportantNames){

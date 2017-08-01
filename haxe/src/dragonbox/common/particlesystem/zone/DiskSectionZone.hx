@@ -38,7 +38,7 @@ class DiskSectionZone implements IZone
     
     public function contains(x : Float, y : Float) : Bool
     {
-        var containedInZone : Bool;
+        var containedInZone : Bool = false;
         x -= m_center.x;
         y -= m_center.y;
         var distanceSquared : Float = x * x + y * y;

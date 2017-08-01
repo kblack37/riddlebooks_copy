@@ -167,8 +167,13 @@ class AddNewLabelOnSegment extends BaseBarModelScript implements ICardOnSegmentS
             m_globalMouseBuffer.setTo(m_mouseState.mousePositionThisFrame.x, m_mouseState.mousePositionThisFrame.y);
             m_barModelArea.globalToLocal(m_globalMouseBuffer, m_localMouseBuffer);
             
-            as3hx.Compat.setArrayLength(m_outParamsBuffer, 0);
-            if (m_eventTypeBuffer.length > 0) 
+			m_outParamsBuffer = new Array<Dynamic>();
+			var targetBarWholeIndex : Int = 0;
+			var targetBarSegmentIndex : Int = 0;
+			var value : String = null;
+			var targetBarSegment : BarSegment = null;
+            
+			if (m_eventTypeBuffer.length > 0) 
             {
                 var args : Dynamic = m_eventParamBuffer[0];
                 var releasedWidget : BaseTermWidget = args.widget;
@@ -179,10 +184,10 @@ class AddNewLabelOnSegment extends BaseBarModelScript implements ICardOnSegmentS
                 
                 if (Std.is(releasedWidget, SymbolTermWidget) && BarModelHitAreaUtil.checkPointInBarSegment(m_outParamsBuffer, m_barModelArea, m_localMouseBuffer)) 
                 {
-                    var targetBarWholeIndex : Int = Std.parseInt(m_outParamsBuffer[0]);
-                    var targetBarSegmentIndex : Int = Std.parseInt(m_outParamsBuffer[1]);
-                    var value : String = releasedWidget.getNode().data;
-                    var targetBarSegment : BarSegment = m_barModelArea.getBarModelData().barWholes[targetBarWholeIndex].barSegments[targetBarSegmentIndex];
+                    targetBarWholeIndex = Std.parseInt(m_outParamsBuffer[0]);
+                    targetBarSegmentIndex = Std.parseInt(m_outParamsBuffer[1]);
+                    value = releasedWidget.getNode().data;
+                    targetBarSegment = m_barModelArea.getBarModelData().barWholes[targetBarWholeIndex].barSegments[targetBarSegmentIndex];
                     
                     // In order to see whether the box would fit we need to apply the change
                     // Give a bar model with target set
@@ -190,22 +195,20 @@ class AddNewLabelOnSegment extends BaseBarModelScript implements ICardOnSegmentS
                     if (canPerformAction(value, targetBarSegment.id)) 
                     {
                         var previousModelDataSnapshot : BarModelData = m_barModelArea.getBarModelData().clone();
-                        color = getColorForTermValue(value);
+                        var color = getColorForTermValue(value);
                         addLabelOnTopOfSegment(m_barModelArea.getBarModelData(), targetBarWholeIndex, targetBarSegmentIndex, value, null, color);
                         m_eventDispatcher.dispatchEventWith(GameEvent.BAR_MODEL_AREA_CHANGE, false, {
-                                    previousSnapshot : previousModelDataSnapshot
-
-                                });
+							previousSnapshot : previousModelDataSnapshot
+                        });
                         
                         // Redraw at the end to refresh
                         m_barModelArea.redraw();
                         
                         // Log replace label on an existing segment
                         m_eventDispatcher.dispatchEventWith(AlgebraAdventureLoggingConstants.ADD_LABEL_ON_BAR_SEGMENT, false, {
-                                    barModel : m_barModelArea.getBarModelData().serialize(),
-                                    value : value,
-
-                                });
+                            barModel : m_barModelArea.getBarModelData().serialize(),
+                            value : value
+                        });
                         
                         status = ScriptStatus.SUCCESS;
                     }
@@ -213,9 +216,9 @@ class AddNewLabelOnSegment extends BaseBarModelScript implements ICardOnSegmentS
                 
                 reset();
             }
-            else if (m_widgetDragSystem.getWidgetSelected()) 
+            else if (m_widgetDragSystem.getWidgetSelected() != null) 
             {
-                releasedWidget = m_widgetDragSystem.getWidgetSelected();
+                var releasedWidget = m_widgetDragSystem.getWidgetSelected();
                 if (Std.is(releasedWidget, SymbolTermWidget) && BarModelHitAreaUtil.checkPointInBarSegment(m_outParamsBuffer, m_barModelArea, m_localMouseBuffer)) 
                 {
                     targetBarWholeIndex = Std.parseInt(m_outParamsBuffer[0]);
@@ -300,15 +303,15 @@ class AddNewLabelOnSegment extends BaseBarModelScript implements ICardOnSegmentS
         var segmentsInTarget : Array<BarSegment> = targetBarWhole.barSegments;
         if (barSegmentIndex >= 0 && barSegmentIndex < segmentsInTarget.length) 
         {
-            var numericaValue : Float = parseFloat(value);
+            var numericalValue : Float = Std.parseFloat(value);
             
             // Make non-numeric values into segments of unit one by default
             var targetNumeratorValue : Float = 1;
             var targetDenominatorValue : Float = 1;
-            if (!Math.isNaN(numericaValue)) 
+            if (!Math.isNaN(numericalValue)) 
             {
                 // Possible the data is a negative value, we do not take this as affecting
-                targetNumeratorValue = Math.abs(numericaValue);
+                targetNumeratorValue = Math.abs(numericalValue);
                 targetDenominatorValue = m_barModelArea.normalizingFactor;
             }
             else 
@@ -358,16 +361,16 @@ class AddNewLabelOnSegment extends BaseBarModelScript implements ICardOnSegmentS
             
             
             var segmentIndexToBarOnTop : Array<Bool> = new Array<Bool>();
-            var i : Int;
+            var i : Int = 0;
             var numBarWholes : Int = barWholes.length;
             for (i in 0...numBarWholes){
                 var barWhole : BarWhole = barWholes[i];
                 
                 // Assuming no segments have label on top at start
-                as3hx.Compat.setArrayLength(segmentIndexToBarOnTop, 0);
+				segmentIndexToBarOnTop = new Array<Bool>();
                 var barSegments : Array<BarSegment> = barWhole.barSegments;
                 var numSegments : Int = barSegments.length;
-                var j : Int;
+                var j : Int = 0;
                 for (j in 0...numSegments){
                     segmentIndexToBarOnTop.push(false);
                 }  // The sizes of these remain fixed    // Determine which segments actually do have a label on top.  
@@ -379,7 +382,7 @@ class AddNewLabelOnSegment extends BaseBarModelScript implements ICardOnSegmentS
                 var barLabels : Array<BarLabel> = barWhole.barLabels;
                 var numLabels : Int = barLabels.length;
                 for (j in 0...numLabels){
-                    barLabel = barLabels[j];
+                    var barLabel = barLabels[j];
                     if (barLabel.bracketStyle == BarLabel.BRACKET_NONE && barLabel.endSegmentIndex == barLabel.startSegmentIndex) 
                     {
                         segmentIndexToBarOnTop[barLabel.startSegmentIndex] = true;
@@ -408,7 +411,7 @@ class AddNewLabelOnSegment extends BaseBarModelScript implements ICardOnSegmentS
             
             
             for (i in 0...barWholes.length){
-                barWhole = barWholes[i];
+                var barWhole = barWholes[i];
                 if (barWhole.barComparison != null) 
                 {
                     var otherBarId : String = barWhole.barComparison.barWholeIdComparedTo;

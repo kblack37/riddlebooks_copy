@@ -75,7 +75,9 @@ class HistoryWindow extends MovieClip
             historyString += historyLine + "\n";
         }
         
-        historyString = historyString.split(historyString.length - 1)[0];
+		// TODO: not sure if this was a correct conversion
+		//historyString = historyString.split(m_historyLines.length - 1)[0];
+        historyString = historyString.split("\n")[m_historyLines.length - 2];
         
         m_historyView.text = historyString;
         

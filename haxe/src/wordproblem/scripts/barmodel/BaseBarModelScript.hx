@@ -95,7 +95,7 @@ class BaseBarModelScript extends BaseGameScript
      */
     public function setRestrictedElementIdsCanPerformAction(elementIds : Array<String>) : Void
     {
-        as3hx.Compat.setArrayLength(m_restrictedElementIds, 0);
+		m_restrictedElementIds = new Array<String>();
         
         if (elementIds != null) 
         {
@@ -124,8 +124,10 @@ class BaseBarModelScript extends BaseGameScript
         m_widgetDragSystem = widgetDragSystem;
         m_eventDispatcher = gameEngineEventDispatcher;
         m_mouseState = mouseState;
+		
+		var castedGameEngine = try cast(m_gameEngine, EventDispatcher) catch (e : Dynamic) null;
         
-        if (m_eventDispatcher != m_gameEngine) 
+        if (m_eventDispatcher != castedGameEngine) 
         {
             m_eventDispatcher.addEventListener(GameEvent.END_DRAG_TERM_WIDGET, bufferEvent);
         }
@@ -158,7 +160,9 @@ class BaseBarModelScript extends BaseGameScript
             m_gameEngine.removeEventListener(GameEvent.END_DRAG_TERM_WIDGET, bufferEvent);
         }
         
-        if (m_gameEngine != m_eventDispatcher) 
+		var castedGameEngine = try cast(m_gameEngine, EventDispatcher) catch (e : Dynamic) null;
+		
+        if (m_eventDispatcher != castedGameEngine) 
         {
             m_eventDispatcher.removeEventListener(GameEvent.END_DRAG_TERM_WIDGET, bufferEvent);
         }

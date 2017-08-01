@@ -26,10 +26,7 @@ import wordproblem.engine.component.StageChangeAnimationComponent;
 import wordproblem.engine.component.TextureCollectionComponent;
 import wordproblem.engine.component.TransformComponent;
 
-import flash.utils.Dictionary;
-
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
-import dragonbox.common.system.Map;
 
 /**
  * Provides a singular method to create individual components from a well structured
@@ -54,10 +51,10 @@ class ComponentFactory
      */
     public function createAndAddComponentsForItemList(componentManager : ComponentManager, data : Dynamic) : Void
     {
-        var entities : Array<Dynamic> = try cast(data, Array</*AS3HX WARNING no type*/>) catch(e:Dynamic) null;
+        var entities : Array<Dynamic> = try cast(data, Array<Dynamic>) catch(e:Dynamic) null;
         
-        var i : Int;
-        var item : Dynamic;
+        var i : Int = 0;
+        var item : Dynamic = null;
         var numItems : Int = entities.length;
         for (i in 0...numItems){
             item = entities[i];
@@ -77,7 +74,7 @@ class ComponentFactory
         // this manager.
         var entityId : String = data.entityId;
         var components : Array<Dynamic> = data.components;
-        var i : Int;
+        var i : Int = 0;
         var numComponents : Int = components.length;
         for (i in 0...numComponents){
             componentManager.addComponentToEntity(this.createComponent(entityId, components[i]));
@@ -119,7 +116,7 @@ class ComponentFactory
                 component = new EquippableComponent(entityId);
             case ExpressionComponent.TYPE_ID:
                 var equationString : String = data.data.equationString;
-                component = new ExpressionComponent(entityId, equationString, m_expressionCompiler.compile(equationString).head);
+                component = new ExpressionComponent(entityId, equationString, m_expressionCompiler.compile(equationString));
             case GenreIdComponent.TYPE_ID:
                 component = new GenreIdComponent(entityId);
             case HiddenItemComponent.TYPE_ID:
@@ -174,45 +171,37 @@ class ComponentFactory
     
     public function serializeComponentManager(componentManager : ComponentManager) : Dynamic
     {
-        var entityIdToComponentList : Dictionary = new Dictionary();
+        var entityIdToComponentList : Map<String, Array<Component>> = new Map<String, Array<Component>>();
         
-        var enityToComponentMaps : Array<Dynamic> = componentManager.getComponentTypeToEntityComponentMap().getValues();
-        var numMaps : Int = enityToComponentMaps.length;
-        var i : Int;
-        for (i in 0...numMaps){
-            var entityToComponentMap : Map = enityToComponentMaps[i];
-            var components : Array<Dynamic> = entityToComponentMap.getValues();
-            var numComponents : Int = components.length;
-            var j : Int;
-            for (j in 0...numComponents){
-                var component : Component = components[j];
+        var entityToComponentMaps = componentManager.getComponentTypeToEntityComponentMap().iterator();
+        for (entityToComponentMap in entityToComponentMaps) {
+            var components = entityToComponentMap.iterator();
+            for (component in components){
                 var entityId : String = component.entityId;
                 if (entityIdToComponentList.exists(entityId)) 
                 {
-                    (try cast(Reflect.field(entityIdToComponentList, entityId), Array/*Vector.<T> call?*/) catch(e:Dynamic) null).push(component);
+                    (try cast(Reflect.field(entityIdToComponentList, entityId), Array<Dynamic>) catch(e:Dynamic) null).push(component);
                 }
                 else 
                 {
                     Reflect.setField(entityIdToComponentList, entityId, [component]);
                 }
             }
-        }  // Go through the dictionary and convert it to the object form  
-        
-        
-        
+        }
+		
+		// Go through the dictionary and convert it to the object form  
         var serializedItems : Array<Dynamic> = [];
-        var componentList : Array<Component>;
+        var componentList : Array<Component> = null;
         for (entityId in Reflect.fields(entityIdToComponentList))
         {
             var entityObject : Dynamic = {
                 entityId : entityId,
                 components : [],
-
             };
             componentList = Reflect.field(entityIdToComponentList, entityId);
-            numComponents = componentList.length;
+            var numComponents = componentList.length;
             for (i in 0...numComponents){
-                (try cast(entityObject.components, Array</*AS3HX WARNING no type*/>) catch(e:Dynamic) null).push(componentList[i].serialize());
+                (try cast(entityObject.components, Array<Dynamic>) catch(e:Dynamic) null).push(componentList[i].serialize());
             }
             
             serializedItems.push(entityObject);

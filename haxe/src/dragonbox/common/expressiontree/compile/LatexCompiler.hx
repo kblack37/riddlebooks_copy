@@ -330,7 +330,7 @@ class LatexCompiler implements IExpressionTreeCompiler
 					// pop operators from the stack and into the output
 					// Also pop the left paren and discard it
 					var top:Token = stack.pop();
-					if (top.type == TokenType.RightParen)
+					if (top.type == TokenType.LeftParen)
 					{
 						foundLeftParen = true;
 					}

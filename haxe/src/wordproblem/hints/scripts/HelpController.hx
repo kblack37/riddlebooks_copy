@@ -5,8 +5,7 @@ import cgs.audio.Audio;
 
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 
-import feathers.controls.Button;
-
+import starling.display.Button;
 import starling.display.DisplayObject;
 import starling.events.Event;
 import starling.filters.ColorMatrixFilter;
@@ -160,7 +159,7 @@ class HelpController extends BaseGameScript
                 m_getHelpButton.removeEventListener(Event.TRIGGERED, bufferEvent);
                 if (Std.is(m_getHelpButton, Button)) 
                 {
-                    (try cast(m_getHelpButton, Button) catch(e:Dynamic) null).isEnabled = value;
+                    (try cast(m_getHelpButton, Button) catch(e:Dynamic) null).enabled = value;
                 }
                 if (value) 
                 {

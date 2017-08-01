@@ -204,19 +204,19 @@ class ExpressionModelHintSelector extends HintSelectorNode
                     else if (barModelType == BarModelTypes.TYPE_3A) 
                     {
                         hintData = generateMultiplyDivideHint(
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")), Reflect.field(m_documentIdToExpressionMap, "unk"), Reflect.field(m_documentIdToExpressionMap, "a1"),
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")), Reflect.field(m_documentIdToExpressionMap, "unk"), Reflect.field(m_documentIdToExpressionMap, "a1"),
                                         null, null, userExpressionRoot);
                     }
                     else if (barModelType == BarModelTypes.TYPE_3B) 
                     {
                         hintData = generateMultiplyDivideHint(
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")), Reflect.field(m_documentIdToExpressionMap, "b1"), Reflect.field(m_documentIdToExpressionMap, "unk"),
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")), Reflect.field(m_documentIdToExpressionMap, "b1"), Reflect.field(m_documentIdToExpressionMap, "unk"),
                                         null, null, userExpressionRoot);
                     }
                     else if (barModelType == BarModelTypes.TYPE_4A) 
                     {
                         hintData = generateMultiplyDivideHint(
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
                                         Reflect.field(m_documentIdToExpressionMap, "unk"),
                                         Reflect.field(m_documentIdToExpressionMap, "a1"),
                                         null, null, userExpressionRoot);
@@ -224,7 +224,7 @@ class ExpressionModelHintSelector extends HintSelectorNode
                     else if (barModelType == BarModelTypes.TYPE_4B) 
                     {
                         hintData = generateMultiplyDivideHint(
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
                                         Reflect.field(m_documentIdToExpressionMap, "a1"),
                                         Reflect.field(m_documentIdToExpressionMap, "unk"),
                                         null, null, userExpressionRoot);
@@ -232,7 +232,7 @@ class ExpressionModelHintSelector extends HintSelectorNode
                     else if (barModelType == BarModelTypes.TYPE_4C) 
                     {
                         hintData = generateMultiplyDivideHint(
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
                                         null,
                                         Reflect.field(m_documentIdToExpressionMap, "a1"),
                                         null, Reflect.field(m_documentIdToExpressionMap, "unk"), userExpressionRoot);
@@ -240,7 +240,7 @@ class ExpressionModelHintSelector extends HintSelectorNode
                     else if (barModelType == BarModelTypes.TYPE_4D) 
                     {
                         hintData = generateMultiplyDivideHint(
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
                                         null,
                                         Reflect.field(m_documentIdToExpressionMap, "a1"),
                                         Reflect.field(m_documentIdToExpressionMap, "unk"), null, userExpressionRoot);
@@ -248,7 +248,7 @@ class ExpressionModelHintSelector extends HintSelectorNode
                     else if (barModelType == BarModelTypes.TYPE_4E) 
                     {
                         hintData = generateMultiplyDivideHint(
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
                                         null,
                                         Reflect.field(m_documentIdToExpressionMap, "unk"),
                                         null, Reflect.field(m_documentIdToExpressionMap, "a1"), userExpressionRoot);
@@ -256,7 +256,7 @@ class ExpressionModelHintSelector extends HintSelectorNode
                     else if (barModelType == BarModelTypes.TYPE_4F) 
                     {
                         hintData = generateMultiplyDivideHint(
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
                                         null,
                                         Reflect.field(m_documentIdToExpressionMap, "unk"),
                                         Reflect.field(m_documentIdToExpressionMap, "a1"), null, userExpressionRoot);
@@ -314,7 +314,7 @@ class ExpressionModelHintSelector extends HintSelectorNode
                     else if (barModelType == BarModelTypes.TYPE_5F) 
                     {
                         hintData = generateTwoStepGroupsHint(
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
                                         Reflect.field(m_documentIdToExpressionMap, "c"),
                                         Reflect.field(m_documentIdToExpressionMap, "a1"),
                                         null,
@@ -325,7 +325,7 @@ class ExpressionModelHintSelector extends HintSelectorNode
                     else if (barModelType == BarModelTypes.TYPE_5G) 
                     {
                         hintData = generateTwoStepGroupsHint(
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
                                         Reflect.field(m_documentIdToExpressionMap, "c"),
                                         Reflect.field(m_documentIdToExpressionMap, "a1"),
                                         Reflect.field(m_documentIdToExpressionMap, "unk"),
@@ -336,7 +336,7 @@ class ExpressionModelHintSelector extends HintSelectorNode
                     else if (barModelType == BarModelTypes.TYPE_5H) 
                     {
                         hintData = generateTwoStepGroupsHint(
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
                                         Reflect.field(m_documentIdToExpressionMap, "c"),
                                         Reflect.field(m_documentIdToExpressionMap, "unk"),
                                         null,
@@ -347,7 +347,7 @@ class ExpressionModelHintSelector extends HintSelectorNode
                     else if (barModelType == BarModelTypes.TYPE_5I) 
                     {
                         hintData = generateTwoStepGroupsHint(
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
                                         Reflect.field(m_documentIdToExpressionMap, "c"),
                                         null,
                                         Reflect.field(m_documentIdToExpressionMap, "unk"),
@@ -358,7 +358,7 @@ class ExpressionModelHintSelector extends HintSelectorNode
                     else if (barModelType == BarModelTypes.TYPE_5J) 
                     {
                         hintData = generateTwoStepGroupsHint(
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
                                         Reflect.field(m_documentIdToExpressionMap, "c"),
                                         Reflect.field(m_documentIdToExpressionMap, "unk"),
                                         Reflect.field(m_documentIdToExpressionMap, "a1"),
@@ -369,7 +369,7 @@ class ExpressionModelHintSelector extends HintSelectorNode
                     else if (barModelType == BarModelTypes.TYPE_5K) 
                     {
                         hintData = generateTwoStepGroupsHint(
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
                                         Reflect.field(m_documentIdToExpressionMap, "c"),
                                         null,
                                         Reflect.field(m_documentIdToExpressionMap, "a1"),
@@ -381,29 +381,29 @@ class ExpressionModelHintSelector extends HintSelectorNode
                     {
                         hintData = generateFractionHint(
                                         Reflect.field(m_documentIdToExpressionMap, "unk"),
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
                                         Reflect.field(m_documentIdToExpressionMap, "b1"),
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")),
-                                        [parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) - parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"))],
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")),
+                                        [Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) - Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"))],
                                         userExpressionRoot);
                     }
                     else if (barModelType == BarModelTypes.TYPE_6B) 
                     {
                         hintData = generateFractionHint(
                                         Reflect.field(m_documentIdToExpressionMap, "unk"),
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) - parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) - Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
                                         Reflect.field(m_documentIdToExpressionMap, "b1"),
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")),
-                                        [parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) - parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"))],
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")),
+                                        [Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) - Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"))],
                                         userExpressionRoot);
                     }
                     else if (barModelType == BarModelTypes.TYPE_6C) 
                     {
                         hintData = generateFractionHint(
                                         Reflect.field(m_documentIdToExpressionMap, "unk"),
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")),
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")),
                                         Reflect.field(m_documentIdToExpressionMap, "b1"),
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
                                         null,
                                         userExpressionRoot);
                     }
@@ -411,10 +411,10 @@ class ExpressionModelHintSelector extends HintSelectorNode
                     {
                         hintData = generateFractionHint(
                                         Reflect.field(m_documentIdToExpressionMap, "unk"),
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) - parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) - Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
                                         Reflect.field(m_documentIdToExpressionMap, "b1"),
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
-                                        [parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) - parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"))],
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
+                                        [Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) - Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"))],
                                         userExpressionRoot);
                     }
                     // For type 7, the 'a2' tag in the document is the denominator of the fraction
@@ -422,9 +422,9 @@ class ExpressionModelHintSelector extends HintSelectorNode
                     {
                         hintData = generateFractionHint(
                                         Reflect.field(m_documentIdToExpressionMap, "unk"),
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")),
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")),
                                         Reflect.field(m_documentIdToExpressionMap, "b1"),
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
                                         null,
                                         userExpressionRoot);
                     }
@@ -432,84 +432,84 @@ class ExpressionModelHintSelector extends HintSelectorNode
                     {
                         hintData = generateFractionHint(
                                         Reflect.field(m_documentIdToExpressionMap, "unk"),
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) + parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) + Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
                                         Reflect.field(m_documentIdToExpressionMap, "b1"),
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
-                                        [parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) + parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"))],
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
+                                        [Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) + Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"))],
                                         userExpressionRoot);
                     }
                     else if (barModelType == BarModelTypes.TYPE_7C) 
                     {
                         hintData = generateFractionHint(
                                         Reflect.field(m_documentIdToExpressionMap, "unk"),
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) - parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) - Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
                                         Reflect.field(m_documentIdToExpressionMap, "b1"),
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
-                                        [parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) - parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"))],
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
+                                        [Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) - Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"))],
                                         userExpressionRoot);
                     }
                     else if (barModelType == BarModelTypes.TYPE_7D_1) 
                     {
                         hintData = generateFractionHint(
                                         Reflect.field(m_documentIdToExpressionMap, "unk"),
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")),
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")),
                                         Reflect.field(m_documentIdToExpressionMap, "b1"),
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")) + parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
-                                        [parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")) + parseInt(Reflect.field(m_documentIdToExpressionMap, "a2"))],
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")) + Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
+                                        [Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")) + Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2"))],
                                         userExpressionRoot);
                     }
                     else if (barModelType == BarModelTypes.TYPE_7D_2) 
                     {
                         hintData = generateFractionHint(
                                         Reflect.field(m_documentIdToExpressionMap, "unk"),
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
                                         Reflect.field(m_documentIdToExpressionMap, "b1"),
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")) + parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")),
-                                        [parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")) + parseInt(Reflect.field(m_documentIdToExpressionMap, "a2"))],
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")) + Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")),
+                                        [Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")) + Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2"))],
                                         userExpressionRoot);
                     }
                     else if (barModelType == BarModelTypes.TYPE_7E) 
                     {
                         hintData = generateFractionHint(
                                         Reflect.field(m_documentIdToExpressionMap, "unk"),
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) - parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) - Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
                                         Reflect.field(m_documentIdToExpressionMap, "b1"),
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")) + parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")),
-                                        [parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) - parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")), 
-                                                parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) + parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"))],
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")) + Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")),
+                                        [Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) - Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")), 
+                                                Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) + Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"))],
                                         userExpressionRoot);
                     }
                     else if (barModelType == BarModelTypes.TYPE_7F_1) 
                     {
                         hintData = generateFractionHint(
                                         Reflect.field(m_documentIdToExpressionMap, "unk"),
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")),
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")),
                                         Reflect.field(m_documentIdToExpressionMap, "b1"),
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) - parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
-                                        [parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) - parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")), 
-                                                parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) + parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"))],
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) - Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
+                                        [Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) - Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")), 
+                                                Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) + Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"))],
                                         userExpressionRoot);
                     }
                     else if (barModelType == BarModelTypes.TYPE_7F_2) 
                     {
                         hintData = generateFractionHint(
                                         Reflect.field(m_documentIdToExpressionMap, "unk"),
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
                                         Reflect.field(m_documentIdToExpressionMap, "b1"),
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) - parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
-                                        [parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) - parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")), 
-                                                parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) + parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"))],
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) - Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
+                                        [Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) - Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")), 
+                                                Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) + Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"))],
                                         userExpressionRoot);
                     }
                     else if (barModelType == BarModelTypes.TYPE_7G) 
                     {
                         hintData = generateFractionHint(
                                         Reflect.field(m_documentIdToExpressionMap, "unk"),
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) + parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) + Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
                                         Reflect.field(m_documentIdToExpressionMap, "b1"),
-                                        parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) - parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
-                                        [parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) - parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")), 
-                                                parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) + parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"))],
+                                        Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) - Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
+                                        [Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) - Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")), 
+                                                Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2")) + Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"))],
                                         userExpressionRoot);
                     }
                 }
@@ -528,17 +528,18 @@ class ExpressionModelHintSelector extends HintSelectorNode
                 var unknownName : String = null;
                 for (expressionComponent in expressionsInText)
                 {
-                    hintData = checkExpressionValueMissing(expressionComponent.expressionString, userExpressionRoot);
+					var castedExpressionComponent = try cast(expressionComponent, ExpressionComponent) catch (e : Dynamic) null;
+                    hintData = checkExpressionValueMissing(castedExpressionComponent.expressionString, userExpressionRoot);
                     
                     // A missing unknown takes precedent over missing number
-                    if (Math.isNaN(parseInt(expressionComponent.expressionString)) && hintData != null) 
+                    if (Math.isNaN(Std.parseInt(castedExpressionComponent.expressionString)) && hintData != null) 
                     {
                         break;
                     }
-                }  // Next hints attempt to check if an operator is missing  
-                
-                
-                
+                }  
+				
+				// Next hints attempt to check if an operator is missing
+				var referenceEquationRoot : ExpressionNode = null;
                 if (hintData == null) 
                 {
                     var operatorTypes : Array<String> = ["+", "-", "*", "/"];
@@ -551,7 +552,7 @@ class ExpressionModelHintSelector extends HintSelectorNode
                     // The target equation can be navigated to see what sort of operators need to be used.
                     // Each operator can have a hint associated with it.
                     // Compare what the operators are between the user model and the reference model
-                    var referenceEquationRoot : ExpressionNode = m_expressionCompiler.compile(m_modelSpecificEquation.getEquations()[0].expressionString).head;
+                    referenceEquationRoot = m_expressionCompiler.compile(m_modelSpecificEquation.getEquations()[0].expressionString);
                     for (i in 0...operatorTypes.length){
                         var targetOperator : String = operatorTypes[i];
                         if (expressionContainsValue(referenceEquationRoot, targetOperator) &&
@@ -559,17 +560,14 @@ class ExpressionModelHintSelector extends HintSelectorNode
                         {
                             hintData = {
                                         descriptionContent : operatorHintContent[i]
-
                                     };
                             break;
                         }
                     }
-                }  // We use the simplifying assumption that the parent operator is what we want to match    // Next hints attempt to check if a term is used with the correct operator  
-                
-                
-                
-                
-                
+                }
+				
+				// Next hints attempt to check if a term is used with the correct operator  
+                // We use the simplifying assumption that the parent operator is what we want to match
                 if (hintData == null) 
                 {
                     // For each term in the reference, find the operator
@@ -678,7 +676,7 @@ class ExpressionModelHintSelector extends HintSelectorNode
         
         if (!expressionContainsValue(userExpressionRoot, expressionValue)) 
         {
-            var isUnknown : Bool = Math.isNaN(parseFloat(expressionValue));
+            var isUnknown : Bool = Math.isNaN(Std.parseFloat(expressionValue));
             var valueMissingHints : Array<String> = new Array<String>();
             if (isUnknown) 
             {
@@ -690,9 +688,6 @@ class ExpressionModelHintSelector extends HintSelectorNode
                             "'" + expressionValue + "' needs to be in the answer.");
                     valueMissingHints.push(
                             "You need to add '" + expressionValue + "' somewhere.");
-                    valueMissingHints.push(
-                            );
-                    
                 }
                 else 
                 {
@@ -700,9 +695,6 @@ class ExpressionModelHintSelector extends HintSelectorNode
                             "You need to put the unknown value in your answer!");
                     valueMissingHints.push(
                             "An important value is missing.");
-                    valueMissingHints.push(
-                            );
-                    
                 }
             }
             else 
@@ -712,9 +704,6 @@ class ExpressionModelHintSelector extends HintSelectorNode
                 {
                     valueMissingHints.push(
                             "'" + expressionValue + "' may need to be put somewhere.");
-                    valueMissingHints.push(
-                            );
-                    
                 }
                 else 
                 {
@@ -724,15 +713,11 @@ class ExpressionModelHintSelector extends HintSelectorNode
                             "Do you have all the numbers you need?");
                     valueMissingHints.push(
                             "What numbers are you missing");
-                    valueMissingHints.push(
-                            );
-                    
                 }
             }
             
             hintData = {
                         descriptionContent : valueMissingHints[Math.floor(Math.random() * valueMissingHints.length)]
-
                     };
         }
         
@@ -1134,7 +1119,8 @@ class ExpressionModelHintSelector extends HintSelectorNode
                 var numberFound : Bool = false;
                 for (expressionComponent in expressionsInDeck)
                 {
-                    if (parseInt(expressionComponent.expressionString) == missingNumber) 
+					var castedExpressionComponent = try cast(expressionComponent, ExpressionComponent) catch (e : Dynamic) null;
+                    if (Std.parseInt(castedExpressionComponent.expressionString) == missingNumber) 
                     {
                         numberFound = true;
                         break;
@@ -1146,29 +1132,22 @@ class ExpressionModelHintSelector extends HintSelectorNode
                     createdMissingNumbers = false;
                     break;
                 }
-            }  // or the difference between the    // The missing number that is useful is either the total number of groups  
-            
-            
-            
-            
-            
+            }
+			
+			// The missing number that is useful is either the total number of groups  
+			// or the difference between the
             if (!createdMissingNumbers) 
             {
                 hintData = {
                             descriptionContent : "You can make a new number if you need it."
-
                         };
             }
-        }  // to creating the equation)    // (Seems like this is a good approach, heavily rely on using the bar model template as a guide    // Create a sequence of hints    // How many times bigger is the unknown than one of the groups?  
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        }
+		
+		// How many times bigger is the unknown than one of the groups?  
+		// Create a sequence of hints
+		// (Seems like this is a good approach, heavily rely on using the bar model template as a guide
+        // to creating the equation)
         if (hintData == null) 
         {
             m_fractionBarCounter++;

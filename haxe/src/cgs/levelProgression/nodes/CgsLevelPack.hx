@@ -116,7 +116,7 @@ class CgsLevelPack extends CGSObject implements ICgsLevelPack
     private function initFromData(prevLevel : ICgsLevelLeaf, data : Dynamic) : ICgsLevelLeaf
     {
         // Node tracking
-        var node : ICgsLevelNode;
+        var node : ICgsLevelNode = null;
         var previousLevel : ICgsLevelLeaf = prevLevel;
         var previousNode : ICgsLevelNode = null;  // The first node created by the level pack will never need a previousNode since it is locked by the level pack  
         
@@ -183,7 +183,7 @@ class CgsLevelPack extends CGSObject implements ICgsLevelPack
 		 */
     private function createNode(nodeData : Dynamic, previousNode : ICgsLevelNode) : ICgsLevelNode
     {
-        var result : ICgsLevelNode;
+        var result : ICgsLevelNode = null;
         
         // Process node type
         var nodeType : String = Reflect.field(nodeData, "nodeType");
@@ -327,7 +327,7 @@ class CgsLevelPack extends CGSObject implements ICgsLevelPack
 		 */
     private function get_firstLeaf() : ICgsLevelLeaf
     {
-        var result : ICgsLevelLeaf;
+        var result : ICgsLevelLeaf = null;
         if (m_levelData.length > 0)
         {
             var firstNode : ICgsLevelNode = m_levelData[0];
@@ -351,7 +351,7 @@ class CgsLevelPack extends CGSObject implements ICgsLevelPack
 		 */
     private function get_lastLeaf() : ICgsLevelLeaf
     {
-        var result : ICgsLevelLeaf;
+        var result : ICgsLevelLeaf = null;
         if (m_levelData.length > 0)
         {
             var lastNode : ICgsLevelNode = m_levelData[m_levelData.length - 1];
@@ -933,7 +933,7 @@ class CgsLevelPack extends CGSObject implements ICgsLevelPack
 		 */
     public function hasLock(lockType : String, keyData : Dynamic) : Bool
     {
-        var result : Bool;
+        var result : Bool = false;
         for (lock in m_packLocks)
         {
             if (lock.lockType == lockType && lock.doesKeyMatch(keyData))
@@ -950,7 +950,7 @@ class CgsLevelPack extends CGSObject implements ICgsLevelPack
 		 */
     public function editLock(lockType : String, oldKeyData : Dynamic, newKeyData : Dynamic) : Bool
     {
-        var result : Bool;
+        var result : Bool = false;
         if (removeLock(lockType, oldKeyData))
         {
             addLock(lockType, newKeyData);
@@ -964,7 +964,7 @@ class CgsLevelPack extends CGSObject implements ICgsLevelPack
 		 */
     public function removeLock(lockType : String, keyData : Dynamic) : Bool
     {
-        var result : Bool;
+        var result : Bool = false;
         for (lock in m_packLocks)
         {
             if (lock.lockType == lockType && lock.doesKeyMatch(keyData))
@@ -1229,7 +1229,7 @@ class CgsLevelPack extends CGSObject implements ICgsLevelPack
 		 */
     private function getPreviousNodeFromIndex(index : Int) : ICgsLevelNode
     {
-        var result : ICgsLevelNode;
+        var result : ICgsLevelNode = null;
         
         if (index < 0 || index > nodes.length)
         {
@@ -1255,7 +1255,7 @@ class CgsLevelPack extends CGSObject implements ICgsLevelPack
 		 */
     private function getNextNodeFromIndex(index : Int) : ICgsLevelNode
     {
-        var result : ICgsLevelNode;
+        var result : ICgsLevelNode = null;
         
         if (index < 0 || index + 1 >= nodes.length || index == as3hx.Compat.INT_MAX)
         {
@@ -1279,7 +1279,7 @@ class CgsLevelPack extends CGSObject implements ICgsLevelPack
 		 */
     public function editNodeInProgression(nameOfNode : String, newNodeData : Dynamic) : Bool
     {
-        var result : Bool;
+        var result : Bool = false;
         
         for (childNode in nodes)
         {
@@ -1422,7 +1422,7 @@ class CgsLevelPack extends CGSObject implements ICgsLevelPack
 		 */
     public function getNextLevel(aNodeLabel : Int = -1) : ICgsLevelLeaf
     {
-        var result : ICgsLevelLeaf;
+        var result : ICgsLevelLeaf = null;
         
         // Find the node with the given label, get the level that comes after it (if any).
         if (aNodeLabel >= 0)
@@ -1491,7 +1491,7 @@ class CgsLevelPack extends CGSObject implements ICgsLevelPack
 		 */
     public function getPrevLevel(aNodeLabel : Int = -1) : ICgsLevelLeaf
     {
-        var result : ICgsLevelLeaf;
+        var result : ICgsLevelLeaf = null;
         
         // Find the node with the given label, get the level that comes before it (if any).
         if (aNodeLabel >= 0)

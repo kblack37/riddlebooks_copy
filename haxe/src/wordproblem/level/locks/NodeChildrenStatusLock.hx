@@ -1,10 +1,9 @@
 package wordproblem.level.locks;
 
-
-import cgs.levelprogression.ICgsLevelManager;
-import cgs.levelprogression.locks.ICgsLevelLock;
-import cgs.levelprogression.nodes.ICgsLevelNode;
-import cgs.levelprogression.nodes.ICgsLevelPack;
+import cgs.levelProgression.ICgsLevelManager;
+import cgs.levelProgression.locks.ICgsLevelLock;
+import cgs.levelProgression.nodes.ICgsLevelNode;
+import cgs.levelProgression.nodes.ICgsLevelPack;
 
 import wordproblem.level.LevelNodeStatuses;
 
@@ -59,7 +58,7 @@ class NodeChildrenStatusLock implements ICgsLevelLock
         {
             var levelPack : ICgsLevelPack = try cast(levelNode, ICgsLevelPack) catch(e:Dynamic) null;
             var childrenNodes : Array<ICgsLevelNode> = levelPack.nodes;
-            var i : Int;
+            var i : Int = 0;
             var numChildren : Int = childrenNodes.length;
             for (i in 0...numChildren){
                 var childMatches : Bool = LevelNodeStatuses.getNodeMatchesStatus(childrenNodes[i], m_unlockStatus);

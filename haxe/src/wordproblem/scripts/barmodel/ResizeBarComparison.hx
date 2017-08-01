@@ -77,20 +77,20 @@ class ResizeBarComparison extends BaseBarModelScript
             var mouseState : MouseState = m_gameEngine.getMouseState();
             m_globalMouseBuffer.setTo(mouseState.mousePositionThisFrame.x, mouseState.mousePositionThisFrame.y);
             m_barModelArea.globalToLocal(m_globalMouseBuffer, m_localMouseBuffer);
-            as3hx.Compat.setArrayLength(m_outParamsBuffer, 0);
+			m_outParamsBuffer = new Array<Dynamic>();
             
             if (mouseState.leftMousePressedThisFrame) 
             {
                 if (checkHitArea(m_outParamsBuffer)) 
                 {
                     m_targetBarView = try cast(m_outParamsBuffer[0], BarWholeView) catch(e:Dynamic) null;
-                    m_draggingLeft = try cast(m_outParamsBuffer[1], Bool) catch(e:Dynamic) null;
+                    m_draggingLeft = try cast(m_outParamsBuffer[1], Bool) catch(e:Dynamic) false;
                     
                     var comparisonView : BarComparisonView = m_targetBarView.comparisonView;
                     m_comparisonViewOriginalLength = comparisonView.pixelLength;
                     
                     m_sparklerAnimation.x = comparisonView.width;
-                    m_sparklerAnimation.y = comparisonView.y +comparisonView.height  //* 0.5;  ;
+                    m_sparklerAnimation.y = comparisonView.y +comparisonView.height;  //* 0.5;  ;
                     m_sparklerAnimation.play(comparisonView);
                     
                     // Assuming that the bar model cannot change while we are dragging,
@@ -107,7 +107,7 @@ class ResizeBarComparison extends BaseBarModelScript
                 {
                     var closestBarWholeView : BarWholeView = try cast(m_outParamsBuffer[0], BarWholeView) catch(e:Dynamic) null;
                     var closestBarSegmentIndex : Int = Std.parseInt(m_outParamsBuffer[1]);
-                    var closestDistance : Float = Math.abs(try cast(m_outParamsBuffer[2], Float) catch(e:Dynamic) null);
+                    var closestDistance : Float = Math.abs(try cast(m_outParamsBuffer[2], Float) catch(e:Dynamic) 0);
                     var barComparisonView : BarComparisonView = m_targetBarView.comparisonView;
                     var newLength : Float = 0;
                     if (closestDistance < 30 * m_barModelArea.scaleFactor) 
@@ -140,8 +140,8 @@ class ResizeBarComparison extends BaseBarModelScript
                 {
                     var previousModelDataSnapshot : BarModelData = m_barModelArea.getBarModelData().clone();
                     
-                    closestBarWholeView = try cast(m_outParamsBuffer[0], BarWholeView) catch(e:Dynamic) null;
-                    closestBarSegmentIndex = Std.parseInt(m_outParamsBuffer[1]);
+                    var closestBarWholeView = try cast(m_outParamsBuffer[0], BarWholeView) catch(e:Dynamic) null;
+                    var closestBarSegmentIndex = Std.parseInt(m_outParamsBuffer[1]);
                     
                     // Write out the change and redraw
                     // TODO: If the data did not change no need to write it out
@@ -152,14 +152,12 @@ class ResizeBarComparison extends BaseBarModelScript
                         barComparison.segmentIndexComparedTo = closestBarSegmentIndex;
                         m_gameEngine.dispatchEventWith(GameEvent.BAR_MODEL_AREA_CHANGE, false, {
                                     previousSnapshot : previousModelDataSnapshot
-
                                 });
                         m_barModelArea.redraw();
                         
                         // Log resizing of a bar comparison
                         m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.RESIZE_BAR_COMPARISON, false, {
                                     barModel : m_barModelArea.getBarModelData().serialize()
-
                                 });
                     }
                     // Make sure if no change occured, the comparison view is restored to its original width
@@ -199,8 +197,8 @@ class ResizeBarComparison extends BaseBarModelScript
         var doHitArea : Bool = false;
         var outBounds : Rectangle = new Rectangle();
         var barWholeViews : Array<BarWholeView> = m_barModelArea.getBarWholeViews();
-        var i : Int;
-        var barWholeView : BarWholeView;
+        var i : Int = 0;
+        var barWholeView : BarWholeView = null;
         var numBarWholeViews : Int = barWholeViews.length;
         for (i in 0...numBarWholeViews){
             barWholeView = barWholeViews[i];
@@ -245,12 +243,12 @@ class ResizeBarComparison extends BaseBarModelScript
         var closestSegmentIndex : Int = -1;
         
         // The absolute value of the smallest possible distance
-        var smallestDelta : Float = Int.MAX_VALUE;
+        var smallestDelta : Float = Math.pow(2, 30);
         
         var barComparisonBounds : Rectangle = targetBarComparisonView.rigidBody.boundingRectangle;
         var barWholeViews : Array<BarWholeView> = m_barModelArea.getBarWholeViews();
-        var i : Int;
-        var barWholeView : BarWholeView;
+        var i : Int = 0;
+        var barWholeView : BarWholeView = null;
         var numBarWholeViews : Int = barWholeViews.length;
         for (i in 0...numBarWholeViews){
             barWholeView = barWholeViews[i];
@@ -260,9 +258,9 @@ class ResizeBarComparison extends BaseBarModelScript
             {
                 var segmentViews : Array<BarSegmentView> = barWholeView.segmentViews;
                 var numSegmentViews : Int = segmentViews.length;
-                var j : Int;
-                var segmentView : BarSegmentView;
-                var segmentBounds : Rectangle;
+                var j : Int = 0;
+                var segmentView : BarSegmentView = null;
+                var segmentBounds : Rectangle = null;
                 for (j in 0...numSegmentViews){
                     segmentView = segmentViews[j];
                     segmentBounds = segmentView.rigidBody.boundingRectangle;

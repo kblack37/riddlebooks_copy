@@ -340,7 +340,7 @@ class MouseInteractionLayer extends LayerManager implements ICGSLayer
 		 */
     private function getObjectsUnderMouse(x : Float, y : Float) : Array<Dynamic>
     {
-        var result : Array<Dynamic>;
+        var result : Array<Dynamic> = null;
         var objectStack : Array<Dynamic> = m_rootSprite.getObjectsUnderPoint(new Point(x, y));
         
         // Process the array of objects under the mouse
@@ -613,7 +613,7 @@ class MouseInteractionLayer extends LayerManager implements ICGSLayer
             {
                 // Get all the objects under the mouse.
                 //var tObjects:Array = getObjectsUnderMouse(event.stageX, event.stageY);
-                var dZone : IDropZone;
+                var dZone : IDropZone = null;
                 if (tObjects != null)
                 {
                     // Search for an IDropZone object

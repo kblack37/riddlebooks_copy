@@ -113,7 +113,7 @@ class EquationInventorySelection extends BaseGameScript
             if (value) 
             {
                 var i : Int = 0;
-                var termArea : TermAreaWidget;
+                var termArea : TermAreaWidget = null;
                 for (i in 0...m_termAreas.length){
                     termArea = m_termAreas[i];
                     termArea.addEventListener(GameEvent.TERM_AREA_CHANGED, onTermAreaChanged);

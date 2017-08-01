@@ -56,7 +56,7 @@ class Layering extends ScriptNode
     
     override public function visit() : Int
     {
-        as3hx.Compat.setArrayLength(m_layers, 0);
+		m_layers = new Array<Layer>();
         this.getOrderedLayerList(m_baseLayer, m_layers);
         
         m_mousePoint.setTo(m_mouseState.mousePositionThisFrame.x, m_mouseState.mousePositionThisFrame.y);
@@ -64,8 +64,8 @@ class Layering extends ScriptNode
         // Iterate through the set of selected layers and set whether the mouse has hit it
         // Note that the layer at the lower index is actually higher on the display list
         var numLayers : Int = m_layers.length;
-        var layer : Layer;
-        var i : Int;
+        var layer : Layer = null;
+        var i : Int = 0;
         var blockLayers : Bool = false;
         for (i in 0...numLayers){
             layer = m_layers[i];
@@ -102,7 +102,7 @@ class Layering extends ScriptNode
         {
             var container : DisplayObjectContainer = try cast(object, DisplayObjectContainer) catch(e:Dynamic) null;
             var numChildren : Int = container.numChildren;
-            var i : Int;
+            var i : Int = 0;
             i = numChildren - 1;
             while (i >= 0){
                 getOrderedLayerList(container.getChildAt(i), outLayers);

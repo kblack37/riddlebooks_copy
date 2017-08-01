@@ -1,7 +1,6 @@
 package wordproblem.level;
 
-
-import cgs.levelprogression.nodes.ICgsLevelNode;
+import cgs.levelProgression.nodes.ICgsLevelNode;
 
 class LevelNodeStatuses
 {

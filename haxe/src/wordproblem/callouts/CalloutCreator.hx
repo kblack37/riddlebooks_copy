@@ -50,7 +50,7 @@ class CalloutCreator
             contentHeight = calloutMeasuringTextField.textHeight + 10;
         }
         
-        return new TextField(width, contentHeight, text, defaultFontFamily, fontSize, color);
+        return new TextField(Std.int(width), Std.int(contentHeight), text, defaultFontFamily, fontSize, color);
     }
     
     /**

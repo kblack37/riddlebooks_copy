@@ -7,6 +7,8 @@ import flash.geom.Vector3D;
 
 import dragonbox.common.dispose.IDisposable;
 
+import openfl.Vector;
+
 import starling.events.Event;
 import starling.events.EventDispatcher;
 import starling.events.Touch;
@@ -104,7 +106,7 @@ class MouseState implements IDisposable
     
     private function onTouch(event : TouchEvent) : Void
     {
-        var touches : Array<Touch> = event.touches;
+        var touches : Vector<Touch> = event.touches;
         var touchCount : Int = touches.length;
         
         // Touches exceeds one only if multiple pressure points have been detected

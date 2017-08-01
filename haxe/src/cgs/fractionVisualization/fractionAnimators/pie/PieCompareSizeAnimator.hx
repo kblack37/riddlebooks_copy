@@ -216,8 +216,8 @@ class PieCompareSizeAnimator implements IFractionAnimator
         //			var firstSegment:Sprite = new Sprite();
         //			firstModule.comparePeel(firstSegment, first.fraction, firstModule.numBaseUnits, first.foregroundColor);
         //			firstSegment.visible = false;
-        var lastIndex : Float;
-        var firstSegmentsFirstIndex : Float;
+        var lastIndex : Float = 0.0;
+        var firstSegmentsFirstIndex : Float = 0.0;
         var firstSegments : Array<Sprite> = firstModule.pulseSegments(first.foregroundColor);
         for (fsIndex in 0...firstSegments.length)
         {
@@ -251,9 +251,9 @@ class PieCompareSizeAnimator implements IFractionAnimator
         // Emphasis data
         var winnerValue : Float = VisualizationUtilities.compareByComparisonType(comparisonType, first.fraction, second.fraction, details);
         var winnerExists : Bool = winnerValue != 0;
-        var winningView : CgsFractionView;
-        var winningModule : PieFractionModule;
-        var winningGlowFinalPosition : Point;
+        var winningView : CgsFractionView = null;
+        var winningModule : PieFractionModule = null;
+        var winningGlowFinalPosition : Point = null;
         if (winnerExists)
         {
             // Setup winning view

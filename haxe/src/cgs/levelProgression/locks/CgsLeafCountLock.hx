@@ -161,7 +161,7 @@ class CgsLeafCountLock implements ICgsLevelLock
         var isLocked : Bool = true;
         
         // Find the level pack we are locked on
-        var levelNode : ICgsLevelNode;
+        var levelNode : ICgsLevelNode = null;
         if (m_unlockPackName != null && m_unlockPackName != "")
         {
             levelNode = m_levelManager.getNodeByName(m_unlockPackName);

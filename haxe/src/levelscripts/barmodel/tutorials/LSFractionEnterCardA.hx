@@ -449,7 +449,7 @@ class LSFractionEnterCardA extends BaseCustomLevelScript
         
         var referenceModel : BarModelData = new BarModelData();
         var barWhole : BarWhole = new BarWhole(false);
-        var i : Int;
+        var i : Int = 0;
         var numerator : Int = 2;
         var numParts : Int = 5;
         for (i in 0...numParts){

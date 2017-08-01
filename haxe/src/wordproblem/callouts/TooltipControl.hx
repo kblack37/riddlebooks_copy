@@ -7,8 +7,6 @@ import flash.text.TextFormat;
 import dragonbox.common.dispose.IDisposable;
 import dragonbox.common.ui.MouseState;
 
-import feathers.controls.Callout;
-
 import starling.display.DisplayObject;
 import starling.text.TextField;
 
@@ -116,21 +114,22 @@ class TooltipControl implements IDisposable
             if (calloutComponent == null && !Layer.getDisplayObjectIsInInactiveLayer(m_objectToGetTooltip) && m_objectToGetTooltip.visible) 
             {
                 var newCalloutComponent : CalloutComponent = new CalloutComponent(m_uiEntityId);
-                newCalloutComponent.display = new TextField(textWidth, textHeight, m_toolTipText, 
-                        m_textStyle.font, Std.parseInt(m_textStyle.size), try cast(m_textStyle.color, Int) catch(e:Dynamic) null);
+                newCalloutComponent.display = new TextField(Std.int(textWidth), Std.int(textHeight), m_toolTipText, 
+                        m_textStyle.font, m_textStyle.size, try cast(m_textStyle.color, Int) catch(e:Dynamic) 0);
                 newCalloutComponent.backgroundTexture = "button_white";
                 newCalloutComponent.arrowTexture = "";
                 newCalloutComponent.backgroundColor = 0x000000;
                 
                 // Have callout point down if the ui is too far up
-                newCalloutComponent.directionFromOrigin = ((m_displayHitArea.y < 100)) ? Callout.DIRECTION_DOWN : Callout.DIRECTION_UP;
+				// TODO: replaced Callout.DIRECTION_DOWN and Callout.DIRECTION_UP with dummy values
+				// since the feathers callout library is not used anymore
+                newCalloutComponent.directionFromOrigin = ((m_displayHitArea.y < 100)) ? "down" : "up";
                 uiComponentManager.addComponentToEntity(newCalloutComponent);
                 
                 m_thisControlCreatedCallout = true;
-            }  // Update callout display if text changed  
-            
-            
-            
+            }
+			
+			// Update callout display if text changed  
             if (calloutComponent != null && m_thisControlCreatedCallout) 
             {
                 var currentText : TextField = try cast((try cast(calloutComponent, CalloutComponent) catch(e:Dynamic) null).display, TextField) catch(e:Dynamic) null;

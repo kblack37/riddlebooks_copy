@@ -12,7 +12,10 @@ class MeasuringTextField extends TextField
         this.wordWrap = false;
     }
     
-    override private function set_defaultTextFormat(format : TextFormat) : TextFormat
+    #if js
+	override
+	#end
+	private function set_defaultTextFormat(format : TextFormat) : TextFormat
     {
         // Whether or not to set the use embed flag depends on the font type used.
         // We need to loop through all the embedded fonts and check
@@ -38,7 +41,7 @@ class MeasuringTextField extends TextField
             maxHeight : Float,
             text : String) : Float
     {
-        var fontSize : Float = try cast(this.defaultTextFormat.size, Float) catch(e:Dynamic) null;
+        var fontSize : Float = try cast(this.defaultTextFormat.size, Float) catch(e:Dynamic) 0;
         var fontName : String = this.defaultTextFormat.font;
         
         // Creating another textfield for measurement

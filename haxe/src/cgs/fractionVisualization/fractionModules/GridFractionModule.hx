@@ -722,7 +722,7 @@ class GridFractionModule implements IFractionModule
 		 */
     private function fillLogicGrid(logicGrid : Array<Bool>, startIndex : Int, blocksPerSquare : Int, blocksToFill : Int, rowSize : Int, columnSize : Int) : Void
     {
-        var i : Int;
+        var i : Int = 0;
         
         // Base case - down to the last grid
         if (blocksToFill < blocksPerSquare)

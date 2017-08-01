@@ -98,7 +98,7 @@ class HomeplayData
     
     private function get_requiredQuestCount() : Int
     {
-        var returnInt : Int;
+        var returnInt : Int = 0;
         
         if (_levelCount > 0)
         {

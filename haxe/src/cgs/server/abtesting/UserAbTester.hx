@@ -490,7 +490,7 @@ class UserAbTester implements IUserAbTester
         
         _tests = new Array<ABTest>();
         var testData : Array<Dynamic> = data.tests;
-        var test : ABTest;
+        var test : ABTest = null;
         for (currTestData in testData)
         {
             test = new ABTest();
@@ -500,7 +500,7 @@ class UserAbTester implements IUserAbTester
         }
         
         //Parse the current status of the tests.
-        var testID : Int;
+        var testID : Int = 0;
         if (Reflect.hasField(data, "t_status"))
         {
             var testStatus:Array<Dynamic> = data.t_status;

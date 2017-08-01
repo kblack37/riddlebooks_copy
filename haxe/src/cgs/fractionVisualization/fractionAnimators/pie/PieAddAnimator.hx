@@ -181,7 +181,7 @@ class PieAddAnimator implements IFractionAnimator
 			**/
         
         // generic counter
-        var i : Int;
+        var i : Int = 0;
         
         // Fraction Views
         var fractionViews : Array<CgsFractionView> = Reflect.field(details, Std.string(CgsFVConstants.CLONE_VIEWS_KEY));
@@ -545,7 +545,7 @@ class PieAddAnimator implements IFractionAnimator
         
         for (i in 0...firstSectors.length)
         {
-            var indexOfFirstSector : Float;
+            var indexOfFirstSector : Float = 0.0;
             // establish insertion point for first sector then all other are
             // inserted at that point (so below each previous)
             // This prevents sectors from passing under each other
@@ -586,7 +586,7 @@ class PieAddAnimator implements IFractionAnimator
         
         for (i in 0...secondSectors.length)
         {
-            var indexOfSecondSector : Float;
+            var indexOfSecondSector : Float = 0.0;
             // establish insertion point for first sector then all other are
             // inserted at that point (so below each previous)
             // This prevents sectors from passing under each other
@@ -1342,8 +1342,8 @@ class PieAddAnimator implements IFractionAnimator
         {
             var paramsForSprites : Dynamic = null;  // example: {foregroundColor:0xffffff, tickColor: 0x6600cc };  
             var allSprites : Array<Sprite> = module.duplicateAllSprites(partitionsPerDenom, paramsForSprites, true, true);
-            var partitionFadeInAndPulseTween : GTween;
-            var partitionBackToSizeTween : GTween;
+            var partitionFadeInAndPulseTween : GTween = null;
+            var partitionBackToSizeTween : GTween = null;
             
             var partitionTime : Float = unitDuration / 4;
             var moveTime : Float = unitDuration / 4;

@@ -1,9 +1,8 @@
 package wordproblem.level.nodes;
 
-
 import cgs.cache.ICgsUserCache;
-import cgs.levelprogression.ICgsLevelManager;
-import cgs.levelprogression.util.ICgsLockFactory;
+import cgs.levelProgression.ICgsLevelManager;
+import cgs.levelProgression.util.ICgsLockFactory;
 
 import dragonbox.common.util.XString;
 
@@ -136,7 +135,8 @@ class WordProblemLevelNode
             if (data.exists("tags")) 
             {
                 m_tags = new Array<String>();
-                for (tag/* AS3HX WARNING could not determine type for var: tag exp: EField(EIdent(data),tags) type: null */ in data.tags)
+				var tags : Array<String> = data.tags;
+                for (tag in tags)
                 {
                     if (tag != "") 
                     {
@@ -170,9 +170,9 @@ class WordProblemLevelNode
                     {
                         Reflect.setField(m_overrideRules, ruleName, XString.stringToBool(ruleValue));
                     }
-                    else if (new EReg('^[0-9]+$', "").test(ruleValue)) 
+                    else if (new EReg('^[0-9]+$', "").match(ruleValue)) 
                     {
-                        Reflect.setField(m_overrideRules, ruleName, parseInt(ruleValue));
+                        Reflect.setField(m_overrideRules, ruleName, Std.parseInt(ruleValue));
                     }
                     else 
                     {
@@ -202,7 +202,7 @@ class WordProblemLevelNode
             if (data.exists("difficulty")) 
             {
                 m_difficultySet = true;
-                m_difficulty = parseFloat(Reflect.field(data, "difficulty"));
+                m_difficulty = Std.parseFloat(Reflect.field(data, "difficulty"));
             }
         }
     }

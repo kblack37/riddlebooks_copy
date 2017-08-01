@@ -46,15 +46,13 @@ class ChangeButtonColorScript extends ScriptNode
                 buttonColorName, TextureCollectionComponent.TYPE_ID), TextureCollectionComponent) catch(e:Dynamic) null;
         if (texturesComponent != null) 
         {
-            m_buttonColorData.setActiveUpColor(parseInt(texturesComponent.textureCollection[0].color, 16));
-        }  // Those not matching should be set to unequipped    // Iterate through all the mouse cursor objects possessed by the player  
-        
-        
-        
-        
-        
+            m_buttonColorData.setActiveUpColor(Std.parseInt(texturesComponent.textureCollection[0].color));
+        }
+		
+		// Those not matching should be set to unequipped
+		// Iterate through all the mouse cursor objects possessed by the player  
         var equippableObjectsOwned : Array<Component> = m_playerItemInventory.componentManager.getComponentListForType(EquippableComponent.TYPE_ID);
-        var i : Int;
+        var i : Int = 0;
         var numEquippablesOwned : Int = equippableObjectsOwned.length;
         for (i in 0...numEquippablesOwned){
             var equippableComponent : EquippableComponent = try cast(equippableObjectsOwned[i], EquippableComponent) catch(e:Dynamic) null;

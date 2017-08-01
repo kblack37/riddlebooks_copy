@@ -45,7 +45,7 @@ class NewItemButton extends BaseRewardButton
         
         // Generate a random present color if the item is hidden
         var itemId : String = rewardData.id;
-        var mainDisplayObject : DisplayObject;
+        var mainDisplayObject : DisplayObject = null;
         if (rewardData.hidden) 
         {
             if (!rewardData.exists("presentColor")) 

@@ -5,8 +5,6 @@ import dragonbox.common.expressiontree.compile.LatexCompiler;
 import dragonbox.common.math.vectorspace.RealsVectorSpace;
 import dragonbox.common.ui.MouseState;
 
-import feathers.controls.Callout;
-
 import starling.animation.Juggler;
 
 import wordproblem.callouts.CalloutCreator;
@@ -104,64 +102,57 @@ class LevelSelectCharacterSequence extends ScriptNode
         if (levelManager.currentLevelProgression.numLevelLeafsPlayed == 0) 
         {
             mainSequence.pushChild(new CustomVisitNode(m_characterController.rotateCharacterTo, {
-                        id : "Taco",
-                        rotation : -Math.PI * 0.5,
-                        velocity : -1,
-
-                    }));
+                id : "Taco",
+                rotation : -Math.PI * 0.5,
+                velocity : -1
+            }));
             mainSequence.pushChild(new CustomVisitNode(m_characterController.isStillMoving, {
-                        id : "Taco"
-
-                    }));
+                id : "Taco"
+            }));
             mainSequence.pushChild(new CustomVisitNode(m_characterController.rotateCharacterTo, {
-                        id : "Taco",
-                        rotation : 0.3,
-                        velocity : 1.4,
-
-                    }));
+                id : "Taco",
+                rotation : 0.3,
+                velocity : 1.4
+            }));
             mainSequence.pushChild(new CustomVisitNode(m_characterController.moveCharacterTo, {
-                        id : "Taco",
-                        x : 530,
-                        y : 335,
-                        velocity : 500,
-
-                    }));
+                id : "Taco",
+                x : 530,
+                y : 335,
+                velocity : 500
+            }));
             mainSequence.pushChild(new CustomVisitNode(m_characterController.isStillMoving, {
-                        id : "Taco"
-
-                    }));
+                id : "Taco"
+            }));
             mainSequence.pushChild(new CustomVisitNode(m_characterController.showDialogForCharacter, {
-                        id : "Taco",
-                        text : "Start playing here!",
-                        color : 0xFFFFFF,
-                        direction : Callout.DIRECTION_RIGHT,
-                        width : 170,
-                        padding : 0,
-
-                    }));
+                id : "Taco",
+                text : "Start playing here!",
+                color : 0xFFFFFF,
+				// TODO: uncomment when callout replacement is redesigned
+                direction : 0, //Callout.DIRECTION_RIGHT,
+                width : 170,
+                padding : 0
+            }));
             
+			function getNumLevelsPlayedExceedsLimit(param : Dynamic) : Int
+			{
+				return ((param.limit < m_levelManager.numLevelLeafsPlayed)) ? ScriptStatus.SUCCESS : ScriptStatus.FAIL;
+			};
+			
             // Once played at least one level can get rid of the character
             mainSequence.pushChild(new CustomVisitNode(getNumLevelsPlayedExceedsLimit, {
-                        limit : 0
-
-                    }));
+                limit : 0
+            }));
         }
         mainSequence.pushChild(new CustomVisitNode(m_characterController.setCharacterVisible, {
-                    id : "Taco",
-                    visible : false,
-
-                }));
+            id : "Taco",
+            visible : false,
+        }));
         
         // TODO:
         // Character tells player that there are new shelves to play after they have finished the first intro chapter
         // but have not yet played any other level
         
         m_children.push(mainSequence);
-        
-        function getNumLevelsPlayedExceedsLimit(param : Dynamic) : Int
-        {
-            return ((param.limit < m_levelManager.numLevelLeafsPlayed)) ? ScriptStatus.SUCCESS : ScriptStatus.FAIL;
-        };
     }
     
     override public function dispose() : Void
@@ -185,9 +176,9 @@ class LevelSelectCharacterSequence extends ScriptNode
         {
             // Remove and stop the characters when setting to inactive
             var textureAtlasComponents : Array<Component> = m_characterComponentManager.getComponentListForType(RenderableComponent.TYPE_ID);
-            var textureAtlasComponent : RenderableComponent;
+            var textureAtlasComponent : RenderableComponent = null;
             var components : Int = textureAtlasComponents.length;
-            var i : Int;
+            var i : Int = 0;
             for (i in 0...components){
                 textureAtlasComponent = try cast(textureAtlasComponents[i], RenderableComponent) catch(e:Dynamic) null;
                 

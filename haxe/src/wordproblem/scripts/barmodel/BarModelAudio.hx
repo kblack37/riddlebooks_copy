@@ -1,6 +1,5 @@
 package wordproblem.scripts.barmodel;
 
-
 import cgs.audio.Audio;
 
 import starling.events.EventDispatcher;

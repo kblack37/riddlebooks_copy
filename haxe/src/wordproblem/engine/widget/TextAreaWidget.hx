@@ -8,9 +8,9 @@ import flash.geom.Rectangle;
 import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
 
-import feathers.controls.Button;
-import feathers.controls.IScrollBar;
+import haxe.Constraints.Function;
 
+import starling.display.Button;
 import starling.display.DisplayObject;
 import starling.display.Image;
 import starling.display.Sprite;
@@ -44,6 +44,8 @@ import wordproblem.resource.AssetManager;
  * The viewport determines the window that is interactable and most clearly visible
  * to the player.
  */
+
+ // TODO: uncomment all scrollbar references after scrollbar is redesigned
 class TextAreaWidget extends Sprite implements IBaseWidget
 {
     public var componentManager(get, never) : ComponentManager;
@@ -149,7 +151,7 @@ class TextAreaWidget extends Sprite implements IBaseWidget
     /**
      * The ui component used by the player to manually scroll up and down.
      */
-    private var m_scrollbar : IScrollBar;
+    //private var m_scrollbar : IScrollBar;
     
     /**
      * Unless the background is tileable, we should not allow the background to scroll.
@@ -173,8 +175,8 @@ class TextAreaWidget extends Sprite implements IBaseWidget
         m_scrollContainerLayer = new Sprite();
         m_foregroundLayer = new Sprite();
         m_pageTexture = pageTexture;
-        m_scrollbar = WidgetUtil.createScrollbar(assetManager);
-        m_scrollbar.addEventListener(Event.CHANGE, onScrollbarChange);
+        //m_scrollbar = WidgetUtil.createScrollbar(assetManager);
+        //m_scrollbar.addEventListener(Event.CHANGE, onScrollbarChange);
         
         m_isActive = true;
         
@@ -241,11 +243,11 @@ class TextAreaWidget extends Sprite implements IBaseWidget
     public function getDocumentIdToExpressionMap() : Dynamic
     {
         var expressionComponents : Array<Component> = this.componentManager.getComponentListForType(ExpressionComponent.TYPE_ID);
-        var i : Int;
+        var i : Int = 0;
         var documentIdToExpressionMap : Dynamic = { };
         for (i in 0...expressionComponents.length){
             var expressionComponent : ExpressionComponent = try cast(expressionComponents[i], ExpressionComponent) catch(e:Dynamic) null;
-            documentIdToExpressionMap[expressionComponent.entityId] = expressionComponent.expressionString;
+            documentIdToExpressionMap[Std.parseInt(expressionComponent.entityId)] = expressionComponent.expressionString;
         }
         
         return documentIdToExpressionMap;
@@ -278,9 +280,9 @@ class TextAreaWidget extends Sprite implements IBaseWidget
         
         // Position the scrollbar off to the furthest right limit
         var scrollWidth : Float = 22;
-        m_scrollbar.x = viewPortWidth - scrollWidth + viewPortX;
-        m_scrollbar.y = viewPortY;
-        m_scrollbar.height = viewPortHeight;
+        //m_scrollbar.x = viewPortWidth - scrollWidth + viewPortX;
+        //m_scrollbar.y = viewPortY;
+        //m_scrollbar.height = viewPortHeight;
         
         // Position the prev and next page buttons to the left and right edges of the viewport respectively
         // Note that height and width of buttons are not set until after they have been added to the stage
@@ -386,8 +388,8 @@ class TextAreaWidget extends Sprite implements IBaseWidget
             
             // If we repeat we initially create as many background texture display block as needed,
             // otherwise we just create one
-            var numTexturesNeeded : Float = ((m_backgroundRepeat)) ? Math.ceil(m_viewPort.height / pageTextureHeight) + 1 : 1;
-            var i : Int;
+            var numTexturesNeeded : Int = Std.int(((m_backgroundRepeat)) ? Math.ceil(m_viewPort.height / pageTextureHeight) + 1 : 1);
+            var i : Int = 0;
             for (i in 0...numTexturesNeeded){
                 var backgroundImage : Image = new Image(m_pageTexture);
                 m_backgroundImageStack.push(backgroundImage);
@@ -560,15 +562,13 @@ class TextAreaWidget extends Sprite implements IBaseWidget
             var targetView : DocumentView = targetViews[0];
             var node : DocumentNode = targetView.node;
             var textNodes : Array<TextNode> = new Array<TextNode>();
-            getTextNodes(node, textNodes);
-            
-            // Need to recursively gather all the text nodes that are contained
+			// Need to recursively gather all the text nodes that are contained
             // within the view.
             function getTextNodes(node : DocumentNode, outTextNodes : Array<TextNode>) : Void
             {
                 if (Std.is(node, TextNode)) 
                 {
-                    outTextNodes.push(node);
+                    outTextNodes.push(try cast(node, TextNode) catch (e:Dynamic) null);
                 }
                 else 
                 {
@@ -578,6 +578,8 @@ class TextAreaWidget extends Sprite implements IBaseWidget
                     }
                 }
             };
+			
+            getTextNodes(node, textNodes);
             
             if (textNodes.length >= 0) 
             {
@@ -664,23 +666,23 @@ class TextAreaWidget extends Sprite implements IBaseWidget
         // Add scrollbar floating above all the contents.
         // Since it is a feathers component, objects above it will automatically block mouse events
         var pageNeedsToScroll : Bool = heightOfVisibleTextContent > m_viewPort.height;
-        if (m_allowUserScroll && pageNeedsToScroll && m_scrollbar.parent == null) 
-        {
-            addChild(try cast(m_scrollbar, DisplayObject) catch(e:Dynamic) null);
-            
-            m_scrollbar.value = this.currentLocationToRatio(m_scrollContainerLayer.y);
-        }
-        // Iterate through the document views and apply updates to the backing data
-        else if (!pageNeedsToScroll && m_scrollbar.parent != null) 
-        {
-            m_scrollbar.removeFromParent();
-        }
+        //if (m_allowUserScroll && pageNeedsToScroll && m_scrollbar.parent == null) 
+        //{
+            //addChild(try cast(m_scrollbar, DisplayObject) catch(e:Dynamic) null);
+            //
+            //m_scrollbar.value = this.currentLocationToRatio(m_scrollContainerLayer.y);
+        //}
+        //// Iterate through the document views and apply updates to the backing data
+        //else if (!pageNeedsToScroll && m_scrollbar.parent != null) 
+        //{
+            //m_scrollbar.removeFromParent();
+        //}
         
         
         
         var numPages : Int = m_textPages.length;
-        var i : Int;
-        var textPage : DocumentView;
+        var i : Int = 0;
+        var textPage : DocumentView = null;
         for (i in 0...numPages){
             textPage = m_textPages[i];
             textPage.visit();
@@ -691,8 +693,8 @@ class TextAreaWidget extends Sprite implements IBaseWidget
         {
             // Adding positive values scrolls up
             // Adding negative values scrolls down
-            scrollDelta = mouseWheelDelta * 20;
-            m_scrollbar.value = this.currentLocationToRatio(scrollDelta + m_scrollContainerLayer.y);
+            var scrollDelta = mouseWheelDelta * 20;
+            //m_scrollbar.value = this.currentLocationToRatio(scrollDelta + m_scrollContainerLayer.y);
         }
         else if (m_scrollAmount != 0) 
         {
@@ -701,9 +703,9 @@ class TextAreaWidget extends Sprite implements IBaseWidget
             // the actual position
             var scrollDelta : Float = 20;
             var negativeModifier : Int = ((m_scrollAmount > 0)) ? 1 : -1;
-            scrollDelta = Math.min(scrollDelta, Math.abs(m_scrollAmount)) * negativeModifier;
-            m_scrollAmount -= scrollDelta;
-            m_scrollbar.value = this.currentLocationToRatio(scrollDelta + m_scrollContainerLayer.y);
+            var scrollDelta = Math.min(scrollDelta, Math.abs(m_scrollAmount)) * negativeModifier;
+            //m_scrollAmount -= scrollDelta;
+            //m_scrollbar.value = this.currentLocationToRatio(scrollDelta + m_scrollContainerLayer.y);
         }
     }
     
@@ -720,11 +722,11 @@ class TextAreaWidget extends Sprite implements IBaseWidget
         m_allowUserScroll = value;
         
         // Hide scrollbar if it is visible
-        var scrollbarDisplay : DisplayObject = try cast(m_scrollbar, DisplayObject) catch(e:Dynamic) null;
-        if (scrollbarDisplay.parent && !value) 
-        {
-            scrollbarDisplay.removeFromParent();
-        }
+        //var scrollbarDisplay : DisplayObject = try cast(m_scrollbar, DisplayObject) catch(e:Dynamic) null;
+        //if (scrollbarDisplay.parent && !value) 
+        //{
+            //scrollbarDisplay.removeFromParent();
+        //}
     }
     
     /**
@@ -737,7 +739,7 @@ class TextAreaWidget extends Sprite implements IBaseWidget
     {
         // Right now we just pick the first visible node
         var documentViews : Array<DocumentView> = this.getDocumentViewsAtPageIndexById(documentId);
-        var i : Int;
+        var i : Int = 0;
         var numViews : Int = documentViews.length;
         for (i in 0...numViews){
             var documentView : DocumentView = documentViews[i];
@@ -758,7 +760,7 @@ class TextAreaWidget extends Sprite implements IBaseWidget
                 
                 // Calculate the difference between the midpoint y and and the target y
                 var scrollAmount : Float = Math.floor(scrollGlobal.y - documentViewGlobal.y);
-                m_scrollAmount = scrollAmount;
+                m_scrollAmount = Std.int(scrollAmount);
                 break;
             }
         }
@@ -791,7 +793,7 @@ class TextAreaWidget extends Sprite implements IBaseWidget
                 var minIndexClippedBottom : Int = -1;
                 var gapAtTop : Bool = false;
                 var gapAtBottom : Bool = false;
-                var i : Int;
+                var i : Int = 0;
                 for (i in 0...numIterations){
                     var image : Image = m_backgroundImageStack[i];
                     image.y += scrollDelta;
@@ -823,8 +825,8 @@ class TextAreaWidget extends Sprite implements IBaseWidget
                     }
                 }
                 
-                var clippedImage : Image;
-                var shiftAmountY : Float;
+                var clippedImage : Image = null;
+                var shiftAmountY : Float = 0.0;
                 if (maxIndexClippedTop >= 0) 
                 {
                     shiftAmountY = (maxIndexClippedTop + 2) * imageHeight;
@@ -896,7 +898,7 @@ class TextAreaWidget extends Sprite implements IBaseWidget
         var expressionComponents : Array<Component> = this.componentManager.getComponentListForType(ExpressionComponent.TYPE_ID);
         var numComponents : Int = expressionComponents.length;
         var targetDocIds : Array<Dynamic> = [];
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...numComponents){
             targetDocIds.push((try cast(expressionComponents[i], ExpressionComponent) catch(e:Dynamic) null).entityId);
         }
@@ -912,15 +914,15 @@ class TextAreaWidget extends Sprite implements IBaseWidget
      */
     private function onScrollbarChange(event : Event) : Void
     {
-        var target : IScrollBar = try cast(event.currentTarget, IScrollBar) catch(e:Dynamic) null;
-        var ratio : Float = target.value;
-        
-        // Use the ratio and the total pixel height of the content to figure out the exact location
-        // to scroll to. The delta between that location and the current one is the amount to scroll by
-        // A value of 0.0 means the content is scrolled to the top as far as possible, while a value of
-        // 1.0 means the content is scrolled to the bottom as far as possible.
-        var scrollToYLocation : Int = this.currentRatioToLocation(ratio);
-        this.scrollByAmount(scrollToYLocation - m_scrollContainerLayer.y);
+        //var target : IScrollBar = try cast(event.currentTarget, IScrollBar) catch(e:Dynamic) null;
+        //var ratio : Float = target.value;
+        //
+        //// Use the ratio and the total pixel height of the content to figure out the exact location
+        //// to scroll to. The delta between that location and the current one is the amount to scroll by
+        //// A value of 0.0 means the content is scrolled to the top as far as possible, while a value of
+        //// 1.0 means the content is scrolled to the bottom as far as possible.
+        //var scrollToYLocation : Int = this.currentRatioToLocation(ratio);
+        //this.scrollByAmount(scrollToYLocation - m_scrollContainerLayer.y);
     }
     
     /**
@@ -1017,7 +1019,7 @@ class TextAreaWidget extends Sprite implements IBaseWidget
             m_componentManager.addComponentToEntity(mouseComponent);
         }
         
-        var i : Int;
+        var i : Int = 0;
         var childViews : Array<DocumentView> = view.childViews;
         for (i in 0...childViews.length){
             _addComponentsForDocumentView(childViews[i]);

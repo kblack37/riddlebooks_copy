@@ -3,9 +3,9 @@ package wordproblem.level.nodes;
 import wordproblem.level.nodes.WordProblemLevelPack;
 
 import cgs.cache.ICgsUserCache;
-import cgs.levelprogression.ICgsLevelManager;
-import cgs.levelprogression.util.ICgsLevelFactory;
-import cgs.levelprogression.util.ICgsLockFactory;
+import cgs.levelProgression.ICgsLevelManager;
+import cgs.levelProgression.util.ICgsLevelFactory;
+import cgs.levelProgression.util.ICgsLockFactory;
 
 /**
  * This level pack will group together word problems that all have the same primary genre.

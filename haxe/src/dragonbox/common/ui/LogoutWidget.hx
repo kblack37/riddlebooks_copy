@@ -7,6 +7,8 @@ import flash.events.MouseEvent;
 import flash.text.TextField;
 import flash.text.TextFormat;
 
+import haxe.Constraints.Function;
+
 import cgs.audio.Audio;
 import cgs.user.ICgsUser;
 

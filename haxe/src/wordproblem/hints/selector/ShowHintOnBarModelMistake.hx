@@ -1,6 +1,7 @@
 package wordproblem.hints.selector;
 
 
+import haxe.xml.Fast;
 import starling.display.DisplayObject;
 import starling.events.Event;
 
@@ -145,65 +146,53 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
             textParser : TextParser,
             textViewFactory : TextViewFactory,
             barModelType : String,
-            customHintData : FastXML)
+            customHintData : Fast)
     {
         super();
         // TODO: Load up the dummy xml, which should contain ALL the hint logic paths
         // The bar model type governs which part of the xml should be loaded
         // Create a mapping from label id to the actual hint elements
-        var defaultHintsXml : FastXML = assetManager.getXml("default_barmodel_hints");
-        var barModelHintBlocks : FastXMLList = defaultHintsXml.node.elements.innerData("barmodelhints");
+        var defaultHintsXml : Fast = new Fast(assetManager.getXml("default_barmodel_hints"));
+        var barModelHintBlocks = defaultHintsXml.nodes.barmodelhints;
         var labelIdToHintXmlElement : Dynamic = { };
-        var i : Int;
-        for (i in 0...barModelHintBlocks.length()){
-            var barModelHintBlock : FastXML = barModelHintBlocks.get(i);
-            var hintElements : FastXMLList = barModelHintBlock.node.elements.innerData("hint");
-            var j : Int;
-            for (j in 0...hintElements.length()){
-                // Create the mapping from label to step based on the selected block
-                var hintElement : FastXML = hintElements.get(j);
-                labelId = hintElement.node.attribute.innerData("labelId");
+		for (barModelHintBlock in barModelHintBlocks) {
+            var hintElements = barModelHintBlock.nodes.hint;
+			for (hintElement in hintElements) {
+				// Create the mapping from label to step based on the selected block
+                var labelId = Std.parseInt(hintElement.att.labelId);
                 labelIdToHintXmlElement[labelId] = hintElement;
             }
-        }  // any external hinting structure    // This mapping will also allow us to rebuild a dummy xml representing default hint that looks like    // Look through the xml data file to figure out what mapping is appropriate.    // Mapping from label id to step is based on the bar model type.    // New strategy.    // TODO:  
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        var defaultHintXmlToBuild : FastXML = FastXML.parse("<barmodelhints/>");
-        var labelToStepMappings : FastXMLList = defaultHintsXml.node.elements.innerData("mapping");
+        }
+		
+		// TODO:  
+		// New strategy.
+		// Mapping from label id to step is based on the bar model type.
+		// Look through the xml data file to figure out what mapping is appropriate.
+		// This mapping will also allow us to rebuild a dummy xml representing default hint that looks like
+        // any external hinting structure
+        var defaultHintXmlToBuild : Xml = Xml.parse("<barmodelhints/>");
+        var labelToStepMappings = defaultHintsXml.nodes.mapping;
         m_labelToStepMap = { };
-        for (i in 0...labelToStepMappings.length()){
-            var labelToStepMapping : FastXML = labelToStepMappings.get(i);
-            var mappingBarModelTypes : String = labelToStepMapping.node.attribute.innerData("type");
-            var typesInMapping : Array<Dynamic> = mappingBarModelTypes.split(",");
+		for (labelToStepMapping in labelToStepMappings) {
+            var mappingBarModelTypes : String = labelToStepMapping.att.type;
+            var typesInMapping : Array<String> = mappingBarModelTypes.split(",");
             if (Lambda.indexOf(typesInMapping, barModelType) > -1) 
             {
-                var labelToStepElements : FastXMLList = labelToStepMapping.node.elements.innerData("label");
-                for (j in 0...labelToStepElements.length()){
-                    var labelToStepElement : FastXML = labelToStepElements.get(j);
-                    var labelId : String = labelToStepElement.node.attribute.innerData("id");
-                    var stepId : Int = parseInt(labelToStepElement.node.attribute.innerData("step"));
+                var labelToStepElements = labelToStepMapping.nodes.label;
+				for (labelToStepElement in labelToStepElements) {
+                    var labelId : String = labelToStepElement.att.id;
+                    var stepId : Int = Std.parseInt(labelToStepElement.att.step);
                     Reflect.setField(m_labelToStepMap, labelId, stepId);
                     
-                    var hintXmlCopy : FastXML = (try cast(Reflect.field(labelIdToHintXmlElement, labelId), FastXML) catch(e:Dynamic) null).copy();
-                    hintXmlCopy.setAttribute("step", stepId);
-                    defaultHintXmlToBuild.node.appendChild.innerData(hintXmlCopy);
+                    var hintXmlCopy : Xml = Xml.parse((try cast(Reflect.field(labelIdToHintXmlElement, labelId), Fast) catch(e:Dynamic) null).x.toString());
+                    hintXmlCopy.set("step", Std.string(stepId));
+                    defaultHintXmlToBuild.addChild(hintXmlCopy);
                 }
                 break;
             }
         }
         
-        m_defaultHintStorage = new HintXMLStorage(defaultHintXmlToBuild);
+        m_defaultHintStorage = new HintXMLStorage(new Fast(defaultHintXmlToBuild));
         
         // Create custom hint block if given that data
         if (customHintData != null) 
@@ -362,7 +351,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
         {
             Reflect.setField(m_gestureToFrequencyPerformed, gestureName, 0);
         }
-        Reflect.field(m_gestureToFrequencyPerformed, gestureName)++;
+		Reflect.setField(m_gestureToFrequencyPerformed, gestureName, Reflect.field(m_gestureToFrequencyPerformed, gestureName) + 1);
     }
     
     private function onBarModelCorrect() : Void
@@ -375,7 +364,6 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
     {
         m_gameEngine.dispatchEventWith(GameEvent.REMOVE_HINT, false, {
                     smoothlyRemove : true
-
                 });
     }
     
@@ -387,11 +375,11 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
     public static function getDocumentIdToExpressionMap(textArea : TextAreaWidget) : Dynamic
     {
         var expressionComponents : Array<Component> = textArea.componentManager.getComponentListForType(ExpressionComponent.TYPE_ID);
-        var i : Int;
+        var i : Int = 0;
         var documentIdToExpressionMap : Dynamic = { };
         for (i in 0...expressionComponents.length){
             var expressionComponent : ExpressionComponent = try cast(expressionComponents[i], ExpressionComponent) catch(e:Dynamic) null;
-            documentIdToExpressionMap[expressionComponent.entityId] = expressionComponent.expressionString;
+			Reflect.setField(documentIdToExpressionMap, expressionComponent.entityId, expressionComponent.expressionString);
         }
         
         return documentIdToExpressionMap;
@@ -407,6 +395,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
         
         
         var playerBarModelSnapshot : BarModelData = m_barModelArea.getBarModelData().clone();
+		var nextMismatchToShow : Dynamic = { };
         if (playerBarModelSnapshot != null && !m_validateBarModelArea.getCurrentModelMatchesReference()) 
         {
             // Relace alias values in the given model (treat a set of values as one common one)
@@ -425,7 +414,6 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
                 m_firstNoActionHintShown = true;
                 nextMismatchToShow = {
                             descriptionContent : "Is this problem about addition, subtraction, multiplication, or division?"
-
                         };
             }
             else 
@@ -440,10 +428,9 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
                                     m_validateBarModelArea.getDecomposedReferenceModels());
                 }
             }
-        }  // HACKY: Save counter state after every request  
-        
-        
-        
+        }
+		
+		// HACKY: Save counter state after every request  
         saveTempHintState();
         
         return nextMismatchToShow;
@@ -503,7 +490,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
         {
             // b1 = b (num groups), a1 = a (value one groups), unk = ? (sum of group)
             // Check if equal sized groups
-            mistmatchData = validateGroupsEqualSum(parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
+            mistmatchData = validateGroupsEqualSum(Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
                             Reflect.field(m_documentIdToExpressionMap, "unk"),
                             Reflect.field(m_documentIdToExpressionMap, "a1"), false, true, null,
                             userDecomposedModel);
@@ -511,7 +498,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
         else if (barModelType == BarModelTypes.TYPE_3B) 
         {
             // b1 = b (sum of groups), a1 = a (num groups), unk = ? (value one group)
-            mistmatchData = validateGroupsEqualSum(parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
+            mistmatchData = validateGroupsEqualSum(Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1")),
                             Reflect.field(m_documentIdToExpressionMap, "b1"),
                             Reflect.field(m_documentIdToExpressionMap, "unk"),
                             false, true, null,
@@ -520,7 +507,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
         else if (barModelType == BarModelTypes.TYPE_4A) 
         {
             // unk = ? (sum of groups), a1 = a (value of unit), b1 = b (num groups)
-            mistmatchData = validateGroupsEqualSum(parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
+            mistmatchData = validateGroupsEqualSum(Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
                             Reflect.field(m_documentIdToExpressionMap, "unk"),
                             Reflect.field(m_documentIdToExpressionMap, "a1"),
                             true, false, null,
@@ -529,7 +516,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
         else if (barModelType == BarModelTypes.TYPE_4B) 
         {
             // unk = ? (value of unit), a1 = a (sum of groups), b1 = b (num groups)
-            mistmatchData = validateGroupsEqualSum(parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
+            mistmatchData = validateGroupsEqualSum(Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
                             Reflect.field(m_documentIdToExpressionMap, "a1"),
                             Reflect.field(m_documentIdToExpressionMap, "unk"),
                             true, false, null,
@@ -538,7 +525,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
         else if (barModelType == BarModelTypes.TYPE_4C) 
         {
             // unk = ? (difference), a1 = a (value of unit), b1 = b (num groups)
-            mistmatchData = validateGroupsEqualSum(parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
+            mistmatchData = validateGroupsEqualSum(Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
                             null,
                             Reflect.field(m_documentIdToExpressionMap, "a1"),
                             true, false,
@@ -548,7 +535,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
         else if (barModelType == BarModelTypes.TYPE_4D) 
         {
             // unk = ? (sum of group), a1 = a (value of unit), b1 = b (num groups)
-            mistmatchData = validateGroupsEqualSum(parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
+            mistmatchData = validateGroupsEqualSum(Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
                             Reflect.field(m_documentIdToExpressionMap, "unk"),
                             Reflect.field(m_documentIdToExpressionMap, "a1"),
                             true, true, null,
@@ -557,7 +544,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
         else if (barModelType == BarModelTypes.TYPE_4E) 
         {
             // unk = ? (value of unit), a1 = a (difference), b1 = b (num groups)
-            mistmatchData = validateGroupsEqualSum(parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
+            mistmatchData = validateGroupsEqualSum(Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
                             null,
                             Reflect.field(m_documentIdToExpressionMap, "unk"),
                             true, false,
@@ -567,7 +554,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
         else if (barModelType == BarModelTypes.TYPE_4F) 
         {
             // unk = ? (value of unit), a1 = a (total), b1 = b (num groups)
-            mistmatchData = validateGroupsEqualSum(parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
+            mistmatchData = validateGroupsEqualSum(Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
                             Reflect.field(m_documentIdToExpressionMap, "unk"),
                             Reflect.field(m_documentIdToExpressionMap, "a1"),
                             true, true, null,
@@ -621,7 +608,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
         else if (barModelType == BarModelTypes.TYPE_5F) 
         {
             // unk = ? (difference), a1 = a (sum of groups), b1 = b (number of groups) c = c (unit value)
-            mistmatchData = validateSumOfGroupsWithIntermediate(parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
+            mistmatchData = validateSumOfGroupsWithIntermediate(Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
                             Reflect.field(m_documentIdToExpressionMap, "a1"), null,
                             Reflect.field(m_documentIdToExpressionMap, "c"),
                             Reflect.field(m_documentIdToExpressionMap, "unk"),
@@ -630,7 +617,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
         else if (barModelType == BarModelTypes.TYPE_5G) 
         {
             // unk = ? (total), a1 = a (sum of groups), b1 = b (number of groups) c = c (unit value)
-            mistmatchData = validateSumOfGroupsWithIntermediate(parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
+            mistmatchData = validateSumOfGroupsWithIntermediate(Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
                             Reflect.field(m_documentIdToExpressionMap, "a1"),
                             Reflect.field(m_documentIdToExpressionMap, "c"),
                             Reflect.field(m_documentIdToExpressionMap, "unk"), null,
@@ -639,7 +626,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
         else if (barModelType == BarModelTypes.TYPE_5H) 
         {
             // unk = ? (sum of groups), a1 = a (difference), b1 = b (number of groups) c = c (unit value)
-            mistmatchData = validateSumOfGroupsWithIntermediate(parseInt(
+            mistmatchData = validateSumOfGroupsWithIntermediate(Std.parseInt(
                                     Reflect.field(m_documentIdToExpressionMap, "b1")),
                             Reflect.field(m_documentIdToExpressionMap, "unk"),
                             null,
@@ -651,7 +638,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
         {
             // unk = ? (total), a1 = a (difference), b1 = b (number of groups) c = c (unit value)
             mistmatchData = validateSumOfGroupsWithIntermediate(
-                            parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
+                            Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
                             null,
                             Reflect.field(m_documentIdToExpressionMap, "unk"),
                             Reflect.field(m_documentIdToExpressionMap, "c"),
@@ -662,7 +649,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
         {
             // unk = ? (sum of groups), a1 = a (total), b1 = b (number of groups) c = c (unit value)
             mistmatchData = validateSumOfGroupsWithIntermediate(
-                            parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
+                            Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
                             Reflect.field(m_documentIdToExpressionMap, "unk"),
                             Reflect.field(m_documentIdToExpressionMap, "a1"),
                             Reflect.field(m_documentIdToExpressionMap, "c"),
@@ -673,7 +660,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
         {
             // unk = ? (difference), a1 = a (total), b1 = b (number of groups) c = c (unit value)
             mistmatchData = validateSumOfGroupsWithIntermediate(
-                            parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
+                            Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "b1")),
                             null,
                             Reflect.field(m_documentIdToExpressionMap, "a1"),
                             Reflect.field(m_documentIdToExpressionMap, "c"),
@@ -683,33 +670,33 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
         else if (barModelType == BarModelTypes.TYPE_6A) 
         {
             // unk = ? (sum of shaded), a1 = a (num groups shaded), a2 = c (num groups total), b1 = b (total)
-            var numGroupsTotal : Int = parseInt(Reflect.field(m_documentIdToExpressionMap, "a2"));
-            var numGroupsShaded : Int = parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"));
+            var numGroupsTotal : Int = Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2"));
+            var numGroupsShaded : Int = Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"));
             var numGroupsUnshaded : Int = numGroupsTotal - numGroupsShaded;
             mistmatchData = validateSumsOfFraction(numGroupsTotal, numGroupsShaded, numGroupsUnshaded, Reflect.field(m_documentIdToExpressionMap, "b1"), Reflect.field(m_documentIdToExpressionMap, "unk"), null, null, userBarModelData, userDecomposedModel);
         }
         else if (barModelType == BarModelTypes.TYPE_6B) 
         {
             // unk = ? (sum of unshaded), a1 = a (num groups shaded), a2 = c (num groups total), b1 = b (total)
-            numGroupsTotal = parseInt(Reflect.field(m_documentIdToExpressionMap, "a2"));
-            numGroupsShaded = parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"));
-            numGroupsUnshaded = numGroupsTotal - numGroupsShaded;
+            var numGroupsTotal = Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2"));
+            var numGroupsShaded = Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"));
+            var numGroupsUnshaded = numGroupsTotal - numGroupsShaded;
             mistmatchData = validateSumsOfFraction(numGroupsTotal, numGroupsShaded, numGroupsUnshaded, Reflect.field(m_documentIdToExpressionMap, "b1"), null, Reflect.field(m_documentIdToExpressionMap, "unk"), null, userBarModelData, userDecomposedModel);
         }
         else if (barModelType == BarModelTypes.TYPE_6C) 
         {
             // unk = ? (total), a1 = a (num groups shaded), a2 = c (num groups total), b1 = b (sum of shaded)
-            numGroupsTotal = parseInt(Reflect.field(m_documentIdToExpressionMap, "a2"));
-            numGroupsShaded = parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"));
-            numGroupsUnshaded = numGroupsTotal - numGroupsShaded;
+            var numGroupsTotal = Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2"));
+            var numGroupsShaded = Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"));
+            var numGroupsUnshaded = numGroupsTotal - numGroupsShaded;
             mistmatchData = validateSumsOfFraction(numGroupsTotal, numGroupsShaded, numGroupsUnshaded, Reflect.field(m_documentIdToExpressionMap, "unk"), Reflect.field(m_documentIdToExpressionMap, "b1"), null, null, userBarModelData, userDecomposedModel);
         }
         else if (barModelType == BarModelTypes.TYPE_6D) 
         {
             // unk = ? (sum of unshaded), a1 = a (num groups shaded), a2 = c (num groups total), b1 = b (sum of shaded)
-            numGroupsTotal = parseInt(Reflect.field(m_documentIdToExpressionMap, "a2"));
-            numGroupsShaded = parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"));
-            numGroupsUnshaded = numGroupsTotal - numGroupsShaded;
+            var numGroupsTotal = Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2"));
+            var numGroupsShaded = Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"));
+            var numGroupsUnshaded = numGroupsTotal - numGroupsShaded;
             mistmatchData = validateSumsOfFraction(numGroupsTotal, numGroupsShaded, numGroupsUnshaded, null, Reflect.field(m_documentIdToExpressionMap, "b1"), Reflect.field(m_documentIdToExpressionMap, "unk"), null, userBarModelData, userDecomposedModel);
         }
         // An important distinguishing factor between type 6 and type 7 problems is that in type 7
@@ -718,73 +705,73 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
         else if (barModelType == BarModelTypes.TYPE_7A) 
         {
             // unk = ? (sum of unshaded), a1 = a (numerator of whole shaded), a2 = c (denominator of whole shaded), b1 = b (sum of shaded)
-            numGroupsShaded = parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"));
-            numGroupsUnshaded = parseInt(Reflect.field(m_documentIdToExpressionMap, "a2"));
-            numGroupsTotal = numGroupsShaded + numGroupsUnshaded;
+            var numGroupsShaded = Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"));
+            var numGroupsUnshaded = Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2"));
+            var numGroupsTotal = numGroupsShaded + numGroupsUnshaded;
             mistmatchData = validateFractionOfLargerAmount(numGroupsTotal, numGroupsShaded, numGroupsUnshaded, null, Reflect.field(m_documentIdToExpressionMap, "b1"), Reflect.field(m_documentIdToExpressionMap, "unk"), null, userBarModelData, userDecomposedModel);
         }
         else if (barModelType == BarModelTypes.TYPE_7B) 
         {
             // unk = ? (total), a1 = a (numerator of whole shaded), a2 = c (denominator of whole shaded), b1 = b (sum of shaded)
-            numGroupsShaded = parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"));
-            numGroupsUnshaded = parseInt(Reflect.field(m_documentIdToExpressionMap, "a2"));
-            numGroupsTotal = numGroupsShaded + numGroupsUnshaded;
+            var numGroupsShaded = Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"));
+            var numGroupsUnshaded = Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2"));
+            var numGroupsTotal = numGroupsShaded + numGroupsUnshaded;
             mistmatchData = validateFractionOfLargerAmount(numGroupsTotal, numGroupsShaded, numGroupsUnshaded, Reflect.field(m_documentIdToExpressionMap, "unk"), Reflect.field(m_documentIdToExpressionMap, "b1"), null, null, userBarModelData, userDecomposedModel);
         }
         else if (barModelType == BarModelTypes.TYPE_7C) 
         {
             // unk = ? (difference), a1 = a (numerator of whole shaded), a2 = c (denominator of whole shaded), b1 = b (sum of shaded)
-            numGroupsShaded = parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"));
-            numGroupsUnshaded = parseInt(Reflect.field(m_documentIdToExpressionMap, "a2"));
-            numGroupsTotal = numGroupsShaded + numGroupsUnshaded;
+            var numGroupsShaded = Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"));
+            var numGroupsUnshaded = Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2"));
+            var numGroupsTotal = numGroupsShaded + numGroupsUnshaded;
             mistmatchData = validateFractionOfLargerAmount(numGroupsTotal, numGroupsShaded, numGroupsUnshaded, null, Reflect.field(m_documentIdToExpressionMap, "b1"), null, Reflect.field(m_documentIdToExpressionMap, "unk"), userBarModelData, userDecomposedModel);
         }
         else if (barModelType == BarModelTypes.TYPE_7D_1) 
         {
             // unk = ? (sum of unshaded), a1 = a (numerator of whole shaded), a2 = c (denominator of whole shaded), b1 = b (total)
-            numGroupsShaded = parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"));
-            numGroupsUnshaded = parseInt(Reflect.field(m_documentIdToExpressionMap, "a2"));
-            numGroupsTotal = numGroupsShaded + numGroupsUnshaded;
+            var numGroupsShaded = Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"));
+            var numGroupsUnshaded = Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2"));
+            var numGroupsTotal = numGroupsShaded + numGroupsUnshaded;
             mistmatchData = validateFractionOfLargerAmount(numGroupsTotal, numGroupsShaded, numGroupsUnshaded, Reflect.field(m_documentIdToExpressionMap, "b1"), null, Reflect.field(m_documentIdToExpressionMap, "unk"), null, userBarModelData, userDecomposedModel);
         }
         else if (barModelType == BarModelTypes.TYPE_7D_2) 
         {
             // unk = ? (sum of shaded), a1 = a (numerator of whole shaded), a2 = c (denominator of whole shaded), b1 = b (total)
-            numGroupsShaded = parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"));
-            numGroupsUnshaded = parseInt(Reflect.field(m_documentIdToExpressionMap, "a2"));
-            numGroupsTotal = numGroupsShaded + numGroupsUnshaded;
+            var numGroupsShaded = Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"));
+            var numGroupsUnshaded = Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2"));
+            var numGroupsTotal = numGroupsShaded + numGroupsUnshaded;
             mistmatchData = validateFractionOfLargerAmount(numGroupsTotal, numGroupsShaded, numGroupsUnshaded, Reflect.field(m_documentIdToExpressionMap, "b1"), Reflect.field(m_documentIdToExpressionMap, "unk"), null, null, userBarModelData, userDecomposedModel);
         }
         else if (barModelType == BarModelTypes.TYPE_7E) 
         {
             // unk = ? (difference), a1 = a (numerator of whole shaded), a2 = c (denominator of whole shaded), b1 = b (total)
-            numGroupsShaded = parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"));
-            numGroupsUnshaded = parseInt(Reflect.field(m_documentIdToExpressionMap, "a2"));
-            numGroupsTotal = numGroupsShaded + numGroupsUnshaded;
+            var numGroupsShaded = Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"));
+            var numGroupsUnshaded = Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2"));
+            var numGroupsTotal = numGroupsShaded + numGroupsUnshaded;
             mistmatchData = validateFractionOfLargerAmount(numGroupsTotal, numGroupsShaded, numGroupsUnshaded, Reflect.field(m_documentIdToExpressionMap, "b1"), null, null, Reflect.field(m_documentIdToExpressionMap, "unk"), userBarModelData, userDecomposedModel);
         }
         else if (barModelType == BarModelTypes.TYPE_7F_1) 
         {
             // unk = ? (sum of unshaded), a1 = a (numerator of whole shaded), a2 = c (denominator of whole shaded), b1 = b (difference)
-            numGroupsShaded = parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"));
-            numGroupsUnshaded = parseInt(Reflect.field(m_documentIdToExpressionMap, "a2"));
-            numGroupsTotal = numGroupsShaded + numGroupsUnshaded;
+            var numGroupsShaded = Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"));
+            var numGroupsUnshaded = Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2"));
+            var numGroupsTotal = numGroupsShaded + numGroupsUnshaded;
             mistmatchData = validateFractionOfLargerAmount(numGroupsTotal, numGroupsShaded, numGroupsUnshaded, null, null, Reflect.field(m_documentIdToExpressionMap, "unk"), Reflect.field(m_documentIdToExpressionMap, "b1"), userBarModelData, userDecomposedModel);
         }
         else if (barModelType == BarModelTypes.TYPE_7F_2) 
         {
             // unk = ? (sum of shaded), a1 = a (numerator of whole shaded), a2 = c (denominator of whole shaded), b1 = b (difference)
-            numGroupsShaded = parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"));
-            numGroupsUnshaded = parseInt(Reflect.field(m_documentIdToExpressionMap, "a2"));
-            numGroupsTotal = numGroupsShaded + numGroupsUnshaded;
+            var numGroupsShaded = Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"));
+            var numGroupsUnshaded = Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2"));
+            var numGroupsTotal = numGroupsShaded + numGroupsUnshaded;
             mistmatchData = validateFractionOfLargerAmount(numGroupsTotal, numGroupsShaded, numGroupsUnshaded, null, Reflect.field(m_documentIdToExpressionMap, "unk"), null, Reflect.field(m_documentIdToExpressionMap, "b1"), userBarModelData, userDecomposedModel);
         }
         else if (barModelType == BarModelTypes.TYPE_7G) 
         {
             // unk = ? (total), a1 = a (numerator of whole shaded), a2 = c (denominator of whole shaded), b1 = b (difference)
-            numGroupsShaded = parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"));
-            numGroupsUnshaded = parseInt(Reflect.field(m_documentIdToExpressionMap, "a2"));
-            numGroupsTotal = numGroupsShaded + numGroupsUnshaded;
+            var numGroupsShaded = Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a1"));
+            var numGroupsUnshaded = Std.parseInt(Reflect.field(m_documentIdToExpressionMap, "a2"));
+            var numGroupsTotal = numGroupsShaded + numGroupsUnshaded;
             mistmatchData = validateFractionOfLargerAmount(numGroupsTotal, numGroupsShaded, numGroupsUnshaded, Reflect.field(m_documentIdToExpressionMap, "unk"), null, null, Reflect.field(m_documentIdToExpressionMap, "b1"), userBarModelData, userDecomposedModel);
         }
         
@@ -833,7 +820,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
             var docIdsExistingAsPartOfSum : Array<Dynamic> = [];
             for (existingLabelValue in Reflect.fields(userDecomposedModel.labelValueToType))
             {
-                var labelType : String = userDecomposedModel.labelValueToType[existingLabelValue];
+                var labelType : String = Reflect.field(userDecomposedModel.labelValueToType, existingLabelValue);
                 if (labelType == "n") 
                 {
                     for (docId in Reflect.fields(m_documentIdToExpressionMap))
@@ -852,6 +839,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
             
             m_missingSumPartCounter++;
             
+			var labelName : String = null;
             if (m_missingSumPartCounter > 2) 
             {
                 labelName = "PartsAddToSumB";
@@ -867,19 +855,16 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
                 labelName = "PartsAddToSumD";
                 mismatchData = getHintFromLabel(labelName, [missingLabelInSum], filterData);
             }
-        }  // If it does, also check that it spans the value    // The sum should be a label spanning across all the added values, first check that exists  
-        
-        
-        
-        
-        
+        }
+		
+		// The sum should be a label spanning across all the added values, first check that exists  
+        // If it does, also check that it spans the value 
         if (mismatchData == null) 
         {
             mismatchData = generateGenericMissingSumHints(sumValue, userDecomposedModel);
-        }  // Generate hint if the total is present but is used in the wrong way  
-        
-        
-        
+        }  
+		
+		// Generate hint if the total is present but is used in the wrong way  
         if (mismatchData == null) 
         {
             var labelAmountMuliplier : Array<Int> = new Array<Int>();
@@ -890,7 +875,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
             
             if (!checkLabelSumOfOtherLabels(sumValue, partsInSumValues, labelAmountMuliplier, userDecomposedModel)) 
             {
-                labelName = "PartsAddToSumE";
+                var labelName = "PartsAddToSumE";
                 mismatchData = getHintFromLabel(labelName, [sumValue]);
             }
         }
@@ -976,14 +961,15 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
         if (!userDecomposedModel.labelValueToType.exists(totalValue)) 
         {
             // Have tried to add a label spanning a sum of boxes
-            var timesAddedHorizontalLabel : Int = ((m_gestureToFrequencyPerformed.exists(AlgebraAdventureLoggingConstants.ADD_NEW_HORIZONTAL_LABEL))) ? m_gestureToFrequencyPerformed[AlgebraAdventureLoggingConstants.ADD_NEW_HORIZONTAL_LABEL] : 0;
-            var timesAddedVerticalLabel : Int = ((m_gestureToFrequencyPerformed.exists(AlgebraAdventureLoggingConstants.ADD_NEW_VERTICAL_LABEL))) ? m_gestureToFrequencyPerformed[AlgebraAdventureLoggingConstants.ADD_NEW_VERTICAL_LABEL] : 0;
+            var timesAddedHorizontalLabel : Int = ((m_gestureToFrequencyPerformed.exists(AlgebraAdventureLoggingConstants.ADD_NEW_HORIZONTAL_LABEL))) ? Reflect.field(m_gestureToFrequencyPerformed, AlgebraAdventureLoggingConstants.ADD_NEW_HORIZONTAL_LABEL) : 0;
+            var timesAddedVerticalLabel : Int = ((m_gestureToFrequencyPerformed.exists(AlgebraAdventureLoggingConstants.ADD_NEW_VERTICAL_LABEL))) ? Reflect.field(m_gestureToFrequencyPerformed, AlgebraAdventureLoggingConstants.ADD_NEW_VERTICAL_LABEL) : 0;
             if (timesAddedHorizontalLabel + timesAddedVerticalLabel == 0 && m_missingSumLabelCounter > 0) 
             {
                 var labelName : String = "GenericMissingSumHintsA";
+				var hintParams : Array<Dynamic> = null;
                 if (useHorizontalLabelForSum) 
                 {
-                    var hintParams : Array<Dynamic> = [TipsViewer.NAME_MANY_BOXES];
+                    hintParams = [TipsViewer.NAME_MANY_BOXES];
                 }
                 else 
                 {
@@ -996,7 +982,8 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
             {
                 m_missingSumLabelCounter++;
                 
-                hintParams = null;
+                var hintParams = null;
+				var labelName : String = null;
                 if (m_missingSumLabelCounter > 2) 
                 {
                     labelName = "GenericMissingSumHintsB";
@@ -1042,12 +1029,12 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
             }
             else if (m_missingLargerDifferencePartCounter > 1) 
             {
-                labelId = "GenericMissingPartsOfDifferenceB";
+                var labelId = "GenericMissingPartsOfDifferenceB";
                 mismatchData = getHintFromLabel(labelId, null);
             }
             else 
             {
-                labelId = "GenericMissingPartsOfDifferenceC";
+                var labelId = "GenericMissingPartsOfDifferenceC";
                 mismatchData = getHintFromLabel(labelId, null);
             }
         }
@@ -1058,17 +1045,17 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
             
             if (m_missingSmallerDifferencePartCounter > 2) 
             {
-                labelId = "GenericMissingPartsOfDifferenceD";
+                var labelId = "GenericMissingPartsOfDifferenceD";
                 mismatchData = getHintFromLabel(labelId, [missingSmallerValue]);
             }
             else if (m_missingSmallerDifferencePartCounter > 1) 
             {
-                labelId = "GenericMissingPartsOfDifferenceE";
+                var labelId = "GenericMissingPartsOfDifferenceE";
                 mismatchData = getHintFromLabel(labelId, null);
             }
             else 
             {
-                labelId = "GenericMissingPartsOfDifferenceF";
+                var labelId = "GenericMissingPartsOfDifferenceF";
                 mismatchData = getHintFromLabel(labelId, null);
             }
         }
@@ -1103,7 +1090,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
             // If never performed the add difference command AND the user has attempted some amount
             // of moves and/or incorrect submission we guess they do not know how to perform the action
             var timesPeformedAddDifference : Int = ((m_gestureToFrequencyPerformed.exists(AlgebraAdventureLoggingConstants.ADD_NEW_BAR_COMPARISON))) ? 
-            m_gestureToFrequencyPerformed[AlgebraAdventureLoggingConstants.ADD_NEW_BAR_COMPARISON] : 0;
+				Reflect.field(m_gestureToFrequencyPerformed, AlgebraAdventureLoggingConstants.ADD_NEW_BAR_COMPARISON) : 0;
             
             // Special case to point out the unknown as the difference is missing
             if (!userDecomposedModel.labelValueToType.exists(differenceValue) && Reflect.field(m_documentIdToExpressionMap, "unk") == differenceValue) 
@@ -1113,18 +1100,19 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
             }
             else if (userDecomposedModel.labelValueToType.exists(differenceValue)) 
             {
-                labelId = "GenericDifferenceHintsB";
+                var labelId = "GenericDifferenceHintsB";
                 mismatchData = getHintFromLabel(labelId, [differenceValue]);
             }
             else if (timesPeformedAddDifference < 1 && m_incorrectDifferenceCounter > 0) 
             {
-                labelId = "GenericDifferenceHintsC";
+                var labelId = "GenericDifferenceHintsC";
                 mismatchData = getHintFromLabel(labelId, [TipsViewer.SUBTRACT_WITH_BOXES]);
             }
             else 
             {
                 // Gradually reveal more information about the hint as the user continues to input wrong answers
-                var missingDifferenceContent : String;
+                var missingDifferenceContent : String = null;
+				var labelId : String = null;
                 m_incorrectDifferenceCounter++;
                 
                 if (m_incorrectDifferenceCounter > 2) 
@@ -1199,20 +1187,20 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
             var timesAttemptedAddUnit : Int = 0;
             if (m_gestureToFrequencyPerformed.exists(AlgebraAdventureLoggingConstants.ADD_NEW_UNIT_BAR)) 
             {
-                timesAttemptedAddUnit = m_gestureToFrequencyPerformed[AlgebraAdventureLoggingConstants.ADD_NEW_UNIT_BAR];
+                timesAttemptedAddUnit = Reflect.field(m_gestureToFrequencyPerformed, AlgebraAdventureLoggingConstants.ADD_NEW_UNIT_BAR);
             }
             
             var timesAttemptedMultiply : Int = 0;
             if (m_gestureToFrequencyPerformed.exists(AlgebraAdventureLoggingConstants.MULTIPLY_BAR)) 
             {
-                timesAttemptedMultiply = m_gestureToFrequencyPerformed[AlgebraAdventureLoggingConstants.MULTIPLY_BAR];
+                timesAttemptedMultiply = Reflect.field(m_gestureToFrequencyPerformed, AlgebraAdventureLoggingConstants.MULTIPLY_BAR);
             }
             
             if (timesAttemptedAddUnit + timesAttemptedMultiply < 1 && m_wrongGroupsCounter > 0) 
             {
                 // If the user has never tried to use one of the gestures to make equal sized boxes, point
                 // out the tip in the help section to tell them how it is done.
-                labelName = "GenericEqualGroupsHintsB";
+                var labelName = "GenericEqualGroupsHintsB";
                 mismatchData = getHintFromLabel(labelName, [TipsViewer.MULTIPLY_WITH_BOXES]);
             }
             // Assuming they have tried the gesture to create groups, the confusion is related to the
@@ -1224,18 +1212,18 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
                 // number of groups is
                 if (m_wrongGroupsCounter > 2) 
                 {
-                    labelName = "GenericEqualGroupsHintsC";
+                    var labelName = "GenericEqualGroupsHintsC";
                     mismatchData = getHintFromLabel(labelName, [groupsExpected]);
                 }
                 // TODO: Make a guess about how many equal sized groups the user has and figure out how many more they actually need
                 else if (m_wrongGroupsCounter > 1) 
                 {
-                    labelName = "GenericEqualGroupsHintsD";
+                    var labelName = "GenericEqualGroupsHintsD";
                     mismatchData = getHintFromLabel(labelName, null);
                 }
                 else 
                 {
-                    labelName = "GenericEqualGroupsHintsD";
+                    var labelName = "GenericEqualGroupsHintsD";
                     mismatchData = getHintFromLabel(labelName, null);
                 }
             }
@@ -1323,6 +1311,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
                 var sumLabelCorrect : Bool = checkLabelSumOfOtherLabels(sumValue, [unitValue], [numGroupsInSum], userDecomposedModel);
                 if (!sumLabelCorrect) 
                 {
+					var labelId : String = null;
                     m_incorrectGroupSumCounter++;
                     if (m_incorrectGroupSumCounter == 1) 
                     {
@@ -1403,7 +1392,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
                 userDecomposedModel.labelValueToType.exists(sum) &&
                 !checkLabelSumOfOtherLabels(sum, [largerPart, smallerPart], [1, 1], userDecomposedModel)) 
             {
-                labelId = "SumAndDifferenceWithIntermediateB";
+                var labelId = "SumAndDifferenceWithIntermediateB";
                 mismatchData = getHintFromLabel(labelId, [sum]);
             }
         }  // Make sure the user has placed the difference  
@@ -1460,7 +1449,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
             // Missing the intermediate value
             if (!userDecomposedModel.labelValueToType.exists(intermediateValue)) 
             {
-                labelId = "SumOfGroupsWithIntermediateB";
+                var labelId = "SumOfGroupsWithIntermediateB";
                 mismatchData = getHintFromLabel(labelId, null);
             }
             else 
@@ -1493,7 +1482,8 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
             var expressionsInDeck : Array<Component> = deckWidget.componentManager.getComponentListForType(ExpressionComponent.TYPE_ID);
             for (expressionInDeck in expressionsInDeck)
             {
-                if (expressionInDeck.expressionString == intermediateValue) 
+				var castedExpressionInDeck : ExpressionComponent = try cast(expressionInDeck, ExpressionComponent) catch (e : Dynamic) null;
+                if (castedExpressionInDeck.expressionString == intermediateValue) 
                 {
                     intermediateValueNotDiscovered = false;
                     break;
@@ -1510,12 +1500,12 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
                 }
                 else if (m_intermediateUnknownNotFoundCounter > 1) 
                 {
-                    labelId = "IntermediateValueNotDiscoveredHintB";
+                    var labelId = "IntermediateValueNotDiscoveredHintB";
                     mismatchData = getHintFromLabel(labelId, null);
                 }
                 else 
                 {
-                    labelId = "IntermediateValueNotDiscoveredHintC";
+                    var labelId = "IntermediateValueNotDiscoveredHintC";
                     mismatchData = getHintFromLabel(labelId, null);
                 }
             }
@@ -1578,7 +1568,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
             
             if (mismatchData == null && !checkLabelSpanCorrectNumGroups(total, numGroupsTotal, userBarModel, userDecomposedModel)) 
             {
-                labelId = "SumsOfFractionB";
+                var labelId = "SumsOfFractionB";
                 mismatchData = getHintFromLabel(labelId, [total]);
             }
         }
@@ -1608,17 +1598,16 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
             var labelId : String = "FractionOfLargerAmountA";
             mismatchData = getHintFromLabel(labelId, null);
             m_firstEmptyBarModelHintCounter++;
-        }  // The correct total is the combination of parts of the whole and the fraction of the whole    // Check if the user has the correct number of equal sized groups  
-        
-        
-        
-        
-        
+        }
+		
+		// Check if the user has the correct number of equal sized groups  
+        // The correct total is the combination of parts of the whole and the fraction of the whole
         if (mismatchData == null && !checkEqualSizedGroupsExists(numGroupsTotal, userDecomposedModel)) 
         {
             // User has made the correct number of groups representing the shaded objects,
             // now they need to represent the unshaded
-            if (checkEqualSizedGroupsExists(numGroupsShaded, userDecomposedModel)) 
+			var labelId : String = null;
+			if (checkEqualSizedGroupsExists(numGroupsShaded, userDecomposedModel)) 
             {
                 labelId = "FractionOfLargerAmountB";
                 mismatchData = getHintFromLabel(labelId, null);
@@ -1666,7 +1655,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
             }
             else 
             {
-                labelId = "UnitLabelB";
+                var labelId = "UnitLabelB";
                 mismatchData = getHintFromLabel(labelId, [unitValue]);
             }
         }
@@ -1677,8 +1666,8 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
             var expectedUnitRatio : Float = 1 / groupsExpected;
             var expectedUnitRatioIfSeparate : Float = 1 / (groupsExpected + 1);
             var error : Float = 0.00001;
-            if (isUnitSeparate && Math.abs(userDecomposedModel.labelToRatioOfTotalBoxes[unitValue] - expectedUnitRatioIfSeparate) > error ||
-                !isUnitSeparate && Math.abs(userDecomposedModel.labelToRatioOfTotalBoxes[unitValue] - expectedUnitRatio) > error) 
+            if (isUnitSeparate && Math.abs(Reflect.field(userDecomposedModel.labelToRatioOfTotalBoxes, unitValue) - expectedUnitRatioIfSeparate) > error ||
+                !isUnitSeparate && Math.abs(Reflect.field(userDecomposedModel.labelToRatioOfTotalBoxes, unitValue) - expectedUnitRatio) > error) 
             {
                 // The actual problem we are trying to detect is that the label on the unit is not on the correct proportion of box
                 // Any additional boxes will cause this to fail however, even if visually it looks like a label is on the correct
@@ -1692,9 +1681,9 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
                 {
                     
                     var normalizedValueOfGroup : Float = userDecomposedModel.normalizedBarSegmentValuesList[groupTallyIndex];
-                    if (Math.abs(userDecomposedModel.labelValueToNormalizedSegmentValue[unitValue] - normalizedValueOfGroup) > error) 
+                    if (Math.abs(Reflect.field(userDecomposedModel.labelValueToNormalizedSegmentValue, unitValue) - normalizedValueOfGroup) > error) 
                     {
-                        
+                        var labelId : String = null;
                         if (m_incorrectUnitAmountCounter == 0) 
                         {
                             labelId = "UnitLabelC";
@@ -1716,13 +1705,13 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
                     // that mess up the total ratio
                     else 
                     {
-                        labelId = "UnitLabelF";
+                        var labelId = "UnitLabelF";
                         mismatchData = getHintFromLabel(labelId, null);
                     }
                 }
                 else 
                 {
-                    labelId = "UnitLabelG";
+                    var labelId = "UnitLabelG";
                     mismatchData = getHintFromLabel(labelId, null);
                 }
             }
@@ -1752,7 +1741,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
             }
             else 
             {
-                labelId = "FractionLabelB";
+                var labelId = "FractionLabelB";
                 mismatchData = getHintFromLabel(labelId, [fractionLabel]);
             }
         }
@@ -1802,19 +1791,19 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
             // This is a structural detail, we need to look through all the labels
             // Check if they span the correct number of boxes AND that all those boxes
             // are equal sizes
-            var i : Int;
+            var i : Int = 0;
             var barWholes : Array<BarWhole> = userModel.barWholes;
             for (i in 0...barWholes.length){
                 var barWhole : BarWhole = barWholes[i];
                 var barLabels : Array<BarLabel> = barWhole.barLabels;
                 var barSegments : Array<BarSegment> = barWhole.barSegments;
-                var j : Int;
+                var j : Int = 0;
                 for (j in 0...barLabels.length){
                     var barLabel : BarLabel = barLabels[j];
                     if (barLabel.value == labelValue && (barLabel.endSegmentIndex - barLabel.startSegmentIndex + 1) == expectedNumGroups) 
                     {
                         // Make sure all the segments this bar covers have the same value
-                        var segmentIndex : Int;
+                        var segmentIndex : Int = 0;
                         var referenceSegmentAmount : Float = -1;
                         var allSegmentsEqualSize : Bool = true;
                         for (segmentIndex in barLabel.startSegmentIndex...barLabel.endSegmentIndex + 1){
@@ -1873,21 +1862,20 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
                     if (verticalLabel.value == labelValue) 
                     {
                         var numSegmentsPartOfLabel : Int = 0;
-                        referenceSegmentAmount = -1;
+                        var referenceSegmentAmount = -1;
+						var allSegmentsEqualSize : Bool = true;
                         for (barIndex in verticalLabel.startSegmentIndex...verticalLabel.endSegmentIndex + 1){
-                            barWhole = userModel.barWholes[barIndex];
-                            barSegments = barWhole.barSegments;
+                            var barWhole = userModel.barWholes[barIndex];
+                            var barSegments = barWhole.barSegments;
                             numSegmentsPartOfLabel += barSegments.length;
-                            allSegmentsEqualSize = true;
                             for (segmentIndex in 0...barSegments.length){
-                                currentSegmentValue = barSegments[segmentIndex].getValue();
+                                var currentSegmentValue = barSegments[segmentIndex].getValue();
                                 if (referenceSegmentAmount < 0) 
                                 {
-                                    referenceSegmentAmount = currentSegmentValue;
-                                }  // If segment  
-                                
-                                
-                                
+                                    referenceSegmentAmount = Std.int(currentSegmentValue);
+                                }
+								
+								// If segment  
                                 if (referenceSegmentAmount != currentSegmentValue) 
                                 {
                                     allSegmentsEqualSize = false;
@@ -1939,7 +1927,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
         if (labelToValue.exists(totalLabelName)) 
         {
             var numOtherLabels : Int = otherLabelNames.length;
-            var i : Int;
+            var i : Int = 0;
             var otherLabelSum : Float = 0;
             for (i in 0...numOtherLabels){
                 var otherLabel : String = otherLabelNames[i];
@@ -1991,7 +1979,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
         var hintData : Dynamic = null;
         if (m_labelToStepMap.exists(hintLabel)) 
         {
-            var generatedStepId : Int = parseInt(Reflect.field(m_labelToStepMap, hintLabel));
+            var generatedStepId : Int = Std.parseInt(Reflect.field(m_labelToStepMap, hintLabel));
             if (m_customHintStorage != null) 
             {
                 hintData = m_customHintStorage.getHintFromStepId(generatedStepId, params, filterData);

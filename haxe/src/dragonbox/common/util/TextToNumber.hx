@@ -3,7 +3,7 @@ package dragonbox.common.util;
 
 class TextToNumber
 {
-    private inline var ONES : String = "onesValue";
+    private inline static var ONES : String = "onesValue";
     private var onesValues : Dynamic = {
             zero : 0,
             one : 1,
@@ -15,9 +15,9 @@ class TextToNumber
             seven : 7,
             eight : 8,
             nine : 9,
-
-        };
-    private inline var ONE_OFF_TENS : String = "oneOffTens";
+    };
+	
+	private inline static var ONE_OFF_TENS : String = "oneOffTens";
     private var oneOffTens : Dynamic = {
             ten : 10,
             eleven : 11,
@@ -29,9 +29,9 @@ class TextToNumber
             seventeen : 17,
             eighteen : 18,
             nineteen : 19,
-
-        };
-    private inline var TENS : String = "tens";
+    };
+	
+	private inline static var TENS : String = "tens";
     private var tensValues : Dynamic = {
             twenty : 20,
             thirty : 30,
@@ -41,16 +41,15 @@ class TextToNumber
             seventy : 70,
             eighty : 80,
             ninety : 90,
-
-        };
-    private inline var MAGNITUDE : String = "magnitude";
+    };
+	
+	private inline static var MAGNITUDE : String = "magnitude";
     private var magnitudeValues : Dynamic = {
             hundred : 100,
             thousand : 1000,
             million : 1000000,
             billion : 1000000000,
-
-        };
+    };
     
     public function new()
     {
@@ -67,8 +66,8 @@ class TextToNumber
         // COMPOUND = tensValues + (optional) onesValues
         // NUMBER = (onesValues | oneOffTens | COMPOUND) + (optional) magnitudeValues + (optional) NUMBER with smaller magnitude
         var numberToReturn : Float = Math.NaN;
-        var words : Array<Dynamic> = text.split(new EReg('\\s+', ""));
-        var i : Int;
+        var words : Array<Dynamic> = (new EReg('\\s+', "")).split(text);
+        var i : Int = 0;
         var numWords : Int = words.length;
         
         // First pass is to just try to use the built-in parse method and see if a number
@@ -77,8 +76,8 @@ class TextToNumber
             var word : String = words[i];
             
             // Remove commas, otherwise parseFloat will treat something like 1,000 as just 1
-            word = word.replace(new EReg('[,\\$]', "g"), "");
-            var attemptToParseNumberDirectly : Float = parseFloat(word);
+            word = (new EReg('[,\\$]', "g")).replace(word, "");
+            var attemptToParseNumberDirectly : Float = Std.parseFloat(word);
             if (!Math.isNaN(attemptToParseNumberDirectly)) 
             {
                 // Found a number that can be parsed, return that one immediately
@@ -96,30 +95,31 @@ class TextToNumber
             var numbers : Array<Int> = new Array<Int>();
             for (i in 0...numWords){
                 // Strip out puncuation
-                word = words[i];
-                words[i] = word.replace(new EReg('[.,-\\/#!$%\\^&\\*;:{}=\\-_`~()]', "g"), "");
+                var word = words[i];
+                words[i] = (new EReg('[.,-\\/#!$%\\^&\\*;:{}=\\-_`~()]', "g")).replace(word, "");
                 
                 // First attempt to match each word into some type so it is easier to check if it
                 // fits the grammer rule.
+				var wordValue = Std.parseInt(word);
                 if (onesValues.exists(word)) 
                 {
                     tokenTypes.push(ONES);
-                    numbers.push(onesValues[word]);
+                    numbers.push(onesValues[wordValue]);
                 }
                 else if (oneOffTens.exists(word)) 
                 {
                     tokenTypes.push(ONE_OFF_TENS);
-                    numbers.push(oneOffTens[word]);
+                    numbers.push(oneOffTens[wordValue]);
                 }
                 else if (tensValues.exists(word)) 
                 {
                     tokenTypes.push(TENS);
-                    numbers.push(tensValues[word]);
+                    numbers.push(tensValues[wordValue]);
                 }
                 else if (magnitudeValues.exists(word)) 
                 {
                     tokenTypes.push(MAGNITUDE);
-                    numbers.push(magnitudeValues[word]);
+                    numbers.push(magnitudeValues[wordValue]);
                 }
                 else 
                 {

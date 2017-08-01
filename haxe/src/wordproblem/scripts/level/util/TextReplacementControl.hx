@@ -2,6 +2,7 @@ package wordproblem.scripts.level.util;
 
 
 import flash.geom.Rectangle;
+import haxe.xml.Fast;
 
 import starling.display.DisplayObject;
 import starling.display.Image;
@@ -57,12 +58,12 @@ class TextReplacementControl
      */
     public function colorImagesWithDocumentId(documentId : String, color : Int) : Void
     {
-        as3hx.Compat.setArrayLength(m_outDocumentViewBuffer, 0);
+		m_outDocumentViewBuffer = new Array<DocumentView>();
         
         var textArea : TextAreaWidget = try cast(m_gameEngine.getUiEntity("textArea"), TextAreaWidget) catch(e:Dynamic) null;
         textArea.getDocumentViewsAtPageIndexById(documentId, m_outDocumentViewBuffer);
         
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...m_outDocumentViewBuffer.length){
             var documentView : DocumentView = m_outDocumentViewBuffer[i];
             if (Std.is(documentView, ImageView)) 
@@ -92,7 +93,7 @@ class TextReplacementControl
             var terminalViewsInLine : Array<Array<DocumentView>> = new Array<Array<DocumentView>>();
             var terminalViews : Array<DocumentView> = new Array<DocumentView>();
             blankSpace.getDocumentViewLeaves(terminalViews);
-            var i : Int;
+            var i : Int = 0;
             var numTerminalViews : Int = terminalViews.length;
             var currentLine : Int = -1;
             for (i in 0...numTerminalViews){
@@ -118,10 +119,10 @@ class TextReplacementControl
             var boundsBuffer : Rectangle = new Rectangle();
             for (i in 0...terminalViewsInLine.length){
                 terminalViews = terminalViewsInLine[i];
-                var j : Int;
+                var j : Int = 0;
                 var boundsForLine : Rectangle = new Rectangle();
                 for (j in 0...terminalViews.length){
-                    terminalView = terminalViews[j];
+                    var terminalView = terminalViews[j];
                     
                     // If view is not part of the stage, then add node that is not visible to
                     // the parent so we can temporarily get the bounds
@@ -147,7 +148,7 @@ class TextReplacementControl
                     // Unadd the non visible views
                     if (tempAddNonVisibleViews) 
                     {
-                        tracker = terminalView;
+                        var tracker = terminalView;
                         while (tracker != null && tracker != blankSpace)
                         {
                             if (!tracker.node.getIsVisible()) 
@@ -182,7 +183,7 @@ class TextReplacementControl
     /**
      * A level might have areas of the text that should be replaced
      */
-    public function getReplacementXMLContentForDecisionValue(documentId : String, decisionKey : String) : FastXML
+    public function getReplacementXMLContentForDecisionValue(documentId : String, decisionKey : String) : Xml
     {
         // Get back the choice the player made for an option
         var decisionValue : String = try cast(m_playerStatsAndSaveData.getPlayerDecision(decisionKey), String) catch(e:Dynamic) null;
@@ -193,7 +194,7 @@ class TextReplacementControl
     /**
      * Add a brand new option for a particular document id and choice
      */
-    public function addDocumentIdContentChoices(documentId : String, choiceId : String, content : FastXML) : Void
+    public function addDocumentIdContentChoices(documentId : String, choiceId : String, content : Xml) : Void
     {
         if (!m_documentIdToReplaceableContentMap.exists(documentId)) 
         {
@@ -207,7 +208,7 @@ class TextReplacementControl
     /**
      * Get back the xml
      */
-    public function getContentForDocumentIdAndChoice(documentId : String, choiceId : String) : FastXML
+    public function getContentForDocumentIdAndChoice(documentId : String, choiceId : String) : Xml
     {
         var choicesForId : Dynamic = Reflect.field(m_documentIdToReplaceableContentMap, documentId);
         return Reflect.field(choicesForId, choiceId);
@@ -264,12 +265,12 @@ class TextReplacementControl
      *      If -1, look at the active page in the text area
      */
     public function replaceContentAtDocumentIdsAtPageIndex(documentIdsToReplace : Array<String>,
-            contentToReplaceWith : Array<FastXML>,
+            contentToReplaceWith : Array<Xml>,
             pageIndex : Int = -1) : Void
     {
         var textArea : TextAreaWidget = try cast(m_gameEngine.getUiEntity("textArea"), TextAreaWidget) catch(e:Dynamic) null;
         var documentViewsToReplace : Array<DocumentView> = new Array<DocumentView>();
-        var i : Int;
+        var i : Int = 0;
         var numDocumentIds : Int = documentIdsToReplace.length;
         for (i in 0...numDocumentIds){
             textArea.getDocumentViewsAtPageIndexById(documentIdsToReplace[i], documentViewsToReplace, pageIndex);
@@ -299,8 +300,8 @@ class TextReplacementControl
         
         if (viewsMatchingClass.length > 0) 
         {
-            var contentToReplaceWith : Array<FastXML> = new Array<FastXML>();
-            var i : Int;
+            var contentToReplaceWith : Array<Xml> = new Array<Xml>();
+            var i : Int = 0;
             for (i in 0...viewsMatchingClass.length){
                 var view : DocumentView = viewsMatchingClass[i];
                 var options : String = view.node.getText();
@@ -308,10 +309,10 @@ class TextReplacementControl
                 // Remove leading spaces (this gets injected during parsing in order to space out the words correctly)
                 if (options.length > 0 && options.charAt(0) == " ") 
                 {
-                    options = options.replace(" ", "");
+                    options = StringTools.replace(options, " ", "");
                 }
                 var pairs : Array<Dynamic> = options.split("&");
-                var j : Int;
+                var j : Int = 0;
                 var replacementContentText : String = "";
                 for (j in 0...pairs.length){
                     var keyValuePair : Array<Dynamic> = pairs[j].split("=");
@@ -322,8 +323,9 @@ class TextReplacementControl
                     }
                 }
                 
-                var replacementContent : FastXML = FastXML.parse("<span></span>");
-                replacementContent.node.appendChild.innerData(replacementContentText);
+                var replacementContent : Xml = Xml.parse("<span></span>");
+				replacementContent.addChild(Xml.parse(replacementContentText));
+                //replacementContent.node.appendChild.innerData(replacementContentText);
                 contentToReplaceWith.push(replacementContent);
             }
             
@@ -333,7 +335,7 @@ class TextReplacementControl
     
     private function replaceContentAtGivenViews(textArea : TextAreaWidget,
             documentViewsToReplace : Array<DocumentView>,
-            contentToReplaceWith : Array<FastXML>,
+            contentToReplaceWith : Array<Xml>,
             pageIndex : Int) : Void
     {
         if (pageIndex < 0) 
@@ -342,14 +344,14 @@ class TextReplacementControl
         }
         
         var targetPageRootNode : DocumentNode = textArea.getPageViews()[pageIndex].node;
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...documentViewsToReplace.length){
             // Parse new content and then attach the new nodes to the existing document model
             var documentViewToReplace : DocumentView = documentViewsToReplace[i];
             var originalViewToReplaceWidth : Float = documentViewToReplace.width;
             
-            var documentNode : DocumentNode = m_textParser.parseDocument(contentToReplaceWith[i], originalViewToReplaceWidth);
-            documentViewToReplace.node.children.length = 0;
+            var documentNode : DocumentNode = m_textParser.parseDocument(new Fast(contentToReplaceWith[i]), originalViewToReplaceWidth);
+			documentViewToReplace.node.children = new Array<DocumentNode>();
             documentViewToReplace.node.children.push(documentNode);
         }  // Re-apply default text stylings  
         

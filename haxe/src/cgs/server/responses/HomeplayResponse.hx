@@ -30,8 +30,8 @@ class HomeplayResponse extends CgsResponseStatus
             //TODO - Parse the homeplays data.
             _homesplays = new UserHomeplaysData();
             
-            var tempAssignment : HomeplayData;
-            var tempUserAssignment : UserAssignment;
+            var tempAssignment : HomeplayData = null;
+            var tempUserAssignment : UserAssignment = null;
             var assignments : Array<Dynamic> = _data.r_data;
             var components:Array<Dynamic>;
 			var results:Array<Dynamic>;

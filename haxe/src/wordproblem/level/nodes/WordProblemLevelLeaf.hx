@@ -3,13 +3,13 @@ package wordproblem.level.nodes;
 import wordproblem.level.nodes.WordProblemLevelNode;
 
 import cgs.cache.ICgsUserCache;
-import cgs.levelprogression.ICgsLevelManager;
-import cgs.levelprogression.locks.ICgsLevelLock;
-import cgs.levelprogression.nodes.ICgsLevelLeaf;
-import cgs.levelprogression.nodes.ICgsLevelNode;
-import cgs.levelprogression.nodes.ICgsLevelPack;
-import cgs.levelprogression.nodes.ICgsStatusNode;
-import cgs.levelprogression.util.ICgsLockFactory;
+import cgs.levelProgression.ICgsLevelManager;
+import cgs.levelProgression.locks.ICgsLevelLock;
+import cgs.levelProgression.nodes.ICgsLevelLeaf;
+import cgs.levelProgression.nodes.ICgsLevelNode;
+import cgs.levelProgression.nodes.ICgsLevelPack;
+import cgs.levelProgression.nodes.ICgsStatusNode;
+import cgs.levelProgression.util.ICgsLockFactory;
 
 import dragonbox.common.util.XString;
 
@@ -121,7 +121,7 @@ class WordProblemLevelLeaf extends WordProblemLevelNode implements ICgsLevelLeaf
             m_previousLevel = prevLevel;
             if (m_previousLevel != null) 
             {
-                m_previousLevel.nextLevel = this;
+                m_previousLevel.nextLevel = try cast(this, ICgsLevelLeaf) catch (e : Dynamic) null;
             }  // Get the name  
             
             
@@ -350,7 +350,7 @@ class WordProblemLevelLeaf extends WordProblemLevelNode implements ICgsLevelLeaf
      */
     public function hasLock(lockType : String, keyData : Dynamic) : Bool
     {
-        var result : Bool;
+        var result : Bool = false;
         for (lock in m_levelLocks)
         {
             if (lock.lockType == lockType && lock.doesKeyMatch(keyData)) 
@@ -367,7 +367,7 @@ class WordProblemLevelLeaf extends WordProblemLevelNode implements ICgsLevelLeaf
      */
     public function editLock(lockType : String, oldKeyData : Dynamic, newKeyData : Dynamic) : Bool
     {
-        var result : Bool;
+        var result : Bool = false;
         if (removeLock(lockType, oldKeyData)) 
         {
             addLock(lockType, newKeyData);
@@ -381,7 +381,7 @@ class WordProblemLevelLeaf extends WordProblemLevelNode implements ICgsLevelLeaf
      */
     public function removeLock(lockType : String, keyData : Dynamic) : Bool
     {
-        var result : Bool;
+        var result : Bool = false;
         for (lock in m_levelLocks)
         {
             if (lock.lockType == lockType && lock.doesKeyMatch(keyData)) 
@@ -472,8 +472,8 @@ class WordProblemLevelLeaf extends WordProblemLevelNode implements ICgsLevelLeaf
             // recursive loop. Need to directly modify the completion value of nodes sharing the same save name.
             var levelNodes : Array<WordProblemLevelLeaf> = new Array<WordProblemLevelLeaf>();
             WordProblemCgsLevelManager.getLevelNodes(levelNodes, m_levelManager.currentLevelProgression);
-            var levelNode : WordProblemLevelLeaf;
-            var i : Int;
+            var levelNode : WordProblemLevelLeaf = null;
+            var i : Int = 0;
             var numLevelNodes : Int = levelNodes.length;
             for (i in 0...numLevelNodes){
                 levelNode = levelNodes[i];
@@ -529,16 +529,16 @@ class WordProblemLevelLeaf extends WordProblemLevelNode implements ICgsLevelLeaf
     private function getSerializedSaveData() : Dynamic
     {
         var dataToSave : Dynamic = { };
-        dataToSave[LevelNodeSaveKeys.COMPLETION_VALUE] = this.completionValue;
-        dataToSave[LevelNodeSaveKeys.HIGH_SCORE] = this.highScore;
+		Reflect.setField(dataToSave, LevelNodeSaveKeys.COMPLETION_VALUE, this.completionValue);
+		Reflect.setField(dataToSave, LevelNodeSaveKeys.HIGH_SCORE, this.highScore);
         if (m_serializedObjectives != null) 
         {
-            dataToSave[LevelNodeSaveKeys.OBJECTIVES] = this.serializedObjectives;
+			Reflect.setField(dataToSave, LevelNodeSaveKeys.OBJECTIVES, this.serializedObjectives);
         }
         
         if (m_savePerformanceStateAcrossInstances) 
         {
-            dataToSave[LevelNodeSaveKeys.PERFORMANCE_STATE] = m_serializedPerformanceState;
+			Reflect.setField(dataToSave, LevelNodeSaveKeys.PERFORMANCE_STATE, m_serializedPerformanceState);
         }
         
         return dataToSave;
@@ -560,12 +560,12 @@ class WordProblemLevelLeaf extends WordProblemLevelNode implements ICgsLevelLeaf
     private function updateSaveDataFieldsFromObject(data : Dynamic) : Bool
     {
         var newCompletionValue : Int = ((data.exists(LevelNodeSaveKeys.COMPLETION_VALUE))) ? 
-        data[LevelNodeSaveKeys.COMPLETION_VALUE] : m_completionValue;
+			Reflect.field(data, LevelNodeSaveKeys.COMPLETION_VALUE) : Std.int(m_completionValue);
         var completionValueChanged : Bool = newCompletionValue != m_completionValue;
         m_completionValue = newCompletionValue;
         
         var newHighScore : Int = ((data.exists(LevelNodeSaveKeys.HIGH_SCORE))) ? 
-        data[LevelNodeSaveKeys.HIGH_SCORE] : m_highScore;
+			Reflect.field(data, LevelNodeSaveKeys.HIGH_SCORE) : m_highScore;
         var highScoreChanged : Bool = newHighScore != m_highScore;
         m_highScore = newHighScore;
         
@@ -574,14 +574,14 @@ class WordProblemLevelLeaf extends WordProblemLevelNode implements ICgsLevelLeaf
         // we can perform a comparison of whether anything really changed.
         if (data.exists(LevelNodeSaveKeys.OBJECTIVES)) 
         {
-            m_serializedObjectives = data[LevelNodeSaveKeys.OBJECTIVES];
+			m_serializedObjectives = Reflect.field(data, LevelNodeSaveKeys.OBJECTIVES);
         }
         
         var performanceStateChanged : Bool = false;
         if (m_savePerformanceStateAcrossInstances && data.exists(LevelNodeSaveKeys.PERFORMANCE_STATE)) 
         {
             performanceStateChanged = true;
-            m_serializedPerformanceState = data[LevelNodeSaveKeys.PERFORMANCE_STATE];
+			m_serializedPerformanceState = Reflect.field(data, LevelNodeSaveKeys.PERFORMANCE_STATE);
         }
         
         return completionValueChanged || highScoreChanged || performanceStateChanged;

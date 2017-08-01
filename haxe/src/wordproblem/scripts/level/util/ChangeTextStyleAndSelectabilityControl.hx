@@ -1,8 +1,7 @@
 package wordproblem.scripts.level.util;
 
 
-import flash.geom.Point;
-import flash.utils.Dictionary;
+import openfl.geom.Point;
 
 import wordproblem.engine.IGameEngine;
 import wordproblem.engine.level.WordProblemLevelData;
@@ -26,45 +25,39 @@ class ChangeTextStyleAndSelectabilityControl
     private var m_gameEngine : IGameEngine;
     
     private var m_scifiStyle : Dynamic = {
-            .term : {
+            term : {
                 color : "0xA3F981"
-
             }
-
         };
     private var m_fantasyStyle : Dynamic = {
-            .term : {
+            term : {
                 color : "0x6C0AB1"
-
             }
-
         };
     private var m_mysteryStyle : Dynamic = {
-            .term : {
+            term : {
                 color : "0x3F62AA"
-
             }
-
         };
     
-    private var m_genreToStyleObject : Dictionary;
+    private var m_genreToStyleObject : Map<String, Dynamic>;
     
     /**
      * key: genre name
      * value: point.x = chapter, point.y = level
      */
-    private var m_genreToStyleCheckPoint : Dictionary;
+    private var m_genreToStyleCheckPoint : Map<String, Point>;
     
     public function new(gameEngine : IGameEngine)
     {
         m_gameEngine = gameEngine;
         
-        m_genreToStyleObject = new Dictionary();
+        m_genreToStyleObject = new Map();
         Reflect.setField(m_genreToStyleObject, "scifi", m_scifiStyle);
         Reflect.setField(m_genreToStyleObject, "fantasy", m_fantasyStyle);
         Reflect.setField(m_genreToStyleObject, "mystery", m_mysteryStyle);
         
-        m_genreToStyleCheckPoint = new Dictionary();
+        m_genreToStyleCheckPoint = new Map();
         Reflect.setField(m_genreToStyleCheckPoint, "scifi", new Point(1, 0));
         Reflect.setField(m_genreToStyleCheckPoint, "fantasy", new Point(1, 0));
         Reflect.setField(m_genreToStyleCheckPoint, "mystery", new Point(1, 0));
@@ -133,12 +126,11 @@ class ChangeTextStyleAndSelectabilityControl
         
         for (key in Reflect.fields(extraStyleToApply))
         {
-            currentStyleObject[key] = extraStyleToApply[key];
+			Reflect.setField(currentStyleObject, key, Reflect.field(extraStyleToApply, key));
             styleOrder.push(key);
-        }  // Re-apply the styles  
-        
-        
-        
+        }
+		
+		// Re-apply the styles  
         var documentNodes : Array<DocumentNode> = currentLevel.getRootDocumentNodes();
         var textParser : TextParser = new TextParser();
         for (i in 0...documentNodes.length){

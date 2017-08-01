@@ -27,8 +27,8 @@ class GameFonts
         var isEmbedded : Bool = false;
         if (fontName != null) 
         {
-            var i : Int;
-            var font : Font;
+            var i : Int = 0;
+            var font : Font = null;
             for (i in 0...FONTS.length){
                 font = FONTS[i];
                 if (font.fontType == FontType.EMBEDDED && fontName == font.fontName) 

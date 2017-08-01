@@ -7,14 +7,9 @@ import flash.text.TextFormatAlign;
 
 import dragonbox.common.util.XColor;
 
-import feathers.controls.Button;
-import feathers.controls.TextInput;
-import feathers.controls.text.TextFieldTextEditor;
-import feathers.core.ITextEditor;
-import feathers.display.Scale9Image;
-import feathers.events.FeathersEventType;
-import feathers.textures.Scale9Textures;
+import haxe.Constraints.Function;
 
+import starling.display.Button;
 import starling.display.DisplayObject;
 import starling.display.Image;
 import starling.display.Sprite;
@@ -34,11 +29,12 @@ class KeyboardWidget extends Layer
     private var buttonHeight : Float = 50;
     private var buttonGap : Float = 1;
     
-    private inline var DEFAULT_MAX_CHARACTERS : Int = 15;
+    private inline static var DEFAULT_MAX_CHARACTERS : Int = 15;
     
     private var m_assetManager : AssetManager;
     
-    private var m_textInput : TextInput;
+	// TODO: uncomment when a suitable text input replacement is found
+    //private var m_textInput : TextInput;
     
     /**
      * Buttons for lower case characters that can be used
@@ -80,25 +76,26 @@ class KeyboardWidget extends Layer
         m_assetManager = assetManager;
         m_acceptCallback = acceptCallback;
         
-        m_textInput = new TextInput();
-        m_textInput.maxChars = maxCharacters;
-        m_textInput.restrict = "A-Z a-z";
-        m_textInput.textEditorFactory = function() : ITextEditor
-                {
-                    var editor : TextFieldTextEditor = new TextFieldTextEditor();
-                    editor.textFormat = new TextFormat(GameFonts.DEFAULT_FONT_NAME, 36, 0xFFFFFF, null, null, null, null, null, TextFormatAlign.CENTER);
-                    editor.embedFonts = true;
-                    return editor;
-                };
-        var textInputTexture : Texture = assetManager.getTexture("button_white");
-        var backgroundPadding : Float = 8;
-        var textInputBackground : Scale9Image = new Scale9Image(new Scale9Textures(textInputTexture, 
-        new Rectangle(backgroundPadding, backgroundPadding, textInputTexture.width - 2 * backgroundPadding, textInputTexture.height - 2 * backgroundPadding)));
-        textInputBackground.color = 0xD09919;
-        m_textInput.backgroundSkin = textInputBackground;
-        m_textInput.addEventListener(FeathersEventType.ENTER, onTextInputEnter);
-        m_textInput.addEventListener(Event.CHANGE, onTextChange);
-        addChild(m_textInput);
+		// TODO: uncomment when a suitable text input replacement is found
+        //m_textInput = new TextInput();
+        //m_textInput.maxChars = maxCharacters;
+        //m_textInput.restrict = "A-Z a-z";
+        //m_textInput.textEditorFactory = function() : ITextEditor
+                //{
+                    //var editor : TextFieldTextEditor = new TextFieldTextEditor();
+                    //editor.textFormat = new TextFormat(GameFonts.DEFAULT_FONT_NAME, 36, 0xFFFFFF, null, null, null, null, null, TextFormatAlign.CENTER);
+                    //editor.embedFonts = true;
+                    //return editor;
+                //};
+        //var textInputTexture : Texture = assetManager.getTexture("button_white");
+        //var backgroundPadding : Float = 8;
+        //var textInputBackground : Scale9Image = new Scale9Image(new Scale9Textures(textInputTexture, 
+        //new Rectangle(backgroundPadding, backgroundPadding, textInputTexture.width - 2 * backgroundPadding, textInputTexture.height - 2 * backgroundPadding)));
+        //textInputBackground.color = 0xD09919;
+        //m_textInput.backgroundSkin = textInputBackground;
+        //m_textInput.addEventListener(FeathersEventType.ENTER, onTextInputEnter);
+        //m_textInput.addEventListener(Event.CHANGE, onTextChange);
+        //addChild(m_textInput);
         m_lowerCaseButtons = new Array<Array<DisplayObject>>();
         
         var lowerCaseCharacterRows : Array<Array<String>> = new Array<Array<String>>();
@@ -127,9 +124,11 @@ class KeyboardWidget extends Layer
                 null,
                 new Rectangle(8, 8, 16, 16)
                 );
-        (try cast(shiftButton.defaultSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.ROYAL_BLUE;
-        (try cast(shiftButton.hoverSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.BRIGHT_ORANGE;
-        (try cast(shiftButton.downSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.BRIGHT_ORANGE;
+		// TODO: starling buttons use textures, not images, and the color cannot be changed
+		// like this
+        //(try cast(shiftButton.defaultSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.ROYAL_BLUE;
+        //(try cast(shiftButton.hoverSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.BRIGHT_ORANGE;
+        //(try cast(shiftButton.downSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.BRIGHT_ORANGE;
         shiftButton.addEventListener(Event.TRIGGERED, onShiftClicked);
         shiftButton.width = buttonWidth * 1.5 + buttonGap;
         shiftButton.height = buttonHeight;
@@ -150,12 +149,14 @@ class KeyboardWidget extends Layer
                 null,
                 new Rectangle(8, 8, 16, 16)
                 );
-        (try cast(backButton.defaultSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.ROYAL_BLUE;
-        (try cast(backButton.hoverSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.BRIGHT_ORANGE;
-        (try cast(backButton.downSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.BRIGHT_ORANGE;
+        // TODO: starling buttons use textures, not images, and the color cannot be changed
+		// like this
+		//(try cast(backButton.defaultSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.ROYAL_BLUE;
+        //(try cast(backButton.hoverSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.BRIGHT_ORANGE;
+        //(try cast(backButton.downSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.BRIGHT_ORANGE;
         var backIcon : Image = new Image(assetManager.getTexture("arrow_rotate"));
         backIcon.scaleX = backIcon.scaleY = (buttonHeight / backIcon.height);
-        backButton.defaultIcon = backIcon;
+        backButton.upState = backIcon.texture;
         backButton.addEventListener(Event.TRIGGERED, onBackClicked);
         backButton.width = buttonWidth * 1.5;
         backButton.height = buttonHeight;
@@ -175,14 +176,16 @@ class KeyboardWidget extends Layer
                 new TextFormat(GameFonts.DEFAULT_FONT_NAME, 20, 0xFFFFFF),
                 null,
                 new Rectangle(8, 8, 16, 16)
-                );
-        (try cast(acceptButton.defaultSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.ROYAL_BLUE;
-        (try cast(acceptButton.hoverSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.BRIGHT_ORANGE;
-        (try cast(acceptButton.downSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.BRIGHT_ORANGE;
+                );		
+		// TODO: starling buttons use textures, not images, and the color cannot be changed
+		// like this
+        //(try cast(acceptButton.defaultSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.ROYAL_BLUE;
+        //(try cast(acceptButton.hoverSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.BRIGHT_ORANGE;
+        //(try cast(acceptButton.downSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.BRIGHT_ORANGE;
         
         var acceptIcon : Image = new Image(assetManager.getTexture("correct"));
         acceptIcon.scaleX = acceptIcon.scaleY = (buttonHeight / acceptIcon.height);
-        acceptButton.defaultIcon = acceptIcon;
+        acceptButton.upState = acceptIcon.texture;
         acceptButton.addEventListener(Event.TRIGGERED, onAcceptClicked);
         acceptButton.width = buttonWidth * 2;
         acceptButton.height = buttonHeight * 2 + buttonGap;
@@ -204,9 +207,11 @@ class KeyboardWidget extends Layer
                 null,
                 new Rectangle(8, 8, 16, 16)
                 );
-        (try cast(spaceButton.defaultSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.ROYAL_BLUE;
-        (try cast(spaceButton.hoverSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.BRIGHT_ORANGE;
-        (try cast(spaceButton.downSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.BRIGHT_ORANGE;
+		// TODO: starling buttons use textures, not images, and the color cannot be changed
+		// like this
+        //(try cast(spaceButton.defaultSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.ROYAL_BLUE;
+        //(try cast(spaceButton.hoverSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.BRIGHT_ORANGE;
+        //(try cast(spaceButton.downSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.BRIGHT_ORANGE;
         spaceButton.addEventListener(Event.TRIGGERED, onCharacterButtonClicked);
         spaceButton.width = buttonWidth * 5 + buttonGap * 4;
         spaceButton.height = buttonHeight;
@@ -218,17 +223,19 @@ class KeyboardWidget extends Layer
         var buttonsLeftPadding : Float = 28;
         var buttonsTotalWidth : Float = 11.5 * buttonWidth + 10 * buttonGap;
         
-        m_textInput.width = buttonsTotalWidth * 0.75;
-        m_textInput.height = 70;
+		// TODO: uncomment when a suitable text input replacement is found
+        //m_textInput.width = buttonsTotalWidth * 0.75;
+        //m_textInput.height = 70;
         
         var backgroundImage : Image = new Image(assetManager.getTexture("summary_background"));
         backgroundImage.width = buttonsTotalWidth + 2 * buttonsLeftPadding;
         
-        m_textInput.x = (backgroundImage.width - m_textInput.width) * 0.5;
-        m_textInput.y = 35;
-        m_buttonsContainer.y = m_textInput.height + m_textInput.y + 20;
-        m_buttonsContainer.x = buttonsLeftPadding;
-        backgroundImage.height = m_textInput.height + m_textInput.y + buttonWidth * 4 + buttonGap * 3 + 50;
+		// TODO: uncomment when a suitable text input replacement is found
+        //m_textInput.x = (backgroundImage.width - m_textInput.width) * 0.5;
+        //m_textInput.y = 35;
+        //m_buttonsContainer.y = m_textInput.height + m_textInput.y + 20;
+        //m_buttonsContainer.x = buttonsLeftPadding;
+        //backgroundImage.height = m_textInput.height + m_textInput.y + buttonWidth * 4 + buttonGap * 3 + 50;
         addChildAt(backgroundImage, 0);
         
         // Show lower case buttons first
@@ -237,32 +244,33 @@ class KeyboardWidget extends Layer
     
     public function getText() : String
     {
-        return m_textInput.text;
+		// TODO: uncomment when a suitable text input replacement is found
+        //return m_textInput.text;
+		return "";
     }
     
     public function setText(value : String) : Void
     {
-        m_textInput.text = value;
+		// TODO: uncomment when a suitable text input replacement is found
+        //m_textInput.text = value;
     }
     
     override public function dispose() : Void
     {
         super.dispose();
         
-        m_textInput.removeEventListener(FeathersEventType.ENTER, onTextInputEnter);
-        m_textInput.removeEventListener(Event.CHANGE, onTextChange);
-        m_textInput.removeFromParent(true);
-        
-        cleanButtonList(m_lowerCaseButtons);
-        cleanButtonList(m_upperCaseButtons);
-        
+		// TODO: uncomment when a suitable text input replacement is found
+        //m_textInput.removeEventListener(FeathersEventType.ENTER, onTextInputEnter);
+        //m_textInput.removeEventListener(Event.CHANGE, onTextChange);
+        //m_textInput.removeFromParent(true);
+		
         // Clean out listeners on buttons
         function cleanButtonList(buttons : Array<Array<DisplayObject>>) : Void
         {
-            var i : Int;
+            var i : Int = 0;
             for (i in 0...buttons.length){
                 var charactersInRow : Array<DisplayObject> = buttons[i];
-                var j : Int;
+                var j : Int = 0;
                 for (j in 0...charactersInRow.length){
                     var button : Button = try cast(charactersInRow[j], Button) catch(e:Dynamic) null;
                     button.removeEventListener(Event.TRIGGERED, onCharacterButtonClicked);
@@ -270,6 +278,8 @@ class KeyboardWidget extends Layer
                 }
             }
         };
+        cleanButtonList(m_lowerCaseButtons);
+        cleanButtonList(m_upperCaseButtons);
         
         m_shiftButton.removeEventListener(Event.TRIGGERED, onShiftClicked);
         m_shiftButton.removeFromParent(true);
@@ -289,12 +299,12 @@ class KeyboardWidget extends Layer
             buttonHeight : Float) : Array<Array<DisplayObject>>
     {
         var listOfButtonRows : Array<Array<DisplayObject>> = new Array<Array<DisplayObject>>();
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...characterRows.length){
             // Create a virtual keyboard for all the buttons
             var outButtonList : Array<DisplayObject> = new Array<DisplayObject>();
             var characters : Array<String> = characterRows[i];
-            var j : Int;
+            var j : Int = 0;
             var numCharacters : Int = characters.length;
             for (j in 0...numCharacters){
                 var character : String = characters[j];
@@ -309,9 +319,11 @@ class KeyboardWidget extends Layer
                         null,
                         new Rectangle(8, 8, 16, 16)
                         );
-                (try cast(button.defaultSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.ROYAL_BLUE;
-                (try cast(button.hoverSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.BRIGHT_ORANGE;
-                (try cast(button.downSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.BRIGHT_ORANGE;
+				// TODO: starling buttons use textures, not images, and the color cannot be changed
+				// like this
+                //(try cast(button.upState, Image) catch(e:Dynamic) null).color = XColor.ROYAL_BLUE;
+                //(try cast(button.overState, Image) catch(e:Dynamic) null).color = XColor.BRIGHT_ORANGE;
+                //(try cast(button.downState, Image) catch(e:Dynamic) null).color = XColor.BRIGHT_ORANGE;
                 button.addEventListener(Event.TRIGGERED, onCharacterButtonClicked);
                 button.width = buttonWidth;
                 button.height = buttonHeight;
@@ -329,13 +341,13 @@ class KeyboardWidget extends Layer
             buttonGap : Float) : Void
     {
         // Layout all of the character buttons
-        var i : Int;
+        var i : Int = 0;
         var yOffset : Float = 0;
         for (i in 0...buttonRows.length){
             var buttonList : Array<DisplayObject> = buttonRows[i];
             var numButtons : Int = buttonList.length;
             var xOffset : Float = i * (buttonWidth * 0.5);
-            var j : Int;
+            var j : Int = 0;
             for (j in 0...numButtons){
                 var button : Button = try cast(buttonList[j], Button) catch(e:Dynamic) null;
                 button.x = xOffset;
@@ -362,7 +374,7 @@ class KeyboardWidget extends Layer
             buttonsToRemove = m_lowerCaseButtons;
         }
         
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...buttonsToRemove.length){
             for (button in buttonsToRemove[i])
             {
@@ -380,7 +392,7 @@ class KeyboardWidget extends Layer
         
         
         
-        m_shiftButton.label = ((lowerCase)) ? 
+        m_shiftButton.text = ((lowerCase)) ? 
                 "A-Z" : "a-z";
     }
     
@@ -391,18 +403,20 @@ class KeyboardWidget extends Layer
     
     private function onTextChange() : Void
     {
-        m_textInput.setFocus();
+		// TODO: uncomment when a suitable text input replacement is found
+        //m_textInput.setFocus();
     }
     
     private function onCharacterButtonClicked(event : Event) : Void
     {
         var button : Button = try cast(event.target, Button) catch(e:Dynamic) null;
         
-        if (m_textInput.text.length < m_textInput.maxChars) 
-        {
-            m_textInput.text += button.label;
-        }
-        m_textInput.setFocus();
+		// TODO: uncomment when a suitable text input replacement is found
+        //if (m_textInput.text.length < m_textInput.maxChars) 
+        //{
+            //m_textInput.text += button.label;
+        //}
+        //m_textInput.setFocus();
     }
     
     private function onShiftClicked(event : Event) : Void
@@ -422,18 +436,19 @@ class KeyboardWidget extends Layer
     
     private function onBackClicked(event : Event) : Void
     {
-        var currentText : String = m_textInput.text;
-        var numCharacters : Int = currentText.length;
-        if (numCharacters > 0) 
-        {
-            if (numCharacters == 1) 
-            {
-                m_textInput.text = "";
-            }
-            else 
-            {
-                m_textInput.text = currentText.substr(0, numCharacters - 1);
-            }
-        }
+		// TODO: uncomment when a suitable text input replacement is found
+        //var currentText : String = m_textInput.text;
+        //var numCharacters : Int = currentText.length;
+        //if (numCharacters > 0) 
+        //{
+            //if (numCharacters == 1) 
+            //{
+                //m_textInput.text = "";
+            //}
+            //else 
+            //{
+                //m_textInput.text = currentText.substr(0, numCharacters - 1);
+            //}
+        //}
     }
 }

@@ -96,7 +96,7 @@ class BaseGiveRewardScript extends BaseBufferEventScript
         // From list of candidate, random rewards find which ones the player already has.
         // They should not be given again
         m_availableLevelUpRewards = new Array<String>();
-        var i : Int;
+        var i : Int = 0;
         var numPossibleRandomRewards : Int = LEVEL_UP_REWARDS.length;
         for (i in 0...numPossibleRandomRewards){
             var itemId : String = LEVEL_UP_REWARDS[i];
@@ -125,7 +125,7 @@ class BaseGiveRewardScript extends BaseBufferEventScript
         
         // Need to map the reward id to the item id/item ids so we can add the appropriate
         // data structures into the player's inventory
-        var i : Int;
+        var i : Int = 0;
         var numRewards : Int = m_rewardsData.length;
         for (i in 0...numRewards){
             var rewardData : Dynamic = m_rewardsData[i];
@@ -134,7 +134,7 @@ class BaseGiveRewardScript extends BaseBufferEventScript
                 if (rewardData.exists("itemInstanceIds")) 
                 {
                     // Add each item inside a collection, assume collections do not nest
-                    var rewardsCollection : Array<Dynamic> = try cast(Reflect.field(rewardData, "itemInstanceIds"), Array</*AS3HX WARNING no type*/>) catch(e:Dynamic) null;
+                    var rewardsCollection : Array<Dynamic> = try cast(Reflect.field(rewardData, "itemInstanceIds"), Array<Dynamic>) catch(e:Dynamic) null;
                     for (idInCollection in rewardsCollection)
                     {
                         m_itemInventory.createItemFromBlueprint(idInCollection);
@@ -152,7 +152,7 @@ class BaseGiveRewardScript extends BaseBufferEventScript
                 else 
                 {
                     m_itemInventory.createItemFromBlueprint(rewardData.itemInstanceId);
-                    itemIdComponent = try cast(m_itemInventory.componentManager.getComponentFromEntityIdAndType(
+                    var itemIdComponent = try cast(m_itemInventory.componentManager.getComponentFromEntityIdAndType(
                                     rewardData.itemInstanceId,
                                     ItemIdComponent.TYPE_ID
                                     ), ItemIdComponent) catch(e:Dynamic) null;
@@ -171,7 +171,7 @@ class BaseGiveRewardScript extends BaseBufferEventScript
         // Detecting rewards to give at the END of a level
         if (eventType == GameEvent.LEVEL_SOLVED) 
         {
-            m_itemInventory.outNewRewardItemIds.length = 0;
+			m_itemInventory.outNewRewardItemIds = new Array<String>();
             checkAndAddItemsToInventory(m_rewardsData, m_itemInventory.outNewRewardItemIds);
         }
         // Temp step to check if player leveled up by finishing this level.
@@ -183,17 +183,17 @@ class BaseGiveRewardScript extends BaseBufferEventScript
             var outData : Array<Int> = new Array<Int>();
             m_xpModel.getLevelAndRemainingXpFromTotalXp(m_xpModel.totalXP, outData);
             var currentLevel : Int = outData[0];
-            as3hx.Compat.setArrayLength(outData, 0);
+			outData = new Array<Int>();
             var xpInLevel : Int = m_gameEngine.getCurrentLevel().statistics.xpEarnedForLevel;
             m_xpModel.getLevelAndRemainingXpFromTotalXp(m_xpModel.totalXP - xpInLevel, outData);
             var prevLevel : Int = outData[0];
             var levelChange : Int = currentLevel - prevLevel;
             
             // For each level gained, give a random collectable from the level pool
-            var i : Int;
+            var i : Int = 0;
             for (i in 0...levelChange){
                 var numCollectablesToGive : Int = 2;
-                var j : Int;
+                var j : Int = 0;
                 for (j in 0...numCollectablesToGive){
                     if (m_availableLevelUpRewards.length > 0) 
                     {
@@ -232,8 +232,8 @@ class BaseGiveRewardScript extends BaseBufferEventScript
     private function checkAndAddItemsToInventory(rewardsData : Array<Dynamic>, outItemIds : Array<String> = null) : Void
     {
         var numEntities : Int = rewardsData.length;
-        var i : Int;
-        var entityId : String;
+        var i : Int = 0;
+        var entityId : String = null;
         for (i in 0...numEntities){
             entityId = rewardsData[i].id;
             

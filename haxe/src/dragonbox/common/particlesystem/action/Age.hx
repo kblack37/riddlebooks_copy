@@ -4,6 +4,8 @@ package dragonbox.common.particlesystem.action;
 import dragonbox.common.particlesystem.Particle;
 import dragonbox.common.particlesystem.emitter.Emitter;
 
+import haxe.Constraints.Function;
+
 /**
  * Action used to kill off particles after a certain amount of time has elapsed
  */

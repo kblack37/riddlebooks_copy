@@ -10,6 +10,8 @@ import cgs.user.ICgsUser;
 import dragonbox.common.state.BaseState;
 import dragonbox.common.state.IStateMachine;
 
+import haxe.Constraints.Function;
+
 import starling.display.Image;
 import starling.textures.Texture;
 
@@ -72,20 +74,20 @@ class TOSState extends BaseState
         
         if (cgsUser != null) 
         {
-            var tosStatus : UserTosStatus = cgsUser.tosStatus;
-            m_tosUi = new TosUi(cgsUser, tosStatus, onTosComplete, "Riddle Books");
+            var tosStatus : UserTosStatus = try cast(cgsUser.tosStatus, UserTosStatus) catch (e : Dynamic) null;
+			// TODO: uncomment when cgs library is finished
+            //m_tosUi = new TosUi(cgsUser, tosStatus, onTosComplete, "Riddle Books");
             
             // We have a problem if there is no TOS to show, the complete callback is
             // called immediately and the tos ui pieces are disposed of (i.e. the ui is no
             // longer usable after this happens)
-            if (m_tosUiActive) 
-            {
-                m_nativeFlashStage.addChild(m_tosUi);
-                m_tosUi.load();
-            }  // If tos already finished or is not needed at all, then just return as complete  
-            
-            
-            
+            //if (m_tosUiActive) 
+            //{
+                //m_nativeFlashStage.addChild(m_tosUi);
+                //m_tosUi.load();
+            //}  
+			
+			// If tos already finished or is not needed at all, then just return as complete  
             if (tosStatus.accepted || !tosStatus.acceptanceRequired) 
             {
                 onTosComplete();
@@ -95,7 +97,7 @@ class TOSState extends BaseState
     
     override public function exit(toState : Dynamic) : Void
     {
-        if (m_tosUi != null && m_tosUi.parent) 
+        if (m_tosUi != null && m_tosUi.parent != null) 
         {
             m_tosUi.parent.removeChild(m_tosUi);
             m_tosUi = null;

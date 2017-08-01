@@ -172,7 +172,7 @@ class RemoveTerm extends BaseTermAreaScript
         super.onLevelReady();
         
         m_widgetDragSystem = try cast(this.getNodeById("WidgetDragSystem"), WidgetDragSystem) catch(e:Dynamic) null;
-        m_expressionSymbolMap = super.m_gameEngine.getExpressionSymbolResources();
+        m_expressionSymbolMap = this.m_gameEngine.getExpressionSymbolResources();
         setIsActive(m_isActive);
     }
     

@@ -130,7 +130,7 @@ class CgsLevelFactory implements ICgsLevelFactory
 		 */
     public function getNodeInstance(typeID : String) : ICgsLevelNode
     {
-        var result : ICgsLevelNode;
+        var result : ICgsLevelNode = null;
         
         // Get the node storage for this type, creating the storage if this is a new type
         if (!m_levelNodeStorage.exists(typeID))
@@ -165,7 +165,7 @@ class CgsLevelFactory implements ICgsLevelFactory
 		 */
     private function generateNodeInstance(typeID : String, nodeLabel : Int) : ICgsLevelNode
     {
-        var result : ICgsLevelNode;
+        var result : ICgsLevelNode = null;
         
         switch (typeID)
         {

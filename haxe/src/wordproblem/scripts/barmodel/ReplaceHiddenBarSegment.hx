@@ -149,15 +149,15 @@ class ReplaceHiddenBarSegment extends BaseBarModelScript
         // Iterate through every bar and check if a hidden portion is selected
         var barWholeViews : Array<BarWholeView> = m_barModelArea.getBarWholeViews();
         var numBarWholeViews : Int = barWholeViews.length;
-        var i : Int;
-        var barWholeView : BarWholeView;
+        var i : Int = 0;
+        var barWholeView : BarWholeView = null;
         for (i in 0...numBarWholeViews){
             barWholeView = barWholeViews[i];
             
             var barSegmentViews : Array<BarSegmentView> = barWholeView.segmentViews;
             var numBarSegmentViews : Int = barSegmentViews.length;
-            var j : Int;
-            var barSegmentView : BarSegmentView;
+            var j : Int = 0;
+            var barSegmentView : BarSegmentView = null;
             if (barWholeView.data.displayHiddenSegments) 
             {
                 for (j in 0...numBarSegmentViews){
@@ -185,8 +185,8 @@ class ReplaceHiddenBarSegment extends BaseBarModelScript
                     barSegmentView = barSegmentViews[j];
                     if (barSegmentView.data.hiddenValue != null && barSegmentView.rigidBody.boundingRectangle.containsPoint(m_localMouseBuffer)) 
                     {
-                        var k : Int;
-                        var otherBarSegmentView : BarSegmentView;
+                        var k : Int = 0;
+                        var otherBarSegmentView : BarSegmentView = null;
                         for (k in 0...numBarSegmentViews){
                             otherBarSegmentView = barSegmentViews[k];
                             if (otherBarSegmentView.data.hiddenValue == dataToMatch) 
@@ -212,12 +212,12 @@ class ReplaceHiddenBarSegment extends BaseBarModelScript
     private function unhideBarSegment(barModelData : BarModelData, barSegmentId : String) : Void
     {
         var numBarWholes : Int = barModelData.barWholes.length;
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...numBarWholes){
             var barSegments : Array<BarSegment> = barModelData.barWholes[i].barSegments;
             var numBarSegments : Int = barSegments.length;
-            var j : Int;
-            var barSegment : BarSegment;
+            var j : Int = 0;
+            var barSegment : BarSegment = null;
             for (j in 0...numBarSegments){
                 barSegment = barSegments[j];
                 if (barSegment.id == barSegmentId) 

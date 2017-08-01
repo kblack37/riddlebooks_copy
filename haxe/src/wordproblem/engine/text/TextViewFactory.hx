@@ -87,7 +87,7 @@ class TextViewFactory
         // A div requires creating a new container and then recursing on all children
         // A paragraph requires using a special layout algorithm for text.
         // An image requires creating the node immediately
-        var compositeView : DocumentView;
+        var compositeView : DocumentView = null;
         if (Std.is(rootNode, DivNode)) 
         {
             var divNode : DivNode = try cast(rootNode, DivNode) catch(e:Dynamic) null;
@@ -240,7 +240,7 @@ class TextViewFactory
             imageProperties : Dynamic,
             nineSlicePadding : Array<Int> = null) : DisplayObject
     {
-        var image : DisplayObject;
+        var image : DisplayObject = null;
         
         var name : String = imageProperties.name;
         var type : String = imageProperties.type;
@@ -407,7 +407,7 @@ class TextViewFactory
             spanNode.fontColor
             );
             
-            var i : Int;
+            var i : Int = 0;
             var numChildren : Int = node.children.length;
             for (i in 0...numChildren){
                 createParagraphChildViews(node.children[i], spanFormat, outViews);
@@ -456,9 +456,9 @@ class TextViewFactory
         var currentLineTopY : Float = parentContentBounds.y;  // The top vertical bound of the current line  
         var currentX : Float = (yWithinRectangle(pixelSpaceBetweenLines, floatLeftBounds)) ? 
         floatLeftBounds.right : parentContentBounds.x;  // Acts like a caret to keep track of where to put the next content horizontally  
-        var i : Int;
+        var i : Int = 0;
         var numViews : Int = views.length;
-        var view : DocumentView;
+        var view : DocumentView = null;
 		function positionView(view : DocumentView, measuredWidth : Int, measuredHeight : Int) : Void
             {
                 var maxAllowedX = getMaxAllowedX(Std.int(currentLineTopY), parentContentBounds, measuredHeight, floatRightBounds);
@@ -510,12 +510,12 @@ class TextViewFactory
                 var textContent : String = textNode.content;
                 var wordBuffer : Array<Dynamic> = textContent.split(" ");
                 var numWords : Int = wordBuffer.length;
-                var wordIndex : Int;
-                var word : String;
+                var wordIndex : Int = 0;
+                var word : String = null;
                 // If the preceding view was an image add a space to the text
                 var wordsForCurrentLine : String = ((i - 1 > 0 && Std.is(views[i - 1], ImageView))) ? " " : "";
-                var textMeasuredWidth : Int;
-                var textMeasuredHeight : Int;
+                var textMeasuredWidth : Int = 0;
+                var textMeasuredHeight : Int = 0;
                 var maxAllowedX : Int = getMaxAllowedX(Std.int(currentLineTopY), parentContentBounds, Std.int(pixelSpaceBetweenLines), floatRightBounds);
                 for (wordIndex in 0...numWords){
                     word = wordBuffer[wordIndex];
@@ -609,7 +609,7 @@ class TextViewFactory
                     {
                         addSpaceForNextView = true;
                         var firstCharacter : String = nextTextNode.content.charAt(0);
-                        var j : Int;
+                        var j : Int = 0;
                         for (j in 0...PUNCUATION_CHARACTERS.length){
                             if (firstCharacter == PUNCUATION_CHARACTERS[j]) 
                             {
@@ -721,8 +721,8 @@ class TextViewFactory
             var outViewsForNonTerminal : Array<DocumentView> = new Array<DocumentView>();
             var childrenNodes : Array<DocumentNode> = node.children;
             var numChildren : Int = childrenNodes.length;
-            var i : Int;
-            var childNode : DocumentNode;
+            var i : Int = 0;
+            var childNode : DocumentNode = null;
             for (i in 0...numChildren){
                 childNode = childrenNodes[i];
                 
@@ -739,15 +739,15 @@ class TextViewFactory
                 var spanView : SpanView = new SpanView(try cast(node, SpanNode) catch(e:Dynamic) null);
                 
                 // Add all views of the span children into the span container
-                var viewInSpan : DocumentView;
+                var viewInSpan : DocumentView = null;
                 for (i in 0...outViewsForNonTerminal.length){
                     viewInSpan = outViewsForNonTerminal[i];
                     
                     // The coordinates of the span matches those of its first children.
                     // We need to readjust the coordinates of the children from the reference of
                     // the parent to the reference of the span.
-                    var spanX : Int;
-                    var spanY : Int;
+                    var spanX : Int = 0;
+                    var spanY : Int = 0;
                     if (i == 0) 
                     {
                         spanX = Std.int(viewInSpan.x);
@@ -781,8 +781,8 @@ class TextViewFactory
             views : Array<DocumentView>,
             outViews : Array<DocumentView>) : Void
     {
-        var i : Int;
-        var view : DocumentView;
+        var i : Int = 0;
+        var view : DocumentView = null;
         var numViews : Int = views.length;
         for (i in 0...numViews){
             view = views[i];
@@ -807,7 +807,7 @@ class TextViewFactory
                 width,
                 height,
                 textFormat.font,
-                try cast(textFormat.color, Int) catch(e:Dynamic) null,
+                try cast(textFormat.color, Int) catch(e:Dynamic) 0,
                 textFormat.size
                 );
         textView.x = x;

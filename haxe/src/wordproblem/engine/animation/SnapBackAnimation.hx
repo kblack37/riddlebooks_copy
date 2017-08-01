@@ -3,6 +3,8 @@ package wordproblem.engine.animation;
 
 import flash.geom.Point;
 
+import haxe.Constraints.Function;
+
 import starling.animation.IAnimatable;
 import starling.display.DisplayObject;
 

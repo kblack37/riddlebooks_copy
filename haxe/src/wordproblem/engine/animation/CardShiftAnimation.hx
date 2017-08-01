@@ -6,6 +6,8 @@ import flash.geom.Vector3D;
 
 import dragonbox.common.expressiontree.ExpressionNode;
 
+import haxe.Constraints.Function;
+
 import starling.animation.Tween;
 import starling.core.Starling;
 
@@ -108,7 +110,7 @@ class CardShiftAnimation
                     tween.moveTo(widget.x + xDelta, widget.y + yDelta);
                     tween.scaleTo(scaleFactor);
                     tween.onComplete = onSmoothShiftComplete;
-                    Starling.juggler.add(tween);
+                    Starling.current.juggler.add(tween);
                 }
             }
             else 

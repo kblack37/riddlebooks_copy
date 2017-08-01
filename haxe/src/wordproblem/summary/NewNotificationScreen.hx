@@ -1,18 +1,17 @@
 package wordproblem.summary;
 
-import wordproblem.summary.PMPRNG;
-
 import flash.geom.Point;
 import flash.text.TextFormat;
 
 import dragonbox.common.util.PMPRNG;
 import dragonbox.common.util.XColor;
 
-import feathers.controls.Button;
+import haxe.Constraints.Function;
 
 import starling.animation.Juggler;
 import starling.animation.Transitions;
 import starling.animation.Tween;
+import starling.display.Button;
 import starling.display.Image;
 import starling.display.Sprite;
 import starling.events.Event;
@@ -83,50 +82,39 @@ class NewNotificationScreen extends Sprite
         var totalScreenWidth : Float = 800;
         var totalScreenHeight : Float = 600;
         m_continueButton = WidgetUtil.createGenericColoredButton(
-                        assetManager,
-                        XColor.ROYAL_BLUE,
-                        "Next",
-                        new TextFormat(GameFonts.DEFAULT_FONT_NAME, 32, 0xFFFFFF),
-                        null
-                        );
+            assetManager,
+            XColor.ROYAL_BLUE,
+            "Next",
+            new TextFormat(GameFonts.DEFAULT_FONT_NAME, 32, 0xFFFFFF),
+            null
+        );
         m_continueButton.width = 200;
         m_continueButton.height = 70;
         m_continueButton.x = (totalScreenWidth - m_continueButton.width) * 0.5;
         m_continueButton.y = totalScreenHeight - m_continueButton.height * 1.5;
         m_continueButton.addEventListener(Event.TRIGGERED, onContinueClick);
-        m_continueButton.isEnabled = false;
+        m_continueButton.enabled = false;
         addChild(m_continueButton);
         
         // Randomly plop down several stars that play a continuous color shift animation
         m_starImages = new Array<Image>();
         
         var starPositions : Array<Point> = new Array<Point>();
-        starPositions.push(
-                new Point(600, 50));
-        starPositions.push(
-                new Point(40, 60));
-        starPositions.push(
-                new Point(50, 300));
-        starPositions.push(
-                new Point(400, 400));
-        starPositions.push(
-                new Point(730, 370));
-        starPositions.push(
-                new Point(700, 530));
-        starPositions.push(
-                new Point(40, 550));
-        starPositions.push(
-                new Point(190, 530));
-        starPositions.push(
-                new Point(540, 550));
-        starPositions.push(
-                );
+        starPositions.push(new Point(600, 50));
+        starPositions.push(new Point(40, 60));
+        starPositions.push(new Point(50, 300));
+        starPositions.push(new Point(400, 400));
+        starPositions.push(new Point(730, 370));
+        starPositions.push(new Point(700, 530));
+        starPositions.push(new Point(40, 550));
+        starPositions.push(new Point(190, 530));
+        starPositions.push(new Point(540, 550));
         
         
-        var i : Int;
+        var i : Int = 0;
         var numStars : Int = starPositions.length;
         var starTexture : Texture = assetManager.getTexture("star_small_white");
-        var randomGenerator : PMPRNG = PM_PRNG.createGen(null);
+        var randomGenerator : PMPRNG = PMPRNG.createGen(null);
         for (i in 0...numStars){
             var position : Point = starPositions[i];
             var starImage : Image = new Image(starTexture);
@@ -196,7 +184,7 @@ class NewNotificationScreen extends Sprite
         addChild(rightDialogContainer);
         
         // Title should fade and pop in
-        m_titleText = new TextField(totalScreenWidth, 80, "Nice Work!", GameFonts.DEFAULT_FONT_NAME, 48, 0xFFFFFF);
+        m_titleText = new TextField(Std.int(totalScreenWidth), 80, "Nice Work!", GameFonts.DEFAULT_FONT_NAME, 48, 0xFFFFFF);
         m_titleText.pivotY = m_titleText.height * 0.5;
         m_titleText.y = 80;
         addChild(m_titleText);
@@ -205,26 +193,22 @@ class NewNotificationScreen extends Sprite
         m_helperCharacterController.setCharacterVisible({
                     id : "Cookie",
                     visible : true,
-
                 });
         m_helperCharacterController.setCharacterVisible({
                     id : "Taco",
                     visible : true,
-
                 });
         m_helperCharacterController.moveCharacterTo({
                     id : "Cookie",
                     x : leftDialogContainer.x,
                     y : leftDialogContainer.y + leftDialogContainer.height,
                     velocity : -1,
-
                 });
         m_helperCharacterController.moveCharacterTo({
                     id : "Taco",
                     x : rightDialogContainer.x,
                     y : rightDialogContainer.y + rightDialogContainer.height,
                     velocity : -1,
-
                 });
         
         m_titleText.scaleY = 0;
@@ -251,7 +235,7 @@ class NewNotificationScreen extends Sprite
         continueButtonFadeTween.delay = showRightDialogTween.delay + showRightDialogTween.totalTime;
         continueButtonFadeTween.onComplete = function() : Void
                 {
-                    m_continueButton.isEnabled = true;
+                    m_continueButton.enabled = true;
                 };
         juggler.add(continueButtonFadeTween);
     }
@@ -276,23 +260,21 @@ class NewNotificationScreen extends Sprite
         m_juggler.purge();
         
         // Remove all star images and their associated tweens
-        var i : Int;
+        var i : Int = 0;
         var numStars : Int = m_starImages.length;
         for (i in 0...numStars){
             m_starImages[i].removeFromParent(true);
         }
-        as3hx.Compat.setArrayLength(m_starImages, 0);
+		m_starImages = new Array<Image>();
         
         // Turn off visibility of characters
         m_helperCharacterController.setCharacterVisible({
                     id : "Cookie",
                     visible : false,
-
                 });
         m_helperCharacterController.setCharacterVisible({
                     id : "Taco",
                     visible : false,
-
                 });
         
         super.dispose();

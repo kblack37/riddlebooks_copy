@@ -7,6 +7,8 @@ import cgs.internationalization.StringTable;
 
 import dragonbox.common.util.XTextField;
 
+import haxe.Constraints.Function;
+
 import starling.animation.Juggler;
 import starling.animation.Transitions;
 import starling.animation.Tween;
@@ -66,7 +68,8 @@ class SummaryObjectivesWidget extends Sprite
         m_juggler = juggler;
         m_tweensInstantiated = new Array<Tween>();
         
-        var objectivesTitle : TextField = new TextField(270, 60, StringTable.lookup("goals"), GameFonts.DEFAULT_FONT_NAME, 36, 0xFFFFFF);
+		// TODO: uncomment when cgs library is finished
+        var objectivesTitle : TextField = new TextField(270, 60, "" /*StringTable.lookup("goals")*/, GameFonts.DEFAULT_FONT_NAME, 36, 0xFFFFFF);
         this.addChild(objectivesTitle);
         
         m_objectivesListContainer = new Sprite();
@@ -119,12 +122,12 @@ class SummaryObjectivesWidget extends Sprite
         Need to be able to interrupt the tween.
         Thus there needs to be a routine to piece together all the parts one by one
         */
-        as3hx.Compat.setArrayLength(m_displayWithoutMarksBuffer, 0);
-        as3hx.Compat.setArrayLength(m_checkMarkBuffer, 0);
+		m_displayWithoutMarksBuffer = new Array<Sprite>();
+		m_checkMarkBuffer = new Array<DisplayObject>();
         
         var objectiveYOffset : Float = 0;
         var numObjectives : Int = objectives.length;
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...numObjectives){
             // Get all the pieces need to contruct the objective display and
             // perform a preliminary layout
@@ -145,18 +148,7 @@ class SummaryObjectivesWidget extends Sprite
             objectiveYOffset += objectiveDisplayWithoutMark.height;
         }
         
-        if (numObjectives > 0) 
-        {
-            // Reset current index to be the start
-            m_currentObjectiveIndexAnimating = 0;
-            animateObjective(m_displayWithoutMarksBuffer[0], m_checkMarkBuffer[0], onAnimateObjectiveComplete);
-        }
-        else 
-        {
-            onAnimationComplete();
-        }
-        
-        function onAnimateObjectiveComplete() : Void
+		function onAnimateObjectiveComplete() : Void
         {
             onSingleObjectiveAnimationComplete(
                     objectives[m_currentObjectiveIndexAnimating], m_displayWithoutMarksBuffer[m_currentObjectiveIndexAnimating]);
@@ -174,6 +166,17 @@ class SummaryObjectivesWidget extends Sprite
                         onAnimateObjectiveComplete);
             }
         };
+		
+        if (numObjectives > 0) 
+        {
+            // Reset current index to be the start
+            m_currentObjectiveIndexAnimating = 0;
+            animateObjective(m_displayWithoutMarksBuffer[0], m_checkMarkBuffer[0], onAnimateObjectiveComplete);
+        }
+        else 
+        {
+            onAnimationComplete();
+        }
     }
     
     /**
@@ -256,7 +259,7 @@ class SummaryObjectivesWidget extends Sprite
         var objectiveTextFormat : TextFormat = new TextFormat(GameFonts.DEFAULT_FONT_NAME, 26, 0xFFFFFF);
         m_measuringTextField.setTextFormat(objectiveTextFormat);
         var resizedFontSize : Float = m_measuringTextField.resizeToDimensions(maxTextWidth, maxTextHeight, objectiveDescription);
-        objectiveTextFormat.size = resizedFontSize;
+        objectiveTextFormat.size = Std.int(resizedFontSize);
         
         var descriptionTextField : DisplayObject = XTextField.createWordWrapTextfield(objectiveTextFormat, objectiveDescription,
                 maxTextWidth, maxTextHeight);

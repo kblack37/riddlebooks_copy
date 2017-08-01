@@ -78,8 +78,8 @@ class DivideExpressionTip extends TermAreaTip
         var globalReferenceObject : DisplayObject = m_canvas.stage;
         var termAreaGlobalLocation : Point = m_termArea.localToGlobal(new Point(0, 0));
         var startDragLocation : Point = new Point(
-        termAreaGlobalLocation.x + 0.5 * m_termArea.getConstraintsWidth(), 
-        termAreaGlobalLocation.y - 25, 
+			termAreaGlobalLocation.x + 0.5 * m_termArea.getConstraintsWidth(), 
+			termAreaGlobalLocation.y - 25
         );
         
         // End mouse at the bottom half of the expression on the board
@@ -87,8 +87,8 @@ class DivideExpressionTip extends TermAreaTip
         var existingExpressionBounds : Rectangle = existingExpressionWidget.rigidBodyComponent.boundingRectangle;
         var operatorGlobalLocation : Point = m_termArea.localToGlobal(new Point(existingExpressionBounds.x, existingExpressionBounds.y));
         var finalDragLocation : Point = new Point(
-        operatorGlobalLocation.x + existingExpressionBounds.width * 0.5, 
-        operatorGlobalLocation.y + existingExpressionBounds.height * 0.85, 
+			operatorGlobalLocation.x + existingExpressionBounds.width * 0.5, 
+			operatorGlobalLocation.y + existingExpressionBounds.height * 0.85
         );
         
         var mainAnimationEvents : Array<SequenceEvent> = new Array<SequenceEvent>();
@@ -129,7 +129,7 @@ class DivideExpressionTip extends TermAreaTip
     
     private function setupExpression() : Void
     {
-        m_termArea.setTree(new ExpressionTree(m_expressionCompiler.getVectorSpace(), m_expressionCompiler.compile("a").head));
+        m_termArea.setTree(new ExpressionTree(m_expressionCompiler.getVectorSpace(), m_expressionCompiler.compile("a")));
         m_termArea.redrawAfterModification(false);
     }
     

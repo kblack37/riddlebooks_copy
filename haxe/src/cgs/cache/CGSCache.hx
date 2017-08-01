@@ -717,7 +717,7 @@ class PlayerCache
             
             // Flush all values
             var serverData : StringMap<Dynamic> = new StringMap<Dynamic>();
-            var value : Dynamic;
+            var value : Dynamic = null;
             for (key in m_updateMap.keys())
             {
                 // Move each key-value in the update map to the shared object and userGameData

@@ -40,13 +40,13 @@ class MouseMoveToSequenceEvent extends SequenceEvent
     
     override public function update(time : Time) : Void
     {
-        if (currentState == ACTIVE) 
+        if (currentState == SequenceEvent.ACTIVE) 
         {
             m_secondsElapsedSinceStart += time.currentDeltaSeconds;
             
             if (m_secondsElapsedSinceStart >= m_moveDurationSeconds) 
             {
-                this.currentState = COMPLETE;
+                this.currentState = SequenceEvent.COMPLETE;
                 
                 m_secondsElapsedSinceStart = m_moveDurationSeconds;
             }

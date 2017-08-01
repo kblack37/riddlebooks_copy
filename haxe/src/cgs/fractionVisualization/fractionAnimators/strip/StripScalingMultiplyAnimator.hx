@@ -307,8 +307,8 @@ class StripScalingMultiplyAnimator implements IFractionAnimator
         var firstDenom_equalsSymbolText_startPosition : Point;
         var firstDenom_resultValueNR_startPosition : Point;
         var firstDenom_resultValueNR_finalPosition : Point;
-        var newFirstSegmentHolder : Sprite;
-        var newFirstSegments : Array<Sprite>;
+        var newFirstSegmentHolder : Sprite = null;
+        var newFirstSegments : Array<Sprite> = null;
         var newFirstSegmentHolders : Array<Sprite> = new Array<Sprite>();
         var numTicksPerFirstSegment : Float = firstMultiplier;
         var numOtherFirstSegments : Float = (firstModule.numBaseUnits * origFirstFraction.denominator) - 1;
@@ -395,9 +395,9 @@ class StripScalingMultiplyAnimator implements IFractionAnimator
         var numExtensionUnits : Int = Math.max(numTotalUnits - numFirstUnits, 0);
         var extensionWidthIncrease : Float = numExtensionUnits * firstModule.unitWidth;
         var doExtension : Bool = numExtensionUnits > 0;
-        var extensionView : CgsFractionView;
-        var extensionMask : Sprite;
-        var extensionFinalX : Float;
+        var extensionView : CgsFractionView = null;
+        var extensionMask : Sprite = null;
+        var extensionFinalX : Float = 0.0;
         if (doExtension)
         {
             extensionView = first.clone();
@@ -445,9 +445,9 @@ class StripScalingMultiplyAnimator implements IFractionAnimator
         var numReductionUnits : Int = Math.max(numFirstUnits - numTotalUnits, 0);
         var reductionWidthDecrease : Float = numReductionUnits * firstModule.unitWidth;
         var doReduction : Bool = numReductionUnits > 0;
-        var reductionView : CgsFractionView;
-        var reductionMask : Sprite;
-        var reductionFinalX : Float;
+        var reductionView : CgsFractionView = null;
+        var reductionMask : Sprite = null;
+        var reductionFinalX : Float = 0.0;
         if (doReduction)
         {
             reductionView = first.clone();

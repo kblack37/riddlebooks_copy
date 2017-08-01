@@ -1,21 +1,22 @@
 package wordproblem.level.controller;
 
 import flash.errors.Error;
-import wordproblem.level.controller.PMPRNG;
 
 import cgs.cache.ICgsUserCache;
 import cgs.achievement.ICgsAchievementManager;
-import cgs.levelprogression.ICgsLevelManager;
-import cgs.levelprogression.nodes.ICgsLevelLeaf;
-import cgs.levelprogression.nodes.ICgsLevelNode;
-import cgs.levelprogression.nodes.ICgsLevelPack;
-import cgs.levelprogression.nodes.ICgsStatusNode;
-import cgs.levelprogression.util.ICgsLevelFactory;
-import cgs.levelprogression.util.ICgsLevelResourceManager;
-import cgs.levelprogression.util.ICgsLockFactory;
+import cgs.levelProgression.ICgsLevelManager;
+import cgs.levelProgression.nodes.ICgsLevelLeaf;
+import cgs.levelProgression.nodes.ICgsLevelNode;
+import cgs.levelProgression.nodes.ICgsLevelPack;
+import cgs.levelProgression.nodes.ICgsStatusNode;
+import cgs.levelProgression.util.ICgsLevelFactory;
+import cgs.levelProgression.util.ICgsLevelResourceManager;
+import cgs.levelProgression.util.ICgsLockFactory;
 import cgs.user.ICgsUserManager;
 
 import dragonbox.common.util.PMPRNG;
+
+import haxe.Constraints.Function;
 
 import wordproblem.engine.level.LevelEndTypes;
 import wordproblem.engine.level.LevelStatistics;
@@ -86,7 +87,7 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
         {
             if (Std.is(levelNode, WordProblemLevelLeaf)) 
             {
-                outLevelNodesWithoutChapter.push(levelNode);
+                outLevelNodesWithoutChapter.push(try cast(levelNode, WordProblemLevelLeaf) catch (e : Dynamic) null);
             }
             else if (Std.is(levelNode, ICgsLevelPack)) 
             {
@@ -98,7 +99,7 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
                 {
                     var children : Array<ICgsLevelNode> = (try cast(levelNode, ICgsLevelPack) catch(e:Dynamic) null).nodes;
                     var numChildren : Int = children.length;
-                    var i : Int;
+                    var i : Int = 0;
                     for (i in 0...numChildren){
                         separateChapterAndLevelNodes(outChapterNodes, outLevelNodesWithoutChapter, children[i]);
                     }
@@ -121,13 +122,13 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
         {
             if (Std.is(levelNode, WordProblemLevelLeaf)) 
             {
-                outLevelNodes.push(levelNode);
+                outLevelNodes.push(try cast(levelNode, WordProblemLevelLeaf) catch (e : Dynamic) null);
             }
             else if (Std.is(levelNode, ICgsLevelPack)) 
             {
                 var children : Array<ICgsLevelNode> = (try cast(levelNode, ICgsLevelPack) catch(e:Dynamic) null).nodes;
                 var numChildren : Int = children.length;
-                var i : Int;
+                var i : Int = 0;
                 for (i in 0...numChildren){
                     getLevelNodes(outLevelNodes, children[i]);
                 }
@@ -286,7 +287,7 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
         
         // Creates all the managers and factories
         // DO NOT call super as it does not set the properties we want in the right order
-        m_lockFactory = new WordProblemLockFactory(this);
+        m_lockFactory = try cast(new WordProblemLockFactory(try cast(this, ICgsLevelManager) catch (e : Dynamic) null), ICgsLockFactory) catch (e : Dynamic) null;
         m_resourceManager = resourceManager;
         m_startLevelCallback = startCallback;
         m_noNextLevelCallback = noLevelCallback;
@@ -302,7 +303,7 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
         m_outLevelBuffer = new Array<WordProblemLevelLeaf>();
         
         // For this session, the random generator reuses the same seed
-        m_randomGenerator = PM_PRNG.createGen(null);
+        m_randomGenerator = PMPRNG.createGen(null);
         m_randomGenerator.seed = 42;
         this.doCheckLocks = doCheckLocks;
     }
@@ -347,12 +348,17 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
         // MUST recreate the factory so the new cache is used
         else if (m_userManager.userList.length > 0) 
         {
-            m_cache = m_userManager.userList[0];
+            m_cache = try cast(m_userManager.userList[0], ICgsUserCache) catch (e : Dynamic) null;
         }
         
         
         
-        m_levelFactory = new WordProblemLevelFactory(this, m_lockFactory, m_userManager, cache);
+        m_levelFactory = try cast(new WordProblemLevelFactory(
+				try cast(this, ICgsLevelManager) catch (e : Dynamic) null,
+				m_lockFactory,
+				m_userManager,
+				cache
+			), ICgsLevelFactory) catch (e : Dynamic) null;
         
         if (m_rootLevelProgression != null) 
         {
@@ -364,6 +370,7 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
         // IMPORTANT NOTE: The current node and its parent form the nodes the player is in.
         
         // Get all save data related to the state the player is in
+		var localConditionSavedData : Dynamic = null;
         if (m_cache.saveExists(CURRENT_LEVEL_STATE_SAVE_KEY)) 
         {
             var clsSaveBlob : Dynamic = m_cache.getSave(CURRENT_LEVEL_STATE_SAVE_KEY);
@@ -380,7 +387,7 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
                 // pick an equivalent node
                 if (WordProblemCgsLevelManager.REMOVED_LEVEL_ID_TO_BUCKET.exists(nextNodeName)) 
                 {
-                    var candidateBucketName : String = WordProblemCgsLevelManager.REMOVED_LEVEL_ID_TO_BUCKET[nextNodeName];
+					var candidateBucketName : String = Reflect.field(WordProblemCgsLevelManager.REMOVED_LEVEL_ID_TO_BUCKET, nextNodeName);
                     m_savedNextLevelLeaf = this.getNextLeafFromSelectionPolicy(this.getNodeByName(candidateBucketName), null);
                 }
                 else 
@@ -391,18 +398,14 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
             
             if (clsSaveBlob.exists(CURRENT_LEVEL_CONDITIONS_SAVE_KEY)) 
             {
-                var localConditionSavedData : Dynamic = Reflect.field(clsSaveBlob, CURRENT_LEVEL_CONDITIONS_SAVE_KEY);
+                localConditionSavedData = Reflect.field(clsSaveBlob, CURRENT_LEVEL_CONDITIONS_SAVE_KEY);
             }
-        }  // If starting point not specified we pick the very first level in the list.    // This is useful the very first time the player enters and they have no saved data where they were.    // point in the graph.    // The progression object has an optional extra property to indicate the exact node that acts as the starting  
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        }
+		
+		// The progression object has an optional extra property to indicate the exact node that acts as the starting  
+		// point in the graph.
+		// This is useful the very first time the player enters and they have no saved data where they were.
+        // If starting point not specified we pick the very first level in the list.
         if (m_savedNextLevelLeaf == null) 
         {
             // Restriction: start node name must be a leaf node
@@ -413,10 +416,9 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
                 {
                     m_savedNextLevelLeaf = startingNode;
                 }
-            }  // No valid start means we pick first level in list  
-            
-            
-            
+            }
+			
+			// No valid start means we pick first level in list  
             if (m_savedNextLevelLeaf == null) 
             {
                 m_savedNextLevelLeaf = try cast(this.currentLevelProgression.firstLeaf, WordProblemLevelLeaf) catch(e:Dynamic) null;
@@ -486,45 +488,45 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
         for (genreLevelPack in genreLevelPacks)
         {
             WordProblemCgsLevelManager.separateChapterAndLevelNodes(chapterNodesInGenre, levelNodesWithoutChapterInGenre, genreLevelPack);
-            var i : Int;
+            var i : Int = 0;
             var numChapterNodes : Int = chapterNodesInGenre.length;
-            var chapterLevelPack : ChapterLevelPack;
+            var chapterLevelPack : ChapterLevelPack = null;
             for (i in 0...numChapterNodes){
                 chapterLevelPack = chapterNodesInGenre[i];
                 chapterLevelPack.index = i;
                 
                 // Set parent genre and chapter for levels in a chapter
                 WordProblemCgsLevelManager.getLevelNodes(levelNodesInChapter, chapterLevelPack);
-                var j : Int;
-                var levelNodeInChapter : WordProblemLevelLeaf;
+                var j : Int = 0;
+                var levelNodeInChapter : WordProblemLevelLeaf = null;
                 var numLevelNodesInChapter : Int = levelNodesInChapter.length;
                 for (j in 0...numLevelNodesInChapter){
                     levelNodeInChapter = levelNodesInChapter[j];
                     levelNodeInChapter.index = j;
                     levelNodeInChapter.parentChapterLevelPack = chapterLevelPack;
                     levelNodeInChapter.parentGenreLevelPack = genreLevelPack;
-                }  // Clear buffer for next chapter  
-                
-                
-                
-                as3hx.Compat.setArrayLength(levelNodesInChapter, 0);
-            }  // Set parent genre and index for levels without a chapter  
-            
-            
-            
+                }  
+				
+				// Clear buffer for next chapter  
+                levelNodesInChapter = new Array<WordProblemLevelLeaf>();
+            }  
+			
+			// Set parent genre and index for levels without a chapter  
             var numLevelNodesWithoutChapter : Int = levelNodesWithoutChapterInGenre.length;
-            var levelLeafWithoutChapter : WordProblemLevelLeaf;
+            var levelLeafWithoutChapter : WordProblemLevelLeaf = null;
             for (i in 0...numLevelNodesWithoutChapter){
                 levelLeafWithoutChapter = try cast(levelNodesWithoutChapterInGenre[i], WordProblemLevelLeaf) catch(e:Dynamic) null;
                 levelLeafWithoutChapter.index = i;
                 levelLeafWithoutChapter.parentGenreLevelPack = genreLevelPack;
-            }  // Clear buffers for next genre  
-            
-            
-            
-            as3hx.Compat.setArrayLength(chapterNodesInGenre, 0);
-            as3hx.Compat.setArrayLength(levelNodesWithoutChapterInGenre, 0);
-        }  // Fire event so other parts of the game can process this information    // At this point, all the nodes should be synchronized with the save data.  
+            }  
+			
+			// Clear buffers for next genre  
+            chapterNodesInGenre = new Array<ChapterLevelPack>();
+			levelNodesWithoutChapterInGenre = new Array<WordProblemLevelLeaf>();
+        }
+		
+		// At this point, all the nodes should be synchronized with the save data.  
+		// Fire event so other parts of the game can process this information
     }
     
     /**
@@ -573,8 +575,36 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
                             isProblemCreate : wordProblemLeaf.getIsProblemCreate(),
                             previousCompletionStatus : wordProblemLeaf.completionValue,
                             tags : wordProblemLeaf.getTags(),
-
                         };
+				
+				function getInheritedProperty(checkPropertyIsInherited : Function, startingNode : ICgsStatusNode) : Void
+                {
+                    var trackingNode : ICgsStatusNode = wordProblemLeaf;
+                    var continueSearch : Bool = true;
+                    while (trackingNode != null && Std.is(trackingNode, WordProblemLevelNode) && continueSearch)
+                    {
+                        var trackingNodeTemp : WordProblemLevelNode = try cast(trackingNode, WordProblemLevelNode) catch(e:Dynamic) null;
+                        if (checkPropertyIsInherited(trackingNodeTemp)) 
+                        {
+                            continueSearch = false;
+                        }
+                        else 
+                        {
+                            if (Std.is(trackingNode, WordProblemLevelLeaf)) 
+                            {
+                                trackingNode = (try cast(trackingNode, WordProblemLevelLeaf) catch(e:Dynamic) null).getParent();
+                            }
+                            else if (Std.is(trackingNode, WordProblemLevelPack)) 
+                            {
+                                trackingNode = (try cast(trackingNode, WordProblemLevelPack) catch(e:Dynamic) null).getParent();
+                            }
+                            else 
+                            {
+                                break;
+                            }
+                        }
+                    }
+                };
                 
                 // If a node does not explicitly define rules to override check if parent node
                 // have this information. Inherit the entire rule set from the closest parent
@@ -612,43 +642,14 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
                             }
                             return isInherited;
                         }, wordProblemLeaf);
-                
-                function getInheritedProperty(checkPropertyIsInherited : Function, startingNode : ICgsStatusNode) : Void
-                {
-                    var trackingNode : ICgsStatusNode = wordProblemLeaf;
-                    var continueSearch : Bool = true;
-                    while (trackingNode != null && Std.is(trackingNode, WordProblemLevelNode) && continueSearch)
-                    {
-                        var trackingNodeTemp : WordProblemLevelNode = try cast(trackingNode, WordProblemLevelNode) catch(e:Dynamic) null;
-                        if (checkPropertyIsInherited(trackingNodeTemp)) 
-                        {
-                            continueSearch = false;
-                        }
-                        else 
-                        {
-                            if (Std.is(trackingNode, WordProblemLevelLeaf)) 
-                            {
-                                trackingNode = (try cast(trackingNode, WordProblemLevelLeaf) catch(e:Dynamic) null).getParent();
-                            }
-                            else if (Std.is(trackingNode, WordProblemLevelPack)) 
-                            {
-                                trackingNode = (try cast(trackingNode, WordProblemLevelPack) catch(e:Dynamic) null).getParent();
-                            }
-                            else 
-                            {
-                                break;
-                            }
-                        }
-                    }
-                };
-                
+				
                 var nodesContainingCurrentLevel : Array<ICgsLevelNode> = getNodesContainingCurrentLevel(wordProblemLeaf.nodeName);
                 var numNodesContainingThisLevel : Int = nodesContainingCurrentLevel.length;
                 
                 // Check if there is an objective class that this node, we stop at the lowest level
                 // containing objectives (means objectives are not inherited right now)
                 for (i in 0...numNodesContainingThisLevel){
-                    nodeContainingLevel = nodesContainingCurrentLevel[i];
+                    var nodeContainingLevel = nodesContainingCurrentLevel[i];
                     
                     var objectiveClassName : String = (try cast(nodeContainingLevel, WordProblemLevelNode) catch(e:Dynamic) null).getObjectiveClass();
                     if (objectiveClassName != null) 
@@ -683,7 +684,7 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
                 // Iterate through the start of the edge list and check for ones where the starting
                 // node is in one we are currently in.
                 // If a node in the path contains outgoing edges, update all the condition objects
-                var i : Int;
+                var i : Int = 0;
                 var numEdges : Int = m_nodeEdges.length;
                 var closestAncestorWithASpecifiedEdge : ICgsLevelNode = null;
                 for (i in 0...numEdges){
@@ -692,7 +693,7 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
                     var startNodeIdForEdge : String = edgeObject.startId;
                     
                     // Check if an edges matches one of the set the current level node is contained within
-                    var j : Int;
+                    var j : Int = 0;
                     for (j in 0...numNodesContainingThisLevel){
                         // If an edge is outgoing from a set, we test whether we should take this edge
                         var nodeContainingLevel : ICgsLevelNode = nodesContainingCurrentLevel[j];
@@ -707,7 +708,7 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
                                 if (edgeObject.exists("conditions")) 
                                 {
                                     var conditionsData : Array<Dynamic> = edgeObject.conditions;
-                                    var k : Int;
+                                    var k : Int = 0;
                                     for (k in 0...conditionsData.length){
                                         conditionsList.push(createCondition(conditionsData[k]));
                                     }
@@ -743,11 +744,6 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
                     {
                         edgeIdsToDelete.push(startingNodeIdForEdge);
                     }
-                }
-                
-                for (edgeIdToDelete in edgeIdsToDelete)
-                {
-                    ;
                 }
             }
         }
@@ -826,7 +822,7 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
         // The next level may depend on the player's performance in the current level
         var currentLevelLeaf : WordProblemLevelLeaf = try cast(this.currentLevelProgression.getNodeByName(id), WordProblemLevelLeaf) catch(e:Dynamic) null;
         var currentLevelLeafSaveData : Dynamic = { };
-        var currentCompletionStatus : Int = currentLevelLeaf.completionValue;
+        var currentCompletionStatus : Int = Std.int(currentLevelLeaf.completionValue);
         var newCompletionStatus : Int = LevelNodeCompletionValues.UNKNOWN;
         
         // Do not mark as complete if they skipped, solved using a cheat hint, or quit in the middle
@@ -843,25 +839,22 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
         
         if (currentCompletionStatus < newCompletionStatus) 
         {
-            currentLevelLeafSaveData[LevelNodeSaveKeys.COMPLETION_VALUE] = newCompletionStatus;
-        }  // Objectives+Score progress should only be updated if the player completed the level  
-        
-        
-        
+			Reflect.setField(currentLevelLeafSaveData, LevelNodeSaveKeys.COMPLETION_VALUE, newCompletionStatus);
+        }
+		
+		// Objectives+Score progress should only be updated if the player completed the level  
         if (newCompletionStatus == LevelNodeCompletionValues.PLAYED_SUCCESS) 
         {
-            currentLevelLeafSaveData[LevelNodeSaveKeys.HIGH_SCORE] = data.gradeFromSummaryObjectives;
+			Reflect.setField(currentLevelLeafSaveData, LevelNodeSaveKeys.HIGH_SCORE, data.gradeFromSummaryObjectives);
         }
         
         if (currentLevelLeaf.getSavePerformanceStateAcrossInstances()) 
         {
-            currentLevelLeafSaveData[LevelNodeSaveKeys.PERFORMANCE_STATE] = data.serialize();
-        }  // Only need to do this if the completion status has increased or a better high score was achieved.    // Update the save data progress of the current level  
-        
-        
-        
-        
-        
+			Reflect.setField(currentLevelLeafSaveData, LevelNodeSaveKeys.PERFORMANCE_STATE, data.serialize());
+        }
+		
+		// Update the save data progress of the current level  		
+		// Only need to do this if the completion status has increased or a better high score was achieved.
         currentLevelLeaf.updateNode(currentLevelLeaf.nodeLabel, currentLevelLeafSaveData);
         
         // Determine what the next level to play should be.
@@ -882,7 +875,7 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
         // Iterate through the start of the edge list and check for ones where the starting
         // node is in one we are currently in.
         // If a node in the path contains outgoing edges, update all the condition objects
-        var i : Int;
+        var i : Int = 0;
         var numEdges : Int = m_nodeEdges.length;
         var closestAncestorWithASpecifiedEdge : ICgsLevelNode = null;
         for (i in 0...numEdges){
@@ -891,8 +884,8 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
             
             // Check if an edges matches one of the set the current level node is contained within
             var numNodesToCheckEdges : Int = nodesContainingCurrentLevel.length;
-            var j : Int;
-            var k : Int;
+            var j : Int = 0;
+            var k : Int = 0;
             for (j in 0...numNodesToCheckEdges){
                 // If an edge is outgoing from a set, we test whether we should take this edge
                 var nodeContainingLevel : ICgsLevelNode = nodesContainingCurrentLevel[j];
@@ -936,9 +929,10 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
             // level, which can be interpreted as kick the player back out to the level select the next time
             // the 'next' level is requested.
             var noNextLevelExplicitlyRequested : Bool = edgeSelected.endId == "";
+			var nodeAtEnd : ICgsLevelNode = null;
             if (!noNextLevelExplicitlyRequested) 
             {
-                var nodeAtEnd : ICgsLevelNode = this.currentLevelProgression.getNodeByName(edgeSelected.endId);
+                nodeAtEnd = this.currentLevelProgression.getNodeByName(edgeSelected.endId);
                 if (nodeAtEnd != null && Std.is(nodeAtEnd, WordProblemLevelLeaf)) 
                 {
                     nextLevelNode = try cast(nodeAtEnd, WordProblemLevelLeaf) catch(e:Dynamic) null;
@@ -986,7 +980,7 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
                     }
                     else if (actionType == LevelNodeActions.SET_NODE_AVAILABLE) 
                     {
-                        nodeName = action.name;
+                        var nodeName = action.name;
                         updateNodeWithNewCompletionValue(this.getNodeByName(nodeName), LevelNodeCompletionValues.UNPLAYED);
                     }
                     // Action saying the app should send a message that mastery was achieved
@@ -1015,25 +1009,22 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
                     {
                         // For a particular leaf node or the children leaves, reset all saved performance data
                         // back to default starting values
-                        nodeName = action.name;
+                        var nodeName = action.name;
                         var outLevelLeafNodes : Array<WordProblemLevelLeaf> = new Array<WordProblemLevelLeaf>();
                         WordProblemCgsLevelManager.getLevelNodes(outLevelLeafNodes, this.getNodeByName(nodeName));
                         for (outLevelLeaf in outLevelLeafNodes)
                         {
                             var resetData : Dynamic = { };
-                            resetData[LevelNodeSaveKeys.PERFORMANCE_STATE] = null;
+							Reflect.setField(resetData, LevelNodeSaveKeys.PERFORMANCE_STATE, null);
                             outLevelLeaf.updateNode(outLevelLeaf.nodeLabel, resetData);
                         }
                     }
                 }
-            }  // DO NOT do this if an edge explicitly marked an empty or null node as the end    // we need to decide which node in the set to start, use the selection policy on that set    // If an action did not end up picking the next level and the end node is a level set  
-            
-            
-            
-            
-            
-            
-            
+            }
+			
+			// If an action did not end up picking the next level and the end node is a level set  
+			// we need to decide which node in the set to start, use the selection policy on that set
+            // DO NOT do this if an edge explicitly marked an empty or null node as the end
             if (!noNextLevelExplicitlyRequested && nextLevelNode == null && Std.is(nodeAtEnd, WordProblemLevelPack)) 
             {
                 nextLevelNode = this.getNextLeafFromSelectionPolicy(nodeAtEnd, (try cast(nodeAtEnd, WordProblemLevelPack) catch(e:Dynamic) null).getSelectionPolicy());
@@ -1088,7 +1079,7 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
             {
                 if (currentLevelLeaf.parentGenreLevelPack != null) 
                 {
-                    as3hx.Compat.setArrayLength(m_outLevelBuffer, 0);
+					m_outLevelBuffer = new Array<WordProblemLevelLeaf>();
                     WordProblemCgsLevelManager.getLevelNodes(m_outLevelBuffer, currentLevelLeaf.parentGenreLevelPack);
                     if (m_outLevelBuffer[m_outLevelBuffer.length - 1] == currentLevelLeaf) 
                     {
@@ -1096,12 +1087,6 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
                     }
                 }
             }
-            
-            
-            
-            
-            
-            
             
             if (data.endType == LevelEndTypes.QUIT_BEFORE_SOLVING) 
             {
@@ -1120,7 +1105,7 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
             var edgeIdsInTheNexLevel : Array<String> = new Array<String>();
             if (nextLevelNode != null) 
             {
-                as3hx.Compat.setArrayLength(nodesContainingCurrentLevel, 0);
+				nodesContainingCurrentLevel = new Array<ICgsLevelNode>();
                 nodesContainingCurrentLevel.push(nextLevelNode);
                 parentLevelSet = nextLevelNode.getParent();
                 
@@ -1136,8 +1121,8 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
                 
                 
                 for (i in 0...m_nodeEdges.length){
-                    edgeObject = m_nodeEdges[i];
-                    startNodeIdForEdge = edgeObject.startId;
+                    var edgeObject = m_nodeEdges[i];
+                    var startNodeIdForEdge = edgeObject.startId;
                     for (j in 0...nodesContainingCurrentLevel.length){
                         if (startNodeIdForEdge == nodesContainingCurrentLevel[j].nodeName) 
                         {
@@ -1158,11 +1143,10 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
                                         if (saveForEdge == null) 
                                         {
                                             saveForEdge = { };
-                                        }  // Index for condition maps to serialized version of that condition  
-                                        
-                                        
-                                        
-                                        saveForEdge[Std.string(k)] = saveForCondition;
+                                        }
+										
+										// Index for condition maps to serialized version of that condition  
+                                        saveForEdge[k] = saveForCondition;
                                     }
                                 }
                                 
@@ -1173,10 +1157,9 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
                                     // Edge id maps to collection of condition indices to serialized condition objects
                                     Reflect.setField(saveDataForAllEdges, edgeId, saveForEdge);
                                 }
-                            }  // Assume nodes have unique names  
-                            
-                            
-                            
+                            }
+							
+							// Assume nodes have unique names  
                             break;
                         }
                     }
@@ -1196,36 +1179,17 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
             m_cache.setSave(CURRENT_LEVEL_STATE_SAVE_KEY, newCurrentLevelStateSaveData, false);
             
             m_cache.flush();
-        }  // We need to identify which of these edges we no longer need and dispose of them    // The edge id to condition map no longer needs conditions bound to nodes we are no longer in.  
-        
-        
-        
-        
-        
-        if (edgeIdsInTheNexLevel != null) 
-        {
-            for (edgeId in Reflect.fields(m_edgeIdToConditionsList))
-            {
-                if (edgeIdsInTheNexLevel.indexOf(edgeId) < 0) 
-                {
-                    ;
-                }
-            }
-        }  // A null next level means there is no logical next level that could be determined    // from outside this interface.    // The next level should be saved until an explicit call to go to the next level is made  
-        
-        
-        
-        
-        
-        
-        
-        m_savedNextLevelLeaf = nextLevelNode;
+        }  
+		
+		// The edge id to condition map no longer needs conditions bound to nodes we are no longer in.  
+		// We need to identify which of these edges we no longer need and dispose of them
+		m_savedNextLevelLeaf = nextLevelNode;
     }
     
     private function updateNodeWithNewCompletionValue(node : ICgsLevelNode, newCompletionValue : Int) : Void
     {
         var newNextLevelStatus : Dynamic = { };
-        newNextLevelStatus[LevelNodeSaveKeys.COMPLETION_VALUE] = newCompletionValue;
+		Reflect.setField(newNextLevelStatus, LevelNodeSaveKeys.COMPLETION_VALUE, newCompletionValue);
         node.updateNode(node.nodeLabel, newNextLevelStatus);
     }
     
@@ -1244,8 +1208,8 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
             if (selectionPolicy == LevelNodeActions.PICK_RANDOM_UNCOMPLETED_LEVEL) 
             {
                 var candidateNodes : Array<ICgsLevelNode> = new Array<ICgsLevelNode>();
-                var i : Int;
-                var childNode : ICgsLevelNode;
+                var i : Int = 0;
+                var childNode : ICgsLevelNode = null;
                 for (i in 0...childNodes.length){
                     childNode = childNodes[i];
                     if (!childNode.isComplete) 
@@ -1268,7 +1232,7 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
             else 
             {
                 for (i in 0...childNodes.length){
-                    childNode = childNodes[i];
+                    var childNode = childNodes[i];
                     if (!childNode.isComplete && !childNode.isLocked) 
                     {
                         selectedChild = childNode;
@@ -1312,8 +1276,8 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
         else 
         {
             var children : Array<ICgsLevelNode> = root.nodes;
-            var i : Int;
-            var child : ICgsLevelNode;
+            var i : Int = 0;
+            var child : ICgsLevelNode = null;
             for (i in 0...children.length){
                 child = children[i];
                 
@@ -1370,7 +1334,7 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
         if (type == KOutOfNProficientCondition.TYPE) 
         {
             var kOfNCondition : KOutOfNProficientCondition = try cast(condition, KOutOfNProficientCondition) catch(e:Dynamic) null;
-            var objectives : Array<BaseObjective> = m_objectiveClassIdToObjectives[kOfNCondition.getObjectiveClass()];
+            var objectives : Array<BaseObjective> = Reflect.field(m_objectiveClassIdToObjectives, kOfNCondition.getObjectiveClass());
             kOfNCondition.update(currentLevelLeaf, data, objectives);
         }
         else if (type == NLevelsCompletedCondition.TYPE) 
@@ -1393,7 +1357,7 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
     private function edgeConditionsPassed(conditions : Array<ICondition>) : Bool
     {
         var allConditionsPassed : Bool = true;
-        var i : Int;
+        var i : Int = 0;
         var numConditions : Int = conditions.length;
         for (i in 0...numConditions){
             var condition : ICondition = conditions[i];
@@ -1455,7 +1419,7 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
      */
     private function get_achievementManager() : ICgsAchievementManager
     {
-        return m_userManager.userList[0];
+        return try cast(m_userManager.userList[0], ICgsAchievementManager) catch (e : Dynamic) null;
     }
     
     /**
@@ -1702,8 +1666,8 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
      */
     public function markLevelLeafAsCompletionValue(nodeLabel : Int, value : Float) : Void
     {
-        var data : Dynamic = new Dynamic();
-        data[LevelNodeSaveKeys.COMPLETION_VALUE] = value;
+        var data : Dynamic = { };
+		Reflect.setField(data, LevelNodeSaveKeys.COMPLETION_VALUE, value);
         m_rootLevelProgression.updateNode(nodeLabel, data);
     }
     
@@ -1789,7 +1753,7 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
      */
     public function getNextLevel(presentLevel : ICgsLevelLeaf = null) : ICgsLevelLeaf
     {
-        var result : ICgsLevelLeaf;
+        var result : ICgsLevelLeaf = null;
         if (presentLevel == null) 
         {
             result = m_rootLevelProgression.firstLeaf;
@@ -1816,7 +1780,7 @@ class WordProblemCgsLevelManager implements ICgsLevelManager
      */
     public function getPrevLevel(presentLevel : ICgsLevelLeaf = null) : ICgsLevelLeaf
     {
-        var result : ICgsLevelLeaf;
+        var result : ICgsLevelLeaf = null;
         if (presentLevel == null) 
         {
             result = m_rootLevelProgression.firstLeaf;

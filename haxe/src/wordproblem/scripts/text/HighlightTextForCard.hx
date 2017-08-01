@@ -100,7 +100,7 @@ class HighlightTextForCard extends ScriptNode
         var viewsToShimmer : Array<DocumentView> = new Array<DocumentView>();
         var expressionsInText : Array<Component> = m_textAreaWidget.componentManager.getComponentListForType(ExpressionComponent.TYPE_ID);
         var numComponents : Int = expressionsInText.length;
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...numComponents){
             var expressionInText : ExpressionComponent = try cast(expressionsInText[i], ExpressionComponent) catch(e:Dynamic) null;
             
@@ -110,7 +110,7 @@ class HighlightTextForCard extends ScriptNode
                 
                 var views : Array<DocumentView> = m_textAreaWidget.getDocumentViewsAtPageIndexById(expressionInText.entityId);
                 var numViews : Int = views.length;
-                var j : Int;
+                var j : Int = 0;
                 for (j in 0...numViews){
                     var view : DocumentView = views[j];
                     
@@ -159,6 +159,6 @@ class HighlightTextForCard extends ScriptNode
         {
             m_textAreaWidget.componentManager.removeComponentFromEntity(blinkId, BlinkComponent.TYPE_ID);
         }
-        as3hx.Compat.setArrayLength(m_currentlyBlinkingTextAreaIds, 0);
+		m_currentlyBlinkingTextAreaIds = new Array<String>();
     }
 }

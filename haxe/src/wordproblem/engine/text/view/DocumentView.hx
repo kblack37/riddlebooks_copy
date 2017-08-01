@@ -236,8 +236,8 @@ class DocumentView extends Sprite
             }
             else 
             {
-                var i : Int;
-                var childView : DocumentView;
+                var i : Int = 0;
+                var childView : DocumentView = null;
                 for (i in 0...numChildViews){
                     childView = childViews[i];
                     furthestView = _getFurthestDocumentView(childView, furthestView, inOutFurthestRectangle);
@@ -306,7 +306,7 @@ class DocumentView extends Sprite
      */
     private function setTextDecoration(textDecoration : String) : Void
     {
-        var i : Int;
+        var i : Int = 0;
         var numChildViews : Int = childViews.length;
         for (i in 0...numChildViews){
             childViews[i].setTextDecoration(textDecoration);

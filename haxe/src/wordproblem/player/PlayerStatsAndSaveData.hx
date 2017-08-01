@@ -1,6 +1,5 @@
 package wordproblem.player;
 
-
 import cgs.cache.ICgsUserCache;
 
 /**

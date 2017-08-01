@@ -154,7 +154,7 @@ class WildCardNode extends ExpressionNode
 		// all information that we need to later parse back into a node.
 		
 		// The $ character in the type indicates its a regex type wildcard
-		var contents:String;
+		var contents:String = null;
 		var prefixCharacter:String = wildCardType.charAt(0);
 		if (prefixCharacter == "$")
 		{

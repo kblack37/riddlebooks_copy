@@ -73,8 +73,8 @@ class LoadingSpinner extends Sprite
     private function draw() : Void
     {
         var i : Int = m_tickSlices;
-        var degrees : Int = 360 / m_tickSlices;
-        while (i--)
+        var degrees : Int = Std.int(360 / m_tickSlices);
+        while (i >= 0)
         {
             var slice : Shape = getSlice();
             slice.alpha = Math.max(0.2, 1 - (0.1 * i));
@@ -83,6 +83,7 @@ class LoadingSpinner extends Sprite
             slice.x = Math.sin(radianAngle) * m_radius;
             slice.y = Math.cos(radianAngle) * m_radius;
             addChild(slice);
+			i--;
         }
     }
     

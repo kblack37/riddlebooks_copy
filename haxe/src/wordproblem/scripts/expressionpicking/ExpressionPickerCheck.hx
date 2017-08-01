@@ -95,7 +95,7 @@ class ExpressionPickerCheck extends BaseGameScript
         as3hx.Compat.setArrayLength(m_pickerIds, 0);
         as3hx.Compat.setArrayLength(m_expressions, 0);
         
-        var i : Int;
+        var i : Int = 0;
         var numPickers : Int = pickerIds.length;
         for (i in 0...numPickers){
             m_pickerIds.push(pickerIds[i]);
@@ -109,7 +109,7 @@ class ExpressionPickerCheck extends BaseGameScript
         {
             m_allExpressionsSatisfied = true;
             var outSelectedExpressionContainers : Array<ExpressionContainer> = new Array<ExpressionContainer>();
-            var i : Int;
+            var i : Int = 0;
             var numPickerIds : Int = m_pickerIds.length;
             for (i in 0...numPickerIds){
                 var expressionPickerWidget : ExpressionPickerWidget = try cast(m_gameEngine.getUiEntity(m_pickerIds[i]), ExpressionPickerWidget) catch(e:Dynamic) null;
@@ -167,7 +167,7 @@ class ExpressionPickerCheck extends BaseGameScript
         if (m_numAnimationsPlaying == 0) 
         {
             // Dispatch event depending on whether the picked answers were correct or incorrrect
-            var loggingDetails : Dynamic;
+            var loggingDetails : Dynamic = null;
             if (m_allExpressionsSatisfied) 
             {
                 m_successCallback();
@@ -195,7 +195,7 @@ class ExpressionPickerCheck extends BaseGameScript
                 m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.EQUALS_CLICKED_EVENT, false, loggingDetails);
             }
             
-            var i : Int;
+            var i : Int = 0;
             var numPickerIds : Int = m_pickerIds.length;
             for (i in 0...numPickerIds){
                 var expressionPickerWidget : ExpressionPickerWidget = try cast(m_gameEngine.getUiEntity(m_pickerIds[i]), ExpressionPickerWidget) catch(e:Dynamic) null;

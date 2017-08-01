@@ -1,11 +1,12 @@
 package wordproblem.engine;
 
+import dragonbox.common.math.vectorspace.RealsVectorSpace;
+import starling.display.Image;
 import wordproblem.engine.IGameEngine;
 
 import flash.geom.Point;
 import flash.geom.Rectangle;
 import flash.text.TextFormat;
-import flash.utils.Dictionary;
 
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.ExpressionUtil;
@@ -15,12 +16,8 @@ import dragonbox.common.math.vectorspace.IVectorSpace;
 import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
 
-import feathers.controls.Button;
-import feathers.display.Scale3Image;
-import feathers.display.Scale9Image;
-import feathers.textures.Scale3Textures;
-
 import starling.animation.Juggler;
+import starling.display.Button;
 import starling.display.DisplayObject;
 import starling.display.DisplayObjectContainer;
 import starling.display.Sprite;
@@ -230,8 +227,8 @@ class GameEngine extends Sprite implements IGameEngine
      */
     public function getTermAreaContent(ids : Array<String>, outNodes : Array<ExpressionNode>) : Bool
     {
-        var i : Int;
-        var id : String;
+        var i : Int = 0;
+        var id : String = null;
         
         if (ids.length > 0) 
         {
@@ -261,12 +258,12 @@ class GameEngine extends Sprite implements IGameEngine
                     );
             
             for (i in 0...renderComponents.length){
-                component = try cast(renderComponents[i], RenderableComponent) catch(e:Dynamic) null;
+                var component = try cast(renderComponents[i], RenderableComponent) catch(e:Dynamic) null;
                 if (Std.is(component.view, TermAreaWidget)) 
                 {
                     ids.push(component.entityId);
                     
-                    termAreaWidget = try cast(component.view, TermAreaWidget) catch(e:Dynamic) null;
+                    var termAreaWidget = try cast(component.view, TermAreaWidget) catch(e:Dynamic) null;
                     outNodes.push(((termAreaWidget.getWidgetRoot() != null)) ? 
                             termAreaWidget.getWidgetRoot().getNode() : null);
                 }
@@ -311,8 +308,8 @@ class GameEngine extends Sprite implements IGameEngine
         }
         var renderComponents : Array<Component> = m_uiComponentManager.getComponentListForType(RenderableComponent.TYPE_ID);
         var numComponents : Int = renderComponents.length;
-        var i : Int;
-        var renderComponent : RenderableComponent;
+        var i : Int = 0;
+        var renderComponent : RenderableComponent = null;
         for (i in 0...numComponents){
             renderComponent = try cast(renderComponents[i], RenderableComponent) catch(e:Dynamic) null;
             if (Std.is(renderComponent.view, classDefinition)) 
@@ -329,8 +326,8 @@ class GameEngine extends Sprite implements IGameEngine
         var renderComponents : Array<Component> = m_uiComponentManager.getComponentListForType(RenderableComponent.TYPE_ID);
         var numComponents : Int = renderComponents.length;
         var matchedEntityId : String = null;
-        var i : Int;
-        var renderComponent : RenderableComponent;
+        var i : Int = 0;
+        var renderComponent : RenderableComponent = null;
         for (i in 0...numComponents){
             renderComponent = try cast(renderComponents[i], RenderableComponent) catch(e:Dynamic) null;
             if (renderComponent.view == displayObject) 
@@ -351,9 +348,9 @@ class GameEngine extends Sprite implements IGameEngine
     
     public function setDeckAreaContent(expressions : Array<String>, hidden : Array<Bool>, attemptMergeSymbols : Bool) : Bool
     {
-        var widget : BaseTermWidget;
-        var expression : String;
-        var expressionComponent : ExpressionComponent;
+        var widget : BaseTermWidget = null;
+        var expression : String = null;
+        var expressionComponent : ExpressionComponent = null;
         var entitiesToRemove : Array<DisplayObject> = new Array<DisplayObject>();
         
         // Compare the new set of symbols requested with the ones already on the board
@@ -408,8 +405,8 @@ class GameEngine extends Sprite implements IGameEngine
         else 
         {
             // Remove all existing expressions
-            expressionComponents = deckComponentManager.getComponentListForType(ExpressionComponent.TYPE_ID);
-            numExpressions = expressionComponents.length;
+            var expressionComponents = deckComponentManager.getComponentListForType(ExpressionComponent.TYPE_ID);
+            var numExpressions = expressionComponents.length;
             for (i in 0...numExpressions){
                 expressionComponent = try cast(expressionComponents[i], ExpressionComponent) catch(e:Dynamic) null;
                 idsToRemove.push(expressionComponent.entityId);
@@ -426,16 +423,16 @@ class GameEngine extends Sprite implements IGameEngine
         
         
         
-        var node : ExpressionNode;
-        var renderComponent : RenderableComponent;
+        var node : ExpressionNode = null;
+        var renderComponent : RenderableComponent = null;
         var entitiesToAdd : Array<DisplayObject> = new Array<DisplayObject>();
-        var entityIdToAdd : String;
-        var i : Int;
+        var entityIdToAdd : String = null;
+        var i : Int = 0;
         for (i in 0...expressions.length){
             expression = expressions[i];
             entityIdToAdd = expression;
             
-            node = m_compiler.compile(expression).head;
+            node = m_compiler.compile(expression);
             var isInitiallyVisible : Bool = ((hidden != null)) ? !hidden[i] : true;
             expressionComponent = new ExpressionComponent(entityIdToAdd, expression, node, isInitiallyVisible);
             deckComponentManager.addComponentToEntity(expressionComponent);
@@ -467,7 +464,7 @@ class GameEngine extends Sprite implements IGameEngine
         var deckAreas : Array<DisplayObject> = this.getUiEntitiesByClass(DeckWidget);
         for (deckArea in deckAreas)
         {
-            deckArea.batchAddRemoveExpressions(entitiesToAdd, entitiesToRemove);
+            (try cast(deckArea, DeckWidget) catch (e : Dynamic) null).batchAddRemoveExpressions(entitiesToAdd, entitiesToRemove);
         }
         
         return true;
@@ -519,8 +516,8 @@ class GameEngine extends Sprite implements IGameEngine
         var termAreaIdList : Array<String> = termAreaIds.split(" ");
         
         var contentRoot : ExpressionNode = ((content == null || content == "")) ? 
-        null : m_compiler.compile(content).head;
-        var vectorSpace : IVectorSpace = m_compiler.getVectorSpace();
+        null : m_compiler.compile(content);
+        var vectorSpace : RealsVectorSpace = m_compiler.getVectorSpace();
         
         // Make sure every term area defined gets an expression root
         var roots : Array<ExpressionNode> = new Array<ExpressionNode>();
@@ -539,7 +536,7 @@ class GameEngine extends Sprite implements IGameEngine
         
         roots.push(rootTracker);
         
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...termAreaIdList.length){
             var termAreaWidget : TermAreaWidget = try cast((try cast(m_uiComponentManager.getComponentFromEntityIdAndType(
                     termAreaIdList[i],
@@ -562,7 +559,7 @@ class GameEngine extends Sprite implements IGameEngine
         var termAreas : Array<DisplayObject> = this.getUiEntitiesByClass(TermAreaWidget);
         if (termAreas.length == 2) 
         {
-            var vectorSpace : IVectorSpace = m_compiler.getVectorSpace();
+            var vectorSpace : RealsVectorSpace = m_compiler.getVectorSpace();
             var leftTermArea : TermAreaWidget = try cast(termAreas[0], TermAreaWidget) catch(e:Dynamic) null;
             var modeledLeft : ExpressionNode = ((leftTermArea.getWidgetRoot() != null)) ? 
             leftTermArea.getWidgetRoot().getNode() : null;
@@ -601,7 +598,7 @@ class GameEngine extends Sprite implements IGameEngine
                         RenderableComponent.TYPE_ID
                         ), RenderableComponent) catch(e:Dynamic) null;
                 
-                var i : Int;
+                var i : Int = 0;
                 for (i in 0...parentAttributes.children.length){
                                     if (parentAttributes.children[i] == attributesForId) 
                                     {
@@ -626,7 +623,7 @@ class GameEngine extends Sprite implements IGameEngine
      */
     private function getWidgetFromId(id : String, rootAttribute : WidgetAttributesComponent) : WidgetAttributesComponent
     {
-        var matchingAttributes : WidgetAttributesComponent;
+        var matchingAttributes : WidgetAttributesComponent = null;
         if (rootAttribute != null) 
         {
             if (rootAttribute.entityId == id) 
@@ -635,7 +632,7 @@ class GameEngine extends Sprite implements IGameEngine
             }
             else if (rootAttribute.children != null) 
             {
-                var i : Int;
+                var i : Int = 0;
                 var numWidgetChildren : Int = rootAttribute.children.length;
                 for (i in 0...numWidgetChildren){
                     matchingAttributes = getWidgetFromId(id, rootAttribute.children[i]);
@@ -658,7 +655,7 @@ class GameEngine extends Sprite implements IGameEngine
      */
     public function enter(params : Array<Dynamic> = null) : Void
     {
-        var vectorSpace : IVectorSpace = m_compiler.getVectorSpace();
+        var vectorSpace : RealsVectorSpace = m_compiler.getVectorSpace();
         var currentLevel : WordProblemLevelData = try cast(params[0], WordProblemLevelData) catch(e:Dynamic) null;
         m_currentLevel = currentLevel;
         
@@ -688,7 +685,7 @@ class GameEngine extends Sprite implements IGameEngine
         // Perform layout on widgets
         this.layoutWidgets();
         
-        var i : Int;
+        var i : Int = 0;
         var documentNodes : Array<DocumentNode> = currentLevel.getRootDocumentNodes();
         for (i in 0...documentNodes.length){
             this.redrawPageViewAtIndex(i, documentNodes[i]);
@@ -712,15 +709,17 @@ class GameEngine extends Sprite implements IGameEngine
         var barModelAreas : Array<DisplayObject> = this.getUiEntitiesByClass(BarModelAreaWidget);
         for (barModelArea in barModelAreas)
         {
-            calloutSystem.addComponentManager(barModelArea.componentManager);
-            blinkSystem.addComponentManager(barModelArea.componentManager);
-            highlightSystem.addComponentManager(barModelArea.componentManager);
+			var barModelAreaComponentManager = (try cast(barModelArea, BarModelAreaWidget) catch (e : Dynamic) null).componentManager;
+            calloutSystem.addComponentManager(barModelAreaComponentManager);
+            blinkSystem.addComponentManager(barModelAreaComponentManager);
+            highlightSystem.addComponentManager(barModelAreaComponentManager);
         }
         
         var termAreas : Array<DisplayObject> = this.getUiEntitiesByClass(TermAreaWidget);
         for (termArea in termAreas)
         {
-            calloutSystem.addComponentManager(termArea.componentManager);
+			var termAreaComponentManager = (try cast(termArea, TermAreaWidget) catch (e : Dynamic) null).componentManager;
+            calloutSystem.addComponentManager(termAreaComponentManager);
         }
         
         scanSystem.addComponentManager(textComponentManager);
@@ -730,8 +729,9 @@ class GameEngine extends Sprite implements IGameEngine
         var deckAreas : Array<DisplayObject> = this.getUiEntitiesByClass(DeckWidget);
         for (deckArea in deckAreas)
         {
-            calloutSystem.addComponentManager(deckArea.componentManager);
-            highlightSystem.addComponentManager(deckArea.componentManager);
+			var deckAreaComponentManager = (try cast(deckArea, DeckWidget) catch (e : Dynamic) null).componentManager;
+            calloutSystem.addComponentManager(deckAreaComponentManager);
+            highlightSystem.addComponentManager(deckAreaComponentManager);
         }
         
         calloutSystem.addComponentManager(m_uiComponentManager);
@@ -754,13 +754,13 @@ class GameEngine extends Sprite implements IGameEngine
      */
     public function exit() : Void
     {
-        var i : Int;
+        var i : Int = 0;
         
         // Walk the list of widgets and dispose all of them
         // Do not dispose of this main state however
         var widgetAttributesList : Array<Component> = m_uiComponentManager.getComponentListForType(WidgetAttributesComponent.TYPE_ID);
-        var widgetAttributes : WidgetAttributesComponent;
-        var renderComponent : RenderableComponent;
+        var widgetAttributes : WidgetAttributesComponent = null;
+        var renderComponent : RenderableComponent = null;
         for (i in 0...widgetAttributesList.length){
             widgetAttributes = try cast(widgetAttributesList[i], WidgetAttributesComponent) catch(e:Dynamic) null;
             
@@ -826,10 +826,10 @@ class GameEngine extends Sprite implements IGameEngine
                 WidgetAttributesComponent.TYPE_ID
                 );
         var numWidgets : Int = widgetAttributeComponents.length;
-        var valueMap : Dictionary = new Dictionary();
-        var i : Int;
-        var widgetAttributeComponent : WidgetAttributesComponent;
-        var renderComponent : RenderableComponent;
+        var valueMap : Map<String, Float> = new Map<String, Float>();
+        var i : Int = 0;
+        var widgetAttributeComponent : WidgetAttributesComponent = null;
+        var renderComponent : RenderableComponent = null;
         for (i in 0...numWidgets){
             widgetAttributeComponent = try cast(widgetAttributeComponents[i], WidgetAttributesComponent) catch(e:Dynamic) null;
             
@@ -890,7 +890,7 @@ class GameEngine extends Sprite implements IGameEngine
                 if (group.numChildren > 0) 
                 {
                     var firstChild : DisplayObject = group.getChildAt(0);
-                    if (Std.is(firstChild, Scale3Image) || Std.is(firstChild, Scale9Image)) 
+                    if (Std.is(firstChild, Image)) 
                     {
                         firstChild.width = targetWidth;
                         firstChild.height = targetHeight;
@@ -927,15 +927,15 @@ class GameEngine extends Sprite implements IGameEngine
      * For each widget we create a mapping for each widget layout attribute to a single numeric value.
      */
     private function createLayoutMapping(widgetId : String,
-            outValueMap : Dictionary) : Void
+            outValueMap : Map<String, Float>) : Void
     {
         var widgetAttributeComponents : Array<Component> = m_uiComponentManager.getComponentListForType(
                 WidgetAttributesComponent.TYPE_ID
                 );
         var numWidgets : Int = widgetAttributeComponents.length;
-        var i : Int;
-        var widgetAttributeComponent : WidgetAttributesComponent;
-        var renderComponent : RenderableComponent;
+        var i : Int = 0;
+        var widgetAttributeComponent : WidgetAttributesComponent = null;
+        var renderComponent : RenderableComponent = null;
         for (i in 0...numWidgets){
             widgetAttributeComponent = try cast(widgetAttributeComponents[i], WidgetAttributesComponent) catch(e:Dynamic) null;
             renderComponent = try cast(m_uiComponentManager.getComponentFromEntityIdAndType(widgetId, RenderableComponent.TYPE_ID), RenderableComponent) catch(e:Dynamic) null;
@@ -978,17 +978,17 @@ class GameEngine extends Sprite implements IGameEngine
             expressionRoot : ExpressionNode,
             attributeName : String,
             valuesBuffer : Array<String>,
-            outValueMap : Dictionary) : Void
+            outValueMap : Map<String, Float>) : Void
     {
-        as3hx.Compat.setArrayLength(valuesBuffer, 0);
+		valuesBuffer = new Array<String>();
         getDynamicValues(expressionRoot, valuesBuffer);
-        var j : Int;
-        var outputValue : String;
+        var j : Int = 0;
+        var outputValue : String = null;
         for (j in 0...valuesBuffer.length){
             outputValue = valuesBuffer[j];
             if (!outValueMap.exists(outputValue)) 
             {
-                var outputValuePieces : Array<Dynamic> = outputValue.split("_", 2);
+                var outputValuePieces : Array<Dynamic> = outputValue.split("_");
                 createLayoutMapping(outputValuePieces[0], outValueMap);
             }
         }
@@ -1025,7 +1025,7 @@ class GameEngine extends Sprite implements IGameEngine
      */
     private function createWidgets(widgetAttributeRoot : WidgetAttributesComponent) : DisplayObject
     {
-        var widget : DisplayObject;
+        var widget : DisplayObject  = null;
         if (widgetAttributeRoot != null) 
         {
             var widgetType : String = widgetAttributeRoot.widgetType;
@@ -1049,8 +1049,10 @@ class GameEngine extends Sprite implements IGameEngine
                 if (texture != null) 
                 {
                     var imagePadding : Float = 10;
-                    var scaledTexture : Scale3Textures = new Scale3Textures(texture, imagePadding, texture.height - imagePadding * 2, Scale3Textures.DIRECTION_VERTICAL);
-                    var scaledImage : Scale3Image = new Scale3Image(scaledTexture);
+					// TODO: this was replaced from a Scale3Texture from the feathers library and
+					// will probably need to be fixed
+                    var scaledTexture : Texture = Texture.fromTexture(texture, new Rectangle(0, imagePadding, texture.width, texture.height - imagePadding * 2));
+                    var scaledImage : Image = new Image(scaledTexture);
                     groupWidget.addChild(scaledImage);
                 }
                 
@@ -1059,14 +1061,14 @@ class GameEngine extends Sprite implements IGameEngine
             else if (widgetType == "termArea") 
             {
                 // Create term areas
-                var vectorSpace : IVectorSpace = m_compiler.getVectorSpace();
+                var vectorSpace : RealsVectorSpace = m_compiler.getVectorSpace();
                 var termAreaWidget : TermAreaWidget = new TermAreaWidget(
                 new ExpressionTree(vectorSpace, null), 
                 m_expressionSymbolMap, 
                 m_assetManager, 
                 texture, 
                 0, 
-                0, 
+                0
                 );
                 
                 termAreaWidget.addEventListener(GameEvent.TERM_AREA_CHANGED, onTermAreaChanged);
@@ -1088,13 +1090,13 @@ class GameEngine extends Sprite implements IGameEngine
                         extraData.backgroundAttachment, 
                         extraData.backgroundRepeat, 
                         extraData.autoCenterPages, 
-                        extraData.allowScroll, 
+                        extraData.allowScroll
                         );
                 widget = m_textArea;
             }
             else if (widgetType == "button") 
             {
-                extraData = widgetAttributeRoot.extraData;
+                var extraData = widgetAttributeRoot.extraData;
                 
                 var nineSliceString : String = extraData.nineSlice;
                 var nineSlice : Rectangle = null;
@@ -1102,10 +1104,10 @@ class GameEngine extends Sprite implements IGameEngine
                 {
                     var nineSliceParts : Array<Dynamic> = nineSliceString.split(",");
                     nineSlice = new Rectangle(
-                            parseInt(nineSliceParts[0]), 
-                            parseInt(nineSliceParts[1]), 
-                            parseInt(nineSliceParts[2]), 
-                            parseInt(nineSliceParts[3]), 
+                            Std.parseInt(nineSliceParts[0]), 
+                            Std.parseInt(nineSliceParts[1]), 
+                            Std.parseInt(nineSliceParts[2]), 
+                            Std.parseInt(nineSliceParts[3])
                             );
                 }
                 
@@ -1115,7 +1117,7 @@ class GameEngine extends Sprite implements IGameEngine
                         extraData.label,
                         ((extraData.label != null)) ? new TextFormat(extraData.fontName, extraData.fontSize, extraData.fontColor) : null,
                         nineSlice
-                        );
+                );
                 
                 widget = button;
             }
@@ -1135,7 +1137,7 @@ class GameEngine extends Sprite implements IGameEngine
             // Assign the widget view to the attributes node
             else if (widgetType == "barModelArea") 
             {
-                extraData = widgetAttributeRoot.extraData;
+                var extraData = widgetAttributeRoot.extraData;
                 
                 // Need extra space to add additional bars at the bottom
                 var bottomPadding : Float = 50;
@@ -1148,7 +1150,7 @@ class GameEngine extends Sprite implements IGameEngine
                         bottomPadding, 
                         extraData.leftBarPadding, 
                         extraData.leftBarPadding, 
-                        extraData.barGap, 
+                        extraData.barGap
                         );
             }
             
@@ -1163,8 +1165,8 @@ class GameEngine extends Sprite implements IGameEngine
             
             if (widgetAttributeRoot.children != null) 
             {
-                var i : Int;
-                var widgetChild : DisplayObject;
+                var i : Int = 0;
+                var widgetChild : DisplayObject = null;
                 var numWidgetChildren : Int = widgetAttributeRoot.children.length;
                 for (i in 0...numWidgetChildren){
                     widgetChild = createWidgets(widgetAttributeRoot.children[i]);
@@ -1211,7 +1213,7 @@ class GameEngine extends Sprite implements IGameEngine
         // This fires an event only when both term areas are in a ready state
         var termAreas : Array<DisplayObject> = this.getUiEntitiesByClass(TermAreaWidget);
         var termAreasReady : Bool = true;
-        var i : Int;
+        var i : Int = 0;
         var numTermAreas : Int = termAreas.length;
         for (i in 0...numTermAreas){
             var termArea : TermAreaWidget = try cast(termAreas[i], TermAreaWidget) catch(e:Dynamic) null;

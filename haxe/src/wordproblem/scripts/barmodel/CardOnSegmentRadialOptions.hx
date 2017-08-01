@@ -9,9 +9,6 @@ import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.ui.MouseState;
 
-import feathers.display.Scale9Image;
-import feathers.textures.Scale9Textures;
-
 import starling.display.DisplayObject;
 import starling.display.DisplayObjectContainer;
 import starling.display.Image;
@@ -117,7 +114,7 @@ class CardOnSegmentRadialOptions extends BaseBarModelScript
             // We should blink the segment to tell the player something can happen
             if ((mouseState.leftMouseDraggedThisFrame || mouseState.leftMouseDown) && Std.is(m_widgetDragSystem.getWidgetSelected(), SymbolTermWidget)) 
             {
-                as3hx.Compat.setArrayLength(m_outParamsBuffer, 0);
+				m_outParamsBuffer = new Array<Dynamic>();
                 if (BarModelHitAreaUtil.checkPointInBarSegment(m_outParamsBuffer, m_barModelArea, m_localMouseBuffer)) 
                 {
                     var value : String = m_widgetDragSystem.getWidgetSelected().getNode().data;
@@ -128,7 +125,7 @@ class CardOnSegmentRadialOptions extends BaseBarModelScript
                     // For the radial menu to pop up, the number of possible actions that can execute with the given
                     // segment and dragged expression need to pass some threshold
                     // This indicates there is ambiguity in the gesture that the user needs to explicitly resolve.
-                    var i : Int;
+                    var i : Int = 0;
                     var numGestures : Int = m_gestures.length;
                     var numValidGestures : Int = 0;
                     var lastValidGestureIndex : Int = -1;
@@ -173,7 +170,7 @@ class CardOnSegmentRadialOptions extends BaseBarModelScript
                             // If only one gesture is valid on the current segment, apply the preview of that gesture
                             if (numValidGestures == 1) 
                             {
-                                gestureScript = m_gestures[lastValidGestureIndex];
+                                var gestureScript = m_gestures[lastValidGestureIndex];
                                 gestureScript.showPreview(value, segmentId);
                                 m_gesturePreviewWithoutMenu = gestureScript;
                                 setDraggedWidgetVisible(false);
@@ -240,7 +237,7 @@ class CardOnSegmentRadialOptions extends BaseBarModelScript
     
     public function getGestureScript(name : String) : ICardOnSegmentScript
     {
-        var matchingGestureScript : ICardOnSegmentScript;
+        var matchingGestureScript : ICardOnSegmentScript = null;
         for (gestureScript in m_gestures)
         {
             if (gestureScript.getName() == name) 
@@ -264,7 +261,7 @@ class CardOnSegmentRadialOptions extends BaseBarModelScript
                 mouseOutRadialOption, 
                 clickRadialOption, 
                 drawMenuSegment, 
-                disposeMenuSegment, 
+                disposeMenuSegment
                 );
     }
     
@@ -274,7 +271,7 @@ class CardOnSegmentRadialOptions extends BaseBarModelScript
         {
             // If a dragged card was dropped first check that the drop point is over a bar
             var droppedObject : BaseTermWidget = param.widget;
-            as3hx.Compat.setArrayLength(m_outParamsBuffer, 0);
+			m_outParamsBuffer = new Array<Dynamic>();
             if (Std.is(droppedObject, SymbolTermWidget) && BarModelHitAreaUtil.checkPointInBarSegment(m_outParamsBuffer, m_barModelArea, m_localMouseBuffer)) 
             {
                 var value : String = droppedObject.getNode().data;
@@ -285,7 +282,7 @@ class CardOnSegmentRadialOptions extends BaseBarModelScript
                 // For the radial menu to pop up, the number of possible actions that can execute with the given
                 // segment and dragged expression need to pass some threshold
                 // This indicates there is ambiguity in the gesture that the user needs to explicitly resolve.
-                var i : Int;
+                var i : Int = 0;
                 var numGestures : Int = m_gestures.length;
                 var numValidGestures : Int = 0;
                 for (i in 0...numGestures){
@@ -338,8 +335,8 @@ class CardOnSegmentRadialOptions extends BaseBarModelScript
                         // Put the dragged card in the middle
                         var termWidget : BaseTermWidget = new SymbolTermWidget(
                         new ExpressionNode(m_expressionCompiler.getVectorSpace(), value), 
-                        m_gameEngine.getExpressionSymbolResources(), 
-                        m_assetManager, 
+							m_gameEngine.getExpressionSymbolResources(), 
+							m_assetManager
                         );
                         var centerSpaceDiameter : Float = 60;
                         var targetScaleY : Float = centerSpaceDiameter / termWidget.height;
@@ -349,7 +346,6 @@ class CardOnSegmentRadialOptions extends BaseBarModelScript
                         
                         m_gameEngine.dispatchEventWith(GameEvent.OPEN_RADIAL_OPTIONS, false, {
                                     display : m_radialMenuControl.getRadialMenuContainer()
-
                                 });
                     }
                 }
@@ -375,7 +371,7 @@ class CardOnSegmentRadialOptions extends BaseBarModelScript
         icon.x = Math.cos(rotation + arcLength * 0.5) * (outerRadius - radiusDelta * 0.5);
         icon.y = Math.sin(rotation + arcLength * 0.5) * (outerRadius - radiusDelta * 0.5);
         
-        var outerTexture : Texture;
+        var outerTexture : Texture = null;
         var outlineThickness : Float = 2;
         if (mode == "up") 
         {
@@ -434,21 +430,23 @@ class CardOnSegmentRadialOptions extends BaseBarModelScript
         if (index < m_gestures.length) 
         {
             gestureScript = m_gestures[index];
-        }  // name value pasted on top (just make the bar the  same color    // The first gesture is adding name on top, this can just be a tiny version of the bar with the  
-        
-        
-        
-        
-        
+        }
+		
+		// The first gesture is adding name on top, this can just be a tiny version of the bar with the  
+        // name value pasted on top (just make the bar the  same color
         if (Std.is(gestureScript, AddNewLabelOnSegment)) 
         {
             var symbolData : SymbolData = m_gameEngine.getExpressionSymbolResources().getSymbolDataFromValue(m_savedDraggedValue);
             
             var barBackgroundTexture : Texture = m_assetManager.getTexture("card_background_square");
             var scale9Offset : Float = 8;
-            var barBackground : Scale9Image = new Scale9Image(new Scale9Textures(
-            barBackgroundTexture, 
-            new Rectangle(scale9Offset, scale9Offset, barBackgroundTexture.width - 2 * scale9Offset, barBackgroundTexture.height - 2 * scale9Offset)), 
+            var barBackground : Image = new Image(Texture.fromTexture(
+				barBackgroundTexture, 
+				new Rectangle(scale9Offset,
+					scale9Offset,
+					barBackgroundTexture.width - 2 * scale9Offset,
+					barBackgroundTexture.height - 2 * scale9Offset)
+				)
             );
             barBackground.color = ((symbolData.useCustomBarColor)) ? symbolData.customBarColor : 0xFFFFFF;
             
@@ -457,7 +455,7 @@ class CardOnSegmentRadialOptions extends BaseBarModelScript
             {
                 nameOnBar = m_savedDraggedValue;
             }
-            var nameTextfield : TextField = new TextField(barBackground.width, barBackground.height, nameOnBar, symbolData.fontName, 12, symbolData.fontColor);
+            var nameTextfield : TextField = new TextField(Std.int(barBackground.width), Std.int(barBackground.height), nameOnBar, symbolData.fontName, 12, symbolData.fontColor);
             var nameIconContainer : Sprite = new Sprite();
             nameIconContainer.addChild(barBackground);
             nameIconContainer.addChild(nameTextfield);

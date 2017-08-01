@@ -36,7 +36,7 @@ class PrioritySelector extends ScriptNode
         var numChildren : Int = m_children.length;
         var foundRunningChild : Bool = false;
         
-        if (super.m_isActive) 
+        if (this.m_isActive) 
         {
             for (i in 0...numChildren){
                 var child : ScriptNode = m_children[i];

@@ -1,11 +1,12 @@
 package starling.filters;
 
 import starling.filters.FragmentFilter;
-import starling.filters.SHADER;
+//import starling.filters.SHADER;
 
-import flash.display3d.Context3D;
-import flash.display3d.Context3DProgramType;
-import flash.display3d.Program3D;
+import openfl.display3D.Context3D;
+import openfl.display3D.Context3DProgramType;
+import openfl.display3D.Program3D;
+import openfl.Vector;
 import flash.utils.ByteArray;
 
 import starling.extensions.CleanAgalMiniAssembler;
@@ -24,22 +25,22 @@ class ScanLineFilter extends FragmentFilter
     /**
      * The target color of the scan line
      */
-    private var m_targetColor : Array<Float>;
+    private var m_targetColor : Vector<Float>;
     
     /**
      * The left most coordinates of the scanline
      */
-    private var m_minBounds : Array<Float>;
+    private var m_minBounds : Vector<Float>;
     
     /**
      * The right most coordinates of the scanline
      */
-    private var m_maxBounds : Array<Float>;
+    private var m_maxBounds : Vector<Float>;
     
     /**
      * The constant to stuff into the shader register
      */
-    private var m_one : Array<Float>;
+    private var m_one : Vector<Float>;
     
     public function new(targetColor : Int,
             startRatio : Float,
@@ -47,32 +48,26 @@ class ScanLineFilter extends FragmentFilter
             numPasses : Int = 1,
             resolution : Float = 1.0)
     {
-        m_targetColor = new Array<Float>();
-        m_targetColor.push(
-                (targetColor & 0xFF0000) >> 16);
-        m_targetColor.push(
-                (targetColor & 0x00FF00) >> 8);
-        m_targetColor.push(
-                (targetColor & 0x0000FF));
-        m_targetColor.push(
-                1);
-        m_targetColor.push(
-                );
+        m_targetColor = new Vector<Float>();
+        m_targetColor.push((targetColor & 0xFF0000) >> 16);
+        m_targetColor.push((targetColor & 0x00FF00) >> 8);
+        m_targetColor.push((targetColor & 0x0000FF));
+        m_targetColor.push(1);
         
-        m_minBounds = new Array<Float>();
+        m_minBounds = new Vector<Float>();
         m_minBounds.push(startRatio);
         m_minBounds.push(0.0);
         m_minBounds.push(0.0);
         m_minBounds.push(0.0);
         
-        m_maxBounds = new Array<Float>();
+        m_maxBounds = new Vector<Float>();
         m_maxBounds.push(endRatio);
         m_maxBounds.push(0.0);
         m_maxBounds.push(0.0);
         m_maxBounds.push(0.0);
         
         
-        m_one = new Array<Float>();
+        m_one = new Vector<Float>();
         m_one.push(1.0);
         m_one.push(0.0);
         m_one.push(0.0);

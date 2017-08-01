@@ -2,11 +2,9 @@ package wordproblem.playercollections.items;
 
 
 import flash.geom.Rectangle;
+import starling.textures.Texture;
 
 import dragonbox.common.util.XColor;
-
-import feathers.display.Scale9Image;
-import feathers.textures.Scale9Textures;
 
 import starling.display.DisplayObject;
 import starling.display.Image;
@@ -44,7 +42,7 @@ class CustomizableItemButton extends Sprite
      * The main rectangle background for the button keep a reference so it is easy to color
      * it depending on state changes on the item
      */
-    private var m_mainBackground : Scale9Image;
+    private var m_mainBackground : Image;
     
     /**
      * Display component showing the price of an item. (Only used in some cases)
@@ -81,10 +79,11 @@ class CustomizableItemButton extends Sprite
         setDefaultColor(defaultColor);
         setSelectedColor(selectedColor);
         
-        var upBackgroundTexture : Scale9Textures = new Scale9Textures(
-        assetManager.getTexture("button_white"), new Rectangle(8, 8, 16, 16), 
+        var upBackgroundTexture : Texture = Texture.fromTexture(
+			assetManager.getTexture("button_white"),
+			new Rectangle(8, 8, 16, 16)
         );
-        var backgroundImage : Scale9Image = new Scale9Image(upBackgroundTexture);
+        var backgroundImage : Image = new Image(upBackgroundTexture);
         backgroundImage.width = totalWidth;
         backgroundImage.height = totalHeight;
         addChild(backgroundImage);
@@ -143,8 +142,13 @@ class CustomizableItemButton extends Sprite
                 coin.scaleX = coin.scaleY = priceIndicatorHeight / coin.height;
                 m_priceContainer.addChild(coin);
                 
-                var priceText : TextField = new TextField(m_totalWidth - coin.width, priceIndicatorHeight, price, 
-                GameFonts.DEFAULT_FONT_NAME, 20, 0xFFFFFF);
+                var priceText : TextField = new TextField(Std.int(m_totalWidth - coin.width),
+					Std.int(priceIndicatorHeight),
+					price, 
+					GameFonts.DEFAULT_FONT_NAME,
+					20,
+					0xFFFFFF
+				);
                 priceText.x = coin.x + coin.width;
                 m_priceContainer.addChild(priceText);
                 
@@ -161,8 +165,13 @@ class CustomizableItemButton extends Sprite
                 if (m_equippedNotice == null) 
                 {
                     var equippedTextHeight : Float = m_totalHeight * 0.25;
-                    var equippedText : TextField = new TextField(m_totalWidth, equippedTextHeight, "Equipped", 
-                    GameFonts.DEFAULT_FONT_NAME, 20, XColor.DARK_GREEN);
+                    var equippedText : TextField = new TextField(Std.int(m_totalWidth),
+						Std.int(equippedTextHeight),
+						"Equipped", 
+						GameFonts.DEFAULT_FONT_NAME,
+						20,
+						XColor.DARK_GREEN
+					);
                     equippedText.y = m_totalHeight - equippedTextHeight;
                     m_equippedNotice = equippedText;
                 }
@@ -188,7 +197,7 @@ class CustomizableItemButton extends Sprite
     
     public function createItemIcon() : DisplayObject
     {
-        var icon : DisplayObject;
+        var icon : DisplayObject = null;
         var texturesComponent : TextureCollectionComponent = try cast(m_itemDataSource.getComponentFromEntityIdAndType(
                 m_itemId, TextureCollectionComponent.TYPE_ID), TextureCollectionComponent) catch(e:Dynamic) null;
         if (m_categoryId == PlayerCollectionCustomizeViewer.CATEGORY_POINTERS) 
@@ -201,11 +210,11 @@ class CustomizableItemButton extends Sprite
         }
         else if (m_categoryId == PlayerCollectionCustomizeViewer.CATEGORY_BUTTON_COLOR) 
         {
-            var buttonColor : Int = parseInt(texturesComponent.textureCollection[0].color, 16);
-            var buttonTexture : Scale9Textures = new Scale9Textures(m_assetManager.getTexture("button_white"), new Rectangle(8, 8, 16, 16));
-            var buttonImageBack : Scale9Image = new Scale9Image(buttonTexture);
+            var buttonColor : Int = Std.parseInt(texturesComponent.textureCollection[0].color);
+            var buttonTexture : Texture = Texture.fromTexture(m_assetManager.getTexture("button_white"), new Rectangle(8, 8, 16, 16));
+            var buttonImageBack : Image = new Image(buttonTexture);
             buttonImageBack.color = 0x000000;
-            var buttonImageFront : Scale9Image = new Scale9Image(buttonTexture);
+            var buttonImageFront : Image = new Image(buttonTexture);
             buttonImageFront.color = buttonColor;
             
             var buttonContainer : Sprite = new Sprite();

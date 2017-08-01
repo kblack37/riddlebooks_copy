@@ -43,7 +43,7 @@ class BarComparison
         this.barWholeIdComparedTo = barWholeIdComparedTo;
         this.segmentIndexComparedTo = segmentIndexComparedTo;
         
-        this.id = ((id == null)) ? Std.string(Identifiable.getId(1)) : id;
+        this.id = ((id == null)) ? Std.string(Identifiable.getId()) : id;
         this.color = color;
     }
     
@@ -53,7 +53,7 @@ class BarComparison
         this.value, 
         this.barWholeIdComparedTo, 
         this.segmentIndexComparedTo, 
-        this.id, 
+        this.id
         );
         return barComparison;
     }

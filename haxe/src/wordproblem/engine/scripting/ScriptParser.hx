@@ -1,7 +1,8 @@
 package wordproblem.engine.scripting;
 
 import flash.errors.Error;
-import wordproblem.engine.scripting.ScriptClass;
+import haxe.xml.Fast;
+//import wordproblem.engine.scripting.ScriptClass;
 
 
 import gameconfig.versions.brainpopturk.WordProblemGameBrainpopTurk;
@@ -15,6 +16,7 @@ import wordproblem.engine.scripting.graph.selector.ConcurrentSelector;
 import wordproblem.engine.scripting.graph.selector.SequenceSelector;
 import wordproblem.player.PlayerStatsAndSaveData;
 import wordproblem.resource.AssetManager;
+import wordproblem.scripts.level.GenericBarModelLevelScript;
 import wordproblem.scripts.level.GenericModelLevelScript;
 
 class ScriptParser
@@ -46,13 +48,12 @@ class ScriptParser
      * @return 
      *      Root of the behavior tree representing the script
      */
-    public function parse(xml : FastXML) : ScriptNode
+    public function parse(xml : Xml) : ScriptNode
     {
-        var rootScript : ScriptNode;
+        var rootScript : ScriptNode = null;
         
-        var allNodeElements : FastXMLList = xml.node.elements.innerData();
+        var allNodeElements = (new Fast(xml)).elements;
         
-        var nodeElement : FastXML;
         // This loop should really only ever fire once
         for (nodeElement in allNodeElements)
         {
@@ -62,10 +63,10 @@ class ScriptParser
         return rootScript;
     }
     
-    private function createNode(nodeElement : FastXML) : ScriptNode
+    private function createNode(nodeElement : Fast) : ScriptNode
     {
-        var rootNode : ScriptNode;
-        var nodeType : String = nodeElement.node.name.innerData();
+        var rootNode : ScriptNode = null;
+        var nodeType : String = nodeElement.name;
         
         // Figure out the type of node to construct, this will affect the location of the
         // children
@@ -73,8 +74,8 @@ class ScriptParser
         if (nodeType == "concurrent") 
         {
             isRegularSelectorNode = true;
-            var failThreshold : Int = ((nodeElement.node.exists.innerData("@failThreshold"))) ? 
-            parseInt(nodeElement.node.attribute.innerData("failThreshold")) : -1;
+            var failThreshold : Int = nodeElement.has.failThreshold ? 
+				Std.parseInt(nodeElement.att.failThreshold) : -1;
             rootNode = new ConcurrentSelector(failThreshold);
         }
         else if (nodeType == "sequence") 
@@ -85,66 +86,53 @@ class ScriptParser
         // Extra condition that creates a specific class object that has a hardcoded script
         else if (nodeType == "code") 
         {
-            if (nodeElement.node.exists.innerData("@id")) 
+            if (nodeElement.has.id) 
             {
                 var fullyQualifiedName : String = nodeElement.att.id;
-                var scriptClass : Class<Dynamic> = Type.getClass(Type.resolveClass(fullyQualifiedName));
+                var scriptClass = Type.resolveClass(fullyQualifiedName);
                 //HACK: Pass in additional data to bar model level script
                 if (fullyQualifiedName == GENERIC_BAR_MODEL_LEVEL_SCRIPT_NAME) {
-                    rootNode = try cast(Type.createInstance(scriptClass, [m_engine, m_compiler, m_assetManager, m_playerStatsAndSaveData, m_levelManager]), ScriptNode) catch(e:Dynamic) null;
+                    rootNode = try cast(Type.createInstance(scriptClass, [m_engine, m_compiler, m_assetManager, m_playerStatsAndSaveData, m_levelManager, null, true]), ScriptNode) catch(e:Dynamic) null;
                 }
                 else {
                     rootNode = try cast(Type.createInstance(scriptClass, [m_engine, m_compiler, m_assetManager, m_playerStatsAndSaveData]), ScriptNode) catch(e:Dynamic) null;
-                }  // For example, dialog options for various characters.    // A custom level script might need to pass in extra data  
-                
-                
-                
-                
-                
-                
-                if (nodeElement.node.elements.innerData().length() > 0) 
+                }
+				
+				// A custom level script might need to pass in extra data  
+				// For example, dialog options for various characters.                
+                if (nodeElement.elements.hasNext()) 
                 {
-                    var list : FastXMLList = nodeElement.node.elements.innerData();
-                    rootNode.setExtraData(list);
+					var list = nodeElement.elements;
+					if (rootNode != null) rootNode.setExtraData(list);
                 }
             }
             else 
             {
-                var dataElement : FastXML = nodeElement.nodes.elements("data")[0];
-                var data : Dynamic = haxe.Json.parse(dataElement.node.text.innerData());
+                var dataElement : Fast = nodeElement.node.data;
+                var data : Dynamic = haxe.Json.parse(dataElement.innerData);
                 
                 // Append hint data
-                var i : Int;
+                var i : Int = 0;
                 var variableHints : Array<Dynamic> = [];
-                var variableHintElements : FastXMLList = nodeElement.node.elements.innerData("variableHint");
-                for (i in 0...variableHintElements.length()){
-                    var variableHintElement : FastXML = variableHintElements.get(i);
+                var variableHintElements = nodeElement.nodes.variableHint;
+				for (variableHintElement in variableHintElements) {
                     variableHints.push(
                             {
-                                textContent : variableHintElement.nodes.children()[0],
+                                textContent : variableHintElement.innerData,
                                 termValue : variableHintElement.att.termValue,
                                 documentId : variableHintElement.att.documentId,
-
                             });
-                    variableHints.push(
-                            );
-                    
                 }
                 Reflect.setField(data, "variableHints", variableHints);
                 
                 var expressionHints : Array<Dynamic> = [];
-                var expressionHintElements : FastXMLList = nodeElement.node.elements.innerData("expressionHint");
-                for (i in 0...expressionHintElements.length()){
-                    var expressionHintElement : FastXML = expressionHintElements.get(i);
+                var expressionHintElements = nodeElement.nodes.expressionHint;
+				for (expressionHintElement in expressionHintElements) {
                     expressionHints.push(
                             {
-                                textContent : expressionHintElement.nodes.children()[0],
+                                textContent : expressionHintElement.innerData,
                                 expression : expressionHintElement.att.expression,
-
                             });
-                    expressionHints.push(
-                            );
-                    
                 }
                 Reflect.setField(data, "expressionHints", expressionHints);
                 
@@ -160,7 +148,7 @@ class ScriptParser
         {
             // Examine the children of the subroot and add them to the
             // tree structure
-            for (childElement/* AS3HX WARNING could not determine type for var: childElement exp: ECall(EField(EIdent(nodeElement),elements),[]) type: null */ in nodeElement.nodes.elements())
+            for (childElement in nodeElement.elements)
             {
                 var childNode : ScriptNode = createNode(childElement);
                 rootNode.pushChild(childNode);

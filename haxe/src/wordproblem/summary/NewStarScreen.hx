@@ -40,6 +40,6 @@ class NewStarScreen extends Sprite
         starRotateTween.animate("rotation", Math.PI * 2);
         starRotateTween.reverse = false;
         starRotateTween.repeatCount = 0;
-        Starling.juggler.add(starRotateTween);
+        Starling.current.juggler.add(starRotateTween);
     }
 }

@@ -5,10 +5,12 @@ import flash.display.DisplayObject;
 import flash.display.Sprite;
 
 import cgs.logotos.TosUi;
-import cgs.server.data.UserTosStatus;
+import cgs.server.data.IUserTosStatus;
 import cgs.user.ICgsUser;
 
 import dragonbox.common.dispose.IDisposable;
+
+import haxe.Constraints.Function;
 
 import gameconfig.commonresource.EmbeddedBundle1X;
 
@@ -29,25 +31,26 @@ class RegisterTosScreen extends Sprite implements IDisposable
         m_acceptTosCallback = acceptTosCallback;
         
         // Place the background
-        var background : DisplayObject = new embeddedbundle1x.SummaryBackground();
+        var background : DisplayObject = Type.createInstance(EmbeddedBundle1X.summary_background, [ ]);
         background.width = width;
         background.height = height;
         addChild(background);
         
         // Paste tos on top
-        var userTosStatus : UserTosStatus = user.tosStatus;
-        var tosUi : TosUi = new TosUi(user, userTosStatus, tosComplete, "Riddle Books");
-        addChild(tosUi);
-        tosUi.load();
-        
-        function tosComplete() : Void
-        {
-            removeChild(tosUi);
-            if (m_acceptTosCallback != null) 
-            {
-                m_acceptTosCallback();
-            }
-        };
+		// TODO: uncomment when cgs library is finished
+        //var userTosStatus : IUserTosStatus = user.tosStatus;
+        //var tosUi : TosUi = new TosUi(user, userTosStatus, tosComplete, "Riddle Books");
+        //addChild(tosUi);
+        //tosUi.load();
+        //
+        //function tosComplete() : Void
+        //{
+            //removeChild(tosUi);
+            //if (m_acceptTosCallback != null) 
+            //{
+                //m_acceptTosCallback();
+            //}
+        //};
     }
     
     public function dispose() : Void

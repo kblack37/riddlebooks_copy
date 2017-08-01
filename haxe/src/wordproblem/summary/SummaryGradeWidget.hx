@@ -1,7 +1,7 @@
 package wordproblem.summary;
 
 
-import flash.utils.Dictionary;
+import haxe.Constraints.Function;
 
 import starling.animation.Juggler;
 import starling.animation.Transitions;
@@ -26,7 +26,7 @@ class SummaryGradeWidget extends Sprite
      * emotion:emotion snapshot the hamster character should be in.
      * For example A+ or A should show the happy character, D or F should show sad
      */
-    private var m_gradeToInformationMap : Dictionary;
+    private var m_gradeToInformationMap : Map<String, Dynamic>;
     
     private var m_assetManager : AssetManager;
     private var m_juggler : Juggler;
@@ -42,7 +42,7 @@ class SummaryGradeWidget extends Sprite
         m_tweensInstantiated = new Array<Tween>();
         
         // Setup the feedback given to the player depending on the grade
-        m_gradeToInformationMap = new Dictionary();
+        m_gradeToInformationMap = new Map();
         Reflect.setField(m_gradeToInformationMap, "A+", {
             emotion : "happy",
             textColor : 0x339933,
@@ -84,7 +84,7 @@ class SummaryGradeWidget extends Sprite
         {
             m_juggler.remove(tween);
         }
-        as3hx.Compat.setArrayLength(m_tweensInstantiated, 0);
+		m_tweensInstantiated = new Array<Tween>();
     }
     
     public function animateCharacter(score : Int, onAnimationComplete : Function) : Void

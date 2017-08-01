@@ -38,18 +38,16 @@ class BarWholeView extends Sprite implements IDisposable
     public function redraw() : Void
     {
         // Re-add the segment views
-        var i : Int;
+        var i : Int = 0;
         var numSegmentViews : Int = segmentViews.length;
-        var segmentView : BarSegmentView;
+        var segmentView : BarSegmentView = null;
         for (i in 0...numSegmentViews){
             segmentView = segmentViews[i];
             addChild(segmentView);
-        }  // that want to group together all the hidden segments as one    // After the segment view bounds have been finalized we do a pass for any bars  
-        
-        
-        
-        
-        
+        }
+		
+		// After the segment view bounds have been finalized we do a pass for any bars  
+        // that want to group together all the hidden segments as one
         if (!this.data.displayHiddenSegments) 
         {
             var startingIndexOfHiddenIndex : Int = -1;
@@ -60,16 +58,14 @@ class BarWholeView extends Sprite implements IDisposable
                     if (startingIndexOfHiddenIndex == -1) 
                     {
                         startingIndexOfHiddenIndex = i;
-                    }  // Remove the hidden segment view  
-                    
-                    
-                    
+                    } 
+					
+					// Remove the hidden segment view  
                     removeChild(segmentView);
                 }
-            }  // Figure out the bounds of the section of the hidden segments  
-            
-            
-            
+            }  
+			
+			// Figure out the bounds of the section of the hidden segments  
             if (startingIndexOfHiddenIndex >= 0) 
             {
                 var firstHiddenSegmentBounds : Rectangle = segmentViews[startingIndexOfHiddenIndex].rigidBody.boundingRectangle;
@@ -80,13 +76,12 @@ class BarWholeView extends Sprite implements IDisposable
                 this.hiddenImage.x = segmentViews[startingIndexOfHiddenIndex].x;
                 addChild(hiddenImage);
             }
-        }  // Need to re-add the bar label views so they appear on top of the segments  
-        
-        
-        
+        } 
+		
+		// Need to re-add the bar label views so they appear on top of the segments  
         var numLabelViews : Int = this.labelViews.length;
-        var labelView : BarLabelView;
-        var barLabel : BarLabel;
+        var labelView : BarLabelView = null;
+        var barLabel : BarLabel = null;
         for (i in 0...numLabelViews){
             // However, DO NOT re-add labels that have no brackets and are instead attached on top of
             // the segment.

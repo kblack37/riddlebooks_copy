@@ -65,12 +65,12 @@ class DragText extends BaseGameScript
     
     override public function visit() : Int
     {
-        if (super.m_ready && super.m_isActive) 
+        if (this.m_ready && this.m_isActive) 
         {
             // The dragging of existing items and their release does not care about the layering
             // deactivation.
-            var params : Dynamic;
-            var mouseState : MouseState = super.m_gameEngine.getMouseState();
+            var params : Dynamic = null;
+            var mouseState : MouseState = this.m_gameEngine.getMouseState();
             m_mousePoint.setTo(mouseState.mousePositionThisFrame.x, mouseState.mousePositionThisFrame.y);
             if (mouseState.leftMouseDraggedThisFrame && m_viewPressedDownOn != null) 
             {
@@ -78,10 +78,9 @@ class DragText extends BaseGameScript
                 var startDrag : Bool = !MathUtil.pointInCircle(m_lastMouseDownPoint, 5, m_mousePoint);
                 if (startDrag) 
                 {
-                    super.m_gameEngine.dispatchEventWith(GameEvent.START_DRAG_TEXT_AREA, false, {
+                    this.m_gameEngine.dispatchEventWith(GameEvent.START_DRAG_TEXT_AREA, false, {
                                 documentView : m_viewPressedDownOn,
                                 location : m_mousePoint.clone(),
-
                             });
                     m_viewPressedDownOn = null;
                 }
@@ -98,14 +97,11 @@ class DragText extends BaseGameScript
                     if (renderComponentUnderMouse != null) 
                     {
                         uiComponentName = renderComponentUnderMouse.entityId;
-                    }  // (ie. expression found) come strictly after the drop in the logs.    // Note: We want to make sure to log the drop before we actually execute the drop in the code, so that any additional logs that occur    // Log the phrase drop  
-                    
-                    
-                    
-                    
-                    
-                    
-                    
+                    }
+					
+					// Log the phrase drop  
+					// Note: We want to make sure to log the drop before we actually execute the drop in the code, so that any additional logs that occur
+                    // (ie. expression found) come strictly after the drop in the logs.
                     var text : String = ((Std.is(m_viewUnderMouse, TextView))) ? (try cast(m_viewUnderMouse, TextView) catch(e:Dynamic) null).getTextField().text : "";
                     var expressionUnder : Array<Dynamic> = viewContainsExpressionThatHasBeenModeled(m_viewUnderMouse);
                     var dropIsAnExpression : Bool = expressionUnder != null;
@@ -168,9 +164,8 @@ class DragText extends BaseGameScript
                     params = {
                                 view : m_viewPressedDownOn,
                                 isExpression : ((expressionPressed != null)) ? true : false,
-
                             };
-                    super.m_gameEngine.dispatchEventWith(GameEvent.PRESS_TEXT_AREA, false, params);
+                    this.m_gameEngine.dispatchEventWith(GameEvent.PRESS_TEXT_AREA, false, params);
                     
                     if (Std.is(m_viewPressedDownOn, TextView)) 
                     {
@@ -180,7 +175,6 @@ class DragText extends BaseGameScript
                             isExpression : pickupIsAnExpression,
                             locationX : m_mousePoint.x,
                             locationY : m_mousePoint.y,
-
                         };
                         if (pickupIsAnExpression) 
                         {
@@ -231,6 +225,6 @@ class DragText extends BaseGameScript
     override private function onLevelReady() : Void
     {
         super.onLevelReady();
-        m_textAreaWidget = try cast(super.m_gameEngine.getUiEntity("textArea"), TextAreaWidget) catch(e:Dynamic) null;
+        m_textAreaWidget = try cast(this.m_gameEngine.getUiEntity("textArea"), TextAreaWidget) catch(e:Dynamic) null;
     }
 }

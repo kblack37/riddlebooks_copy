@@ -1,11 +1,12 @@
 package wordproblem.engine.widget;
 
+import starling.display.Image;
 import wordproblem.engine.widget.IBaseWidget;
 
 import flash.geom.Rectangle;
 
-import feathers.display.Scale9Image;
-import feathers.textures.Scale9Textures;
+//import feathers.display.Scale9Image;
+//import feathers.textures.Scale9Textures;
 
 import starling.display.DisplayObject;
 import starling.textures.Texture;
@@ -62,7 +63,6 @@ class BarModelAreaWidget extends BarModelView implements IBaseWidget
             rightBarPadding : Float,
             barGap : Float)
     {
-        super();
         // Widget always starts out initially empty
         super(unitLength, unitHeight, topBarPadding, bottomBarPadding, leftBarPadding, rightBarPadding, barGap, new BarModelData(), expressionSymbolMap, assetManager);
         
@@ -74,8 +74,8 @@ class BarModelAreaWidget extends BarModelView implements IBaseWidget
         var horizontalPadding : Float = 20;
         var verticalPadding : Float = 30;
         var backgroundImageTexture : Texture = assetManager.getTexture("term_area_left");
-        var bgImage : Scale9Image = new Scale9Image(new Scale9Textures(backgroundImageTexture, new Rectangle(
-        horizontalPadding, verticalPadding, backgroundImageTexture.width - 2 * horizontalPadding, backgroundImageTexture.height - 2 * verticalPadding)), 
+        var bgImage : Image = new Image(Texture.fromTexture(backgroundImageTexture, new Rectangle(
+        horizontalPadding, verticalPadding, backgroundImageTexture.width - 2 * horizontalPadding, backgroundImageTexture.height - 2 * verticalPadding))
         );
         m_background = bgImage;
     }
@@ -146,7 +146,7 @@ class BarModelAreaWidget extends BarModelView implements IBaseWidget
         
         if (doCloneData) 
         {
-            var barModelDataClone : BarModelData = super.m_barModelData.clone();
+            var barModelDataClone : BarModelData = this.m_barModelData.clone();
             m_previewBarModelView.unitHeight = this.unitHeight;
             m_previewBarModelView.unitLength = this.unitLength;
             m_previewBarModelView.setBarModelData(barModelDataClone);
@@ -207,12 +207,12 @@ class BarModelAreaWidget extends BarModelView implements IBaseWidget
         
         // We just do a brute force search through all elements
         var barWholeViews : Array<BarWholeView> = barModelArea.getBarWholeViews();
-        var i : Int;
+        var i : Int = 0;
         var numBarWholeViews : Int = barWholeViews.length;
         for (i in 0...numBarWholeViews){
             var barWholeView : BarWholeView = barWholeViews[i];
             
-            var j : Int;
+            var j : Int = 0;
             for (j in 0...barWholeView.segmentViews.length){
                 var segmentView : BarSegmentView = barWholeView.segmentViews[j];
                 if (segmentView.data.id == id) 

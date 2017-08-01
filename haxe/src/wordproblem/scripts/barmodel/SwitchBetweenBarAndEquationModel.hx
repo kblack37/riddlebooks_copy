@@ -5,10 +5,11 @@ import cgs.audio.Audio;
 
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 
-import feathers.controls.Button;
+import haxe.Constraints.Function;
 
 import starling.animation.Tween;
 import starling.core.Starling;
+import starling.display.Button;
 import starling.display.DisplayObject;
 import starling.display.DisplayObjectContainer;
 import starling.events.Event;
@@ -51,8 +52,8 @@ class SwitchBetweenBarAndEquationModel extends BaseGameScript
     private var m_deckAndTermContainerOriginalY : Float;
     
     private var m_tooltipControl : TooltipControl;
-    private inline var TOOLTIP_SHOW_EQUATION : String = "Show Equation";
-    private inline var TOOLTIP_SHOW_TEXT : String = "Show Problem";
+    private inline static var TOOLTIP_SHOW_EQUATION : String = "Show Equation";
+    private inline static var TOOLTIP_SHOW_TEXT : String = "Show Problem";
     
     /**
      * The y value of the ui that is should move to when revealing the model area
@@ -87,7 +88,7 @@ class SwitchBetweenBarAndEquationModel extends BaseGameScript
         if (m_ready) 
         {
             // Set whether the button is enabled
-            m_switchModelButton.isEnabled = value;
+            m_switchModelButton.enabled = value;
             m_switchModelButton.removeEventListener(Event.TRIGGERED, onSwitchModelClicked);
             if (value) 
             {
@@ -190,10 +191,10 @@ class SwitchBetweenBarAndEquationModel extends BaseGameScript
         var rotateDuration : Float = 0.2;
         var rotateTween : Tween = new Tween(m_switchModelButton, rotateDuration);
         rotateTween.animate("rotation", targetRotation);
-        Starling.juggler.add(rotateTween);
+        Starling.current.juggler.add(rotateTween);
         
         var slideTween : Tween = new Tween(uiContainer, rotateDuration);
         slideTween.animate("y", targetY);
-        Starling.juggler.add(slideTween);
+        Starling.current.juggler.add(slideTween);
     }
 }

@@ -79,7 +79,7 @@ class SparklerAnimation implements IAnimatable
     {
         m_emitter.reset();
         m_emitter.start();
-        Starling.juggler.add(this);
+        Starling.current.juggler.add(this);
         
         canvasToAddTo.addChild(m_particleRenderer);
     }
@@ -89,7 +89,7 @@ class SparklerAnimation implements IAnimatable
         m_emitter.reset();
         m_particleRenderer.removeFromParent();
         
-        Starling.juggler.remove(this);
+        Starling.current.juggler.remove(this);
     }
     
     public function advanceTime(time : Float) : Void

@@ -1,9 +1,9 @@
 package wordproblem.engine.level;
 
+import dragonbox.common.math.vectorspace.RealsVectorSpace;
+import haxe.xml.Fast;
 import wordproblem.engine.level.LevelRules;
 import wordproblem.engine.level.WordProblemLevelData;
-
-import flash.utils.Dictionary;
 
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
@@ -34,7 +34,7 @@ class LevelCompiler
      * The purpose of this is to provide levels with a menu of predefined ui configurations. Thus a level
      * xml just needs to define the layout name rather than re-specifying the entire ui xml structure.
      */
-    private var m_predefinedLayoutMap : Dictionary;
+    private var m_predefinedLayoutMap : Map<String, WidgetAttributesComponent>;
     
     public function new(expressionCompiler : IExpressionTreeCompiler, predefinedLayoutData : String)
     {
@@ -42,15 +42,10 @@ class LevelCompiler
         
         // Parse out layout options
         // Each option should have a name, levels can pick a predefined layout by referencing this name
-        m_predefinedLayoutMap = new Dictionary();
-        var predefinedLayoutXML : FastXML = new FastXML(predefinedLayoutData);
-        var predefinedLayoutList : FastXMLList = predefinedLayoutXML.node.elements.innerData("layout");
-        var predefinedLayout : FastXML;
-        var numPredefinedLayouts : Int = predefinedLayoutList.length();
-        var i : Int;
-        for (i in 0...numPredefinedLayouts){
-            predefinedLayout = predefinedLayoutList.get(i);
-            
+        m_predefinedLayoutMap = new Map();
+        var predefinedLayoutXML : Fast = new Fast(Xml.parse(predefinedLayoutData));
+        var predefinedLayoutList = predefinedLayoutXML.node.layouts.nodes.layout;
+        for (predefinedLayout in predefinedLayoutList){
             var layoutName : String = Std.string(predefinedLayout.att.name);
             Reflect.setField(m_predefinedLayoutMap, layoutName, parseWidgetLayout(predefinedLayout));
         }
@@ -79,7 +74,7 @@ class LevelCompiler
      *      List of custom goal objectives not baked into the xml (mostly from the level manager in order to apply
      *      goals across many levels in the same set)
      */
-    public function compileWordProblemLevel(levelConfig : FastXML,
+    public function compileWordProblemLevel(levelConfig : Xml,
             name : String,
             levelIndex : Int,
             chapterIndex : Int,
@@ -90,59 +85,58 @@ class LevelCompiler
             objectives : Array<BaseObjective> = null) : WordProblemLevelData
     {
         var levelId : Int = -1;
-        if (levelConfig.node.exists.innerData("@id")) 
+		var fastLevelConfig = new Fast(levelConfig);
+        if (levelConfig.exists("id")) 
         {
-            levelId = parseInt(levelConfig.att.id);
+            levelId = Std.parseInt(fastLevelConfig.att.id);
         }
         else 
         {
             trace("WARNING: The level " + name + " has no qid, log data may not be able to tell us which level was played!");
-        }  // Bar model levels will need to map to correct bin the pdf  
-        
-        
-        
-        var barModelType : String = ((levelConfig.node.exists.innerData("@barModelType"))) ? levelConfig.att.barModelType : null;
+        }
+		
+		// Bar model levels will need to map to correct bin the pdf  
+        var barModelType : String = fastLevelConfig.has.barModelType ? fastLevelConfig.att.barModelType : null;
         
         // Parse out the variable symbols to use
-        var vectorSpace : IVectorSpace = m_expressionCompiler.getVectorSpace();
+        var vectorSpace : RealsVectorSpace = m_expressionCompiler.getVectorSpace();
         var symbolBindings : Array<SymbolData> = new Array<SymbolData>();
-        var symbolBindingsList : FastXMLList = levelConfig.node.elements.innerData("symbols").elements("symbol");
+        var symbolBindingsList = fastLevelConfig.node.symbols.nodes.symbol;
         for (symbolBinding in symbolBindingsList)
         {
             // Treat empty string as same as null for some values
-            var symbolValue : String = symbolBinding.node.attribute.innerData("value");
-            var symbolName : String = ((symbolBinding.node.exists.innerData("@name"))) ? 
-            symbolBinding.node.attribute.innerData("name") : symbolValue;
-            var symbolAbbreviatedName : String = ((symbolBinding.node.exists.innerData("@abbreviatedName"))) ? 
-            symbolBinding.node.attribute.innerData("abbreviatedName") : symbolValue;
-            var symbolTexture : String = ((symbolBinding.node.exists.innerData("@symbolTexture"))) ? 
-            symbolBinding.node.attribute.innerData("symbolTexture") : null;
-            var symbolBackgroundTexturePositive : String = ((symbolBinding.node.exists.innerData("@backgroundTexturePositive"))) ? 
-            symbolBinding.node.attribute.innerData("backgroundTexturePositive") : "card_background_square";
+            var symbolValue : String = symbolBinding.att.value;
+            var symbolName : String = symbolBinding.has.name ? 
+				symbolBinding.att.name : symbolValue;
+            var symbolAbbreviatedName : String = symbolBinding.has.abbreviatedName ? 
+				symbolBinding.att.abbreviatedName : symbolValue;
+            var symbolTexture : String = symbolBinding.has.symbolTexture ? 
+				symbolBinding.att.symbolTexture : null;
+            var symbolBackgroundTexturePositive : String = symbolBinding.has.backgroundTexturePositive ? 
+				symbolBinding.att.backgroundTexturePositive : "card_background_square";
             if (symbolBackgroundTexturePositive == "") 
             {
                 symbolBackgroundTexturePositive = "card_background_square";
             }
-            var symbolBackgroundTextureNegative : String = ((symbolBinding.node.exists.innerData("@backgroundTextureNegative"))) ? 
-            symbolBinding.node.attribute.innerData("backgroundTextureNegative") : symbolBackgroundTexturePositive;
+            var symbolBackgroundTextureNegative : String = symbolBinding.has.backgroundTextureNegative ? 
+				symbolBinding.att.backgroundTextureNegative : symbolBackgroundTexturePositive;
             if (symbolBackgroundTextureNegative == "") 
             {
                 symbolBackgroundTextureNegative = null;
-            }  // Set optional properties for font colors and size, if not set they go to default values  
-            
-            
-            
+            }
+			
+			// Set optional properties for font colors and size, if not set they go to default values  
             var defaultSymbolAttributes : CardAttributes = CardAttributes.DEFAULT_CARD_ATTRIBUTES;
-            var symbolBackgroundColor : Int = ((symbolBinding.node.exists.innerData("@backgroundColor"))) ? 
-            parseInt(symbolBinding.node.attribute.innerData("backgroundColor"), 16) : 0xFFFFFF;
-            var symbolFontName : String = ((symbolBinding.node.exists.innerData("@fontName"))) ? 
-            symbolBinding.node.attribute.innerData("fontName") : defaultSymbolAttributes.defaultFontName;
-            var symbolFontColorPositive : Int = ((symbolBinding.node.exists.innerData("@fontColorPositive"))) ? 
-            parseInt(symbolBinding.node.attribute.innerData("fontColorPositive"), 16) : defaultSymbolAttributes.defaultPositiveTextColor;
-            var symbolFontColorNegative : Int = ((symbolBinding.node.exists.innerData("@fontColorNegative"))) ? 
-            parseInt(symbolBinding.node.attribute.innerData("fontColorNegative"), 16) : defaultSymbolAttributes.defaultNegativeTextColor;
-            var symbolFontSize : Int = ((symbolBinding.node.exists.innerData("@fontSize"))) ? 
-            parseInt(symbolBinding.node.attribute.innerData("fontSize")) : defaultSymbolAttributes.defaultFontSize;
+            var symbolBackgroundColor : Int = symbolBinding.has.backgroundColor ? 
+				Std.parseInt(symbolBinding.att.backgroundColor) : 0xFFFFFF;
+            var symbolFontName : String = symbolBinding.has.fontName ? 
+				symbolBinding.att.fontName : defaultSymbolAttributes.defaultFontName;
+            var symbolFontColorPositive : Int = symbolBinding.has.fontColorPositive ? 
+				Std.parseInt(symbolBinding.att.fontColorPositive) : defaultSymbolAttributes.defaultPositiveTextColor;
+            var symbolFontColorNegative : Int = symbolBinding.has.fontColorNegative ? 
+				Std.parseInt(symbolBinding.att.fontColorNegative) : defaultSymbolAttributes.defaultNegativeTextColor;
+            var symbolFontSize : Int = symbolBinding.has.fontSize ? 
+				Std.parseInt(symbolBinding.att.fontSize) : defaultSymbolAttributes.defaultFontSize;
             
             
             // Need to create positive and negative binding at this point
@@ -159,12 +153,12 @@ class LevelCompiler
             );
             positiveSymbolData.fontColor = symbolFontColorPositive;
             positiveSymbolData.fontSize = symbolFontSize;
-            positiveSymbolData.useCustomBarColor = ((symbolBinding.node.exists.innerData("@useCustomBarColor"))) ? 
-                    symbolBinding.node.attribute.innerData("useCustomBarColor") == "true" : false;
-            if (symbolBinding.node.exists.innerData("@customBarColor")) 
+            positiveSymbolData.useCustomBarColor = symbolBinding.has.useCustomBarColor ? 
+                    symbolBinding.att.useCustomBarColor == "true" : false;
+            if (symbolBinding.has.customBarColor) 
             {
-                var colorString : String = symbolBinding.node.attribute.innerData("customBarColor");
-                positiveSymbolData.customBarColor = parseInt(colorString, 16);
+                var colorString : String = symbolBinding.att.customBarColor;
+                positiveSymbolData.customBarColor = Std.parseInt(colorString);
             }
             symbolBindings.push(positiveSymbolData);
             
@@ -183,30 +177,28 @@ class LevelCompiler
             symbolBindings.push(negativeSymbolData);
             
             // Optional setting if the texture itself should get a color
-            var hasSymbolTextureColor : Bool = symbolBinding.node.exists.innerData("@symbolColor");
+            var hasSymbolTextureColor : Bool = symbolBinding.has.symbolColor;
             if (hasSymbolTextureColor) 
             {
-                var symbolColor : Int = parseInt(symbolBinding.node.attribute.innerData("symbolColor"));
+                var symbolColor : Int = Std.parseInt(symbolBinding.att.symbolColor);
                 positiveSymbolData.symbolTextureColor = symbolColor;
                 negativeSymbolData.symbolTextureColor = symbolColor;
-            }  // Optional setting if terms of this type should have a specific bar color  
-            
-            
-            
-            var hasCustomBarColor : Bool = symbolBinding.node.exists.innerData("@barColor");
+            }  
+			
+			// Optional setting if terms of this type should have a specific bar color  
+            var hasCustomBarColor : Bool = symbolBinding.has.barColor;
             if (hasCustomBarColor) 
             {
-                var barColor : Int = parseInt(symbolBinding.node.attribute.innerData("barColor"), 16);
+                var barColor : Int = Std.parseInt(symbolBinding.att.barColor);
                 positiveSymbolData.customBarColor = barColor;
                 negativeSymbolData.customBarColor = barColor;
             }
-        }  // Parse scripting data  
-        
-        
-        
-        var scriptXml : FastXML = levelConfig.nodes.elements("script")[0];
-        var scriptHead : FastXML = scriptXml.nodes.elements("scriptedActions")[0];
-        var scriptRoot : ScriptNode = scriptParser.parse(scriptHead);
+        }
+		
+		// Parse scripting data  
+        var scriptXml : Fast = fastLevelConfig.node.script;
+        var scriptHead : Fast = scriptXml.node.scriptedActions;
+        var scriptRoot : ScriptNode = scriptParser.parse(scriptHead.x);
         
         // TODO: This is hacky, default width should be part of the style info
         var defaultWidth : Float = 500;
@@ -214,18 +206,17 @@ class LevelCompiler
         // Parse out the style json and apply the styles to the problem
         // Config should have provided default styles.
         // HACK: For now, if one of the three genres automatically use a default styling
-        var cssObject : Dynamic;
-        var styleXML : FastXML = levelConfig.nodes.elements("style")[0];
+        var cssObject : Dynamic = null;
+        var styleXML : Fast = fastLevelConfig.node.style;
         var defaultStyle : String = config.getDefaultTextStyle();
-        var styleData : String = ((styleXML != null)) ? styleXML.nodes.text()[0] : defaultStyle;
+        var styleData : String = ((styleXML != null)) ? styleXML.innerData : defaultStyle;
         cssObject = haxe.Json.parse(styleData);
         
         // Parse the main textual and visual content describing the word problem
-        var paragraph : FastXML = levelConfig.nodes.elements("wordproblem")[0];
+        var paragraph : Fast = fastLevelConfig.node.wordproblem;
         var pageRootNodes : Array<DocumentNode> = new Array<DocumentNode>();
-        var pageList : FastXMLList = paragraph.node.children.innerData();
-        for (i in 0...pageList.length()){
-            var pageXML : FastXML = pageList.get(i);
+        var pageList = paragraph.elements;
+        for (pageXML in pageList){
             pageRootNodes.push(textParser.parseDocument(pageXML, defaultWidth));
         }
         
@@ -234,26 +225,19 @@ class LevelCompiler
         {
             textParser.applyStyleAndLayout(pageRoot, cssObject);
             textParser.getImagesToLoad(pageRoot, imagesToLoad);
-        }  // Parse layout data and other miscellaneous assets needed by the level    // * do nothing which just picks the default layout    // * pick an existing ui layout from a predefined list without an override (add a name attribute)    // * define its own layout using a layout tag (provide no name attribute)    // * choose to override properties from an existing ui layout using an override tag    // A level can  
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        var layoutXML : FastXML = levelConfig.nodes.elements("layout")[0];
-        var layoutData : WidgetAttributesComponent;
+        }
+		
+		// A level can  
+		// * choose to override properties from an existing ui layout using an override tag
+		// * define its own layout using a layout tag (provide no name attribute)
+		// * pick an existing ui layout from a predefined list without an override (add a name attribute)
+		// * do nothing which just picks the default layout
+        // Parse layout data and other miscellaneous assets needed by the level
+        var layoutXML : Fast = fastLevelConfig.hasNode.layout ? fastLevelConfig.node.layout : null;
+        var layoutData : WidgetAttributesComponent = null;
         if (layoutXML != null) 
         {
-            if (layoutXML.node.exists.innerData("@name")) 
+            if (layoutXML.has.name) 
             {
                 layoutData = getLayoutFromName(Std.string(layoutXML.att.name)).clone(vectorSpace);
             }
@@ -269,29 +253,26 @@ class LevelCompiler
             // To facilitate this, we search for an override tag. Components with a matching id
             // will take on the new values specified in the override. This does not affect the
             // layout structure though.
-            var overrideLayoutAttributes : FastXML = levelConfig.nodes.elements("overrideLayoutAttributes")[0];
+            var overrideLayoutAttributes : Fast = fastLevelConfig.node.overrideLayoutAttributes;
             if (overrideLayoutAttributes != null) 
             {
-                if (overrideLayoutAttributes.node.exists.innerData("@name")) 
+                if (overrideLayoutAttributes.has.name) 
                 {
-                    layoutData = getLayoutFromName(Std.string(overrideLayoutAttributes.att.name)).clone(vectorSpace);
+                    layoutData = getLayoutFromName(overrideLayoutAttributes.att.name).clone(vectorSpace);
                 }
                 else 
                 {
                     layoutData = getLayoutFromName("default").clone(vectorSpace);
                 }
                 
-                var overrideChildren : FastXMLList = overrideLayoutAttributes.node.children.innerData();
-                var numOverrideChildren : Int = overrideChildren.length();
-                var i : Int;
-                for (i in 0...numOverrideChildren){
+                var overrideChildren = overrideLayoutAttributes.elements;
+                for (overrideChild in overrideChildren){
                     // Find the id of component and overwrite the attributes specified in the file
-                    var overrideChildXML : FastXML = overrideChildren.get(i);
-                    var idToFind : String = overrideChildXML.att.id;
+                    var idToFind : String = overrideChild.att.id;
                     var componentToOverride : WidgetAttributesComponent = getWidgetAttributeComponent(layoutData, idToFind);
                     if (componentToOverride != null) 
                     {
-                        overwriteWidgetAttributes(overrideChildXML, componentToOverride);
+                        overwriteWidgetAttributes(overrideChild, componentToOverride);
                     }
                 }
             }
@@ -299,11 +280,9 @@ class LevelCompiler
             {
                 layoutData = getLayoutFromName("default").clone(vectorSpace);
             }
-        }  // load up the background images for the various widgets  
-        
-        
-        
-        loadImages(layoutData, imagesToLoad);
+        }
+		
+		// load up the background images for the various widgets  
         function loadImages(widgetAttributes : WidgetAttributesComponent, outImages : Array<String>) : Void
         {
             var widgetSources : Array<Dynamic> = widgetAttributes.getResourceSourceList();
@@ -321,24 +300,21 @@ class LevelCompiler
                     loadImages(childWidgetAttributes, outImages);
                 }
             }
-        }  // the script using those resource is never executed    // This is required so the level can pre-load those assets even if its possible    // Parse all the resources required by the level script  ;
+        };
         
+        loadImages(layoutData, imagesToLoad);
         
-        
-        
-        
-        
-        
+		// Parse all the resources required by the level script  ;
+		// This is required so the level can pre-load those assets even if its possible
+        // the script using those resource is never executed
         var audioToLoad : Array<Dynamic> = new Array<Dynamic>();
         var textureAtlasesToLoad : Array<Array<String>> = new Array<Array<String>>();
-        var resourcesXML : FastXML = levelConfig.nodes.elements("resources")[0];
+        var resourcesXML : Fast = fastLevelConfig.node.resources;
         if (resourcesXML != null) 
         {
-            var resourceXMLList : FastXMLList = resourcesXML.node.children.innerData();
-            var resourceXML : FastXML;
-            for (i in 0...resourceXMLList.length()){
-                resourceXML = resourceXMLList.get(i);
-                var resourceType : String = resourceXML.node.name.innerData();
+            var resourceXMLList = resourcesXML.elements;
+            for (resourceXML in resourceXMLList){
+                var resourceType : String = resourceXML.name;
                 if (resourceType == "img") 
                 {
                     imagesToLoad.push(resourceXML.att.src);
@@ -346,11 +322,10 @@ class LevelCompiler
                 else if (resourceType == "audio") 
                 {
                     var audioSource : String = resourceXML.att.src;
-                    var audioType : String = resourcesXML.att.type;
+                    var audioType : String = resourceXML.att.type;
                     var audioData : Dynamic = {
                         type : audioType,
                         src : audioSource,
-
                     };
                     audioToLoad.push(audioData);
                 }
@@ -359,43 +334,39 @@ class LevelCompiler
                     textureAtlasesToLoad.push([resourceXML.att.src, resourceXML.att.xml]);
                 }
             }
-        }  // TODO: Add default audio, background music specific to the genre if none is specified  
-        
-        
-        
+        }
+		
+		// TODO: Add default audio, background music specific to the genre if none is specified  
         if (audioToLoad.length == 0) 
-            { }  // Check if the level overrides the default card rendering attributes.  
-        
-        
-        
-        var cardXML : FastXML = levelConfig.nodes.elements("cardAttributes")[0];
+            { }
+			
+		// Check if the level overrides the default card rendering attributes.  
         var defaultCardAttributes : CardAttributes = CardAttributes.DEFAULT_CARD_ATTRIBUTES;
-        var cardAttributes : CardAttributes = ((cardXML != null)) ? 
-        parseCardAttributes(cardXML, defaultCardAttributes) : defaultCardAttributes;
+        var cardAttributes : CardAttributes = fastLevelConfig.hasNode.cardAttributes ? 
+			parseCardAttributes(fastLevelConfig.node.cardAttributes, defaultCardAttributes) : defaultCardAttributes;
         
         // Parse the level rules, see what initial values need to be overridden
-        var rulesXml : FastXML = levelConfig.nodes.elements("rules")[0];
         var defaultRules : LevelRules = config.getDefaultLevelRules();
-        var levelRules : LevelRules = ((rulesXml != null)) ? 
-        LevelRules.createRulesFromXml(rulesXml, defaultRules) : defaultRules;
+        var levelRules : LevelRules = fastLevelConfig.hasNode.rules ? 
+			LevelRules.createRulesFromXml(fastLevelConfig.node.rules, defaultRules) : defaultRules;
         
         var levelData : WordProblemLevelData = new WordProblemLevelData(
-        levelId, 
-        levelIndex, 
-        chapterIndex, 
-        genreId, 
-        name, 
-        pageRootNodes, 
-        cssObject, 
-        symbolBindings, 
-        scriptRoot, 
-        imagesToLoad, 
-        audioToLoad, 
-        textureAtlasesToLoad, 
-        layoutData, 
-        cardAttributes, 
-        levelRules, 
-        barModelType
+			levelId, 
+			levelIndex, 
+			chapterIndex, 
+			genreId, 
+			name, 
+			pageRootNodes, 
+			cssObject, 
+			symbolBindings, 
+			scriptRoot, 
+			imagesToLoad, 
+			audioToLoad, 
+			textureAtlasesToLoad, 
+			layoutData, 
+			cardAttributes, 
+			levelRules, 
+			barModelType
         );
         
         // TODO: Should overwriting be occuring? Right now just append everything
@@ -405,14 +376,12 @@ class LevelCompiler
         // Parse out objectives that have been manually defined in a level
         // Objectives are not only goals the player can view at the end, but they are also
         // thesholds to determine satisfactory completion.
-        var objectivesXml : FastXML = levelConfig.nodes.elements("objectives")[0];
-        if (objectivesXml != null) 
+        if (fastLevelConfig.hasNode.objectives) 
         {
-            ObjectivesFactory.getObjectivesFromXml(objectivesXml, levelData.objectives);
-        }  // Objectives are bound to a particular level, they are polled from the logic in the script node.  
-        
-        
-        
+            ObjectivesFactory.getObjectivesFromXml(fastLevelConfig.node.objectives, levelData.objectives);
+        }
+		
+		// Objectives are bound to a particular level, they are polled from the logic in the script node.  
         if (Std.is(scriptRoot, BaseCustomLevelScript)) 
         {
             (try cast(scriptRoot, BaseCustomLevelScript) catch(e:Dynamic) null).getObjectives(levelData.objectives);
@@ -432,29 +401,35 @@ class LevelCompiler
     /**
      * Parse the attributes related to the rendering of the cards.
      */
-    public function parseCardAttributes(xml : FastXML,
+    public function parseCardAttributes(xml : Fast,
             defaultAttributes : CardAttributes) : CardAttributes
     {
-        var defaultPositiveCardElement : FastXML = xml.nodes.elements("defaultCardPositiveBg")[0];
+        var defaultPositiveCardElement : Fast = xml.node.defaultCardPositiveBg;
+		var defaultPositiveCardBgId : String = null;
+		var defaultPositiveCardColor : Int = 0;
+		var defaultPositiveTextColor : Int = 0;
         if (defaultPositiveCardElement != null) 
         {
-            var defaultPositiveCardBgId : String = defaultPositiveCardElement.att.src;
-            var defaultPositiveCardColor : Int = parseInt(defaultPositiveCardElement.att.color, 16);
-            var defaultPostiveTextColor : Int = parseInt(defaultPositiveCardElement.att.textColor, 16);
+            defaultPositiveCardBgId = defaultPositiveCardElement.att.src;
+            defaultPositiveCardColor = Std.parseInt(defaultPositiveCardElement.att.color);
+            defaultPositiveTextColor = Std.parseInt(defaultPositiveCardElement.att.textColor);
         }
         else 
         {
             defaultPositiveCardBgId = defaultAttributes.defaultPositiveCardBgId;
             defaultPositiveCardColor = defaultAttributes.defaultPositiveCardColor;
-            defaultPostiveTextColor = defaultAttributes.defaultPositiveTextColor;
+            defaultPositiveTextColor = defaultAttributes.defaultPositiveTextColor;
         }
         
-        var defaultNegativeCardElement : FastXML = xml.nodes.elements("defaultCardNegativeBg")[0];
+        var defaultNegativeCardElement : Fast = xml.node.defaultCardNegativeBg;
+		var defaultNegativeCardBgId : String = null;
+		var defaultNegativeCardColor : Int = 0;
+		var defaultNegativeTextColor : Int = 0;
         if (defaultNegativeCardElement != null) 
         {
-            var defaultNegativeCardBgId : String = defaultNegativeCardElement.att.src;
-            var defaultNegativeCardColor : Int = parseInt(defaultNegativeCardElement.att.color, 16);
-            var defaultNegativeTextColor : Int = parseInt(defaultNegativeCardElement.att.textColor, 16);
+            defaultNegativeCardBgId = defaultNegativeCardElement.att.src;
+            defaultNegativeCardColor = Std.parseInt(defaultNegativeCardElement.att.color);
+            defaultNegativeTextColor = Std.parseInt(defaultNegativeCardElement.att.textColor);
         }
         else 
         {
@@ -464,14 +439,14 @@ class LevelCompiler
         }
         
         return new CardAttributes(
-        defaultPositiveCardBgId, 
-        defaultPositiveCardColor, 
-        defaultPostiveTextColor, 
-        defaultNegativeCardBgId, 
-        defaultNegativeCardColor, 
-        defaultNegativeTextColor, 
-        32, 
-        "Verdana"  //GameFonts.DEFAULT_FONT_NAME  , 
+			defaultPositiveCardBgId, 
+			defaultPositiveCardColor, 
+			defaultPositiveTextColor, 
+			defaultNegativeCardBgId, 
+			defaultNegativeCardColor, 
+			defaultNegativeTextColor, 
+			32, 
+			"Verdana"  //GameFonts.DEFAULT_FONT_NAME
         );
     }
     
@@ -484,7 +459,7 @@ class LevelCompiler
      *      The layout component struct containing the attributes for the layout node.
      *      Nested inside of it is the children widgets inside of it.
      */
-    public function parseWidgetLayout(xml : FastXML) : WidgetAttributesComponent
+    public function parseWidgetLayout(xml : Fast) : WidgetAttributesComponent
     {
         // Create the attribute structure for the current element
         var widgetAttributes : WidgetAttributesComponent = parseWidgetAttributes(xml);
@@ -492,16 +467,14 @@ class LevelCompiler
         // If the tag is a group, then it acts as a container for other widgets.
         // Note that we currently assume any containers have no other functionality other
         // than holding other widgets.
-        var tagName : String = xml.node.name.innerData();
+        var tagName : String = xml.name;
         if (tagName == "group" || tagName == "layout") 
         {
             var childrenAttributes : Array<WidgetAttributesComponent> = new Array<WidgetAttributesComponent>();
-            var childElements : FastXMLList = xml.node.children.innerData();
-            var numChildren : Int = childElements.length();
-            var i : Int;
-            var childAttributes : WidgetAttributesComponent;
-            for (i in 0...numChildren){
-                childAttributes = this.parseWidgetLayout(childElements.get(i));
+            var childElements = xml.elements;
+            var childAttributes : WidgetAttributesComponent = null;
+            for (childElement in childElements){
+                childAttributes = this.parseWidgetLayout(childElement);
                 childAttributes.parent = widgetAttributes;
                 childrenAttributes.push(childAttributes);
             }
@@ -521,7 +494,7 @@ class LevelCompiler
     private function getWidgetAttributeComponent(rootComponent : WidgetAttributesComponent,
             idToFind : String) : WidgetAttributesComponent
     {
-        var component : WidgetAttributesComponent;
+        var component : WidgetAttributesComponent = null;
         if (rootComponent != null) 
         {
             if (rootComponent.entityId == idToFind) 
@@ -530,7 +503,7 @@ class LevelCompiler
             }
             else if (rootComponent.children != null) 
             {
-                var i : Int;
+                var i : Int = 0;
                 for (i in 0...rootComponent.children.length){
                     component = getWidgetAttributeComponent(rootComponent.children[i], idToFind);
                     if (component != null) 
@@ -544,73 +517,73 @@ class LevelCompiler
         return component;
     }
     
-    private function overwriteWidgetAttributes(xml : FastXML, component : WidgetAttributesComponent) : Void
+    private function overwriteWidgetAttributes(xml : Fast, component : WidgetAttributesComponent) : Void
     {
-        if (xml.node.exists.innerData("@width")) 
+        if (xml.has.width) 
         {
             var widthExpression : String = xml.att.width;
-            component.widthRoot = m_expressionCompiler.compile(widthExpression).head;
+            component.widthRoot = m_expressionCompiler.compile(widthExpression);
         }
         
-        if (xml.node.exists.innerData("@height")) 
+        if (xml.has.height) 
         {
             var heightExpression : String = xml.att.height;
-            component.heightRoot = m_expressionCompiler.compile(heightExpression).head;
+            component.heightRoot = m_expressionCompiler.compile(heightExpression);
         }
         
-        if (xml.node.exists.innerData("@x")) 
+        if (xml.has.x) 
         {
             var xExpression : String = xml.att.x;
-            component.xRoot = m_expressionCompiler.compile(xExpression).head;
+            component.xRoot = m_expressionCompiler.compile(xExpression);
         }
         
-        if (xml.node.exists.innerData("@y")) 
+        if (xml.has.y) 
         {
             var yExpression : String = xml.att.y;
-            component.yRoot = m_expressionCompiler.compile(yExpression).head;
+            component.yRoot = m_expressionCompiler.compile(yExpression);
         }
         
-        if (xml.node.exists.innerData("@viewportWidth")) 
+        if (xml.has.viewportWidth) 
         {
-            component.viewportWidth = parseInt(xml.att.viewportWidth);
+            component.viewportWidth = Std.parseInt(xml.att.viewportWidth);
         }
         
-        if (xml.node.exists.innerData("@viewportHeight")) 
+        if (xml.has.viewportHeight) 
         {
-            component.viewportHeight = parseInt(xml.att.viewportHeight);
+            component.viewportHeight = Std.parseInt(xml.att.viewportHeight);
         }
         
-        if (xml.node.exists.innerData("@src")) 
+        if (xml.has.src) 
         {
             component.setResourceSourceList(xml.att.src);
         }
         
-        if (xml.node.exists.innerData("@visible")) 
+        if (xml.has.visible) 
         {
             component.visible = XString.stringToBool(xml.att.visible);
         }
         
-        if (xml.node.exists.innerData("@backgroundAttachment")) 
+        if (xml.has.backgroundAttachment) 
         {
             component.extraData.backgroundAttachment = xml.att.backgroundAttachment;
         }
         
-        if (xml.node.exists.innerData("@backgroundRepeat")) 
+        if (xml.has.backgroundRepeat) 
         {
             component.extraData.backgroundRepeat = xml.att.backgroundRepeat;
         }
         
-        if (xml.node.exists.innerData("@autoCenterPages")) 
+        if (xml.has.autoCenterPages) 
         {
             component.extraData.autoCenterPages = XString.stringToBool(xml.att.autoCenterPages);
         }
         
-        if (xml.node.exists.innerData("@autoShowPrevNextButtons")) 
+        if (xml.has.autoShowPrevNextButtons) 
         {
             component.extraData.autoShowPrevNextButtons = XString.stringToBool(xml.att.autoShowPrevNextButtons);
         }
         
-        if (xml.node.exists.innerData("@allowScroll")) 
+        if (xml.has.allowScroll) 
         {
             component.extraData.allowScroll = XString.stringToBool(xml.att.allowScroll);
         }
@@ -620,22 +593,22 @@ class LevelCompiler
      * Parse the attributes of the given xml tag. Only looks at the top level tag, not
      * any potential children.
      */
-    private function parseWidgetAttributes(xml : FastXML) : WidgetAttributesComponent
+    private function parseWidgetAttributes(xml : Fast) : WidgetAttributesComponent
     {
-        var type : String = xml.node.name.innerData();
+        var type : String = xml.name;
         var id : String = xml.att.id;
-        var width : ExpressionNode = (xml.node.exists.innerData("@width")) ? 
-        m_expressionCompiler.compile(xml.att.width).head : null;
-        var height : ExpressionNode = (xml.node.exists.innerData("@height")) ? 
-        m_expressionCompiler.compile(xml.att.height).head : null;
-        var xExpression : String = (xml.node.exists.innerData("@x")) ? xml.att.x : "0";
-        var x : ExpressionNode = m_expressionCompiler.compile(xExpression).head;
-        var yExpression : String = (xml.node.exists.innerData("@y")) ? xml.att.y : "0";
-        var y : ExpressionNode = m_expressionCompiler.compile(yExpression).head;
-        var viewportWidth : Float = (xml.node.exists.innerData("@viewportWidth")) ? parseInt(xml.att.viewportWidth) : -1;
-        var viewportHeight : Float = (xml.node.exists.innerData("@viewportHeight")) ? parseInt(xml.att.viewportHeight) : -1;
-        var backgroundSource : String = (xml.node.exists.innerData("@src")) ? xml.att.src : null;
-        var visible : Bool = (xml.node.exists.innerData("@visible")) ? XString.stringToBool(xml.att.visible) : true;
+        var width : ExpressionNode = xml.has.width ? 
+			m_expressionCompiler.compile(xml.att.width) : null;
+        var height : ExpressionNode = xml.has.height ? 
+			m_expressionCompiler.compile(xml.att.height) : null;
+        var xExpression : String = xml.has.x ? xml.att.x : "0";
+        var x : ExpressionNode = m_expressionCompiler.compile(xExpression);
+        var yExpression : String = xml.has.y ? xml.att.y : "0";
+        var y : ExpressionNode = m_expressionCompiler.compile(yExpression);
+        var viewportWidth : Float = xml.has.viewportWidth ? Std.parseFloat(xml.att.viewportWidth) : -1;
+        var viewportHeight : Float = xml.has.viewportHeight ? Std.parseFloat(xml.att.viewportHeight) : -1;
+        var backgroundSource : String = xml.has.src ? xml.att.src : null;
+        var visible : Bool = xml.has.visible ? XString.stringToBool(xml.att.visible) : true;
         
         var extraData : Dynamic = { };
         
@@ -643,42 +616,42 @@ class LevelCompiler
         {
             // Appending extra properties to the widget
             // (Right now this is just to get extra arguments into the text area)
-            extraData.backgroundAttachment = (xml.node.exists.innerData("@backgroundAttachment")) ? xml.att.backgroundAttachment : "scroll";
-            extraData.backgroundRepeat = (xml.node.exists.innerData("@backgroundRepeat")) ? xml.att.backgroundRepeat : "repeat";
-            extraData.autoCenterPages = (xml.node.exists.innerData("@autoCenterPages")) ? XString.stringToBool(xml.att.autoCenterPages) : true;
-            extraData.allowScroll = (xml.node.exists.innerData("@allowScroll")) ? XString.stringToBool(xml.att.allowScroll) : true;
+            extraData.backgroundAttachment = xml.has.backgroundAttachment ? xml.att.backgroundAttachment : "scroll";
+            extraData.backgroundRepeat = xml.has.backgroundRepeat ? xml.att.backgroundRepeat : "repeat";
+            extraData.autoCenterPages = xml.has.autoCenterPages ? XString.stringToBool(xml.att.autoCenterPages) : true;
+            extraData.allowScroll = xml.has.allowScroll ? XString.stringToBool(xml.att.allowScroll) : true;
         }
         
         if (type == "button") 
         {
-            extraData.label = (xml.node.exists.innerData("@label")) ? xml.att.label : null;
-            extraData.fontName = (xml.node.exists.innerData("@fontName")) ? xml.att.fontName : "Verdana";
-            extraData.fontColor = (xml.node.exists.innerData("@fontColor")) ? parseInt(xml.att.fontColor, 16) : 0x000000;
-            extraData.fontSize = (xml.node.exists.innerData("@fontSize")) ? parseInt(xml.att.fontSize) : 12;
-            extraData.nineSlice = (xml.node.exists.innerData("@nineSlice")) ? xml.att.nineSlice : null;
+            extraData.label = xml.has.label ? xml.att.label : null;
+            extraData.fontName = xml.has.fontName ? xml.att.fontName : "Verdana";
+            extraData.fontColor = xml.has.fontColor ? Std.parseInt(xml.att.fontColor) : 0x000000;
+            extraData.fontSize = xml.has.fontSize ? Std.parseInt(xml.att.fontSize) : 12;
+            extraData.nineSlice = xml.has.nineSlice ? xml.att.nineSlice : null;
         }
         
         if (type == "barModelArea") 
         {
-            extraData.unitLength = (xml.node.exists.innerData("@unitLength")) ? parseInt(xml.att.unitLength) : 100;
-            extraData.unitHeight = (xml.node.exists.innerData("@unitHeight")) ? parseInt(xml.att.unitHeight) : 40;
-            extraData.topBarPadding = (xml.node.exists.innerData("@topBarPadding")) ? parseInt(xml.att.topBarPadding) : 10;
-            extraData.leftBarPadding = (xml.node.exists.innerData("@leftBarPadding")) ? parseInt(xml.att.leftBarPadding) : 60;
-            extraData.barGap = (xml.node.exists.innerData("@barGap")) ? parseInt(xml.att.barGap) : 30;
+            extraData.unitLength = xml.has.unitLength ? Std.parseInt(xml.att.unitLength) : 100;
+            extraData.unitHeight = xml.has.unitHeight ? Std.parseInt(xml.att.unitHeight) : 40;
+            extraData.topBarPadding = xml.has.topBarPadding ? Std.parseInt(xml.att.topBarPadding) : 10;
+            extraData.leftBarPadding = xml.has.leftBarPadding ? Std.parseInt(xml.att.leftBarPadding) : 60;
+            extraData.barGap = xml.has.barGap ? Std.parseInt(xml.att.barGap) : 30;
         }
         
         var attributes : WidgetAttributesComponent = new WidgetAttributesComponent(
-        id, 
-        type, 
-        width, 
-        height, 
-        x, 
-        y, 
-        viewportWidth, 
-        viewportHeight, 
-        backgroundSource, 
-        visible, 
-        extraData
+			id, 
+			type, 
+			width, 
+			height, 
+			x, 
+			y, 
+			viewportWidth, 
+			viewportHeight, 
+			backgroundSource, 
+			visible, 
+			extraData
         );
         
         return attributes;

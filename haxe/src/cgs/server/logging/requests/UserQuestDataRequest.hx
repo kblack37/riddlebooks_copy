@@ -74,8 +74,8 @@ class UserQuestDataRequest extends DataRequest
     //Parse users quests data for all users.
     private function parseUsersQuestData(questData : Dynamic) : Void
     {
-        var currDqid : String;
-        var rawQuestDataObjs : Array<Dynamic>;
+        var currDqid : String = null;
+        var rawQuestDataObjs : Array<Dynamic> = null;
         var rawQuestData : Dictionary = new Dictionary();
         for (questObj/* AS3HX WARNING could not determine type for var: questObj exp: EIdent(questData) type: Dynamic */ in questData)
         {
@@ -91,8 +91,8 @@ class UserQuestDataRequest extends DataRequest
         }
         
         //Create user quest data without actions.
-        var currQuestData : Array<Dynamic>;
-        var newQuestData : QuestData;
+        var currQuestData : Array<Dynamic> = null;
+        var newQuestData : QuestData = null;
         for (dqid in Reflect.fields(rawQuestData))
         {
             currQuestData = rawQuestData[dqid];
@@ -139,8 +139,8 @@ class UserQuestDataRequest extends DataRequest
     {
         //Mapping of dqids to raw quest actions.
         var actionsMap : Dictionary = new Dictionary();
-        var dqid : String;
-        var questActions : Array<Dynamic>;
+        var dqid : String = null;
+        var questActions : Array<Dynamic> = null;
         
         //Get all of the actions for each dqid.
         for (actionObj/* AS3HX WARNING could not determine type for var: actionObj exp: EIdent(data) type: Dynamic */ in data)
@@ -157,7 +157,7 @@ class UserQuestDataRequest extends DataRequest
             questActions.push(actionObj);
         }
         
-        var questData : QuestData;
+        var questData : QuestData = null;
         for (currDqid in Reflect.fields(_userQuestsMap))
         {
             questData = _userQuestsMap[currDqid];

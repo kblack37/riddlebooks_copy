@@ -3,7 +3,6 @@ package wordproblem.summary;
 
 import flash.geom.Rectangle;
 import flash.text.TextFormat;
-import flash.utils.Dictionary;
 
 import cgs.internationalization.StringTable;
 
@@ -11,8 +10,9 @@ import dragonbox.common.ui.MouseState;
 import dragonbox.common.util.ListUtil;
 import dragonbox.common.util.XColor;
 
-import feathers.controls.Button;
+import haxe.Constraints.Function;
 
+import starling.display.Button;
 import starling.display.DisplayObjectContainer;
 import starling.display.Image;
 import starling.display.Quad;
@@ -72,7 +72,7 @@ class SummaryRewardsScreen extends Layer
      * Key: String id of the object
      * Value: Object with extra data of how to render the additional popup
      */
-    private var m_renderComponentIdToData : Dictionary;
+    private var m_renderComponentIdToData : Map<String, Dynamic>;
     
     /**
      * Between a new draw call and before a reset call we need to keep track of the textures of rewards
@@ -82,7 +82,7 @@ class SummaryRewardsScreen extends Layer
      * key: name of texture
      * value: true if texture was a TextureAtlas, false otherwise
      */
-    private var m_itemTextureNamesUsedBuffer : Dictionary;
+    private var m_itemTextureNamesUsedBuffer : Map<String, Bool>;
     
     /**
      * This is the list of all display objects that are the visual representation of the rewards
@@ -136,12 +136,13 @@ class SummaryRewardsScreen extends Layer
         m_playerItemInventory = playerItemInventory;
         m_itemDataSource = itemDataSource;
         m_assetManager = assetManager;
-        m_renderComponentIdToData = new Dictionary();
-        m_itemTextureNamesUsedBuffer = new Dictionary();
+        m_renderComponentIdToData = new Map();
+        m_itemTextureNamesUsedBuffer = new Map();
         m_rewardButtonsInCurrentPage = new Array<BaseRewardButton>();
         m_rewardButtonHitBuffer = new Rectangle();
         m_rewardDataModels = new Array<Dynamic>();
-        m_rewardsTitle = new TextField(800, 60, StringTable.lookup("rewards"), GameFonts.DEFAULT_FONT_NAME, 32, 0xFFFFFF);
+		// TODO: uncomment when cgs library is finished
+        m_rewardsTitle = new TextField(800, 60, "", /*StringTable.lookup("rewards")*/ GameFonts.DEFAULT_FONT_NAME, 32, 0xFFFFFF);
         m_closeCallback = closeCallback;
         
         // Add transparent background to block events below
@@ -152,7 +153,8 @@ class SummaryRewardsScreen extends Layer
         m_rewardsDismissButton = WidgetUtil.createGenericColoredButton(
                         assetManager,
                         XColor.ROYAL_BLUE,
-                        StringTable.lookup("ok"),
+						// TODO: uncomment when cgs library is finished
+                        "",//StringTable.lookup("ok"),
                         new TextFormat(GameFonts.DEFAULT_FONT_NAME, 32, 0xFFFFFF),
                         null
                         );
@@ -207,8 +209,8 @@ class SummaryRewardsScreen extends Layer
         if (m_activeRewardsDetailScreen == null && this.stage != null) 
         {
             // Only check the buttons visible on the currently active page
-            var buttonMouseIsOverThisFrame : BaseRewardButton;
-            var i : Int;
+            var buttonMouseIsOverThisFrame : BaseRewardButton = null;
+            var i : Int = 0;
             var numRewards : Int = m_rewardButtonsInCurrentPage.length;
             for (i in 0...numRewards){
                 // Go through and set the hit areas after layout is finished
@@ -284,7 +286,7 @@ class SummaryRewardsScreen extends Layer
             currentStages : Array<Int>) : Void
     {
         // Clear out old models
-        as3hx.Compat.setArrayLength(m_rewardDataModels, 0);
+		m_rewardDataModels = new Array<Dynamic>();
         
         // Create reward model data for each one of the types of rewards
         // There is an extra dirty property that when set to true should prompt
@@ -299,7 +301,7 @@ class SummaryRewardsScreen extends Layer
         }
         */
         
-        var i : Int;
+        var i : Int = 0;
         for (i in 0...newRewardItemIds.length){
             // New items are intially hidden as presents
             // This hidden property is so we know whether the player has seen what the item
@@ -388,7 +390,7 @@ class SummaryRewardsScreen extends Layer
         {
             existingRewardButton.removeFromParent(true);
         }
-        as3hx.Compat.setArrayLength(m_rewardButtonsInCurrentPage, 0);
+		m_rewardButtonsInCurrentPage = new Array<BaseRewardButton>();
     }
     
     private function drawButtonsAtCurrentPage(pageIndex : Int) : Void
@@ -401,7 +403,7 @@ class SummaryRewardsScreen extends Layer
             {
                 if (rewardId == rewardDataModel.id) 
                 {
-                    rewardButton = createButton(rewardDataModel);
+                    var rewardButton = createButton(rewardDataModel);
                     m_rewardButtonsInCurrentPage.push(rewardButton);
                 }
             }
@@ -476,7 +478,7 @@ class SummaryRewardsScreen extends Layer
     public function close() : Void
     {
         // Dispose of all reward model buttons and data models
-        as3hx.Compat.setArrayLength(m_rewardDataModels, 0);
+		m_rewardDataModels = new Array<Dynamic>();
         disposeButtons();
         m_rewardsTitle.removeFromParent();
         m_displayParent.removeChild(this);

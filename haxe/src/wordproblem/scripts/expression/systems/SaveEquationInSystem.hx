@@ -73,10 +73,10 @@ class SaveEquationInSystem extends BaseGameScript
                 new ExpressionTree(m_expressionCompiler.getVectorSpace(), null), 
                 m_gameEngine.getExpressionSymbolResources(), 
                 m_assetManager, 
-                m_assetManager.getTexture("term_area_left"), 
+                m_assetManager.getTexture("assets/ui/term_area_left.png"), 
                 containerWidth, 
                 containerHeight, 
-                true, 
+                true
                 );
         
         setIsActive(m_isActive);
@@ -119,7 +119,7 @@ class SaveEquationInSystem extends BaseGameScript
                     m_otherEquation.alpha = 0.0;
                     var tween : Tween = new Tween(m_otherEquation, 1);
                     tween.animate("alpha", 1.0);
-                    Starling.juggler.add(tween);
+                    Starling.current.juggler.add(tween);
                 }
             }
         }
