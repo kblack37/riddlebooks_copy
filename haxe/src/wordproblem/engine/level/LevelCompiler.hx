@@ -47,7 +47,7 @@ class LevelCompiler
         var predefinedLayoutList = predefinedLayoutXML.node.layouts.nodes.layout;
         for (predefinedLayout in predefinedLayoutList){
             var layoutName : String = Std.string(predefinedLayout.att.name);
-            Reflect.setField(m_predefinedLayoutMap, layoutName, parseWidgetLayout(predefinedLayout));
+			m_predefinedLayoutMap.set(layoutName, parseWidgetLayout(predefinedLayout));
         }
     }
     
@@ -665,8 +665,7 @@ class LevelCompiler
      */
     private function getLayoutFromName(layoutName : String) : WidgetAttributesComponent
     {
-        
         return ((m_predefinedLayoutMap.exists(layoutName))) ? 
-        Reflect.field(m_predefinedLayoutMap, layoutName) : Reflect.field(m_predefinedLayoutMap, "default");
+			m_predefinedLayoutMap.get(layoutName) : m_predefinedLayoutMap.get("default");
     }
 }

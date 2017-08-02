@@ -55,6 +55,21 @@ class ExternalComm implements IExternalComm
 		myWindow.parent.postMessage(msg, target);
 	}
 #else
-	#error  
+	
+	public function new() 
+	{		
+	}
+	
+	public function setOnMessageCallback(onMessage:Dynamic -> Void):Void
+	{
+	}
+	
+	public function setMessageCallback(message:String, callback:Array<Dynamic>->Void):Void
+	{
+	}
+	
+	public function sendMsgToParent(msg:ExternalCommuicationParentMessage, target:Targets=Targets.ALL_TARGETS):Void
+	{
+	}
 #end
 }
