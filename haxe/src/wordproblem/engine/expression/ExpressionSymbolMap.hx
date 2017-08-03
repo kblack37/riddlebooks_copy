@@ -230,7 +230,7 @@ class ExpressionSymbolMap
             m_idToDynamicTextureMap.set(value, renderTexture);
             cardTexture = renderTexture;
         }
-        cardObject = new Image(cardTexture);
+        //cardObject = new Image(cardTexture);
         cardObject.pivotX = cardObject.width / 2;
         cardObject.pivotY = cardObject.height / 2;
         

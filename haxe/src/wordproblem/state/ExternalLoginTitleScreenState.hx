@@ -224,7 +224,7 @@ class ExternalLoginTitleScreenState extends BaseState
         addChild(optionsWidget);
         m_options = optionsWidget;
         
-        var bgTexture : Texture = m_assetManager.getTexture("login_background_with_ui");
+        var bgTexture : Texture = m_assetManager.getTexture("login_background_with_ui.png");
         addChildAt(new Image(bgTexture), 0);
         
         // Without any external login info, a continue assumes that the returning player is the
@@ -232,7 +232,7 @@ class ExternalLoginTitleScreenState extends BaseState
         var allowContinue : Bool = m_localSharedObject.data.exists("uid");
         
         // Create a button to continue IF a user id was saved in the cache
-        var baseContinueGameButtonTexture : Texture = m_assetManager.getTexture("button_green_up");
+        var baseContinueGameButtonTexture : Texture = m_assetManager.getTexture("button_green_up.png");
         var buttonTexturePadding : Float = 16;
         var nineSliceGrid : Rectangle = new Rectangle(
 			buttonTexturePadding, 
@@ -264,7 +264,7 @@ class ExternalLoginTitleScreenState extends BaseState
         
         
         
-        var baseNewGameButtonTexture : Texture = m_assetManager.getTexture("button_green_up");
+        var baseNewGameButtonTexture : Texture = m_assetManager.getTexture("button_green_up.png");
         buttonTexturePadding = 16;
         nineSliceGrid = new Rectangle(
             buttonTexturePadding, 

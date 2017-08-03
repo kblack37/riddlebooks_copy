@@ -11,8 +11,9 @@ import dragonbox.common.math.vectorspace.RealsVectorSpace;
 import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
 
-import feathers.controls.Button;
+import haxe.Constraints.Function;
 
+import starling.display.Button;
 import starling.display.Image;
 import starling.display.Quad;
 import starling.display.Sprite;
@@ -131,7 +132,7 @@ class TestCreatedLevelScreen extends Sprite
         m_optionsScreen.addChild(disablingQuad);
         
         var optionsButtonContainer : Sprite = new Sprite();
-        var optionsBackground : Image = new Image(assetManager.getTexture("summary_background"));
+        var optionsBackground : Image = new Image(getTexture("summary_background.png"));
         optionsButtonContainer.addChild(optionsBackground);
         m_optionsScreen.addChild(optionsButtonContainer);
         

@@ -179,7 +179,7 @@ class HoldToCopy extends BaseBarModelScript
         var textWidth : Float = 150;
         var textHeight : Float = 40;
         var descriptionText : TextField = new TextField(Std.int(textWidth), Std.int(textHeight), "Hold to Copy", "Verdana", 20, 0x000000);
-        var background : Image = new Image(m_assetManager.getTexture("thought_bubble"));
+        var background : Image = new Image(m_assetManager.getTexture("thought_bubble.png"));
         background.scaleX = textWidth / background.width;
         background.scaleY = (textHeight * 2) / background.height;
         background.color = 0xFFFFFF;

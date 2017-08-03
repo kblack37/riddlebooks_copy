@@ -55,8 +55,7 @@ class TextViewFactory
     {
         m_assetManager = assetManager;
         m_expressionSymbolMap = expressionSymbolMap;
-        m_measuringTextForWhitespace = new MeasuringTextField();
-        m_measuringTextForWhitespace.text = " ";
+		m_measuringTextForWhitespace = new MeasuringTextField();
     }
     
     public function createView(node : DocumentNode) : DocumentView
@@ -199,10 +198,9 @@ class TextViewFactory
             
             divChildView.parentView = divContainer;
             divContainer.addChildView(divChildView);
-        }  // Handle padding with the div itself  
-        
-        
-        
+        } 
+		
+		// Handle padding with the div itself  
         divContainer.pivotX -= divNode.paddingLeft;
         divContainer.pivotY -= divNode.paddingTop;
         
@@ -309,12 +307,10 @@ class TextViewFactory
             {
                 image = new Image(originalTexture);
             }
-        }  // If both set then fit those exact dimensions    // If only one of width or height set, uniformly scale to that size  
-        
-        
-        
-        
-        
+        }
+		
+		// If only one of width or height set, uniformly scale to that size  
+        // If both set then fit those exact dimensions
         if (width != -1 && height != -1) 
         {
             image.width = width;
@@ -338,9 +334,9 @@ class TextViewFactory
         var paragraphContainer : DocumentView = new DocumentView(paragraphNode);
         var paragraphChildren : Array<DocumentNode> = paragraphNode.children;
         var textFormat : TextFormat = new TextFormat(
-        paragraphNode.fontName, 
-        paragraphNode.fontSize, 
-        paragraphNode.fontColor
+			paragraphNode.fontName, 
+			paragraphNode.fontSize, 
+			paragraphNode.fontColor
         );
         var outCreatedViews : Array<DocumentView> = new Array<DocumentView>();
         for (childIndex in 0...paragraphChildren.length){
@@ -415,7 +411,7 @@ class TextViewFactory
         }
         else if (Std.is(node, TextNode)) 
         {
-            var textNode : TextNode = try cast(node, TextNode) catch(e:Dynamic) null;
+            var textNode : TextNode = try cast(node, TextNode) catch (e:Dynamic) null;
             var textView : DocumentView = new DummyTextView(textNode, textFormat);
             outViews.push(textView);
         }
@@ -455,16 +451,30 @@ class TextViewFactory
         var centerInline : Bool = true;  // Should the content in a line be centered  
         var currentLineTopY : Float = parentContentBounds.y;  // The top vertical bound of the current line  
         var currentX : Float = (yWithinRectangle(pixelSpaceBetweenLines, floatLeftBounds)) ? 
-        floatLeftBounds.right : parentContentBounds.x;  // Acts like a caret to keep track of where to put the next content horizontally  
+			floatLeftBounds.right : parentContentBounds.x;  // Acts like a caret to keep track of where to put the next content horizontally  
         var i : Int = 0;
         var numViews : Int = views.length;
         var view : DocumentView = null;
+		
+		/**
+        * Internal functional that actually modifies the x and y values of a view to correctly
+        * position it.
+        * 
+        * @param measuredWidth
+        *      Bounding width to treat the view with
+        * @param measuredHeight
+        *      Bound height to treat the view with
+        */
 		function positionView(view : DocumentView, measuredWidth : Int, measuredHeight : Int) : Void
             {
                 var maxAllowedX = getMaxAllowedX(Std.int(currentLineTopY), parentContentBounds, measuredHeight, floatRightBounds);
                 if (measuredWidth + currentX <= maxAllowedX) 
-                    { }  // No need to center in this case    // With the new line, the content sets the starting height bounds so it always fits vertically.    // For an image we wrap to the next line  
-                // Set coordinates of the given target view
+                    { }  
+					// For an image we wrap to the next line  
+                	// With the new line, the content sets the starting height bounds so it always fits vertically. 
+					// No need to center in this case
+					
+				// Set coordinates of the given target view
                 else if (Std.is(view, ImageView)) 
                 {
                     // Right now this only occurs for images
@@ -475,8 +485,6 @@ class TextViewFactory
                     
                     view.lineNumber = ++m_currentLineNumber;
                 }
-                
-                
                 
                 view.x = currentX;
                 view.y = ((centerInline)) ? 
@@ -508,7 +516,7 @@ class TextViewFactory
                 
                 // Break up content into individual words, check how many can fit into the current line
                 var textContent : String = textNode.content;
-                var wordBuffer : Array<Dynamic> = textContent.split(" ");
+                var wordBuffer : Array<String> = textContent.split(" ");
                 var numWords : Int = wordBuffer.length;
                 var wordIndex : Int = 0;
                 var word : String = null;
@@ -534,11 +542,10 @@ class TextViewFactory
                         var addedCurrentWordToPreviousLine : Bool = false;
                         
                         // Puncuation marks should stay on the previous line
-                        if (Lambda.indexOf(PUNCUATION_CHARACTERS, word) >= 0) 
-                        {
-                            wordsForCurrentLine += word;
-                            addedCurrentWordToPreviousLine = true;
-                        }
+						if (Lambda.indexOf(PUNCUATION_CHARACTERS, word) >= 0) {
+							wordsForCurrentLine += word;
+							addedCurrentWordToPreviousLine = true;
+						}
                         
                         if (wordsForCurrentLine.length > 0) 
                         {
@@ -549,7 +556,7 @@ class TextViewFactory
                             }
                             
                             measuringTextField.text = wordsForCurrentLine;
-                            textMeasuredWidth = Std.int(measuringTextField.textWidth + m_measuringTextForWhitespace.textWidth * 2.5);
+                            textMeasuredWidth = Std.int(measuringTextField.textWidth + getWidthOfWhitespace() * 2.5);
                             var newTextView : TextView = this.createTextView(
                                     view.node,
                                     wordsForCurrentLine,
@@ -558,16 +565,12 @@ class TextViewFactory
                                     );
                             positionView(newTextView, Std.int(measuringTextField.textWidth), textMeasuredHeight);
                             newTextView.lineNumber = m_currentLineNumber++;
-                        }  // No content left on this line, we need to immediately shift downward    // at all, we cannot rely on position view to do anything    // start of the next line. Note that since we are not guaranteed that there was any content    // Since the last word we added will not fit on the current line, we need to move to the  
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
+                        }  
+						
+						// Since the last word we added will not fit on the current line, we need to move to the  
+						// start of the next line. Note that since we are not guaranteed that there was any content 
+						// at all, we cannot rely on position view to do anything 
+                        // No content left on this line, we need to immediately shift downward 
                         currentLineTopY += pixelSpaceBetweenLines;
                         currentX = (yWithinRectangle(currentLineTopY + pixelSpaceBetweenLines, floatLeftBounds)) ? 
                                 floatLeftBounds.right : parentContentBounds.x;
@@ -591,16 +594,12 @@ class TextViewFactory
                             wordsForCurrentLine += " ";
                         }
                     }
-                }  // Get the next view and check that it is text. Then check if the first character is some puncuation    // we strip out that last space.    // case where the next view is more text and the starting character is a puncuation. In that case    // In the previous loop we always added a space after every word. This is not correct in the  
-                
-                
-                
-                
-                
-                
-                
-                
-                
+                }
+				
+				// In the previous loop we always added a space after every word. This is not correct in the  
+				// case where the next view is more text and the starting character is a puncuation. In that case
+				// we strip out that last space.  
+                // Get the next view and check that it is text. Then check if the first character is some puncuation
                 var addSpaceForNextView : Bool = false;
                 if (i + 1 < numViews && Std.is(views[i + 1], DummyTextView)) 
                 {
@@ -624,19 +623,17 @@ class TextViewFactory
                             }
                         }
                     }
-                }  // Also don't add a space if word already ends in a space  
-                
-                
-                
+                }  
+				
+				// Also don't add a space if word already ends in a space  
                 if (wordsForCurrentLine.charAt(wordsForCurrentLine.length - 1) == " ") 
                 {
                     addSpaceForNextView = false;
-                }  // Add the last chunk  
-                
-                
-                
+                } 
+				
+				// Add the last chunk  
                 measuringTextField.text = wordsForCurrentLine;
-                textMeasuredWidth = Std.int(measuringTextField.textWidth + m_measuringTextForWhitespace.textWidth * 2.5);
+                textMeasuredWidth = Std.int(measuringTextField.textWidth + getWidthOfWhitespace() * 2.5);
                 textMeasuredHeight = Std.int(measuringTextField.textHeight + TEXT_HACK_HEIGHT);
                 var newTextView = this.createTextView(
                                 view.node,
@@ -649,24 +646,14 @@ class TextViewFactory
                 // left text <span>spanned</span> right text
                 // will not preserve the white space, no space after parsing after 'left text'
                 // or before 'right text'. Need to inject this space by repositioning things.
-                
                 var boundsOfCurrentTextToAdd : Float = measuringTextField.textWidth;
                 if (addSpaceForNextView) 
                 {
-                    boundsOfCurrentTextToAdd += m_measuringTextForWhitespace.textWidth;
+                    boundsOfCurrentTextToAdd += getWidthOfWhitespace();
                 }
                 positionView(newTextView, Std.int(boundsOfCurrentTextToAdd), textMeasuredHeight);
                 newTextView.lineNumber = m_currentLineNumber;
             }
-            /**
-                 * Internal functional that actually modifies the x and y values of a view to correctly
-                 * position it.
-                 * 
-                 * @param measuredWidth
-                 *      Bounding width to treat the view with
-                 * @param measuredHeight
-                 *      Bound height to treat the view with
-                 */
             else if (Std.is(view, ImageView)) 
             {
                 var imageView : ImageView = try cast(view, ImageView) catch(e:Dynamic) null;
@@ -740,14 +727,14 @@ class TextViewFactory
                 
                 // Add all views of the span children into the span container
                 var viewInSpan : DocumentView = null;
+				var spanX : Int = 0;
+                var spanY : Int = 0;
                 for (i in 0...outViewsForNonTerminal.length){
                     viewInSpan = outViewsForNonTerminal[i];
                     
                     // The coordinates of the span matches those of its first children.
                     // We need to readjust the coordinates of the children from the reference of
                     // the parent to the reference of the span.
-                    var spanX : Int = 0;
-                    var spanY : Int = 0;
                     if (i == 0) 
                     {
                         spanX = Std.int(viewInSpan.x);
@@ -807,7 +794,7 @@ class TextViewFactory
                 width,
                 height,
                 textFormat.font,
-                try cast(textFormat.color, Int) catch(e:Dynamic) 0,
+                try cast(textFormat.color, Int) catch(e:Dynamic) 0xFFFFFF,
                 textFormat.size
                 );
         textView.x = x;
@@ -825,4 +812,20 @@ class TextViewFactory
     {
         return (y >= rectangle.top && y <= rectangle.bottom);
     }
+	
+	/*
+	 * Since a MeasuringTextField with only whitespace has a width
+	 * of 0, we must use a hacky method to retrieve the width of
+	 * whitespace
+	 * NOTE: this presupposes that the correct TextFormat for the
+	 * MeasuringTextField has been set
+	 */ 
+	private function getWidthOfWhitespace() : Float {
+		var whitespaceWidth : Float = 0;
+		m_measuringTextForWhitespace.text = " a";
+		whitespaceWidth += m_measuringTextForWhitespace.textWidth;
+		m_measuringTextForWhitespace.text = "a";
+		whitespaceWidth -= m_measuringTextForWhitespace.textWidth;
+		return whitespaceWidth;
+	}
 }

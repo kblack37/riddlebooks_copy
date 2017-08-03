@@ -252,7 +252,7 @@ class PlayerCollectionCustomizeViewer extends PlayerCollectionViewer
         var xOffset : Float = (800 - buttonWidth) * 0.5;
         var yOffset : Float = m_titleText.y + m_titleText.height;
         var nineSliceRectangle : Rectangle = new Rectangle(8, 8, 16, 16);
-        var scale9Texture : Texture = Texture.fromTexture(m_assetManager.getTexture("button_white"), nineSliceRectangle);
+        var scale9Texture : Texture = Texture.fromTexture(m_assetManager.getTexture("button_white.png"), nineSliceRectangle);
         for (i in 0...numCategories){
             var defaultBackground : Image = new Image(scale9Texture);
             defaultBackground.color = m_buttonColorData.getUpButtonColor();
@@ -444,7 +444,7 @@ class PlayerCollectionCustomizeViewer extends PlayerCollectionViewer
 						mainDisplayContainer.addChild(askText);
 						
 						var priceIndicatorHeight : Float = 40;
-						var coin : Image = new Image(m_assetManager.getTexture("coin"));
+						var coin : Image = new Image(m_assetManager.getTexture("coin.png"));
 						coin.scaleX = coin.scaleY = priceIndicatorHeight / coin.height;
 						coin.x = askText.x + askText.width;
 						mainDisplayContainer.addChild(coin);

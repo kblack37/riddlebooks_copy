@@ -37,13 +37,13 @@ class SimulatedMouseVisualizer implements IDisposable
         m_mouseState = mouseState;
         m_canvas = canvas;
         
-        var cursorTexture : Texture = assetManager.getTexture("custom_cursor");
+        var cursorTexture : Texture = assetManager.getTexture("custom_cursor.png");
         m_cursor = new Image(cursorTexture);
         
         m_globalBuffer = new Point();
         m_localBuffer = new Point();
         
-        m_pulseAnimation = new RingPulseAnimation(assetManager.getTexture("ring"), onPulseComplete);
+        m_pulseAnimation = new RingPulseAnimation(assetManager.getTexture("ring.png"), onPulseComplete);
     }
     
     public function dispose() : Void

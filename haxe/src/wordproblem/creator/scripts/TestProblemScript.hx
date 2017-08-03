@@ -4,8 +4,7 @@ package wordproblem.creator.scripts;
 import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
 
-import feathers.controls.Button;
-
+import starling.display.Button;
 import starling.events.Event;
 
 import wordproblem.AlgebraAdventureConfig;

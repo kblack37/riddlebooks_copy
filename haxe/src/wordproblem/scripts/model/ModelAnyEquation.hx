@@ -6,8 +6,7 @@ import dragonbox.common.expressiontree.ExpressionUtil;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.math.vectorspace.IVectorSpace;
 
-import feathers.controls.Button;
-
+import starling.display.Button;
 import starling.events.Event;
 
 import wordproblem.engine.IGameEngine;

@@ -90,7 +90,7 @@ class PlayerXPBar extends Sprite
         m_juggler = Starling.current.juggler;
         
         var padding : Float = 10;
-        var xpBarBackTexture : Texture = assetManager.getTexture("xp_bar_back");
+        var xpBarBackTexture : Texture = assetManager.getTexture("xp_bar_back.png");
 		
 		// TODO: this was replaced from a Scale3Texture and may need to be fixed
         var xpBarBackImage : Image = new Image(Texture.fromTexture(
@@ -108,7 +108,7 @@ class PlayerXPBar extends Sprite
         var fillPaddingTop : Float = 5;
         var fillPaddingLeft : Float = 4;
         m_fillWidthWhenFull = maxBarLength - fillPaddingLeft * 2;
-        var xpBarFillTexture : Texture = assetManager.getTexture("xp_bar_fill");
+        var xpBarFillTexture : Texture = assetManager.getTexture("xp_bar_fill.png");
         
 		// TODO: this was replaced from a Scale3Texture and may need to be fixed
         m_xpBarFillImageSliced = new Image(Texture.fromTexture(
@@ -186,7 +186,7 @@ class PlayerXPBar extends Sprite
         m_brainImageContainer.y = 0;
         m_brainImageContainer.x = xpBarBackImage.width;
         
-        m_brainImage = new Image(assetManager.getTexture("Art_BrainLargeFront"));
+        m_brainImage = new Image(assetManager.getTexture("Art_BrainLargeFront.png"));
         m_brainImage.scaleX = m_brainImage.scaleY = 0.4;
         m_brainImage.pivotX = m_brainImage.width * 0.5;
         m_brainImage.pivotY = m_brainImage.height * 0.5;

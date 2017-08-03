@@ -14,9 +14,6 @@ import dragonbox.common.math.vectorspace.IVectorSpace;
 import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
 
-//import feathers.display.Scale9Image;
-//import feathers.textures.Scale9Textures;
-
 import starling.display.DisplayObjectContainer;
 import starling.display.Sprite;
 import starling.events.EventDispatcher;
@@ -186,7 +183,7 @@ class GestureAndTextTip extends ScriptNode implements IShowableScript
         var scale9Padding : Float = 12;
         
         // TEMP: No chalk outline as it may cause unneeded clutter
-        var chalkOutlineTexture : Texture = m_assetManager.getTexture("chalk_outline");
+        var chalkOutlineTexture : Texture = m_assetManager.getTexture("chalk_outline.png");
         var chalkOutline : Image = new Image(Texture.fromTexture(chalkOutlineTexture, 
 			new Rectangle(scale9Padding, scale9Padding, chalkOutlineTexture.width - 2 * scale9Padding, chalkOutlineTexture.height - 2 * scale9Padding)));
         chalkOutline.width = descriptionWidth;

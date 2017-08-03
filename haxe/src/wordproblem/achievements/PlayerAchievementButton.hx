@@ -37,7 +37,7 @@ class PlayerAchievementButton extends Sprite
         super();
         
         var scale9Padding : Float = 8;
-        var bgTexture : Texture = assetManager.getTexture("button_white");
+        var bgTexture : Texture = assetManager.getTexture("button_white.png");
         var bgImage : Image = new Image(Texture.fromTexture(
 			bgTexture,
 			new Rectangle(scale9Padding,
@@ -73,7 +73,7 @@ class PlayerAchievementButton extends Sprite
         // If not completed we want to show a lock on the front of the gem
         if (!achievementCompleted) 
         {
-            var lockTexture : Texture = assetManager.getTexture("Art_LockGrey");
+            var lockTexture : Texture = assetManager.getTexture("Art_LockGrey.png");
             var lockScaleFactor : Float = (height * 0.4) / lockTexture.height;
             var lockImage : Image = new Image(lockTexture);
             lockImage.scaleX = lockImage.scaleY = lockScaleFactor;

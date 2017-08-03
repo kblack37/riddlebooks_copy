@@ -12,11 +12,7 @@ import dragonbox.common.state.IStateMachine;
 import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
 
-import feathers.controls.Button;
-import feathers.core.PopUpManager;
-import feathers.display.Scale9Image;
-import feathers.textures.Scale9Textures;
-
+import starling.display.Button;
 import starling.display.DisplayObject;
 import starling.display.Image;
 import starling.display.Sprite;
@@ -226,10 +222,14 @@ class WordProblemCreateState extends BaseState
         // top of the image)
         var lowerUiContainer : Sprite = new Sprite();
         var transparencyPaddingOnImage : Float = 10;
-        var bottomUiBackgroundTexture : Texture = m_assetManager.getTexture("ui_background");
+        var bottomUiBackgroundTexture : Texture = m_assetManager.getTexture("ui_background.png");
         var bottomUiPadding : Float = 16;
-        var bottomUiImage : Scale9Image = new Scale9Image(new Scale9Textures(bottomUiBackgroundTexture, new Rectangle(
-        bottomUiPadding, bottomUiPadding, bottomUiBackgroundTexture.width - 2 * bottomUiPadding, bottomUiBackgroundTexture.height - 2 * bottomUiPadding, 
+        var bottomUiImage : Image = new Image(Texture.fromTexture(bottomUiBackgroundTexture,
+			new Rectangle(
+				bottomUiPadding,
+				bottomUiPadding,
+				bottomUiBackgroundTexture.width - 2 * bottomUiPadding,
+				bottomUiBackgroundTexture.height - 2 * bottomUiPadding, 
         )));
         bottomUiImage.width = screenWidth;
         bottomUiImage.height = screenHeight - m_editableTextArea.getConstraints().height - m_editableTextArea.y + transparencyPaddingOnImage;
@@ -259,7 +259,8 @@ class WordProblemCreateState extends BaseState
         // Create a set of picker objects that allow the user to alter various appearence setting
         // for the text. (Need to be able to set the dimensions of the picker, right now the script is)
         // For the picker list need to reset the canvas from which the popup menu is derived from
-        PopUpManager.root = this;
+		// TODO: replace the PopUpManager that was from the feathers library
+        //PopUpManager.root = this;
         var backgroundPicker : ScrollOptionsPicker = new ScrollOptionsPicker(m_assetManager, null);
         addUiComponent("backgroundPicker", backgroundPicker);
         
@@ -296,16 +297,16 @@ class WordProblemCreateState extends BaseState
         
         // The button to submit the tagged contents
         // (Appears just below the example container)
-        var disabledSubmitImage : Image = new Image(m_assetManager.getTexture("button_check_bar_model_up"));
+        var disabledSubmitImage : Image = new Image(m_assetManager.getTexture("assets/ui/button_check_bar_model_up.png"));
         var greyScaleFilter : ColorMatrixFilter = new ColorMatrixFilter();
         greyScaleFilter.adjustSaturation(-1);
         disabledSubmitImage.filter = greyScaleFilter;
         var submitButtonWidthAndHeight : Float = 80;
         var submitButton : Button = WidgetUtil.createButtonFromImages(
-                new Image(m_assetManager.getTexture("button_check_bar_model_up")),
-                new Image(m_assetManager.getTexture("button_check_bar_model_down")),
+                new Image(m_assetManager.getTexture("assets/ui/button_check_bar_model_up.png")),
+                new Image(m_assetManager.getTexture("assets/ui/button_check_bar_model_down.png")),
                 disabledSubmitImage,
-                new Image(m_assetManager.getTexture("button_check_bar_model_over")), null, null);
+                new Image(m_assetManager.getTexture("assets/ui/button_check_bar_model_over.png")), null, null);
         submitButton.width = submitButton.height = submitButtonWidthAndHeight;
         submitButton.pivotX = submitButton.width * 0.5;
         submitButton.pivotY = submitButton.height * 0.5;

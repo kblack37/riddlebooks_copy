@@ -4,8 +4,6 @@ package wordproblem.engine.animation;
 import dragonbox.common.util.XColor;
 import starling.display.Image;
 
-//import feathers.display.Scale9Image;
-
 import starling.animation.IAnimatable;
 import starling.display.DisplayObject;
 import starling.events.Event;

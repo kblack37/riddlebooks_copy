@@ -49,7 +49,7 @@ class PlayerCollectionItemButton extends Sprite
         m_assetManager = assetManager;
         
         var scale9Texture : Texture = Texture.fromTexture(
-			assetManager.getTexture("button_white"), 
+			assetManager.getTexture("button_white.png"), 
 			new Rectangle(8, 8, 16, 16)
         );
         m_normalBackground = new Image(scale9Texture);
@@ -83,7 +83,7 @@ class PlayerCollectionItemButton extends Sprite
         itemImage.y = (height - itemImage.height) * 0.5;
         
         
-        var lockTexture : Texture = assetManager.getTexture("Art_LockRed");
+        var lockTexture : Texture = assetManager.getTexture("Art_LockRed.png");
         var lockImage : Image = new Image(lockTexture);
         var lockScaleFactor : Float = 1.0;
         if (lockTexture.width > maxWidth || lockTexture.height > maxHeight) 

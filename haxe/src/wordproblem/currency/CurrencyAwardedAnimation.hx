@@ -38,7 +38,7 @@ class CurrencyAwardedAnimation extends Sprite
         m_tweens = new Array<Tween>();
         
         var coinDesiredEndDimension : Float = 60;
-        var coinTexture : Texture = assetManager.getTexture("coin");
+        var coinTexture : Texture = assetManager.getTexture("coin.png");
         var centralCoin : Image = new Image(coinTexture);
         centralCoin.pivotX = coinTexture.width * 0.5;
         centralCoin.pivotY = coinTexture.height * 0.5;
@@ -55,11 +55,11 @@ class CurrencyAwardedAnimation extends Sprite
         amountText.pivotX = amountText.width * 0.5;
         amountText.pivotY = amountText.height * 0.5 + 6;
         
-        var starBurst : DisplayObject = new Image(assetManager.getTexture("Art_StarBurst"));
+        var starBurst : DisplayObject = new Image(assetManager.getTexture("Art_StarBurst.png"));
         starBurst.pivotX = starBurst.width * 0.5;
         starBurst.pivotY = starBurst.height * 0.5;
         
-        var glow : DisplayObject = new Image(assetManager.getTexture("Art_YellowGlow"));
+        var glow : DisplayObject = new Image(assetManager.getTexture("Art_YellowGlow.png"));
         glow.pivotX = glow.width * 0.5;
         glow.pivotY = glow.height * 0.5;
         

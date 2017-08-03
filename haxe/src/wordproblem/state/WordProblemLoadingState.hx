@@ -99,7 +99,7 @@ class WordProblemLoadingState extends BaseState
 		m_activeAnimations = new Array<Dynamic>();
 		m_thoughtBubbleColors = XColor.getCandidateColorsForSession();
 
-		var backgroundTexture : Texture = m_assetManager.getTexture("login_background");
+		var backgroundTexture : Texture = m_assetManager.getTexture("login_background.png");
 		var backgroundImage : Image = new Image(backgroundTexture);
 		backgroundImage.width = m_width;
 		backgroundImage.height = m_height;
@@ -234,7 +234,7 @@ class WordProblemLoadingState extends BaseState
 	private function getThoughtBubble() : DisplayObject
 	{
 		var thoughtBubbleContainer : Sprite = new Sprite();
-		var thoughtBubbleBg : Image = new Image(m_assetManager.getTexture("thought_bubble"));
+		var thoughtBubbleBg : Image = new Image(m_assetManager.getTexture("thought_bubble.png"));
 
 		// Pick random tint
 		thoughtBubbleBg.color = m_thoughtBubbleColors[Math.floor(Math.random() * m_thoughtBubbleColors.length)];

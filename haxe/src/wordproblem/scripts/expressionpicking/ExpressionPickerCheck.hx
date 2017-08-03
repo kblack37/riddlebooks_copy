@@ -5,11 +5,10 @@ import cgs.audio.Audio;
 
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 
-import feathers.controls.Button;
-
 import starling.animation.Transitions;
 import starling.animation.Tween;
 import starling.core.Starling;
+import starling.display.Button;
 import starling.display.DisplayObject;
 import starling.display.DisplayObjectContainer;
 import starling.display.Image;

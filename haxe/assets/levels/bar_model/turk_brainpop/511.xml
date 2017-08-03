@@ -61,7 +61,7 @@
       </code>
     </scriptedActions>
   </script>
-  <style>{"p":{"fontName":"Calibri","color":"0x0000000","fontSize":24}}</style>
+  <style>{"p":{"fontName":"Calibri","color":"0xFFFFFF","fontSize":24}}</style>
   <wordproblem>
     <page paddingLeft="110" paddingTop="50">
       <div layout="relative" width="580">

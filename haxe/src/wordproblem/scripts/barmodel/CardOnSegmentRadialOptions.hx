@@ -438,7 +438,7 @@ class CardOnSegmentRadialOptions extends BaseBarModelScript
         {
             var symbolData : SymbolData = m_gameEngine.getExpressionSymbolResources().getSymbolDataFromValue(m_savedDraggedValue);
             
-            var barBackgroundTexture : Texture = m_assetManager.getTexture("card_background_square");
+            var barBackgroundTexture : Texture = m_assetManager.getTexture("card_background_square.png");
             var scale9Offset : Float = 8;
             var barBackground : Image = new Image(Texture.fromTexture(
 				barBackgroundTexture, 
@@ -463,7 +463,7 @@ class CardOnSegmentRadialOptions extends BaseBarModelScript
         }
         else if (Std.is(gestureScript, SplitBarSegment)) 
         {
-            var divideIcon : Image = new Image(m_assetManager.getTexture("divide_obelus"));
+            var divideIcon : Image = new Image(m_assetManager.getTexture("divide_obelus.png"));
             icon = divideIcon;
         }
         

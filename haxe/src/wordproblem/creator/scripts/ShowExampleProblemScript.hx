@@ -3,11 +3,10 @@ package wordproblem.creator.scripts;
 
 import flash.text.TextFormat;
 
-import feathers.controls.Button;
-
 import starling.animation.Transitions;
 import starling.animation.Tween;
 import starling.core.Starling;
+import starling.display.Button;
 import starling.display.DisplayObject;
 import starling.display.Sprite;
 import starling.events.Event;
@@ -196,7 +195,7 @@ class ShowExampleProblemScript extends BaseProblemCreateScript
             realBarModelView.visible = false;
             submitButton.visible = false;
             
-            showExampleButton.label = "Hide Example";
+            showExampleButton.text = "Hide Example";
             
             redraw();
             
@@ -212,7 +211,7 @@ class ShowExampleProblemScript extends BaseProblemCreateScript
             realBarModelView.visible = true;
             submitButton.visible = true;
             
-            showExampleButton.label = "Show Example";
+            showExampleButton.text = "Show Example";
             
             m_createState.dispatchEventWith(ProblemCreateEvent.SHOW_EXAMPLE_END, false, null);
         }  // Figure out which parts to fade in or fade out    // Smoothly animate the text areas fading in or fading out  

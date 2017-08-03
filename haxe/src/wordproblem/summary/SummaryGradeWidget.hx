@@ -109,7 +109,7 @@ class SummaryGradeWidget extends Sprite
         
         
         var gradeDisplayContainer : Sprite = new Sprite();
-        var gradeStarTexture : Texture = m_assetManager.getTexture("star_large");
+        var gradeStarTexture : Texture = m_assetManager.getTexture("assets/ui/win/star_large.png");
         var gradeStarImage : Image = new Image(gradeStarTexture);
         gradeStarImage.color = 0xFFFF66;
         var gradeStarTargetScale : Float = 300.0 / gradeStarTexture.width;

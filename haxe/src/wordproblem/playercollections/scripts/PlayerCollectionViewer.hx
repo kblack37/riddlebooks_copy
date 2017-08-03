@@ -85,7 +85,7 @@ class PlayerCollectionViewer extends ScriptNode
         m_buttonColorData = buttonColorData;
         
         var sidePadding : Float = 15;
-        var arrowTexture : Texture = assetManager.getTexture("arrow_short");
+        var arrowTexture : Texture = assetManager.getTexture("arrow_short.png");
         var scaleFactor : Float = 1.5;
         var leftUpImage : Image = WidgetUtil.createPointingArrow(arrowTexture, true, scaleFactor);
         var leftOverImage : Image = WidgetUtil.createPointingArrow(arrowTexture, true, scaleFactor, 0xCCCCCC);
@@ -177,7 +177,7 @@ class PlayerCollectionViewer extends ScriptNode
     
     private function createBackButton() : Void
     {
-        var arrowRotateTexture : Texture = m_assetManager.getTexture("arrow_rotate");
+        var arrowRotateTexture : Texture = m_assetManager.getTexture("arrow_rotate.png");
         var scaleFactor : Float = 0.65;
         var backUpImage : Image = new Image(arrowRotateTexture);
         backUpImage.color = 0xFBB03B;

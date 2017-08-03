@@ -2,11 +2,9 @@ package wordproblem.creator.scripts;
 
 
 import flash.geom.Rectangle;
+import js.html.Image;
 
 import dragonbox.common.ui.MouseState;
-
-import feathers.display.Scale9Image;
-import feathers.textures.Scale9Textures;
 
 import starling.animation.Tween;
 import starling.core.Starling;
@@ -26,7 +24,7 @@ class ChangeMouseOnHighlightActive extends BaseProblemCreateScript
     private var m_mouseState : MouseState;
     
     private var m_highlightActive : Bool;
-    private var m_highlightIndicatorImage : Scale9Image;
+    private var m_highlightIndicatorImage : Image;
     private var m_highlightIndicatorTween : Tween;
     
     public function new(createState : WordProblemCreateState,
@@ -99,10 +97,15 @@ class ChangeMouseOnHighlightActive extends BaseProblemCreateScript
         setIsActive(m_isActive);
         
         var padding : Float = 4;
-        var indicatorTexture : Texture = m_assetManager.getTexture("card_background_square");
-        var scale9Texture : Scale9Textures = new Scale9Textures(indicatorTexture, 
-        new Rectangle(padding, padding, indicatorTexture.width - 2 * padding, indicatorTexture.height - 2 * padding));
-        var indicatorImage : Scale9Image = new Scale9Image(scale9Texture);
+        var indicatorTexture : Texture = m_assetManager.getTexture("card_background_square.png");
+        var scale9Texture : Texture = Texture.fromTexture(indicatorTexture, 
+			new Rectangle(padding,
+				padding,
+				indicatorTexture.width - 2 * padding,
+				indicatorTexture.height - 2 * padding
+			)
+		);
+        var indicatorImage : Image = new Image(scale9Texture);
         indicatorImage.pivotX = indicatorTexture.width * 0.5;
         indicatorImage.pivotY = indicatorTexture.height * 0.5;
         

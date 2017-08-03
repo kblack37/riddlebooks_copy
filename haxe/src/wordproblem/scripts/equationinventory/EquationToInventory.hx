@@ -2,9 +2,7 @@ package wordproblem.scripts.equationinventory;
 
 
 import flash.geom.Rectangle;
-
-import feathers.display.Scale9Image;
-import feathers.textures.Scale9Textures;
+import starling.textures.Texture;
 
 import starling.core.Starling;
 import starling.display.DisplayObject;
@@ -204,10 +202,10 @@ class EquationToInventory extends BaseGameScript
             if (numShifted == 2) 
             {
                 var backgroundBounds : Rectangle = copyLeftTightBounds.union(copyRightTightBounds);
-                var scaleNineTexture : Scale9Textures = new Scale9Textures(
-                m_assetManager.getTexture("button_white"), 
-                new Rectangle(10, 10, backgroundBounds.width - 10, backgroundBounds.height - 10));
-                var scaleNineImage : Scale9Image = new Scale9Image(scaleNineTexture);
+                var scaleNineTexture : Texture = Texture.fromTexture(
+					m_assetManager.getTexture("assets/ui/button_white.png"), 
+					new Rectangle(10, 10, backgroundBounds.width - 10, backgroundBounds.height - 10));
+                var scaleNineImage : Image = new Image(scaleNineTexture);
                 scaleNineImage.color = 0x000000;
                 scaleNineImage.width = backgroundBounds.width;
                 scaleNineImage.height = backgroundBounds.height;
@@ -220,7 +218,7 @@ class EquationToInventory extends BaseGameScript
                 animationLayer.addChild(equationContainer);
                 
                 // Equals needs to be placed in between the two equation copies
-                var equalsImage : Image = new Image(m_assetManager.getTexture("equal"));
+                var equalsImage : Image = new Image(m_assetManager.getTexture("assets/operators/equal.png"));
                 equalsImage.pivotX = equalsImage.width * 0.5;
                 equalsImage.pivotY = equalsImage.height * 0.5;
                 //equalsImage.x = backgroundBounds.width * 0.5;

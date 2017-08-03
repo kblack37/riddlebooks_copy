@@ -19,9 +19,6 @@ import dragonbox.common.particlesystem.initializer.VelocityInitializer;
 import dragonbox.common.particlesystem.renderer.ParticleRenderer;
 import dragonbox.common.particlesystem.zone.LineZone;
 
-//import feathers.display.Scale3Image;
-//import feathers.textures.Scale3Textures;
-
 import openfl.display3D.Context3DBlendFactor;
 
 import starling.animation.IAnimatable;
@@ -81,7 +78,7 @@ class LinkToAnimation implements IAnimatable
         renderer.addEmitter(emitter);
         m_particleRenderer = renderer;
         
-        var texture : Texture = assetManager.getTexture("arrow_short");
+        var texture : Texture = assetManager.getTexture("arrow_short.png");
         m_arrowOriginalLength = texture.width;
         
 		// TODO: this was replaced from the Scale3Texture from the feathers library and

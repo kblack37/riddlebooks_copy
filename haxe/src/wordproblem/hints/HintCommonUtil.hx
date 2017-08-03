@@ -484,7 +484,7 @@ class HintCommonUtil
         {
             tipName = pickedMismatch.linkToTip;
             
-            var helpButtonTexture : Texture = assetManager.getTexture("help_icon");
+            var helpButtonTexture : Texture = assetManager.getTexture("help_icon.png");
             helpButton = new Button(helpButtonTexture);
             helpButton.scaleWhenOver = 1.1;
             helpButton.scaleWhenDown = 0.9;

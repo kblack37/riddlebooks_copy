@@ -72,7 +72,6 @@ class BarComparison
             v : this.value,
             bid : this.barWholeIdComparedTo,
             i : this.segmentIndexComparedTo,
-
         };
         return serializedObject;
     }

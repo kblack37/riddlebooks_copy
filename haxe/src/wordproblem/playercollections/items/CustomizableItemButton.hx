@@ -80,7 +80,7 @@ class CustomizableItemButton extends Sprite
         setSelectedColor(selectedColor);
         
         var upBackgroundTexture : Texture = Texture.fromTexture(
-			assetManager.getTexture("button_white"),
+			assetManager.getTexture("button_white.png"),
 			new Rectangle(8, 8, 16, 16)
         );
         var backgroundImage : Image = new Image(upBackgroundTexture);
@@ -138,7 +138,7 @@ class CustomizableItemButton extends Sprite
                 m_priceContainer = new Sprite();
                 
                 var priceIndicatorHeight : Float = m_totalHeight * 0.25;
-                var coin : Image = new Image(m_assetManager.getTexture("coin"));
+                var coin : Image = new Image(m_assetManager.getTexture("coin.png"));
                 coin.scaleX = coin.scaleY = priceIndicatorHeight / coin.height;
                 m_priceContainer.addChild(coin);
                 
@@ -211,7 +211,7 @@ class CustomizableItemButton extends Sprite
         else if (m_categoryId == PlayerCollectionCustomizeViewer.CATEGORY_BUTTON_COLOR) 
         {
             var buttonColor : Int = Std.parseInt(texturesComponent.textureCollection[0].color);
-            var buttonTexture : Texture = Texture.fromTexture(m_assetManager.getTexture("button_white"), new Rectangle(8, 8, 16, 16));
+            var buttonTexture : Texture = Texture.fromTexture(m_assetManager.getTexture("button_white.png"), new Rectangle(8, 8, 16, 16));
             var buttonImageBack : Image = new Image(buttonTexture);
             buttonImageBack.color = 0x000000;
             var buttonImageFront : Image = new Image(buttonTexture);

@@ -8,9 +8,6 @@ import starling.display.Image;
 import dragonbox.common.dispose.IDisposable;
 import dragonbox.common.math.vectorspace.IVectorSpace;
 
-//import feathers.display.Scale9Image;
-//import feathers.textures.Scale9Textures;
-
 import starling.display.DisplayObject;
 import starling.display.Quad;
 import starling.display.Sprite;

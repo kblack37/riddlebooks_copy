@@ -28,7 +28,7 @@ class WildCardTermWidget extends BaseTermWidget
         // TODO: Early on we want wild cards to represent blank placeholders
         // We don't want to lock them into any particular data value.
         // For now printing out a question mark card
-        var wildCardImage : Image = new Image(assetManager.getTexture("wildcard"));
+        var wildCardImage : Image = new Image(assetManager.getTexture("assets/card/wildcard.png"));
         wildCardImage.pivotX += wildCardImage.width * 0.5;
         wildCardImage.pivotY += wildCardImage.height * 0.5;
         addChild(wildCardImage);

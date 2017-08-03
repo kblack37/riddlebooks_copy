@@ -5,9 +5,6 @@ import wordproblem.engine.systems.BaseSystemScript;
 
 import flash.geom.Point;
 
-//import feathers.display.Scale3Image;
-//import feathers.textures.Scale3Textures;
-
 import starling.animation.Tween;
 import starling.core.Starling;
 import starling.display.DisplayObject;
@@ -89,7 +86,7 @@ class ArrowDrawingSystem extends BaseSystemScript
         if (arrowComponent.arrowView == null) 
         {
 			// TODO: this image will likely need to be fixed
-            var arrowTexture : Texture = m_assetManager.getTexture("arrow_short");
+            var arrowTexture : Texture = m_assetManager.getTexture("assets/ui/arrow_short.png");
             var arrowImage : Image = new Image(Texture.fromTexture(arrowTexture));
             
             arrowImage.pivotX = arrowImage.width * 0.5;

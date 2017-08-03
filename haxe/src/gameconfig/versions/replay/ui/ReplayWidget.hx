@@ -50,7 +50,7 @@ class ReplayWidget extends Sprite
         var totalWidth : Float = 500;
         var totalHeight : Float = 150;
         
-        var optionsBackground : Image = new Image(assetManager.getTexture("summary_background"));
+        var optionsBackground : Image = new Image(getTexture("summary_background.png"));
         optionsBackground.width = totalWidth;
         optionsBackground.height = totalHeight;
         addChild(optionsBackground);

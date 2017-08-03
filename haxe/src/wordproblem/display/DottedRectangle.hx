@@ -3,9 +3,6 @@ package wordproblem.display;
 
 import flash.geom.Rectangle;
 
-//import feathers.display.Scale9Image;
-//import feathers.textures.Scale9Textures;
-
 import starling.display.Image;
 import starling.display.Sprite;
 import starling.textures.Texture;

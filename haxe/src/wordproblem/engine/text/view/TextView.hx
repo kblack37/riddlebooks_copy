@@ -105,6 +105,6 @@ class TextView extends DocumentView
     public function shade(color : Int, intensity : Float) : Int
     {
         var transform : ColorTransform = new ColorTransform(intensity, intensity, intensity, intensity, (color >> 16 & 0xFF) * intensity, (color >> 8 & 0xFF) * intensity, (color & 0xFF) * intensity);
-        return try cast(transform.color, Int) catch(e:Dynamic) 0;
+        return try cast(transform.color, Int) catch(e:Dynamic) 0xFFFFFF;
     }
 }

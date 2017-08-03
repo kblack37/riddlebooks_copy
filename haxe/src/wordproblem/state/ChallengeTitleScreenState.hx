@@ -100,8 +100,8 @@ class ChallengeTitleScreenState extends BaseState
         m_logger = logger;
         
         m_background = new Sprite();
-        m_background.addChild(new Image(assetManager.getTexture("login_background")));
-        var boxBackground : Image = new Image(assetManager.getTexture("summary_background"));
+        m_background.addChild(new Image(assetManager.getTexture("login_background.png")));
+        var boxBackground : Image = new Image(assetManager.getTexture("summary_background.png"));
         boxBackground.width = 450;
         boxBackground.height = 280;
         boxBackground.x = (m_background.width - boxBackground.width) * 0.5;

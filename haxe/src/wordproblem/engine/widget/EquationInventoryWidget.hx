@@ -83,7 +83,7 @@ class EquationInventoryWidget extends Sprite
         super();
         
         var padding : Float = 20;
-        var texture : Texture = assetManager.getTexture("button_white");
+        var texture : Texture = assetManager.getTexture("button_white.png");
 		// TODO: this was replaced from the Scale3Texture from the feathers library
 		// and will probably need to be fixed
         var backgroundTexture : Texture = Texture.fromTexture(texture, new Rectangle(padding, 0, texture.width - 2 * padding, texture.height));
@@ -101,7 +101,7 @@ class EquationInventoryWidget extends Sprite
                 );
         
         var scaleFactor : Float = 0.7;
-        var buttonTexture : Texture = assetManager.getTexture("button_sidebar_minimize");
+        var buttonTexture : Texture = assetManager.getTexture("button_sidebar_minimize.png");
         m_scrollButtonDimensions = new Rectangle(0, 0, buttonTexture.width * scaleFactor, buttonTexture.height * scaleFactor);
         m_scrollLeftButton = WidgetUtil.createButton(assetManager, "button_sidebar_minimize", "button_sidebar_minimize_click", null, "button_sidebar_minimize_mouseover", null, null);
         m_scrollLeftButton.scaleX = m_scrollLeftButton.scaleY = scaleFactor;
@@ -111,9 +111,9 @@ class EquationInventoryWidget extends Sprite
         m_scrollRightButton.scaleX = m_scrollRightButton.scaleY = scaleFactor;
         m_scrollRightButton.addEventListener(Event.TRIGGERED, onClickRight);
         
-        var expandTexture : Texture = assetManager.getTexture("box_closed");
+        var expandTexture : Texture = assetManager.getTexture("box_closed.png");
         m_expandIconClosed = new Image(expandTexture);
-        m_expandIconOpen = new Image(assetManager.getTexture("box_open"));
+        m_expandIconOpen = new Image(assetManager.getTexture("box_open.png"));
         
         m_expandButtonWidth = expandTexture.width;
         m_expandButton = WidgetUtil.createButton(assetManager, "box_closed", null, null, null, null, null);

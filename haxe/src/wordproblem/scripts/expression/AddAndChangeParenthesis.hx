@@ -9,9 +9,6 @@ import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.ExpressionUtil;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 
-//import feathers.display.Scale9Image;
-//import feathers.textures.Scale9Textures;
-
 import starling.animation.Transitions;
 import starling.animation.Tween;
 import starling.core.Starling;
@@ -512,7 +509,7 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
         var parenthesisButtonWidth : Float = 50;
         var parenthesisButtonHeight : Float = 50;
         
-        var backgroundTexture : Texture = m_assetManager.getTexture("card_background_square");
+        var backgroundTexture : Texture = m_assetManager.getTexture("card_background_square.png");
         var cornerPadding : Float = 8;
         m_buttonBackground = new Image(Texture.fromTexture(
                 backgroundTexture, 
@@ -524,11 +521,11 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
         
         var parenthesisButton : Layer = new Layer();
         var iconContainer : Sprite = new Sprite();
-        var leftParenImage : Image = new Image(m_assetManager.getTexture("paren_left"));
+        var leftParenImage : Image = new Image(m_assetManager.getTexture("paren_left.png"));
         var parenScaleFactor : Float = 0.7;
         leftParenImage.scaleX = leftParenImage.scaleY = parenScaleFactor;
         iconContainer.addChild(leftParenImage);
-        var rightParenImage : Image = new Image(m_assetManager.getTexture("paren_right"));
+        var rightParenImage : Image = new Image(m_assetManager.getTexture("paren_right.png"));
         rightParenImage.scaleX = rightParenImage.scaleY = parenScaleFactor;
         rightParenImage.x = leftParenImage.x + leftParenImage.width * 2;
         iconContainer.addChild(rightParenImage);

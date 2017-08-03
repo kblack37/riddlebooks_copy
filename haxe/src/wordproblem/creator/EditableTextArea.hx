@@ -14,9 +14,6 @@ import flash.text.TextFormat;
 
 import dragonbox.common.time.Time;
 
-import feathers.display.Scale9Image;
-import feathers.textures.Scale9Textures;
-
 import starling.animation.Tween;
 import starling.core.Starling;
 import starling.display.DisplayObject;
@@ -122,12 +119,12 @@ class EditableTextArea extends Layer
     /**
      * The texture from which all the highlight backgrounds should sample from
      */
-    private var m_textBackgroundTexture : Scale9Textures;
+    private var m_textBackgroundTexture : Texture;
     
     /**
      * We have two types of highlighting, one usage is to highlight every line
      */
-    private var m_textEmphasizeTexture : Scale9Textures;
+    private var m_textEmphasizeTexture : Texture;
     
     /**
      * When dealing with the whole event buffering scripts there is a situation where on its update
@@ -189,11 +186,11 @@ class EditableTextArea extends Layer
         m_highlightedTextObjects = { };
         m_whiteSpaceRegex = new EReg('[\\s\\r\\n]', "");
         
-        m_textBackgroundTexture = new Scale9Textures(assetManager.getTexture("card_background_square"), new Rectangle(8, 8, 16, 16));
+        m_textBackgroundTexture = Texture.fromTexture(assetManager.getTexture("assets/card/card_background_square.png"), new Rectangle(8, 8, 16, 16));
         
         var scale9Delta : Float = 2;
-        var emphasizeTexture : Texture = assetManager.getTexture("halo");
-        m_textEmphasizeTexture = new Scale9Textures(emphasizeTexture, new Rectangle(
+        var emphasizeTexture : Texture = getTexture("halo.png");
+        m_textEmphasizeTexture = Texture.fromTexture(emphasizeTexture, new Rectangle(
                 (emphasizeTexture.width - scale9Delta) * 0.5, 
                 (emphasizeTexture.height - scale9Delta) * 0.5, 
                 scale9Delta, 
@@ -1048,7 +1045,7 @@ class EditableTextArea extends Layer
             endIndex : Int,
             color : Int,
             textBlockIndex : Int,
-            texture : Scale9Textures,
+            texture : Texture,
             outDisplayObjects : Array<DisplayObject> = null) : Void
     {
         // The highlight may be composed of multiple parts depending on if the content
@@ -1098,7 +1095,7 @@ class EditableTextArea extends Layer
                 var firstCharacterBounds : Rectangle = textBlock.getCharBoundaries(firstCharIndexInLine);
                 var lastCharacterBounds : Rectangle = textBlock.getCharBoundaries(lastCharIndexInLine);
                 var backgroundBounds : Rectangle = firstCharacterBounds.union(lastCharacterBounds);
-                var backgroundImage : Scale9Image = new Scale9Image(texture);
+                var backgroundImage : Image = new Image(texture);
                 
                 // Since the highlight has a black border, need to add padding everything so the border does not
                 // interfere with the text.
