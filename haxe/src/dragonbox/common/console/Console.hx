@@ -5,15 +5,6 @@ import dragonbox.common.console.IConsole;
 import dragonbox.common.console.IConsoleInterfacable;
 import flash.errors.Error;
 
-import flash.display.MovieClip;
-import flash.display.Stage;
-import flash.events.Event;
-import flash.events.KeyboardEvent;
-import flash.text.TextField;
-import flash.text.TextFormat;
-import flash.text.TextFormatAlign;
-import flash.ui.Keyboard;
-
 import dragonbox.common.console.components.HistoryWindow;
 import dragonbox.common.console.components.InputWindow;
 import dragonbox.common.console.components.Intellisense;
@@ -21,7 +12,17 @@ import dragonbox.common.console.components.MethodInspector;
 import dragonbox.common.console.expression.DynamicInvokeEvent;
 import dragonbox.common.console.expression.MethodExpression;
 
-class Console extends MovieClip implements IConsole
+import openfl.text.TextFormat;
+import openfl.text.TextFormatAlign;
+import openfl.ui.Keyboard;
+
+import starling.core.Starling;
+import starling.display.Sprite;
+import starling.events.Event;
+import starling.events.KeyboardEvent;
+import starling.text.TextField;
+
+class Console extends Sprite implements IConsole
 {
     public static var HELP_FORMAT : TextFormat = new TextFormat("Kalinga");
     
@@ -37,11 +38,11 @@ class Console extends MovieClip implements IConsole
     private var m_history : Array<String>;
     private var m_historyPointer : Int;
     
-    public function new(stage : Stage)
+    public function new()
     {
         super();
-        width = stage.stageWidth;
-        height = stage.stageHeight;
+        width = Starling.current.stage.stageWidth;
+        height = Starling.current.stage.stageHeight;
         
         m_consoleInterfacables = new Array<IConsoleInterfacable>();
         
@@ -62,13 +63,15 @@ class Console extends MovieClip implements IConsole
         m_history = new Array<String>();
         m_historyPointer = 0;
         
-        stage.addChild(this);
+        Starling.current.stage.addChild(this);
         
         repaint();
         
-        stage.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-        stage.addEventListener(KeyboardEvent.KEY_DOWN, onStageKeyDown);
+        Starling.current.stage.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+        Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, onStageKeyDown);
         
+		// TODO: Starling KeyboardEvents are dispatched only to the stage, so this
+		// may not work
         m_inputWindow.addEventListener(DynamicInvokeEvent.EVENT_TYPE, onDynamicInvoke);
         var inputField : TextField = m_inputWindow.getInputField();
         inputField.addEventListener(KeyboardEvent.KEY_DOWN, onInputWindowKeyDown);
@@ -84,7 +87,7 @@ class Console extends MovieClip implements IConsole
         this.m_consoleInterfacables.push(consoleInterfacable);
     }
     
-    public function dispose() : Void
+    override public function dispose() : Void
     {
         m_consoleInterfacables = null;
         
@@ -116,8 +119,8 @@ class Console extends MovieClip implements IConsole
     
     private function onAddedToStage(e : Event) : Void
     {
-        stage.removeChild(this);
-        stage.addChild(this);
+        Starling.current.stage.removeChild(this);
+        Starling.current.stage.addChild(this);
         
         repaint();
     }
@@ -128,7 +131,8 @@ class Console extends MovieClip implements IConsole
         if (e.keyCode == tilde) 
         {
             this.visible = !this.visible;
-            this.stage.focus = m_inputWindow.getInputField();
+			// TODO: Starling Stage has no equivalent to this
+            //this.stage.focus = m_inputWindow.getInputField();
             dispatchEvent(new ConsoleVisibilityEvent(this.visible));
         }
     }
@@ -143,7 +147,8 @@ class Console extends MovieClip implements IConsole
             case tilde:
             {
                 this.visible = !this.visible;
-                this.stage.focus = m_inputWindow.getInputField();
+				// TODO: the Starling Stage has no equivalent for this
+                //this.stage.focus = m_inputWindow.getInputField();
                 dispatchEvent(new ConsoleVisibilityEvent(this.visible));
             }
             case Keyboard.UP:
@@ -289,8 +294,8 @@ class Console extends MovieClip implements IConsole
     private function showIntellisense() : Void
     {
         var inputField : TextField = m_inputWindow.getInputField();
-        m_intellisense.x = inputField.textWidth;
-        m_intellisense.y = inputField.textHeight;
+        m_intellisense.x = inputField.width;
+        m_intellisense.y = inputField.height;
         
         m_intellisense.visible = true;
     }
@@ -298,8 +303,8 @@ class Console extends MovieClip implements IConsole
     private function showMethodInsepctor() : Void
     {
         var inputField : TextField = m_inputWindow.getInputField();
-        m_methodInspector.x = inputField.textWidth;
-        m_methodInspector.y = inputField.textHeight;
+        m_methodInspector.x = inputField.width;
+        m_methodInspector.y = inputField.height;
         
         m_methodInspector.visible = true;
     }
@@ -438,7 +443,7 @@ class Console extends MovieClip implements IConsole
         
         m_inputWindow.y = m_historyWindow.height;
         
-        width = stage.stageWidth;
+        width = Starling.current.stage.stageWidth;
         height = m_historyWindow.height + m_inputWindow.height;
     }
     private static var init = {

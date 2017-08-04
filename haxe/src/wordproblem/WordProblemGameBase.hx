@@ -437,7 +437,7 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
                     
                     if (m_config.getEnableConsole()) 
                     {
-                        m_console = new Console(nativeFlashStage);
+                        m_console = new Console();
                         m_console.registerConsoleInterfacable(gameBaseReference);
                     }  // Initialize the api to the cgs services.  This initialization occurs within the Logger which sets the cgs User Properties first.  
                     

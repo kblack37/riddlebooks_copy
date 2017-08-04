@@ -305,12 +305,10 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
             {
                 m_widgetRoot = null;
             }
-        }  // have an associated widget created for it    // Go through all the nodes in the expression tree and check for ones that do not  
-        
-        
-        
-        
-        
+        }  
+		
+		// Go through all the nodes in the expression tree and check for ones that do not  
+        // have an associated widget created for it 
         var widgetsToCreate : Array<ExpressionNode> = new Array<ExpressionNode>();
         _getWidgetsToCreate(treeRoot, m_nodeIdToWidgetMap, widgetsToCreate, forceCreate);
         for (i in 0...widgetsToCreate.length){
@@ -345,10 +343,9 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
                 addedNodeWidget = groupWidget;
             }
             m_nodeIdToWidgetMap.set(nodeToCreateWidgetFor.id, addedNodeWidget);
-        }  // Create widget for root if it doesn't exist already  
-        
-        
-        
+        } 
+		
+		// Create widget for root if it doesn't exist already  
         if (treeRoot != null && m_widgetRoot == null) 
         {
             m_widgetRoot = m_nodeIdToWidgetMap.get(treeRoot.id);
@@ -903,16 +900,12 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
         {
             m_contraintsBox.width = rootRectangle.width;
             m_contraintsBox.height = rootRectangle.height;
-        }  // apply repulsive forces for each group to figure out the final position    // This is the final step to the layout. For inline we just center the root and for groups    // intelligent fashion    // TODO: After scaling this should use an algorithm to layout the groups in a more  
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        }  
+		
+		// TODO: After scaling this should use an algorithm to layout the groups in a more  
+		// intelligent fashion 
+		// This is the final step to the layout. For inline we just center the root and for groups
+        // apply repulsive forces for each group to figure out the final position 
         rootWidget.getBounds(this, rootRectangle);
         rootWidget.x -= rootRectangle.left;
         rootWidget.x += (m_contraintsBox.width - rootWidget.width) / 2;
@@ -1002,12 +995,10 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
                 // Same thing for inline addition, subtraction, and equality
                 layoutHorizontally(groupWidget, leftWidget, rightWidget);
             }
-        }  // bounds for this node have been calculated    // If the node is marked as showing parenthesis we render it at the end after  
-        
-        
-        
-        
-        
+        }
+		
+		// If the node is marked as showing parenthesis we render it at the end after  
+        // bounds for this node have been calculated
         while (rootWidget.m_parenthesesCanvas.numChildren > 0)
         {
             rootWidget.m_parenthesesCanvas.removeChildAt(0);
@@ -1023,13 +1014,13 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
             var topOffset : Float = centralPointInLocal.y - currentRectangle.top;
             var parenPadding : Float = 5;
             
-            var leftParen : DisplayObject = new Image(m_assetManager.getTexture("paren_left.png"));
+            var leftParen : DisplayObject = new Image(m_assetManager.getTexture("assets/operators/parentheses_left.png"));
             leftParen.pivotX = leftParen.width / 2.0;
             leftParen.pivotY = leftParen.height / 2.0;
             leftParen.x = -leftOffset - parenPadding;
             rootWidget.m_parenthesesCanvas.addChild(leftParen);
             
-            var rightParen : DisplayObject = new Image(m_assetManager.getTexture("paren_right.png"));
+            var rightParen : DisplayObject = new Image(m_assetManager.getTexture("assets/operators/parentheses_right.png"));
             rightParen.pivotX = rightParen.width / 2.0;
             rightParen.pivotY = rightParen.height / 2.0;
             rightParen.x = currentRectangle.right - centralPointInLocal.x + parenPadding;

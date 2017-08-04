@@ -110,7 +110,7 @@ class SubstitutionAnimation
         m_expressionSymbolResources, 
         m_assetManager, 
         m_previewTree.getConstraintsWidth(), 
-        m_previewTree.getConstraintsHeight(), 
+        m_previewTree.getConstraintsHeight(),
         false, 
         );
         var replacementWidgetRoot : DisplayObject = replacementWidget.getWidgetRoot();

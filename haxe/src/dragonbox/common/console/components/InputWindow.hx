@@ -4,44 +4,23 @@ package dragonbox.common.console.components;
 import dragonbox.common.console.expression.DynamicInvokeEvent;
 import dragonbox.common.console.expression.MethodExpression;
 
-import flash.display.MovieClip;
-import flash.events.EventDispatcher;
-import flash.events.KeyboardEvent;
-import flash.text.TextField;
-import flash.text.TextFormat;
-import flash.text.TextFormatAlign;
-import flash.ui.Keyboard;
+import openfl.text.TextFormat;
+import openfl.text.TextFormatAlign;
+import openfl.ui.Keyboard;
 
-class InputWindow extends MovieClip
+import starling.events.EventDispatcher;
+import starling.events.KeyboardEvent;
+import starling.display.Sprite;
+import starling.text.TextField;
+
+class InputWindow extends Sprite
 {
     // Constant
     private static var UNKNOWN_FORMAT : TextFormat = new TextFormat("Kalinga");
-    
-    
-    
-    
-    
     private static var OBJECT_ALIAS : TextFormat = new TextFormat("Kalinga");
-    
-    
-    
-    
     private static var METHOD_FORMAT : TextFormat = new TextFormat("Kalinga");
-    
-    
-    
-    
     private static var ARGUMENT_FORMAT : TextFormat = new TextFormat("Kalinga");
-    
-    
-    
-    
-    
     private static var MALFORMED_EXPRESSION : TextFormat = new TextFormat("Kalinga");
-    
-    
-    
-    
     
     // View
     private var m_inputField : TextField;
@@ -49,8 +28,9 @@ class InputWindow extends MovieClip
     public function new()
     {
         super();
-        m_inputField = new TextField();
-        m_inputField.wordWrap = false;
+        m_inputField = new TextField(0, 0, "");
+		// TODO: Starling TextFields don't have this field
+        //m_inputField.wordWrap = false;
         addChild(m_inputField);
     }
     
@@ -60,23 +40,30 @@ class InputWindow extends MovieClip
         {
             removeChild(m_inputField);
             m_inputField.text = " ";
-            m_inputField.setTextFormat(UNKNOWN_FORMAT);
-            m_inputField.height = m_inputField.textHeight + 2;
+			// TODO: Starling TextFields don't have this field
+            //m_inputField.setTextFormat(UNKNOWN_FORMAT);
+            m_inputField.height = m_inputField.height + 2;
             m_inputField.text = "";
             addChild(m_inputField);
         }
         else 
         {
-            m_inputField.height = m_inputField.textHeight + 2;
+            m_inputField.height = m_inputField.height + 2;
         }
         
         m_inputField.width = stage.stageWidth;
         
-        this.graphics.clear();
-        this.graphics.lineStyle(1, 0xffffff, 0.8);
-        this.graphics.beginFill(0x444444, 0.65);
-        this.graphics.drawRect(1, 1, m_inputField.width - 2, m_inputField.height - 2);
-        this.graphics.endFill();
+		// TODO: this is likely not the intended result of the commented
+		// out code below, but a Starling solution would require much
+		// more refactoring
+		m_inputField.border = true;
+		m_inputField.redraw();
+		
+        //this.graphics.clear();
+        //this.graphics.lineStyle(1, 0xffffff, 0.8);
+        //this.graphics.beginFill(0x444444, 0.65);
+        //this.graphics.drawRect(1, 1, m_inputField.width - 2, m_inputField.height - 2);
+        //this.graphics.endFill();
     }
     
     public function getCurrentExpression() : MethodExpression
@@ -121,19 +108,20 @@ class InputWindow extends MovieClip
                 dispatchEvent(dynamicInvokeEvent);
                 
                 m_inputField.text = "";
-                m_inputField.setTextFormat(UNKNOWN_FORMAT);
+				// TODO: Starling TextFields don't have this method
+                //m_inputField.setTextFormat(UNKNOWN_FORMAT);
             }
             case Keyboard.BACKSPACE:
             {
                 if (m_inputField.text.length > 0) 
                 {
-                    m_inputField.text = m_inputField.text.substr(0, m_inputField.length - 1);
+                    m_inputField.text = m_inputField.text.substr(0, m_inputField.text.length - 1);
                 }
             }
             default:
                 {
                     // Syntax highlighting :)  For each of these strings to recieve valid input
-                    m_inputField.appendText(String.fromCharCode(e.charCode));
+                    m_inputField.text += String.fromCharCode(e.charCode);
                 }
         }
         
@@ -145,25 +133,26 @@ class InputWindow extends MovieClip
         var methodExpression : MethodExpression = parseStatement(m_inputField.text);
         if (methodExpression.wellFormed) 
         {
-            m_inputField.setTextFormat(UNKNOWN_FORMAT);
+			// TODO: Starling TextFields don't have this method
+            //m_inputField.setTextFormat(UNKNOWN_FORMAT);
             if (methodExpression.objectAlias.length > 0) 
             {
-                m_inputField.setTextFormat(OBJECT_ALIAS, methodExpression.startAliasIndex, methodExpression.endAliasIndex);
+                //m_inputField.setTextFormat(OBJECT_ALIAS, methodExpression.startAliasIndex, methodExpression.endAliasIndex);
                 if (methodExpression.methodAlias.length > 0) 
                 {
-                    m_inputField.setTextFormat(METHOD_FORMAT, methodExpression.startMethodIndex, methodExpression.endMethodIndex);
+                    //m_inputField.setTextFormat(METHOD_FORMAT, methodExpression.startMethodIndex, methodExpression.endMethodIndex);
                     var numArguments : Int = methodExpression.arguments.length;
                     for (i in 0...numArguments){
                         var argumentStartIndex : Int = methodExpression.startArgumentIndices[i];
                         var argumentEndIndex : Int = methodExpression.endArgumentIndices[i];
-                        m_inputField.setTextFormat(ARGUMENT_FORMAT, argumentStartIndex, argumentEndIndex);
+                        //m_inputField.setTextFormat(ARGUMENT_FORMAT, argumentStartIndex, argumentEndIndex);
                     }
                 }
             }
         }
         else 
         {
-            m_inputField.setTextFormat(MALFORMED_EXPRESSION, 0, m_inputField.text.length);
+            //m_inputField.setTextFormat(MALFORMED_EXPRESSION, 0, m_inputField.text.length);
         }
     }
     

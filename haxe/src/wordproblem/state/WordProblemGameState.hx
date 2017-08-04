@@ -189,7 +189,9 @@ class WordProblemGameState extends BaseState implements IConsoleInterfacable
         
         // Set up intial data for common characters
         var componentFactory : ComponentFactory = new ComponentFactory(compiler);
-        var characterData : Dynamic = m_assetManager.getObject("characters");
+		// TODO: uncomment when assets are finalized
+        //var characterData : Dynamic = m_assetManager.getObject("characters");
+		var characterData : Dynamic = { charactersGame : [ ] };
         componentFactory.createAndAddComponentsForItemList(m_characterComponentManager, characterData.charactersGame);
     }
     

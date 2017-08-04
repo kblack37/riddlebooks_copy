@@ -2,7 +2,7 @@ package dragonbox.common.console.expression;
 
 import dragonbox.common.console.expression.MethodExpression;
 
-import flash.events.Event;
+import starling.events.Event;
 
 class DynamicInvokeEvent extends Event
 {

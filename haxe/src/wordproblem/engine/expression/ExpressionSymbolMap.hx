@@ -227,7 +227,9 @@ class ExpressionSymbolMap
             );
 			
             renderTexture.draw(cardObject);
-            m_idToDynamicTextureMap.set(value, renderTexture);
+			// TODO: this caching is commented out because of issues with RenderTexture
+			// so that cards with duplicate values will not return null
+            //m_idToDynamicTextureMap.set(value, renderTexture);
             cardTexture = renderTexture;
         }
         //cardObject = new Image(cardTexture);
