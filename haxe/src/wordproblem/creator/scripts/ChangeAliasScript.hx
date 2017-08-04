@@ -431,7 +431,7 @@ class ChangeAliasScript extends BaseProblemCreateScript
         cardForElement.y = cardForElement.height * 0.5;
         m_expressionContainer.addChild(cardForElement);
         
-        var equals : Image = new Image(m_assetManager.getTexture("equal.png"));
+        var equals : Image = new Image(m_assetManager.getTexture("equal"));
         equals.scaleX = equals.scaleY = 1.2;
         equals.x = cardForElement.width + (cardForElement.x - cardForElement.width * 0.5) + 10;
         equals.y = (cardForElement.height - equals.height) * 0.5 + (cardForElement.y - cardForElement.height * 0.5);
@@ -467,7 +467,7 @@ class ChangeAliasScript extends BaseProblemCreateScript
             var measuredTextHeight : Float = measuringText.textHeight + 5;
             var textFieldForElement : TextField = new TextField(measuredTextWidth, measuredTextHeight, 
             textForElement, textFormat.font, Std.parseInt(textFormat.size), try cast(textFormat.color, Int) catch(e:Dynamic) null);
-            var highlightBackground : Image = new Image(Texture.fromTexture(m_assetManager.getTexture("assets/ui/button_white.png"), 
+            var highlightBackground : Image = new Image(Texture.fromTexture(m_assetManager.getTexture("button_white"), 
 				new Rectangle(8, 8, 16, 16)));
             highlightBackground.color = color;
             highlightBackground.width = measuredTextWidth;

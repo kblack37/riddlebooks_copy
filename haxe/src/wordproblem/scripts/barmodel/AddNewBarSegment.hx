@@ -240,7 +240,7 @@ class AddNewBarSegment extends BaseBarModelScript implements IHitAreaScript impl
     public function postProcessHitAreas(hitAreas : Array<Rectangle>, hitAreaGraphics : Array<DisplayObjectContainer>) : Void
     {
         for (i in 0...hitAreas.length){
-            var icon : Image = new Image(m_assetManager.getTexture("add.png"));
+            var icon : Image = new Image(m_assetManager.getTexture("add"));
             var hitArea : Rectangle = hitAreas[i];
             icon.pivotX = icon.width * 0.5;
             icon.pivotY = icon.height * 0.5;

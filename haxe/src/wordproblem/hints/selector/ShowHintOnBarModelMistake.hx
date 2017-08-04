@@ -152,17 +152,19 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
         // TODO: Load up the dummy xml, which should contain ALL the hint logic paths
         // The bar model type governs which part of the xml should be loaded
         // Create a mapping from label id to the actual hint elements
-        var defaultHintsXml : Fast = new Fast(assetManager.getXml("default_barmodel_hints"));
-        var barModelHintBlocks = defaultHintsXml.nodes.barmodelhints;
-        var labelIdToHintXmlElement : Dynamic = { };
-		for (barModelHintBlock in barModelHintBlocks) {
-            var hintElements = barModelHintBlock.nodes.hint;
-			for (hintElement in hintElements) {
-				// Create the mapping from label to step based on the selected block
-                var labelId = Std.parseInt(hintElement.att.labelId);
-                labelIdToHintXmlElement[labelId] = hintElement;
-            }
-        }
+        var defaultHintsXml : Xml = assetManager.getXml("default_barmodel_hints");
+		var labelIdToHintXmlElement : Dynamic = { };
+		if (defaultHintsXml != null) {
+			var barModelHintBlocks = defaultHintsXml.elementsNamed("barmodelhints");
+			for (barModelHintBlock in barModelHintBlocks) {
+				var hintElements = barModelHintBlock.elementsNamed("hint");
+				for (hintElement in hintElements) {
+					// Create the mapping from label to step based on the selected block
+					var labelId = hintElement.get("labelId");
+					Reflect.setField(labelIdToHintXmlElement, labelId, hintElement);
+				}
+			}
+		}
 		
 		// TODO:  
 		// New strategy.
@@ -171,26 +173,28 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
 		// This mapping will also allow us to rebuild a dummy xml representing default hint that looks like
         // any external hinting structure
         var defaultHintXmlToBuild : Xml = Xml.parse("<barmodelhints/>");
-        var labelToStepMappings = defaultHintsXml.nodes.mapping;
-        m_labelToStepMap = { };
-		for (labelToStepMapping in labelToStepMappings) {
-            var mappingBarModelTypes : String = labelToStepMapping.att.type;
-            var typesInMapping : Array<String> = mappingBarModelTypes.split(",");
-            if (Lambda.indexOf(typesInMapping, barModelType) > -1) 
-            {
-                var labelToStepElements = labelToStepMapping.nodes.label;
-				for (labelToStepElement in labelToStepElements) {
-                    var labelId : String = labelToStepElement.att.id;
-                    var stepId : Int = Std.parseInt(labelToStepElement.att.step);
-                    Reflect.setField(m_labelToStepMap, labelId, stepId);
-                    
-                    var hintXmlCopy : Xml = Xml.parse((try cast(Reflect.field(labelIdToHintXmlElement, labelId), Fast) catch(e:Dynamic) null).x.toString());
-                    hintXmlCopy.set("step", Std.string(stepId));
-                    defaultHintXmlToBuild.addChild(hintXmlCopy);
-                }
-                break;
-            }
-        }
+		if (defaultHintsXml != null) {
+			var labelToStepMappings = defaultHintsXml.elementsNamed("mapping");
+			m_labelToStepMap = { };
+			for (labelToStepMapping in labelToStepMappings) {
+				var mappingBarModelTypes : String = labelToStepMapping.get("type");
+				var typesInMapping : Array<String> = mappingBarModelTypes.split(",");
+				if (Lambda.indexOf(typesInMapping, barModelType) > -1) 
+				{
+					var labelToStepElements = labelToStepMapping.elementsNamed("label");
+					for (labelToStepElement in labelToStepElements) {
+						var labelId : String = labelToStepElement.get("id");
+						var stepId : Int = Std.parseInt(labelToStepElement.get("step"));
+						Reflect.setField(m_labelToStepMap, labelId, stepId);
+						
+						var hintXmlCopy : Xml = Xml.parse((try cast(Reflect.field(labelIdToHintXmlElement, labelId), Fast) catch(e:Dynamic) null).x.toString());
+						hintXmlCopy.set("step", Std.string(stepId));
+						defaultHintXmlToBuild.addChild(hintXmlCopy);
+					}
+					break;
+				}
+			}
+		}
         
         m_defaultHintStorage = new HintXMLStorage(new Fast(defaultHintXmlToBuild));
         

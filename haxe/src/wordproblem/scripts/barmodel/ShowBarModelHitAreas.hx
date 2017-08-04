@@ -98,11 +98,11 @@ class ShowBarModelHitAreas extends BaseBarModelScript
                 if (!m_hitAreasShown) 
                 {
 					m_postProcessHitAreaBuffer = new Array<DisplayObjectContainer>();
-                    var hitAreaBackgroundTexture : Texture = m_assetManager.getTexture("wildcard.png");
+                    var hitAreaBackgroundTexture : Texture = m_assetManager.getTexture("wildcard");
                     var nineslicePadding : Int = 10;
                     var ninesliceGrid : Rectangle = new Rectangle(nineslicePadding, nineslicePadding, hitAreaBackgroundTexture.width - 2 * nineslicePadding, hitAreaBackgroundTexture.height - 2 * nineslicePadding);
-                    var cornerTexture : Texture = m_assetManager.getTexture("dotted_line_corner.png");
-                    var segmentTexture : Texture = m_assetManager.getTexture("dotted_line_segment.png");
+                    var cornerTexture : Texture = m_assetManager.getTexture("dotted_line_corner");
+                    var segmentTexture : Texture = m_assetManager.getTexture("dotted_line_segment");
                     
                     var hitAreas : Array<Rectangle> = m_hitAreaScript.getActiveHitAreas();
                     var i : Int = 0;

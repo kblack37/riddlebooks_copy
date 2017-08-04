@@ -86,7 +86,7 @@ class ArrowDrawingSystem extends BaseSystemScript
         if (arrowComponent.arrowView == null) 
         {
 			// TODO: this image will likely need to be fixed
-            var arrowTexture : Texture = m_assetManager.getTexture("assets/ui/arrow_short.png");
+            var arrowTexture : Texture = m_assetManager.getTexture("arrow_short");
             var arrowImage : Image = new Image(Texture.fromTexture(arrowTexture));
             
             arrowImage.pivotX = arrowImage.width * 0.5;

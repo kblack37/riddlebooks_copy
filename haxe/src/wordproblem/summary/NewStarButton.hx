@@ -14,7 +14,7 @@ class NewStarButton extends BaseRewardButton
     {
         super(maxEdgeLength, rewardData, assetManager);
         
-        var starTexture : Texture = assetManager.getTexture("level_button_star.png");
+        var starTexture : Texture = assetManager.getTexture("level_button_star");
         var starImageContainer : Sprite = new Sprite();
         
         var starImage : Image = new Image(starTexture);

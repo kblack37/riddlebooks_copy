@@ -48,7 +48,7 @@ class RemoveVerticalLabel extends BaseBarModelScript implements IRemoveBarElemen
     {
         super(gameEngine, expressionCompiler, assetManager, id, isActive);
         
-        m_ringPulseAnimation = new RingPulseAnimation(assetManager.getTexture("ring.png"), onRingPulseAnimationComplete);
+        m_ringPulseAnimation = new RingPulseAnimation(assetManager.getTexture("ring"), onRingPulseAnimationComplete);
         m_labelDescriptionBounds = new Rectangle();
     }
     

@@ -203,7 +203,7 @@ class EquationToInventory extends BaseGameScript
             {
                 var backgroundBounds : Rectangle = copyLeftTightBounds.union(copyRightTightBounds);
                 var scaleNineTexture : Texture = Texture.fromTexture(
-					m_assetManager.getTexture("assets/ui/button_white.png"), 
+					m_assetManager.getTexture("button_white"), 
 					new Rectangle(10, 10, backgroundBounds.width - 10, backgroundBounds.height - 10));
                 var scaleNineImage : Image = new Image(scaleNineTexture);
                 scaleNineImage.color = 0x000000;
@@ -218,7 +218,7 @@ class EquationToInventory extends BaseGameScript
                 animationLayer.addChild(equationContainer);
                 
                 // Equals needs to be placed in between the two equation copies
-                var equalsImage : Image = new Image(m_assetManager.getTexture("assets/operators/equal.png"));
+                var equalsImage : Image = new Image(m_assetManager.getTexture("equal"));
                 equalsImage.pivotX = equalsImage.width * 0.5;
                 equalsImage.pivotY = equalsImage.height * 0.5;
                 //equalsImage.x = backgroundBounds.width * 0.5;

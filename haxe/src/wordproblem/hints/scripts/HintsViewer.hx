@@ -151,20 +151,20 @@ class HintsViewer extends ScriptNode implements IShowableScript
         m_lockedHints = new Array<HintScript>();
         m_unlockedHints = new Array<HintScript>();
         
-        var whiteButtonTexture : Texture = assetManager.getTexture("button_white.png");
+        var whiteButtonTexture : Texture = assetManager.getTexture("button_white");
         var whiteScale9Texture : Texture = Texture.fromTexture(whiteButtonTexture, new Rectangle(8, 8, 16, 16));
         
         var lightbulbIconMaxHeight : Float = 60;
         
         // The star burst should play a spin animation when the mouse is over it
-        var starBurst : DisplayObject = new Image(assetManager.getTexture("Art_StarBurst.png"));
+        var starBurst : DisplayObject = new Image(assetManager.getTexture("Art_StarBurst"));
         starBurst.pivotX = starBurst.width * 0.5;
         starBurst.pivotY = starBurst.height * 0.5;
         starBurst.scaleX = starBurst.scaleY = (lightbulbIconMaxHeight * 1.7 / starBurst.height);
         starBurst.x = starBurst.width * 0.5;
         starBurst.y = starBurst.height * 0.5;
         
-        var lightbulbTexture : Texture = assetManager.getTexture("light.png");
+        var lightbulbTexture : Texture = assetManager.getTexture("light");
         var lightbulbIcon : Image = new Image(lightbulbTexture);
         lightbulbIcon.scaleX = lightbulbIcon.scaleY = lightbulbIconMaxHeight * 0.9 / lightbulbTexture.height;
         lightbulbIcon.x = (starBurst.width - lightbulbIcon.width) * 0.5;
@@ -190,7 +190,7 @@ class HintsViewer extends ScriptNode implements IShowableScript
         m_newHintButton.addEventListener(TouchEvent.TOUCH, onNewHintTouched);
         
         var showHintWidth : Float = 60;
-        var showIconTexture : Texture = assetManager.getTexture("help_icon.png");
+        var showIconTexture : Texture = assetManager.getTexture("help_icon");
         var showIcon : Image = new Image(showIconTexture);
         showIcon.scaleX = showIcon.scaleY = showHintWidth * 0.9 / showIconTexture.height;
         
@@ -200,7 +200,7 @@ class HintsViewer extends ScriptNode implements IShowableScript
         m_showHintButton.scaleWhenDown = 0.9;
         m_showHintButton.addEventListener(Event.TRIGGERED, onShowHintClicked);
         
-        var thoughtBubbleSmallTexture : Texture = m_assetManager.getTexture("thought_bubble_small.png");
+        var thoughtBubbleSmallTexture : Texture = m_assetManager.getTexture("thought_bubble_small");
         var thoughtBubbleSmallA : Image = new Image(thoughtBubbleSmallTexture);
         thoughtBubbleSmallA.scaleX = thoughtBubbleSmallA.scaleY = 0.8;
         thoughtBubbleSmallA.pivotX = thoughtBubbleSmallTexture.width * 0.5;
@@ -213,7 +213,7 @@ class HintsViewer extends ScriptNode implements IShowableScript
         thoughtBubbleSmallB.pivotY = thoughtBubbleSmallTexture.height * 0.5;
         m_thoughtBubbleB = thoughtBubbleSmallB;
         
-        var thoughtBubbleTexture : Texture = m_assetManager.getTexture("thought_bubble.png");
+        var thoughtBubbleTexture : Texture = m_assetManager.getTexture("thought_bubble");
         var thoughtBubble : Image = new Image(thoughtBubbleTexture);
         thoughtBubble.pivotX = thoughtBubbleTexture.width * 0.5;
         thoughtBubble.pivotY = thoughtBubbleTexture.height * 0.5;
@@ -227,7 +227,7 @@ class HintsViewer extends ScriptNode implements IShowableScript
         m_descriptionContainer.x = (m_thoughtBubbleMain.x - m_thoughtBubbleWidth * 0.5) + m_thoughtBubbleWidth * 0.121;
         m_descriptionContainer.y = (m_thoughtBubbleMain.y - m_thoughtBubbleHeight * 0.5) + m_thoughtBubbleHeight * 0.215;
         
-        var arrowTexture : Texture = assetManager.getTexture("arrow_short.png");
+        var arrowTexture : Texture = assetManager.getTexture("arrow_short");
         var arrowScale : Float = 1.5;
         var leftUpArrow : Image = WidgetUtil.createPointingArrow(arrowTexture, true, arrowScale, 0xFFFFFF);
         var leftDownArrow : Image = WidgetUtil.createPointingArrow(arrowTexture, true, arrowScale, 0xCCCCCC);

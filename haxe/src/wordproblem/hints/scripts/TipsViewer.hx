@@ -146,7 +146,7 @@ class TipsViewer extends ScriptNode implements IShowableScript
         m_tipsTitle = new TextField(Std.int(screenWidth), 60, "How to...", GameFonts.DEFAULT_FONT_NAME, 24, 0xFFFFFF);
         
         // Create the back button to return from the script view to the tip names view
-        var arrowRotateTexture : Texture = m_assetManager.getTexture("arrow_rotate.png");
+        var arrowRotateTexture : Texture = m_assetManager.getTexture("arrow_rotate");
         var scaleFactor : Float = 0.65;
         var backUpImage : Image = new Image(arrowRotateTexture);
         backUpImage.color = 0xFBB03B;
@@ -186,7 +186,7 @@ class TipsViewer extends ScriptNode implements IShowableScript
             m_tipScripts.push(tipScript);
         }
         
-        var arrowTexture : Texture = assetManager.getTexture("arrow_short.png");
+        var arrowTexture : Texture = assetManager.getTexture("arrow_short");
         scaleFactor = 1.5;
         var leftUpImage : Image = WidgetUtil.createPointingArrow(arrowTexture, true, scaleFactor);
         var leftOverImage : Image = WidgetUtil.createPointingArrow(arrowTexture, true, scaleFactor, 0xCCCCCC);

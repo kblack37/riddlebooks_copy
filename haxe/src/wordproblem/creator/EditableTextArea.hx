@@ -186,10 +186,10 @@ class EditableTextArea extends Layer
         m_highlightedTextObjects = { };
         m_whiteSpaceRegex = new EReg('[\\s\\r\\n]', "");
         
-        m_textBackgroundTexture = Texture.fromTexture(assetManager.getTexture("assets/card/card_background_square.png"), new Rectangle(8, 8, 16, 16));
+        m_textBackgroundTexture = Texture.fromTexture(assetManager.getTexture("card_background_square"), new Rectangle(8, 8, 16, 16));
         
         var scale9Delta : Float = 2;
-        var emphasizeTexture : Texture = getTexture("halo.png");
+        var emphasizeTexture : Texture = getTexture("halo");
         m_textEmphasizeTexture = Texture.fromTexture(emphasizeTexture, new Rectangle(
                 (emphasizeTexture.width - scale9Delta) * 0.5, 
                 (emphasizeTexture.height - scale9Delta) * 0.5, 

@@ -66,7 +66,7 @@ class CancelManager
             strokeFinishedCallback : Function)
     {
         m_treeWidget = treeWidget;
-        m_strokeTexture = getTexture("brush_circle.png");
+        m_strokeTexture = getTexture("brush_circle");
         
         m_renderTexture = new RenderTexture(treeWidget.getConstraintsWidth(), treeWidget.getConstraintsHeight());
         m_cancellationCanvas = new Image(m_renderTexture);

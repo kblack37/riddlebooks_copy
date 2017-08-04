@@ -505,7 +505,7 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
                 for (barSegment in barWhole.barSegments)
                 {
                     var segmentValue : String = Std.string(barSegment.getValue());
-                    if (segmentValueToOccurencesMap.exists(segmentValue)) 
+                    if (Reflect.hasField(segmentValueToOccurencesMap, segmentValue)) 
                     {
 						Reflect.setField(segmentValueToOccurencesMap, segmentValue, Reflect.field(segmentValueToOccurencesMap, segmentValue) + 1);
                     }
@@ -542,7 +542,7 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
                 for (barSegment in barWhole.barSegments)
                 {
                     var segmentValue = Std.string(barSegment.getValue());
-                    if (segmentValueToColorMap.exists(segmentValue)) 
+                    if (Reflect.field(segmentValueToColorMap, segmentValue)) 
                     {
                         barSegment.color = Reflect.field(segmentValueToColorMap, segmentValue);
                     }

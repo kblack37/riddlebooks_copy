@@ -113,7 +113,7 @@ class NewNotificationScreen extends Sprite
         
         var i : Int = 0;
         var numStars : Int = starPositions.length;
-        var starTexture : Texture = assetManager.getTexture("star_small_white.png");
+        var starTexture : Texture = assetManager.getTexture("star_small_white");
         var randomGenerator : PMPRNG = PMPRNG.createGen(null);
         for (i in 0...numStars){
             var position : Point = starPositions[i];
@@ -242,7 +242,7 @@ class NewNotificationScreen extends Sprite
     
     private function createThoughtBubble(color : Int, assetManager : AssetManager, width : Float, height : Float) : Image
     {
-        var thoughtBubbleTexture : Texture = assetManager.getTexture("thought_bubble.png");
+        var thoughtBubbleTexture : Texture = assetManager.getTexture("thought_bubble");
         var thoughtBubble : Image = new Image(thoughtBubbleTexture);
         thoughtBubble.pivotX = thoughtBubbleTexture.width * 0.5;
         thoughtBubble.pivotY = thoughtBubbleTexture.height * 0.5;

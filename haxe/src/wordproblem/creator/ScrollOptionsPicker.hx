@@ -43,7 +43,7 @@ class ScrollOptionsPicker extends Sprite
     {
         super();
         
-        var arrowTexture : Texture = getTexture("arrow_short.png");
+        var arrowTexture : Texture = getTexture("arrow_short");
         var scaleFactor : Float = 1.0;
         var leftUpImage : Image = WidgetUtil.createPointingArrow(arrowTexture, true, scaleFactor);
         var leftOverImage : Image = WidgetUtil.createPointingArrow(arrowTexture, true, scaleFactor, 0xCCCCCC);

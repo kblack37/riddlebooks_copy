@@ -70,7 +70,7 @@ class BarModelAreaWidget extends BarModelView implements IBaseWidget
         
         var horizontalPadding : Float = 20;
         var verticalPadding : Float = 30;
-        var backgroundImageTexture : Texture = assetManager.getTexture("assets/ui/term_area_left.png");
+        var backgroundImageTexture : Texture = assetManager.getTexture("term_area_left");
         var bgImage : Image = new Image(Texture.fromTexture(backgroundImageTexture, new Rectangle(
         horizontalPadding, verticalPadding, backgroundImageTexture.width - 2 * horizontalPadding, backgroundImageTexture.height - 2 * verticalPadding))
         );

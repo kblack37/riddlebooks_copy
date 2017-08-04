@@ -367,12 +367,10 @@ class WordProblemGameState extends BaseState implements IConsoleInterfacable
         if (!m_overrideSkip) 
         {
             m_optionsScreen.toggleSkipButtonEnabled(levelData.skippable);
-        }  // If nothing is specified, then use a default set    // Look at the level first and see what music should be played.  
-        
-        
-        
-        
-        
+        }  
+		
+		// Look at the level first and see what music should be played.  
+        // If nothing is specified, then use a default set
         var audioData : Array<Dynamic> = levelData.getAudioData();
         if (audioData != null && audioData.length > 0) 
         {

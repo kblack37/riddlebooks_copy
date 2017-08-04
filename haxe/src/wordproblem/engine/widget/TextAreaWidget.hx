@@ -183,7 +183,7 @@ class TextAreaWidget extends Sprite implements IBaseWidget
         m_backgroundScroll = (backgroundScroll == "scroll");
         m_backgroundRepeat = (backgroundRepeat == "repeat");
         
-        var arrowTexture : Texture = assetManager.getTexture("arrow_short.png");
+        var arrowTexture : Texture = assetManager.getTexture("arrow_short");
         var scaleFactor : Float = 1.5;
         var leftUpImage : Image = WidgetUtil.createPointingArrow(arrowTexture, true, scaleFactor);
         var leftOverImage : Image = WidgetUtil.createPointingArrow(arrowTexture, true, scaleFactor, 0xCCCCCC);

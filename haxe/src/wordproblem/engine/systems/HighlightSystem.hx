@@ -41,7 +41,7 @@ class HighlightSystem extends BaseSystemScript
         
         m_highlightJuggler = Starling.current.juggler;
         
-        var highlightTexture : Texture = assetManager.getTexture("assets/card/halo.png");
+        var highlightTexture : Texture = assetManager.getTexture("halo");
         var scale9Delta : Float = 2;
         m_highlightTexture = Texture.fromTexture(highlightTexture, new Rectangle(
                 (highlightTexture.width - scale9Delta) * 0.5, 

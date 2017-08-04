@@ -342,7 +342,7 @@ class TitleScreenState extends BaseState
         );
         
         var bgTexture : Texture = ((m_autoLogin)) ? 
-        m_assetManager.getTexture("login_background") : m_assetManager.getTexture("login_background_with_ui.png");
+        m_assetManager.getTexture("login_background") : m_assetManager.getTexture("login_background_with_ui");
         addChildAt(new Image(bgTexture), 0);
         
         if (m_autoLogin) 

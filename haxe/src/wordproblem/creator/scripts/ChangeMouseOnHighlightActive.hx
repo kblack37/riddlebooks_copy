@@ -97,7 +97,7 @@ class ChangeMouseOnHighlightActive extends BaseProblemCreateScript
         setIsActive(m_isActive);
         
         var padding : Float = 4;
-        var indicatorTexture : Texture = m_assetManager.getTexture("card_background_square.png");
+        var indicatorTexture : Texture = m_assetManager.getTexture("card_background_square");
         var scale9Texture : Texture = Texture.fromTexture(indicatorTexture, 
 			new Rectangle(padding,
 				padding,

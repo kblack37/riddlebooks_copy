@@ -78,7 +78,7 @@ class LinkToAnimation implements IAnimatable
         renderer.addEmitter(emitter);
         m_particleRenderer = renderer;
         
-        var texture : Texture = assetManager.getTexture("arrow_short.png");
+        var texture : Texture = assetManager.getTexture("arrow_short");
         m_arrowOriginalLength = texture.width;
         
 		// TODO: this was replaced from the Scale3Texture from the feathers library and

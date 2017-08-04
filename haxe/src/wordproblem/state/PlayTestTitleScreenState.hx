@@ -116,7 +116,7 @@ class PlayTestTitleScreenState extends BaseState
         m_textInput.x = (800 - m_textInput.width) * 0.5;
         m_textInput.y = 200;
         
-        var backgroundTexture : Texture = m_assetManager.getTexture("assets/ui/button_white.png");
+        var backgroundTexture : Texture = m_assetManager.getTexture("button_white");
         var padding : Float = 10;
         var textInputBackground : Image = new Image(Texture.fromTexture(backgroundTexture, 
 			new Rectangle(padding, padding, backgroundTexture.width - 2 * padding, backgroundTexture.height - 2 * padding)));
@@ -141,7 +141,7 @@ class PlayTestTitleScreenState extends BaseState
     
     override public function enter(fromState : Dynamic, params : Array<Dynamic> = null) : Void
     {
-        var backgroundTexture : Texture = m_assetManager.getTexture("login_background.png");
+        var backgroundTexture : Texture = m_assetManager.getTexture("login_background");
         addChild(new Image(backgroundTexture));
         
         addChild(m_startButton);

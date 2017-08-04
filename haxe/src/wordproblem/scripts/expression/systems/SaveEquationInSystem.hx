@@ -73,7 +73,7 @@ class SaveEquationInSystem extends BaseGameScript
                 new ExpressionTree(m_expressionCompiler.getVectorSpace(), null), 
                 m_gameEngine.getExpressionSymbolResources(), 
                 m_assetManager, 
-                m_assetManager.getTexture("assets/ui/term_area_left.png"), 
+                m_assetManager.getTexture("term_area_left"), 
                 containerWidth, 
                 containerHeight, 
                 true

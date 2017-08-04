@@ -164,7 +164,7 @@ class SummaryRewardsScreen extends Layer
         m_rewardsDismissButton.y = totalScreenHeight - m_rewardsDismissButton.height * 1.5;
         m_rewardsDismissButton.addEventListener(Event.TRIGGERED, onRewardDismissClick);
         
-        var arrowTexture : Texture = assetManager.getTexture("assets/ui/arrow_short.png");
+        var arrowTexture : Texture = assetManager.getTexture("arrow_short");
         var scaleFactor : Float = 1.5;
         var leftUpImage : Image = WidgetUtil.createPointingArrow(arrowTexture, true, scaleFactor);
         var leftOverImage : Image = WidgetUtil.createPointingArrow(arrowTexture, true, scaleFactor, 0xCCCCCC);

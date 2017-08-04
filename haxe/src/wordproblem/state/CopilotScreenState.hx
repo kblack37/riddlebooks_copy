@@ -64,7 +64,7 @@ class CopilotScreenState extends BaseState
         optionsWidget.y = 600 - 40;
         addChild(optionsWidget);
         
-        var bgTexture : Texture = m_assetManager.getTexture("login_background.png");
+        var bgTexture : Texture = m_assetManager.getTexture("login_background");
         addChildAt(new Image(bgTexture), 0);
     }
     

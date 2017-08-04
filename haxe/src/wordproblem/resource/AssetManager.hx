@@ -33,6 +33,8 @@ import haxe.Constraints.Function;
 import cgs.audio.IAudioResource;
 import cgs.levelProgression.util.ICgsLevelResourceManager;
 
+import gameconfig.commonresource.EmbeddedBundle1X;
+
 import starling.core.Starling;
 import starling.events.Event;
 import starling.events.EventDispatcher;
@@ -443,9 +445,10 @@ class AssetManager extends EventDispatcher implements ICgsLevelResourceManager i
         // have extra data appended to it to point to the texture atlas to use
         // ex.) the name 'button_up::ui_atlas' will attempt to grab the button texture
         // from the ui_atlas.
+		var assetPath : String = getAssetPath(name);
         var texture : Texture = null;
-		if (Assets.exists(name)) {
-			var bmpData : BitmapData = Assets.getBitmapData(name);
+		if (Assets.exists(assetPath)) {
+			var bmpData : BitmapData = Assets.getBitmapData(assetPath);
 			if (bmpData != null) texture = Texture.fromBitmapData(bmpData, false);
 		}
         
@@ -546,6 +549,20 @@ class AssetManager extends EventDispatcher implements ICgsLevelResourceManager i
 		}
 		return xml;
     }
+	
+	/* 
+	 * Returns the asset file path associated with the asset name, or
+	 * an empty string if no mapping exists
+	 */
+	private function getAssetPath(name : String) : String {
+		var assetPath : String = "";
+		if (EmbeddedBundle1X.pathMappingExists(name)) {
+			assetPath = EmbeddedBundle1X.getPathMapping(name);
+		} else {
+			trace("Either no asset with name " + name + " exists or there is no file path mapping");
+		}
+		return assetPath;
+	}
     
     /** Returns all XML names that start with a certain string, sorted alphabetically. 
      *  If you pass a result vector, the names will be added to that vector. */

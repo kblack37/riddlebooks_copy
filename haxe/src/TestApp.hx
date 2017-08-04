@@ -5,9 +5,11 @@ import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.compile.LatexCompiler;
 import dragonbox.common.math.vectorspace.RealsVectorSpace;
 import dragonbox.common.state.StateMachine;
+import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
 import starling.core.Starling;
 import starling.display.Sprite;
+import starling.events.Event;
 import starling.events.EventDispatcher;
 import starling.text.TextField;
 import wordproblem.AlgebraAdventureConfig;
@@ -51,14 +53,14 @@ class TestApp extends Sprite {
 			assetManager.getXml("assets/layout/predefined_layouts.xml").toString());
 		var algebraConfig = new AlgebraAdventureConfig();
 		var expressionSymbolMap = new ExpressionSymbolMap(assetManager);
+		var mouseState = new MouseState(new starling.events.EventDispatcher(), new openfl.events.EventDispatcher());
+		var time = new Time();
 		var gameEngine = new GameEngine(new LatexCompiler(vectorSpace),
 			assetManager,
 			expressionSymbolMap,
 			this.width,
 			this.height,
-			new MouseState(new starling.events.EventDispatcher(),
-				new openfl.events.EventDispatcher()
-			)
+			mouseState
 		);
 		var scriptParser = new ScriptParser(gameEngine,
 			new LatexCompiler(vectorSpace),
@@ -83,16 +85,20 @@ class TestApp extends Sprite {
 		);
 		
 		// compiling levels from the xml, testing that text is parsed correctly
-		//var xml = assetManager.getXml("assets/levels/bar_model/turk_brainpop/519.xml");
-		//var wordProblemLevelData = levelCompiler.compileWordProblemLevel(xml.firstElement(),
-			//"levelTest",
-			//0,
-			//-1,
-			//"genreTest",
-			//algebraConfig,
-			//scriptParser,
-			//new TextParser()
-		//);
+		var xml = assetManager.getXml("assets/levels/bar_model/turk_brainpop/519.xml");
+		var wordProblemLevelData = levelCompiler.compileWordProblemLevel(xml.firstElement(),
+			"levelTest",
+			0,
+			-1,
+			"genreTest",
+			algebraConfig,
+			scriptParser,
+			new TextParser()
+		);
+		
+		gameState.enter(null, [wordProblemLevelData]);
+		
+		this.addEventListener(Event.ENTER_FRAME, function() updates(gameState, time, mouseState));
 		
 		//var docView = textViewFactory.createView(wordProblemLevelData.m_rootDocumentNode[0]);
 		//addChild(docView);
@@ -136,7 +142,7 @@ class TestApp extends Sprite {
 		//}
 		//
 		//// creating a BarModelView instance
-		//var barModelView = new BarModelView(50, 50, 5, 5, 5, 5, 5, barModelData, new ExpressionSymbolMap(assetManager), assetManager);
+		//var barModelView = new BarModelView(50, 50, 5, 5, 5, 5, 5, barModelData, expressionSymbolMap, assetManager);
 		//barModelView.setDimensions(500, 500);
 		//barModelView.redraw();
 		//addChild(barModelView);
@@ -150,6 +156,11 @@ class TestApp extends Sprite {
 		//addChild(expressionTreeWidget);
 		//expressionTreeWidget.refreshNodes();
 		//expressionTreeWidget.buildTreeWidget();
+	}
+	
+	private function updates(gameState : WordProblemGameState, time : Time, mouseState : MouseState) {
+		time.update();
+		gameState.update(time, mouseState);
 	}
 	
 	// Function to trace the leaves in the tree defined by the word problem level data

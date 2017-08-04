@@ -304,11 +304,11 @@ class WordProblemGameChallengeDemoLogin extends BaseState
         addChild(optionsWidget);
         m_options = optionsWidget;
         
-        var bgTexture : Texture = m_assetManager.getTexture("login_background_with_ui.png");
+        var bgTexture : Texture = m_assetManager.getTexture("login_background_with_ui");
         addChildAt(new Image(bgTexture), 0);
         
         // Create a button to continue IF a user id was saved in the cache
-        var baseContinueGameButtonTexture : Texture = m_assetManager.getTexture("button_green_up.png");
+        var baseContinueGameButtonTexture : Texture = m_assetManager.getTexture("button_green_up");
         var buttonTexturePadding : Float = 16;
         var nineSliceGrid : Rectangle = new Rectangle(
         buttonTexturePadding, 
@@ -318,7 +318,7 @@ class WordProblemGameChallengeDemoLogin extends BaseState
         );
         
         // Create a button to register as a new student that auto-assigns a username
-        var baseNewGameButtonTexture : Texture = m_assetManager.getTexture("button_green_up.png");
+        var baseNewGameButtonTexture : Texture = m_assetManager.getTexture("button_green_up");
         buttonTexturePadding = 16;
         nineSliceGrid = new Rectangle(
                 buttonTexturePadding, 

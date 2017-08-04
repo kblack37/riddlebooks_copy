@@ -132,7 +132,7 @@ class TestCreatedLevelScreen extends Sprite
         m_optionsScreen.addChild(disablingQuad);
         
         var optionsButtonContainer : Sprite = new Sprite();
-        var optionsBackground : Image = new Image(getTexture("summary_background.png"));
+        var optionsBackground : Image = new Image(getTexture("summary_background"));
         optionsButtonContainer.addChild(optionsBackground);
         m_optionsScreen.addChild(optionsButtonContainer);
         

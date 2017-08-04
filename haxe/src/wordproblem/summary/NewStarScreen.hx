@@ -22,7 +22,7 @@ class NewStarScreen extends Sprite
         starText.y = totalScreenHeight * 0.15;
         addChild(starText);
         
-        var starTexture : Texture = assetManager.getTexture("level_button_star.png");
+        var starTexture : Texture = assetManager.getTexture("level_button_star");
         var starImage : Image = new Image(starTexture);
         starImage.pivotX = starTexture.width * 0.5;
         starImage.pivotY = starTexture.height * 0.5;
