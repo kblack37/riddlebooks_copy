@@ -1,0 +1,277 @@
+<!--
+For default hints, we map the labels in the code to the step value
+
+These blocks are eventually supposed to be similar to the real hint data
+-->
+<root>
+<barmodelhints id="PartsAddToSum">
+	<hint labelId="PartsAddToSumA">This problem has things being added together. What are they?</hint>
+	<hint labelId="PartsAddToSumB" highlightTextExpressionValue="$0">You need to add a group with the name '$0'.</hint>
+	<hint labelId="PartsAddToSumC">You are missing at least one part that needs to be added.</hint>
+	<hint labelId="PartsAddToSumD">This problem has parts being added together. What are those parts?</hint>
+	<hint labelId="PartsAddToSumE">'$0' needs to be the total of all important parts.</hint>
+</barmodelhints>
+
+<barmodelhints id="GenericMissingSumHints">
+	<hint labelId="GenericMissingSumHintsA" linkToTip="$0">An important name is missing.</hint>
+	<hint labelId="GenericMissingSumHintsB" highlightTextExpressionValue="$0">'$0' should be the total, where do you add it?</hint>
+	<hint labelId="GenericMissingSumHintsC">What is the name of all the parts added together? Where do you add it?</hint>
+	<hint labelId="GenericMissingSumHintsD">The unknown part is missing? What is it?</hint>
+	<hint labelId="GenericMissingSumHintsE">What is the total of all the parts added together?</hint>
+</barmodelhints>
+
+<barmodelhints id="DifferenceBetweenParts">
+	<hint labelId="DifferenceBetweenPartsA">This problem wants you to find the difference between parts.</hint>
+</barmodelhints>
+
+<barmodelhints id="GenericDifferenceHints">
+	<hint labelId="GenericDifferenceHintsA">The unknown is missing. What is it?</hint>
+	<hint labelId="GenericDifferenceHintsB" highlightTextExpressionValueValue="$0">'$0' should be a difference in your answer.</hint>
+	<hint labelId="GenericDifferenceHintsC" linkToTip="$0">You need to show a difference.</hint>
+	<hint labelId="GenericDifferenceHintsD" highlightTextExpressionValueValue="$0">'$0' is the difference between the larger and smaller parts.</hint>
+	<hint labelId="GenericDifferenceHintsE">What is the difference between the larger and smaller parts?</hint>
+	<hint labelId="GenericDifferenceHintsF">You don't have the right difference!</hint>
+</barmodelhints>
+
+<barmodelhints id="GenericMissingPartsOfDifference">
+	<hint labelId="GenericMissingPartsOfDifferenceA" highlightTextExpressionValue="$0">The larger value '$0' is missing.</hint>
+	<hint labelId="GenericMissingPartsOfDifferenceB">Find the larger part and add it.</hint>
+	<hint labelId="GenericMissingPartsOfDifferenceC">What values make up the larger part?</hint>
+	<hint labelId="GenericMissingPartsOfDifferenceD" highlightTextExpressionValue="$0">The smaller value '$0' is missing.</hint>
+	<hint labelId="GenericMissingPartsOfDifferenceE">Find the smaller part and add it.</hint>
+	<hint labelId="GenericMissingPartsOfDifferenceF">What values make up the smaller part?</hint>
+</barmodelhints>
+
+<barmodelhints id="GroupsEqualSum">
+	<hint labelId="GroupsEqualSumA">This problem has many groups of the same size. How many do you need in the answer?</hint>
+	<hint labelId="GroupsEqualSumB">How many groups should '$0' be?</hint>
+	<hint labelId="GroupsEqualSumC" highlightTextExpressionValueValue="$0">'$0' is every group added together.</hint>
+	<hint labelId="GroupsEqualSumD" highlightTextExpressionValueValue="$0">'$0' equals the $1 groups added together.</hint>
+</barmodelhints>
+
+<barmodelhints id="GenericEqualGroupsHints">
+	<hint labelId="GenericEqualGroupsHintsA">There are two kinds of things in the problem. One is the size of one group.</hint>
+	<hint labelId="GenericEqualGroupsHintsB" linkToTip="$0">This problem has groups of things. Do you know what they are?</hint>
+	<hint labelId="GenericEqualGroupsHintsC" highlightTextExpressionValue="$0">The problem talks about $0 groups of things of the same size. You need a box for each group.</hint>
+	<hint labelId="GenericEqualGroupsHintsD">You don't have the right number of equal sized groups.</hint>
+	<hint labelId="GenericEqualGroupsHintsE">How many equal size groups do you need to make?</hint>
+</barmodelhints>
+
+<barmodelhints id="SumAndDifferenceWithIntermediate">
+	<hint labelId="SumAndDifferenceWithIntermediateA">You have to find both the total and difference between parts.</hint>
+	<hint labelId="SumAndDifferenceWithIntermediateB" highlightTextExpressionValueValue="$0">'$0' is the total of two other parts.</hint>
+</barmodelhints>
+
+<barmodelhints id="SumOfGroupsWithIntermediate">
+	<hint labelId="SumOfGroupsWithIntermediateA">You have to find both the total and difference between parts.</hint>
+	<hint labelId="SumOfGroupsWithIntermediateB">Where does the second unknown need to be added?</hint>
+</barmodelhints>
+
+<barmodelhints id="IntermediateValueNotDiscoveredHint">
+	<hint labelId="IntermediateValueNotDiscoveredHintA" highlightTextExpressionValueValue="$0">The second unknown is '$0'. What do you need to do with it?</hint>
+	<hint labelId="IntermediateValueNotDiscoveredHintB">The problem has two different types of things. The second unknown is one of them.</hint>
+	<hint labelId="IntermediateValueNotDiscoveredHintC">The problem has a second, extra unknown. Can you find it?</hint>
+</barmodelhints>
+
+<barmodelhints id="UnitLabel">
+	<hint labelId="UnitLabelA">How much is one group? Put a name on a group to show how much it is.</hint>
+	<hint labelId="UnitLabelB" highlightTextExpressionValueValue="$0">The number of things in one group equals '$0'.</hint>
+	<hint labelId="UnitLabelC">How much should one group be?</hint>
+	<hint labelId="UnitLabelD">Make sure '$0' is naming the right amount.</hint>
+	<hint labelId="UnitLabelE">'$0' should be 1 / $1 of all boxes.</hint>
+	<hint labelId="UnitLabelF">You may have too many extra boxes.</hint>
+	<hint labelId="UnitLabelG">Are you sure you have the right number of boxes?</hint>
+</barmodelhints>
+
+<barmodelhints id="FractionLabel">
+	<hint labelId="FractionLabelA" highlightTextExpressionValueValue="$0">'$0' should equal $1/$2 of all groups</hint>
+	<hint labelId="FractionLabelB">How much of the whole fraction is '$0'?</hint>
+</barmodelhints>
+
+<barmodelhints id="SumsOfFraction">
+	<hint labelId="SumsOfFractionA">This problem has groups that make up a fraction.</hint>
+	<hint labelId="SumsOfFractionB" highlightTextExpressionValueValue="$0">'$0' needs to be the total of every equal sized group.</hint>
+</barmodelhints>
+
+<barmodelhints id="FractionOfLargerAmount">
+	<hint labelId="FractionOfLargerAmountA">This problem has groups that make up a fraction.</hint>
+	<hint labelId="FractionOfLargerAmountB">You have the right number of parts for the fraction of the whole, how many do you need for the whole?</hint>
+	<hint labelId="FractionOfLargerAmountC">You have the right number of parts for the whole, how many do you need for the fraction?</hint>
+	<hint labelId="FractionOfLargerAmountD">The problem has two types of things. What type is the whole and what is the fraction of that whole?</hint>
+</barmodelhints>
+
+<!-- For each unique bar model type, need to manually assign 'step id'. This is purely to make sure external hints from the turk
+system are consistent with default ones -->
+<mapping type="1a,2b">
+	<label id="PartsAddToSumA" step="1"/>
+	<label id="PartsAddToSumB" step="4"/>
+	<label id="PartsAddToSumC" step="3"/>
+	<label id="PartsAddToSumD" step="2"/>
+	<label id="PartsAddToSumE" step="5"/>
+	<label id="GenericMissingSumHintsA" step="6"/>
+	<label id="GenericMissingSumHintsB" step="9"/>
+	<label id="GenericMissingSumHintsC" step="8"/>
+	<label id="GenericMissingSumHintsD" step="7"/>
+	<label id="GenericMissingSumHintsE" step="10"/>
+</mapping>
+
+<mapping type="1b,2a,2e,2c,2d">
+	<label id="DifferenceBetweenPartsA" step="1"/>
+
+	<label id="GenericMissingPartsOfDifferenceA" step="4"/>
+	<label id="GenericMissingPartsOfDifferenceB" step="3"/>
+	<label id="GenericMissingPartsOfDifferenceC" step="2"/>
+	<label id="GenericMissingPartsOfDifferenceD" step="7"/>
+	<label id="GenericMissingPartsOfDifferenceE" step="6"/>
+	<label id="GenericMissingPartsOfDifferenceF" step="5"/>
+	
+	<label id="GenericDifferenceHintsA" step="9"/>
+	<label id="GenericDifferenceHintsB" step="8"/>
+</mapping>
+
+<mapping type="3a,3b,4a,4b,4c,4d,4e,4f,4g">
+	<label id="GroupsEqualSumA" step="1"/>
+	<label id="GroupsEqualSumB" step="4"/>
+	<label id="GroupsEqualSumC" step="3"/>
+	<label id="GroupsEqualSumD" step="2"/>
+	
+	<label id="GenericEqualGroupsHintsA" step="20"/>
+	<label id="GenericEqualGroupsHintsB" step="21"/>
+	<label id="GenericEqualGroupsHintsC" step="22"/>
+	<label id="GenericEqualGroupsHintsD" step="23"/>
+	<label id="GenericEqualGroupsHintsE" step="24"/>
+	
+	<label id="UnitLabelA" step="31"/>
+	<label id="UnitLabelB" step="32"/>
+	<label id="UnitLabelC" step="33"/>
+	<label id="UnitLabelD" step="34"/>
+	<label id="UnitLabelE" step="35"/>
+	<label id="UnitLabelF" step="36"/>
+	<label id="UnitLabelG" step="37"/>
+	
+	<label id="GenericMissingSumHintsA" step="6"/>
+	<label id="GenericMissingSumHintsB" step="9"/>
+	<label id="GenericMissingSumHintsC" step="8"/>
+	<label id="GenericMissingSumHintsD" step="7"/>
+	<label id="GenericMissingSumHintsE" step="10"/>
+	
+	<label id="GenericDifferenceHintsA" step="14"/>
+	<label id="GenericDifferenceHintsB" step="15"/>
+	<label id="GenericDifferenceHintsC" step="16"/>
+	<label id="GenericDifferenceHintsD" step="17"/>
+	<label id="GenericDifferenceHintsE" step="18"/>
+	<label id="GenericDifferenceHintsF" step="19"/>
+</mapping>
+
+<mapping type="5a,5b,5c,5d,5e">
+	<label id="IntermediateValueNotDiscoveredHintA" step="26"/>
+	<label id="IntermediateValueNotDiscoveredHintB" step="27"/>
+	<label id="IntermediateValueNotDiscoveredHintC" step="28"/>
+
+	<label id="SumAndDifferenceWithIntermediateA" step="1"/>
+	<label id="SumAndDifferenceWithIntermediateB" step="2"/>
+	
+	<label id="GenericMissingPartsOfDifferenceA" step="4"/>
+	<label id="GenericMissingPartsOfDifferenceB" step="3"/>
+	<label id="GenericMissingPartsOfDifferenceC" step="8"/>
+	<label id="GenericMissingPartsOfDifferenceD" step="7"/>
+	<label id="GenericMissingPartsOfDifferenceE" step="6"/>
+	<label id="GenericMissingPartsOfDifferenceF" step="5"/>
+	
+	<label id="GenericMissingSumHintsA" step="11"/>
+	<label id="GenericMissingSumHintsB" step="9"/>
+	<label id="GenericMissingSumHintsC" step="12"/>
+	<label id="GenericMissingSumHintsD" step="13"/>
+	<label id="GenericMissingSumHintsE" step="10"/>
+	
+	<label id="GenericDifferenceHintsA" step="14"/>
+	<label id="GenericDifferenceHintsB" step="15"/>
+	<label id="GenericDifferenceHintsC" step="16"/>
+	<label id="GenericDifferenceHintsD" step="17"/>
+	<label id="GenericDifferenceHintsE" step="18"/>
+	<label id="GenericDifferenceHintsF" step="19"/>
+</mapping>
+
+<mapping type="5f,5g,5h,5i,5j">
+	<label id="IntermediateValueNotDiscoveredHintA" step="26"/>
+	<label id="IntermediateValueNotDiscoveredHintB" step="27"/>
+	<label id="IntermediateValueNotDiscoveredHintC" step="28"/>
+
+	<label id="SumOfGroupsWithIntermediateA" step="1"/>
+	<label id="SumOfGroupsWithIntermediateB" step="2"/>
+	
+	<label id="GenericEqualGroupsHintsA" step="3"/>
+	<label id="GenericEqualGroupsHintsB" step="7"/>
+	<label id="GenericEqualGroupsHintsC" step="5"/>
+	<label id="GenericEqualGroupsHintsD" step="6"/>
+	<label id="GenericEqualGroupsHintsE" step="4"/>
+	
+	<label id="UnitLabelA" step="8"/>
+	<label id="UnitLabelB" step="9"/>
+	<label id="UnitLabelC" step="10"/>
+	<label id="UnitLabelD" step="11"/>
+	<label id="UnitLabelE" step="12"/>
+	<label id="UnitLabelF" step="13"/>
+	<label id="UnitLabelG" step="14"/>
+	
+	<label id="GenericMissingSumHintsA" step="15"/>
+	<label id="GenericMissingSumHintsB" step="16"/>
+	<label id="GenericMissingSumHintsC" step="17"/>
+	<label id="GenericMissingSumHintsD" step="18"/>
+	<label id="GenericMissingSumHintsE" step="19"/>
+	
+	<label id="GenericDifferenceHintsA" step="20"/>
+	<label id="GenericDifferenceHintsB" step="21"/>
+	<label id="GenericDifferenceHintsC" step="22"/>
+	<label id="GenericDifferenceHintsD" step="23"/>
+	<label id="GenericDifferenceHintsE" step="24"/>
+	<label id="GenericDifferenceHintsF" step="25"/>
+</mapping>
+
+<mapping type="6a,6b,6c,6d">
+	<label id="SumsOfFractionA" step="1"/>
+	<label id="SumsOfFractionB" step="2"/>
+	
+	<label id="GenericEqualGroupsHintsA" step="3"/>
+	<label id="GenericEqualGroupsHintsB" step="4"/>
+	<label id="GenericEqualGroupsHintsC" step="5"/>
+	<label id="GenericEqualGroupsHintsD" step="6"/>
+	<label id="GenericEqualGroupsHintsE" step="7"/>
+	
+	<label id="FractionLabelA" step="8"/>
+	<label id="FractionLabelB" step="9"/>
+	
+	<label id="GenericDifferenceHintsA" step="15"/>
+	<label id="GenericDifferenceHintsB" step="10"/>
+	<label id="GenericDifferenceHintsC" step="11"/>
+	<label id="GenericDifferenceHintsD" step="12"/>
+	<label id="GenericDifferenceHintsE" step="13"/>
+	<label id="GenericDifferenceHintsF" step="14"/>
+</mapping>
+
+<mapping type="7a,7b,7c,7d,7d-2,7e,7f,7f-2,7g">
+	<label id="FractionOfLargerAmountA" step="1"/>
+	<label id="FractionOfLargerAmountB" step="4"/>
+	<label id="FractionOfLargerAmountC" step="3"/>
+	<label id="FractionOfLargerAmountD" step="2"/>
+	
+	<label id="SumsOfFractionA" step="5"/>
+	<label id="SumsOfFractionB" step="6"/>
+	
+	<label id="GenericEqualGroupsHintsA" step="7"/>
+	<label id="GenericEqualGroupsHintsB" step="8"/>
+	<label id="GenericEqualGroupsHintsC" step="9"/>
+	<label id="GenericEqualGroupsHintsD" step="10"/>
+	<label id="GenericEqualGroupsHintsE" step="11"/>
+	
+	<label id="FractionLabelA" step="12"/>
+	<label id="FractionLabelB" step="13"/>
+	
+	<label id="GenericDifferenceHintsA" step="14"/>
+	<label id="GenericDifferenceHintsB" step="15"/>
+	<label id="GenericDifferenceHintsC" step="16"/>
+	<label id="GenericDifferenceHintsD" step="17"/>
+	<label id="GenericDifferenceHintsE" step="18"/>
+	<label id="GenericDifferenceHintsF" step="19"/>
+</mapping>
+</root>
