@@ -1,14 +1,15 @@
 package dragonbox.common.console.components;
 
 
-import flash.display.MovieClip;
-import flash.text.TextField;
-import flash.text.TextFormat;
-import flash.text.TextFormatAlign;
-
 import dragonbox.common.console.expression.MethodExpression;
 
-class HistoryWindow extends MovieClip
+import starling.text.TextField;
+import openfl.text.TextFormat;
+import openfl.text.TextFormatAlign;
+
+import starling.display.Sprite;
+
+class HistoryWindow extends Sprite
 {
     public static var UNKNOWN_FORMAT : TextFormat = new TextFormat("Kalinga");
     
@@ -29,9 +30,10 @@ class HistoryWindow extends MovieClip
     public function new(historyBufferSize : Int = 100)
     {
         super();
-        m_historyView = new TextField();
-        m_historyView.selectable = true;
-        m_historyView.wordWrap = false;
+        m_historyView = new TextField(0, 0, "");
+		// TODO: Starling TextFields don't have these equivalents
+        //m_historyView.selectable = true;
+        //m_historyView.wordWrap = false;
         
         addChild(m_historyView);
         
@@ -63,11 +65,17 @@ class HistoryWindow extends MovieClip
     {
         m_historyView.width = stage.stageWidth;
         m_historyView.height = stage.stageHeight / 3;
+		
+		// TODO: this is likely not the intended result of the commented
+		// out code below, but a Starling solution would require much
+		// more refactoring
+		m_historyView.border = true;
+		m_historyView.redraw();
         
-        this.graphics.clear();
-        this.graphics.beginFill(0x444444, 0.35);
-        this.graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight / 3);
-        this.graphics.endFill();
+        //this.graphics.clear();
+        //this.graphics.beginFill(0x444444, 0.35);
+        //this.graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight / 3);
+        //this.graphics.endFill();
         
         var historyString : String = "";
         for (historyLine in m_historyLines)
@@ -97,10 +105,10 @@ class HistoryWindow extends MovieClip
             characterOffset += lineLength;
         }
         
-        if (m_historyView.textHeight > stage.stageHeight / 3) 
+        if (m_historyView.height > stage.stageHeight / 3) 
         {
-            m_historyView.height = m_historyView.textHeight + 2;
-            m_historyView.y = -(m_historyView.textHeight - stage.stageHeight / 3);
+            m_historyView.height = m_historyView.height + 2;
+            m_historyView.y = -(m_historyView.height - stage.stageHeight / 3);
         }
     }
     private static var init = {

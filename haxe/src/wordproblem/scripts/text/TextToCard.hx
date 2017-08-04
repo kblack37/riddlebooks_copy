@@ -398,7 +398,7 @@ class TextToCard extends BaseGameScript
                     currentLineBounds = lines[i];
                     
                     var padding : Float = 10;
-                    var buttonTexture : Texture = m_assetManager.getTexture("card_background_square");
+                    var buttonTexture : Texture = m_assetManager.getTexture("card_background_square.png");
                     var nineTextureButton : Texture = Texture.fromTexture(
 						buttonTexture, 
 						new Rectangle(padding,
@@ -426,7 +426,7 @@ class TextToCard extends BaseGameScript
             for (i in 0...lines.length){
                 currentLineBounds = lines[i];
                 
-                var backgroundTexture : Texture = m_assetManager.getTexture("wildcard");
+                var backgroundTexture : Texture = m_assetManager.getTexture("wildcard.png");
                 var padding = 10;
                 var nineTextureBackground : Texture = Texture.fromTexture(
 					backgroundTexture, 

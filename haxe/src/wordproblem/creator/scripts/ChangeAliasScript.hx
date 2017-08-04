@@ -4,15 +4,13 @@ package wordproblem.creator.scripts;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 import flash.text.TextFormat;
+import starling.textures.Texture;
 
 import cgs.internationalization.StringTable;
 
 import dragonbox.common.ui.MouseState;
 import dragonbox.common.util.TextToNumber;
 import dragonbox.common.util.XColor;
-
-import feathers.display.Scale9Image;
-import feathers.textures.Scale9Textures;
 
 import starling.display.DisplayObject;
 import starling.display.Image;
@@ -433,7 +431,7 @@ class ChangeAliasScript extends BaseProblemCreateScript
         cardForElement.y = cardForElement.height * 0.5;
         m_expressionContainer.addChild(cardForElement);
         
-        var equals : Image = new Image(m_assetManager.getTexture("equal"));
+        var equals : Image = new Image(m_assetManager.getTexture("equal.png"));
         equals.scaleX = equals.scaleY = 1.2;
         equals.x = cardForElement.width + (cardForElement.x - cardForElement.width * 0.5) + 10;
         equals.y = (cardForElement.height - equals.height) * 0.5 + (cardForElement.y - cardForElement.height * 0.5);
@@ -469,8 +467,8 @@ class ChangeAliasScript extends BaseProblemCreateScript
             var measuredTextHeight : Float = measuringText.textHeight + 5;
             var textFieldForElement : TextField = new TextField(measuredTextWidth, measuredTextHeight, 
             textForElement, textFormat.font, Std.parseInt(textFormat.size), try cast(textFormat.color, Int) catch(e:Dynamic) null);
-            var highlightBackground : Scale9Image = new Scale9Image(new Scale9Textures(m_assetManager.getTexture("button_white"), 
-            new Rectangle(8, 8, 16, 16)));
+            var highlightBackground : Image = new Image(Texture.fromTexture(m_assetManager.getTexture("assets/ui/button_white.png"), 
+				new Rectangle(8, 8, 16, 16)));
             highlightBackground.color = color;
             highlightBackground.width = measuredTextWidth;
             highlightBackground.height = measuredTextHeight;

@@ -26,21 +26,21 @@ class BrainPoint extends Sprite
         
         m_tweens = new Array<Tween>();
         
-        var brain : DisplayObject = new Image(assetManager.getTexture("Art_Brain"));
+        var brain : DisplayObject = new Image(assetManager.getTexture("Art_Brain.png"));
         brain.pivotX = brain.width * 0.5;
         brain.pivotY = brain.height * 0.5;
         
-        var starBurst : DisplayObject = new Image(assetManager.getTexture("Art_StarBurst"));
+        var starBurst : DisplayObject = new Image(assetManager.getTexture("Art_StarBurst.png"));
         starBurst.pivotX = starBurst.width * 0.5;
         starBurst.pivotY = starBurst.height * 0.5;
         
-        var arch : DisplayObject = new Image(assetManager.getTexture("Art_YellowArch"));
+        var arch : DisplayObject = new Image(assetManager.getTexture("Art_YellowArch.png"));
         arch.scaleX = arch.scaleY = 1.00;
         arch.y = -(arch.height * 0.6);
         arch.pivotX = arch.width * 0.5;
         arch.pivotY = arch.height * 0.5;
         
-        var glow : DisplayObject = new Image(assetManager.getTexture("Art_YellowGlow"));
+        var glow : DisplayObject = new Image(assetManager.getTexture("Art_YellowGlow.png"));
         glow.pivotX = glow.width * 0.5;
         glow.pivotY = glow.height * 0.5;
         glow.scaleX = glow.scaleY = 0.0;

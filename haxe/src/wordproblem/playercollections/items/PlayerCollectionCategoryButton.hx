@@ -40,7 +40,7 @@ class PlayerCollectionCategoryButton extends Sprite
         m_categoryInformationObject = categoryInformationObject;
         
         var scale9Texture : Texture = Texture.fromTexture(
-			assetManager.getTexture("button_white"), 
+			assetManager.getTexture("button_white.png"), 
 			new Rectangle(8, 8, 16, 16)
         );
         m_normalBackground = new Image(scale9Texture);

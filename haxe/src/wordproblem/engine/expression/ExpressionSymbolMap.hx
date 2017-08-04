@@ -227,10 +227,12 @@ class ExpressionSymbolMap
             );
 			
             renderTexture.draw(cardObject);
-            m_idToDynamicTextureMap.set(value, renderTexture);
+			// TODO: this caching is commented out because of issues with RenderTexture
+			// so that cards with duplicate values will not return null
+            //m_idToDynamicTextureMap.set(value, renderTexture);
             cardTexture = renderTexture;
         }
-        cardObject = new Image(cardTexture);
+        //cardObject = new Image(cardTexture);
         cardObject.pivotX = cardObject.width / 2;
         cardObject.pivotY = cardObject.height / 2;
         
@@ -292,7 +294,6 @@ class ExpressionSymbolMap
 				symbolData.fontColor
             );
             symbolTextField.hAlign = HAlign.CENTER;
-			trace(measuringTextField.textWidth + ", " + measuringTextField.textHeight);
             
             cardContainer.addChild(symbolTextField);
             scaleBackgroundToFitTextWidth = symbolTextField.width;

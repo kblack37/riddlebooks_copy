@@ -30,7 +30,7 @@ class BaseRewardButton extends Sprite
         m_assetManager = assetManager;
         
         // Create a general glow background for every button
-        var backgroundGlowTexture : Texture = assetManager.getTexture("Art_YellowGlow");
+        var backgroundGlowTexture : Texture = assetManager.getTexture("Art_YellowGlow.png");
         var backgroundGlowImage : Image = new Image(backgroundGlowTexture);
         backgroundGlowImage.pivotX = backgroundGlowTexture.width * 0.5;
         backgroundGlowImage.pivotY = backgroundGlowTexture.height * 0.5;

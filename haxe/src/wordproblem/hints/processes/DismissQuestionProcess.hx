@@ -143,12 +143,12 @@ class DismissQuestionProcess extends ScriptNode
             if (isCorrect) 
             {
                 // Make button look correct (change color to green and add a check)
-                icon = new Image(m_assetManager.getTexture("correct"));
+                icon = new Image(m_assetManager.getTexture("correct.png"));
             }
             else 
             {
                 // Make button look incorrect (change color to red and add an x)
-                icon = new Image(m_assetManager.getTexture("wrong"));
+                icon = new Image(m_assetManager.getTexture("wrong.png"));
             }
             
             icon.pivotX = icon.width * 0.5;

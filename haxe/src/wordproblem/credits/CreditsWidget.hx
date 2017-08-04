@@ -51,7 +51,7 @@ class CreditsWidget extends Sprite
         backgroundContainer.y = (height - backgroundContainerHeight) * 0.5;
         addChild(backgroundContainer);
         
-        var backgroundImage : Image = new Image(assetManager.getTexture("summary_background"));
+        var backgroundImage : Image = new Image(assetManager.getTexture("summary_background.png"));
         backgroundImage.width = backgroundContainerWidth;
         backgroundImage.height = backgroundContainerHeight;
         backgroundContainer.addChild(backgroundImage);
@@ -88,7 +88,7 @@ class CreditsWidget extends Sprite
         centerForGameScienceTextField.y = 50;
         backgroundContainer.addChild(centerForGameScienceTextField);
         
-        var cgsLogoTexture : Texture = assetManager.getTexture("cgs_logo");
+        var cgsLogoTexture : Texture = assetManager.getTexture("cgs_logo.png");
         var cgsLogo : Image = new Image(cgsLogoTexture);
         cgsLogo.x = (backgroundContainerWidth - cgsLogoTexture.width) * 0.5;
         cgsLogo.y = centerForGameScienceTextField.y + centerForGameScienceTextField.height;

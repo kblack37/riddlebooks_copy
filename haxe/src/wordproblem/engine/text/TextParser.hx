@@ -91,7 +91,7 @@ class TextParser
     public function parseDocument(content : Fast,
             maxWidth : Float) : DocumentNode
     {
-        var documentNodeRoot : DocumentNode = _parseDocument(content);
+		var documentNodeRoot : DocumentNode = _parseDocument(content.x);
         
         // Set the initial width of each page if not already specified
         // The default value should be the width of the wrapping container
@@ -167,7 +167,6 @@ class TextParser
                 if (node.getMatchesSelector(selectorName)) 
                 {
                     var selectorContents : Dynamic = Reflect.field(cssObject, selectorName);
-                    
                     this.checkAndApplyPropertyToNode(node, selectorContents);
                     
                     // Cascade certain properties to the children of this node
@@ -346,78 +345,86 @@ class TextParser
      * @return
      *      A custom node representing the data in the xml chunk
      */
-    private function _parseDocument(content : Fast) : DocumentNode
+    private function _parseDocument(content : Xml) : DocumentNode
     {
         // Create a document node base on the tagname of the content root
         var documentNode : DocumentNode = null;
-        var contentTagName : String = content.name;
+        var contentTagName : String = content.nodeType == Element ? content.nodeName : null;
         
         if (contentTagName == null) 
         {
             // Strip out new line characters and replace with string
-            var textContent : String = Std.string(content);
+            var textContent : String = StringTools.trim(content.nodeValue);
             documentNode = new TextNode((new EReg('\\r?\\n|\\r', "g")).replace(textContent, " "));
-        }
+        } else {
         // Pages are div are mostly the same, a page is just a way to explicitly break up
         // content is separate screen but logically they both simply aggregate other tags.
-        else if (contentTagName == TAG_DIV || contentTagName == TAG_PAGE) 
-        {
-            documentNode = new DivNode();
-        }
-        else if (contentTagName == TAG_PARAGRAPH) 
-        {
-            documentNode = new ParagraphNode();
-            
-            if (content.has.lineHeight) 
-            {
-                (try cast(documentNode, ParagraphNode) catch(e:Dynamic) null).lineHeight = Std.parseFloat(content.att.lineHeight);
-            }
-        }
-        else if (contentTagName == TAG_IMAGE) 
-        {
-            var imageSrc : String = content.att.src;
-            documentNode = new ImageNode(imageSrc);
-        }
-        else if (contentTagName == TAG_SPAN) 
-        {
-            documentNode = new SpanNode();
-        }
-        else 
-        {
-            throw new Error("Unrecognized xml tag name: " + contentTagName);
-        }
-        
-        if (content.has.id) 
-        {
-            documentNode.id = content.att.id;
-        }  ///Generated sentences have "ref" attributes, which are like ids.  But if the top paragraph element has id="question" do not overwrite it.  
-        
-        if (content.has.ref && documentNode.id != "question") 
-        {
-            documentNode.id = content.att.ref;
-        }
-        
-        if (content.has.resolve("class")) 
-        {
-            var classString : String = content.att.resolve("class");
-            var classArray : Array<String> = classString.split(" ");
-            documentNode.classes = classArray;
-        }
-        
-        this.checkAndApplyPropertyToNode(documentNode, content);
-        
-        // Parse the children tags of the content if they exist
-        // They will be the children tags of the root.
-        var childXMLList = content.elements;
-		if (childXMLList.hasNext()) {
-			for (child in childXMLList) {
-				var childDocumentNode : DocumentNode = _parseDocument(child);
-				documentNode.children.push(childDocumentNode);
+			if (contentTagName == TAG_DIV || contentTagName == TAG_PAGE) 
+			{
+				documentNode = new DivNode();
 			}
-		} else if (contentTagName == TAG_SPAN) {
-			documentNode.children.push(new TextNode(""));
-		}
-        
+			else if (contentTagName == TAG_PARAGRAPH) 
+			{
+				documentNode = new ParagraphNode();
+				
+				if (content.exists("lineHeight")) 
+				{
+					(try cast(documentNode, ParagraphNode) catch(e:Dynamic) null).lineHeight = Std.parseFloat(content.get("lineHeight"));
+				}
+			}
+			else if (contentTagName == TAG_IMAGE) 
+			{
+				var imageSrc : String = content.get("src");
+				documentNode = new ImageNode(imageSrc);
+			}
+			else if (contentTagName == TAG_SPAN) 
+			{
+				documentNode = new SpanNode();
+			}
+			else 
+			{
+				throw new Error("Unrecognized xml tag name: " + contentTagName);
+			}
+			
+			if (content.exists("id")) 
+			{
+				documentNode.id = content.get("id");
+			}
+			
+			// Generated sentences have "ref" attributes, which are like ids.
+			// But if the top paragraph element has id="question" do not overwrite it.  
+			if (content.exists("ref") && documentNode.id != "question") 
+			{
+				documentNode.id = content.get("ref");
+			}
+			
+			if (content.exists("class")) 
+			{
+				var classString : String = content.get("class");
+				var classArray : Array<String> = classString.split(" ");
+				documentNode.classes = classArray;
+			}
+			
+			this.checkAndApplyPropertyToNode(documentNode, content);
+			
+			// Parse the children tags of the content if they exist
+			// They will be the children tags of the root.
+			if (contentTagName == TAG_SPAN) {
+				documentNode.children.push(new TextNode(content.firstChild().nodeValue));
+			} else {
+				var childXMLList = content.iterator();
+				for (child in childXMLList) {
+					// HACK: since each node in the Haxe Xml API has a child that is of type PCData
+					// and also empty except for the leading whitespace of the next line, we must
+					// make sure we aren't including those as children
+					if (child.nodeType == PCData && StringTools.trim(child.nodeValue) == "")
+						continue;
+					var childDocumentNode : DocumentNode = _parseDocument(child);
+					documentNode.children.push(childDocumentNode);
+				}
+			}
+        }
+		
         return documentNode;
     }
     
@@ -428,60 +435,63 @@ class TextParser
     // Only works is for xml we apply the @ prefix for everything
     private function checkAndApplyPropertyToNode(node : DocumentNode, properties : Dynamic) : Void
     {
-        var usePrefix : Bool = Std.is(properties, Fast);
-        var numAttributes : Int = m_nodeAttributes.length;
-        var i : Int = 0;
-        var baseAttribute : String = null;
-        var attributeName : String = null;
-        var attributeValue : Dynamic = null;
-        for (i in 0...numAttributes){
-            baseAttribute = m_nodeAttributes[i];
-            attributeName = ((usePrefix)) ? "@" + baseAttribute : baseAttribute;
-            if (Reflect.hasField(properties, attributeName)) 
+		// the standard reflect notation won't work if the properties are sourced
+		// from xml, so we must convert
+		var attributesBlob : Dynamic = { };
+		if (Std.is(properties, Xml)) {
+			var castedProperties : Xml = try cast(properties, Xml) catch (e : Dynamic) null;
+			for (attribute in castedProperties.attributes()) {
+				Reflect.setField(attributesBlob, attribute, castedProperties.get(attribute));
+			}
+		} else {
+			attributesBlob = properties;
+		}
+        for (baseAttribute in m_nodeAttributes){
+            if (Reflect.hasField(attributesBlob, baseAttribute)) 
             {
-                attributeValue = Reflect.field(properties, attributeName);
+                var attributeValue = Reflect.field(attributesBlob, baseAttribute);
                 if (baseAttribute == "layout" && Std.is(node, DivNode)) 
                 {
                     (try cast(node, DivNode) catch(e:Dynamic) null).setLayout(attributeValue);
                 }
                 else if (baseAttribute == "width") 
                 {
-                    node.width = Std.parseInt(attributeValue);
+                    node.width = Std.parseFloat(attributeValue);
                 }
                 else if (baseAttribute == "height") 
                 {
-                    node.height = Std.parseInt(attributeValue);
+                    node.height = Std.parseFloat(attributeValue);
                 }
                 else if (baseAttribute == "x") 
                 {
-                    node.x = attributeValue;
+                    node.x = Std.parseFloat(attributeValue);
                 }
                 else if (baseAttribute == "y") 
                 {
-                    node.y = attributeValue;
+                    node.y = Std.parseFloat(attributeValue);
                 }
                 else if (baseAttribute == "padding") 
                 {
-                    node.paddingBottom = attributeValue;
-                    node.paddingLeft = attributeValue;
-                    node.paddingRight = attributeValue;
-                    node.paddingTop = attributeValue;
+                    node.paddingBottom = Std.parseFloat(attributeValue);
+                    node.paddingLeft = Std.parseFloat(attributeValue);
+                    node.paddingRight = Std.parseFloat(attributeValue);
+                    node.paddingTop = Std.parseFloat(attributeValue);
                 }
                 else if (baseAttribute == "paddingTop") 
                 {
-                    node.paddingTop = attributeValue;
+                    node.paddingTop = Std.parseFloat(attributeValue);
                 }
                 else if (baseAttribute == "paddingBottom") 
                 {
-                    node.paddingBottom = attributeValue;
+                    node.paddingBottom = Std.parseFloat(attributeValue);
                 }
                 else if (baseAttribute == "paddingLeft") 
                 {
-                    node.paddingLeft = attributeValue;
+                    node.paddingLeft = Std.parseFloat(attributeValue);
                 }
                 else if (baseAttribute == "paddingRight") 
                 {
-                    node.paddingRight = attributeValue;
+                    node.paddingRight = Std.parseFloat(attributeValue);
                 }
                 else if (baseAttribute == "float") 
                 {
@@ -497,7 +507,7 @@ class TextParser
                 }
                 else if (baseAttribute == "background9Slice") 
                 {
-                    var sliceString : String = try cast(attributeValue, String) catch(e:Dynamic) null;
+                    var sliceString : String = attributeValue;
                     var sliceValues : Array<Dynamic> = sliceString.split(" ");
                     var paddingValues : Array<Int> = new Array<Int>();
                     
@@ -528,27 +538,17 @@ class TextParser
                 {
                     node.fontSize = Std.parseInt(attributeValue);
                 }
+                else if (baseAttribute == "fontName") 
+                {
+                    node.fontName = attributeValue;
+                }
+				
                 // TODO: (this might be a bit strange)
                 // If a node got the value from the xml, then the only way that attribute can be
                 // overridden is if a style object selector explicitly matches and modifies it.
                 // That attribute should not inherit from the parent by default because it has its own values.
                 // Inheritance of attributes should only apply if a value wasn't already set by something
-                else if (baseAttribute == "fontName") 
-                {
-                    node.fontName = attributeValue;
-                }
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                if (usePrefix) 
+                if (Std.is(properties, Xml)) 
                 {
                     node.setShouldInheritProperty(baseAttribute, false);
                 }

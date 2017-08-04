@@ -5,9 +5,6 @@ import wordproblem.engine.widget.IBaseWidget;
 
 import flash.geom.Rectangle;
 
-//import feathers.display.Scale9Image;
-//import feathers.textures.Scale9Textures;
-
 import starling.display.DisplayObject;
 import starling.textures.Texture;
 
@@ -73,7 +70,7 @@ class BarModelAreaWidget extends BarModelView implements IBaseWidget
         
         var horizontalPadding : Float = 20;
         var verticalPadding : Float = 30;
-        var backgroundImageTexture : Texture = assetManager.getTexture("term_area_left");
+        var backgroundImageTexture : Texture = assetManager.getTexture("assets/ui/term_area_left.png");
         var bgImage : Image = new Image(Texture.fromTexture(backgroundImageTexture, new Rectangle(
         horizontalPadding, verticalPadding, backgroundImageTexture.width - 2 * horizontalPadding, backgroundImageTexture.height - 2 * verticalPadding))
         );

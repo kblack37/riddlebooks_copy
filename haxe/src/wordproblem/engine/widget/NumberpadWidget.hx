@@ -94,7 +94,7 @@ class NumberpadWidget extends Layer
                     //return editor;
                 //};
         //
-        //var numberBackground : Scale9Image = new Scale9Image(new Scale9Textures(assetManager.getTexture("button_white"), new Rectangle(8, 8, 16, 16)));
+        //var numberBackground : Scale9Image = new Scale9Image(new Scale9Textures(getTexture("button_white.png"), new Rectangle(8, 8, 16, 16)));
         //numberBackground.color = 0x000000;
         //numberBackground.width = m_numberDisplay.width;
         //numberBackground.height = m_numberDisplay.height;
@@ -171,7 +171,7 @@ class NumberpadWidget extends Layer
         addChild(m_mainDisplayContainer);
         
 		// TODO: uncomment when a text input replacement is found
-        var backgroundImage : Image = new Image(assetManager.getTexture("summary_background"));
+        var backgroundImage : Image = new Image(assetManager.getTexture("summary_background.png"));
         backgroundImage.width = m_buttonContainer.width + 50;
         //backgroundImage.height = m_numberDisplay.height + m_buttonContainer.height + 50;
         m_mainDisplayContainer.x = (backgroundImage.width - m_mainDisplayContainer.width) * 0.5;

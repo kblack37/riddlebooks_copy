@@ -73,11 +73,11 @@ class LevelSetSelector extends Sprite
         m_onLevelSelectedCallback = onLevelSelectedCallback;
         m_onDismissCallback = onDismissCallback;
         
-        var arrowTexture : Texture = assetManager.getTexture("arrow_short");
+        var arrowTexture : Texture = assetManager.getTexture("arrow_short.png");
         var disablingQuad : Quad = new Quad(screenWidth, screenHeight, 0x000000);
         disablingQuad.alpha = 0.5;
         addChild(disablingQuad);
-        var background : Image = new Image(assetManager.getTexture("summary_background"));
+        var background : Image = new Image(assetManager.getTexture("summary_background.png"));
         background.scaleX = background.scaleY = 0.75;
         background.x = (screenWidth - background.width) * 0.5;
         background.y = (screenHeight - background.height) * 0.5;
@@ -249,7 +249,7 @@ class LevelSetSelector extends Sprite
         for (i in startingLevelIndex...endLevelIndex){
             // Draw button for this level
             var levelButton : Button = WidgetUtil.createButtonFromImages(
-                    new Image(m_assetManager.getTexture("fantasy_button_up")),
+                    new Image(m_assetManager.getTexture("fantasy_button_up.png")),
                     null,
                     null,
                     null,
@@ -266,7 +266,7 @@ class LevelSetSelector extends Sprite
             if (levelNode.isComplete) 
             {
                 // If the level is completed, draw a star at the top left corner
-                var starImage : Image = new Image(m_assetManager.getTexture("level_button_star"));
+                var starImage : Image = new Image(m_assetManager.getTexture("level_button_star.png"));
                 starImage.pivotX = starImage.width * 0.5;
                 starImage.pivotY = starImage.height * 0.5;
                 starImage.x = 6;

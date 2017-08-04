@@ -13,13 +13,11 @@ import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
 import dragonbox.common.util.XColor;
 
-import feathers.controls.Button;
-import feathers.display.Scale9Image;
-
 import gameconfig.versions.replay.events.ReplayEvents;
 import gameconfig.versions.replay.scripts.ReplayBarModelLevel;
 import gameconfig.versions.replay.scripts.ReplayControllerScript;
 
+import starling.display.Button;
 import starling.events.Event;
 
 import wordproblem.engine.GameEngine;
@@ -79,9 +77,11 @@ class ReplayGameState extends BaseState
                         null,
                         new Rectangle(8, 8, 16, 16)
                         );
-        (try cast(m_exitButton.defaultSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.ROYAL_BLUE;
-        (try cast(m_exitButton.hoverSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.BRIGHT_ORANGE;
-        (try cast(m_exitButton.downSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.BRIGHT_ORANGE;
+		// TODO: the starling button uses textures, not images like the feathers button, so this will
+		// have to be redesigned
+        //(try cast(m_exitButton.defaultSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.ROYAL_BLUE;
+        //(try cast(m_exitButton.hoverSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.BRIGHT_ORANGE;
+        //(try cast(m_exitButton.downSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.BRIGHT_ORANGE;
         m_exitButton.addEventListener(Event.TRIGGERED, onExitClicked);
         m_exitButton.width = buttonWidth;
         m_exitButton.height = buttonHeight;

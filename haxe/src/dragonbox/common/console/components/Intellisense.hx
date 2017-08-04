@@ -1,13 +1,14 @@
 package dragonbox.common.console.components;
 
 
-import flash.display.MovieClip;
-import flash.text.TextField;
-import flash.text.TextFieldAutoSize;
-import flash.text.TextFormat;
-import flash.text.TextFormatAlign;
+import starling.text.TextField;
+import openfl.text.TextFieldAutoSize;
+import openfl.text.TextFormat;
+import openfl.text.TextFormatAlign;
 
-class Intellisense extends MovieClip
+import starling.display.Sprite;
+
+class Intellisense extends Sprite
 {
     private static var ITEM : TextFormat = new TextFormat("Kalinga");
     
@@ -18,7 +19,7 @@ class Intellisense extends MovieClip
     private var m_labels : Array<TextField>;
     private var m_selection : Int;
     
-    private var m_background : MovieClip;
+    private var m_background : Sprite;
     
     public function new()
     {
@@ -26,7 +27,7 @@ class Intellisense extends MovieClip
         m_items = new Array<String>();
         m_labels = new Array<TextField>();
         
-        m_background = new MovieClip();
+        m_background = new Sprite();
         addChild(m_background);
     }
     
@@ -62,7 +63,8 @@ class Intellisense extends MovieClip
         if (m_labels.length > 0) 
         {
             var label : TextField = m_labels[index];
-            label.background = false;
+			// TODO: Starling TextFields don't have these equivalents
+            //label.background = false;
         }
     }
     
@@ -71,8 +73,9 @@ class Intellisense extends MovieClip
         if (m_labels.length > 0) 
         {
             var label : TextField = m_labels[index];
-            label.background = true;
-            label.backgroundColor = 0x7777dd;
+			// TODO: Starling TextFields don't have these equivalents
+            //label.background = true;
+            //label.backgroundColor = 0x7777dd;
         }
     }
     
@@ -90,14 +93,15 @@ class Intellisense extends MovieClip
         var y : Float = 0;
         for (item in m_items)
         {
-            var itemLabel : TextField = new TextField();
-            itemLabel.selectable = false;
+            var itemLabel : TextField = new TextField(0, 0, "");
+			// TODO: Starling TextFields don't have these equivalents
+            //itemLabel.selectable = false;
             itemLabel.autoSize = TextFieldAutoSize.LEFT;
             itemLabel.text = item;
-            itemLabel.setTextFormat(ITEM);
+            //itemLabel.setTextFormat(ITEM);
             itemLabel.y = y;
             
-            y += itemLabel.textHeight;
+            y += itemLabel.height;
             
             m_labels.push(itemLabel);
             this.addChild(itemLabel);
@@ -109,10 +113,12 @@ class Intellisense extends MovieClip
             }
         }
         
-        m_background.graphics.clear();
-        m_background.graphics.beginFill(0xdddd77, 0.95);
-        m_background.graphics.drawRect(0, 0, backgroundWidth, backgroundHeight);
-        m_background.graphics.endFill();
+		// TODO: a Starling solution to this code would require more effort
+		// that is better expended elsewhere, since it is going to be replaced
+        //m_background.graphics.clear();
+        //m_background.graphics.beginFill(0xdddd77, 0.95);
+        //m_background.graphics.drawRect(0, 0, backgroundWidth, backgroundHeight);
+        //m_background.graphics.endFill();
         
         select(m_selection);
     }

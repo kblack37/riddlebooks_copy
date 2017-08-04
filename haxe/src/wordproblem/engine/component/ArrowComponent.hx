@@ -5,8 +5,6 @@ import wordproblem.engine.component.Component;
 
 import flash.geom.Point;
 
-//import feathers.display.Scale3Image;
-
 import starling.animation.Tween;
 
 /**

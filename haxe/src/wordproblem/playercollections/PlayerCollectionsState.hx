@@ -129,7 +129,7 @@ class PlayerCollectionsState extends BaseState
         
         var screenWidth : Float = 800;
         var screenHeight : Float = 600;
-        m_background = new Image(assetManager.getTexture("summary_background"));
+        m_background = new Image(assetManager.getTexture("summary_background.png"));
         m_background.width = screenWidth;
         m_background.height = screenHeight;
         
@@ -154,7 +154,7 @@ class PlayerCollectionsState extends BaseState
         // TODO: uncomment when a suitable toggle button replacement is found
 		//m_categoryButtons = new Array<ToggleButton>();
         
-        var selectedTexture : Texture = m_assetManager.getTexture("button_white");
+        var selectedTexture : Texture = m_assetManager.getTexture("button_white.png");
         var selectedScale9Texture : Texture = Texture.fromTexture(selectedTexture, new Rectangle(8, 8, 16, 16));
         var i : Int = 0;
         var fontSize : Int = 20;
@@ -194,7 +194,7 @@ class PlayerCollectionsState extends BaseState
         
         var backButtonWidth : Float = 60;
         var backButtonHeight : Float = 60;
-        var homeIcon : Image = new Image(m_assetManager.getTexture("home_icon"));
+        var homeIcon : Image = new Image(m_assetManager.getTexture("home_icon.png"));
         var iconScaleTarget : Float = (backButtonHeight * 0.8) / homeIcon.height;
         homeIcon.scaleX = homeIcon.scaleY = iconScaleTarget;
         var backButton : Button = WidgetUtil.createGenericColoredButton(m_assetManager, m_buttonColorData.getUpButtonColor(), null, null);

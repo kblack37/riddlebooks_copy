@@ -1,7 +1,7 @@
 package dragonbox.common.console;
 
 
-import flash.events.Event;
+import starling.events.Event;
 
 class ConsoleVisibilityEvent extends Event
 {

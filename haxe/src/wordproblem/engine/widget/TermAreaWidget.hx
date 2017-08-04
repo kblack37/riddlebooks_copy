@@ -4,9 +4,6 @@ package wordproblem.engine.widget;
 import flash.geom.Rectangle;
 import starling.display.Image;
 
-//import feathers.display.Scale9Image;
-//import feathers.textures.Scale9Textures;
-
 import starling.animation.Tween;
 import starling.core.Starling;
 import starling.textures.Texture;

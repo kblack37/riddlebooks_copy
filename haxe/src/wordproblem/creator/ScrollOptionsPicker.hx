@@ -1,8 +1,6 @@
 package wordproblem.creator;
 
-
-import feathers.controls.Button;
-
+import starling.display.Button;
 import starling.display.Image;
 import starling.display.Sprite;
 import starling.events.Event;
@@ -45,7 +43,7 @@ class ScrollOptionsPicker extends Sprite
     {
         super();
         
-        var arrowTexture : Texture = assetManager.getTexture("arrow_short");
+        var arrowTexture : Texture = getTexture("arrow_short.png");
         var scaleFactor : Float = 1.0;
         var leftUpImage : Image = WidgetUtil.createPointingArrow(arrowTexture, true, scaleFactor);
         var leftOverImage : Image = WidgetUtil.createPointingArrow(arrowTexture, true, scaleFactor, 0xCCCCCC);
@@ -61,7 +59,7 @@ class ScrollOptionsPicker extends Sprite
                         );
         m_scrollLeftButton.addEventListener(Event.TRIGGERED, onLeftClicked);
         m_scrollLeftButton.scaleWhenDown = 0.9;
-        m_scrollLeftButton.scaleWhenHovering = 1.1;
+        m_scrollLeftButton.scaleWhenOver = 1.1;
         addChild(m_scrollLeftButton);
         
         var rightUpImage : Image = WidgetUtil.createPointingArrow(arrowTexture, false, scaleFactor, 0xFFFFFF);
@@ -77,7 +75,7 @@ class ScrollOptionsPicker extends Sprite
                         );
         m_scrollRightButton.addEventListener(Event.TRIGGERED, onRightClicked);
         m_scrollRightButton.scaleWhenDown = 0.9;
-        m_scrollRightButton.scaleWhenHovering = 1.1;
+        m_scrollRightButton.scaleWhenOver = 1.1;
         addChild(m_scrollRightButton);
         
         m_label = new TextField(200, 60, "", GameFonts.DEFAULT_FONT_NAME, 20, 0xFFFFFF);

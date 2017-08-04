@@ -243,7 +243,7 @@ class WordProblemSelectState extends BaseState
         addChild(m_backgroundLayer);
         
         // Add library shelf background image
-        m_originalBackgroundImage = new Image(m_assetManager.getTexture("library_bg"));
+        m_originalBackgroundImage = new Image(m_assetManager.getTexture("library_bg.png"));
         m_backgroundLayer.addChild(m_originalBackgroundImage);
         
         // Create middle layer where scripts can paste new objects into the level select
@@ -315,7 +315,7 @@ class WordProblemSelectState extends BaseState
                         disableQuad.x = hitAreaData.x;
                         disableQuad.y = hitAreaData.y;
                         
-                        var lockImage : Image = new Image(m_assetManager.getTexture("level_button_lock"));
+                        var lockImage : Image = new Image(m_assetManager.getTexture("level_button_lock.png"));
                         lockImage.pivotX = lockImage.width * 0.5;
                         lockImage.pivotY = lockImage.height * 0.5;
                         lockImage.x = disableQuad.x + hitAreaData.width * 0.5;

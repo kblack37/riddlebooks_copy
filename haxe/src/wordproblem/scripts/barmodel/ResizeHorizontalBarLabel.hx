@@ -95,7 +95,7 @@ class ResizeHorizontalBarLabel extends BaseBarModelScript
     {
         super(gameEngine, expressionCompiler, assetManager, id, isActive);
         m_outParamsBuffer = new Array<Dynamic>();
-        m_ringPulseAnimation = new RingPulseAnimation(assetManager.getTexture("ring"), onRingPulseAnimationComplete);
+        m_ringPulseAnimation = new RingPulseAnimation(assetManager.getTexture("ring.png"), onRingPulseAnimationComplete);
     }
     
     override public function visit() : Int
@@ -165,7 +165,7 @@ class ResizeHorizontalBarLabel extends BaseBarModelScript
                         m_ringPulseAnimation.reset(m_localMouseBuffer.x, m_localMouseBuffer.y, m_barModelArea, 0x00FF00);
                         Starling.current.juggler.add(m_ringPulseAnimation);
                         
-                        m_previewBarLabelView.addButtonImagesToEdges(m_assetManager.getTexture("card_background_circle"));
+                        m_previewBarLabelView.addButtonImagesToEdges(m_assetManager.getTexture("card_background_circle.png"));
                         m_previewBarLabelView.colorEdgeButton(m_draggingLeftEdge, 0x00FF00, 1.0);
                         m_eventDispatcher.dispatchEventWith(GameEvent.START_RESIZE_HORIZONTAL_LABEL);
                         break;
@@ -530,7 +530,7 @@ class ResizeHorizontalBarLabel extends BaseBarModelScript
             showButtons : Bool) : Void
     {
         // Look through all horizontal labels and add buttons to the edges
-        var buttonTexture : Texture = m_assetManager.getTexture("card_background_circle");
+        var buttonTexture : Texture = m_assetManager.getTexture("card_background_circle.png");
         var barWholeViews : Array<BarWholeView> = barModelView.getBarWholeViews();
         var numBarWholeViews : Int = barWholeViews.length;
         var i : Int = 0;

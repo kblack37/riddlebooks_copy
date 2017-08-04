@@ -312,7 +312,7 @@ class ValidateBarModelArea extends BaseBarModelScript
     {
         var barModelAreaConstraints : Rectangle = m_barModelArea.getConstraints();
         var maxEdgeLength : Float = Math.min(barModelAreaConstraints.width, barModelAreaConstraints.height);
-        var targetTexture : Texture = ((isValid)) ? m_assetManager.getTexture("correct") : m_assetManager.getTexture("wrong");
+        var targetTexture : Texture = ((isValid)) ? m_assetManager.getTexture("correct") : m_assetManager.getTexture("wrong.png");
         
         // Tween in the icon
         var targetIcon : Image = new Image(targetTexture);

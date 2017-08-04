@@ -1,5 +1,6 @@
 package wordproblem.engine.barmodel.view;
 
+import starling.core.Starling;
 import wordproblem.engine.barmodel.view.BarSegmentView;
 import wordproblem.engine.barmodel.view.BarWholeView;
 
@@ -1021,18 +1022,13 @@ class BarModelView extends Sprite
             
             // Re-calculate bounds
             m_objectLayer.getBounds(this, boundsBuffer);
-        }  // to the edge.    // We also need to take into account scaling, since scaling down will shrink the segments such that they won't quite fit    // Iterate through every bar, we want to find the one with the greatest value    // to avoid recreating new views)    // Force a redraw if the unit length was altered (This should take existing views and just reposition them  
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        }  
+		
+		// Force a redraw if the unit length was altered (This should take existing views and just reposition them  
+		// to avoid recreating new views) 
+		// Iterate through every bar, we want to find the one with the greatest value   
+		// We also need to take into account scaling, since scaling down will shrink the segments such that they won't quite fit 
+        // to the edge. 
         var maxScaledWidthOfLongestBar : Float = this.m_barModelData.getMaxBarUnitValue() * this.unitLength * this.scaleFactor;
         var excessPadding : Float = boundsBuffer.width - maxScaledWidthOfLongestBar;
         var desiredUnitLength : Float = this.getUnitValueFromBarModelData(m_barModelData, excessPadding);
@@ -1107,10 +1103,9 @@ class BarModelView extends Sprite
                         boundingRectangleBuffer.height
                         );
             }
-        }  // Set up the bounding hit areas for the vertical labels  
-        
-        
-        
+        }  
+		
+		// Set up the bounding hit areas for the vertical labels  
         for (i in 0...m_verticalLabelViews.length){
             var labelView = m_verticalLabelViews[i];
             labelView.lineGraphicDisplayContainer.getBounds(this, boundingRectangleBuffer);

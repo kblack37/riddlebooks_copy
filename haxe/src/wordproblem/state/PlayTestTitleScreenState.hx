@@ -17,14 +17,12 @@ import dragonbox.common.state.IStateMachine;
 import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
 
-import feathers.controls.Button;
 import feathers.controls.TextInput;
 import feathers.controls.text.StageTextTextEditor;
 import feathers.core.ITextEditor;
-import feathers.display.Scale9Image;
-import feathers.textures.Scale9Textures;
 
 import starling.animation.Juggler;
+import starling.display.Button;
 import starling.display.Image;
 import starling.events.Event;
 import starling.textures.Texture;
@@ -118,10 +116,10 @@ class PlayTestTitleScreenState extends BaseState
         m_textInput.x = (800 - m_textInput.width) * 0.5;
         m_textInput.y = 200;
         
-        var backgroundTexture : Texture = m_assetManager.getTexture("button_white");
+        var backgroundTexture : Texture = m_assetManager.getTexture("assets/ui/button_white.png");
         var padding : Float = 10;
-        var textInputBackground : Scale9Image = new Scale9Image(new Scale9Textures(backgroundTexture, 
-        new Rectangle(padding, padding, backgroundTexture.width - 2 * padding, backgroundTexture.height - 2 * padding)));
+        var textInputBackground : Image = new Image(Texture.fromTexture(backgroundTexture, 
+			new Rectangle(padding, padding, backgroundTexture.width - 2 * padding, backgroundTexture.height - 2 * padding)));
         textInputBackground.color = 0x000000;
         m_textInput.backgroundSkin = textInputBackground;
         m_textInput.textEditorFactory = function() : ITextEditor
@@ -143,7 +141,7 @@ class PlayTestTitleScreenState extends BaseState
     
     override public function enter(fromState : Dynamic, params : Array<Dynamic> = null) : Void
     {
-        var backgroundTexture : Texture = m_assetManager.getTexture("login_background");
+        var backgroundTexture : Texture = m_assetManager.getTexture("login_background.png");
         addChild(new Image(backgroundTexture));
         
         addChild(m_startButton);

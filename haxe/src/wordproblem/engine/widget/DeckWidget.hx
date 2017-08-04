@@ -96,7 +96,7 @@ class DeckWidget extends ScrollGridWidget implements IDisposable implements IBas
         m_entitiesToAddQueue = new Array<Array<DisplayObject>>();
         m_entitiesToRemoveQueue = new Array<Array<DisplayObject>>();
         
-        var arrowTexture : Texture = assetManager.getTexture("arrow_short");
+        var arrowTexture : Texture = assetManager.getTexture("arrow_short.png");
         var arrowScale : Float = 1.0;
         m_scrollButtonWidth = arrowTexture.width * arrowScale;
         var leftUpArrow : Image = WidgetUtil.createPointingArrow(arrowTexture, true, arrowScale, 0xFFFFFF);

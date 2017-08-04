@@ -42,7 +42,7 @@ class OptionButton extends Sprite
         m_button.width = 42;
         m_button.height = 42;
         
-        var optionsIcon : Image = new Image(assetManager.getTexture("gear_yellow_icon"));
+        var optionsIcon : Image = new Image(assetManager.getTexture("gear_yellow_icon.png"));
         optionsIcon.pivotX = optionsIcon.width * 0.5;
         optionsIcon.pivotY = optionsIcon.height * 0.5;
         m_button.upState = optionsIcon.texture;

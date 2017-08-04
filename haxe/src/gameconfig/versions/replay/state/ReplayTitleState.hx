@@ -36,7 +36,7 @@ class ReplayTitleState extends BaseState
     
     override public function enter(fromState : Dynamic, params : Array<Dynamic> = null) : Void
     {
-        addChild(new Image(m_assetManager.getTexture("login_background")));
+        addChild(new Image(m_assetManager.getTexture("login_background.png")));
         
         var screenWidth : Float = 800;
         

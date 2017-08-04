@@ -32,8 +32,8 @@ class WidgetUtil
             isToggle : Bool = false) : Button
     {
         var scaleNineRect : Rectangle = new Rectangle(8, 8, 16, 16);
-        var buttonBackground : Texture = assetManager.getTexture("button_white");
-        var buttonOutline : Texture = assetManager.getTexture("button_outline_white");
+        var buttonBackground : Texture = assetManager.getTexture("button_white.png");
+        var buttonOutline : Texture = assetManager.getTexture("button_outline_white.png");
         var defaultSkin : Image = new Image(Texture.fromTexture(buttonBackground, scaleNineRect));
         
 		var compositeArray = new Array<Image>();
@@ -210,32 +210,32 @@ class WidgetUtil
         //scrollbar.thumbFactory = function() : Button
                 //{
                     //var thumbButton : Button = new Button();
-                    //thumbButton.defaultSkin = new Image(assetManager.getTexture("scrollbar_button"));
-                    //thumbButton.downSkin = new Image(assetManager.getTexture("scrollbar_button_click"));
-                    //thumbButton.hoverSkin = new Image(assetManager.getTexture("scrollbar_button_mouseover"));
+                    //thumbButton.defaultSkin = new Image(getTexture("scrollbar_button.png"));
+                    //thumbButton.downSkin = new Image(getTexture("scrollbar_button_click.png"));
+                    //thumbButton.hoverSkin = new Image(getTexture("scrollbar_button_mouseover.png"));
                     //return thumbButton;
                 //};
         //
         //scrollbar.decrementButtonFactory = function() : Button
                 //{
                     //var decrementButton : Button = new Button();
-                    //decrementButton.defaultSkin = new Image(assetManager.getTexture("scrollbar_up"));
-                    //decrementButton.downSkin = new Image(assetManager.getTexture("scrollbar_up_click"));
+                    //decrementButton.defaultSkin = new Image(getTexture("scrollbar_up.png"));
+                    //decrementButton.downSkin = new Image(getTexture("scrollbar_up_click.png"));
                     //return decrementButton;
                 //};
         //
         //scrollbar.incrementButtonFactory = function() : Button
                 //{
                     //var incrementButton : Button = new Button();
-                    //incrementButton.defaultSkin = new Image(assetManager.getTexture("scrollbar_down"));
-                    //incrementButton.downSkin = new Image(assetManager.getTexture("scrollbar_down_click"));
+                    //incrementButton.defaultSkin = new Image(getTexture("scrollbar_down.png"));
+                    //incrementButton.downSkin = new Image(getTexture("scrollbar_down_click.png"));
                     //return incrementButton;
                 //};
         //
         //scrollbar.minimumTrackFactory = function() : Button
                 //{
                     //var trackButton : Button = new Button();
-                    //trackButton.defaultSkin = new Image(assetManager.getTexture("scrollbar_track"));
+                    //trackButton.defaultSkin = new Image(getTexture("scrollbar_track.png"));
                     //return trackButton;
                 //};
         //

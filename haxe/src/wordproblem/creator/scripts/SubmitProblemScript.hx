@@ -1,10 +1,9 @@
 package wordproblem.creator.scripts;
 
 
-import feathers.controls.Button;
-
 import starling.animation.Tween;
 import starling.core.Starling;
+import starling.display.Button;
 import starling.display.DisplayObject;
 import starling.display.Image;
 import starling.events.Event;
@@ -45,7 +44,7 @@ class SubmitProblemScript extends BaseProblemCreateScript
         m_gameServerRequester = gameServerRequester;
         
         var targetWidth : Float = 70;
-        m_submitButtonGlow = new Image(m_assetManager.getTexture("halo"));
+        m_submitButtonGlow = new Image(m_assetManager.getTexture("assets/card/halo.png"));
         m_submitButtonGlow.scaleX = m_submitButtonGlow.scaleY = targetWidth / m_submitButtonGlow.width;
         m_submitButtonGlow.pivotX = m_submitButtonGlow.width * 0.5;
         m_submitButtonGlow.pivotY = m_submitButtonGlow.height * 0.5;
@@ -81,7 +80,7 @@ class SubmitProblemScript extends BaseProblemCreateScript
         
         var submitButton : Button = try cast(m_createState.getWidgetFromId("submitButton"), Button) catch(e:Dynamic) null;
         submitButton.addEventListener(starling.events.Event.TRIGGERED, onSubmit);
-        submitButton.isEnabled = false;
+        submitButton.enabled = false;
         
         // Need to figure out how many parts needed to be tagged in the text area
         // To do this we poll the list of toggle buttons representing each part
@@ -138,7 +137,7 @@ class SubmitProblemScript extends BaseProblemCreateScript
                 // Disable the animation if it was playing
                 stopAnimations();
             }
-            submitButton.isEnabled = allPartsHighlighted;
+            submitButton.enabled = allPartsHighlighted;
         }
     }
     

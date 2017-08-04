@@ -72,7 +72,7 @@ class AddTerm extends BaseTermAreaScript
         
         m_addCardAnimation = new AddCardsAnimation();
         
-        m_additionPreviewImage = new Image(m_assetManager.getTexture("add"));
+        m_additionPreviewImage = new Image(m_assetManager.getTexture("add.png"));
         m_additionPreviewImage.pivotX = m_additionPreviewImage.width * 0.5;
         m_additionPreviewImage.pivotY = m_additionPreviewImage.height * 0.5;
     }

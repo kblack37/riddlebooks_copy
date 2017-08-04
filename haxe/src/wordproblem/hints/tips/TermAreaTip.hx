@@ -40,7 +40,7 @@ class TermAreaTip extends GestureAndTextTip
         
         m_screenBounds = screenBounds;
         m_termArea = new TermAreaWidget(new ExpressionTree(new RealsVectorSpace(), null), 
-                expressionSymbolMap, assetManager, assetManager.getTexture("term_area_left"), termAreaTotalWidth, termAreaTotalHeight);
+                expressionSymbolMap, assetManager, assetManager.getTexture("term_area_left.png"), termAreaTotalWidth, termAreaTotalHeight);
     }
     
     override public function show() : Void
