@@ -1,0 +1,46 @@
+<Strings locale="en">
+    <String id="ok" val="OK"/>
+    <String id="exit" val="EXIT"/>
+    <String id="next" val="NEXT"/>
+    <String id="yes" val="Yes"/>
+    <String id="no" val="No"/>
+    <String id="back" val="Back"/>
+    <String id="main_menu" val="Main Menu"/>
+    
+    <String id="new" val="New"/>
+    <String id="achievement" val="Achievement"/>
+    <String id="create_number" val="Create Number"/>
+    
+    <String id="rewards" val="Rewards"/>
+    <String id="item_changing" val="Item is changing!"/>
+    <String id="get_x_more_hatch" val="Get $1 more to hatch!"/>
+    <String id="m_out_n_earned" val="$1 out of $2 earned!"/>
+    
+    <String id="goals" val="Goals"/>
+    
+    <String id="home" val="Home"/>
+    <String id="options" val="Options"/>
+    <String id="music" val="Music"/>
+    <String id="sfx" val="SFX"/>
+    <String id="credits" val="Credits"/>
+    <String id="resume" val="Resume"/>
+    <String id="skip" val="Skip"/>
+    <String id="restart" val="Restart"/>
+    
+    <String id="help" val="Help"/>
+    <String id="undo" val="Undo"/>
+    <String id="reset" val="Reset"/>
+    
+    <String id="brain_points" val="Brain Points"/>
+    
+    <String id="not_enough_coins" val="Not enough coins!"/>
+    <String id="buy_for" val="Buy for"/>
+    
+    <String id="reset_data_warning" val="Are you sure you want to reset all your save data?"/>
+    <String id="signout_warning" val="Are you sure you want to sign out?"/>
+    <String id="start_new_warning" val="Starting a new game will erase all previous data. Are you sure you want to continue?"/>
+    
+    <String id="new_hint" val="New Hint"/>
+    
+    <String id="click_to_continue" val="Click to continue..."/>
+</Strings>

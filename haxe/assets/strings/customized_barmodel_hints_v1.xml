@@ -1,0 +1,465 @@
+<!--
+For default hints, we map the labels in the code to the step value
+
+These blocks are eventually supposed to be similar to the real hint data
+-->
+<root>
+<barmodelhints id="PartsAddToSum">
+	<!-- User has done nothing -->
+	<hint labelId="PartsAddToSumA">This problem has parts being added together. What are they?</hint>
+
+	<!-- In decreasing order of specificity, a part of the sum is missing -->
+	<hint labelId="PartsAddToSumB" replicateFor="partOfSum" highlightTextExpressionValue="$0">You need to add '$0' for the number of #partOfSum.</hint>
+	<hint labelId="PartsAddToSumC" replicateFor="partOfSum">You need to add the number of #partOfSum.</hint>
+	<hint labelId="PartsAddToSumD">Can you find the missing part that needs to be added.</hint>
+
+	<!-- The sum value is not used in that way -->
+	<hint labelId="PartsAddToSumE">'$0' needs to be the total #totalItemName.</hint>
+</barmodelhints>
+
+<barmodelhints id="GenericMissingSumHints">
+	<!-- Has not attempted adding a sum label -->
+	<hint labelId="GenericMissingSumHintsA" linkToTip="$0">Show the part for the total #totalItemName.</hint>
+
+	<!-- In decreasing order of specificity, the sum is missing entirely -->
+	<hint labelId="GenericMissingSumHintsB" tags="totalIsVariable" highlightTextExpressionValue="$0">The variable '$0' should be the total #totalItemName.</hint>
+	<hint labelId="GenericMissingSumHintsB" tags="totalIsNumber" highlightTextExpressionValue="$0">The total number of #totalItemName should be $0.</hint>
+
+	<hint labelId="GenericMissingSumHintsC">What part represents the total #totalItemName?</hint>
+	<hint labelId="GenericMissingSumHintsD">The part for the total is missing? What is it?</hint>
+	<hint labelId="GenericMissingSumHintsE">What is the total of all the parts added together?</hint>
+</barmodelhints>
+
+<barmodelhints id="DifferenceBetweenParts">
+	<hint labelId="DifferenceBetweenPartsA">This problem wants you to show the difference between parts.</hint>
+	<hint labelId="DifferenceBetweenPartsB">You'll need to show the difference between the #largerItemName and the #smallerItemName.</hint>
+</barmodelhints>
+
+<barmodelhints id="GenericDifferenceHints">
+	<!-- Value for the difference is missing entirely-->
+	<hint labelId="GenericDifferenceHintsA">The difference between #largerItemName and #smallerItemName is missing.</hint>
+
+	<!-- The value that should be the difference is present but is not being used that way. -->
+	<hint labelId="GenericDifferenceHintsB" highlightTextExpressionValue="$0">'$0' should be a difference in your answer.</hint>
+
+	<!-- Has not tried to perform adding a difference -->
+	<hint labelId="GenericDifferenceHintsC" linkToTip="$0">Show the difference between #largerItemName and #smallerItemName.</hint>
+
+	<!-- Unknown or missing difference most exact hint -->
+	<hint labelId="GenericDifferenceHintsD" highlightTextExpressionValue="$0" tags="differenceIsVariable">The variable '$0' should show the difference between #largerItemName and #smallerItemName.</hint>
+	<hint labelId="GenericDifferenceHintsD" highlightTextExpressionValue="$0" tags="differenceIsNumber">$0 is the difference between the #largerItemName and #smallerItemName.</hint>
+	<!-- Missing Difference -->
+	<hint labelId="GenericDifferenceHintsE">What is the difference between the #largerItemName and the #smallerItemName?</hint>
+
+	<!-- Incorrect Difference -->
+	<hint labelId="GenericDifferenceHintsF" tags="fewer">How much fewer is the number of #smallerItemName than the #largerItemName?</hint>
+	<hint labelId="GenericDifferenceHintsF" tags="greater">How much greater is the number of #largerItemName than the #smallerItemName?</hint>
+</barmodelhints>
+
+<barmodelhints id="GenericMissingPartsOfDifference">
+	<!-- Parts making up larger part of difference is missing, in descreasing order of specificity -->
+	<hint labelId="GenericMissingPartsOfDifferenceA" replicateFor="largerPart" tags="partIsVariable" highlightTextExpressionValue="$0">The variable '$0' should be part of the greater value.</hint>
+	<hint labelId="GenericMissingPartsOfDifferenceA" replicateFor="largerPart" tags="partIsNumber" highlightTextExpressionValue="$0">$0 #largerPart should be part of the greater value.</hint>
+	<hint labelId="GenericMissingPartsOfDifferenceB" replicateFor="largerPart">The #largerPart need to be part of the larger value.</hint>
+	<hint labelId="GenericMissingPartsOfDifferenceC">One part is larger than the other, what values are in the larger part?</hint>
+
+	<!-- Parts making up smaller part of difference is missing, in descreasing order of specificity -->
+	<hint labelId="GenericMissingPartsOfDifferenceD" replicateFor="smallerPart" tags="partIsVariable" highlightTextExpressionValue="$0">The variable '$0' should be part of the smaller value.</hint>
+	<hint labelId="GenericMissingPartsOfDifferenceD" replicateFor="smallerPart" tags="partIsNumber" highlightTextExpressionValue="$0">$0 #smallerPart should be part of the smaller value.</hint>
+	<hint labelId="GenericMissingPartsOfDifferenceE" replicateFor="smallerPart">The #smallerPart need to be part of the smaller value.</hint>
+	<hint labelId="GenericMissingPartsOfDifferenceF">One part is smaller than the other, what values are in the smaller part?</hint>
+</barmodelhints>
+
+<barmodelhints id="GroupsEqualSum">
+	<!-- Player has not done anything -->
+	<hint labelId="GroupsEqualSumA" tags="multipleContainers">You need to add some number of groups.</hint>
+	<hint labelId="GroupsEqualSumA" tags="multipleOfOther">You need to add some number of groups.</hint>
+
+	<!-- Sum is not covering right number of groups (most general)-->
+	<hint labelId="GroupsEqualSumB" tags="multipleContainers">Show the total number of #itemUnitName for all the #containerName.</hint>
+	<hint labelId="GroupsEqualSumB" tags="multipleOfOther">Show the total number of #itemUnitName.</hint>
+	<!-- Only used for cases where there is a separate unit included in the sum. $0 is the total-->
+	<hint labelId="GroupsEqualSumC" highlightTextExpressionValue="$0">The total number of #itemUnitName should be every group added.</hint>
+	<!-- Only used for cases where is no separate unit for the sum. $0 is the total, $1 is the number of groups -->
+	<hint labelId="GroupsEqualSumD" tags="multipleContainers" highlightTextExpressionValue="$0">The total number of #itemUnitName should cover #numGroups groups.</hint>
+	<hint labelId="GroupsEqualSumD" tags="multipleOfOther" highlightTextExpressionValue="$0">The total number of #itemUnitName should cover #numGroups groups.</hint>
+</barmodelhints>
+
+<barmodelhints id="GenericEqualGroupsHints">
+	<!-- There is a separate unit, they got the right number of groups except one for the unit -->
+	<hint labelId="GenericEqualGroupsHintsA" tags="multipleContainers">Make sure you have the right number of #containerName.</hint>
+	<hint labelId="GenericEqualGroupsHintsA" tags="multipleOfOther">Create groups to represent the #largerItemName and #smallerItemName.</hint>
+
+	<!-- Has never tried to make equal groups -->
+	<hint labelId="GenericEqualGroupsHintsB" linkToTip="$0">You'll need to make multiple groups. How many do you need?</hint>
+
+	<!-- 
+	Wrong number of groups, decreasing in specificity, we want nouns representing the name of a group if applicable, the individual item
+	-->
+	<hint labelId="GenericEqualGroupsHintsC" tags="multipleContainers" highlightTextExpressionValue="$0">Show #numGroups #containerName by making #numGroups equal sized boxes.</hint>
+	<hint labelId="GenericEqualGroupsHintsD" tags="multipleContainers">Make equal sized boxes for each of the #containerName. How many do you need?</hint>
+	<hint labelId="GenericEqualGroupsHintsE" tags="multipleContainers">How many #containerName does the problem talk about?</hint>
+
+	<hint labelId="GenericEqualGroupsHintsC" tags="multipleOfOther" highlightTextExpressionValue="$0">Make #numGroups equal groups to show the #largerItemName is #numGroups times bigger.</hint>
+	<hint labelId="GenericEqualGroupsHintsD" tags="multipleOfOther">Show how many times greater the #largerItemName are than the #smallerItemName?</hint>
+	<hint labelId="GenericEqualGroupsHintsE" tags="multipleOfOther">The #largerItemName are a multiple of the #smallerItemName. Make equal sized boxes to show this.</hint>
+</barmodelhints>
+
+<barmodelhints id="SumAndDifferenceWithIntermediate">
+	<!-- User has not done anything -->
+	<hint labelId="SumAndDifferenceWithIntermediateA">You have to find both the total and difference between #largerItemName and #smallerItemName.</hint>
+
+	<!-- The value representing the sum is present, but is not used as the sum correctly -->
+	<hint labelId="SumAndDifferenceWithIntermediateB" highlightTextExpressionValue="$0">'$0' is #largerItemName and #smallerItemName in total.</hint>
+</barmodelhints>
+
+<barmodelhints id="SumOfGroupsWithIntermediate">
+	<!-- User has done nothing -->
+	<hint labelId="SumOfGroupsWithIntermediateA">You will need groups to show the #largerItemName and #smallerItemName.</hint>
+	<!-- -User is missing the second unknown, has the docId='c' -->
+	<hint labelId="SumOfGroupsWithIntermediateB">Make sure you use both variables for the #largerItemName and #smallerItemName.</hint>
+</barmodelhints>
+
+<barmodelhints id="IntermediateValueNotDiscoveredHint">
+	<hint labelId="IntermediateValueNotDiscoveredHintA" highlightTextExpressionValue="$0">The second unknown is '$0'. What do you need to do with it?</hint>
+	<hint labelId="IntermediateValueNotDiscoveredHintB">The problem talks about #smallerItemName and #largerItemName. Find and use both of the parts.</hint>
+	<hint labelId="IntermediateValueNotDiscoveredHintC">You have not found all the important parts in the problem yet.</hint>
+</barmodelhints>
+
+<barmodelhints id="UnitLabel">
+	<!-- The value of the unit is missing completely, in increasing order of specificity -->
+	<hint labelId="UnitLabelA" tags="multipleContainers">How many #itemUnitName should go into one #containerSingle?</hint>
+	<hint labelId="UnitLabelA" tags="multipleOfOther">You need to use the value for the #smallerItemName on a box.</hint>
+	<hint labelId="UnitLabelB" tags="multipleContainers" highlightTextExpressionValue="$0">Each box is a #containerName with some number of #itemUnitName.</hint>
+	<hint labelId="UnitLabelB" tags="multipleOfOther" highlightTextExpressionValue="$0">Each group should equal the #smallerItemName.</hint>
+
+	<!-- Label for the unit is present, not covering the right amount -->
+	<hint labelId="UnitLabelC" tags="multipleContainers">How many #itemUnitName are in a group?</hint>
+	<hint labelId="UnitLabelC" tags="multipleOfOther">Show the #smallerItemName as one group.</hint>
+	<hint labelId="UnitLabelD" tags="multipleContainers">Show the #itemUnitName per #containerSingle?</hint>
+	<hint labelId="UnitLabelD" tags="multipleOfOther">The value for the #smallerItemName should equal one group?</hint>
+	<hint labelId="UnitLabelE" tags="unitIsNumber">Make $1 groups. '$0' #itemUnitName is in one group.</hint>
+	<hint labelId="UnitLabelE" tags="unitIsVariable">Make $1 groups. '$0' should equal one group.</hint>
+	<hint labelId="UnitLabelF">Make sure you have the right number of groups.</hint>
+
+	<!-- Wrong number of groups (this needs to be expanded, likely user will be stuck in this path) -->
+	<hint labelId="UnitLabelG" tags="multipleContainers">Make sure you are showing the right number of #containerName as groups.</hint>
+	<hint labelId="UnitLabelG" tags="multipleOfOther">Make sure you are showing the right multiple of #smallerItemName.</hint>
+</barmodelhints>
+
+<!-- Label is covering the right fraction -->
+<barmodelhints id="FractionLabel">
+	<hint labelId="FractionLabelA" highlightTextExpressionValue="$0" replicateFor="fractionItem" tags="partIsNumber">$0 #fractionItem should be $1/$2 of the total #totalItemName?</hint>
+	<hint labelId="FractionLabelA" highlightTextExpressionValue="$0" replicateFor="fractionItem" tags="partIsVariable">The variable '$0' should be $1/$2 of the total #totalItemName?</hint>
+	<hint labelId="FractionLabelB" replicateFor="fractionItem">You need to show the #fractionItem as $0/$1 of the total #totalItemName?</hint>
+	<hint labelId="FractionLabelC" replicateFor="fractionItem">What fraction of the total #totalItemName should the #fractionItem be?</hint>
+</barmodelhints>
+
+<!-- Sum label covering the right part -->
+<barmodelhints id="SumsOfFraction">
+	<!-- User has not done anything -->
+	<hint labelId="SumsOfFractionA">Try making equal groups to represent the fractions.</hint>
+	<!-- The total label is not covering the right amount -->
+	<hint labelId="SumsOfFractionB" highlightTextExpressionValue="$0" tags="totalIsNumber">$0 #totalItemName needs to be the total of all fraction parts.</hint>
+	<hint labelId="SumsOfFractionB" highlightTextExpressionValue="$0" tags="totalIsVariable">The variable '$0' needs to be the total of all fraction parts.</hint>
+</barmodelhints>
+
+<barmodelhints id="FractionEqualGroupsHints">
+	<hint labelId="FractionEqualGroupsHintsA">This problem asks for a fraction of all the #totalItemName, use equal groups to show this.</hint>
+	<hint labelId="FractionEqualGroupsHintsB">How many groups should you use to show fractions of the #totalItemName?</hint>
+	<hint labelId="FractionEqualGroupsHintsC">Use the denominator to create the right number of groups for the #totalItemName.</hint>
+	<hint labelId="FractionEqualGroupsHintsD">Try creating $0 groups to represent the #totalItemName.</hint>
+</barmodelhints>
+
+<barmodelhints id="FractionOfLargerAmount">
+	<!-- User has not added anything -->
+	<hint labelId="FractionOfLargerAmountA">The number of #smallerItemName should be a fraction of the number of #largerItemName, use equal groups to show this.</hint>
+	<!-- Have fraction amount correct -->
+	<hint labelId="FractionOfLargerAmountB">You have the groups showing the #smallerItemName, how many do you need for the #largerItemName?</hint>
+	<!-- Have whole amount correct -->
+	<hint labelId="FractionOfLargerAmountC">You have the groups showing the #largerItemName, how many do you need for the #smallerItemName?</hint>
+	<!-- Have some other incorrect amount-->
+	<hint labelId="FractionOfLargerAmountD">Try having one row of groups for #largerItemName and another for groups of #smallerItemName.</hint>
+	<hint labelId="FractionOfLargerAmountE">If you have one row for #smallerItemName and one for #largerItemName, think of the smaller row as a fraction of the other.</hint>
+	<hint labelId="FractionOfLargerAmountF">The amount of #smallerItemName should be $0/$1 of the #largerItemName, and $0/$2 of the #totalItemName.</hint>
+	<hint labelId="FractionOfLargerAmountG">Try making $0 groups for the #largerItemName and $1 groups for the #smallerItemName.</hint>
+	<hint labelId="FractionOfLargerAmountH">Have $0 groups to show the #totalItemName. $1 would be #largerItemName and $2 would be #smallerItemName.</hint>
+</barmodelhints>
+
+<!-- For each unique bar model type, need to manually assign 'step id'. This is purely to make sure external hints from the turk
+system are consistent with default ones -->
+<mapping type="1a,2b">
+	<label id="PartsAddToSumA" step="1"/>
+	<label id="PartsAddToSumB" step="4"/>
+	<label id="PartsAddToSumC" step="3"/>
+	<label id="PartsAddToSumD" step="2"/>
+	<label id="PartsAddToSumE" step="5"/>
+	<label id="GenericMissingSumHintsA" step="6"/>
+	<label id="GenericMissingSumHintsB" step="9"/>
+	<label id="GenericMissingSumHintsC" step="8"/>
+	<label id="GenericMissingSumHintsD" step="7"/>
+	<label id="GenericMissingSumHintsE" step="10"/>
+</mapping>
+
+<mapping type="1b,2a,2e,2c,2d">
+	<label id="DifferenceBetweenPartsA" step="1"/>
+
+	<label id="GenericMissingPartsOfDifferenceA" step="4"/>
+	<label id="GenericMissingPartsOfDifferenceB" step="3"/>
+	<label id="GenericMissingPartsOfDifferenceC" step="2"/>
+	<label id="GenericMissingPartsOfDifferenceD" step="7"/>
+	<label id="GenericMissingPartsOfDifferenceE" step="6"/>
+	<label id="GenericMissingPartsOfDifferenceF" step="5"/>
+	
+	<label id="GenericDifferenceHintsA" step="9"/>
+	<label id="GenericDifferenceHintsB" step="8"/>
+</mapping>
+
+<mapping type="3a,3b,4a,4b">
+	<label id="GroupsEqualSumA" step="1"/>
+	<label id="GroupsEqualSumB" step="4"/>
+	<label id="GroupsEqualSumC" step="3"/>
+	<label id="GroupsEqualSumD" step="2"/>
+	
+	<label id="GenericEqualGroupsHintsA" step="20"/>
+	<label id="GenericEqualGroupsHintsB" step="21"/>
+	<label id="GenericEqualGroupsHintsC" step="22"/>
+	<label id="GenericEqualGroupsHintsD" step="23"/>
+	<label id="GenericEqualGroupsHintsE" step="24"/>
+	
+	<label id="UnitLabelA" step="31"/>
+	<label id="UnitLabelB" step="32"/>
+	<label id="UnitLabelC" step="33"/>
+	<label id="UnitLabelD" step="34"/>
+	<label id="UnitLabelE" step="35"/>
+	<label id="UnitLabelF" step="36"/>
+	<label id="UnitLabelG" step="37"/>
+	
+	<label id="GenericMissingSumHintsA" step="6"/>
+	<label id="GenericMissingSumHintsB" step="9"/>
+	<label id="GenericMissingSumHintsC" step="8"/>
+	<label id="GenericMissingSumHintsD" step="7"/>
+	<label id="GenericMissingSumHintsE" step="10"/>
+</mapping>
+
+<mapping type="4c,4e">
+	<label id="GroupsEqualSumA" step="1"/>
+	<label id="GroupsEqualSumB" step="4"/>
+	<label id="GroupsEqualSumC" step="3"/>
+	<label id="GroupsEqualSumD" step="2"/>
+	
+	<label id="GenericEqualGroupsHintsA" step="11"/>
+	<label id="GenericEqualGroupsHintsB" step="12"/>
+	<label id="GenericEqualGroupsHintsC" step="13"/>
+	<label id="GenericEqualGroupsHintsD" step="14"/>
+	<label id="GenericEqualGroupsHintsE" step="15"/>
+	
+	<label id="UnitLabelA" step="16"/>
+	<label id="UnitLabelB" step="17"/>
+	<label id="UnitLabelC" step="18"/>
+	<label id="UnitLabelD" step="19"/>
+	<label id="UnitLabelE" step="20"/>
+	<label id="UnitLabelF" step="21"/>
+	<label id="UnitLabelG" step="22"/>
+	
+	<label id="GenericDifferenceHintsA" step="5"/>
+	<label id="GenericDifferenceHintsB" step="6"/>
+	<label id="GenericDifferenceHintsC" step="7"/>
+	<label id="GenericDifferenceHintsD" step="8"/>
+	<label id="GenericDifferenceHintsE" step="9"/>
+	<label id="GenericDifferenceHintsF" step="10"/>
+</mapping>
+
+<mapping type="4d,4f">
+	<label id="GroupsEqualSumA" step="1"/>
+	<label id="GroupsEqualSumB" step="4"/>
+	<label id="GroupsEqualSumC" step="3"/>
+	<label id="GroupsEqualSumD" step="2"/>
+	
+	<label id="GenericEqualGroupsHintsA" step="20"/>
+	<label id="GenericEqualGroupsHintsB" step="21"/>
+	<label id="GenericEqualGroupsHintsC" step="22"/>
+	<label id="GenericEqualGroupsHintsD" step="23"/>
+	<label id="GenericEqualGroupsHintsE" step="24"/>
+	
+	<label id="UnitLabelA" step="31"/>
+	<label id="UnitLabelB" step="32"/>
+	<label id="UnitLabelC" step="33"/>
+	<label id="UnitLabelD" step="34"/>
+	<label id="UnitLabelE" step="35"/>
+	<label id="UnitLabelF" step="36"/>
+	<label id="UnitLabelG" step="37"/>
+	
+	<label id="GenericMissingSumHintsA" step="6"/>
+	<label id="GenericMissingSumHintsB" step="9"/>
+	<label id="GenericMissingSumHintsC" step="8"/>
+	<label id="GenericMissingSumHintsD" step="7"/>
+	<label id="GenericMissingSumHintsE" step="10"/>
+</mapping>
+
+<mapping type="5a,5b,5c,5d,5e">
+	<label id="IntermediateValueNotDiscoveredHintA" step="26"/>
+	<label id="IntermediateValueNotDiscoveredHintB" step="27"/>
+	<label id="IntermediateValueNotDiscoveredHintC" step="28"/>
+
+	<label id="SumAndDifferenceWithIntermediateA" step="1"/>
+	<label id="SumAndDifferenceWithIntermediateB" step="2"/>
+	
+	<label id="GenericMissingPartsOfDifferenceA" step="4"/>
+	<label id="GenericMissingPartsOfDifferenceB" step="3"/>
+	<label id="GenericMissingPartsOfDifferenceC" step="8"/>
+	<label id="GenericMissingPartsOfDifferenceD" step="7"/>
+	<label id="GenericMissingPartsOfDifferenceE" step="6"/>
+	<label id="GenericMissingPartsOfDifferenceF" step="5"/>
+	
+	<label id="GenericMissingSumHintsA" step="11"/>
+	<label id="GenericMissingSumHintsB" step="9"/>
+	<label id="GenericMissingSumHintsC" step="12"/>
+	<label id="GenericMissingSumHintsD" step="13"/>
+	<label id="GenericMissingSumHintsE" step="10"/>
+	
+	<label id="GenericDifferenceHintsA" step="14"/>
+	<label id="GenericDifferenceHintsB" step="15"/>
+	<label id="GenericDifferenceHintsC" step="16"/>
+	<label id="GenericDifferenceHintsD" step="17"/>
+	<label id="GenericDifferenceHintsE" step="18"/>
+	<label id="GenericDifferenceHintsF" step="19"/>
+</mapping>
+
+<mapping type="5f,5h,5i">
+	<label id="IntermediateValueNotDiscoveredHintA" step="26"/>
+	<label id="IntermediateValueNotDiscoveredHintB" step="27"/>
+	<label id="IntermediateValueNotDiscoveredHintC" step="28"/>
+
+	<label id="SumOfGroupsWithIntermediateA" step="1"/>
+	<label id="SumOfGroupsWithIntermediateB" step="2"/>
+	
+	<label id="GenericEqualGroupsHintsA" step="3"/>
+	<label id="GenericEqualGroupsHintsB" step="7"/>
+	<label id="GenericEqualGroupsHintsC" step="5"/>
+	<label id="GenericEqualGroupsHintsD" step="6"/>
+	<label id="GenericEqualGroupsHintsE" step="4"/>
+	
+	<label id="UnitLabelA" step="8"/>
+	<label id="UnitLabelB" step="9"/>
+	<label id="UnitLabelC" step="10"/>
+	<label id="UnitLabelD" step="11"/>
+	<label id="UnitLabelE" step="12"/>
+	<label id="UnitLabelF" step="13"/>
+	<label id="UnitLabelG" step="14"/>
+	
+	<label id="GenericMissingSumHintsA" step="15"/>
+	<label id="GenericMissingSumHintsB" step="16"/>
+	<label id="GenericMissingSumHintsC" step="17"/>
+	<label id="GenericMissingSumHintsD" step="18"/>
+	<label id="GenericMissingSumHintsE" step="19"/>
+	
+	<label id="GenericDifferenceHintsA" step="20"/>
+	<label id="GenericDifferenceHintsB" step="21"/>
+	<label id="GenericDifferenceHintsC" step="22"/>
+	<label id="GenericDifferenceHintsD" step="23"/>
+	<label id="GenericDifferenceHintsE" step="24"/>
+	<label id="GenericDifferenceHintsF" step="25"/>
+</mapping>
+
+<mapping type="5g,5j">
+	<label id="IntermediateValueNotDiscoveredHintA" step="26"/>
+	<label id="IntermediateValueNotDiscoveredHintB" step="27"/>
+	<label id="IntermediateValueNotDiscoveredHintC" step="28"/>
+
+	<label id="SumOfGroupsWithIntermediateA" step="1"/>
+	<label id="SumOfGroupsWithIntermediateB" step="2"/>
+	
+	<label id="GenericEqualGroupsHintsA" step="3"/>
+	<label id="GenericEqualGroupsHintsB" step="7"/>
+	<label id="GenericEqualGroupsHintsC" step="5"/>
+	<label id="GenericEqualGroupsHintsD" step="6"/>
+	<label id="GenericEqualGroupsHintsE" step="4"/>
+	
+	<label id="UnitLabelA" step="8"/>
+	<label id="UnitLabelB" step="9"/>
+	<label id="UnitLabelC" step="10"/>
+	<label id="UnitLabelD" step="11"/>
+	<label id="UnitLabelE" step="12"/>
+	<label id="UnitLabelF" step="13"/>
+	<label id="UnitLabelG" step="14"/>
+	
+	<label id="GenericMissingSumHintsA" step="15"/>
+	<label id="GenericMissingSumHintsB" step="16"/>
+	<label id="GenericMissingSumHintsC" step="17"/>
+	<label id="GenericMissingSumHintsD" step="18"/>
+	<label id="GenericMissingSumHintsE" step="19"/>
+</mapping>
+
+<mapping type="6a,6b,6c,6d">
+	<label id="SumsOfFractionA" step="1"/>
+	<label id="SumsOfFractionB" step="2"/>
+	
+	<label id="FractionEqualGroupsHintsA" step="3"/>
+	<label id="FractionEqualGroupsHintsB" step="4"/>
+	<label id="FractionEqualGroupsHintsC" step="5"/>
+	<label id="FractionEqualGroupsHintsD" step="6"/>
+	
+	<label id="FractionLabelA" step="7"/>
+	<label id="FractionLabelB" step="8"/>
+	<label id="FractionLabelC" step="9"/>
+</mapping>
+
+<mapping type="7a,7b,7d,7d-2">
+	<label id="FractionOfLargerAmountA" step="1"/>
+	<label id="FractionOfLargerAmountB" step="2"/>
+	<label id="FractionOfLargerAmountC" step="3"/>
+	<label id="FractionOfLargerAmountD" step="4"/>
+	<label id="FractionOfLargerAmountE" step="5"/>
+	<label id="FractionOfLargerAmountF" step="6"/>
+	<label id="FractionOfLargerAmountG" step="7"/>
+	
+	<label id="SumsOfFractionA" step="8"/>
+	<label id="SumsOfFractionB" step="9"/>
+	
+	<label id="FractionLabelA" step="10"/>
+	<label id="FractionLabelB" step="11"/>
+	<label id="FractionLabelC" step="12"/>
+</mapping>
+
+<mapping type="7c,7f,7f-2">
+	<label id="FractionOfLargerAmountA" step="1"/>
+	<label id="FractionOfLargerAmountB" step="2"/>
+	<label id="FractionOfLargerAmountC" step="3"/>
+	<label id="FractionOfLargerAmountD" step="4"/>
+	<label id="FractionOfLargerAmountE" step="5"/>
+	<label id="FractionOfLargerAmountF" step="6"/>
+	<label id="FractionOfLargerAmountG" step="7"/>
+
+	<label id="FractionLabelA" step="8"/>
+	<label id="FractionLabelB" step="9"/>
+	<label id="FractionLabelC" step="10"/>
+	
+	<label id="GenericDifferenceHintsA" step="11"/>
+	<label id="GenericDifferenceHintsB" step="12"/>
+	<label id="GenericDifferenceHintsC" step="13"/>
+	<label id="GenericDifferenceHintsD" step="14"/>
+	<label id="GenericDifferenceHintsE" step="15"/>
+	<label id="GenericDifferenceHintsF" step="16"/>
+</mapping>
+
+<mapping type="7e,7g">
+	<label id="FractionOfLargerAmountA" step="1"/>
+	<label id="FractionOfLargerAmountB" step="2"/>
+	<label id="FractionOfLargerAmountC" step="3"/>
+	<label id="FractionOfLargerAmountD" step="4"/>
+	<label id="FractionOfLargerAmountE" step="5"/>
+	<label id="FractionOfLargerAmountF" step="6"/>
+	<label id="FractionOfLargerAmountG" step="7"/>
+	
+	<label id="SumsOfFractionA" step="8"/>
+	<label id="SumsOfFractionB" step="9"/>
+	
+	<label id="GenericDifferenceHintsA" step="10"/>
+	<label id="GenericDifferenceHintsB" step="11"/>
+	<label id="GenericDifferenceHintsC" step="12"/>
+	<label id="GenericDifferenceHintsD" step="13"/>
+	<label id="GenericDifferenceHintsE" step="14"/>
+	<label id="GenericDifferenceHintsF" step="15"/>
+</mapping>
+</root>
