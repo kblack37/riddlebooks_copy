@@ -58,7 +58,6 @@ class TextParserUtil
                     var sourceObject : Dynamic = {
                         type : sourcePieces[0],
                         name : sourcePieces[1],
-
                     };
                     resourceObjects.push(sourceObject);
                     

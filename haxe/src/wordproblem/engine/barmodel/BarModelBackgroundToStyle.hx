@@ -159,7 +159,6 @@ class BarModelBackgroundToStyle
                 path : "book_pastel",
                 styles : regularStyle,
                 highlightColors : metroColors,
-
             },
 
         };

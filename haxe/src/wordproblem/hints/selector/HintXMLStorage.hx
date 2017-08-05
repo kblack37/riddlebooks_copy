@@ -20,12 +20,12 @@ class HintXMLStorage
         m_stepIdToHintElementList = { };
         var childHints = hintData.elements;
 		for (childHint in childHints) {
-            var stepId : Int = Std.parseInt(childHint.att.step);
-            if (!m_stepIdToHintElementList.exists(stepId)) 
+            var stepId : String = childHint.att.step;
+            if (!Reflect.hasField(m_stepIdToHintElementList, stepId)) 
             {
-                m_stepIdToHintElementList[stepId] = new Array<Fast>();
+				Reflect.setField(m_stepIdToHintElementList, stepId, new Array<Fast>());
             }
-			(try cast(m_stepIdToHintElementList[stepId], Array<Dynamic>) catch(e:Dynamic) null).push(childHint);
+			(try cast(Reflect.field(m_stepIdToHintElementList, stepId), Array<Dynamic>) catch(e:Dynamic) null).push(childHint);
         }
     }
     
@@ -39,16 +39,16 @@ class HintXMLStorage
      *      which one by having the game specify the missing one to focus on.
      *      Can be null to we want to just randomly pick a hint
      */
-    public function getHintFromStepId(stepId : Int, params : Array<Dynamic>, filterData : Dynamic) : Dynamic
+    public function getHintFromStepId(stepId : String, params : Array<Dynamic>, filterData : Dynamic) : Dynamic
     {
         var hintData : Dynamic = null;
         
-        if (m_stepIdToHintElementList.exists(stepId)) 
+        if (Reflect.hasField(m_stepIdToHintElementList, stepId)) 
         {
             // If possible, look at the params act as a filter.
             // For example a param, might include the bar model pattern name 'a1', 'b1', 'unk'
             // used to indicate which element is missing
-            var hintElementsForStep : Array<Fast> = m_stepIdToHintElementList[stepId];
+            var hintElementsForStep : Array<Fast> = Reflect.field(m_stepIdToHintElementList, stepId);
             if (hintElementsForStep.length > 0) 
             {
                 
@@ -61,7 +61,7 @@ class HintXMLStorage
                     // This means this step is valid if the user has included the part with that
                     // name in their current bar model.
                     // For example.) existingBar=a mean that part id 'a' has been placed as a part
-                    if (filterData.exists("existingLabelParts")) 
+                    if (Reflect.hasField(filterData, "existingLabelParts")) 
                     {
                         var existingLabelParts : Array<Dynamic> = Reflect.field(filterData, "existingLabelParts");
                         for (i in 0...hintElementsForStep.length){
@@ -87,7 +87,7 @@ class HintXMLStorage
                     }
                     // Filter indicates that a value associated with a tagged document id is missing.
                     // Get the hint that exactly references this
-                    else if (filterData.exists("targetMissingDocId")) 
+                    else if (Reflect.hasField(filterData, "targetMissingDocId")) 
                     {
                         for (i in 0...hintElementsForStep.length){
                             var candidateHint = hintElementsForStep[i];

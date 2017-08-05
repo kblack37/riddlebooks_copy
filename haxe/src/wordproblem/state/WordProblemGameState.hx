@@ -416,12 +416,10 @@ class WordProblemGameState extends BaseState implements IConsoleInterfacable
                 child.removeEventListeners();
             }
             child.removeFromParent(true);
-        }  // the ui components of the new level.    // Remove option screen if visible, otherwise it will still be visible underneath  
-        
-        
-        
-        
-        
+        }  
+		
+		// Remove option screen if visible, otherwise it will still be visible underneath  
+        // the ui components of the new level.
         m_optionsScreen.removeFromParent();
         
         // Clean up and remove the help screen

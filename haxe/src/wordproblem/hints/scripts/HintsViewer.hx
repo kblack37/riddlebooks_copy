@@ -157,7 +157,8 @@ class HintsViewer extends ScriptNode implements IShowableScript
         var lightbulbIconMaxHeight : Float = 60;
         
         // The star burst should play a spin animation when the mouse is over it
-        var starBurst : DisplayObject = new Image(assetManager.getTexture("Art_StarBurst"));
+		// TODO: previously this was Art_Starburst, however that asset is missing at the moment
+        var starBurst : DisplayObject = new Image(assetManager.getTexture("burst_purple"));
         starBurst.pivotX = starBurst.width * 0.5;
         starBurst.pivotY = starBurst.height * 0.5;
         starBurst.scaleX = starBurst.scaleY = (lightbulbIconMaxHeight * 1.7 / starBurst.height);

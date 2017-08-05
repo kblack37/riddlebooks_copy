@@ -521,11 +521,11 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
         
         var parenthesisButton : Layer = new Layer();
         var iconContainer : Sprite = new Sprite();
-        var leftParenImage : Image = new Image(m_assetManager.getTexture("paren_left"));
+        var leftParenImage : Image = new Image(m_assetManager.getTexture("parentheses_left"));
         var parenScaleFactor : Float = 0.7;
         leftParenImage.scaleX = leftParenImage.scaleY = parenScaleFactor;
         iconContainer.addChild(leftParenImage);
-        var rightParenImage : Image = new Image(m_assetManager.getTexture("paren_right"));
+        var rightParenImage : Image = new Image(m_assetManager.getTexture("parentheses_right"));
         rightParenImage.scaleX = rightParenImage.scaleY = parenScaleFactor;
         rightParenImage.x = leftParenImage.x + leftParenImage.width * 2;
         iconContainer.addChild(rightParenImage);

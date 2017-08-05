@@ -152,7 +152,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
         // TODO: Load up the dummy xml, which should contain ALL the hint logic paths
         // The bar model type governs which part of the xml should be loaded
         // Create a mapping from label id to the actual hint elements
-        var defaultHintsXml : Xml = assetManager.getXml("default_barmodel_hints");
+        var defaultHintsXml : Xml = assetManager.getXml("assets/strings/default_barmodel_hints.xml").firstElement();
 		var labelIdToHintXmlElement : Dynamic = { };
 		if (defaultHintsXml != null) {
 			var barModelHintBlocks = defaultHintsXml.elementsNamed("barmodelhints");
@@ -172,7 +172,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
 		// Look through the xml data file to figure out what mapping is appropriate.
 		// This mapping will also allow us to rebuild a dummy xml representing default hint that looks like
         // any external hinting structure
-        var defaultHintXmlToBuild : Xml = Xml.parse("<barmodelhints/>");
+        var defaultHintXmlToBuild : Xml = Xml.parse("<barmodelhints></barmodelhints>").firstElement();
 		if (defaultHintsXml != null) {
 			var labelToStepMappings = defaultHintsXml.elementsNamed("mapping");
 			m_labelToStepMap = { };
@@ -184,11 +184,11 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
 					var labelToStepElements = labelToStepMapping.elementsNamed("label");
 					for (labelToStepElement in labelToStepElements) {
 						var labelId : String = labelToStepElement.get("id");
-						var stepId : Int = Std.parseInt(labelToStepElement.get("step"));
+						var stepId : String = labelToStepElement.get("step");
 						Reflect.setField(m_labelToStepMap, labelId, stepId);
 						
-						var hintXmlCopy : Xml = Xml.parse((try cast(Reflect.field(labelIdToHintXmlElement, labelId), Fast) catch(e:Dynamic) null).x.toString());
-						hintXmlCopy.set("step", Std.string(stepId));
+						var hintXmlCopy : Xml = Xml.parse((try cast(Reflect.field(labelIdToHintXmlElement, labelId), Xml) catch(e:Dynamic) null).toString()).firstElement();
+						hintXmlCopy.set("step", stepId);
 						defaultHintXmlToBuild.addChild(hintXmlCopy);
 					}
 					break;
@@ -1983,7 +1983,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
         var hintData : Dynamic = null;
         if (m_labelToStepMap.exists(hintLabel)) 
         {
-            var generatedStepId : Int = Std.parseInt(Reflect.field(m_labelToStepMap, hintLabel));
+            var generatedStepId : String = Reflect.field(m_labelToStepMap, hintLabel);
             if (m_customHintStorage != null) 
             {
                 hintData = m_customHintStorage.getHintFromStepId(generatedStepId, params, filterData);

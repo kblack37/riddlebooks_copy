@@ -295,7 +295,7 @@ class LevelCompiler
             
             if (widgetAttributes.children != null) 
             {
-                for (childWidgetAttributes/* AS3HX WARNING could not determine type for var: childWidgetAttributes exp: EField(EIdent(widgetAttributes),children) type: null */ in widgetAttributes.children)
+                for (childWidgetAttributes in widgetAttributes.children)
                 {
                     loadImages(childWidgetAttributes, outImages);
                 }

@@ -794,10 +794,10 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
         // Color for click to continue should match that of the paragraph
         var textStyle : Dynamic = currentLevel.getCssStyleObject();
         var clickToContinueColor : Int = 0;
-        if (textStyle != null && textStyle.exists("p")) 
+        if (textStyle != null && Reflect.hasField(textStyle, "p")) 
         {
             var paragraphStyle : Dynamic = Reflect.field(textStyle, "p");
-            if (paragraphStyle.exists("color")) 
+            if (Reflect.hasField(paragraphStyle, "color")) 
             {
                 clickToContinueColor = Reflect.field(paragraphStyle, "color");
             }
@@ -806,13 +806,11 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
                     x : 300,
                     y : 300,
                     color : clickToContinueColor,
-
                 }));
         otherSequence.pushChild(new CustomVisitNode(function(param : Dynamic) : Int
                 {
                     Starling.current.juggler.tween(uiContainer, 0.3, {
                                 y : startingUiContainerY
-
                             });
                     deleteChild(otherSequence);
                     return ScriptStatus.SUCCESS;
