@@ -26,6 +26,8 @@ import wordproblem.engine.text.model.ImageNode;
 import wordproblem.engine.text.model.TextNode;
 import wordproblem.engine.text.view.DocumentView;
 import wordproblem.engine.text.view.TextView;
+import wordproblem.engine.widget.BarModelAreaWidget;
+import wordproblem.level.controller.WordProblemCgsLevelManager;
 import wordproblem.player.ButtonColorData;
 import wordproblem.player.PlayerStatsAndSaveData;
 import wordproblem.resource.AssetManager;
@@ -34,6 +36,8 @@ import wordproblem.state.WordProblemGameState;
 
 import wordproblem.engine.barmodel.model.BarModelData;
 import wordproblem.engine.barmodel.view.BarModelView;
+
+import wordproblem.scripts.level.GenericBarModelLevelScript;
 
 
 /**
@@ -48,8 +52,9 @@ class TestApp extends Sprite {
 	
 	public function new() {
 		super();
-		
-		// some setup
+	}
+	
+	public function run() {
 		var assetManager = new AssetManager();
 		var vectorSpace = new RealsVectorSpace();
 		var latexCompiler = new LatexCompiler(vectorSpace);
@@ -57,10 +62,10 @@ class TestApp extends Sprite {
 			assetManager.getXml("assets/layout/predefined_layouts.xml").toString());
 		var algebraConfig = new AlgebraAdventureConfig();
 		var expressionSymbolMap = new ExpressionSymbolMap(assetManager);
-		 mouseState = new MouseState(new starling.events.EventDispatcher(), new openfl.events.EventDispatcher());
-		 time = new Time();
+		mouseState = new MouseState(this.stage, new openfl.events.EventDispatcher());
+		time = new Time();
 		var stateMachine = new StateMachine(Starling.current.stage.stageWidth, Starling.current.stage.stageHeight);
-		var gameEngine = new GameEngine(new LatexCompiler(vectorSpace),
+		var gameEngine = new GameEngine(latexCompiler,
 			assetManager,
 			expressionSymbolMap,
 			this.width,
@@ -68,7 +73,7 @@ class TestApp extends Sprite {
 			mouseState
 		);
 		var scriptParser = new ScriptParser(gameEngine,
-			new LatexCompiler(vectorSpace),
+			latexCompiler,
 			assetManager,
 			new PlayerStatsAndSaveData(new DummyCache())
 		);
@@ -98,7 +103,6 @@ class TestApp extends Sprite {
 			new TextParser()
 		);
 		
-		//stateMachine.register(gameState);
 		addChild(gameState);
 		
 		this.addEventListener(Event.ENTER_FRAME, traceLoop);
@@ -152,6 +156,7 @@ class TestApp extends Sprite {
 	
 	private function traceLoop(e : Event) {
 		gameState.update(time, mouseState);
+		mouseState.onEnterFrame();
 	}
 	
 	// Function to trace the leaves in the tree defined by the word problem level data

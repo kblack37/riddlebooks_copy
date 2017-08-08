@@ -3,6 +3,7 @@ package;
 import dragonbox.common.tests.MathUtilTest;
 import openfl.display.Sprite;
 import starling.core.Starling;
+import starling.events.Event;
 
 /**
  * ...
@@ -22,6 +23,12 @@ class TestMain extends Sprite {
 		
 		test_starling = new Starling(TestApp, this.stage);
 		test_starling.start();
+		test_starling.addEventListener(Event.ROOT_CREATED, onRootCreated);
+	}
+	
+	public function onRootCreated(event : Event, data : Dynamic) {
+		var app = try cast(data, TestApp) catch (e : Dynamic) null;
+		app.run();
 	}
 
 }

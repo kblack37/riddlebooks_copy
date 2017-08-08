@@ -140,8 +140,9 @@ class ShowBarModelHitAreas extends BaseBarModelScript
             {
                 reset();
             }
-        }  // No notion of success with this script  
-        
+        }  
+		
+		// No notion of success with this script  
         return ScriptStatus.FAIL;
     }
     
@@ -163,11 +164,11 @@ class ShowBarModelHitAreas extends BaseBarModelScript
                 // Animate the fade out of the hit boxes
                 var fadeOutTween : Tween = new Tween(hitAreaImage, 0.4);
                 fadeOutTween.fadeTo(0.0);
-                fadeOutTween.onCompleteArgs = [fadeOutTween, hitAreaImage];
-                fadeOutTween.onComplete = function(targetTween : Tween, targetImage : DisplayObject) : Void
+                //fadeOutTween.onCompleteArgs = [fadeOutTween, hitAreaImage];
+                fadeOutTween.onComplete = function() : Void
                         {
-                            targetImage.removeFromParent(true);
-                            m_animationJuggler.remove(targetTween);
+                            hitAreaImage.removeFromParent(true);
+                            m_animationJuggler.remove(fadeOutTween);
                         };
                 m_animationJuggler.add(fadeOutTween);
             }
@@ -178,6 +179,6 @@ class ShowBarModelHitAreas extends BaseBarModelScript
     {
         super.onLevelReady();
         
-        m_hitAreaScript = try cast(this.getNodeById(m_nodeIdToCalculateHitAreas), IHitAreaScript) catch(e:Dynamic) null;
+        m_hitAreaScript = try cast(this.getNodeById(m_nodeIdToCalculateHitAreas), IHitAreaScript) catch (e:Dynamic) null;
     }
 }

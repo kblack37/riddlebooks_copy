@@ -122,7 +122,7 @@ class HighlightProblemPartsScript extends BaseProblemCreateScript
     {
         if (eventType == ProblemCreateEvent.SELECT_BAR_ELEMENT) 
         {
-            if (param.exists("id")) 
+            if (Reflect.hasField(param, "id")) 
             {
                 var selectedId : String = param.id;
                 
@@ -161,7 +161,7 @@ class HighlightProblemPartsScript extends BaseProblemCreateScript
             var partsInBarModel : Dynamic = m_createState.getCurrentLevel().elementIdToDataMap;
             for (partName in Reflect.fields(partsInBarModel))
             {
-                Reflect.setField(partsInBarModel, partName, highlights.exists(partName)).highlighted;
+                Reflect.setField(partsInBarModel, partName, Reflect.hasField(highlights, partName)).highlighted;
             }
         }
     }
@@ -228,7 +228,7 @@ class HighlightProblemPartsScript extends BaseProblemCreateScript
                     var isCursorOverText : Bool = editableTextArea.getIsTextUnderPoint(m_localPointBuffer.x, m_localPointBuffer.y);
                     var partName : String = m_activeHighlightId;
                     var styleObject : Dynamic = m_createState.getCurrentLevel().currentlySelectedBackgroundData;
-                    var colorForPartName : Int = ((styleObject != null && styleObject.exists("highlightColors"))) ? 
+                    var colorForPartName : Int = ((styleObject != null && Reflect.hasField(styleObject, "highlightColors"))) ? 
                     Reflect.field(Reflect.field(styleObject, "highlightColors"), partName) : 0xFFFFFF;
                     if (m_mouseState.leftMousePressedThisFrame && currentMousePointInTextArea) 
                     {
@@ -401,7 +401,7 @@ class HighlightProblemPartsScript extends BaseProblemCreateScript
         var highlightTextObjects : Dynamic = m_editableTextArea.getHighlightTextObjects();
         var partName : String = m_activeHighlightId;
         
-        if (highlightTextObjects.exists(partName)) 
+        if (Reflect.hasField(highlightTextObjects, partName)) 
         {
             var displays : Array<DisplayObject> = Reflect.field(highlightTextObjects, partName).display;
             for (highlightDisplay in displays)

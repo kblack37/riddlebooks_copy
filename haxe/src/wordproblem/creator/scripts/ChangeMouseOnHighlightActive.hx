@@ -126,7 +126,7 @@ class ChangeMouseOnHighlightActive extends BaseProblemCreateScript
         // Get the color of the highlight based on the id
         var barPartName : String = params.id;
         var styleInformation : Dynamic = m_createState.getCurrentLevel().currentlySelectedBackgroundData;
-        if (styleInformation != null && styleInformation.exists("highlightColors")) 
+        if (styleInformation != null && Reflect.hasField(styleInformation, "highlightColors")) 
         {
             m_highlightIndicatorImage.color = Reflect.field(Reflect.field(styleInformation, "highlightColors"), barPartName);
         }

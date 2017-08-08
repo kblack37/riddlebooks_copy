@@ -180,10 +180,10 @@ class AddNewHorizontalLabel extends BaseBarModelScript implements IHitAreaScript
     
     public function postProcessHitAreas(hitAreas : Array<Rectangle>, hitAreaGraphics : Array<DisplayObjectContainer>) : Void
     {
-        var leftBracketTexture : Texture = m_assetManager.getTexture("brace_left_end");
-        var rightBracketTexture : Texture = m_assetManager.getTexture("brace_right_end");
-        var middleBracketTexture : Texture = m_assetManager.getTexture("brace_center");
-        var fullBracketTexture : Texture = m_assetManager.getTexture("brace_full");
+        var leftBracketTexture : Texture = m_assetManager.getTexture("bracket_left_edge");
+        var rightBracketTexture : Texture = m_assetManager.getTexture("bracket_right_edge");
+        var middleBracketTexture : Texture = m_assetManager.getTexture("bracket_middle");
+        var fullBracketTexture : Texture = m_assetManager.getTexture("bracket_full");
         var i : Int = 0;
         var numHitAreas : Int = hitAreas.length;
         for (i in 0...numHitAreas){

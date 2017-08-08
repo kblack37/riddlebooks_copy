@@ -247,7 +247,7 @@ class TextAreaWidget extends Sprite implements IBaseWidget
         var documentIdToExpressionMap : Dynamic = { };
         for (i in 0...expressionComponents.length){
             var expressionComponent : ExpressionComponent = try cast(expressionComponents[i], ExpressionComponent) catch(e:Dynamic) null;
-            documentIdToExpressionMap[Std.parseInt(expressionComponent.entityId)] = expressionComponent.expressionString;
+			Reflect.setField(documentIdToExpressionMap, expressionComponent.entityId, expressionComponent.expressionString);
         }
         
         return documentIdToExpressionMap;

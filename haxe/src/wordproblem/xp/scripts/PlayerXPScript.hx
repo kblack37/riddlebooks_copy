@@ -343,7 +343,7 @@ class PlayerXPScript extends BaseBufferEventScript
             // For each add gesture, we check the value that was used.
             // Find in the map whether that value was used in that same way at some point earlier
             // in the level
-            if (param.exists("value")) 
+            if (Reflect.hasField(param, "value")) 
             {
                 expressionValueForGesture = param.value;
             }
@@ -369,7 +369,7 @@ class PlayerXPScript extends BaseBufferEventScript
         
         if (expressionValueForGesture != null) 
         {
-            if (m_expressionValueToGestureMap.exists(expressionValueForGesture)) 
+            if (Reflect.hasField(m_expressionValueToGestureMap, expressionValueForGesture)) 
             {
                 var barModelGesturesForValue : Array<String> = Reflect.field(m_expressionValueToGestureMap, expressionValueForGesture);
                 if (Lambda.indexOf(barModelGesturesForValue, eventType) > -1) 

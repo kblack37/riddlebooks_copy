@@ -523,7 +523,7 @@ class WordProblemGameBrainpop extends WordProblemGameBase
                             // A level in the section being modified has a set of actions that are performed in the level.
                             // Each action should be introduced by a tutorial level
                             // (tutorials exist for subtract, multiply, divide, and parentheses)
-                            if (levelToAdd.exists("tags")) 
+                            if (Reflect.hasField(levelToAdd, "tags")) 
                             {
                                 // Each action maps to a tutorial, if that tutorial has not already been added
                                 // to the sequence then we need to add it here.

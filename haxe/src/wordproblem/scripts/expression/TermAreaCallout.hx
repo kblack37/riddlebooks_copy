@@ -87,7 +87,7 @@ class TermAreaCallout extends BaseTermAreaScript
                         termArea.componentManager.getComponentFromEntityIdAndType(entityId, RenderableComponent.TYPE_ID) != null) 
                     {
                         // Clear out old callout if it was visible and was created internally
-                        if (m_lastPickedEntityId != null && m_calloutCreatedInternallyMap.exists(m_lastPickedEntityId) && Reflect.field(m_calloutCreatedInternallyMap, m_lastPickedEntityId)) 
+                        if (m_lastPickedEntityId != null && Reflect.hasField(m_calloutCreatedInternallyMap, m_lastPickedEntityId) && Reflect.field(m_calloutCreatedInternallyMap, m_lastPickedEntityId)) 
                         {
                             Reflect.setField(m_calloutCreatedInternallyMap, m_lastPickedEntityId, false);
                             termArea.componentManager.removeComponentFromEntity(
@@ -133,7 +133,7 @@ class TermAreaCallout extends BaseTermAreaScript
             
             
             if (pickedWidget == null && m_lastPickedEntityId != null &&
-                m_calloutCreatedInternallyMap.exists(m_lastPickedEntityId) && Reflect.field(m_calloutCreatedInternallyMap, m_lastPickedEntityId)) 
+                Reflect.hasField(m_calloutCreatedInternallyMap, m_lastPickedEntityId) && Reflect.field(m_calloutCreatedInternallyMap, m_lastPickedEntityId)) 
             {
                 m_lastPickedTermArea.componentManager.removeComponentFromEntity(
                         m_lastPickedEntityId,

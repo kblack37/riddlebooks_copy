@@ -155,7 +155,7 @@ class ReplayControllerScript extends BaseGameScript
         while (trackerIndex >= 0 && !indexContainsBarModel)
         {
             var prevActionDetails : Dynamic = actions[trackerIndex].detailObject;
-            if (prevActionDetails != null && prevActionDetails.exists("barModel")) 
+            if (prevActionDetails != null && Reflect.hasField(prevActionDetails, "barModel")) 
             {
                 indexContainsBarModel = setNewBarModel(Reflect.field(prevActionDetails, "barModel"));
             }
@@ -179,7 +179,7 @@ class ReplayControllerScript extends BaseGameScript
         while (trackerIndex >= 0 && !indexContainsEquation)
         {
             prevActionDetails = actions[trackerIndex].detailObject;
-            if (prevActionDetails != null && prevActionDetails.exists("equation")) 
+            if (prevActionDetails != null && Reflect.hasField(prevActionDetails, "equation")) 
             {
                 indexContainsEquation = true;
                 setNewEquation(prevActionDetails);
@@ -354,7 +354,7 @@ class ReplayControllerScript extends BaseGameScript
     private function setNewBarModel(serializedBarModelData : Dynamic) : Bool
     {
         var setNewBarModelSuccess : Bool = false;
-        if (serializedBarModelData.exists("bwl")) 
+        if (Reflect.hasField(serializedBarModelData, "bwl")) 
         {
             var barModelData : BarModelData = m_barModelAreaWidget.getBarModelData();
             barModelData.clear();

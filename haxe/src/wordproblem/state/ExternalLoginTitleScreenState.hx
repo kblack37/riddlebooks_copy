@@ -229,7 +229,7 @@ class ExternalLoginTitleScreenState extends BaseState
         
         // Without any external login info, a continue assumes that the returning player is the
         // same one who played the last session
-        var allowContinue : Bool = m_localSharedObject.data.exists("uid");
+        var allowContinue : Bool = Reflect.hasField(m_localSharedObject.data, "uid");
         
         // Create a button to continue IF a user id was saved in the cache
         var baseContinueGameButtonTexture : Texture = m_assetManager.getTexture("button_green_up");
@@ -340,7 +340,7 @@ class ExternalLoginTitleScreenState extends BaseState
     public function continueGuestUser() : Void
     {
         // Use the user id saved in the local cache
-        if (m_localSharedObject.data.exists("uid")) 
+        if (Reflect.hasField(m_localSharedObject.data, "uid")) 
         {
             var username : String = Reflect.field(m_localSharedObject.data, "uid");
             var password : String = null;
@@ -392,7 +392,7 @@ class ExternalLoginTitleScreenState extends BaseState
         
         // Need to first clear out any local data (most important is the whatever user id was saved in the cache)
         // Local storage gets overwritten anyways so may not be necessary
-        if (m_localSharedObject.data.exists("uid")) 
+        if (Reflect.hasField(m_localSharedObject.data, "uid")) 
         {
             // Ask the player if they are okay with previous save data being lost
             addChild(m_newGameConfirmationWidget);

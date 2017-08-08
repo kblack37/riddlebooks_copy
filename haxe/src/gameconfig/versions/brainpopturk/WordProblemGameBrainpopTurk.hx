@@ -406,7 +406,7 @@ class WordProblemGameBrainpopTurk extends WordProblemGameBase
         else if (m_nativeFlashStage.loaderInfo != null && m_nativeFlashStage.loaderInfo.parameters != null && Reflect.hasField(m_nativeFlashStage.loaderInfo.parameters, "data"))
         {
             var externalData : Dynamic = haxe.Json.parse(m_nativeFlashStage.loaderInfo.parameters.data);
-            if (externalData.exists("ext_id") && externalData.exists("ext_s_id")) 
+            if (Reflect.hasField(externalData, "ext_id") && Reflect.hasField(externalData, "ext_s_id")) 
             {
                 // If we get passed in a uid, assume it has come from edmodo.
                 // Attempt to login into our servers using this id (in order to fetch the correct

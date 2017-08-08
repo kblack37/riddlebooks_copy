@@ -268,7 +268,18 @@ class AssetManager extends EventDispatcher implements ICgsLevelResourceManager i
      */
     public function getBitmapData(name : String) : BitmapData
     {
-        return Reflect.field(m_savedBitmapData, name);
+		var assetPath : String = null;
+		if (name.indexOf("assets") >= 0) {
+			assetPath = name;
+		} else {
+			assetPath = getAssetPath(name);
+		}
+        var bmpData : BitmapData = null;
+		if (Assets.exists(assetPath)) {
+			bmpData = Assets.getBitmapData(assetPath);
+		}
+        
+		return bmpData;
     }
     
     /**
@@ -445,7 +456,12 @@ class AssetManager extends EventDispatcher implements ICgsLevelResourceManager i
         // have extra data appended to it to point to the texture atlas to use
         // ex.) the name 'button_up::ui_atlas' will attempt to grab the button texture
         // from the ui_atlas.
-		var assetPath : String = getAssetPath(name);
+		var assetPath : String = null;
+		if (name.indexOf("assets") >= 0) {
+			assetPath = name;
+		} else {
+			assetPath = getAssetPath(name);
+		}
         var texture : Texture = null;
 		if (Assets.exists(assetPath)) {
 			var bmpData : BitmapData = Assets.getBitmapData(assetPath);

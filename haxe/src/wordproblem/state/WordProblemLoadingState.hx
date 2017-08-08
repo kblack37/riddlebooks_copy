@@ -124,12 +124,12 @@ class WordProblemLoadingState extends BaseState
 
 		for (animationObject in m_activeAnimations)
 		{
-			if (animationObject.exists("start"))
+			if (Reflect.hasField(animationObject, "start"))
 			{
 				Starling.current.juggler.remove(animationObject.start);
 			}
 
-			if (animationObject.exists("end"))
+			if (Reflect.hasField(animationObject, "end"))
 			{
 				Starling.current.juggler.remove(animationObject.end);
 			}

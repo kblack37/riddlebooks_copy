@@ -63,82 +63,82 @@ class CalloutCreator
     public function createCalloutComponentFromText(param : Dynamic) : CalloutComponent
     {
         var calloutComponent : CalloutComponent = new CalloutComponent(param.id);
-        var contentWidth : Float = ((param.exists("width"))) ? param.width : 100;
-        var contentHeight : Float = ((param.exists("height"))) ? param.height : 50;
+        var contentWidth : Float = ((Reflect.hasField(param, "width"))) ? param.width : 100;
+        var contentHeight : Float = ((Reflect.hasField(param, "height"))) ? param.height : 50;
         
         // Must choose between a regualr text field vs xml formatted text
         var calloutMainDisplay : DisplayObject = null;
-        if (param.exists("text")) 
+        if (Reflect.hasField(param, "text")) 
         {
-            if (!param.exists("height")) 
+            if (!Reflect.hasField(param, "height")) 
             {
                 contentHeight = -1;
             }
-            var fontColor : Int = ((param.exists("color"))) ? 
+            var fontColor : Int = ((Reflect.hasField(param, "color"))) ? 
             param.color : 0x000000;
             calloutMainDisplay = this.createDefaultCalloutText(param.text, contentWidth, contentHeight, fontColor);
         }
-        else if (param.exists("dialog")) 
+        else if (Reflect.hasField(param, "dialog")) 
         {
             calloutMainDisplay = TextParserUtil.createTextViewFromXML(param.dialog, param.styleObject, contentWidth, m_textParser, m_textViewFactory);
         }
-        else if (param.exists("content")) 
+        else if (Reflect.hasField(param, "content")) 
         {
             calloutMainDisplay = try cast(param.content, DisplayObject) catch(e:Dynamic) null;
         }
         calloutComponent.display = calloutMainDisplay;
         
-        var backgroundTextureName : String = ((param.exists("backgroundTexture"))) ? 
+        var backgroundTextureName : String = ((Reflect.hasField(param, "backgroundTexture"))) ? 
         param.backgroundTexture : "button_white";
         calloutComponent.backgroundTexture = backgroundTextureName;
         
-        var backgroundColor : Int = ((param.exists("backgroundColor"))) ? 
+        var backgroundColor : Int = ((Reflect.hasField(param, "backgroundColor"))) ? 
         param.backgroundColor : 0xFF9900;
         calloutComponent.backgroundColor = backgroundColor;
         
         var padding : Int = 10;
-        if (param.exists("padding")) 
+        if (Reflect.hasField(param, "padding")) 
         {
             padding = param.padding;
         }
         calloutComponent.edgePadding = padding;
         
-        if (param.exists("direction")) 
+        if (Reflect.hasField(param, "direction")) 
         {
             calloutComponent.directionFromOrigin = param.direction;
         }
         
-        if (param.exists("animationPeriod")) 
+        if (Reflect.hasField(param, "animationPeriod")) 
         {
             calloutComponent.arrowAnimationPeriod = param.animationPeriod;
         }
         
-        if (!param.exists("noArrow")) 
+        if (!Reflect.hasField(param, "noArrow")) 
         {
             calloutComponent.arrowTexture = "callout_arrow";
         }
         
-        if (param.exists("xOffset")) 
+        if (Reflect.hasField(param, "xOffset")) 
         {
             calloutComponent.xOffset = param.xOffset;
         }
         
-        if (param.exists("yOffset")) 
+        if (Reflect.hasField(param, "yOffset")) 
         {
             calloutComponent.yOffset = param.yOffset;
         }
         
-        if (param.exists("closeOnTouchOutside")) 
+        if (Reflect.hasField(param, "closeOnTouchOutside")) 
         {
             calloutComponent.closeOnTouchOutside = param.closeOnTouchOutside;
         }
         
-        if (param.exists("closeOnTouchInside")) 
+        if (Reflect.hasField(param, "closeOnTouchInside")) 
         {
             calloutComponent.closeOnTouchInside = param.closeOnTouchInside;
         }
         
-        if (param.exists("closeCallback")) 
+        if (Reflect.hasField(param, "closeCallback")) 
         {
             calloutComponent.closeCallback = param.closeCallback;
         }

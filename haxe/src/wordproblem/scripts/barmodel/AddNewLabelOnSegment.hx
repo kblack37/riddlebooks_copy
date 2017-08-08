@@ -184,8 +184,8 @@ class AddNewLabelOnSegment extends BaseBarModelScript implements ICardOnSegmentS
                 
                 if (Std.is(releasedWidget, SymbolTermWidget) && BarModelHitAreaUtil.checkPointInBarSegment(m_outParamsBuffer, m_barModelArea, m_localMouseBuffer)) 
                 {
-                    targetBarWholeIndex = Std.parseInt(m_outParamsBuffer[0]);
-                    targetBarSegmentIndex = Std.parseInt(m_outParamsBuffer[1]);
+                    targetBarWholeIndex = m_outParamsBuffer[0];
+                    targetBarSegmentIndex = m_outParamsBuffer[1];
                     value = releasedWidget.getNode().data;
                     targetBarSegment = m_barModelArea.getBarModelData().barWholes[targetBarWholeIndex].barSegments[targetBarSegmentIndex];
                     
@@ -221,8 +221,8 @@ class AddNewLabelOnSegment extends BaseBarModelScript implements ICardOnSegmentS
                 var releasedWidget = m_widgetDragSystem.getWidgetSelected();
                 if (Std.is(releasedWidget, SymbolTermWidget) && BarModelHitAreaUtil.checkPointInBarSegment(m_outParamsBuffer, m_barModelArea, m_localMouseBuffer)) 
                 {
-                    targetBarWholeIndex = Std.parseInt(m_outParamsBuffer[0]);
-                    targetBarSegmentIndex = Std.parseInt(m_outParamsBuffer[1]);
+                    targetBarWholeIndex = m_outParamsBuffer[0];
+                    targetBarSegmentIndex = m_outParamsBuffer[1];
                     value = releasedWidget.getNode().data;
                     targetBarSegment = m_barModelArea.getBarModelData().barWholes[targetBarWholeIndex].barSegments[targetBarSegmentIndex];
                     
@@ -318,7 +318,7 @@ class AddNewLabelOnSegment extends BaseBarModelScript implements ICardOnSegmentS
             {
                 // Check later if the non-numeric values have a value it should bind to
                 var termToValueMap : Dynamic = ((m_gameEngine != null)) ? m_gameEngine.getCurrentLevel().termValueToBarModelValue : null;
-                if (termToValueMap != null && termToValueMap.exists(value)) 
+                if (termToValueMap != null && Reflect.hasField(termToValueMap, value)) 
                 {
                     targetNumeratorValue = Reflect.field(termToValueMap, value);
                     targetDenominatorValue = m_barModelArea.normalizingFactor;

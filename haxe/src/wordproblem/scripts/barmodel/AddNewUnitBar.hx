@@ -224,7 +224,7 @@ class AddNewUnitBar extends BaseBarModelScript implements IHitAreaScript
                             var numSegments = Std.parseInt(draggedExpressionNode.data);
                             var extraDragParams : Dynamic = m_widgetDragSystem.getExtraParams();
                             var symbolDataForDragged : SymbolData = m_expressionSymbolMap.getSymbolDataFromValue(draggedExpressionNode.data);
-                            if (extraDragParams != null && extraDragParams.exists("color")) 
+                            if (extraDragParams != null && Reflect.hasField(extraDragParams, "color")) 
                             {
                                 m_previewColor = Reflect.field(extraDragParams, "color");
                             }

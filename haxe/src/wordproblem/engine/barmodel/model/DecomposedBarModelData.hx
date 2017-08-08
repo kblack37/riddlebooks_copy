@@ -390,7 +390,6 @@ class DecomposedBarModelData
             checkForLabelConflict(verticalLabel.value, totalValue);
 			Reflect.setField(labelValueToNormalizedSegmentValue, verticalLabel.value, totalValue);
             
-            this.labelValueToType[Std.parseInt(verticalLabel.value)] = "v";
 			Reflect.setField(labelValueToType, verticalLabel.value, "v");
         }  
 		

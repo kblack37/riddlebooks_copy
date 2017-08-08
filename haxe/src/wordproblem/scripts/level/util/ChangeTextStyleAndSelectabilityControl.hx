@@ -53,15 +53,15 @@ class ChangeTextStyleAndSelectabilityControl
         m_gameEngine = gameEngine;
         
         m_genreToStyleObject = new Map();
-        Reflect.setField(m_genreToStyleObject, "scifi", m_scifiStyle);
-        Reflect.setField(m_genreToStyleObject, "fantasy", m_fantasyStyle);
-        Reflect.setField(m_genreToStyleObject, "mystery", m_mysteryStyle);
-        
+		m_genreToStyleObject.set("scifi", m_scifiStyle);
+		m_genreToStyleObject.set("fantasy", m_fantasyStyle);
+        m_genreToStyleObject.set("mystery", m_mysteryStyle);
+		
         m_genreToStyleCheckPoint = new Map();
-        Reflect.setField(m_genreToStyleCheckPoint, "scifi", new Point(1, 0));
-        Reflect.setField(m_genreToStyleCheckPoint, "fantasy", new Point(1, 0));
-        Reflect.setField(m_genreToStyleCheckPoint, "mystery", new Point(1, 0));
-    }
+		m_genreToStyleCheckPoint.set("scifi", new Point(1, 0));
+		m_genreToStyleCheckPoint.set("fantasy", new Point(1, 0));
+		m_genreToStyleCheckPoint.set("mystery", new Point(1, 0));
+	}
     
     // TODO: If the text area gets redrawn (which happens for the non-bar model levels at the start to highlight the terms)
     // the changes get clobbered and must be re-applied
@@ -112,7 +112,7 @@ class ChangeTextStyleAndSelectabilityControl
         
         // Make sure extra styles are ordered so they are applied last, otherwise they
         // might get overridden by the original style
-        var currentStyleHasOrder : Bool = currentStyleObject.exists("ORDER");
+        var currentStyleHasOrder : Bool = Reflect.hasField(currentStyleObject, "ORDER");
         var styleOrder : Array<Dynamic> = ((currentStyleHasOrder)) ? Reflect.field(currentStyleObject, "ORDER") : [];
         if (!currentStyleHasOrder) 
         {

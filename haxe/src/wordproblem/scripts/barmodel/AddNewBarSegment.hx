@@ -240,7 +240,7 @@ class AddNewBarSegment extends BaseBarModelScript implements IHitAreaScript impl
     public function postProcessHitAreas(hitAreas : Array<Rectangle>, hitAreaGraphics : Array<DisplayObjectContainer>) : Void
     {
         for (i in 0...hitAreas.length){
-            var icon : Image = new Image(m_assetManager.getTexture("add"));
+            var icon : Image = new Image(m_assetManager.getTexture("plus"));
             var hitArea : Rectangle = hitAreas[i];
             icon.pivotX = icon.width * 0.5;
             icon.pivotY = icon.height * 0.5;
@@ -317,7 +317,7 @@ class AddNewBarSegment extends BaseBarModelScript implements IHitAreaScript impl
         {
             // Check later if the non-numeric values have a value it should bind to
             var termToValueMap : Dynamic = m_gameEngine.getCurrentLevel().termValueToBarModelValue;
-            if (termToValueMap != null && termToValueMap.exists(data)) 
+            if (termToValueMap != null && Reflect.hasField(termToValueMap, data)) 
             {
                 targetNumeratorValue = Reflect.field(termToValueMap, data);
                 targetDenominatorValue = m_barModelArea.normalizingFactor;
@@ -386,7 +386,7 @@ class AddNewBarSegment extends BaseBarModelScript implements IHitAreaScript impl
                 {
                     labelOnTop = cardValue;
                 }
-                else if (extraParams.exists("label")) 
+                else if (Reflect.hasField(extraParams, "label")) 
                 {
                     labelOnTop = Reflect.field(extraParams, "label");
                 }
@@ -427,7 +427,7 @@ class AddNewBarSegment extends BaseBarModelScript implements IHitAreaScript impl
             {
                 labelOnTop = cardValue;
             }
-            else if (extraParams.exists("label")) 
+            else if (Reflect.hasField(extraParams, "label")) 
             {
                 labelOnTop = Reflect.field(extraParams, "label");
             }

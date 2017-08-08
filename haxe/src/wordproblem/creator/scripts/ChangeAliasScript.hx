@@ -211,7 +211,7 @@ class ChangeAliasScript extends BaseProblemCreateScript
             for (partId in Reflect.fields(m_previousPartIdToValueMap))
             {
                 var prevValueForPart : String = Reflect.field(m_previousPartIdToValueMap, partId);
-                if (mapForCurrent.exists(partId)) 
+                if (Reflect.hasField(m_genreToStyleCheckPoint, genreId)) 
                 {
                     var currentValueForPart : String = Reflect.field(mapForCurrent, partId).value;
                     if (currentValueForPart != prevValueForPart) 
@@ -366,7 +366,7 @@ class ChangeAliasScript extends BaseProblemCreateScript
             for (importantBarPartName in Reflect.fields(m_styleAndDataForBarModel))
             {
                 // The highlight for a bar part does not exist
-                if (!highlightObjectForPart.exists(importantBarPartName) && m_createState.getCurrentLevel().elementIdToDataMap[importantBarPartName].value != "") 
+                if (!Reflect.hasField(highlightObjectForPart, importantBarPartName) && m_createState.getCurrentLevel().elementIdToDataMap[importantBarPartName].value != "") 
                 {
                     m_createState.getCurrentLevel().elementIdToDataMap[importantBarPartName].value = "";
                 }

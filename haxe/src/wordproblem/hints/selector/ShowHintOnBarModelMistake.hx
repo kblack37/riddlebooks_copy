@@ -351,7 +351,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
     private function onBarModelGesturePerformed(event : Event) : Void
     {
         var gestureName : String = event.type;
-        if (!m_gestureToFrequencyPerformed.exists(gestureName)) 
+        if (!Reflect.hasField(m_gestureToFrequencyPerformed, gestureName)) 
         {
             Reflect.setField(m_gestureToFrequencyPerformed, gestureName, 0);
         }
@@ -962,11 +962,11 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
             useHorizontalLabelForSum : Bool = true) : Dynamic
     {
         var mismatchData : Dynamic = null;
-        if (!userDecomposedModel.labelValueToType.exists(totalValue)) 
+        if (!Reflect.hasField(userDecomposedModel.labelValueToType, totalValue)) 
         {
             // Have tried to add a label spanning a sum of boxes
-            var timesAddedHorizontalLabel : Int = ((m_gestureToFrequencyPerformed.exists(AlgebraAdventureLoggingConstants.ADD_NEW_HORIZONTAL_LABEL))) ? Reflect.field(m_gestureToFrequencyPerformed, AlgebraAdventureLoggingConstants.ADD_NEW_HORIZONTAL_LABEL) : 0;
-            var timesAddedVerticalLabel : Int = ((m_gestureToFrequencyPerformed.exists(AlgebraAdventureLoggingConstants.ADD_NEW_VERTICAL_LABEL))) ? Reflect.field(m_gestureToFrequencyPerformed, AlgebraAdventureLoggingConstants.ADD_NEW_VERTICAL_LABEL) : 0;
+            var timesAddedHorizontalLabel : Int = ((Reflect.hasField(m_gestureToFrequencyPerformed, AlgebraAdventureLoggingConstants.ADD_NEW_HORIZONTAL_LABEL))) ? Reflect.field(m_gestureToFrequencyPerformed, AlgebraAdventureLoggingConstants.ADD_NEW_HORIZONTAL_LABEL) : 0;
+            var timesAddedVerticalLabel : Int = ((Reflect.hasField(m_gestureToFrequencyPerformed, AlgebraAdventureLoggingConstants.ADD_NEW_VERTICAL_LABEL))) ? Reflect.field(m_gestureToFrequencyPerformed, AlgebraAdventureLoggingConstants.ADD_NEW_VERTICAL_LABEL) : 0;
             if (timesAddedHorizontalLabel + timesAddedVerticalLabel == 0 && m_missingSumLabelCounter > 0) 
             {
                 var labelName : String = "GenericMissingSumHintsA";
@@ -1022,7 +1022,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
     {
         var mismatchData : Dynamic = null;
         
-        if (missingLargerValue != null && !userDecomposedModel.labelValueToType.exists(missingLargerValue)) 
+        if (missingLargerValue != null && !Reflect.hasField(userDecomposedModel.labelValueToType, missingLargerValue)) 
         {
             m_missingLargerDifferencePartCounter++;
             
@@ -1043,7 +1043,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
             }
         }
         
-        if (mismatchData == null && missingSmallerValue != null && !userDecomposedModel.labelValueToType.exists(missingSmallerValue)) 
+        if (mismatchData == null && missingSmallerValue != null && !Reflect.hasField(userDecomposedModel.labelValueToType, missingSmallerValue)) 
         {
             m_missingSmallerDifferencePartCounter++;
             
@@ -1093,16 +1093,16 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
         {
             // If never performed the add difference command AND the user has attempted some amount
             // of moves and/or incorrect submission we guess they do not know how to perform the action
-            var timesPeformedAddDifference : Int = ((m_gestureToFrequencyPerformed.exists(AlgebraAdventureLoggingConstants.ADD_NEW_BAR_COMPARISON))) ? 
+            var timesPeformedAddDifference : Int = ((Reflect.hasField(m_gestureToFrequencyPerformed, AlgebraAdventureLoggingConstants.ADD_NEW_BAR_COMPARISON))) ? 
 				Reflect.field(m_gestureToFrequencyPerformed, AlgebraAdventureLoggingConstants.ADD_NEW_BAR_COMPARISON) : 0;
             
             // Special case to point out the unknown as the difference is missing
-            if (!userDecomposedModel.labelValueToType.exists(differenceValue) && Reflect.field(m_documentIdToExpressionMap, "unk") == differenceValue) 
+            if (!Reflect.hasField(userDecomposedModel.labelValueToType, differenceValue) && Reflect.field(m_documentIdToExpressionMap, "unk") == differenceValue) 
             {
                 var labelId : String = "GenericDifferenceHintsA";
                 mismatchData = getHintFromLabel(labelId, null);
             }
-            else if (userDecomposedModel.labelValueToType.exists(differenceValue)) 
+            else if (Reflect.hasField(userDecomposedModel.labelValueToType, differenceValue)) 
             {
                 var labelId = "GenericDifferenceHintsB";
                 mismatchData = getHintFromLabel(labelId, [differenceValue]);
@@ -1189,13 +1189,13 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
             // Generating equal groups can be done through splitting or adding a unit bar.
             // In nearly every case, there is no good reason to use one over the other
             var timesAttemptedAddUnit : Int = 0;
-            if (m_gestureToFrequencyPerformed.exists(AlgebraAdventureLoggingConstants.ADD_NEW_UNIT_BAR)) 
+            if (Reflect.hasField(m_gestureToFrequencyPerformed, AlgebraAdventureLoggingConstants.ADD_NEW_UNIT_BAR)) 
             {
                 timesAttemptedAddUnit = Reflect.field(m_gestureToFrequencyPerformed, AlgebraAdventureLoggingConstants.ADD_NEW_UNIT_BAR);
             }
             
             var timesAttemptedMultiply : Int = 0;
-            if (m_gestureToFrequencyPerformed.exists(AlgebraAdventureLoggingConstants.MULTIPLY_BAR)) 
+            if (Reflect.hasField(m_gestureToFrequencyPerformed, AlgebraAdventureLoggingConstants.MULTIPLY_BAR)) 
             {
                 timesAttemptedMultiply = Reflect.field(m_gestureToFrequencyPerformed, AlgebraAdventureLoggingConstants.MULTIPLY_BAR);
             }
@@ -1243,7 +1243,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
         var firstMissingLabel : String = null;
         for (labelName in labelNames)
         {
-            if (!decomposedModel.labelValueToType.exists(labelName)) 
+            if (!Reflect.hasField(decomposedModel.labelValueToType, labelName)) 
             {
                 firstMissingLabel = labelName;
                 break;
@@ -1393,7 +1393,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
         {
             mismatchData = generateGenericMissingSumHints(sum, userDecomposedModel, false);
             if (mismatchData == null &&
-                userDecomposedModel.labelValueToType.exists(sum) &&
+                Reflect.hasField(userDecomposedModel.labelValueToType, sum) &&
                 !checkLabelSumOfOtherLabels(sum, [largerPart, smallerPart], [1, 1], userDecomposedModel)) 
             {
                 var labelId = "SumAndDifferenceWithIntermediateB";
@@ -1451,7 +1451,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
         if (mismatchData == null) 
         {
             // Missing the intermediate value
-            if (!userDecomposedModel.labelValueToType.exists(intermediateValue)) 
+            if (!Reflect.hasField(userDecomposedModel.labelValueToType, intermediateValue)) 
             {
                 var labelId = "SumOfGroupsWithIntermediateB";
                 mismatchData = getHintFromLabel(labelId, null);
@@ -1647,7 +1647,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
         var mismatchData : Dynamic = null;
         
         // Make sure the unit is added somewhere and refers to just one group
-        if (!userDecomposedModel.labelValueToType.exists(unitValue)) 
+        if (!Reflect.hasField(userDecomposedModel.labelValueToType, unitValue)) 
         {
             // After enough mistakes where the unit is missing, we should just give the answer
             m_missingUnitCounter++;
@@ -1733,7 +1733,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
         var mismatchData : Dynamic = null;
         
         // Check that the fraction label exists and is spanning the right number of groups
-        if (!userDecomposedModel.labelValueToType.exists(fractionLabel) ||
+        if (!Reflect.hasField(userDecomposedModel.labelValueToType, fractionLabel) ||
             !checkLabelSpanCorrectNumGroups(fractionLabel, numerator, userModel, userDecomposedModel)) 
         {
             m_incorrectFractionLabel++;
@@ -1789,7 +1789,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
         // Check if label exists
         var labelSpansCorrectAmount : Bool = false;
         var continueSearch : Bool = true;
-        if (userModelDecomposed.labelValueToType.exists(labelValue)) 
+        if (Reflect.hasField(userModelDecomposed.labelValueToType, labelValue)) 
         {
             // If so check that it is covering the correct amount of equal sized groups
             // This is a structural detail, we need to look through all the labels
@@ -1928,14 +1928,14 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
         var isTotalTheSum : Bool = false;
         
         var labelToValue : Dynamic = decomposedModel.labelValueToNormalizedSegmentValue;
-        if (labelToValue.exists(totalLabelName)) 
+        if (Reflect.hasField(labelToValue, totalLabelName)) 
         {
             var numOtherLabels : Int = otherLabelNames.length;
             var i : Int = 0;
             var otherLabelSum : Float = 0;
             for (i in 0...numOtherLabels){
                 var otherLabel : String = otherLabelNames[i];
-                if (labelToValue.exists(otherLabel)) 
+                if (Reflect.hasField(labelToValue, otherLabel)) 
                 {
                     otherLabelSum += otherLabelRatioMultiplier[i] * Reflect.field(labelToValue, otherLabel);
                 }
@@ -1981,7 +1981,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
     {
         // Convert the hint label to a 'step' within a particular type
         var hintData : Dynamic = null;
-        if (m_labelToStepMap.exists(hintLabel)) 
+        if (Reflect.hasField(m_labelToStepMap, hintLabel)) 
         {
             var generatedStepId : String = Reflect.field(m_labelToStepMap, hintLabel);
             if (m_customHintStorage != null) 

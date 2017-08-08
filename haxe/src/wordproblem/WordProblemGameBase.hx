@@ -318,18 +318,13 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
         if (flashContext.containsFlashVar("uid")) 
         {
             forceUid = flashContext.getFlashVar("uid");
-        }  // from a relative url)    // loaded. (This includes the config itself being loaded, although normally we should be fine loading    // Initial settings need to be hardcoded if any dynamic loading is occuring before the config is    // So the resource path and https setting are not what the final value should be yet    // NOTE: The config is NOT loaded at this point,  
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        }  
+		
+		// NOTE: The config is NOT loaded at this point,  
+		// So the resource path and https setting are not what the final value should be yet 
+		// Initial settings need to be hardcoded if any dynamic loading is occuring before the config is  
+		// loaded. (This includes the config itself being loaded, although normally we should be fine loading 
+        // from a relative url)
         var resourcePathBase : String = m_config.getResourcePathBase();
         if (resourcePathBase != null) 
         {
@@ -738,27 +733,27 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
         var objectives : Array<BaseObjective> = null;
         if (extraLevelProgressionData != null) 
         {
-            if (extraLevelProgressionData.exists("genreId")) 
+            if (Reflect.hasField(extraLevelProgressionData, "genreId")) 
             {
                 genreId = extraLevelProgressionData.genreId;
             }
             
-            if (extraLevelProgressionData.exists("chapterIndex")) 
+            if (Reflect.hasField(extraLevelProgressionData, "chapterIndex")) 
             {
                 chapterIndex = extraLevelProgressionData.chapterIndex;
             }
             
-            if (extraLevelProgressionData.exists("levelIndex")) 
+            if (Reflect.hasField(extraLevelProgressionData, "levelIndex")) 
             {
                 levelIndex = extraLevelProgressionData.levelIndex;
             }
             
-            if (extraLevelProgressionData.exists("previousCompletionStatus")) 
+            if (Reflect.hasField(extraLevelProgressionData, "previousCompletionStatus")) 
             {
                 previousCompletionStatus = extraLevelProgressionData.previousCompletionStatus;
             }
             
-            if (extraLevelProgressionData.exists("objectives")) 
+            if (Reflect.hasField(extraLevelProgressionData, "objectives")) 
             {
                 objectives = extraLevelProgressionData.objectives;
             }
@@ -786,7 +781,7 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
         if (extraLevelProgressionData != null) 
         {
             // Add skippable property if defined
-            if (extraLevelProgressionData.exists("skippable")) 
+            if (Reflect.hasField(extraLevelProgressionData, "skippable")) 
             {
                 problemData.skippable = extraLevelProgressionData.skippable;
             }  // different rules that the original ones    // bar model type. However, we may have one-off levels where it has slightly    // Consider scenarios where levels by default have a rule set depending on    // Override some of the rules  
@@ -799,7 +794,7 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
             
             
             
-            if (extraLevelProgressionData.exists("rules")) 
+            if (Reflect.hasField(extraLevelProgressionData, "rules")) 
             {
                 var levelRules : LevelRules = problemData.getLevelRules();
                 var rulesToOverride : Dynamic = extraLevelProgressionData.rules;
@@ -809,24 +804,24 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
                 }
             }
             
-            if (extraLevelProgressionData.exists("tags")) 
+            if (Reflect.hasField(extraLevelProgressionData, "tags")) 
             {
                 problemData.tags = Reflect.field(extraLevelProgressionData, "tags");
             }
             
-            if (extraLevelProgressionData.exists("difficulty")) 
+            if (Reflect.hasField(extraLevelProgressionData, "difficulty")) 
             {
                 problemData.difficulty = Reflect.field(extraLevelProgressionData, "difficulty");
             }  // Get whether this level should pre-populate some of the data for the equation  
             
             
             
-            if (extraLevelProgressionData.exists("prepopulateEquation")) 
+            if (Reflect.hasField(extraLevelProgressionData, "prepopulateEquation")) 
             {
                 problemData.prepopulateEquationData = Reflect.field(extraLevelProgressionData, "prepopulateEquation");
             }
             
-            if (extraLevelProgressionData.exists("performanceState")) 
+            if (Reflect.hasField(extraLevelProgressionData, "performanceState")) 
             {
                 problemData.statistics.deserialize(Reflect.field(extraLevelProgressionData, "performanceState"));
             }

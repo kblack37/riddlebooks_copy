@@ -435,7 +435,7 @@ class WordProblemGameState extends BaseState implements IConsoleInterfacable
             
             // Visit the extra script nodes
             m_preBakedScript.visit();
-            
+			
             if (m_helpScreenViewer != null) 
             {
                 m_helpScreenViewer.visit();

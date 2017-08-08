@@ -237,17 +237,15 @@ class BarModelAreaWidget extends BarModelView implements IBaseWidget
             {
                 break;
             }
-        }  // If not contained in one of the bar model elements, check if it is in the vertical labels  
-        
-        
-        
+        }  
+		
+		// If not contained in one of the bar model elements, check if it is in the vertical labels  
         if (targetView == null) 
         {
             targetView = barModelArea.getVerticalBarLabelViewById(id);
-        }  // Either create a new component for a view or refresh it.  
-        
-        
-        
+        }
+		
+		// Either create a new component for a view or refresh it.  
         var renderComponent : RenderableComponent = try cast(m_componentManager.getComponentFromEntityIdAndType(id, RenderableComponent.TYPE_ID), RenderableComponent) catch(e:Dynamic) null;
         if (renderComponent == null) 
         {

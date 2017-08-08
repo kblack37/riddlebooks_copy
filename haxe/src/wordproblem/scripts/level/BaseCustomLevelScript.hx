@@ -74,9 +74,7 @@ class BaseCustomLevelScript extends BaseGameScript
                 fontName : GameFonts.DEFAULT_FONT_NAME,
                 fontSize : 22,
                 color : "0xFFFFFF",
-
             }
-
         };
     
     /**
@@ -263,6 +261,7 @@ class BaseCustomLevelScript extends BaseGameScript
 					m_childrenListModifyIndexBuffer = new Array<Int>();
                     numChildren = m_children.length;
                 }
+				i++;
             }
         }
 		
@@ -475,7 +474,7 @@ class BaseCustomLevelScript extends BaseGameScript
         var status : Int = ScriptStatus.FAIL;
         
         // Add indicator is not already there
-        var parentContainer : DisplayObjectContainer = ((param.exists("parent"))) ? param.parent : m_gameEngine.getSprite();
+        var parentContainer : DisplayObjectContainer = Reflect.hasField(param, "parent") ? param.parent : m_gameEngine.getSprite();
         if (m_continueIndicator.parent == null) 
         {
             var x : Float = 350;
@@ -493,8 +492,8 @@ class BaseCustomLevelScript extends BaseGameScript
         
         
         
-        m_continueIndicator.color = ((param.exists("color"))) ? Reflect.field(param, "color") : CONTINUE_TEXT_DEFAULT_COLOR;
-        m_continueIndicator.filter = ((param.exists("outlineColor"))) ? BlurFilter.createGlow(Reflect.field(param, "outlineColor")) : m_continueTextDefaultHighlightFilter;
+        m_continueIndicator.color = Reflect.hasField(param, "color") ? Reflect.field(param, "color") : CONTINUE_TEXT_DEFAULT_COLOR;
+        m_continueIndicator.filter = Reflect.hasField(param, "outlineColor") ? BlurFilter.createGlow(Reflect.field(param, "outlineColor")) : m_continueTextDefaultHighlightFilter;
         
         var mouseState : MouseState = m_gameEngine.getMouseState();
         if (mouseState.leftMousePressedThisFrame) 
@@ -507,7 +506,6 @@ class BaseCustomLevelScript extends BaseGameScript
                 buttonName : "ClickAnywhereToContinue",
                 locationX : mouseState.mousePositionThisFrame.x,
                 locationY : mouseState.mousePositionThisFrame.y,
-
             };
             m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.TUTORIAL_PROGRESS_EVENT, false, loggingDetails);
         }
@@ -535,7 +533,7 @@ class BaseCustomLevelScript extends BaseGameScript
         
         // Get the view itself and its parent.
         // Add the target view to the parent
-        var pageIndex : Int = ((param.exists("pageIndex"))) ? param.pageIndex : -1;
+        var pageIndex : Int = Reflect.hasField(param, "pageIndex") ? param.pageIndex : -1;
         var targetDocumentViews : Array<DocumentView> = textArea.getDocumentViewsAtPageIndexById(documentId, null, pageIndex);
         var i : Int = 0;
         for (i in 0...targetDocumentViews.length){
@@ -648,11 +646,11 @@ class BaseCustomLevelScript extends BaseGameScript
             status = ScriptStatus.SUCCESS;
         }
         
-        if (param.exists("finished")) 
+        if (Reflect.hasField(param, "finished")) 
         {
             status = ScriptStatus.SUCCESS;
         }
-        else if (param.exists("waitToFinish")) 
+        else if (Reflect.hasField(param, "waitToFinish")) 
         {
             if (!param.waitToFinish) 
             {

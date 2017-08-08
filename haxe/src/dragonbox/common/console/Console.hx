@@ -127,7 +127,7 @@ class Console extends Sprite implements IConsole
     
     private function onStageKeyDown(e : KeyboardEvent) : Void
     {
-        var tilde : Int = 192;
+        var tilde : UInt = 192;
         if (e.keyCode == tilde) 
         {
             this.visible = !this.visible;
@@ -139,8 +139,8 @@ class Console extends Sprite implements IConsole
     
     private function onInputWindowKeyDown(e : KeyboardEvent) : Void
     {
-        var tilde : Int = 96;
-        var _sw0_ : Int = (e.keyCode);
+        var tilde : UInt = 96;
+        var _sw0_ : UInt = (e.keyCode);
 		
         switch (_sw0_)
         {

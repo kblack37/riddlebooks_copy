@@ -230,7 +230,7 @@ class HintCommonUtil
             var expectedLabelType : String = Reflect.field(expectedLabelToType, expectedLabelValue);
             
             // The submitted model is missing a label
-            if (!actualLabelToType.exists(expectedLabelValue)) 
+            if (!Reflect.hasField(actualLabelToType, expectedLabelValue)) 
             {
                 // Should prompt user that they need have not used a particular label value
                 // How that new label should be used is another issue (i.e. how much
@@ -342,7 +342,7 @@ class HintCommonUtil
         // groups is incorrectly used a label.
         for (actualLabelName in Reflect.fields(actualLabelToType))
         {
-            if (!expectedLabelToType.exists(actualLabelName)) 
+            if (!Reflect.hasField(expectedLabelToType, actualLabelName)) 
             {
                 incorrectLabelTypeBuffer.push({
                             type : INCORRECT_EXTRA_NAME,
@@ -421,7 +421,7 @@ class HintCommonUtil
             characterStopY : Float) : HintScript
     {
         // Check if this hint should be shown as a question.
-        var showQuestion : Bool = pickedMismatch.exists("question") && pickedMismatch.question != null;
+        var showQuestion : Bool = Reflect.hasField(pickedMismatch, "question") && pickedMismatch.question != null;
         if (showQuestion) 
         {
             pickedMismatch.descriptionContent = pickedMismatch.question.text;
@@ -480,7 +480,7 @@ class HintCommonUtil
         // need to add an extra button to the callout that goes to the tip
         var helpButton : Button = null;
 		var tipName : String = null;
-        if (pickedMismatch.exists("linkToTip")) 
+        if (Reflect.hasField(pickedMismatch, "linkToTip")) 
         {
             tipName = pickedMismatch.linkToTip;
             
@@ -564,7 +564,7 @@ class HintCommonUtil
         
         // Make sure all these other process are added to index 1, otherwise the processes controlling the dismissal of
         // the character will block it and prevent them from being executed
-        if (pickedMismatch.exists("highlightTextExpressionValue")) 
+        if (Reflect.hasField(pickedMismatch, "highlightTextExpressionValue")) 
         {
             // translate the expression value to document ids
             // Also highlight the spot the text area with the missing label
@@ -587,7 +587,7 @@ class HintCommonUtil
             hintScriptToRun.addProcess(highlightTextProcess, 1);
         }
         
-        if (pickedMismatch.exists("highlightDocIds")) 
+        if (Reflect.hasField(pickedMismatch, "highlightDocIds")) 
         {
             var docIdsToHighlight : Array<Dynamic> = pickedMismatch.highlightDocIds;
             var documentIds = new Array<String>();
@@ -599,9 +599,9 @@ class HintCommonUtil
             hintScriptToRun.addProcess(highlightTextProcess, 1);
         }
         
-        if (pickedMismatch.exists("highlightBarsThenTextFromDocIds")) 
+        if (Reflect.hasField(pickedMismatch, "highlightBarsThenTextFromDocIds")) 
         {
-            var highlightColor : Int = ((pickedMismatch.exists("highlightBarsThenTextColor"))) ? 
+            var highlightColor : Int = ((Reflect.hasField(pickedMismatch, "highlightBarsThenTextColor"))) ? 
             pickedMismatch.highlightBarsThenTextColor : 0x00FF00;
             var docIdsToHighlight = try cast(pickedMismatch.highlightBarsThenTextFromDocIds, Array<Dynamic>) catch (e : Dynamic) null;
             var documentIds = new Array<String>();
@@ -615,16 +615,16 @@ class HintCommonUtil
                     );
         }
         
-        if (pickedMismatch.exists("highlightBarModelArea") && pickedMismatch.highlightBarModelArea) 
+        if (Reflect.hasField(pickedMismatch, "highlightBarModelArea") && pickedMismatch.highlightBarModelArea) 
         {
-            var highlightColor = ((pickedMismatch.exists("highlightBarModelAreaColor"))) ? 
+            var highlightColor = ((Reflect.hasField(pickedMismatch, "highlightBarModelAreaColor"))) ? 
                     pickedMismatch.highlightBarModelAreaColor : 0x00FF00;
             hintScriptToRun.addProcess(new HighlightUiElementProcess(gameEngine, "barModelArea", highlightColor), 1);
         }
         
-        if (pickedMismatch.exists("highlightValidateButton") && pickedMismatch.highlightValidateButton) 
+        if (Reflect.hasField(pickedMismatch, "highlightValidateButton") && pickedMismatch.highlightValidateButton) 
         {
-            var highlightColor = ((pickedMismatch.exists("highlightValidateButtonColor"))) ? 
+            var highlightColor = ((Reflect.hasField(pickedMismatch, "highlightValidateButtonColor"))) ? 
                     pickedMismatch.highlightValidateButtonColor : 0x00FF00;
             hintScriptToRun.addProcess(new HighlightUiElementProcess(gameEngine, "validateButton", highlightColor), 1);
         }
