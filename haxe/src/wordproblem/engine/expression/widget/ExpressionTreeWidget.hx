@@ -1014,13 +1014,13 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
             var topOffset : Float = centralPointInLocal.y - currentRectangle.top;
             var parenPadding : Float = 5;
             
-            var leftParen : DisplayObject = new Image(m_assetManager.getTexture("assets/operators/parentheses_left.png"));
+            var leftParen : DisplayObject = new Image(m_assetManager.getTexture("parentheses_left"));
             leftParen.pivotX = leftParen.width / 2.0;
             leftParen.pivotY = leftParen.height / 2.0;
             leftParen.x = -leftOffset - parenPadding;
             rootWidget.m_parenthesesCanvas.addChild(leftParen);
             
-            var rightParen : DisplayObject = new Image(m_assetManager.getTexture("assets/operators/parentheses_right.png"));
+            var rightParen : DisplayObject = new Image(m_assetManager.getTexture("parentheses_right"));
             rightParen.pivotX = rightParen.width / 2.0;
             rightParen.pivotY = rightParen.height / 2.0;
             rightParen.x = currentRectangle.right - centralPointInLocal.x + parenPadding;

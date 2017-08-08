@@ -234,10 +234,10 @@ class SummaryScript extends BaseBufferEventScript
 		});
 
 		// TODO: this will only display half the image and will need to be fixed
-		m_rewardsButton = new Button(m_assetManager.getTexture("present_bottom_yellow.png"));
+		m_rewardsButton = new Button(m_assetManager.getTexture("present_bottom_yellow"));
 		var presentIcon : Sprite = new Sprite();
-		//var presentBottom : Image = new Image(m_assetManager.getTexture("present_bottom_yellow.png"));
-		//var presentTop : Image = new Image(m_assetManager.getTexture("present_top_yellow.png"));
+		//var presentBottom : Image = new Image(m_assetManager.getTexture("present_bottom_yellow"));
+		//var presentTop : Image = new Image(m_assetManager.getTexture("present_top_yellow"));
 		//presentIcon.addChild(presentBottom);
 		//presentIcon.addChild(presentTop);
 		//presentBottom.y += presentTop.height * 0.3;
@@ -251,7 +251,7 @@ class SummaryScript extends BaseBufferEventScript
 		m_rewardsButton.x = 100;
 		m_rewardsButton.y = 420;
 
-		var rewardButtonBurstTexture : Texture = m_assetManager.getTexture("burst_purple.png");
+		var rewardButtonBurstTexture : Texture = m_assetManager.getTexture("burst_purple");
 		m_rewardButtonBurstBackground = new Image(rewardButtonBurstTexture);
 		m_rewardButtonBurstBackground.pivotX = rewardButtonBurstTexture.width * 0.5;
 		m_rewardButtonBurstBackground.pivotY = rewardButtonBurstTexture.height * 0.5;
@@ -504,7 +504,7 @@ class SummaryScript extends BaseBufferEventScript
 			coinsEarnedText.hAlign = HAlign.LEFT;
 
 			coinsEarnedText.y = levelUpText.y + levelUpText.height + 50;
-			var coinIcon : Image = new Image(m_assetManager.getTexture("coin.png"));
+			var coinIcon : Image = new Image(m_assetManager.getTexture("coin"));
 			coinIcon.scaleX = coinIcon.scaleY = 0.4;
 
 			coinsEarnedText.x = (400 - (coinsEarnedText.width + coinIcon.width)) * 0.5;

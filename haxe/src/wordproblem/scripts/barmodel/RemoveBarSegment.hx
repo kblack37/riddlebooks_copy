@@ -71,7 +71,7 @@ class RemoveBarSegment extends BaseBarModelScript implements IRemoveBarElement
         this.segmentIdsCannotRemove = new Array<String>();
         
         m_outParamsBuffer = new Array<Dynamic>();
-        m_ringPulseAnimation = new RingPulseAnimation(assetManager.getTexture("ring.png"), onRingPulseAnimationComplete);
+        m_ringPulseAnimation = new RingPulseAnimation(assetManager.getTexture("ring"), onRingPulseAnimationComplete);
         m_hitAnchor = new Point();
     }
     

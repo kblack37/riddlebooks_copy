@@ -101,7 +101,7 @@ class HelpScreenViewer extends ScriptNode
         var screenLayer : Sprite = new Sprite();
         var screenWidth : Float = totalWidth - 100;
         var screenHeight : Float = totalHeight - 70;
-        var backgroundImage : Image = new Image(assetManager.getTexture("summary_background.png"));
+        var backgroundImage : Image = new Image(assetManager.getTexture("summary_background"));
         backgroundImage.width = screenWidth;
         backgroundImage.height = screenHeight;
         screenLayer.addChild(backgroundImage);
@@ -114,7 +114,7 @@ class HelpScreenViewer extends ScriptNode
         var buttonLabels : Array<String> = ["Tips", "Controls"];
         var numButtons : Int = buttonLabels.length;
         m_categoryButtons = new Array<Button>();
-        var whiteButtonTexture : Texture = assetManager.getTexture("button_white.png");
+        var whiteButtonTexture : Texture = assetManager.getTexture("button_white");
         var whiteScale9Texture : Texture = Texture.fromTexture(whiteButtonTexture, new Rectangle(8, 8, 16, 16));
         var i : Int = 0;
         var fontSize : Int = 20;
@@ -161,7 +161,7 @@ class HelpScreenViewer extends ScriptNode
         //}
         
         var closeWidth : Float = 80;
-        var closeIconTexture : Texture = assetManager.getTexture("wrong.png");
+        var closeIconTexture : Texture = assetManager.getTexture("wrong");
         var closeIcon : Image = new Image(closeIconTexture);
         m_closeButton = new Button(closeIconTexture);
         m_closeButton.scaleWhenOver = 1.2;

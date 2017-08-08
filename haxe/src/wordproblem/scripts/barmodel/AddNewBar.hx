@@ -144,7 +144,7 @@ class AddNewBar extends BaseBarModelScript implements IHitAreaScript
                     {
                         labelOnTopValue = releasedExpressionNode.data;
                     }
-                    else if (args.exists("label")) 
+                    else if (Reflect.hasField(args, "label")) 
                     {
                         labelOnTopValue = Reflect.field(args, "label");
                     }
@@ -199,7 +199,7 @@ class AddNewBar extends BaseBarModelScript implements IHitAreaScript
                         {
                             labelOnTopValue = releasedExpressionNode.data;
                         }
-                        else if (extraDragParams.exists("label")) 
+                        else if (Reflect.hasField(extraDragParams, "label")) 
                         {
                             labelOnTopValue = Reflect.field(extraDragParams, "label");
                         }
@@ -262,7 +262,7 @@ class AddNewBar extends BaseBarModelScript implements IHitAreaScript
     public function postProcessHitAreas(hitAreas : Array<Rectangle>, hitAreaGraphics : Array<DisplayObjectContainer>) : Void
     {
         for (i in 0...hitAreas.length){
-            var icon : Image = new Image(m_assetManager.getTexture("add.png"));
+            var icon : Image = new Image(m_assetManager.getTexture("plus"));
             var hitArea : Rectangle = hitAreas[i];
             icon.pivotX = icon.width * 0.5;
             icon.pivotY = icon.height * 0.5;
@@ -374,7 +374,7 @@ class AddNewBar extends BaseBarModelScript implements IHitAreaScript
         else 
         {
             var termToValueMap : Dynamic = ((m_gameEngine != null)) ? m_gameEngine.getCurrentLevel().termValueToBarModelValue : m_termToValueMap;
-            if (termToValueMap != null && termToValueMap.exists(data)) 
+            if (termToValueMap != null && Reflect.hasField(termToValueMap, data)) 
             {
                 targetNumeratorValue = Reflect.field(termToValueMap, data);
                 targetDenominatorValue = m_barModelArea.normalizingFactor;

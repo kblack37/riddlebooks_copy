@@ -189,7 +189,7 @@ class BaseBarModelScript extends BaseGameScript
     private function getBarColor(termValue : String, extraDragParams : Dynamic) : Int
     {
         var color : Int = 0xFFFFFF;
-        if (extraDragParams != null && extraDragParams.exists("color")) 
+        if (extraDragParams != null && Reflect.hasField(extraDragParams, "color")) 
         {
             color = extraDragParams.color;
         }

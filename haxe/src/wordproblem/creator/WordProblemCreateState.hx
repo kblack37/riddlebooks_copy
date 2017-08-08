@@ -222,7 +222,7 @@ class WordProblemCreateState extends BaseState
         // top of the image)
         var lowerUiContainer : Sprite = new Sprite();
         var transparencyPaddingOnImage : Float = 10;
-        var bottomUiBackgroundTexture : Texture = m_assetManager.getTexture("ui_background.png");
+        var bottomUiBackgroundTexture : Texture = m_assetManager.getTexture("ui_background");
         var bottomUiPadding : Float = 16;
         var bottomUiImage : Image = new Image(Texture.fromTexture(bottomUiBackgroundTexture,
 			new Rectangle(
@@ -297,16 +297,16 @@ class WordProblemCreateState extends BaseState
         
         // The button to submit the tagged contents
         // (Appears just below the example container)
-        var disabledSubmitImage : Image = new Image(m_assetManager.getTexture("assets/ui/button_check_bar_model_up.png"));
+        var disabledSubmitImage : Image = new Image(m_assetManager.getTexture("button_check_bar_model_up"));
         var greyScaleFilter : ColorMatrixFilter = new ColorMatrixFilter();
         greyScaleFilter.adjustSaturation(-1);
         disabledSubmitImage.filter = greyScaleFilter;
         var submitButtonWidthAndHeight : Float = 80;
         var submitButton : Button = WidgetUtil.createButtonFromImages(
-                new Image(m_assetManager.getTexture("assets/ui/button_check_bar_model_up.png")),
-                new Image(m_assetManager.getTexture("assets/ui/button_check_bar_model_down.png")),
+                new Image(m_assetManager.getTexture("button_check_bar_model_up")),
+                new Image(m_assetManager.getTexture("button_check_bar_model_down")),
                 disabledSubmitImage,
-                new Image(m_assetManager.getTexture("assets/ui/button_check_bar_model_over.png")), null, null);
+                new Image(m_assetManager.getTexture("button_check_bar_model_over")), null, null);
         submitButton.width = submitButton.height = submitButtonWidthAndHeight;
         submitButton.pivotX = submitButton.width * 0.5;
         submitButton.pivotY = submitButton.height * 0.5;

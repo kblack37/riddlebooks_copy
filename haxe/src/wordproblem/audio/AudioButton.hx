@@ -44,13 +44,13 @@ class AudioButton extends Sprite
                         "", textFormatUp, textFormatHover);
         this.addChild(m_mainButton);
         
-        var onIconTexture : Texture = assetManager.getTexture("correct.png");
+        var onIconTexture : Texture = assetManager.getTexture("correct");
         var iconScaleFactor : Float = height / onIconTexture.height * 0.65;
         var onIcon : Image = new Image(onIconTexture);
         onIcon.scaleX = onIcon.scaleY = iconScaleFactor;
         m_onIcon = onIcon;
         
-        var offIconTexture : Texture = assetManager.getTexture("wrong.png");
+        var offIconTexture : Texture = assetManager.getTexture("wrong");
         iconScaleFactor = height / offIconTexture.height * 0.65;
         var offIcon : Image = new Image(offIconTexture);
         offIcon.scaleX = offIcon.scaleY = iconScaleFactor;

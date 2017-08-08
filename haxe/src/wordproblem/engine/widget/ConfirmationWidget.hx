@@ -63,7 +63,7 @@ class ConfirmationWidget extends Layer
         var backgroundContainer : Sprite = new Sprite();
         addChild(backgroundContainer);
         
-        var texture : Texture = assetManager.getTexture("summary_background.png");
+        var texture : Texture = assetManager.getTexture("summary_background");
         var background : Image = new Image(texture);
         var backgroundWidth : Float = width * 0.5;
         var backgroundHeight : Float = height * 0.5;

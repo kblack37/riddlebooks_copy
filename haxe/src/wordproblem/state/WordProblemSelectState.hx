@@ -243,7 +243,7 @@ class WordProblemSelectState extends BaseState
         addChild(m_backgroundLayer);
         
         // Add library shelf background image
-        m_originalBackgroundImage = new Image(m_assetManager.getTexture("library_bg.png"));
+        m_originalBackgroundImage = new Image(m_assetManager.getTexture("library_bg"));
         m_backgroundLayer.addChild(m_originalBackgroundImage);
         
         // Create middle layer where scripts can paste new objects into the level select
@@ -282,7 +282,7 @@ class WordProblemSelectState extends BaseState
 			
 			// Check if the genre has a name display object that should be shown on hover over
             var hoverTextDisplay : DisplayObject = null;
-            if (sectionInLevelSelect.exists("hoverTextArea")) 
+            if (Reflect.hasField(sectionInLevelSelect, "hoverTextArea")) 
             {
                 var textAreaRectangle : Dynamic = sectionInLevelSelect.hoverTextArea;
                 var hoverTextField : TextField = new TextField(
@@ -290,7 +290,7 @@ class WordProblemSelectState extends BaseState
 					textAreaRectangle.height, 
 					sectionInLevelSelect.title, 
 					GameFonts.DEFAULT_FONT_NAME, 
-					((textAreaRectangle.exists("fontSize"))) ? textAreaRectangle.fontSize : 32, 
+					((Reflect.hasField(textAreaRectangle, "fontSize"))) ? textAreaRectangle.fontSize : 32, 
 					0xFFFFFF
                 );
                 hoverTextField.x = textAreaRectangle.x + sectionInLevelSelect.hitArea.x;
@@ -315,7 +315,7 @@ class WordProblemSelectState extends BaseState
                         disableQuad.x = hitAreaData.x;
                         disableQuad.y = hitAreaData.y;
                         
-                        var lockImage : Image = new Image(m_assetManager.getTexture("level_button_lock.png"));
+                        var lockImage : Image = new Image(m_assetManager.getTexture("level_button_lock"));
                         lockImage.pivotX = lockImage.width * 0.5;
                         lockImage.pivotY = lockImage.height * 0.5;
                         lockImage.x = disableQuad.x + hitAreaData.width * 0.5;
@@ -469,7 +469,7 @@ class WordProblemSelectState extends BaseState
             openGenreWidgetData.levelIndex;
             var chapterIndex : Int = openGenreWidgetData.chapterIndex;
             var genreNode : ICgsLevelNode = m_levelManager.getNodeByName(openGenreWidgetData.genre);
-            if (openGenreWidgetData.exists("levelIndex") && m_currentGenreWidget != null) 
+            if (Reflect.hasField(openGenreWidgetData, "levelIndex") && m_currentGenreWidget != null) 
             {
                 m_currentGenreWidget.setGenre(try cast(genreNode, GenreLevelPack) catch(e:Dynamic) null, chapterIndex);
                 m_foregroundLayer.addChild(m_currentGenreWidget);
@@ -541,7 +541,7 @@ class WordProblemSelectState extends BaseState
                 var cachedDataForSection : Dynamic = m_cachedDataObjectsForLevelSelect[i];
                 hitArea = cachedDataForSection.hitArea;
                 
-                var selectedGenre : GenreLevelPack = ((cachedDataForSection.exists("genreNode"))) ? 
+                var selectedGenre : GenreLevelPack = ((Reflect.hasField(cachedDataForSection, "genreNode"))) ? 
                 cachedDataForSection.genreNode : null;
                 
                 // If genre is locked clicks and hovers should have no effect

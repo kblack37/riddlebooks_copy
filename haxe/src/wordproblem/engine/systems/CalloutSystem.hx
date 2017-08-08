@@ -237,7 +237,7 @@ class CalloutSystem extends BaseSystemScript
                         //
                         //if (calloutComponent.arrowTexture != null) 
                         //{
-                            //var arrowTexture : Texture = m_assetManager.getTexture("callout_arrow_top_white.png");
+                            //var arrowTexture : Texture = m_assetManager.getTexture("callout_arrow_top_white");
                             //
                             //var bottomArrow : Image = new Image(arrowTexture);
                             //bottomArrow.color = calloutComponent.backgroundColor;

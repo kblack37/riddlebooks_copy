@@ -196,7 +196,7 @@ class GenreWidget extends Sprite
         
         var closeButtonHeight : Float = 60;
         var closeButtonWidth : Float = 60;
-        var homeIcon : Image = new Image(m_assetManager.getTexture("assets/ui/home_icon.png"));
+        var homeIcon : Image = new Image(m_assetManager.getTexture("home_icon"));
         var iconScaleTarget : Float = (closeButtonHeight * 0.8) / homeIcon.height;
         homeIcon.scaleX = homeIcon.scaleY = iconScaleTarget;
         m_closeButton = WidgetUtil.createGenericColoredButton(assetManager, homeButtonColor, null, null);
@@ -207,7 +207,7 @@ class GenreWidget extends Sprite
         m_onCloseCallback = onCloseCallback;
         m_onStartLevelCallback = onStartLevelCallback;
         
-        var arrowTexture : Texture = assetManager.getTexture("assets/ui/arrow_short.png");
+        var arrowTexture : Texture = assetManager.getTexture("arrow_short");
         var pageChangeButtonScaleFactor : Float = 1.25;
         var leftUpImage : Image = WidgetUtil.createPointingArrow(arrowTexture, true, pageChangeButtonScaleFactor);
         var leftOverImage : Image = WidgetUtil.createPointingArrow(arrowTexture, true, pageChangeButtonScaleFactor, 0xCCCCCC);
@@ -760,7 +760,7 @@ class GenreWidget extends Sprite
                             
                             // Draw the text over a black background
                             var nineSlicePadding : Float = 8;
-                            var backgroundTexture : Texture = m_assetManager.getTexture("assets/ui/button_white.png");
+                            var backgroundTexture : Texture = m_assetManager.getTexture("button_white");
                             var backgroundImage : Image = new Image(Texture.fromTexture(
 								backgroundTexture, 
 								new Rectangle(
@@ -777,7 +777,7 @@ class GenreWidget extends Sprite
                             backgroundImage.x = 0;
                             backgroundImage.y = 0;
                             
-                            var starTexture : Texture = m_assetManager.getTexture("assets/ui/level_select/level_button_star.png");
+                            var starTexture : Texture = m_assetManager.getTexture("level_button_star");
                             var starImage : Image = new Image(starTexture);
                             starImage.x = 0;
                             starImage.y = 0;
@@ -848,7 +848,7 @@ class GenreWidget extends Sprite
             // Need to calculate the total number of levels that can possibly completed + the total number they can complete
             // This will tell us the number of stars that could possibly be earned.
             var starsTotalWidth : Float = 0;
-            var starTexture : Texture = m_assetManager.getTexture("assets/ui/level_select/level_button_star.png");
+            var starTexture : Texture = m_assetManager.getTexture("level_button_star");
             starsTotalWidth += starTexture.width * 2;
             
             // Organize the section devoted to showing the number of stars earned.
@@ -926,7 +926,7 @@ class GenreWidget extends Sprite
                 var isProblemCreation : Bool = Std.is(levelNode, WordProblemLevelLeaf) && (try cast(levelNode, WordProblemLevelLeaf) catch(e:Dynamic) null).getIsProblemCreate();
                 if (isProblemCreation) 
                 {
-                    var problemCreateTexture : Texture = m_assetManager.getTexture("assets/ui/button_white.png");
+                    var problemCreateTexture : Texture = m_assetManager.getTexture("button_white");
                     var padding : Float = 8;
                     var problemCreateButtonImage : Image = new Image(Texture.fromTexture(
 						problemCreateTexture, 
@@ -977,7 +977,7 @@ class GenreWidget extends Sprite
                     
                     if (doAddStar) 
                     {
-                        var starImage : Image = new Image(m_assetManager.getTexture("assets/ui/level_select/level_button_star.png"));
+                        var starImage : Image = new Image(m_assetManager.getTexture("level_button_star"));
                         starImage.pivotX = starImage.width * 0.5;
                         starImage.pivotY = starImage.height * 0.5;
                         starImage.x = 6;
@@ -989,7 +989,7 @@ class GenreWidget extends Sprite
                 // Add a banner for these special levels
                 else if (levelNode.isLocked) 
                 {
-                    var lockImage : Image = new Image(m_assetManager.getTexture("assets/ui/level_select/level_button_lock.png"));
+                    var lockImage : Image = new Image(m_assetManager.getTexture("level_button_lock"));
                     lockImage.x = (buttonBackgroundImage.width - lockImage.width) * 0.5;
                     lockImage.y = (buttonBackgroundImage.height - lockImage.height) * 0.5;
                     levelButton.addChild(lockImage);
@@ -1005,7 +1005,7 @@ class GenreWidget extends Sprite
                 var isLevelSet : Bool = (Std.is(levelNode, WordProblemLevelPack));
                 if (isPractice || isProblemCreation || isLevelSet) 
                 {
-                    var arch : DisplayObject = new Image(m_assetManager.getTexture("Art_YellowArch.png"));
+                    var arch : DisplayObject = new Image(m_assetManager.getTexture("Art_YellowArch"));
                     arch.scaleX = arch.scaleY = 0.80;
                     arch.x = buttonUpSkinContainer.width * 0.5 * arch.scaleX;
                     arch.y = buttonUpSkinContainer.height - (10 * arch.scaleY);
@@ -1038,7 +1038,7 @@ class GenreWidget extends Sprite
                 var isTutorial : Bool = (try cast(levelNode, WordProblemLevelNode) catch(e:Dynamic) null).getTagWithNameExists("tutorial");
                 if (isTutorial) 
                 {
-                    var lightBulbIcon : Image = new Image(m_assetManager.getTexture("assets/ui/light.png"));
+                    var lightBulbIcon : Image = new Image(m_assetManager.getTexture("light"));
                     lightBulbIcon.scaleX = lightBulbIcon.scaleY = 0.8;
                     lightBulbIcon.x = (buttonBackgroundImage.width - lightBulbIcon.width) * 0.5;
                     lightBulbIcon.y = (buttonBackgroundImage.height - lightBulbIcon.height) * 0.5;

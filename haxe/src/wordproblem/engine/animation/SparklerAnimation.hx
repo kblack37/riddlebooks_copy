@@ -36,31 +36,31 @@ class SparklerAnimation implements IAnimatable
     
     public function new(assetManager : AssetManager)
     {
-        var particleAtlas : TextureAtlas = assetManager.getTextureAtlas(Resources.PARTICLE_ATLAS);
-        var sourceTexture : Texture = particleAtlas.getTexture(Resources.PARTICLE_ALL);
-        var sourceBounds : Rectangle = particleAtlas.getRegion(Resources.PARTICLE_ALL);
-        var particleBounds : Rectangle = particleAtlas.getRegion("circle");
-        
-        var textureInitializer : Initializer = new TextureUVInitializer([particleBounds], sourceBounds);
-        var colorInitializer : Initializer = new ColorInitializer(0xFF00C0, 0x198CFF, false);
-        var velocityInitializer : Initializer = new VelocityInitializer(new DiskZone(0, 0, 100, 50, 1));
-        var lifeTimeInitializer : Initializer = new LifeTime(1.0, 0.7);
-        
-        var emitter : Emitter = new Emitter();
-        emitter.setClock(new SteadyClock(15));
-        emitter.addInitializer(textureInitializer);
-        emitter.addInitializer(colorInitializer);
-        emitter.addInitializer(velocityInitializer);
-        emitter.addInitializer(lifeTimeInitializer);
-        emitter.addAction(new Age());
-        emitter.addAction(new Move());
-        emitter.addAction(new ScaleChangeFixed(0.8, 0.1));
-        emitter.addAction(new RotateToDirection());
-        m_emitter = emitter;
-        
-        var renderer : ParticleRenderer = new ParticleRenderer(sourceTexture);  //, Context3DBlendFactor.SOURCE_ALPHA, Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA);  
-        renderer.addEmitter(emitter);
-        m_particleRenderer = renderer;
+        //var particleAtlas : TextureAtlas = assetManager.getTextureAtlas(Resources.PARTICLE_ATLAS);
+        //var sourceTexture : Texture = particleAtlas.getTexture(Resources.PARTICLE_ALL);
+        //var sourceBounds : Rectangle = particleAtlas.getRegion(Resources.PARTICLE_ALL);
+        //var particleBounds : Rectangle = particleAtlas.getRegion("circle");
+        //
+        //var textureInitializer : Initializer = new TextureUVInitializer([particleBounds], sourceBounds);
+        //var colorInitializer : Initializer = new ColorInitializer(0xFF00C0, 0x198CFF, false);
+        //var velocityInitializer : Initializer = new VelocityInitializer(new DiskZone(0, 0, 100, 50, 1));
+        //var lifeTimeInitializer : Initializer = new LifeTime(1.0, 0.7);
+        //
+        //var emitter : Emitter = new Emitter();
+        //emitter.setClock(new SteadyClock(15));
+        //emitter.addInitializer(textureInitializer);
+        //emitter.addInitializer(colorInitializer);
+        //emitter.addInitializer(velocityInitializer);
+        //emitter.addInitializer(lifeTimeInitializer);
+        //emitter.addAction(new Age());
+        //emitter.addAction(new Move());
+        //emitter.addAction(new ScaleChangeFixed(0.8, 0.1));
+        //emitter.addAction(new RotateToDirection());
+        //m_emitter = emitter;
+        //
+        //var renderer : ParticleRenderer = new ParticleRenderer(sourceTexture);  //, Context3DBlendFactor.SOURCE_ALPHA, Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA);  
+        //renderer.addEmitter(emitter);
+        //m_particleRenderer = renderer;
     }
     
     private function set_x(value : Float) : Float

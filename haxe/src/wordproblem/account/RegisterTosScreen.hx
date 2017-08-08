@@ -14,6 +14,8 @@ import haxe.Constraints.Function;
 
 import gameconfig.commonresource.EmbeddedBundle1X;
 
+import starling.display.Image;
+
 class RegisterTosScreen extends Sprite implements IDisposable
 {
     /**
@@ -31,10 +33,11 @@ class RegisterTosScreen extends Sprite implements IDisposable
         m_acceptTosCallback = acceptTosCallback;
         
         // Place the background
-        var background : DisplayObject = Type.createInstance(EmbeddedBundle1X.summary_background, [ ]);
-        background.width = width;
-        background.height = height;
-        addChild(background);
+		// TODO: update this to work with the new AssetManager and without embedded resources
+        //var background : DisplayObject = Type.createInstance(EmbeddedBundle1X.summary_background, [ ]);
+        //background.width = width;
+        //background.height = height;
+        //addChild(background);
         
         // Paste tos on top
 		// TODO: uncomment when cgs library is finished

@@ -5,9 +5,11 @@ import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.compile.LatexCompiler;
 import dragonbox.common.math.vectorspace.RealsVectorSpace;
 import dragonbox.common.state.StateMachine;
+import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
 import starling.core.Starling;
 import starling.display.Sprite;
+import starling.events.Event;
 import starling.events.EventDispatcher;
 import starling.text.TextField;
 import wordproblem.AlgebraAdventureConfig;
@@ -24,6 +26,8 @@ import wordproblem.engine.text.model.ImageNode;
 import wordproblem.engine.text.model.TextNode;
 import wordproblem.engine.text.view.DocumentView;
 import wordproblem.engine.text.view.TextView;
+import wordproblem.engine.widget.BarModelAreaWidget;
+import wordproblem.level.controller.WordProblemCgsLevelManager;
 import wordproblem.player.ButtonColorData;
 import wordproblem.player.PlayerStatsAndSaveData;
 import wordproblem.resource.AssetManager;
@@ -33,6 +37,8 @@ import wordproblem.state.WordProblemGameState;
 import wordproblem.engine.barmodel.model.BarModelData;
 import wordproblem.engine.barmodel.view.BarModelView;
 
+import wordproblem.scripts.level.GenericBarModelLevelScript;
+
 
 /**
  * ...
@@ -40,10 +46,15 @@ import wordproblem.engine.barmodel.view.BarModelView;
  */
 class TestApp extends Sprite {
 	
+	private var gameState : WordProblemGameState;
+	private var time : Time;
+	private var mouseState : MouseState;
+	
 	public function new() {
 		super();
-		
-		// some setup
+	}
+	
+	public function run() {
 		var assetManager = new AssetManager();
 		var vectorSpace = new RealsVectorSpace();
 		var latexCompiler = new LatexCompiler(vectorSpace);
@@ -51,28 +62,26 @@ class TestApp extends Sprite {
 			assetManager.getXml("assets/layout/predefined_layouts.xml").toString());
 		var algebraConfig = new AlgebraAdventureConfig();
 		var expressionSymbolMap = new ExpressionSymbolMap(assetManager);
-		var gameEngine = new GameEngine(new LatexCompiler(vectorSpace),
+		mouseState = new MouseState(this.stage, new openfl.events.EventDispatcher());
+		time = new Time();
+		var stateMachine = new StateMachine(Starling.current.stage.stageWidth, Starling.current.stage.stageHeight);
+		var gameEngine = new GameEngine(latexCompiler,
 			assetManager,
 			expressionSymbolMap,
 			this.width,
 			this.height,
-			new MouseState(new starling.events.EventDispatcher(),
-				new openfl.events.EventDispatcher()
-			)
+			mouseState
 		);
 		var scriptParser = new ScriptParser(gameEngine,
-			new LatexCompiler(vectorSpace),
+			latexCompiler,
 			assetManager,
 			new PlayerStatsAndSaveData(new DummyCache())
 		);
 		var textViewFactory = new TextViewFactory(assetManager, expressionSymbolMap);
 		
 		// running the game state
-		var gameState = new WordProblemGameState(
-			new StateMachine(
-				Starling.current.stage.stageWidth,
-				Starling.current.stage.stageHeight
-			),
+		 gameState = new WordProblemGameState(
+			stateMachine,
 			gameEngine,
 			assetManager,
 			latexCompiler,
@@ -83,19 +92,22 @@ class TestApp extends Sprite {
 		);
 		
 		// compiling levels from the xml, testing that text is parsed correctly
-		//var xml = assetManager.getXml("assets/levels/bar_model/turk_brainpop/519.xml");
-		//var wordProblemLevelData = levelCompiler.compileWordProblemLevel(xml.firstElement(),
-			//"levelTest",
-			//0,
-			//-1,
-			//"genreTest",
-			//algebraConfig,
-			//scriptParser,
-			//new TextParser()
-		//);
+		var xml = assetManager.getXml("assets/levels/bar_model/turk_brainpop/510.xml");
+		var wordProblemLevelData = levelCompiler.compileWordProblemLevel(xml.firstElement(),
+			"levelTest",
+			0,
+			-1,
+			"genreTest",
+			algebraConfig,
+			scriptParser,
+			new TextParser()
+		);
 		
-		//var docView = textViewFactory.createView(wordProblemLevelData.m_rootDocumentNode[0]);
-		//addChild(docView);
+		addChild(gameState);
+		
+		this.addEventListener(Event.ENTER_FRAME, traceLoop);
+		
+		gameState.enter(null, [wordProblemLevelData]);
 		
 		// creating a BarModelData instance
 		//var barModelData = new BarModelData();
@@ -136,20 +148,15 @@ class TestApp extends Sprite {
 		//}
 		//
 		//// creating a BarModelView instance
-		//var barModelView = new BarModelView(50, 50, 5, 5, 5, 5, 5, barModelData, new ExpressionSymbolMap(assetManager), assetManager);
+		//var barModelView = new BarModelView(50, 50, 5, 5, 5, 5, 5, barModelData, expressionSymbolMap, assetManager);
 		//barModelView.setDimensions(500, 500);
 		//barModelView.redraw();
 		//addChild(barModelView);
-		
-		// validating expression data
-		//var data = "2*(a+b)=c";
-		//var rootNode = latexCompiler.compile(data);
-		//
-		//var expressionTree = new ExpressionTree(vectorSpace, rootNode);
-		//var expressionTreeWidget = new ExpressionTreeWidget(expressionTree, expressionSymbolMap, assetManager, 500, 500);
-		//addChild(expressionTreeWidget);
-		//expressionTreeWidget.refreshNodes();
-		//expressionTreeWidget.buildTreeWidget();
+	}
+	
+	private function traceLoop(e : Event) {
+		gameState.update(time, mouseState);
+		mouseState.onEnterFrame();
 	}
 	
 	// Function to trace the leaves in the tree defined by the word problem level data

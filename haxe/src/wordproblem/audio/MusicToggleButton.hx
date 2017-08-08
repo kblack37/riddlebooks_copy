@@ -22,7 +22,7 @@ class MusicToggleButton extends AudioButton
         super(width, height, textFormatUp, textFormatHover, assetManager, /*StringTable.lookup("music") + ":"*/ "", color);
         
         // Adjust music based on the saved value
-        if (m_localSharedObject.data.exists("music")) 
+        if (Reflect.hasField(m_localSharedObject.data, "music")) 
         {
             Audio.instance.musicOn = m_localSharedObject.data.music;
         }

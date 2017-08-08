@@ -87,7 +87,7 @@ class KeyboardWidget extends Layer
                     //editor.embedFonts = true;
                     //return editor;
                 //};
-        //var textInputTexture : Texture = getTexture("button_white.png");
+        //var textInputTexture : Texture = getTexture("button_white");
         //var backgroundPadding : Float = 8;
         //var textInputBackground : Scale9Image = new Scale9Image(new Scale9Textures(textInputTexture, 
         //new Rectangle(backgroundPadding, backgroundPadding, textInputTexture.width - 2 * backgroundPadding, textInputTexture.height - 2 * backgroundPadding)));
@@ -154,7 +154,7 @@ class KeyboardWidget extends Layer
 		//(try cast(backButton.defaultSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.ROYAL_BLUE;
         //(try cast(backButton.hoverSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.BRIGHT_ORANGE;
         //(try cast(backButton.downSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.BRIGHT_ORANGE;
-        var backIcon : Image = new Image(assetManager.getTexture("arrow_rotate.png"));
+        var backIcon : Image = new Image(assetManager.getTexture("arrow_rotate"));
         backIcon.scaleX = backIcon.scaleY = (buttonHeight / backIcon.height);
         backButton.upState = backIcon.texture;
         backButton.addEventListener(Event.TRIGGERED, onBackClicked);
@@ -183,7 +183,7 @@ class KeyboardWidget extends Layer
         //(try cast(acceptButton.hoverSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.BRIGHT_ORANGE;
         //(try cast(acceptButton.downSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.BRIGHT_ORANGE;
         
-        var acceptIcon : Image = new Image(assetManager.getTexture("correct.png"));
+        var acceptIcon : Image = new Image(assetManager.getTexture("correct"));
         acceptIcon.scaleX = acceptIcon.scaleY = (buttonHeight / acceptIcon.height);
         acceptButton.upState = acceptIcon.texture;
         acceptButton.addEventListener(Event.TRIGGERED, onAcceptClicked);
@@ -227,7 +227,7 @@ class KeyboardWidget extends Layer
         //m_textInput.width = buttonsTotalWidth * 0.75;
         //m_textInput.height = 70;
         
-        var backgroundImage : Image = new Image(assetManager.getTexture("summary_background.png"));
+        var backgroundImage : Image = new Image(assetManager.getTexture("summary_background"));
         backgroundImage.width = buttonsTotalWidth + 2 * buttonsLeftPadding;
         
 		// TODO: uncomment when a suitable text input replacement is found

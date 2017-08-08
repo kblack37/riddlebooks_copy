@@ -367,12 +367,10 @@ class WordProblemGameState extends BaseState implements IConsoleInterfacable
         if (!m_overrideSkip) 
         {
             m_optionsScreen.toggleSkipButtonEnabled(levelData.skippable);
-        }  // If nothing is specified, then use a default set    // Look at the level first and see what music should be played.  
-        
-        
-        
-        
-        
+        }  
+		
+		// Look at the level first and see what music should be played.  
+        // If nothing is specified, then use a default set
         var audioData : Array<Dynamic> = levelData.getAudioData();
         if (audioData != null && audioData.length > 0) 
         {
@@ -418,12 +416,10 @@ class WordProblemGameState extends BaseState implements IConsoleInterfacable
                 child.removeEventListeners();
             }
             child.removeFromParent(true);
-        }  // the ui components of the new level.    // Remove option screen if visible, otherwise it will still be visible underneath  
-        
-        
-        
-        
-        
+        }  
+		
+		// Remove option screen if visible, otherwise it will still be visible underneath  
+        // the ui components of the new level.
         m_optionsScreen.removeFromParent();
         
         // Clean up and remove the help screen
@@ -439,7 +435,7 @@ class WordProblemGameState extends BaseState implements IConsoleInterfacable
             
             // Visit the extra script nodes
             m_preBakedScript.visit();
-            
+			
             if (m_helpScreenViewer != null) 
             {
                 m_helpScreenViewer.visit();

@@ -236,7 +236,7 @@ class SummaryObjectivesWidget extends Sprite
         var totalObjectiveWidth : Float = 270;
         var totalObjectiveHeight : Float = 90;
         
-        var outlineTexture : Texture = m_assetManager.getTexture("chalk_outline.png");
+        var outlineTexture : Texture = m_assetManager.getTexture("chalk_outline");
         var outline : Image = new Image(outlineTexture);
         outline.width = totalObjectiveWidth;
         outline.height = totalObjectiveHeight;
@@ -277,7 +277,7 @@ class SummaryObjectivesWidget extends Sprite
         var displayMark : DisplayObject = null;
         if (objective.getCompleted()) 
         {
-            var completionTexture : Texture = m_assetManager.getTexture("correct.png");
+            var completionTexture : Texture = m_assetManager.getTexture("correct");
             var completionImage : Image = new Image(completionTexture);
             completionImage.pivotX = completionTexture.width * 0.5;
             completionImage.pivotY = completionTexture.height * 0.5;

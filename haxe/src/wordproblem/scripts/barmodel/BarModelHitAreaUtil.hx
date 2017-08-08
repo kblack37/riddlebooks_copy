@@ -159,10 +159,9 @@ class BarModelHitAreaUtil
                 outParams.push(barWholeView);
                 break;
             }
-        }  // If did not hit any part of a bar, check if hit vertical labels  
-        
-        
-        
+        } 
+		
+		// If did not hit any part of a bar, check if hit vertical labels  
         if (!hitElement) 
         {
             if (getHitLabels(outParams, barModelView, barModelView.getVerticalBarLabelViews(), localPoint, rectBuffer)) 

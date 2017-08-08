@@ -66,7 +66,7 @@ class TOSState extends BaseState
         
         var width : Float = 800;
         var height : Float = 600;
-        var backgroundTexture : Texture = m_assetManager.getTexture("login_background.png");
+        var backgroundTexture : Texture = m_assetManager.getTexture("login_background");
         var backgroundImage : Image = new Image(backgroundTexture);
         backgroundImage.width = width;
         backgroundImage.height = height;

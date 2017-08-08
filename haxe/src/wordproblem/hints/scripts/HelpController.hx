@@ -187,7 +187,7 @@ class HelpController extends BaseGameScript
         var smoothlyRemove : Bool = false;
         if (type == GameEvent.SHOW_HINT) 
         {
-            if (param.exists("smoothlyRemove")) 
+            if (Reflect.hasField(param, "smoothlyRemove")) 
             {
                 smoothlyRemove = param.smoothlyRemove;
             }
@@ -196,7 +196,7 @@ class HelpController extends BaseGameScript
         else if (type == GameEvent.REMOVE_HINT) 
         {
             // Smoothly delete hint
-            if (param.exists("smoothlyRemove")) 
+            if (Reflect.hasField(param, "smoothlyRemove")) 
             {
                 smoothlyRemove = param.smoothlyRemove;
             }
@@ -209,12 +209,10 @@ class HelpController extends BaseGameScript
                 m_gameEngine.dispatchEventWith(GameEvent.HINT_BUTTON_SELECTED);
                 Audio.instance.playSfx("button_click");
                 m_gameEngine.dispatchEventWith(GameEvent.GET_NEW_HINT);
-            }  // list of hint scripts    // The selection of the next hint to show is a simple iteration through the  
-            
-            
-            
-            
-            
+            }  
+			
+			// The selection of the next hint to show is a simple iteration through the  
+            // list of hint scripts 
             var hintScript : HintScript = m_rootHintSelectorNode.getHint();
             if (hintScript != null) 
             {

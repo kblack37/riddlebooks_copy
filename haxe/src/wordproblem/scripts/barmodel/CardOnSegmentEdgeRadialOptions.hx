@@ -139,11 +139,11 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
         m_hitAreaIndexToBarWholeIndex = new Array<Int>();
         m_bufferedEventOnFrameCausedChange = false;
         
-        var hitAreaBackgroundTexture : Texture = m_assetManager.getTexture("wildcard.png");
+        var hitAreaBackgroundTexture : Texture = m_assetManager.getTexture("wildcard");
         var nineslicePadding : Int = 10;
         var ninesliceGrid : Rectangle = new Rectangle(nineslicePadding, nineslicePadding, hitAreaBackgroundTexture.width - 2 * nineslicePadding, hitAreaBackgroundTexture.height - 2 * nineslicePadding);
-        var cornerTexture : Texture = m_assetManager.getTexture("dotted_line_corner.png");
-        var segmentTexture : Texture = m_assetManager.getTexture("dotted_line_segment.png");
+        var cornerTexture : Texture = m_assetManager.getTexture("dotted_line_corner");
+        var segmentTexture : Texture = m_assetManager.getTexture("dotted_line_segment");
         m_currentMouseOverHitAreaDisplay = new DottedRectangle(hitAreaBackgroundTexture, ninesliceGrid, 1, cornerTexture, segmentTexture);
     }
     
@@ -438,18 +438,18 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
                 }
                 else 
                 {
-                    var addIcon : Image = new Image(m_assetManager.getTexture("add.png"));
+                    var addIcon : Image = new Image(m_assetManager.getTexture("plus"));
                     mainIcon = addIcon;
                 }
             }
             else if (allowAddComparison) 
             {
-                var subtractIcon : Image = new Image(m_assetManager.getTexture("subtract.png"));
+                var subtractIcon : Image = new Image(m_assetManager.getTexture("subtract"));
                 mainIcon = subtractIcon;
             }
             else if (allowAddNewSegment) 
             {
-                var addIcon = new Image(m_assetManager.getTexture("add.png"));
+                var addIcon = new Image(m_assetManager.getTexture("plus"));
                 mainIcon = addIcon;
             }
             
@@ -484,9 +484,9 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
     private function createAddSubtractIcon() : DisplayObject
     {
         var compositeOperators : Sprite = new Sprite();
-        var addIcon : Image = new Image(m_assetManager.getTexture("add.png"));
-        var subtractIcon : Image = new Image(m_assetManager.getTexture("subtract.png"));
-        var slashIcon : Image = new Image(m_assetManager.getTexture("divide_bar.png"));
+        var addIcon : Image = new Image(m_assetManager.getTexture("plus"));
+        var subtractIcon : Image = new Image(m_assetManager.getTexture("subtract"));
+        var slashIcon : Image = new Image(m_assetManager.getTexture("divide_bar"));
         slashIcon.scaleX = slashIcon.scaleY = 0.8;
         slashIcon.pivotX = slashIcon.width * 0.5;
         slashIcon.pivotY = slashIcon.height * 0.5;
@@ -790,12 +790,12 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
         
         if (Std.is(gestureScript, AddNewBarComparison)) 
         {
-            var subtractIcon : Image = new Image(m_assetManager.getTexture("subtract.png"));
+            var subtractIcon : Image = new Image(m_assetManager.getTexture("subtract"));
             icon = subtractIcon;
         }
         else if (Std.is(gestureScript, AddNewBarSegment)) 
         {
-            var addIcon : Image = new Image(m_assetManager.getTexture("add.png"));
+            var addIcon : Image = new Image(m_assetManager.getTexture("plus"));
             icon = addIcon;
         }
         

@@ -70,7 +70,7 @@ class BarModelAreaWidget extends BarModelView implements IBaseWidget
         
         var horizontalPadding : Float = 20;
         var verticalPadding : Float = 30;
-        var backgroundImageTexture : Texture = assetManager.getTexture("assets/ui/term_area_left.png");
+        var backgroundImageTexture : Texture = assetManager.getTexture("term_area_left");
         var bgImage : Image = new Image(Texture.fromTexture(backgroundImageTexture, new Rectangle(
         horizontalPadding, verticalPadding, backgroundImageTexture.width - 2 * horizontalPadding, backgroundImageTexture.height - 2 * verticalPadding))
         );
@@ -237,17 +237,15 @@ class BarModelAreaWidget extends BarModelView implements IBaseWidget
             {
                 break;
             }
-        }  // If not contained in one of the bar model elements, check if it is in the vertical labels  
-        
-        
-        
+        }  
+		
+		// If not contained in one of the bar model elements, check if it is in the vertical labels  
         if (targetView == null) 
         {
             targetView = barModelArea.getVerticalBarLabelViewById(id);
-        }  // Either create a new component for a view or refresh it.  
-        
-        
-        
+        }
+		
+		// Either create a new component for a view or refresh it.  
         var renderComponent : RenderableComponent = try cast(m_componentManager.getComponentFromEntityIdAndType(id, RenderableComponent.TYPE_ID), RenderableComponent) catch(e:Dynamic) null;
         if (renderComponent == null) 
         {

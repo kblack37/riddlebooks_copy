@@ -44,7 +44,7 @@ class SubmitProblemScript extends BaseProblemCreateScript
         m_gameServerRequester = gameServerRequester;
         
         var targetWidth : Float = 70;
-        m_submitButtonGlow = new Image(m_assetManager.getTexture("assets/card/halo.png"));
+        m_submitButtonGlow = new Image(m_assetManager.getTexture("halo"));
         m_submitButtonGlow.scaleX = m_submitButtonGlow.scaleY = targetWidth / m_submitButtonGlow.width;
         m_submitButtonGlow.pivotX = m_submitButtonGlow.width * 0.5;
         m_submitButtonGlow.pivotY = m_submitButtonGlow.height * 0.5;

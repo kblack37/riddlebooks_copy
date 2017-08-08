@@ -95,7 +95,7 @@ class SummaryWidget extends Layer
         m_obscuringBackground.alpha = 0.3;
         
         // Add the actual background texture
-        var backgroundTexture : Texture = m_assetManager.getTexture("summary_background.png");
+        var backgroundTexture : Texture = m_assetManager.getTexture("summary_background");
         var backgroundImage : Image = new Image(backgroundTexture);
         backgroundImage.width = totalScreenWidth;
         backgroundImage.height = totalScreenHeight;
@@ -132,7 +132,7 @@ class SummaryWidget extends Layer
                         new TextFormat(GameFonts.DEFAULT_FONT_NAME, 32, 0xFFFFFF),
                         null
                         );
-        var nextIcon : Image = new Image(assetManager.getTexture("arrow_yellow_icon.png"));
+        var nextIcon : Image = new Image(assetManager.getTexture("arrow_yellow_icon"));
         nextIcon.scaleX = nextIcon.scaleY = 1.5;
         nextButton.upState = nextIcon.texture;
 		// TODO: uncomment when a suitable button replacement is found

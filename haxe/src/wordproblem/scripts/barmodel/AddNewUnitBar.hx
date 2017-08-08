@@ -224,7 +224,7 @@ class AddNewUnitBar extends BaseBarModelScript implements IHitAreaScript
                             var numSegments = Std.parseInt(draggedExpressionNode.data);
                             var extraDragParams : Dynamic = m_widgetDragSystem.getExtraParams();
                             var symbolDataForDragged : SymbolData = m_expressionSymbolMap.getSymbolDataFromValue(draggedExpressionNode.data);
-                            if (extraDragParams != null && extraDragParams.exists("color")) 
+                            if (extraDragParams != null && Reflect.hasField(extraDragParams, "color")) 
                             {
                                 m_previewColor = Reflect.field(extraDragParams, "color");
                             }
@@ -285,7 +285,7 @@ class AddNewUnitBar extends BaseBarModelScript implements IHitAreaScript
     public function postProcessHitAreas(hitAreas : Array<Rectangle>, hitAreaGraphics : Array<DisplayObjectContainer>) : Void
     {
         for (i in 0...hitAreaGraphics.length){
-            var icon : Image = new Image(m_assetManager.getTexture("multiply_x.png"));
+            var icon : Image = new Image(m_assetManager.getTexture("multiply_x"));
             var hitArea : Rectangle = hitAreas[i];
             icon.pivotX = icon.width * 0.5;
             icon.pivotY = icon.height * 0.5;

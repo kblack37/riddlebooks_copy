@@ -131,14 +131,14 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
     {
         super(gameEngine, expressionCompiler, assetManager, id, isActive);
         
-        m_draggedLeftParenthesisImage = createParenthesisImage("paren_left");
-        m_draggedRightParenthesisImage = createParenthesisImage("paren_right");
+        m_draggedLeftParenthesisImage = createParenthesisImage("parentheses_left");
+        m_draggedRightParenthesisImage = createParenthesisImage("parentheses_right");
         
         m_draggedWholeParenthesis = new Sprite();
-        var leftParenImage : Image = createParenthesisImage("paren_left");
+        var leftParenImage : Image = createParenthesisImage("parentheses_left");
         m_draggedWholeParenthesis.addChild(leftParenImage);
         leftParenImage.x = -leftParenImage.width;
-        var rightParenImage : Image = createParenthesisImage("paren_right");
+        var rightParenImage : Image = createParenthesisImage("parentheses_right");
         m_draggedWholeParenthesis.addChild(rightParenImage);
         rightParenImage.x = rightParenImage.width;
         
@@ -509,7 +509,7 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
         var parenthesisButtonWidth : Float = 50;
         var parenthesisButtonHeight : Float = 50;
         
-        var backgroundTexture : Texture = m_assetManager.getTexture("card_background_square.png");
+        var backgroundTexture : Texture = m_assetManager.getTexture("card_background_square");
         var cornerPadding : Float = 8;
         m_buttonBackground = new Image(Texture.fromTexture(
                 backgroundTexture, 
@@ -521,11 +521,11 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
         
         var parenthesisButton : Layer = new Layer();
         var iconContainer : Sprite = new Sprite();
-        var leftParenImage : Image = new Image(m_assetManager.getTexture("paren_left.png"));
+        var leftParenImage : Image = new Image(m_assetManager.getTexture("parentheses_left"));
         var parenScaleFactor : Float = 0.7;
         leftParenImage.scaleX = leftParenImage.scaleY = parenScaleFactor;
         iconContainer.addChild(leftParenImage);
-        var rightParenImage : Image = new Image(m_assetManager.getTexture("paren_right.png"));
+        var rightParenImage : Image = new Image(m_assetManager.getTexture("parentheses_right"));
         rightParenImage.scaleX = rightParenImage.scaleY = parenScaleFactor;
         rightParenImage.x = leftParenImage.x + leftParenImage.width * 2;
         iconContainer.addChild(rightParenImage);

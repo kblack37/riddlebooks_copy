@@ -22,7 +22,7 @@ class SfxToggleButton extends AudioButton
         super(width, height, textFormatUp, textFormatHover, assetManager, /*StringTable.lookup("sfx") + ":"*/ "", color);
         
         // Adjust sfx based on the saved value
-        if (m_localSharedObject.data.exists("sfx")) 
+        if (Reflect.hasField(m_localSharedObject.data, "sfx")) 
         {
             Audio.instance.sfxOn = m_localSharedObject.data.sfx;
         }

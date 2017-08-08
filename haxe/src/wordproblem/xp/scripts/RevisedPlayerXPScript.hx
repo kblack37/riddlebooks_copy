@@ -190,10 +190,9 @@ class RevisedPlayerXPScript extends BaseBufferEventScript
                 {
                     difficultyMultiplier = 3.0;
                 }
-            }  // Give bonus points if player has solved a level they did not complete previously  
-            
-            
-            
+            } 
+			
+			// Give bonus points if player has solved a level they did not complete previously  
             if (currentLevel.previousCompletionStatus != LevelNodeCompletionValues.PLAYED_SUCCESS) 
             {
                 // Tutorial should give fixed amount that is much less than other problem types
@@ -232,12 +231,10 @@ class RevisedPlayerXPScript extends BaseBufferEventScript
                         m_maxNumberOfTermsInTheExpressionForCurrentLevel = Std.int(Math.max(ExpressionUtil.nodeCount(expressionComponent.root), m_maxNumberOfTermsInTheExpressionForCurrentLevel));
                     }
                 }
-            }  // ones they had created    // Check whether the equation created by the user is sufficiently different from previous  
-            
-            
-            
-            
-            
+            }  
+			
+			// Check whether the equation created by the user is sufficiently different from previous  
+            // ones they had created  
             var expressionSnapshot : ExpressionNode = m_gameEngine.getExpressionFromTermAreas();
             var numNodesInSnapshot : Int = ExpressionUtil.nodeCount(expressionSnapshot);
             if (numNodesInSnapshot <= m_maxNumberOfTermsInTheExpressionForCurrentLevel) 
@@ -295,19 +292,16 @@ class RevisedPlayerXPScript extends BaseBufferEventScript
                 
                 // Do not give points if the history is not big enough
                 if (m_decomposedBarModelHistory.length >= m_decomposedBarModelMinThreshold) 
-                    { }  // a new construct    // If the history is sufficiently large, then award the player xp for trying  
-                
-                
-                
-                
-                
+                    { }
+					
+				// If the history is sufficiently large, then award the player xp for trying  
+				// a new construct 
                 if (m_decomposedBarModelHistory.length >= m_decomposedBarModelMaxThreshold) 
                 {
                     m_decomposedBarModelHistory.shift();
-                }  // Add new snapshot  
-                
-                
-                
+                }
+				
+				// Add new snapshot  
                 m_decomposedBarModelHistory.push(currentSnapshot);
             }
         }

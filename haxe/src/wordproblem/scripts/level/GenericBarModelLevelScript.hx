@@ -490,10 +490,9 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
                 }
                 dataForCard.useCustomBarColor = true;
             }
-        }  // Apply the custom colors to the reference models  
-        
-        
-        
+        } 
+		
+		// Apply the custom colors to the reference models  
         for (referenceModel in m_referenceModels)
         {
             var segmentValueToColorMap : Dynamic = { };
@@ -505,7 +504,7 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
                 for (barSegment in barWhole.barSegments)
                 {
                     var segmentValue : String = Std.string(barSegment.getValue());
-                    if (segmentValueToOccurencesMap.exists(segmentValue)) 
+                    if (Reflect.hasField(segmentValueToOccurencesMap, segmentValue)) 
                     {
 						Reflect.setField(segmentValueToOccurencesMap, segmentValue, Reflect.field(segmentValueToOccurencesMap, segmentValue) + 1);
                     }
@@ -542,7 +541,7 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
                 for (barSegment in barWhole.barSegments)
                 {
                     var segmentValue = Std.string(barSegment.getValue());
-                    if (segmentValueToColorMap.exists(segmentValue)) 
+                    if (Reflect.field(segmentValueToColorMap, segmentValue)) 
                     {
                         barSegment.color = Reflect.field(segmentValueToColorMap, segmentValue);
                     }
@@ -666,18 +665,16 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
                     defaultEquationIdSet.push(equationId);
                 }
                 m_equationIdSets.push(defaultEquationIdSet);
-            }  // Specify the valid equation sets the player needs to model to finish this level  
-            
-            
-            
+            } 
+			
+			// Specify the valid equation sets the player needs to model to finish this level  
             var numEquationSets : Int = m_equationIdSets.length;
             for (i in 0...numEquationSets){
                 modelSpecificEquationScript.addEquationSet(m_equationIdSets[i]);
             }
-        }  // Map parts of text to terms  
-        
-        
-        
+        } 
+		
+		// Map parts of text to terms  
         var i : Int = 0;
         for (i in 0...m_documentIds.length){
             m_gameEngine.addTermToDocument(m_documentIdCardValues[i], m_documentIds[i]);
@@ -785,39 +782,37 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
         
         // Keep the ui part down until the first click (allows user to see more of the background as
         // an added benefit.
-        var uiContainer : DisplayObject = m_gameEngine.getUiEntity("deckAndTermContainer");
-        var startingUiContainerY : Float = uiContainer.y;
-        m_switchModelScript.setContainerOriginalY(startingUiContainerY);
-        uiContainer.y = 600;
-        var otherSequence : SequenceSelector = new SequenceSelector();
-        
-        // Color for click to continue should match that of the paragraph
-        var textStyle : Dynamic = currentLevel.getCssStyleObject();
-        var clickToContinueColor : Int = 0;
-        if (textStyle != null && textStyle.exists("p")) 
-        {
-            var paragraphStyle : Dynamic = Reflect.field(textStyle, "p");
-            if (paragraphStyle.exists("color")) 
-            {
-                clickToContinueColor = Reflect.field(paragraphStyle, "color");
-            }
-        }
-        otherSequence.pushChild(new CustomVisitNode(clickToContinue, {
-                    x : 300,
-                    y : 300,
-                    color : clickToContinueColor,
-
-                }));
-        otherSequence.pushChild(new CustomVisitNode(function(param : Dynamic) : Int
-                {
-                    Starling.current.juggler.tween(uiContainer, 0.3, {
-                                y : startingUiContainerY
-
-                            });
-                    deleteChild(otherSequence);
-                    return ScriptStatus.SUCCESS;
-                }, { }));
-        this.pushChild(otherSequence);
+        //var uiContainer : DisplayObject = m_gameEngine.getUiEntity("deckAndTermContainer");
+        //var startingUiContainerY : Float = uiContainer.y;
+        //m_switchModelScript.setContainerOriginalY(startingUiContainerY);
+        //uiContainer.y = 600;
+        //var otherSequence : SequenceSelector = new SequenceSelector();
+        //
+        //// Color for click to continue should match that of the paragraph
+        //var textStyle : Dynamic = currentLevel.getCssStyleObject();
+        //var clickToContinueColor : Int = 0;
+        //if (textStyle != null && Reflect.hasField(textStyle, "p")) 
+        //{
+            //var paragraphStyle : Dynamic = Reflect.field(textStyle, "p");
+            //if (Reflect.hasField(paragraphStyle, "color")) 
+            //{
+                //clickToContinueColor = Reflect.field(paragraphStyle, "color");
+            //}
+        //}
+        //otherSequence.pushChild(new CustomVisitNode(clickToContinue, {
+                    //x : 300,
+                    //y : 300,
+                    //color : clickToContinueColor,
+                //}));
+        //otherSequence.pushChild(new CustomVisitNode(function(param : Dynamic) : Int
+                //{
+                    //Starling.current.juggler.tween(uiContainer, 0.3, {
+                                //y : startingUiContainerY
+                            //});
+                    //deleteChild(otherSequence);
+                    //return ScriptStatus.SUCCESS;
+                //}, { }));
+        //this.pushChild(otherSequence);
     }
     
     override private function processBufferedEvent(eventType : String, param : Dynamic) : Void

@@ -5,7 +5,7 @@
     <symbol name="total people" abbreviatedName="people" value="people" backgroundTexturePositive="card_background_square" customBarColor="0xFF19FD02" useCustomBarColor="true"/>
   </symbols>
   <overrideLayoutAttributes name="barEquationModel">
-    <textArea id="textArea" src="url(../assets/level_images/book_pastel.jpg)"/>
+    <textArea id="textArea" src="url(assets/level_images/book_pastel.jpg)"/>
   </overrideLayoutAttributes>
   <rules>
     <allowAddNewSegments value="true"/>

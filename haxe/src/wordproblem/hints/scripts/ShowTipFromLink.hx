@@ -63,7 +63,7 @@ class ShowTipFromLink extends BaseGameScript
         var blockingQuad : Quad = new Quad(m_screenWidth, m_screenHeight, 0x000000);
         blockingQuad.alpha = 0.7;
         m_mainDisplayContainer.addChild(blockingQuad);
-        var backgroundImage : Image = new Image(m_assetManager.getTexture("summary_background.png"));
+        var backgroundImage : Image = new Image(m_assetManager.getTexture("summary_background"));
         backgroundImage.width = m_screenWidth * 0.8;
         backgroundImage.height = m_screenHeight * 0.8;
         backgroundImage.x = (m_screenWidth - backgroundImage.width) * 0.5;
@@ -80,7 +80,7 @@ class ShowTipFromLink extends BaseGameScript
         m_simulatedTimer = new Time();
         
         var closeWidth : Float = 40;
-        var closeIconTexture : Texture = assetManager.getTexture("wrong.png");
+        var closeIconTexture : Texture = assetManager.getTexture("wrong");
         var closeIcon : Image = new Image(closeIconTexture);
         m_closeButton = new Button(closeIcon.texture);
         m_closeButton.scaleWhenOver = 1.2;

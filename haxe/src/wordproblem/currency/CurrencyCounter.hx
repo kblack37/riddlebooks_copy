@@ -46,7 +46,7 @@ class CurrencyCounter extends Sprite
         super();
         
         var scale9Padding : Float = 8;
-        var textBackgroundTexture : Texture = assetManager.getTexture("button_white.png");
+        var textBackgroundTexture : Texture = assetManager.getTexture("button_white");
         var currencyTextBackground : Image = new Image(
 			Texture.fromTexture(textBackgroundTexture, 
 			new Rectangle(
@@ -61,7 +61,7 @@ class CurrencyCounter extends Sprite
         currencyTextBackground.color = 0xC2A100;
         addChild(currencyTextBackground);
         
-        var coinTexture : Texture = assetManager.getTexture("coin.png");
+        var coinTexture : Texture = assetManager.getTexture("coin");
         var coinImage : Image = new Image(coinTexture);
         var scaleFactor : Float = coinEdgeLength / coinTexture.width;
         coinImage.scaleX = coinImage.scaleY = scaleFactor;

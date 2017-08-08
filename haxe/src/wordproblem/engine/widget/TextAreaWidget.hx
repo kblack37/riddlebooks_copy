@@ -183,7 +183,7 @@ class TextAreaWidget extends Sprite implements IBaseWidget
         m_backgroundScroll = (backgroundScroll == "scroll");
         m_backgroundRepeat = (backgroundRepeat == "repeat");
         
-        var arrowTexture : Texture = assetManager.getTexture("arrow_short.png");
+        var arrowTexture : Texture = assetManager.getTexture("arrow_short");
         var scaleFactor : Float = 1.5;
         var leftUpImage : Image = WidgetUtil.createPointingArrow(arrowTexture, true, scaleFactor);
         var leftOverImage : Image = WidgetUtil.createPointingArrow(arrowTexture, true, scaleFactor, 0xCCCCCC);
@@ -247,7 +247,7 @@ class TextAreaWidget extends Sprite implements IBaseWidget
         var documentIdToExpressionMap : Dynamic = { };
         for (i in 0...expressionComponents.length){
             var expressionComponent : ExpressionComponent = try cast(expressionComponents[i], ExpressionComponent) catch(e:Dynamic) null;
-            documentIdToExpressionMap[Std.parseInt(expressionComponent.entityId)] = expressionComponent.expressionString;
+			Reflect.setField(documentIdToExpressionMap, expressionComponent.entityId, expressionComponent.expressionString);
         }
         
         return documentIdToExpressionMap;

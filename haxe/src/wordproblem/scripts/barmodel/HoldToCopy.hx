@@ -179,7 +179,7 @@ class HoldToCopy extends BaseBarModelScript
         var textWidth : Float = 150;
         var textHeight : Float = 40;
         var descriptionText : TextField = new TextField(Std.int(textWidth), Std.int(textHeight), "Hold to Copy", "Verdana", 20, 0x000000);
-        var background : Image = new Image(m_assetManager.getTexture("thought_bubble.png"));
+        var background : Image = new Image(m_assetManager.getTexture("thought_bubble"));
         background.scaleX = textWidth / background.width;
         background.scaleY = (textHeight * 2) / background.height;
         background.color = 0xFFFFFF;
@@ -294,14 +294,11 @@ class HoldToCopy extends BaseBarModelScript
                         m_holdToCopyDescriptionTween.reset(m_holdToCopyDescription, 0.3);
                         m_holdToCopyDescriptionTween.animate("alpha", 1.0);
                         Starling.current.juggler.add(m_holdToCopyDescriptionTween);
-                    }  // Must iterate through every type of view    // Remember need to pair it with a valid render component    // Add a blink to the element so it is clear what is being copied  
-                    
-                    
-                    
-                    
-                    
-                    
-                    
+                    }  
+					
+					// Add a blink to the element so it is clear what is being copied  
+					// Remember need to pair it with a valid render component  
+                    // Must iterate through every type of view 
                     var barWholeViews : Array<BarWholeView> = m_barModelArea.getBarWholeViews();
                     m_hitBarElementId = null;
                     for (barWholeView in barWholeViews)
@@ -383,10 +380,9 @@ class HoldToCopy extends BaseBarModelScript
                                 try cast(this.getNodeById("WidgetDragSystem"), WidgetDragSystem) catch(e:Dynamic) null,
                                 m_barModelArea
                                 );
-                    }  // Loop through all the remove scripts and check if the hit element can be deleted.  
-                    
-                    
-                    
+                    } 
+					
+					// Loop through all the remove scripts and check if the hit element can be deleted.  
                     for (removeScript in m_removeScripts)
                     {
                         if (removeScript.removeElement(m_hitBarElement)) 
@@ -413,18 +409,16 @@ class HoldToCopy extends BaseBarModelScript
                 {
                     m_barToCard.cancelTransform();
                     m_transformInProgress = false;
-                }  // Stop the blink on the element to copy  
-                
-                
-                
+                } 
+				
+				// Stop the blink on the element to copy  
                 if (m_hitBarElementId != null) 
                 {
                     m_barModelArea.componentManager.removeComponentFromEntity(m_hitBarElementId, BlinkComponent.TYPE_ID);
                     m_hitBarElementId = null;
-                }  // Stop the tween of the dialog box  
-                
-                
-                
+                } 
+				
+				// Stop the tween of the dialog box  
                 Starling.current.juggler.remove(m_holdToCopyDescriptionTween);
             }
             
@@ -444,18 +438,16 @@ class HoldToCopy extends BaseBarModelScript
                     {
                         m_radiansToFill = 2 * Math.PI;
                         m_hasStartedCompletionAnimation = true;
-                    }  // Stop the blink on the element to copy  
-                    
-                    
-                    
+                    }
+					
+					// Stop the blink on the element to copy  
                     if (m_hitBarElementId != null) 
                     {
                         m_barModelArea.componentManager.removeComponentFromEntity(m_hitBarElementId, BlinkComponent.TYPE_ID);
                         m_hitBarElementId = null;
-                    }  // Force transform and start dragging  
-                    
-                    
-                    
+                    }  
+					
+					// Force transform and start dragging  
                     m_transformInProgress = true;
                     m_barToCard.forceTransform(
                             m_globalBuffer.x,
@@ -500,10 +492,9 @@ class HoldToCopy extends BaseBarModelScript
                     {
                         m_currentFillImage.removeFromParent(true);
                         m_currentFillImage.texture.dispose();
-                    }  // After every visit we need to update the fill of the radial bar  
-                    
-                    
-                    
+                    } 
+					
+					// After every visit we need to update the fill of the radial bar  
                     var newFillTexture : Texture = TextureUtil.getRingSegmentTexture(
                             m_innerRadius, m_outerRadius, -Math.PI / 2, m_radiansToFill, true, m_fillBitmapData, 0, true, 1, 0
                             );

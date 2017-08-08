@@ -42,7 +42,7 @@ class NewItemScreen extends Sprite
         var itemId : String = data.id;
         
         // Create tween of the burst rotating as a background element
-        var burstPurpleTexture : Texture = assetManager.getTexture("burst_purple.png");
+        var burstPurpleTexture : Texture = assetManager.getTexture("burst_purple");
         var targetScale : Float = 450 / burstPurpleTexture.width;
         var burstPurpleImage : Image = new Image(burstPurpleTexture);
         burstPurpleImage.pivotX = burstPurpleTexture.width * 0.5;

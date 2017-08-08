@@ -65,7 +65,7 @@ class OptionsScreen extends Sprite
         addChild(optionsBackingQuad);
         
         var optionsButtonContainer : Sprite = new Sprite();
-        var optionsBackground : Image = new Image(assetManager.getTexture("summary_background.png"));
+        var optionsBackground : Image = new Image(assetManager.getTexture("summary_background"));
         optionsButtonContainer.addChild(optionsBackground);
         
         // Button to close menu and resume the game
@@ -79,7 +79,7 @@ class OptionsScreen extends Sprite
                 new TextFormat(GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF),
                 new TextFormat(GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF)
                 );
-        var resumeIconTexture : Texture = assetManager.getTexture("arrow_yellow_icon.png");
+        var resumeIconTexture : Texture = assetManager.getTexture("arrow_yellow_icon");
         var resumeIcon : Image = new Image(resumeIconTexture);
         var resumeIconScale : Float = (buttonHeight * 0.8) / resumeIconTexture.height;
         resumeIcon.scaleX = resumeIcon.scaleY = resumeIconScale;
@@ -134,7 +134,7 @@ class OptionsScreen extends Sprite
                     new TextFormat(GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF),
                     new TextFormat(GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF)
                     );
-            var skipIconTexture : Texture = assetManager.getTexture("busy_icon.png");
+            var skipIconTexture : Texture = assetManager.getTexture("busy_icon");
             var skipIcon : Image = new Image(skipIconTexture);
             var skipIconScale : Float = (buttonHeight * 0.8) / skipIcon.height;
             skipIcon.scaleX = skipIcon.scaleY = skipIconScale;

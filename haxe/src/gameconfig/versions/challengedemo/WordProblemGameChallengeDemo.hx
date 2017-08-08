@@ -207,7 +207,7 @@ class WordProblemGameChallengeDemo extends WordProblemGameBase
         loginScreen.addEventListener(CommandEvent.WAIT_SHOW, onWaitShow);
         loginScreen.addEventListener(CommandEvent.USER_AUTHENTICATED, function(event : Event, params : Dynamic) : Void
                 {
-                    if (params != null && params.exists("grade")) 
+                    if (params != null && Reflect.hasField(params, "grade")) 
                     {
                         var userGrade : Int = Reflect.field(params, "grade");
                         if (!m_setUpClassAlready) 
@@ -501,7 +501,7 @@ class WordProblemGameChallengeDemo extends WordProblemGameBase
         // HACK: The type of the problem is encoded in the extra progression data.
         // The end/start level events trigger several other pieces
         // It seems like this logic should only be valid for versions that would include the new level type
-        if (extraLevelProgressionData != null && extraLevelProgressionData.exists("isProblemCreate") && extraLevelProgressionData.isProblemCreate) 
+        if (extraLevelProgressionData != null && Reflect.hasField(extraLevelProgressionData, "isProblemCreate") && extraLevelProgressionData.isProblemCreate) 
         {
             // If a problem is of level create type we have a different bundle of initial data
             // that needs to be loaded
@@ -605,7 +605,7 @@ class WordProblemGameChallengeDemo extends WordProblemGameBase
     {
         // For this version we ignore level pack since we are using a baked in progressions
         var gradeString : String = "";
-        if (details.exists("grade")) 
+        if (Reflect.hasField(details, "grade")) 
         {
             gradeString = Reflect.field(details, "grade");
         }  // properly (in particular we may get the grade that we need)    // It is only at this point do we have all the user data necessary for the game to set up    // Only do anything if no level is active or we have orders to interrupt  
@@ -680,12 +680,12 @@ class WordProblemGameChallengeDemo extends WordProblemGameBase
             // We use the assumption that the item ids referenced are only used
             // in the conditions sub element
             var edge : Dynamic = levelEdges[i];
-            if (edge.exists("conditions")) 
+            if (Reflect.hasField(edge, "conditions")) 
             {
                 var edgeConditions : Array<Dynamic> = edge.conditions;
                 for (j in 0...edgeConditions.length){
                     var condition : Dynamic = edgeConditions[j];
-                    if (condition.exists("name")) 
+                    if (Reflect.hasField(condition, "name")) 
                     {
                         var nodeNameInCondition : String = Reflect.field(condition, "name");
                         if (Lambda.indexOf(m_itemIdsToRemoveForCondition, nodeNameInCondition) > -1) 
@@ -710,13 +710,13 @@ class WordProblemGameChallengeDemo extends WordProblemGameBase
     private function _preprocessLevels(levelObject : Dynamic, userConditions : Dynamic) : Bool
     {
         var levelObjectAllowedForCondition : Bool = true;
-        if (levelObject.exists("condkey") && levelObject.exists("condvalue")) 
+        if (Reflect.hasField(levelObject, "condkey") && Reflect.hasField(levelObject, "condvalue")) 
         {
             var conditionKey : String = Reflect.field(levelObject, "condkey");
             var conditionValue : String = Reflect.field(levelObject, "condvalue");
             
             // If the level object for a
-            if (userConditions.exists(conditionKey)) 
+            if (Reflect.hasField(userConditions, conditionKey)) 
             {
                 var userConditionValue : String = Reflect.field(userConditions, conditionKey);
                 if (conditionValue != userConditionValue) 
@@ -729,7 +729,7 @@ class WordProblemGameChallengeDemo extends WordProblemGameBase
         
         
         
-        if (levelObjectAllowedForCondition && levelObject.exists("children")) 
+        if (levelObjectAllowedForCondition && Reflect.hasField(levelObject, "children")) 
         {
             var tempChildrenBuffer : Array<Dynamic> = new Array<Dynamic>();
             var children : Array<Dynamic> = levelObject.children;

@@ -105,18 +105,16 @@ class DeckCallout extends BaseGameScript
                         if (topmostHitObject != hitObject) 
                         {
                             continue;
-                        }  // Occurs during card flip. In this case we discard the old callout    // Possible for a card to take a new value that no longer matches the text in the callout  
-                        
-                        
-                        
-                        
-                        
+                        }  
+						
+						// Possible for a card to take a new value that no longer matches the text in the callout  
+                        // Occurs during card flip. In this case we discard the old callout  
                         var symbolName : String = m_gameEngine.getExpressionSymbolResources().getSymbolName(hitObject.getNode().data);
                         if (calloutForHitObject != null) 
                         {
                             // If an outside entity created the callout then do not override
                             // (i.e. if a tutorial hint added a callout over the card, we should not remove it)
-                            if (!m_calloutCreatedInternallyMap.exists(deckEntityId) || !Reflect.field(m_calloutCreatedInternallyMap, deckEntityId)) 
+                            if (!Reflect.hasField(m_calloutCreatedInternallyMap, deckEntityId) || !Reflect.field(m_calloutCreatedInternallyMap, deckEntityId)) 
                             {
                                 continue;
                             }
@@ -125,10 +123,9 @@ class DeckCallout extends BaseGameScript
                             {
                                 m_deckArea.componentManager.removeComponentFromEntity(deckEntityId, CalloutComponent.TYPE_ID);
                             }
-                        }  // Create a new callout for the hit object if one does not already exist  
-                        
-                        
-                        
+                        } 
+						
+						// Create a new callout for the hit object if one does not already exist  
                         if (calloutForHitObject == null) 
                         {
                             // If the contents of the tool tip is exactly the same as the text that is on the card,
@@ -136,14 +133,11 @@ class DeckCallout extends BaseGameScript
                             if (symbolName == m_gameEngine.getExpressionSymbolResources().getSymbolDataFromValue(hitObject.getNode().data).abbreviatedName) 
                             {
                                 continue;
-                            }  // Callout should point to middle of the VISIBLE portion only.    // of callout as the callout should point only to visible portion.    // Checked if hit object is clipped by edge of view port, this will affect positioning  
-                            
-                            
-                            
-                            
-                            
-                            
-                            
+                            }  
+							
+							// Checked if hit object is clipped by edge of view port, this will affect positioning  
+							// of callout as the callout should point only to visible portion.  
+                            // Callout should point to middle of the VISIBLE portion only.  
                             hitObject.getBounds(m_deckArea, m_localBoundsBuffer);
                             var calloutXOffset : Float = 0;
                             

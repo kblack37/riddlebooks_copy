@@ -180,7 +180,7 @@ class EnterNewCard extends BaseGameScript
                         null
                         );
         var closeDimensions : Float = 50;
-        var closeIcon : Image = new Image(assetManager.getTexture("wrong.png"));
+        var closeIcon : Image = new Image(assetManager.getTexture("wrong"));
         closeIcon.scaleX = closeIcon.scaleY = (closeDimensions * 0.8) / closeIcon.width;
         m_closeButton.upState = closeIcon.texture;
         m_closeButton.width = m_closeButton.height = closeDimensions;

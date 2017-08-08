@@ -84,7 +84,7 @@ class ComponentManager
      */
     public function getComponentListForType(componentType : String) : Array<Component>
     {
-        if (!m_activeComponentTypes.exists(componentType)) 
+        if (!Reflect.hasField(m_activeComponentTypes, componentType)) 
         {
             initStructuresForComponentType(componentType);
         }
@@ -102,7 +102,7 @@ class ComponentManager
     public function getComponentFromEntityIdAndType(entityId : String,
             componentType : String) : Component
     {
-        if (!m_activeComponentTypes.exists(componentType)) 
+        if (!Reflect.hasField(m_activeComponentTypes, componentType)) 
         {
             initStructuresForComponentType(componentType);
         }
@@ -122,7 +122,7 @@ class ComponentManager
         var entityId : String = component.entityId;
         var componentType : String = component.typeId;
         
-        if (!m_activeComponentTypes.exists(componentType)) 
+        if (!Reflect.hasField(m_activeComponentTypes, componentType)) 
         {
             initStructuresForComponentType(componentType);
         }

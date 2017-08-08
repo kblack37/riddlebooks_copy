@@ -150,13 +150,12 @@ class WidgetDragSystem extends BaseGameScript
                 var eventParams : Dynamic = {
                     widget : releasedWidget,
                     origin : releaseWidgetOrigin,
-
                 };
                 if (m_extraParams != null) 
                 {
                     for (extraParamAttribute in Reflect.fields(m_extraParams))
                     {
-                        if (!eventParams.exists(extraParamAttribute)) 
+                        if (!Reflect.hasField(eventParams, extraParamAttribute)) 
                         {
                             Reflect.setField(eventParams, extraParamAttribute, Reflect.field(m_extraParams, extraParamAttribute));
                         }
@@ -235,7 +234,7 @@ class WidgetDragSystem extends BaseGameScript
         if (customDisplay == null) 
         {
             // create a copy of the widget that can be dragged around the board
-            var widgetCopy : BaseTermWidget = new SymbolTermWidget(
+            widgetCopy = new SymbolTermWidget(
             node, 
             m_expressionSymbolMap, 
             m_assetManager
@@ -265,7 +264,6 @@ class WidgetDragSystem extends BaseGameScript
         var params : Dynamic = {
             termWidget : m_draggedWidget,
             location : new Point(x, y),
-
         };
         m_eventDispatcher.dispatchEventWith(eventType, false, params);
     }

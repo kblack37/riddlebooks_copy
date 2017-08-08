@@ -97,7 +97,7 @@ class ChangeMouseOnHighlightActive extends BaseProblemCreateScript
         setIsActive(m_isActive);
         
         var padding : Float = 4;
-        var indicatorTexture : Texture = m_assetManager.getTexture("card_background_square.png");
+        var indicatorTexture : Texture = m_assetManager.getTexture("card_background_square");
         var scale9Texture : Texture = Texture.fromTexture(indicatorTexture, 
 			new Rectangle(padding,
 				padding,
@@ -126,7 +126,7 @@ class ChangeMouseOnHighlightActive extends BaseProblemCreateScript
         // Get the color of the highlight based on the id
         var barPartName : String = params.id;
         var styleInformation : Dynamic = m_createState.getCurrentLevel().currentlySelectedBackgroundData;
-        if (styleInformation != null && styleInformation.exists("highlightColors")) 
+        if (styleInformation != null && Reflect.hasField(styleInformation, "highlightColors")) 
         {
             m_highlightIndicatorImage.color = Reflect.field(Reflect.field(styleInformation, "highlightColors"), barPartName);
         }

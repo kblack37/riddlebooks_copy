@@ -122,7 +122,7 @@ class DrawBarModelTypeHint extends BasicTextAndCharacterHint
     {
         // Add callout to the character (the thought bubble used as the default background
         // only has a small rectangular segment where we can properly fit the model
-        var calloutBackground : Texture = m_assetManager.getTexture("thought_bubble.png");
+        var calloutBackground : Texture = m_assetManager.getTexture("thought_bubble");
         var calloutWidth : Float = calloutBackground.width;
         var calloutHeight : Float = calloutBackground.height;
         var calloutVerticalPadding : Float = 20;

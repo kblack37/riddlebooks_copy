@@ -32,25 +32,30 @@ class WidgetUtil
             isToggle : Bool = false) : Button
     {
         var scaleNineRect : Rectangle = new Rectangle(8, 8, 16, 16);
-        var buttonBackground : Texture = assetManager.getTexture("button_white.png");
-        var buttonOutline : Texture = assetManager.getTexture("button_outline_white.png");
+        var buttonBackground : Texture = assetManager.getTexture("button_white");
+        var buttonOutline : Texture = assetManager.getTexture("button_outline_white");
         var defaultSkin : Image = new Image(Texture.fromTexture(buttonBackground, scaleNineRect));
         
-		var compositeArray = new Array<Image>();
-        var hoverBackground : Image = new Image(Texture.fromTexture(buttonBackground, scaleNineRect));
-        var hoverOutline : Image = new Image(Texture.fromTexture(buttonOutline, scaleNineRect));
-		compositeArray.push(hoverBackground);
-		compositeArray.push(hoverOutline);
-        var hoverSkin : Sprite = new Scale9CompositeImage(compositeArray);
-		
-		compositeArray = new Array<Image>();
-        
-        var downBackground : Image = new Image(Texture.fromTexture(buttonBackground, scaleNineRect));
-        var downOutline : Image = new Image(Texture.fromTexture(buttonOutline, scaleNineRect));
-        downOutline.color = 0x000000;
-		compositeArray.push(downBackground);
-		compositeArray.push(downOutline);
-        var downSkin : Sprite = new Scale9CompositeImage(compositeArray);
+		// TODO: Starling button skins are Textures, not Images or Sprites, so these
+		// routines for combining Images will have to be redesigned or replaced when 
+		// Starling is. the code below the comment is just placeholder
+		//var compositeArray = new Array<Image>();
+        //var hoverBackground : Image = new Image(Texture.fromTexture(buttonBackground, scaleNineRect));
+        //var hoverOutline : Image = new Image(Texture.fromTexture(buttonOutline, scaleNineRect));
+		//compositeArray.push(hoverBackground);
+		//compositeArray.push(hoverOutline);
+        //var hoverSkin : Sprite = new Scale9CompositeImage(compositeArray);
+		//
+		//compositeArray = new Array<Image>();
+        //
+        //var downBackground : Image = new Image(Texture.fromTexture(buttonBackground, scaleNineRect));
+        //var downOutline : Image = new Image(Texture.fromTexture(buttonOutline, scaleNineRect));
+        //downOutline.color = 0x000000;
+		//compositeArray.push(downBackground);
+		//compositeArray.push(downOutline);
+        //var downSkin : Sprite = new Scale9CompositeImage(compositeArray);
+		var hoverSkin : Image = defaultSkin;
+		var downSkin : Image = defaultSkin;
         
         var button : Button = WidgetUtil.createButtonFromImages(defaultSkin,
                 downSkin, null, hoverSkin, label, textFormatDefault, textFormatHover, isToggle);
@@ -63,14 +68,20 @@ class WidgetUtil
      */
     public static function changeColorForGenericButton(genericButton : Button, color : Int) : Void
     {
-        var defaultSkin : Image = try cast(genericButton.upState, Image) catch(e:Dynamic) null;
-        defaultSkin.color = color;
+        var defaultSkin : Texture = try cast(genericButton.upState, Texture) catch(e:Dynamic) null;
+        var defaultSkinImage : Image = new Image(defaultSkin);
+		defaultSkinImage.color = color;
+		genericButton.upState = defaultSkinImage.texture;
         
-        var hoverSkin : Image = try cast((try cast(genericButton.overState, Sprite) catch(e:Dynamic) null).getChildAt(0), Image) catch(e:Dynamic) null;
-        hoverSkin.color = XColor.shadeColor(color, 0.2);
+        var hoverSkin : Texture = try cast(genericButton.overState, Texture) catch (e:Dynamic) null;
+		var hoverSkinImage : Image = new Image(hoverSkin);
+        hoverSkinImage.color = XColor.shadeColor(color, 0.2);
+		genericButton.overState = hoverSkinImage.texture;
         
-        var downSkin : Image = try cast((try cast(genericButton.downState, Sprite) catch(e:Dynamic) null).getChildAt(0), Image) catch(e:Dynamic) null;
-        downSkin.color = XColor.shadeColor(color, -0.2);
+        var downSkin : Texture = try cast(genericButton.downState, Texture) catch (e:Dynamic) null;
+		var downSkinImage : Image = new Image(downSkin);
+        downSkinImage.color = XColor.shadeColor(color, -0.2);
+		genericButton.downState = downSkinImage.texture;
     }
     
     /**
@@ -141,11 +152,11 @@ class WidgetUtil
 		// TODO: uncomment once ToggleButton is designed
 		//
         var button : Button = /*((isToggle)) ? new ToggleButton() : */new Button(
-			try cast(defaultSkin, Texture) catch (e : Dynamic) null,
+			try cast(defaultSkin, Image).texture catch (e : Dynamic) null,
 			label,
-			try cast(downSkin, Texture) catch (e : Dynamic) null,
-			try cast(hoverSkin, Texture) catch (e : Dynamic) null,
-			try cast(disabledSkin, Texture) catch (e : Dynamic) null
+			try cast(downSkin, Image).texture catch (e : Dynamic) null,
+			try cast(hoverSkin, Image).texture catch (e : Dynamic) null,
+			try cast(disabledSkin, Image).texture catch (e : Dynamic) null
 		);
         
 		// TODO: uncomment once buttons need to be figured out
@@ -210,32 +221,32 @@ class WidgetUtil
         //scrollbar.thumbFactory = function() : Button
                 //{
                     //var thumbButton : Button = new Button();
-                    //thumbButton.defaultSkin = new Image(getTexture("scrollbar_button.png"));
-                    //thumbButton.downSkin = new Image(getTexture("scrollbar_button_click.png"));
-                    //thumbButton.hoverSkin = new Image(getTexture("scrollbar_button_mouseover.png"));
+                    //thumbButton.defaultSkin = new Image(getTexture("scrollbar_button"));
+                    //thumbButton.downSkin = new Image(getTexture("scrollbar_button_click"));
+                    //thumbButton.hoverSkin = new Image(getTexture("scrollbar_button_mouseover"));
                     //return thumbButton;
                 //};
         //
         //scrollbar.decrementButtonFactory = function() : Button
                 //{
                     //var decrementButton : Button = new Button();
-                    //decrementButton.defaultSkin = new Image(getTexture("scrollbar_up.png"));
-                    //decrementButton.downSkin = new Image(getTexture("scrollbar_up_click.png"));
+                    //decrementButton.defaultSkin = new Image(getTexture("scrollbar_up"));
+                    //decrementButton.downSkin = new Image(getTexture("scrollbar_up_click"));
                     //return decrementButton;
                 //};
         //
         //scrollbar.incrementButtonFactory = function() : Button
                 //{
                     //var incrementButton : Button = new Button();
-                    //incrementButton.defaultSkin = new Image(getTexture("scrollbar_down.png"));
-                    //incrementButton.downSkin = new Image(getTexture("scrollbar_down_click.png"));
+                    //incrementButton.defaultSkin = new Image(getTexture("scrollbar_down"));
+                    //incrementButton.downSkin = new Image(getTexture("scrollbar_down_click"));
                     //return incrementButton;
                 //};
         //
         //scrollbar.minimumTrackFactory = function() : Button
                 //{
                     //var trackButton : Button = new Button();
-                    //trackButton.defaultSkin = new Image(getTexture("scrollbar_track.png"));
+                    //trackButton.defaultSkin = new Image(getTexture("scrollbar_track"));
                     //return trackButton;
                 //};
         //

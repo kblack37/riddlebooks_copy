@@ -68,7 +68,7 @@ class BarModelData
                 var labelValue : String = barLabel.value;
                 if (aliasToTermMap.exists(labelValue)) 
                 {
-                    m_elementIdToOldValueRestoreMap[Std.parseInt(barLabel.id)] = labelValue;
+					Reflect.setField(m_elementIdToOldValueRestoreMap, barLabel.id, labelValue);
                     barLabel.value = Reflect.field(aliasToTermMap, labelValue);
                 }
             }
@@ -79,7 +79,7 @@ class BarModelData
                 var comparisonValue : String = barComparison.value;
                 if (aliasToTermMap.exists(comparisonValue)) 
                 {
-                    m_elementIdToOldValueRestoreMap[Std.parseInt(barComparison.id)] = comparisonValue;
+					Reflect.setField(m_elementIdToOldValueRestoreMap, barComparison.id, comparisonValue);
                     barComparison.value = Reflect.field(aliasToTermMap, comparisonValue);
                 }
             }
@@ -90,8 +90,8 @@ class BarModelData
             var labelValue = barLabel.value;
             if (aliasToTermMap.exists(labelValue)) 
             {
-                m_elementIdToOldValueRestoreMap[Std.parseInt(barLabel.id)] = labelValue;
-                barLabel.value = aliasToTermMap[Std.parseInt(labelValue)];
+				Reflect.setField(m_elementIdToOldValueRestoreMap, barLabel.id, labelValue);
+				barLabel.value = Reflect.field(aliasToTermMap, labelValue);
             }
         }
     }
@@ -112,7 +112,7 @@ class BarModelData
                     var barLabel : BarLabel = barLabels[j];
                     if (m_elementIdToOldValueRestoreMap.exists(barLabel.id)) 
                     {
-                        barLabel.value = m_elementIdToOldValueRestoreMap[Std.parseInt(barLabel.id)];
+						barLabel.value = Reflect.field(m_elementIdToOldValueRestoreMap, barLabel.id);
                     }
                 }
                 
@@ -122,16 +122,16 @@ class BarModelData
                     var comparisonValue : String = barComparison.value;
                     if (m_elementIdToOldValueRestoreMap.exists(barComparison.id)) 
                     {
-                        barComparison.value = m_elementIdToOldValueRestoreMap[Std.parseInt(barComparison.id)];
+						barComparison.value = Reflect.field(m_elementIdToOldValueRestoreMap, barComparison.id);
                     }
                 }
             }
             
             for (i in 0...verticalBarLabels.length){
                 var barLabel = verticalBarLabels[i];
-                if (m_elementIdToOldValueRestoreMap.exists(Std.parseInt(barLabel.id))) 
+                if (Reflect.hasField(m_elementIdToOldValueRestoreMap, barLabel.id)) 
                 {
-                    barLabel.value = m_elementIdToOldValueRestoreMap[Std.parseInt(barLabel.id)];
+					barLabel.value = Reflect.field(m_elementIdToOldValueRestoreMap, barLabel.id);
                 }
             }
         }

@@ -70,7 +70,7 @@ class ModalButtonControl implements IDisposable
         m_modalButtonBounds = new Rectangle();
         
         var maxButtonDimension : Float = 48;
-        var mainButtonBgTexture : Texture = getTexture("card_background_circle.png");
+        var mainButtonBgTexture : Texture = getTexture("card_background_circle");
         var deleteIconTexture : Texture = assetManager.getTexture(iconTextureName);
         
         // Need to define the max bounds of the button

@@ -206,7 +206,6 @@ class BarToCard extends BaseBarModelScript
             {
                 extraDragParams = {
                             color : m_barColor
-
                         };
             }
             
@@ -214,7 +213,6 @@ class BarToCard extends BaseBarModelScript
             {
                 extraDragParams = {
                             label : m_barLabelValueOnSegment
-
                         };
             }
             
@@ -262,7 +260,7 @@ class BarToCard extends BaseBarModelScript
         if (BarModelHitAreaUtil.getBarElementUnderPoint(m_outParamsBuffer, barModelArea, barModelPoint, m_boundsBuffer, prioritizeLabels)) 
         {
             hitElement = m_outParamsBuffer[0];
-            var hitElementIndex : Int = Std.parseInt(m_outParamsBuffer[1]);
+            var hitElementIndex : Int = m_outParamsBuffer[1];
             var hitBarView : BarWholeView = try cast(m_outParamsBuffer[2], BarWholeView) catch(e:Dynamic) null;
             
             // Save the view that was hit
@@ -412,12 +410,10 @@ class BarToCard extends BaseBarModelScript
                 {
                     m_barElementCopy.x = m_globalMouseBuffer.x;
                     m_barElementCopy.y = m_globalMouseBuffer.y;
-                }  // In the case of a bar segment there is no tween so the drag system will immediately detect the drag.    // We only want to create the dragged copy once while dragging.  
-                
-                
-                
-                
-                
+                }  
+				
+				// We only want to create the dragged copy once while dragging.  
+                // In the case of a bar segment there is no tween so the drag system will immediately detect the drag.
                 if (m_barElementCopy == null && m_widgetDragSystem.getWidgetSelected() == null) 
                 {
                     Audio.instance.playSfx("bar2card");

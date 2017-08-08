@@ -77,7 +77,7 @@ class AchievementUnlockedAnimation implements IDisposable
         
         // Create a banner to indicate an achievement was earned
         var bannerContainer : Sprite = new Sprite();
-        var arch : DisplayObject = new Image(assetManager.getTexture("Art_YellowArch.png"));
+        var arch : DisplayObject = new Image(assetManager.getTexture("Art_YellowArch"));
         arch.scaleX = arch.scaleY = 1.5;
         var topY : Float = -36;
         var startX : Float = 0;
@@ -94,7 +94,7 @@ class AchievementUnlockedAnimation implements IDisposable
         bannerContainer.addChild(textB);
         
         // Draw the background image for the achievement name text
-        var backgroundTexture : Texture = assetManager.getTexture("button_white.png");
+        var backgroundTexture : Texture = assetManager.getTexture("button_white");
         var textAndBgContainer : Sprite = new Sprite();
         var padding : Float = 8;
         var backgroundHeight : Float = maxHeight * 0.75;

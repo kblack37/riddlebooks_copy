@@ -283,17 +283,17 @@ class BarModelView extends Sprite
     
     public function createBarLabelView(barLabel : BarLabel) : BarLabelView
     {
-        var leftBracketTexture : Texture = m_assetManager.getTexture("assets/ui/bar_model/bracket_left_edge.png");
-        var rightBracketTexture : Texture = m_assetManager.getTexture("assets/ui/bar_model/bracket_right_edge.png");
-        var middleBracketTexture : Texture = m_assetManager.getTexture("assets/ui/bar_model/bracket_middle.png");
-        var fullBracketTexture : Texture = m_assetManager.getTexture("assets/ui/bar_model/bracket_full.png");
+        var leftBracketTexture : Texture = m_assetManager.getTexture("bracket_left_edge");
+        var rightBracketTexture : Texture = m_assetManager.getTexture("bracket_right_edge");
+        var middleBracketTexture : Texture = m_assetManager.getTexture("bracket_middle");
+        var fullBracketTexture : Texture = m_assetManager.getTexture("bracket_full");
         
         var blankTexturePadding : Float = 12;
-        var blankTexture : Texture = m_assetManager.getTexture("assets/card/wildcard.png");
+        var blankTexture : Texture = m_assetManager.getTexture("wildcard");
         var blankNineSliceGrid : Rectangle = new Rectangle(blankTexturePadding, blankTexturePadding, blankTexture.width - 2 * blankTexturePadding, blankTexture.height - 2 * blankTexturePadding);
         
-        var dottedLineCornerTexture : Texture = m_assetManager.getTexture("assets/ui/bar_model/dotted_line_corner.png");
-        var dottedLineSegmentTexture : Texture = m_assetManager.getTexture("assets/ui/bar_model/dotted_line_segment.png");
+        var dottedLineCornerTexture : Texture = m_assetManager.getTexture("dotted_line_corner");
+        var dottedLineSegmentTexture : Texture = m_assetManager.getTexture("dotted_line_segment");
         
         // Look at the expression symbol map for styling properties
         // Color text inside segment differently than outside
@@ -336,9 +336,9 @@ class BarModelView extends Sprite
     
     public function createBarComparisonView(barComparison : BarComparison) : BarComparisonView
     {
-        var comparisonLeftTexture : Texture = m_assetManager.getTexture("assets/ui/bar_model/comparison_left.png");
-        var comparisonRightTexture : Texture = m_assetManager.getTexture("assets/ui/bar_model/comparison_right.png");
-        var comparisonFullTexture : Texture = m_assetManager.getTexture("assets/ui/bar_model/comparison_full.png");
+        var comparisonLeftTexture : Texture = m_assetManager.getTexture("comparison_left");
+        var comparisonRightTexture : Texture = m_assetManager.getTexture("comparison_right");
+        var comparisonFullTexture : Texture = m_assetManager.getTexture("comparison_full");
         var threeSlicePadding : Float = 28;
 		// TODO: this image was replaced from the feathers library and will probably need to be fixed
         var threeSliceComparisonTexture : Texture = Texture.fromTexture(comparisonFullTexture);
@@ -914,7 +914,7 @@ class BarModelView extends Sprite
 		// The redraw function needs to first draw unscaled versions of the bars and their segments.  
         var i : Int = 0;
         var numBarWholes : Int = m_barModelData.barWholes.length;
-        var segmentTexture : Texture = m_assetManager.getTexture("assets/card/card_background_square.png");
+        var segmentTexture : Texture = m_assetManager.getTexture("card_background_square");
         var nineSlicePadding : Float = 8;
         var nineSliceTexture : Texture = Texture.fromTexture(segmentTexture, 
 			new Rectangle(nineSlicePadding, 
@@ -925,15 +925,15 @@ class BarModelView extends Sprite
         );
         
         var blankTexturePadding : Float = 12;
-        var blankTexture : Texture = m_assetManager.getTexture("assets/card/wildcard.png");
+        var blankTexture : Texture = m_assetManager.getTexture("wildcard");
         var blankNineSliceGrid : Rectangle = new Rectangle(blankTexturePadding,
 			blankTexturePadding,
 			blankTexture.width - 2 * blankTexturePadding,
 			blankTexture.height - 2 * blankTexturePadding
 		);
         
-        var dottedLineCornerTexture : Texture = m_assetManager.getTexture("assets/ui/bar_model/dotted_line_corner.png");
-        var dottedLineSegmentTexture : Texture = m_assetManager.getTexture("assets/ui/bar_model/dotted_line_segment.png");
+        var dottedLineCornerTexture : Texture = m_assetManager.getTexture("dotted_line_corner");
+        var dottedLineSegmentTexture : Texture = m_assetManager.getTexture("dotted_line_segment");
         
         for (i in 0...numBarWholes){
             var barWhole : BarWhole = m_barModelData.barWholes[i];

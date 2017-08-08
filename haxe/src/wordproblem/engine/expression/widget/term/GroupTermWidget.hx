@@ -38,7 +38,7 @@ class GroupTermWidget extends BaseTermWidget
         if (node.isSpecificOperator(vectorSpace.getDivisionOperator())) 
         {
             // The division symbol needs to be able to scale horizontally if it is the bar
-            var texture : Texture = assetManager.getTexture("divide_bar.png");
+            var texture : Texture = assetManager.getTexture("divide_bar");
             var centerX : Float = 10;
             var centerWidth : Float = texture.width - 2 * centerX;
 			// TODO: this was converted from a Scale3Texture from the feathers library

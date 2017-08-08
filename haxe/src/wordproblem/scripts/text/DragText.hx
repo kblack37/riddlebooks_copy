@@ -112,7 +112,6 @@ class DragText extends BaseGameScript
                         regionDropped : uiComponentName,
                         locationX : m_mousePoint.x,
                         locationY : m_mousePoint.y,
-
                     };
                     if (dropIsAnExpression) 
                     {
@@ -127,7 +126,6 @@ class DragText extends BaseGameScript
                                 isExpression : dropIsAnExpression,
                                 regionDropped : uiComponentName,
                                 location : m_mousePoint,
-
                             };
                     m_gameEngine.dispatchEventWith(GameEvent.RELEASE_TEXT_AREA, false, params);
                 }
@@ -141,10 +139,9 @@ class DragText extends BaseGameScript
             if (Layer.getDisplayObjectIsInInactiveLayer(m_textAreaWidget)) 
             {
                 return ScriptStatus.FAIL;
-            }  // Need to check that we are within the bounding of this mask  
-            
-            
-            
+            }  
+			
+			// Need to check that we are within the bounding of this mask  
             if (mouseState.leftMousePressedThisFrame) 
             {
                 // The hit test should return the document view furthest down in the tree structure.

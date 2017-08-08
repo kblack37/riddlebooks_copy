@@ -140,11 +140,11 @@ class ExpressionSymbolMap
 		// Add in operator symbols to the atlas if they haven't already been specified  
         // The defaults are to use a single embedded static image
         var operatorNames : Array<String> = ["+", "/", "=", "*", "-"];
-        var operatorTextures : Array<String> = ["assets/operators/plus.png",
-			"assets/operators/divide_bar.png",
-			"assets/operators/equal.png",
-			"assets/operators/multiply_x.png",
-			"assets/operators/subtract.png"
+        var operatorTextures : Array<String> = ["plus",
+			"divide_bar",
+			"equal",
+			"multiply_x",
+			"subtract"
 		];
         for (i in 0...operatorNames.length){
             var operatorName : String = operatorNames[i];
