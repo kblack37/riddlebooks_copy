@@ -145,6 +145,8 @@ class RadialMenuControl implements IDisposable
         
         m_localLocationBuffer = new Point();
         m_globalLocationBuffer = new Point();
+		
+		m_hitSegmentIndexOnLastFrame = -1;
     }
     
     public function getRadialMenuContainer() : Sprite
@@ -235,12 +237,10 @@ class RadialMenuControl implements IDisposable
                         }
                     }
                 }
-            }  // mouse out    // If the hit segment on the new frame doesn't exist then trigger a  
-            
-            
-            
-            
-            
+            }  
+			
+			// If the hit segment on the new frame doesn't exist then trigger a  
+            // mouse out   
             if (m_hitSegmentIndexOnLastFrame != hitSegmentIndex && m_hitSegmentIndexOnLastFrame >= 0) 
             {
                 if (m_enabledGestures[m_hitSegmentIndexOnLastFrame]) 
@@ -249,10 +249,9 @@ class RadialMenuControl implements IDisposable
                 }
                 
                 m_mouseOutOptionCallback(m_hitSegmentIndexOnLastFrame);
-            }  // If the hit segment on this frame is new then trigger a mouse in  
-            
-            
-            
+            } 
+			
+			// If the hit segment on this frame is new then trigger a mouse in  
             if (m_hitSegmentIndexOnLastFrame != hitSegmentIndex && hitSegmentIndex >= 0) 
             {
                 if (m_enabledGestures[hitSegmentIndex]) 
@@ -261,10 +260,9 @@ class RadialMenuControl implements IDisposable
                 }
                 
                 m_mouseOverOptionCallback(hitSegmentIndex);
-            }  // Check for click on a segment (this is the selection of an option)  
-            
-            
-            
+            } 
+			
+			// Check for click on a segment (this is the selection of an option)  
             if (m_mouseState.leftMousePressedThisFrame) 
             {
                 if (hitSegmentIndex == -1) 

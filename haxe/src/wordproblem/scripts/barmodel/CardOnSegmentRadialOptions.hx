@@ -118,8 +118,8 @@ class CardOnSegmentRadialOptions extends BaseBarModelScript
                 if (BarModelHitAreaUtil.checkPointInBarSegment(m_outParamsBuffer, m_barModelArea, m_localMouseBuffer)) 
                 {
                     var value : String = m_widgetDragSystem.getWidgetSelected().getNode().data;
-                    var targetBarWhole : BarWhole = m_barModelArea.getBarWholeViews()[Std.parseInt(m_outParamsBuffer[0])].data;
-                    var targetBarSegmentIndex : Int = Std.parseInt(m_outParamsBuffer[1]);
+                    var targetBarWhole : BarWhole = m_barModelArea.getBarWholeViews()[m_outParamsBuffer[0]].data;
+                    var targetBarSegmentIndex : Int = m_outParamsBuffer[1];
                     var segmentId : String = targetBarWhole.barSegments[targetBarSegmentIndex].id;
                     
                     // For the radial menu to pop up, the number of possible actions that can execute with the given
@@ -275,8 +275,8 @@ class CardOnSegmentRadialOptions extends BaseBarModelScript
             if (Std.is(droppedObject, SymbolTermWidget) && BarModelHitAreaUtil.checkPointInBarSegment(m_outParamsBuffer, m_barModelArea, m_localMouseBuffer)) 
             {
                 var value : String = droppedObject.getNode().data;
-                var targetBarWhole : BarWhole = m_barModelArea.getBarWholeViews()[Std.parseInt(m_outParamsBuffer[0])].data;
-                var targetBarSegmentIndex : Int = Std.parseInt(m_outParamsBuffer[1]);
+                var targetBarWhole : BarWhole = m_barModelArea.getBarWholeViews()[m_outParamsBuffer[0]].data;
+                var targetBarSegmentIndex : Int = m_outParamsBuffer[1];
                 var segmentId : String = targetBarWhole.barSegments[targetBarSegmentIndex].id;
                 
                 // For the radial menu to pop up, the number of possible actions that can execute with the given

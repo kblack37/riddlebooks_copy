@@ -104,7 +104,6 @@ class FlipTerm extends BaseTermAreaScript
                 regionFlipped : uiComponentName,
                 locationX : mousePoint.x,
                 locationY : mousePoint.y,
-
             };
             m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.NEGATE_EXPRESSION_EVENT, false, loggingDetails);
             

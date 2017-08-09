@@ -54,7 +54,9 @@ class ResizeBarComparison extends BaseBarModelScript
     /**
      * Throw off sparks to give indication the user is dragging an edge.
      */
-    private var m_sparklerAnimation : SparklerAnimation;
+	// TODO: uncomment references to the sparkler animation once animation
+	// issues are fixed
+    //private var m_sparklerAnimation : SparklerAnimation;
     
     private var m_outParamsBuffer : Array<Dynamic>;
     
@@ -66,7 +68,7 @@ class ResizeBarComparison extends BaseBarModelScript
     {
         super(gameEngine, expressionCompiler, assetManager, id, isActive);
         m_outParamsBuffer = new Array<Dynamic>();
-        m_sparklerAnimation = new SparklerAnimation(assetManager);
+        //m_sparklerAnimation = new SparklerAnimation(assetManager);
     }
     
     override public function visit() : Int
@@ -89,9 +91,9 @@ class ResizeBarComparison extends BaseBarModelScript
                     var comparisonView : BarComparisonView = m_targetBarView.comparisonView;
                     m_comparisonViewOriginalLength = comparisonView.pixelLength;
                     
-                    m_sparklerAnimation.x = comparisonView.width;
-                    m_sparklerAnimation.y = comparisonView.y +comparisonView.height;  //* 0.5;  ;
-                    m_sparklerAnimation.play(comparisonView);
+                    //m_sparklerAnimation.x = comparisonView.width;
+                    //m_sparklerAnimation.y = comparisonView.y +comparisonView.height;  //* 0.5;  ;
+                    //m_sparklerAnimation.play(comparisonView);
                     
                     // Assuming that the bar model cannot change while we are dragging,
                     // We can take a snapshot of all possible segments that the comparison edge can snap to.
@@ -106,7 +108,7 @@ class ResizeBarComparison extends BaseBarModelScript
                 if (checkClosestSegmentEdge(m_targetBarView.comparisonView, m_localMouseBuffer, m_outParamsBuffer)) 
                 {
                     var closestBarWholeView : BarWholeView = try cast(m_outParamsBuffer[0], BarWholeView) catch(e:Dynamic) null;
-                    var closestBarSegmentIndex : Int = Std.parseInt(m_outParamsBuffer[1]);
+                    var closestBarSegmentIndex : Int = m_outParamsBuffer[1];
                     var closestDistance : Float = Math.abs(try cast(m_outParamsBuffer[2], Float) catch(e:Dynamic) 0);
                     var barComparisonView : BarComparisonView = m_targetBarView.comparisonView;
                     var newLength : Float = 0;
@@ -128,7 +130,7 @@ class ResizeBarComparison extends BaseBarModelScript
                         // Move sparkler over
                         newLength /= m_barModelArea.scaleFactor;
                         barComparisonView.resizeToLength(newLength);
-                        m_sparklerAnimation.x = newLength;
+                        //m_sparklerAnimation.x = newLength;
                     }
                 }
                 
@@ -141,7 +143,7 @@ class ResizeBarComparison extends BaseBarModelScript
                     var previousModelDataSnapshot : BarModelData = m_barModelArea.getBarModelData().clone();
                     
                     var closestBarWholeView = try cast(m_outParamsBuffer[0], BarWholeView) catch(e:Dynamic) null;
-                    var closestBarSegmentIndex = Std.parseInt(m_outParamsBuffer[1]);
+                    var closestBarSegmentIndex = m_outParamsBuffer[1];
                     
                     // Write out the change and redraw
                     // TODO: If the data did not change no need to write it out
@@ -167,7 +169,7 @@ class ResizeBarComparison extends BaseBarModelScript
                     }
                 }
                 
-                m_sparklerAnimation.stop();
+                //m_sparklerAnimation.stop();
                 m_targetBarView = null;
                 status = ScriptStatus.SUCCESS;
             }
@@ -181,7 +183,7 @@ class ResizeBarComparison extends BaseBarModelScript
         super.setIsActive(value);
         if (m_ready && !value) 
         {
-            m_sparklerAnimation.stop();
+            //m_sparklerAnimation.stop();
         }
     }
     

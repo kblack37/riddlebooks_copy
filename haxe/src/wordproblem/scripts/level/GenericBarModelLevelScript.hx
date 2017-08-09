@@ -782,37 +782,37 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
         
         // Keep the ui part down until the first click (allows user to see more of the background as
         // an added benefit.
-        //var uiContainer : DisplayObject = m_gameEngine.getUiEntity("deckAndTermContainer");
-        //var startingUiContainerY : Float = uiContainer.y;
-        //m_switchModelScript.setContainerOriginalY(startingUiContainerY);
-        //uiContainer.y = 600;
-        //var otherSequence : SequenceSelector = new SequenceSelector();
-        //
-        //// Color for click to continue should match that of the paragraph
-        //var textStyle : Dynamic = currentLevel.getCssStyleObject();
-        //var clickToContinueColor : Int = 0;
-        //if (textStyle != null && Reflect.hasField(textStyle, "p")) 
-        //{
-            //var paragraphStyle : Dynamic = Reflect.field(textStyle, "p");
-            //if (Reflect.hasField(paragraphStyle, "color")) 
-            //{
-                //clickToContinueColor = Reflect.field(paragraphStyle, "color");
-            //}
-        //}
-        //otherSequence.pushChild(new CustomVisitNode(clickToContinue, {
-                    //x : 300,
-                    //y : 300,
-                    //color : clickToContinueColor,
-                //}));
-        //otherSequence.pushChild(new CustomVisitNode(function(param : Dynamic) : Int
-                //{
-                    //Starling.current.juggler.tween(uiContainer, 0.3, {
-                                //y : startingUiContainerY
-                            //});
-                    //deleteChild(otherSequence);
-                    //return ScriptStatus.SUCCESS;
-                //}, { }));
-        //this.pushChild(otherSequence);
+        var uiContainer : DisplayObject = m_gameEngine.getUiEntity("deckAndTermContainer");
+        var startingUiContainerY : Float = uiContainer.y;
+        m_switchModelScript.setContainerOriginalY(startingUiContainerY);
+        uiContainer.y = 600;
+        var otherSequence : SequenceSelector = new SequenceSelector();
+        
+        // Color for click to continue should match that of the paragraph
+        var textStyle : Dynamic = currentLevel.getCssStyleObject();
+        var clickToContinueColor : Int = 0;
+        if (textStyle != null && Reflect.hasField(textStyle, "p")) 
+        {
+            var paragraphStyle : Dynamic = Reflect.field(textStyle, "p");
+            if (Reflect.hasField(paragraphStyle, "color")) 
+            {
+                clickToContinueColor = Reflect.field(paragraphStyle, "color");
+            }
+        }
+        otherSequence.pushChild(new CustomVisitNode(clickToContinue, {
+                    x : 300,
+                    y : 300,
+                    color : clickToContinueColor,
+                }));
+        otherSequence.pushChild(new CustomVisitNode(function(param : Dynamic) : Int
+                {
+                    Starling.current.juggler.tween(uiContainer, 0.3, {
+                                y : startingUiContainerY
+                            });
+                    deleteChild(otherSequence);
+                    return ScriptStatus.SUCCESS;
+                }, { }));
+        this.pushChild(otherSequence);
     }
     
     override private function processBufferedEvent(eventType : String, param : Dynamic) : Void

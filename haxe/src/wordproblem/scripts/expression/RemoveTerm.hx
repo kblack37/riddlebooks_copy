@@ -91,15 +91,10 @@ class RemoveTerm extends BaseTermAreaScript
                         var draggedTermValue : String = m_selectedWidget.getNode().data;
                         var canRemoveTerm : Bool = true;
                         var nonRemoveableTerms : Array<String> = m_levelRules.termsNotRemovable;
-                        for (i in 0...nonRemoveableTerms.length){
-                            var nonRemoveableValue : String = nonRemoveableTerms[i];
-                            if (nonRemoveableValue == draggedTermValue) 
-                            {
-                                canRemoveTerm = false;
-                                break;
-                            }
-                        }
-                        
+						if (nonRemoveableTerms.indexOf(draggedTermValue) >= 0) {
+							canRemoveTerm = false;
+						}
+						
                         if (canRemoveTerm) 
                         {
                             // This small segment of code is overrideable because we want a slightly modified
@@ -111,7 +106,6 @@ class RemoveTerm extends BaseTermAreaScript
                             m_draggedWidget = null;
                             m_gameEngine.dispatchEventWith(GameEvent.REMOVE_TERM, false, {
                                         widget : m_selectedWidget
-
                                     });
                             
                             m_gameEngine.dispatchEventWith(GameEvent.EQUATION_CHANGED);
@@ -196,7 +190,6 @@ class RemoveTerm extends BaseTermAreaScript
             regionPickup : uiComponentName,
             locationX : m_mousePoint.x,
             locationY : m_mousePoint.y,
-
         };
         m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.EXPRESSION_PICKUP_EVENT, false, loggingDetails_pickup);
     }

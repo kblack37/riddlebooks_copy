@@ -146,8 +146,8 @@ class BarToCard extends BaseBarModelScript
         
         var selectedBarModelElementCopy : Image = BarModelToExpressionAnimation.convertBarModelViewsToSingleImage(
                 m_barElementsToTransform, barModelArea.stage, barModelArea.scaleFactor, m_boundsBuffer
-                );
-        
+        );
+		
         // If the element should be converted into a card we play a tween where the element shrinks to nothing
         // otherwise we can start dragging the element without any extra tween
         if (m_doCreateCardForBarElements) 
@@ -320,7 +320,7 @@ class BarToCard extends BaseBarModelScript
                         // row with the same segment value as the one that was dragged.
                         var numSegmentsWithTheSameValue : Int = 0;
                         var segmentValueOfHitPart : Float = barSegmentView.data.getValue();
-                        for (segmentViewInBar/* AS3HX WARNING could not determine type for var: segmentViewInBar exp: EField(EIdent(hitBarView),segmentViews) type: null */ in hitBarView.segmentViews)
+                        for (segmentViewInBar in hitBarView.segmentViews)
                         {
                             if (segmentViewInBar.data.getValue() == segmentValueOfHitPart) 
                             {
@@ -379,8 +379,6 @@ class BarToCard extends BaseBarModelScript
                 idOfHitElement = (try cast(hitElement, BarComparisonView) catch(e:Dynamic) null).data.id;
             }
             
-            
-            
             if (idOfHitElement != null && Lambda.indexOf(m_idsToIgnore, idOfHitElement) > -1) 
             {
                 hitExpressionValue = null;
@@ -420,10 +418,6 @@ class BarToCard extends BaseBarModelScript
                     forceTransform(m_globalMouseBuffer.x, m_globalMouseBuffer.y, m_termValueSelected, m_widgetDragSystem, m_barModelArea);
                 }
             }
-            
-            
-            
-            
             
             if (m_mouseState.leftMouseReleasedThisFrame) 
             {

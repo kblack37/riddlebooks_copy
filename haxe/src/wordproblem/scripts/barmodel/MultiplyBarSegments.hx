@@ -117,7 +117,7 @@ class MultiplyBarSegments extends BaseBarModelScript implements IHitAreaScript
                 {
                     clearPreview();
                     
-                    var barIndex : Int = Std.parseInt(m_outParamsBuffer[0]);
+                    var barIndex : Int = m_outParamsBuffer[0];
                     var barWholeView : BarWholeView = m_barModelArea.getBarWholeViews()[barIndex];
                     var numCopies : Int = Std.parseInt(releasedExpressionNode.data);
                     
@@ -160,7 +160,7 @@ class MultiplyBarSegments extends BaseBarModelScript implements IHitAreaScript
                     m_showHitAreas = true;
                     if (getMouseInHitAreas(m_outParamsBuffer)) 
                     {
-                        var barIndex = Std.parseInt(m_outParamsBuffer[0]);
+                        var barIndex = m_outParamsBuffer[0];
                         var barWholeView = m_barModelArea.getBarWholeViews()[barIndex];
                         
                         // Get whether the copies would fit nicely in the view port, if not then do not allow the preview
@@ -310,7 +310,7 @@ class MultiplyBarSegments extends BaseBarModelScript implements IHitAreaScript
         var numberValid : Bool = false;
         if (ExpressionUtil.isNodeNumeric(node) && !node.isNegative()) 
         {
-            var value : Float = Std.parseInt(node.data);
+            var value : Float = Std.parseFloat(node.data);
             numberValid = (value > 1 && value < MAX_ALLOWABLE_UNITS);
         }
         return numberValid;

@@ -438,7 +438,7 @@ class HintCommonUtil
         var maxTextWidth : Float = measuringTexture.width - 2 * paddingSide;
         var paddingTop : Float = 50;
         var maxTextHeight : Float = measuringTexture.height - 2 * paddingTop;
-        var contentXML : Xml = Xml.parse("<p></p>");
+        var contentXML : Xml = Xml.parse("<p></p>").firstElement();
         contentXML.addChild(Xml.createPCData(pickedMismatch.descriptionContent));
         
         // Measure the text so we can set a font size that will cause everything to fit into the speech bubble
@@ -456,12 +456,10 @@ class HintCommonUtil
         if (MEASURING_TEXTFIELD.textWidth > MEASURING_TEXTFIELD.width || MEASURING_TEXTFIELD.textHeight > MEASURING_TEXTFIELD.height) 
         {
             fontSize = MEASURING_TEXTFIELD.resizeToDimensions(maxTextWidth, maxTextHeight, pickedMismatch.descriptionContent);
-        }  // 'invisible' space so no stretching is needed.    // HACK: It appears the callout will always try to stretch to fit contents, we need to create  
-        
-        
-        
-        
-        
+        }  
+		
+		// HACK: It appears the callout will always try to stretch to fit contents, we need to create  
+        // 'invisible' space so no stretching is needed.  
         var calloutContent : DisplayObject = TextParserUtil.createTextViewFromXML(
                 new Fast(contentXML),
                 {

@@ -6,7 +6,7 @@
     <symbol name="total chihuahuas" abbreviatedName="chihuahuas" value="chihuahuas" backgroundTexturePositive="card_background_square" customBarColor="0xFFFFFFFF" useCustomBarColor="true"/>
   </symbols>
   <overrideLayoutAttributes name="barEquationModel">
-    <textArea id="textArea" src="url(../assets/level_images/book_crystal_cave.jpg)"/>
+    <textArea id="textArea" src="url(assets/level_images/book_crystal_cave.jpg)"/>
   </overrideLayoutAttributes>
   <rules>
     <allowAddNewSegments value="true"/>

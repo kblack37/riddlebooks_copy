@@ -5,7 +5,7 @@
     <symbol name="fruit John bought" abbreviatedName="fruit" value="fruit" backgroundTexturePositive="card_background_square" customBarColor="0xFFF05CFD" useCustomBarColor="true"/>
   </symbols>
   <overrideLayoutAttributes name="barEquationModel">
-    <textArea id="textArea" src="url(../assets/level_images/book_vampire_high.jpg)"/>
+    <textArea id="textArea" src="url(assets/level_images/book_vampire_high.jpg)"/>
   </overrideLayoutAttributes>
   <rules>
     <allowAddNewSegments value="true"/>

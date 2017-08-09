@@ -575,7 +575,7 @@ class ModelSpecificEquation extends BaseGameScript
     {
         if (node != null) 
         {
-            if (m_aliasValueToTermMap.exists(node.data)) 
+            if (Reflect.hasField(m_aliasValueToTermMap, node.data)) 
             {
                 node.data = Reflect.field(m_aliasValueToTermMap, node.data);
             }

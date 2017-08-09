@@ -86,10 +86,9 @@ class RemoveBarSegment extends BaseBarModelScript implements IRemoveBarElement
             var barWholes : Array<BarWhole> = m_barModelArea.getBarModelData().barWholes;
 			var i = 0;
 			var j = 0;
-            while (i < barWholes.length) {
-                var barSegments : Array<BarSegment> = barWholes[i].barSegments;
-                while (j < barSegments.length) {
-                    if (barSegments[j] == hitSegmentView.data) 
+			for (barWhole in barWholes) {
+				for (barSegment in barWhole.barSegments) {
+                    if (barSegment == hitSegmentView.data) 
                     {
                         foundSegment = true;
                         break;
@@ -100,10 +99,9 @@ class RemoveBarSegment extends BaseBarModelScript implements IRemoveBarElement
                 {
                     break;
                 }
-            }  // Get the segment and single label (if applicable) and play the shatter animation on it  
-            
-            
-            
+            }  
+			
+			// Get the segment and single label (if applicable) and play the shatter animation on it  
             hitSegmentView.alpha = 1.0;
             
             var segmentViewBounds : Rectangle = hitSegmentView.rigidBody.boundingRectangle;
@@ -123,27 +121,26 @@ class RemoveBarSegment extends BaseBarModelScript implements IRemoveBarElement
                 renderTexture.draw(hitSegmentView, new Matrix(1, 0, 0, 1, 0, 0));
             }
             
-            var shatterAnimation : ShatterAnimation = new ShatterAnimation(renderTexture, onShatterAnimationComplete, 0.7);
-            shatterAnimation.play(m_barModelArea.getForegroundLayer(), segmentViewBounds.x, segmentViewBounds.y);
+			// TODO: uncomment when animation issues are fixed
+            //var shatterAnimation : ShatterAnimation = new ShatterAnimation(renderTexture, onShatterAnimationComplete, 0.7);
+            //shatterAnimation.play(m_barModelArea.getForegroundLayer(), segmentViewBounds.x, segmentViewBounds.y);
             
             var previousModelDataSnapshot : BarModelData = m_barModelArea.getBarModelData().clone();
             removeBarSegment(m_barModelArea.getBarModelData(), hitSegmentView.data.id);
             BarModelDataUtil.stretchHorizontalBrackets(m_barModelArea.getBarModelData());
             m_eventDispatcher.dispatchEventWith(GameEvent.BAR_MODEL_AREA_CHANGE, false, {
                         previousSnapshot : previousModelDataSnapshot
-
                     });
             m_barModelArea.redraw();
             
             // Log removal of a bar segment
             m_eventDispatcher.dispatchEventWith(AlgebraAdventureLoggingConstants.REMOVE_BAR_SEGMENT, false, {
                         barModel : m_barModelArea.getBarModelData().serialize()
-
                     });
             
             canRemove = true;
         }
-        
+		
         return canRemove;
     }
     
@@ -161,7 +158,7 @@ class RemoveBarSegment extends BaseBarModelScript implements IRemoveBarElement
                 if (checkHitSegment(m_outParamsBuffer)) 
                 {
                     // Make the hit segment view transparent
-                    m_hitSegmentView = m_barModelArea.getBarWholeViews()[Std.parseInt(m_outParamsBuffer[0])].segmentViews[Std.parseInt(m_outParamsBuffer[1])];
+                    m_hitSegmentView = m_barModelArea.getBarWholeViews()[m_outParamsBuffer[0]].segmentViews[m_outParamsBuffer[1]];
                     m_hitSegmentView.alpha = 0.3;
                     
                     m_ringPulseAnimation.reset(m_localMouseBuffer.x, m_localMouseBuffer.y, m_barModelArea.getForegroundLayer(), 0xFF0000);
@@ -201,8 +198,8 @@ class RemoveBarSegment extends BaseBarModelScript implements IRemoveBarElement
         // Check that the segment is not part of the list marked as unremovable
         if (hitSegment) 
         {
-            var targetBarWhole : BarWhole = m_barModelArea.getBarWholeViews()[Std.parseInt(m_outParamsBuffer[0])].data;
-            var hitSegmentId : String = targetBarWhole.barSegments[Std.parseInt(m_outParamsBuffer[1])].id;
+            var targetBarWhole : BarWhole = m_barModelArea.getBarWholeViews()[m_outParamsBuffer[0]].data;
+            var hitSegmentId : String = targetBarWhole.barSegments[m_outParamsBuffer[1]].id;
             hitSegment = this.segmentIdsCannotRemove.indexOf(hitSegmentId) < 0;
         }
         
@@ -256,8 +253,8 @@ class RemoveBarSegment extends BaseBarModelScript implements IRemoveBarElement
 		m_outParamsBuffer = new Array<Dynamic>();
         getBarWholeIndexFromSegmentId(m_outParamsBuffer, barModelData.barWholes, barSegmentId);
         
-        var targetBarWholeIndex : Int = Std.parseInt(m_outParamsBuffer[0]);
-        var targetBarSegmentIndex : Int = Std.parseInt(m_outParamsBuffer[1]);
+        var targetBarWholeIndex : Int = m_outParamsBuffer[0];
+        var targetBarSegmentIndex : Int = m_outParamsBuffer[1];
         
         // Remove the target segment
         var barWhole : BarWhole = barModelData.barWholes[targetBarWholeIndex];
@@ -274,10 +271,9 @@ class RemoveBarSegment extends BaseBarModelScript implements IRemoveBarElement
             
             // The deletion of a bar might cascade to affect the vertical labels
             readjustLabelsFromDeletedIndex(barModelData.verticalBarLabels, barWholeIndexToRemove);
-        }  // Remove/alter bar comparisons based on removal  
-        
-        
-        
+        } 
+		
+		// Remove/alter bar comparisons based on removal  
         readjustBarComparison(barModelData, barWhole.id, targetBarSegmentIndex);
     }
     
@@ -297,18 +293,13 @@ class RemoveBarSegment extends BaseBarModelScript implements IRemoveBarElement
                 barWholeWithRemovedSegment = barWhole;
                 break;
             }
-        }  // is always assumed to be at the right edge of the bar.    // If the bar with the removed segment had a comparison, nothing needs to change since the comparison    // it would point to.    // We want to check if the deletion of the segment forces the comparison to alter the segment index    // Search through all bar comparisons that reference the bar that had an object deleted  
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        }  
+		
+		// Search through all bar comparisons that reference the bar that had an object deleted  
+		// We want to check if the deletion of the segment forces the comparison to alter the segment index   
+		// it would point to.   
+		// If the bar with the removed segment had a comparison, nothing needs to change since the comparison   
+        // is always assumed to be at the right edge of the bar.  
         for (i in 0...numBarWholes){
             barWhole = barWholes[i];
             var barComparison : BarComparison = barWhole.barComparison;
@@ -325,12 +316,10 @@ class RemoveBarSegment extends BaseBarModelScript implements IRemoveBarElement
                     if (barComparison.segmentIndexComparedTo >= barWholeWithRemovedSegment.barSegments.length) 
                     {
                         barComparison.segmentIndexComparedTo = barWholeWithRemovedSegment.barSegments.length - 1;
-                    }  // value of the whole bar. There is no valid difference    // Remove bar comparison, if values of the bar up to the new index is less than or the same as the  
-                    
-                    
-                    
-                    
-                    
+                    }  
+					
+					// Remove bar comparison, if values of the bar up to the new index is less than or the same as the  
+                    // value of the whole bar. There is no valid difference  
                     if (barComparison.segmentIndexComparedTo < 0) 
                     {
                         barWhole.barComparison = null;
@@ -377,6 +366,7 @@ class RemoveBarSegment extends BaseBarModelScript implements IRemoveBarElement
                     barLabel.endSegmentIndex--;
                 }
             }
+			i++;
         }
     }
     

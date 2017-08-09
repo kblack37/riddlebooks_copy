@@ -508,7 +508,7 @@ class HoldToCopy extends BaseBarModelScript
                 }
             }
         }
-        
+		
         return ScriptStatus.FAIL;
     }
     
