@@ -1,0 +1,91 @@
+<level barModelType="7a" name="Bar model 856" id="856">
+  <symbols>
+    <symbol name="grey wolf cubs" abbreviatedName="grey" value="grey" backgroundTexturePositive="card_background_square" customBarColor="0xFFFFFFFF" useCustomBarColor="true"/>
+    <symbol name="9" abbreviatedName="9 red" value="9" backgroundTexturePositive="card_background_square" customBarColor="0xFFB39566" useCustomBarColor="true"/>
+    <symbol value="3" customBarColor="0xFF6099F5" useCustomBarColor="true"/>
+    <symbol value="5" customBarColor="0xFFFAFF96" useCustomBarColor="true"/>
+  </symbols>
+  <overrideLayoutAttributes name="barEquationModel">
+    <textArea id="textArea" src="url(../assets/level_images/book_mountain_meadow.jpg)"/>
+  </overrideLayoutAttributes>
+  <rules>
+    <allowAddNewSegments value="true"/>
+    <allowAddUnitBar value="true"/>
+    <allowSplitBar value="true"/>
+    <allowCopyBar value="true"/>
+    <allowCreateCard value="true"/>
+    <allowParenthesis value="true"/>
+    <allowSubtract value="true"/>
+    <allowMultiply value="true"/>
+    <allowDivide value="true"/>
+    <allowResizeBrackets value="true"/>
+  </rules>
+  <script>
+    <scriptedActions>
+      <code id="wordproblem.scripts.level.GenericBarModelLevelScript">
+        <documentToCard documentId="a1" value="3"/>
+        <documentToCard documentId="unk" value="grey"/>
+        <documentToCard documentId="b1" value="9"/>
+        <documentToCard documentId="a2" value="5"/>
+        <barNormalizingFactor value="3"/>
+        <termValueToBarValue termValue="grey" barValue="15"/>
+        <referenceModel>
+          <barWhole id="a2">
+            <barSegment value="1"/>
+            <barSegment value="1"/>
+            <barSegment value="1"/>
+            <barSegment value="1"/>
+            <barSegment value="1"/>
+            <bracket value="grey" start="0" end="4"/>
+          </barWhole>
+          <barWhole>
+            <barSegment value="1"/>
+            <barSegment value="1"/>
+            <barSegment value="1"/>
+            <bracket value="9" start="0" end="2"/>
+          </barWhole>
+        </referenceModel>
+        <equation value="grey=9/3*5"/>
+        <customHints>
+          <hint step="1">The number of red cubs should be a fraction of the number of grey cubs, use equal groups to show this.</hint>
+          <hint step="2">You have the groups showing the red cubs, how many do you need for the grey cubs?</hint>
+          <hint step="3">You have the groups showing the grey cubs, how many do you need for the red cubs?</hint>
+          <hint step="4">Try having one row of groups for grey cubs and another for groups of red cubs.</hint>
+          <hint step="5">If you have one row for red cubs and one for grey cubs, think of the smaller row as a fraction of the other.</hint>
+          <hint step="6">The amount of red cubs should be $0/$1 of the grey cubs, and $0/$2 of the cubs playing.</hint>
+          <hint step="7">Try making $0 groups for the grey cubs and $1 groups for the red cubs.</hint>
+          <hint step="8">Try making equal groups to represent the fractions.</hint>
+          <hint step="10" targetMissingDocId="b1">$0 red cubs should be $1/$2 of the total cubs playing?</hint>
+          <hint step="10" targetMissingDocId="unk">The variable '$0' should be $1/$2 of the total cubs playing?</hint>
+          <hint step="11" targetMissingDocId="b1">You need to show the red cubs as $0/$1 of the total cubs playing?</hint>
+          <hint step="11" targetMissingDocId="unk">You need to show the grey cubs as $0/$1 of the total cubs playing?</hint>
+          <hint step="12" targetMissingDocId="b1">What fraction of the total cubs playing should the red cubs be?</hint>
+          <hint step="12" targetMissingDocId="unk">What fraction of the total cubs playing should the grey cubs be?</hint>
+        </customHints>
+      </code>
+    </scriptedActions>
+  </script>
+  <style>{"p":{"fontName":"Calibri","color":"0x0000000","fontSize":24}}</style>
+  <wordproblem>
+    <page paddingLeft="110" paddingTop="50">
+      <div layout="relative" width="580">
+        <p>
+          Children at the zoo watched the wolf cubs play. They ran all over the exhibit, tumbling and chasing each other. There were
+          <span class="term" id="a1">3</span>
+          /
+          <span class="term" id="a2">5</span>
+          as many red wolf cubs as
+          <span class="term" id="unk">grey wolf cubs</span>
+          . If there were
+          <span class="term" id="b1">9 red wolf cubs playing</span>
+          , how many
+          <span class="term" alias="grey" id="unk">grey wolf cubs were there</span>
+          ?
+        </p>
+      </div>
+    </page>
+  </wordproblem>
+  <resources>
+    <audio type="streaming" src="bg_home_music"/>
+  </resources>
+</level>
