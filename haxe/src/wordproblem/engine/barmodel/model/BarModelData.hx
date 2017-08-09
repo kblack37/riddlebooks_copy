@@ -66,7 +66,7 @@ class BarModelData
             for (j in 0...barLabels.length){
                 var barLabel : BarLabel = barLabels[j];
                 var labelValue : String = barLabel.value;
-                if (aliasToTermMap.exists(labelValue)) 
+                if (Reflect.hasField(aliasToTermMap, labelValue)) 
                 {
 					Reflect.setField(m_elementIdToOldValueRestoreMap, barLabel.id, labelValue);
                     barLabel.value = Reflect.field(aliasToTermMap, labelValue);
@@ -77,7 +77,7 @@ class BarModelData
             if (barComparison != null) 
             {
                 var comparisonValue : String = barComparison.value;
-                if (aliasToTermMap.exists(comparisonValue)) 
+                if (Reflect.hasField(aliasToTermMap, comparisonValue)) 
                 {
 					Reflect.setField(m_elementIdToOldValueRestoreMap, barComparison.id, comparisonValue);
                     barComparison.value = Reflect.field(aliasToTermMap, comparisonValue);
@@ -88,7 +88,7 @@ class BarModelData
         for (i in 0...verticalBarLabels.length){
             var barLabel = verticalBarLabels[i];
             var labelValue = barLabel.value;
-            if (aliasToTermMap.exists(labelValue)) 
+            if (Reflect.hasField(aliasToTermMap, labelValue)) 
             {
 				Reflect.setField(m_elementIdToOldValueRestoreMap, barLabel.id, labelValue);
 				barLabel.value = Reflect.field(aliasToTermMap, labelValue);
@@ -110,7 +110,7 @@ class BarModelData
                 var j : Int = 0;
                 for (j in 0...barLabels.length){
                     var barLabel : BarLabel = barLabels[j];
-                    if (m_elementIdToOldValueRestoreMap.exists(barLabel.id)) 
+                    if (Reflect.hasField(m_elementIdToOldValueRestoreMap, barLabel.id)) 
                     {
 						barLabel.value = Reflect.field(m_elementIdToOldValueRestoreMap, barLabel.id);
                     }
@@ -120,7 +120,7 @@ class BarModelData
                 if (barComparison != null) 
                 {
                     var comparisonValue : String = barComparison.value;
-                    if (m_elementIdToOldValueRestoreMap.exists(barComparison.id)) 
+                    if (Reflect.hasField(m_elementIdToOldValueRestoreMap, barComparison.id)) 
                     {
 						barComparison.value = Reflect.field(m_elementIdToOldValueRestoreMap, barComparison.id);
                     }

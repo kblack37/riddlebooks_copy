@@ -5,7 +5,7 @@
     <symbol value="18" customBarColor="0xFFBB89DD" useCustomBarColor="true"/>
   </symbols>
   <overrideLayoutAttributes name="barEquationModel">
-    <textArea id="textArea" src="url(../assets/level_images/book_mountain_meadow.jpg)"/>
+    <textArea id="textArea" src="url(assets/level_images/book_mountain_meadow.jpg)"/>
   </overrideLayoutAttributes>
   <rules>
     <allowAddNewSegments value="true"/>

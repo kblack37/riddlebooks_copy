@@ -236,26 +236,23 @@ class PlayerXPScript extends BaseBufferEventScript
         {
             numTriggersActivated++;
             totalXpFromTriggers += 5;
-        }  // Reward points for just doing any action  
-        
-        
-        
+        } 
+		
+		// Reward points for just doing any action  
         if (m_actionCounter >= m_actionCounterThreshold) 
         {
             numTriggersActivated++;
             totalXpFromTriggers += 1;
-        }  // Reward points for trying different gestures with the actions  
-        
-        
-        
+        }
+		
+		// Reward points for trying different gestures with the actions  
         if (m_newGestureForExpressionValueCounter >= m_newGestureForExpressionThreshold) 
         {
             numTriggersActivated++;
             totalXpFromTriggers += 3;
-        }  // Reset ALL triggers  
-        
-        
-        
+        }
+		
+		// Reset ALL triggers  
         if (numTriggersActivated > 1) 
         {
             m_rewardForDifferentBarModelTriggered = false;
@@ -263,12 +260,10 @@ class PlayerXPScript extends BaseBufferEventScript
             m_actionCounter = 0;
             m_newGestureForExpressionValueCounter = 0;
             m_xpToGiveOnFrame = totalXpFromTriggers;
-        }  // on this frame.    // After processing all buffered events, we can now appropriately add the xp all at once  
-        
-        
-        
-        
-        
+        }  
+		
+		// After processing all buffered events, we can now appropriately add the xp all at once  
+        // on this frame.
         if (m_xpToGiveOnFrame > 0) 
         {
             addXp(m_xpToGiveOnFrame);
@@ -365,8 +360,6 @@ class PlayerXPScript extends BaseBufferEventScript
             }
         }
         
-        
-        
         if (expressionValueForGesture != null) 
         {
             if (Reflect.hasField(m_expressionValueToGestureMap, expressionValueForGesture)) 
@@ -384,10 +377,9 @@ class PlayerXPScript extends BaseBufferEventScript
             else 
             {
                 Reflect.setField(m_expressionValueToGestureMap, expressionValueForGesture, [eventType]);
-            }  // Increase counter once new gesture is detected for that expression value  
-            
-            
-            
+            } 
+			
+			// Increase counter once new gesture is detected for that expression value  
             if (newGestureForExpression) 
             {
                 m_newGestureForExpressionValueCounter++;
@@ -398,14 +390,11 @@ class PlayerXPScript extends BaseBufferEventScript
         {
             playerExplicitlyAlteredModel = true;
             m_actionCounter++;
-        }  // from previous model snapshots    // we need to look at a snapshot of the model and check if the construct is different    // If the event involved the player performing a gesture to alter the model,  
-        
-        
-        
-        
-        
-        
-        
+        }  
+		
+		// If the event involved the player performing a gesture to alter the model,  
+		// we need to look at a snapshot of the model and check if the construct is different  
+        // from previous model snapshots  
         if (playerExplicitlyAlteredModel) 
         {
             var barModelWidget : BarModelAreaWidget = try cast(m_gameEngine.getUiEntity("barModelArea"), BarModelAreaWidget) catch(e:Dynamic) null;
@@ -432,19 +421,16 @@ class PlayerXPScript extends BaseBufferEventScript
                 if (m_decomposeBarModelHistory.length >= m_decomposeBarModelMinThreshold) 
                 {
                     m_rewardForDifferentBarModelTriggered = true;
-                }  // a new construct    // If the history is sufficiently large, then award the player xp for trying  
-                
-                
-                
-                
-                
+                }  
+				
+				// If the history is sufficiently large, then award the player xp for trying  
+                // a new construct    
                 if (m_decomposeBarModelHistory.length >= m_decomposeBarModelMaxThreshold) 
                 {
                     m_decomposeBarModelHistory.pop();
-                }  // Add new snapshot  
-                
-                
-                
+                }  
+				
+				// Add new snapshot  
                 m_decomposeBarModelHistory.push(currentSnapshot);
             }
         }
@@ -483,12 +469,10 @@ class PlayerXPScript extends BaseBufferEventScript
                 {
                     equivalencyScore += 5;
                 }
-            }  // To check the children    // This is imperfect in that in non-communative operators the order does matter  
-            
-            
-            
-            
-            
+            }  
+			
+			// This is imperfect in that in non-communative operators the order does matter  
+            // To check the children  
             var firstComboScore : Int = getExpressionEquivalencyScore(nodeA.left, nodeB.left) +
             getExpressionEquivalencyScore(nodeA.right, nodeB.right);
             

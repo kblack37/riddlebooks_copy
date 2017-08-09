@@ -39,9 +39,14 @@ import flash.geom.Point;
         
         // Strip whitespace
         value = StringTools.replace(value, " ", "");
+		
+		// Strip the initial "-" if it exists
+		if (value.charAt(0) == "-") {
+			value = value.substr(1);
+		}
         
         // Simply iterate through every character and check if each one is a digit
-        // Also allow for decimal
+        // Also allow for decimal and an initial "-" for negative values
         var containsDecimal : Bool = false;
         var isNumber : Bool = true;
         var numCharacters : Int = value.length;

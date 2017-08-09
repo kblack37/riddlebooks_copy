@@ -177,23 +177,18 @@ class ComponentManager
      */
     public function removeAllComponentsFromEntity(entityIdToRemove : String) : Void
     {
-        var componentType : String = null;
-        var componentList : Array<Component> = null;
-        var entityComponentMap : Map<String, Component> = null;
         for (componentType in m_componentTypeToComponentsList.keys())
         {
-            componentList = m_componentTypeToComponentsList.get(componentType);
-            entityComponentMap = m_componentTypeToEntityComponentMap.get(componentType);
+            var componentList = m_componentTypeToComponentsList.get(componentType);
+            var entityComponentMap = m_componentTypeToEntityComponentMap.get(componentType);
             
-            var entityId : String = null;
-            var componentToRemove : Component = null;
             for (entityId in entityComponentMap.keys())
             {
                 // Need to delete from both maps, assume each entity has at most one
                 // of each component type
                 if (entityId == entityIdToRemove) 
                 {
-                    componentToRemove = entityComponentMap.get(entityId);
+                    var componentToRemove = entityComponentMap.get(entityId);
                     componentToRemove.dispose();
                     componentList.splice(Lambda.indexOf(componentList, componentToRemove), 1);
                     

@@ -70,7 +70,7 @@ class PickElementFromBarModel extends BaseProblemCreateScript
             if (m_outParamsBuffer.length > 0) 
             {
                 var hitElement : Dynamic = m_outParamsBuffer[0];
-                var hitElementIndex : Int = Std.parseInt(m_outParamsBuffer[1]);
+                var hitElementIndex : Int = m_outParamsBuffer[1];
                 var hitBarView : BarWholeView = try cast(m_outParamsBuffer[2], BarWholeView) catch(e:Dynamic) null;
                 
                 if (hitBarView != null) 

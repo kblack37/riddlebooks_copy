@@ -5,7 +5,7 @@
     <symbol name="troops" abbreviatedName="troops" value="troops" backgroundTexturePositive="card_background_square" customBarColor="0xFFFDD1FF" useCustomBarColor="true"/>
   </symbols>
   <overrideLayoutAttributes name="barEquationModel">
-    <textArea id="textArea" src="url(../assets/level_images/book_fantasy_v3.jpg)"/>
+    <textArea id="textArea" src="url(assets/level_images/book_fantasy_v3.jpg)"/>
   </overrideLayoutAttributes>
   <rules>
     <allowAddNewSegments value="true"/>

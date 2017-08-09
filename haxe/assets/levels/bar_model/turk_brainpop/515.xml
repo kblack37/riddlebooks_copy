@@ -5,7 +5,7 @@
     <symbol name="total pounds food" abbreviatedName="total pounds" value="food" backgroundTexturePositive="card_background_square" customBarColor="0xFFF05CFD" useCustomBarColor="true"/>
   </symbols>
   <overrideLayoutAttributes name="barEquationModel">
-    <textArea id="textArea" src="url(../assets/level_images/book_dead_forest.jpg)"/>
+    <textArea id="textArea" src="url(assets/level_images/book_dead_forest.jpg)"/>
   </overrideLayoutAttributes>
   <rules>
     <allowAddNewSegments value="true"/>

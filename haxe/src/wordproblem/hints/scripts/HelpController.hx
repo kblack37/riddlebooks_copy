@@ -106,12 +106,10 @@ class HelpController extends BaseGameScript
                     m_currentlyRunningHint.dispose();
                     m_currentlyRunningHint = null;
                 }
-            }  // (i.e. the previous hint has completely finished cleaning itself up)    // Start running the buffered hint only if there is no other hint active  
-            
-            
-            
-            
-            
+            }  
+			
+			// Start running the buffered hint only if there is no other hint active  
+            // (i.e. the previous hint has completely finished cleaning itself up) 
             if (m_currentlyRunningHint == null && m_bufferedNextHintScriptToShow != null) 
             {
                 m_currentlyRunningHint = m_bufferedNextHintScriptToShow;
@@ -133,12 +131,10 @@ class HelpController extends BaseGameScript
         {
             m_currentlyRunningHint.hide();
             m_currentlyRunningHint.dispose();
-        }  // level scripts that create the hints in the first place    // All available hints must be cleaned up, the better place to put this is the  
-        
-        
-        
-        
-        
+        }  
+		
+		// All available hints must be cleaned up, the better place to put this is the  
+        // level scripts that create the hints in the first place   
         if (m_rootHintSelectorNode != null) 
         {
             m_rootHintSelectorNode.dispose();

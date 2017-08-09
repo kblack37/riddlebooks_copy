@@ -73,12 +73,16 @@ class HelperCharacterController
     
     public function setCharacterVisible(param : Dynamic) : Int
     {
+		var status = ScriptStatus.FAIL;
         var renderComponent : RenderableComponent = try cast(m_characterComponentManager.getComponentFromEntityIdAndType(
                 param.id,
                 RenderableComponent.TYPE_ID
-                ), RenderableComponent) catch(e:Dynamic) null;
-        renderComponent.isVisible = param.visible;
-        return ScriptStatus.SUCCESS;
+                ), RenderableComponent) catch (e:Dynamic) null;
+		if (renderComponent != null) {
+			renderComponent.isVisible = param.visible;
+			status = ScriptStatus.SUCCESS;
+		}
+        return status;
     }
     
     public function showDialogForCharacter(param : Dynamic) : Int

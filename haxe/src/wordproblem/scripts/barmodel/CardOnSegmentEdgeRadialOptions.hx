@@ -641,10 +641,9 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
                     {
                         numValidGestures++;
                     }
-                }  // Open the radial menu only if there are enough gestures  
-                
-                
-                
+                } 
+				
+				// Open the radial menu only if there are enough gestures  
                 if (numValidGestures > 0) 
                 {
                     // Special case, if there is only one valid gesture then just execute that gesture directly
@@ -782,12 +781,10 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
         if (index < m_gestures.length) 
         {
             gestureScript = m_gestures[index];
-        }  // name value pasted on top (just make the bar the  same color    // The first gesture is adding name on top, this can just be a tiny version of the bar with the  
-        
-        
-        
-        
-        
+        }  
+		
+		// The first gesture is adding name on top, this can just be a tiny version of the bar with the  
+        // name value pasted on top (just make the bar the  same color
         if (Std.is(gestureScript, AddNewBarComparison)) 
         {
             var subtractIcon : Image = new Image(m_assetManager.getTexture("subtract"));

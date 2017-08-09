@@ -85,7 +85,7 @@ class BaseGameScript extends BaseBufferEventScript
     private function secondsElapsed(param : Dynamic) : Int
     {
         // On the first visit
-        if (!param.exists("completed")) 
+        if (!Reflect.hasField(param, "completed")) 
         {
             var duration : Float = param.duration;
             Starling.current.juggler.delayCall(function() : Void

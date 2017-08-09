@@ -188,7 +188,7 @@ class ResizeVerticalBarLabel extends BaseBarModelScript
                 
                 
                 getClosestSegmentIndexToPoint(m_localMouseBuffer.x, localY, m_outParamsBuffer);
-                var closestBarIndex : Int = Std.parseInt(m_outParamsBuffer[0]);
+                var closestBarIndex : Int = m_outParamsBuffer[0];
                 var distanceFromBar : Float = try cast(m_outParamsBuffer[1], Float) catch(e:Dynamic) 0;
                 var distanceThreshold : Float = 20;
                 

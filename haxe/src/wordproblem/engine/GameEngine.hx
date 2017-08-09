@@ -411,18 +411,16 @@ class GameEngine extends Sprite implements IGameEngine
                 expressionComponent = try cast(expressionComponents[i], ExpressionComponent) catch(e:Dynamic) null;
                 idsToRemove.push(expressionComponent.entityId);
             }
-        }  // Clear components from the entities that will be discarded  
-        
-        
-        
+        } 
+		
+		// Clear components from the entities that will be discarded  
         for (entityIdToRemove in idsToRemove)
         {
             entitiesToRemove.push((try cast(deckComponentManager.getComponentFromEntityIdAndType(entityIdToRemove, RenderableComponent.TYPE_ID), RenderableComponent) catch(e:Dynamic) null).view);
             deckComponentManager.removeAllComponentsFromEntity(entityIdToRemove);
-        }  // Create widgets for each of the new symbols that we have discovered  
-        
-        
-        
+        }  
+		
+		// Create widgets for each of the new symbols that we have discovered  
         var node : ExpressionNode = null;
         var renderComponent : RenderableComponent = null;
         var entitiesToAdd : Array<DisplayObject> = new Array<DisplayObject>();
@@ -914,8 +912,6 @@ class GameEngine extends Sprite implements IGameEngine
                 }
             }
             
-            
-            
             renderComponent.view.x = valueMap[widgetId + "_x"];
             renderComponent.view.y = valueMap[widgetId + "_y"];
             
@@ -1083,6 +1079,7 @@ class GameEngine extends Sprite implements IGameEngine
             }
             else if (widgetType == "textArea") 
             {
+				trace(widgetAttributeRoot.getResourceSourceList()[0].name);
                 var extraData : Dynamic = widgetAttributeRoot.extraData;
                 m_textArea = new TextAreaWidget(
                         m_assetManager, 

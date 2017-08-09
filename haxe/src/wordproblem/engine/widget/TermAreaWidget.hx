@@ -386,7 +386,6 @@ class TermAreaWidget extends ExpressionTreeWidget implements IBaseWidget
         {
             param = {
                         undo : true
-
                     };
         }
         this.dispatchEventWith(GameEvent.TERM_AREA_CHANGED, false, param);
@@ -399,7 +398,7 @@ class TermAreaWidget extends ExpressionTreeWidget implements IBaseWidget
         var entityIds : Array<String> = new Array<String>();
         m_componentManager.getEntityIds(entityIds);
         
-        // Get all the entities (cards) that exist in the term area, need these to compore later
+        // Get all the entities (cards) that exist in the term area, need these to compare later
         var outWidgetLeaves : Array<BaseTermWidget> = new Array<BaseTermWidget>();
         this.getWidgetLeaves(outWidgetLeaves);
         
@@ -432,22 +431,18 @@ class TermAreaWidget extends ExpressionTreeWidget implements IBaseWidget
                     outWidgetLeaves.splice(j, 1);
                     break;
                 }
-            }  // then we have a card that must be removed    // If an entity id within the component manager is not found in the term areas,  
-            
-            
-            
-            
-            
+            }  
+			
+			// If an entity id within the component manager is not found in the term areas,  
+            // then we have a card that must be removed 
             if (!foundMatch) 
             {
                 m_componentManager.removeAllComponentsFromEntity(entityId);
             }
-        }  // manager we need to create a new batch of data for that card.    // For each leaf in the term area that did not match with an id the previous snapshot of the component  
-        
-        
-        
-        
-        
+        }  
+		
+		// For each leaf in the term area that did not match with an id the previous snapshot of the component  
+        // manager we need to create a new batch of data for that card.    
         var numNewWidgets : Int = outWidgetLeaves.length;
         for (i in 0...numNewWidgets){
             var termAreaEntity = outWidgetLeaves[i];

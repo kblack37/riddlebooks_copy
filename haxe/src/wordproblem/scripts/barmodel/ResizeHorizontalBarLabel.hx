@@ -216,10 +216,8 @@ class ResizeHorizontalBarLabel extends BaseBarModelScript
                     m_previewBarLabelView.colorEdgeButton(!m_draggingLeftEdge, 0xFFFFFF, 0.3);
                 }
                 
-                
-                
                 getClosestSegmentIndexToCurrentMouse(localX, m_localMouseBuffer.y, m_outParamsBuffer);
-                var closestSegmentIndex : Int = Std.parseInt(m_outParamsBuffer[0]);
+                var closestSegmentIndex : Int = m_outParamsBuffer[0];
                 var distanceFromSegment : Float = try cast(m_outParamsBuffer[1], Float) catch(e:Dynamic) 0;
                 
                 // If do not allow for a label to span nothing

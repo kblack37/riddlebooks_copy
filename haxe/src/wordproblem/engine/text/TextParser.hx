@@ -417,7 +417,7 @@ class TextParser
 					// HACK: since each node in the Haxe Xml API has a child that is of type PCData
 					// and also empty except for the leading whitespace of the next line, we must
 					// make sure we aren't including those as children
-					if (child.nodeType == PCData && StringTools.trim(child.nodeValue) == "")
+					if (child.nodeType == PCData && (child.nodeValue == null || StringTools.trim(child.nodeValue) == ""))
 						continue;
 					var childDocumentNode : DocumentNode = _parseDocument(child);
 					documentNode.children.push(childDocumentNode);

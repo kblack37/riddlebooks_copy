@@ -77,12 +77,10 @@ class TermAreaMouseScript extends BaseTermAreaScript
             if (m_widgetDragSystem.getWidgetSelected() != null && m_mouseState.leftMouseDraggedThisFrame) 
             {
                 onDragCardOverTermArea(m_widgetDragSystem.getWidgetSelected(), m_globalMousePoint);
-            }  // dispatching events.    // If one of the term areas is underneath another layer it should not be  
-            
-            
-            
-            
-            
+            }  
+			
+			// If one of the term areas is underneath another layer it should not be  
+            // dispatching events.   
             if (m_termAreas.length > 0 && Layer.getDisplayObjectIsInInactiveLayer(m_termAreas[0])) 
             {
                 return ScriptStatus.FAIL;
@@ -109,7 +107,6 @@ class TermAreaMouseScript extends BaseTermAreaScript
                                         widget : outParams[0],
                                         termArea : termArea,
                                         left : outParams[1],
-
                                     });
                         }
                         
@@ -124,7 +121,6 @@ class TermAreaMouseScript extends BaseTermAreaScript
                             m_eventDispatcher.dispatchEventWith(GameEvent.PRESS_TERM_AREA, false, {
                                         widget : pickedWidget,
                                         termArea : termArea,
-
                                     });
                         }
                     }
@@ -137,7 +133,6 @@ class TermAreaMouseScript extends BaseTermAreaScript
                             m_eventDispatcher.dispatchEventWith(GameEvent.START_DRAG_TERM_AREA, false, {
                                         widget : m_currentWidgetPressed,
                                         termArea : m_termAreaForCurrentWidgetPressed,
-
                                     });
                             m_termAreaForCurrentWidgetPressed = null;
                             m_currentWidgetPressed = null;
@@ -149,23 +144,18 @@ class TermAreaMouseScript extends BaseTermAreaScript
                         m_eventDispatcher.dispatchEventWith(GameEvent.CLICK_TERM_AREA, false, {
                                     widget : m_currentWidgetPressed,
                                     termArea : termArea,
-
                                 });
                         m_termAreaForCurrentWidgetPressed = null;
                         m_currentWidgetPressed = null;
                     }
                     
-                    
-                    
                     break;
                 }
             }
-        }  // come after it.    // Always return fail so a priority selector will always process the nodes that  
-        
-        
-        
-        
-        
+        }  
+		
+		// Always return fail so a priority selector will always process the nodes that  
+        // come after it.   
         return ScriptStatus.FAIL;
     }
     

@@ -139,8 +139,8 @@ class Console extends Sprite implements IConsole
     
     private function onInputWindowKeyDown(e : KeyboardEvent) : Void
     {
-        var tilde : UInt = 96;
-        var _sw0_ : UInt = (e.keyCode);
+        var tilde : Int = 96;
+        var _sw0_ : Int = (e.keyCode);
 		
         switch (_sw0_)
         {

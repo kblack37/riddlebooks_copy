@@ -296,8 +296,9 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
             var widgetToRemove : BaseTermWidget = widgetsToDelete[i];
             widgetToRemove.removeChildWidgets();
             
-            if (widgetToRemove.parent != null) 
+            if (widgetToRemove.parent != null) {
                 widgetToRemove.parent.removeChild(widgetToRemove);
+			}
             m_nodeIdToWidgetMap.remove(widgetToRemove.getNode().id);
             widgetToRemove.parentWidget = null;
             
@@ -610,10 +611,9 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
                         break;
                     }
                 }
-            }  // If we didn't hit anything then we continue searching  
-            
-            
-            
+            } 
+			
+			// If we didn't hit anything then we continue searching  
             if (pickedWidget == null) 
             {
                 _pickParenthesisUnderPoint(widget.leftChildWidget, localPoint, outParams);
@@ -762,10 +762,9 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
         if (m_tree.getRoot() == null) 
         {
             return;
-        }  // Recursively build all links between the various widgets  
-        
-        
-        
+        } 
+		
+		// Recursively build all links between the various widgets
         var rootWidget : BaseTermWidget = _buildTreeWidgetLinks(m_tree.getRoot());
         
         // Layout all widgets based on a particular algorithm
@@ -919,7 +918,7 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
         
         setNodePositions(m_widgetRoot);
     }
-    
+	
     /**
      * A function that should be executable at any point in time that will examine a link
      * of widgets and determine how that set should be laid out in a formal grouping.

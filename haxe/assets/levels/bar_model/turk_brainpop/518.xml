@@ -5,7 +5,7 @@
     <symbol value="8" customBarColor="0xFFF05CFD" useCustomBarColor="true"/>
   </symbols>
   <overrideLayoutAttributes name="barEquationModel">
-    <textArea id="textArea" src="url(../assets/level_images/book_scifi_v2.jpg)"/>
+    <textArea id="textArea" src="url(assets/level_images/book_scifi_v2.jpg)"/>
   </overrideLayoutAttributes>
   <rules>
     <allowAddNewSegments value="true"/>

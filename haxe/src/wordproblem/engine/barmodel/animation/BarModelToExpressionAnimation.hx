@@ -231,7 +231,6 @@ class BarModelToExpressionAnimation implements IAnimatable
             barModelViews : barModelViews,
             subexpression : subexpression,
             expressionView : expressionView,
-
         };
         m_barModelToExpressionMappings.push(mappingObject);
         
@@ -253,10 +252,9 @@ class BarModelToExpressionAnimation implements IAnimatable
         for (i in 0...numViews){
             var barModelView : DisplayObject = barModelViews[i];
             barModelView.alpha = 0.2;
-        }  // Need to make sure this texture gets cleaned up later which is why we add it to a list  
-        
-        
-        
+        } 
+		
+		// Need to make sure this texture gets cleaned up later which is why we add it to a list  
         m_displayContainer.addChild(image);
         m_barModelCopyImages.push(image);
         

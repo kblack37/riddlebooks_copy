@@ -161,8 +161,8 @@ class SplitBarSegment extends BaseBarModelScript implements ICardOnSegmentScript
                 if (BarModelHitAreaUtil.checkPointInBarSegment(m_outParamsBuffer, m_barModelArea, m_localMouseBuffer) &&
                     checkDraggedWidgetValid(releasedWidget)) 
                 {
-                    var targetBarWholeIndex : Int = Std.parseInt(m_outParamsBuffer[0]);
-                    var targetBarSegmentIndex : Int = Std.parseInt(m_outParamsBuffer[1]);
+                    var targetBarWholeIndex : Int = m_outParamsBuffer[0];
+                    var targetBarSegmentIndex : Int = m_outParamsBuffer[1];
                     var value : Int = Std.parseInt(releasedWidget.getNode().data);
                     
                     // In order to see whether the box would fit we need to apply the change
@@ -197,8 +197,8 @@ class SplitBarSegment extends BaseBarModelScript implements ICardOnSegmentScript
                 if (BarModelHitAreaUtil.checkPointInBarSegment(m_outParamsBuffer, m_barModelArea, m_localMouseBuffer)
                     && checkDraggedWidgetValid(releasedWidget)) 
                 {
-                    var targetBarWholeIndex = Std.parseInt(m_outParamsBuffer[0]);
-                    var targetBarSegmentIndex = Std.parseInt(m_outParamsBuffer[1]);
+                    var targetBarWholeIndex = m_outParamsBuffer[0];
+                    var targetBarSegmentIndex = m_outParamsBuffer[1];
                     var value = Std.parseInt(releasedWidget.getNode().data);
                     
                     // This check shows the preview if either it was not showing already OR a lower priority
@@ -259,7 +259,7 @@ class SplitBarSegment extends BaseBarModelScript implements ICardOnSegmentScript
         // Do not allow a segment to be split by a non-numeric value or any non-positive value
         // since it doesn't make sense how a split would occur in those situations.
         // Also ignore a split by one since that has no effect
-        var value : Float = Std.parseInt(dataValue);
+        var value : Float = Std.parseFloat(dataValue);
         return (!Math.isNaN(value) && value > 1 && value < m_splitLimit);
     }
     
@@ -313,10 +313,9 @@ class SplitBarSegment extends BaseBarModelScript implements ICardOnSegmentScript
         while (i > targetBarSegmentIndex){
             tempSegmentStack.push(targetBarWhole.barSegments.pop());
             i--;
-        }  // Delete the old segment  
-        
-        
-        
+        } 
+		
+		// Delete the old segment  
         targetBarWhole.barSegments.pop();
         
         // Add the new segments and the previous segment that came after the one that was deleted
@@ -328,14 +327,11 @@ class SplitBarSegment extends BaseBarModelScript implements ICardOnSegmentScript
         while (tempSegmentStack.length > 0)
         {
             targetBarWhole.barSegments.push(tempSegmentStack.pop());
-        }  // In addition we need to update any indices that came after the previous target bar segment index    // be a bracket that spans all of the new split items    // If a label was associated with that segment and it had no bracket, we need to alter it to  
-        
-        
-        
-        
-        
-        
-        
+        }  
+		
+		// If a label was associated with that segment and it had no bracket, we need to alter it to  
+		// be a bracket that spans all of the new split items  
+        // In addition we need to update any indices that came after the previous target bar segment index  
         var barLabel : BarLabel = null;
         var numBarLabels : Int = targetBarWhole.barLabels.length;
         for (i in 0...numBarLabels){
@@ -357,12 +353,10 @@ class SplitBarSegment extends BaseBarModelScript implements ICardOnSegmentScript
             {
                 barLabel.startSegmentIndex += numSplits - 1;
             }
-        }  // add up segments until we get something as close as possible to the true value    // Once the split is done the we need to re-adjust the bar comparisons  
-        
-        
-        
-        
-        
+        }  
+		
+		// Once the split is done the we need to re-adjust the bar comparisons  
+        // add up segments until we get something as close as possible to the true value  
         var numComparisons : Int = barWholesWithComparison.length;
         for (i in 0...numComparisons){
             // Take into account the additional value provided by the bar assuming that it is

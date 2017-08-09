@@ -1,6 +1,7 @@
 package wordproblem.scripts.deck;
 
 
+import dragonbox.common.util.XString;
 import flash.geom.Point;
 
 import cgs.audio.Audio;
@@ -241,7 +242,7 @@ class DeckController extends BaseGameScript
     {
         // If an entry has been clicked we first assume that it is an attempt to turn
         // the given card.
-        if (m_gameEngine.getCurrentLevel().getLevelRules().allowCardFlip) 
+        if (m_gameEngine.getCurrentLevel().getLevelRules().allowCardFlip && XString.isNumber(pickedWidget.getNode().data)) 
         {
             // Log flip
             var uiComponentName : String = m_gameEngine.getUiEntityUnder(m_globalMouseBuffer).entityId;
@@ -250,7 +251,6 @@ class DeckController extends BaseGameScript
                 regionFlipped : uiComponentName,
                 locationX : m_globalMouseBuffer.x,
                 locationY : m_globalMouseBuffer.y,
-
             };
             m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.NEGATE_EXPRESSION_EVENT, false, loggingDetails);
             

@@ -465,7 +465,11 @@ class AssetManager extends EventDispatcher implements ICgsLevelResourceManager i
         var texture : Texture = null;
 		if (Assets.exists(assetPath)) {
 			var bmpData : BitmapData = Assets.getBitmapData(assetPath);
-			if (bmpData != null) texture = Texture.fromBitmapData(bmpData, false);
+			if (bmpData != null) {
+				texture = Texture.fromBitmapData(bmpData, false);
+			} else {
+				trace("Asset " + name + " not found");
+			}
 		}
         
         return texture;

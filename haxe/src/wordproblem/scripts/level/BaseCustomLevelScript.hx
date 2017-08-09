@@ -230,7 +230,7 @@ class BaseCustomLevelScript extends BaseGameScript
             super.iterateThroughBufferedEvents();
             var numChildren : Int = m_children.length;
             var i : Int = 0;
-            while (i < numChildren){
+            while (i < numChildren) {
                 m_children[i].visit();
                 
                 // Adjust the indices based on changes made to the child list while in the middle of visiting
