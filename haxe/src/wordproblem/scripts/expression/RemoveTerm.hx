@@ -182,7 +182,7 @@ class RemoveTerm extends BaseTermAreaScript
         termArea.isReady = false;
         termArea.getTree().removeNode(termWidget.getNode());
         termArea.redrawAfterModification();
-        
+		
         // Log the expression pickup - being picked up from a term area
         var uiComponentName : String = (termArea == m_gameEngine.getUiEntity("leftTermArea")) ? "leftTermRegion" : "rightTermRegion";
         var loggingDetails_pickup : Dynamic = {

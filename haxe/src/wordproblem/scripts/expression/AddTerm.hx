@@ -156,12 +156,10 @@ class AddTerm extends BaseTermAreaScript
                         snapManager.update(m_mouseState, draggedWidget);
                     }
                 }
-            }  // Preview for add only valid if something is being dragged    // Check if we should show a small addition image to signal to the player that adding the dragged card is allowed  
-            
-            
-            
-            
-            
+            }  
+			
+			// Check if we should show a small addition image to signal to the player that adding the dragged card is allowed  
+            // Preview for add only valid if something is being dragged  
             var showAddPreviewForFrame : Bool = false;
             if (draggedWidget != null && canPerformAddition()) 
             {
@@ -176,17 +174,15 @@ class AddTerm extends BaseTermAreaScript
                         if (snapManager.getOperatorForSnap() == null) 
                         {
                             showAddPreviewForFrame = true;
-                        }  // We assume term areas do not overlap so stop search after first hit  
-                        
-                        
-                        
+                        } 
+						
+						// We assume term areas do not overlap so stop search after first hit  
                         break;
                     }
                 }
-            }  // Clear the add preview if it was  
-            
-            
-            
+            } 
+			
+			// Clear the add preview if it was  
             if (showAddPreviewForFrame) 
             {
                 var scaleUpFactor : Float = 1.5;
@@ -199,12 +195,10 @@ class AddTerm extends BaseTermAreaScript
                     Starling.current.juggler.add(m_additionPreviewTween);
                     
                     m_additionPreviewCanvas.addChild(m_additionPreviewImage);
-                }  // Convert the global mouse point to the reference frame of the canvas    // The addition preview should be positioned just around the mouse  
-                
-                
-                
-                
-                
+                }  
+				
+				// The addition preview should be positioned just around the mouse  
+                // Convert the global mouse point to the reference frame of the canvas 
                 m_additionPreviewCanvas.globalToLocal(m_globalMouseBuffer, m_localMouseBuffer);
                 m_additionPreviewImage.x = m_localMouseBuffer.x - (draggedWidget.width * 0.5) - m_additionPreviewImage.pivotX * scaleUpFactor;
                 m_additionPreviewImage.y = m_localMouseBuffer.y;
@@ -299,7 +293,6 @@ class AddTerm extends BaseTermAreaScript
                     m_eventDispatcher.dispatchEventWith(GameEvent.ADD_TERM_ATTEMPTED, false, {
                                 widget : releasedWidgit,
                                 success : addSuccessful,
-
                             });
                     if (addSuccessful) 
                     {
@@ -422,12 +415,10 @@ class AddTerm extends BaseTermAreaScript
                             nodeSnappedTo = additiveTerm;
                             break;
                         }
-                    }  // or we add it farthest right    // If we did not encounter a node in the above loop, then there wasn't any content  
-                    
-                    
-                    
-                    
-                    
+                    }  
+					
+					// If we did not encounter a node in the above loop, then there wasn't any content  
+                    // or we add it farthest right   
                     if (additiveTermNodes.length > 0 && nodeSnappedTo == null) 
                     {
                         attachToLeft = false;
@@ -472,14 +463,11 @@ class AddTerm extends BaseTermAreaScript
                 if (ExpressionUtil.isNodePartOfDenominator(vectorSpace, nodeAcceptingSnap)) 
                 {
                     operator = vectorSpace.getDivisionOperator();
-                }  // Need to do this hear since parameters might be cleared in the loop below    // group containing the snapped node (this already has the data to be attached)    // Fill in wild cards for the just hit term area with the exception of the  
-                
-                
-                
-                
-                
-                
-                
+                }  
+				
+				// Fill in wild cards for the just hit term area with the exception of the  
+				// group containing the snapped node (this already has the data to be attached)
+                // Need to do this here since parameters might be cleared in the loop below  
                 var groupRoots : Array<ExpressionNode> = new Array<ExpressionNode>();
                 ExpressionUtil.getCommutativeGroupRoots(
                         hitTermArea.getWidgetRoot().getNode(),
@@ -579,7 +567,6 @@ class AddTerm extends BaseTermAreaScript
     {
         // Like the latex compiler, the incoming data needs to be formatted properly in order for wild cards
         // to be created
-        
         var vectorSpace : RealsVectorSpace = m_expressionCompiler.getVectorSpace();
         var nodeToAttachTo : ExpressionNode = null;
         var attachToLeft : Bool = false;
@@ -653,18 +640,13 @@ class AddTerm extends BaseTermAreaScript
         if (nodeToAttach == null) 
         {
             nodeToAttach = termArea.getTree().getRoot();
-        }  // left child    // To do this check up until the parenthesis is found that a tracking node is always the    // Need to check whether the note to attach is the left edge of a parenthesis    // ex.) have (a+b), dropping c to left should result in c+(a+b) and not (c+a+b)    // Handle case where we want to add new nodes outside a parenthesis.  
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        }  
+		
+		// Handle case where we want to add new nodes outside a parenthesis.  
+		// ex.) have (a+b), dropping c to left should result in c+(a+b) and not (c+a+b) 
+		// Need to check whether the note to attach is the left edge of a parenthesis  
+		// To do this check up until the parenthesis is found that a tracking node is always the   
+        // left child  
         var isAddedToLeftOfParenthesis : Bool = false;
         
         var trackingNode : ExpressionNode = nodeToAttach;
@@ -674,10 +656,9 @@ class AddTerm extends BaseTermAreaScript
             if (trackingNode.parent != null && trackingNode.parent.left != trackingNode) 
             {
                 break;
-            }  // Discontinue search with success if the tracking node is wrapped in parenthesis  
-            
-            
-            
+            } 
+			
+			// Discontinue search with success if the tracking node is wrapped in parenthesis  
             if (trackingNode.wrapInParentheses) 
             {
                 isAddedToLeftOfParenthesis = true;
@@ -685,19 +666,16 @@ class AddTerm extends BaseTermAreaScript
             }
             
             trackingNode = trackingNode.parent;
-        }  // of a parenthesis then the node to attach to should become that parenthesis node    // If we were attaching to the left and the node to attach was in fact the left most edge  
-        
-        
-        
-        
-        
+        }  
+		
+		// If we were attaching to the left and the node to attach was in fact the left most edge  
+        // of a parenthesis then the node to attach to should become that parenthesis node  
         if (attachToLeft && isAddedToLeftOfParenthesis) 
         {
             nodeToAttach = trackingNode;
-        }  // Convert point from global to this coordinate space  
-        
-        
-        
+        }
+		
+		// Convert point from global to this coordinate space  
         var pointBuffer : Point = termArea.globalToLocal(globalMousePoint);
 		function onAddedNode(event : Event, data : Dynamic) : Void
         {
@@ -706,7 +684,7 @@ class AddTerm extends BaseTermAreaScript
             {
                 m_addCardAnimation.play(
                         termArea,
-                        data.nodeAdded.id,
+                        cast(data.nodeAdded, ExpressionNode).id,
                         data.initialXPosition,
                         data.initialYPosition,
                         m_expressionSymbolMap,

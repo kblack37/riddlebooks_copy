@@ -1079,7 +1079,6 @@ class GameEngine extends Sprite implements IGameEngine
             }
             else if (widgetType == "textArea") 
             {
-				trace(widgetAttributeRoot.getResourceSourceList()[0].name);
                 var extraData : Dynamic = widgetAttributeRoot.extraData;
                 m_textArea = new TextAreaWidget(
                         m_assetManager, 
