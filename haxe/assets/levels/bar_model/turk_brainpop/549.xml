@@ -1,0 +1,115 @@
+<level barModelType="4a" name="Bar model 549" id="549">
+  <symbols>
+    <symbol name="4" abbreviatedName="4 warts" value="4" backgroundTexturePositive="card_background_square" customBarColor="0xFF6099F5" useCustomBarColor="true"/>
+    <symbol name="snake tongues needed" abbreviatedName="tongues" value="tongues" backgroundTexturePositive="card_background_square" customBarColor="0xFFFDD1FF" useCustomBarColor="true"/>
+    <symbol value="9" customBarColor="0xFFEDDB48" useCustomBarColor="true"/>
+  </symbols>
+  <overrideLayoutAttributes name="barEquationModel">
+    <textArea id="textArea" src="url(../assets/level_images/book_fantasy_v1.jpg)"/>
+  </overrideLayoutAttributes>
+  <rules>
+    <allowAddNewSegments value="true"/>
+    <allowAddUnitBar value="true"/>
+    <allowSplitBar value="true"/>
+    <allowCopyBar value="true"/>
+    <allowCreateCard value="false"/>
+    <allowParenthesis value="false"/>
+    <allowSubtract value="true"/>
+    <allowMultiply value="true"/>
+    <allowDivide value="true"/>
+    <allowResizeBrackets value="false"/>
+  </rules>
+  <script>
+    <scriptedActions>
+      <code id="wordproblem.scripts.level.GenericBarModelLevelScript">
+        <documentToCard documentId="a1" value="4"/>
+        <documentToCard documentId="unk" value="tongues"/>
+        <documentToCard documentId="b1" value="9"/>
+        <barNormalizingFactor value="4"/>
+        <termValueToBarValue termValue="tongues" barValue="36"/>
+        <referenceModel>
+          <barWhole id="b1">
+            <barSegment value="4"/>
+            <barSegment value="4"/>
+            <barSegment value="4"/>
+            <barSegment value="4"/>
+            <barSegment value="4"/>
+            <barSegment value="4"/>
+            <barSegment value="4"/>
+            <barSegment value="4"/>
+            <barSegment value="4"/>
+            <bracket value="tongues" start="0" end="8"/>
+          </barWhole>
+          <barWhole>
+            <barSegment value="4" label="4"/>
+          </barWhole>
+        </referenceModel>
+        <referenceModel>
+          <barWhole>
+            <barSegment value="4" label="4"/>
+            <barSegment value="4"/>
+            <barSegment value="4"/>
+            <barSegment value="4"/>
+            <barSegment value="4"/>
+            <barSegment value="4"/>
+            <barSegment value="4"/>
+            <barSegment value="4"/>
+            <barSegment value="4"/>
+            <bracket value="tongues" start="0" end="8"/>
+          </barWhole>
+        </referenceModel>
+        <referenceModel>
+          <barWhole>
+            <barSegment value="9" label="9"/>
+            <barSegment value="9"/>
+            <barSegment value="9"/>
+            <barSegment value="9"/>
+            <bracket value="tongues" start="0" end="3"/>
+          </barWhole>
+        </referenceModel>
+        <equation value="tongues=9*4"/>
+        <customHints>
+          <hint step="1">You need to add some number of groups.</hint>
+          <hint step="4">Show the total number of snake tongues.</hint>
+          <hint step="3">The total number of snake tongues should be every group added.</hint>
+          <hint step="2">The total number of snake tongues should cover 9 groups.</hint>
+          <hint step="20">Create groups to represent the snake tongues and toad warts.</hint>
+          <hint step="21">You'll need to make multiple groups. How many do you need?</hint>
+          <hint step="22">Make 9 equal groups to show the snake tongues is 9 times bigger.</hint>
+          <hint step="23">Show how many times greater the snake tongues are than the toad warts?</hint>
+          <hint step="24">The snake tongues are a multiple of the toad warts. Make equal sized boxes to show this.</hint>
+          <hint step="31">You need to use the value for the toad warts on a box.</hint>
+          <hint step="32">Each group should equal the toad warts.</hint>
+          <hint step="33">Show the toad warts as one group.</hint>
+          <hint step="34">The value for the toad warts should equal one group?</hint>
+          <hint step="36">Make sure you have the right number of groups.</hint>
+          <hint step="37">Make sure you are showing the right multiple of toad warts.</hint>
+          <hint step="6">Show the part for the total snake tongues needed.</hint>
+          <hint step="9">The variable '$0' should be the total snake tongues needed.</hint>
+          <hint step="8">What part represents the total snake tongues needed?</hint>
+          <hint step="7">The part for the total is missing? What is it?</hint>
+          <hint step="10">What is the total of all the parts added together?</hint>
+        </customHints>
+      </code>
+    </scriptedActions>
+  </script>
+  <style>{"p":{"fontName":"Immortal","color":"0x3D1E07","fontSize":23}}</style>
+  <wordproblem>
+    <page paddingLeft="110" paddingTop="50">
+      <div layout="relative" width="580">
+        <p>
+          Sienna was in love with the prince, and decided she needed a love potion.  She went to a witch who needed certain items to make this potion.  If she needed
+          <span class="term" id="a1">4 toad warts</span>
+          and
+          <span class="term" id="b1">9 times</span>
+          as many snakes tongues, how many
+          <span class="term" alias="tongues" id="unk">snake tongues did the witch need</span>
+          ?
+        </p>
+      </div>
+    </page>
+  </wordproblem>
+  <resources>
+    <audio type="streaming" src="bg_music_fantasy_2"/>
+  </resources>
+</level>

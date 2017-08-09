@@ -1,0 +1,90 @@
+<level barModelType="4f" name="Bar model 658" id="658">
+  <symbols>
+    <symbol name="strawberry pies eaten" abbreviatedName="strawberry" value="strawberry" backgroundTexturePositive="card_background_square" customBarColor="0xFFEDDB48" useCustomBarColor="true"/>
+    <symbol name="21" abbreviatedName="21 pies" value="21" backgroundTexturePositive="card_background_square" customBarColor="0xFF6099F5" useCustomBarColor="true"/>
+    <symbol value="6" customBarColor="0xFFFFFFFF" useCustomBarColor="true"/>
+  </symbols>
+  <overrideLayoutAttributes name="barEquationModel">
+    <textArea id="textArea" src="url(../assets/level_images/book_fantasy_v2.jpg)"/>
+  </overrideLayoutAttributes>
+  <rules>
+    <allowAddNewSegments value="true"/>
+    <allowAddUnitBar value="true"/>
+    <allowSplitBar value="true"/>
+    <allowCopyBar value="true"/>
+    <allowCreateCard value="true"/>
+    <allowParenthesis value="false"/>
+    <allowSubtract value="true"/>
+    <allowMultiply value="true"/>
+    <allowDivide value="true"/>
+    <allowResizeBrackets value="false"/>
+  </rules>
+  <script>
+    <scriptedActions>
+      <code id="wordproblem.scripts.level.GenericBarModelLevelScript">
+        <documentToCard documentId="a1" value="21"/>
+        <documentToCard documentId="unk" value="strawberry"/>
+        <documentToCard documentId="b1" value="6"/>
+        <barNormalizingFactor value="6"/>
+        <termValueToBarValue termValue="strawberry" barValue="3"/>
+        <referenceModel>
+          <barWhole id="b1">
+            <barSegment value="3"/>
+            <barSegment value="3"/>
+            <barSegment value="3"/>
+            <barSegment value="3"/>
+            <barSegment value="3"/>
+            <barSegment value="3"/>
+          </barWhole>
+          <barWhole>
+            <barSegment value="3" label="strawberry"/>
+          </barWhole>
+          <verticalBracket value="21" start="0" end="1"/>
+        </referenceModel>
+        <equation value="strawberry=21/(6+1)"/>
+        <customHints>
+          <hint step="1">You need to add some number of groups.</hint>
+          <hint step="4">Show the total number of pies.</hint>
+          <hint step="3">The total number of pies should be every group added.</hint>
+          <hint step="2">The total number of pies should cover 6 groups.</hint>
+          <hint step="20">Create groups to represent the blueberry pies and strawberry pies.</hint>
+          <hint step="21">You'll need to make multiple groups. How many do you need?</hint>
+          <hint step="22">Make 6 equal groups to show the blueberry pies is 6 times bigger.</hint>
+          <hint step="23">Show how many times greater the blueberry pies are than the strawberry pies?</hint>
+          <hint step="24">The blueberry pies are a multiple of the strawberry pies. Make equal sized boxes to show this.</hint>
+          <hint step="31">You need to use the value for the strawberry pies on a box.</hint>
+          <hint step="32">Each group should equal the strawberry pies.</hint>
+          <hint step="33">Show the strawberry pies as one group.</hint>
+          <hint step="34">The value for the strawberry pies should equal one group?</hint>
+          <hint step="36">Make sure you have the right number of groups.</hint>
+          <hint step="37">Make sure you are showing the right multiple of strawberry pies.</hint>
+          <hint step="6">Show the part for the total pies at the feast.</hint>
+          <hint step="8">What part represents the total pies at the feast?</hint>
+          <hint step="7">The part for the total is missing? What is it?</hint>
+          <hint step="10">What is the total of all the parts added together?</hint>
+        </customHints>
+      </code>
+    </scriptedActions>
+  </script>
+  <style>{"p":{"fontName":"Immortal","color":"0x3D1E07","fontSize":24}}</style>
+  <wordproblem>
+    <page paddingLeft="110" paddingTop="50">
+      <div layout="relative" width="580">
+        <p>
+          King Arthur and his knights were enjoying a feast after winning a fight against Merlin. If they had
+          <span class="term" id="b1">6 times</span>
+          as many blueberry pies as
+          <span class="term" id="unk">strawberry pies</span>
+          , and a total of
+          <span class="term" id="a1">21 pies</span>
+          , how many
+          <span class="term" alias="strawberry" id="unk">strawberry pies were at the feast</span>
+          ?
+        </p>
+      </div>
+    </page>
+  </wordproblem>
+  <resources>
+    <audio type="streaming" src="bg_music_fantasy_2"/>
+  </resources>
+</level>
