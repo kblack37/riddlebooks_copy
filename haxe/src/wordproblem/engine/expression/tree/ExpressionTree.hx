@@ -136,7 +136,6 @@ class ExpressionTree extends EventDispatcher
                     nodeAdded : newNode,
                     initialXPosition : xPosition,
                     initialYPosition : yPosition,
-
                 }
                 );
     }

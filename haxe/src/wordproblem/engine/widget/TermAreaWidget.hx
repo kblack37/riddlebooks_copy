@@ -404,12 +404,7 @@ class TermAreaWidget extends ExpressionTreeWidget implements IBaseWidget
         
         // For every entity id in the current manager, check if there is a matching
         // entity within the term area widget
-        var numEntityIds : Int = entityIds.length;
-        var entityId : String = null;
-        var i : Int = 0;
-        for (i in 0...numEntityIds){
-            entityId = entityIds[i];
-            
+        for (entityId in entityIds){
             var numTermAreaEntities : Int = outWidgetLeaves.length;
             var foundMatch : Bool = false;
             var termAreaEntity : BaseTermWidget = null;
@@ -443,12 +438,9 @@ class TermAreaWidget extends ExpressionTreeWidget implements IBaseWidget
 		
 		// For each leaf in the term area that did not match with an id the previous snapshot of the component  
         // manager we need to create a new batch of data for that card.    
-        var numNewWidgets : Int = outWidgetLeaves.length;
-        for (i in 0...numNewWidgets){
-            var termAreaEntity = outWidgetLeaves[i];
-            
+        for (termAreaEntity in outWidgetLeaves){
             // Only base component we need to create for it is the render component
-            entityId = Std.string(termAreaEntity.getNode().id);
+            var entityId = Std.string(termAreaEntity.getNode().id);
             
             var renderComponent = new RenderableComponent(entityId);
             renderComponent.view = termAreaEntity;

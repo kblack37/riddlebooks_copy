@@ -114,7 +114,6 @@ class RingPulseAnimation implements IAnimatable implements IDisposable
             ringExpandTween.animate("alpha", 0.1);
             ringExpandTween.repeatCount = 1;
             ringExpandTween.onComplete = onTweenComplete;
-            ringExpandTween.onCompleteArgs = [ringExpandTween];
             m_activeTweens.push(ringExpandTween);
             
             displayContainer.addChild(ringImage);
@@ -123,10 +122,9 @@ class RingPulseAnimation implements IAnimatable implements IDisposable
         m_totalTweensToPlay = m_activeTweens.length;
     }
     
-    private function onTweenComplete(tween : Tween) : Void
+    private function onTweenComplete() : Void
     {
-        m_displayContainer.removeChild(try cast(tween.target, Image) catch(e:Dynamic) null);
-        m_activeTweens.splice(Lambda.indexOf(m_activeTweens, tween), 1);
+        m_displayContainer.removeChild(try cast(m_activeTweens.pop().target, Image) catch(e:Dynamic) null);
         
         m_numCompletedTweens++;
         if (m_numCompletedTweens >= m_totalTweensToPlay) 

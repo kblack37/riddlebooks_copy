@@ -552,7 +552,7 @@ class HoldToCopy extends BaseBarModelScript
     
     private function onFadeCompletedRingComplete(target : Image) : Void
     {
-        target.removeFromParent(true);
+		m_canvas.removeChild(target);
     }
     
     private function onTransformComplete() : Void
