@@ -228,7 +228,7 @@ class ValidateBarModelArea extends BaseBarModelScript
             // Always go through every model even if we detect success in case we want to know how other
             // models failed
             var currentModelDecomposed : DecomposedBarModelData = new DecomposedBarModelData(currentModelSnapshot);
-            if (currentModelDecomposed.detectedLabelValueConflict.length == 0) 
+            if (currentModelDecomposed.detectedLabelValueConflict.length == 0 && currentModelDecomposed.labelValueProportionsAreConsistent()) 
             {
                 var i : Int = 0;
                 var numModels : Int = m_referenceBarModels.length;

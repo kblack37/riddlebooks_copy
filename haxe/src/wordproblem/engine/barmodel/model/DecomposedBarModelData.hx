@@ -1,4 +1,5 @@
 package wordproblem.engine.barmodel.model;
+import dragonbox.common.util.XString;
 
 
 /**
@@ -33,7 +34,7 @@ class DecomposedBarModelData
      * amount of the smallest segment
      */
     public var labelValueToNormalizedSegmentValue : Dynamic;
-    
+	
     /**
      * When decomposing a model, it is possible that a label is used multiple times and maps to different
      * value. This automatically makes this model invalid so it is no longer useful.
@@ -57,7 +58,7 @@ class DecomposedBarModelData
     /**
      * Map from value of the label to the ratio of all total bar segments added together.
      * It is used to perform comparison where the tally of segments is not considered and only
-     * propertions are checked.
+     * proportions are checked.
      */
     public var labelToRatioOfTotalBoxes : Dynamic;
     
@@ -92,21 +93,21 @@ class DecomposedBarModelData
             if (!Reflect.hasField(this.labelValueToNormalizedSegmentValue, labelValue)) 
             {
                 labelsMatch = false;
-                break;
             }
-        }  // Check everything in this is contained in the other  
-        
-        
-        
+        }  
+		
+		// Check everything in this is contained in the other
         for (labelValue in Reflect.fields(this.labelValueToNormalizedSegmentValue))
         {
             if (!Reflect.hasField(otherDecomposedBarModelData.labelValueToNormalizedSegmentValue, labelValue)) 
             {
-                labelsMatch = false;
-                break;
+				// It doesn't matter if the player has extra numeric labels
+				// since we already checked that they're correct
+				if (!XString.isNumber(labelValue))
+					labelsMatch = false;
             }
         }
-        
+		
         if (labelsMatch) 
         {
             
@@ -197,10 +198,9 @@ class DecomposedBarModelData
                     if (smallestValueDelta > DecomposedBarModelData.ERROR) 
                     {
                         equivalencyScore += (talliesToConsume * smallestValueDelta);
-                    }  // Consume as much of the tallies as possible  
-                    
-                    
-                    
+                    } 
+					
+					// Consume as much of the tallies as possible  
                     var remainingTallies : Int = (otherSegmentTallies[indexOfClosestValue] - talliesToConsume);
                     if (remainingTallies > 0) 
                     {
@@ -287,6 +287,24 @@ class DecomposedBarModelData
         // (General equivalency check should not care about this since this is a structural property)
         return Math.ceil(equivalencyScore);
     }
+	
+	/**
+	 * Returns true if the proportion of ratio to label value is identical 
+	 * for all numeric label values
+	 */
+	public function labelValueProportionsAreConsistent() : Bool {
+		var lastProportion : Float = -1;
+		for (labelValue in Reflect.fields(labelToRatioOfTotalBoxes)) {
+			if (XString.isNumber(labelValue)) {
+				var proportion  : Float = Reflect.field(labelToRatioOfTotalBoxes, labelValue) / Std.parseFloat(labelValue);
+				if (lastProportion != -1 && Math.abs(lastProportion - proportion) > ERROR) {
+					return false;
+				}
+				lastProportion = proportion;
+			}
+		}
+		return true;
+	}
     
     private function decomposeBarModelData(barModelData : BarModelData) : Void
     {
@@ -323,10 +341,9 @@ class DecomposedBarModelData
                         foundExistingValue = true;
                         this.normalizedBarSegmentValueTally[k] = this.normalizedBarSegmentValueTally[k] + 1;
                     }
-                }  // Add new value with starting tally of one if it wasn't found  
-                
-                
-                
+                } 
+				
+				// Add new value with starting tally of one if it wasn't found  
                 if (!foundExistingValue) 
                 {
                     this.normalizedBarSegmentValuesList.push(normalizedValue);
@@ -341,10 +358,10 @@ class DecomposedBarModelData
                 var labelSegmentValue : Float = barWhole.getValue(barLabel.startSegmentIndex, barLabel.endSegmentIndex);
                 
                 // Normalize the value
-                var normalizedLabelValue : Float = (labelSegmentValue * segmentWithMinValue.denominatorValue) / segmentWithMinValue.numeratorValue;
-                checkForLabelConflict(barLabel.value, normalizedLabelValue);
-				Reflect.setField(labelValueToNormalizedSegmentValue, barLabel.value, normalizedLabelValue);
-                
+                var normalizedLabelSegmentValue : Float = (labelSegmentValue * segmentWithMinValue.denominatorValue) / segmentWithMinValue.numeratorValue;
+                checkForLabelConflict(barLabel.value, normalizedLabelSegmentValue);
+				Reflect.setField(labelValueToNormalizedSegmentValue, barLabel.value, normalizedLabelSegmentValue);
+				
                 if (barLabel.bracketStyle == BarLabel.BRACKET_NONE) 
                 {
 					Reflect.setField(this.labelValueToType, barLabel.value, "n");
@@ -427,14 +444,13 @@ class DecomposedBarModelData
         for (barWhole in barWholes)
         {
             totalBarValue += barWhole.getValue();
-        }  // Go through every labeled part and figure out what it's normalized ratio should be  
-        
-        
-        
+        }  
+		
+		// Go through every labeled part and figure out what it's normalized ratio should be  
         var labelTermNameToSegmentAmount : Dynamic = { };
         for (barWhole in barWholes)
         {
-            for (barLabel/* AS3HX WARNING could not determine type for var: barLabel exp: EField(EIdent(barWhole),barLabels) type: null */ in barWhole.barLabels)
+            for (barLabel in barWhole.barLabels)
             {
                 var labelSegmentAmount : Float = barWhole.getValue(barLabel.startSegmentIndex, barLabel.endSegmentIndex);
 				Reflect.setField(labelToRatioOfTotalBoxes, barLabel.value, labelSegmentAmount / totalBarValue);
