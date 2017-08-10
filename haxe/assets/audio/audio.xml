@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+Give names to all the types of sounds
+
+The reason for the nesting is if we want a sound resource type to randomly
+select from a sampling of several different sounds.
+
+The 'name' attribute of the <type> is what the game code should use when asking the Audio class to play a sound or music loop. You can freely call these whatever you want.
+Ex.) In the game code we would call Audio.playSound("<type_name>")
+
+The 'name' attribute of the <sound> is what the asset manager uses to link the raw resource to the <type>. For embedded resources this name is the same as the class used 
+to embed the file.  
+Ex.) Somewhere in the app we have:
+[Embed(source="/../assets/audio/bg_music1.mp3")]
+public static const bg_music1:Class;
+
+'bg_music1' is the sound name in this case
+
+For dynamically streamed resources this is the name of the file WITH the extension, and the <sound /> element needs to have a url attribute to the DIRECTORY where the named sound lives.
+Ex.) <type name="bg_music" volume="0.4" previewMuffle="false">
+		<sound name="SndLoop_Game_WhilePlaying.mp3" url="../assets/audio/"/>
+     </type>
+-->
+<audio swfName="" usePanning="true">
+
+    <!-- MUSIC -->
+    
+    <!-- Music to play in the background of a level -->
+    <type name="bg_level_music" volume="0.4" previewMuffle="false">
+		<sound name="SndLoop_Game_WhilePlaying.mp3" url="../assets/audio/"/>
+	</type>
+    
+    <type name="bg_level_fantasy" volume="0.4" previewMuffle="false">
+        <sound name="bg_fantasy_loop1.mp3"  url="../assets/audio/"/>
+        <sound name="bg_fantasy_loop2.mp3"  url="../assets/audio/"/>
+	</type>
+	
+	<type name="bg_music_fantasy_1" volume="0.4" previewMuffle="false">
+        <sound name="bg_fantasy_loop1.mp3"  url="../assets/audio/"/>
+    </type>
+    
+    <type name="bg_music_fantasy_2" volume="0.4" previewMuffle="false">
+        <sound name="bg_fantasy_loop2.mp3"  url="../assets/audio/"/>
+    </type>
+    
+    <type name="bg_level_science_fiction" volume="0.4" previewMuffle="false">
+        <sound name="bg_science_fiction_loop1.mp3"  url="../assets/audio/"/>
+        <sound name="bg_science_fiction_loop2.mp3"  url="../assets/audio/"/>
+        <sound name="bg_science_fiction_loop3.mp3"  url="../assets/audio/"/>
+	</type>
+	
+	<type name="bg_music_science_fiction_1" volume="0.4" previewMuffle="false">
+        <sound name="bg_science_fiction_loop1.mp3"  url="../assets/audio/"/>
+    </type>
+    
+    <type name="bg_music_science_fiction_2" volume="0.4" previewMuffle="false">
+        <sound name="bg_science_fiction_loop2.mp3"  url="../assets/audio/"/>
+    </type>
+    
+    <type name="bg_music_science_fiction_3" volume="0.4" previewMuffle="false">
+        <sound name="bg_science_fiction_loop3.mp3"  url="../assets/audio/"/>
+    </type>
+    
+    <type name="bg_level_mystery" volume="0.4" previewMuffle="false">
+        <sound name="bg_mystery_loop1.mp3"  url="../assets/audio/"/>
+	</type>
+	
+	<type name="bg_music_mystery_1" volume="0.4" previewMuffle="false">
+        <sound name="bg_mystery_loop1.mp3"  url="../assets/audio/"/>
+    </type>
+    
+    <!-- Music to play at the home screen or login screen-->
+    <type name="bg_home_music" volume="0.4" previewMuffle="false">
+        <sound name="bg_home_1.mp3" url="../assets/audio/"/>
+    </type>
+	
+	<!-- SOUND FX -->
+	<type name="page_flip" volume="0.6" previewMuffle="false">
+	   <sound name="SndEff_pageflip_v1" />
+	</type>
+	
+	<type name="book_open" volume="0.6" previewMuffle="false">
+       <sound name="SndEff_bookopen_v1" />
+    </type>
+	
+	<type name="locked" volume="0.6" previewMuffle="false">
+       <sound name="SndEff_Wrong2" />
+    </type>
+	
+	<type name="expression_option_pick" volume="0.6" previewMuffle="false">
+       <sound name="SndEff_text2card_v2" />
+    </type>
+    
+    <type name="expression_option_success" volume="0.6" previewMuffle="false">
+       <sound name="SndEff_card2deck_v2" />
+    </type>
+	
+	<type name="card_flip" volume="0.6" previewMuffle="false">
+       <sound name="SndEff_cardflip_v1" />
+    </type>
+	
+	<type name="text2card" volume="0.6" previewMuffle="false">
+		<sound name="SndEff_text2card_v1" />
+	</type>
+	
+	<type name="bar2card" volume="0.6" previewMuffle="false">
+        <sound name="SndEff_text2card_v1" />
+    </type>
+    
+	<type name="card2deck" volume="0.6" previewMuffle="false">
+		<sound name="SndEff_card2deck_v1" />
+		<sound name="SndEff_card2deck_v2" />
+		<sound name="SndEff_card2deck_v3" />
+	</type>
+    
+	<type name="carddrop" volume="0.6" previewMuffle="false">
+		<sound name="SndEff_carddrop_v3" />
+	</type>
+    
+	<type name="find_correct_equation" volume="0.6" previewMuffle="false">
+		<sound name="SndEff_Win" />
+		<sound name="SndEff_Win2" />
+	</type>
+    
+    <type name="win_level" volume="0.3" previewMuffle="false">
+        <sound name="SndEff_Win3" />
+    </type>
+    
+	<type name="wrong" volume="1.0" previewMuffle="false">
+		<sound name="SndEff_Wrong2" />
+		<sound name="SndEff_Wrong3" />
+	</type>
+	
+	<type name="button_click" volume="1.0" previewMuffle="false">
+        <sound name="SndEff_Wrong" />
+    </type>
+    
+    <type name="reward" volume="1.0" previewMuffle="false">
+        <sound name="SndEff_Win" />
+    </type>
+    
+    <type name="pickup_card_deck" volume="1.0" previewMuffle="false">
+        <sound name="SndEff_carddrop_v2" />
+    </type>
+    
+</audio>
