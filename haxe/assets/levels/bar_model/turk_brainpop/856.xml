@@ -6,7 +6,7 @@
     <symbol value="5" customBarColor="0xFFFAFF96" useCustomBarColor="true"/>
   </symbols>
   <overrideLayoutAttributes name="barEquationModel">
-    <textArea id="textArea" src="url(../assets/level_images/book_mountain_meadow.jpg)"/>
+    <textArea id="textArea" src="url(assets/level_images/book_mountain_meadow.jpg)"/>
   </overrideLayoutAttributes>
   <rules>
     <allowAddNewSegments value="true"/>
@@ -65,7 +65,7 @@
       </code>
     </scriptedActions>
   </script>
-  <style>{"p":{"fontName":"Calibri","color":"0x0000000","fontSize":24}}</style>
+  <style>{"p":{"fontName":"Calibri","color":"0x000000","fontSize":24}}</style>
   <wordproblem>
     <page paddingLeft="110" paddingTop="50">
       <div layout="relative" width="580">

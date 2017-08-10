@@ -341,12 +341,10 @@ class SnapManager implements IDisposable
                             }
                         }
                     }
-                }  // Stopping on first valid snap    // TODO: This may be breaking to early  
-                
-                
-                
-                
-                
+                }  
+				
+				// TODO: This may be breaking to early  
+                // Stopping on first valid snap   
                 if (widgetAcceptingSnap != null) 
                 {
                     break;
@@ -356,14 +354,11 @@ class SnapManager implements IDisposable
         else 
         {
             m_widgetToSnapStartDrag = false;
-        }  // The parameters for the snap are the target node, the operator, and side of the snap (left or right)    // any animations or previews with the old snap and start the animations for the new snapped widget.    // If a snap was detected check if the parameters for the snap were altered. If it is, clear  
-        
-        
-        
-        
-        
-        
-        
+        }  
+		
+		// If a snap was detected check if the parameters for the snap were altered. If it is, clear  
+		// any animations or previews with the old snap and start the animations for the new snapped widget.  
+        // The parameters for the snap are the target node, the operator, and side of the snap (left or right) 
         if (m_snapToLeft != snapToLeft ||
             m_operatorForSnap != snapOperator ||
             m_widgetAcceptingSnap != widgetAcceptingSnap) 

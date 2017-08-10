@@ -136,10 +136,9 @@ class TextureUtil
                 currentRad -= radPerStep;
             }
             amountFilled += radPerStep;
-        }  // Make sure no missing space at the end  
-        
-        
-        
+        }  
+		
+		// Make sure no missing space at the end  
         var cos = Math.cos(startAngleRad + radToFill);
         var sin = Math.sin(startAngleRad + radToFill);
         innerCoordinates.push(innerRadius * cos);
@@ -156,16 +155,16 @@ class TextureUtil
             var innerX = innerCoordinates[i];
             var innerY = innerCoordinates[i + 1];
             shape.graphics.lineTo(innerX, innerY);
-        }  // Outer loop, goes backwards  
-        
-        
-        
+        } 
+		
+		// Outer loop, goes backwards  
         for (i in numCoordinates - 1...0){
             var outerX = outCoordinates[i - 1];
             var outerY = outCoordinates[i];
             shape.graphics.lineTo(outerX, outerY);
-        }  // Close at start of inner  
-        
+        }  
+		
+		// Close at start of inner  
         shape.graphics.lineTo(innerCoordinates[0], innerCoordinates[1]);
         
         // If an outline is used it added to the size

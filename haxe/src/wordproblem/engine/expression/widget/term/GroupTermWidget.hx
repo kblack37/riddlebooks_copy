@@ -43,7 +43,7 @@ class GroupTermWidget extends BaseTermWidget
             var centerWidth : Float = texture.width - 2 * centerX;
 			// TODO: this was converted from a Scale3Texture from the feathers library
 			// and will probably need to be fixed
-            this.groupImage = new Image(Texture.fromTexture(texture, new Rectangle(centerX, 0, centerWidth, texture.height)));
+            this.groupImage = new Image(texture);
         }
         else 
         {

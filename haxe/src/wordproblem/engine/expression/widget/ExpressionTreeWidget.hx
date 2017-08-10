@@ -984,8 +984,6 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
                                 leftWidget.rigidBodyComponent.boundingRectangle.width,
                                 rightWidget.rigidBodyComponent.boundingRectangle.width
                                 );
-                divisionImage.pivotX = divisionImage.width * 0.5;
-                divisionImage.pivotY = divisionImage.height * 0.5;
             }
             else 
             {
