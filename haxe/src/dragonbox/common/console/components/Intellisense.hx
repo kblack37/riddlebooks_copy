@@ -1,12 +1,15 @@
 package dragonbox.common.console.components;
 
 
-import starling.text.TextField;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.display.DisplayObject;
+import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
 
-import starling.display.Sprite;
+import openfl.display.Sprite;
 
 class Intellisense extends Sprite
 {
@@ -19,7 +22,7 @@ class Intellisense extends Sprite
     private var m_labels : Array<TextField>;
     private var m_selection : Int;
     
-    private var m_background : Sprite;
+    private var m_background : DisplayObject;
     
     public function new()
     {
@@ -63,8 +66,7 @@ class Intellisense extends Sprite
         if (m_labels.length > 0) 
         {
             var label : TextField = m_labels[index];
-			// TODO: Starling TextFields don't have these equivalents
-            //label.background = false;
+            label.background = false;
         }
     }
     
@@ -73,9 +75,8 @@ class Intellisense extends Sprite
         if (m_labels.length > 0) 
         {
             var label : TextField = m_labels[index];
-			// TODO: Starling TextFields don't have these equivalents
-            //label.background = true;
-            //label.backgroundColor = 0x7777dd;
+            label.background = true;
+            label.backgroundColor = 0x7777dd;
         }
     }
     
@@ -93,12 +94,14 @@ class Intellisense extends Sprite
         var y : Float = 0;
         for (item in m_items)
         {
-            var itemLabel : TextField = new TextField(0, 0, "");
-			// TODO: Starling TextFields don't have these equivalents
-            //itemLabel.selectable = false;
+            var itemLabel : TextField = new TextField();
+			itemLabel.width = 0;
+			itemLabel.height = 0;
+			itemLabel.text = "";
+            itemLabel.selectable = false;
             itemLabel.autoSize = TextFieldAutoSize.LEFT;
             itemLabel.text = item;
-            //itemLabel.setTextFormat(ITEM);
+            itemLabel.setTextFormat(ITEM);
             itemLabel.y = y;
             
             y += itemLabel.height;
@@ -113,12 +116,7 @@ class Intellisense extends Sprite
             }
         }
         
-		// TODO: a Starling solution to this code would require more effort
-		// that is better expended elsewhere, since it is going to be replaced
-        //m_background.graphics.clear();
-        //m_background.graphics.beginFill(0xdddd77, 0.95);
-        //m_background.graphics.drawRect(0, 0, backgroundWidth, backgroundHeight);
-        //m_background.graphics.endFill();
+		m_background = new Bitmap(new BitmapData(Std.int(backgroundWidth), Std.int(backgroundHeight), false, 0xdddd77));
         
         select(m_selection);
     }

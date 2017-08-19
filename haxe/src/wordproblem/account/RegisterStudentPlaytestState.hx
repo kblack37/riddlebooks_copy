@@ -432,7 +432,7 @@ class RegisterStudentPlaytestState extends Sprite implements IDisposable
             
             
             
-            m_registerAccountScreen.parent.removeChild(m_registerAccountScreen);
+            if (m_registerAccountScreen.parent != null) m_registerAccountScreen.parent.removeChild(m_registerAccountScreen);
             
             m_registerRewardScreen = new RegisterRewardScreen(m_onCompleteCallback, user);
             

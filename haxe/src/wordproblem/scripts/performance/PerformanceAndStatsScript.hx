@@ -64,7 +64,7 @@ class PerformanceAndStatsScript extends BaseBufferEventScript
             {
                 levelStatistics.totalMillisecondsPlayed = Date.now().getTime() - m_levelStartTime;
             }
-            onLevelSolved();
+            onLevelSolved(null);
             m_levelStartTime = -1;
         }
         else if (eventType == GameEvent.LEVEL_READY) 
@@ -93,28 +93,28 @@ class PerformanceAndStatsScript extends BaseBufferEventScript
         m_gameEngine.removeEventListener(GameEvent.BAR_MODEL_AREA_CHANGE, bufferEvent);
     }
     
-    private function onBarModelFail() : Void
+    private function onBarModelFail(event : Dynamic) : Void
     {
         var levelStatistics : LevelStatistics = m_gameEngine.getCurrentLevel().statistics;
         levelStatistics.barModelFails++;
         flushPerformanceStateToNode();
     }
     
-    private function onEquationModeledFail() : Void
+    private function onEquationModeledFail(event : Dynamic) : Void
     {
         var levelStatistics : LevelStatistics = m_gameEngine.getCurrentLevel().statistics;
         levelStatistics.equationModelFails++;
         flushPerformanceStateToNode();
     }
     
-    private function onGetNewHint() : Void
+    private function onGetNewHint(event : Dynamic) : Void
     {
         var levelStatistics : LevelStatistics = m_gameEngine.getCurrentLevel().statistics;
         levelStatistics.additionalHintsUsed++;
         flushPerformanceStateToNode();
     }
     
-    private function onLevelSolved() : Void
+    private function onLevelSolved(event : Dynamic) : Void
     {
         // Once a level is 'solved' there is nothing more that a player can do.
         // At this point we can terminate any further recording of the objectives
@@ -126,12 +126,10 @@ class PerformanceAndStatsScript extends BaseBufferEventScript
         for (i in 0...numObjectives){
             objective = objectives[i];
             objective.end(m_gameEngine.getCurrentLevel().statistics);
-        }  // We also need to combine all of them for a final level grade.    // Each objective is responsible for calculating the end grade  
-        
-        
-        
-        
-        
+        }  
+		
+		// Each objective is responsible for calculating the end grade  
+        // We also need to combine all of them for a final level grade.  
         var totalObjectiveGradePointsEarned : Int = 0;
         var totalPossibleGradePoints : Int = 0;
         for (i in 0...numObjectives){
@@ -141,10 +139,9 @@ class PerformanceAndStatsScript extends BaseBufferEventScript
                 totalObjectiveGradePointsEarned += objective.getGrade();
                 totalPossibleGradePoints += 100;
             }
-        }  // Record the data into the level stats blob  
-        
-        
-        
+        }
+		
+		// Record the data into the level stats blob  
         var levelStatistics : LevelStatistics = m_gameEngine.getCurrentLevel().statistics;
         if (totalPossibleGradePoints > 0) 
         {

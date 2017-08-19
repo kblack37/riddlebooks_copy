@@ -1,7 +1,7 @@
 package dragonbox.common.console;
 
 
-import starling.events.Event;
+import openfl.events.Event;
 
 class ConsoleVisibilityEvent extends Event
 {

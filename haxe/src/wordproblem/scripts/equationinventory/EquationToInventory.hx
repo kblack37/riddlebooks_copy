@@ -3,6 +3,7 @@ package wordproblem.scripts.equationinventory;
 
 import flash.geom.Rectangle;
 import starling.textures.Texture;
+import wordproblem.engine.events.DataEvent;
 
 import starling.core.Starling;
 import starling.display.DisplayObject;
@@ -45,17 +46,18 @@ class EquationToInventory extends BaseGameScript
         m_gameEngine.removeEventListener(GameEvent.EQUATION_MODEL_SUCCESS, onModeled);
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         m_gameEngine.addEventListener(GameEvent.EQUATION_MODEL_SUCCESS, onModeled);
     }
     
-    private function onModeled(event : Event, args : Dynamic) : Void
+    private function onModeled(event : Dynamic) : Void
     {
         // Remember the equations that was modeled. The script needs to immediately add it later if we that
         // equation to go into the inventory.
+		var args = (try cast(event, DataEvent) catch (e : Dynamic) null).getData();
         var modeledId : Int = args.id;
         var modeledExpression : String = args.equation;
         
@@ -66,16 +68,12 @@ class EquationToInventory extends BaseGameScript
                         typeId : ExpressionComponent.TYPE_ID,
                         data : {
                             equationString : modeledExpression
-
                         },
-
                     }, 
                     {
                         typeId : RenderableComponent.TYPE_ID,
                         data : { },
-
                     }],
-
                 }
                 );
         
@@ -84,10 +82,9 @@ class EquationToInventory extends BaseGameScript
         if (inventoryArea != null && inventoryArea.parent != null) 
         {
             this.animateEquation();
-        }  // Clear the modeling term area immediately of all contents  
-        
-        
-        
+        }  
+		
+		// Clear the modeling term area immediately of all contents  
         m_gameEngine.setTermAreaContent("leftTermArea rightTermArea", null);
     }
     
@@ -139,7 +136,7 @@ class EquationToInventory extends BaseGameScript
         var equalsButton : DisplayObject = m_gameEngine.getUiEntity("modelEquationButton");
         var animationLayer : DisplayObjectContainer = equalsButton.parent.parent;
         
-        equalsButton.getBounds(animationLayer, boundsRectangle);
+        boundsRectangle = equalsButton.getBounds(animationLayer);
         var leftTermStopEdge : Float = boundsRectangle.left;
         var rightTermStopEdge : Float = boundsRectangle.right;
         
@@ -153,7 +150,7 @@ class EquationToInventory extends BaseGameScript
         leftTermArea.getConstraintsHeight(), 
         true, 
         );
-        leftTermArea.getBounds(animationLayer, boundsRectangle);
+        boundsRectangle = leftTermArea.getBounds(animationLayer);
         copyLeftTermArea.x = boundsRectangle.x;
         copyLeftTermArea.y = boundsRectangle.y;
         animationLayer.addChild(copyLeftTermArea);
@@ -168,7 +165,7 @@ class EquationToInventory extends BaseGameScript
         rightTermArea.getConstraintsHeight(), 
         true, 
         );
-        rightTermArea.getBounds(animationLayer, boundsRectangle);
+        boundsRectangle = rightTermArea.getBounds(animationLayer);
         copyRightTermArea.x = boundsRectangle.x;
         copyRightTermArea.y = boundsRectangle.y;
         animationLayer.addChild(copyRightTermArea);
@@ -225,12 +222,12 @@ class EquationToInventory extends BaseGameScript
                 equalsImage.y = backgroundBounds.height * 0.5;
                 
                 // Readjust the position of the term areas to fit inside the container.
-                copyLeftTermArea.getBounds(equationContainer, boundsRectangle);
+                boundsRectangle = copyLeftTermArea.getBounds(equationContainer);
                 copyLeftTermArea.x += (boundsRectangle.x - copyLeftTightBounds.x);
                 copyLeftTermArea.y += (boundsRectangle.y - copyLeftTightBounds.y);
                 equalsImage.x = boundsRectangle.width;
                 var leftEdge : Float = boundsRectangle.right;
-                copyRightTermArea.getBounds(equationContainer, boundsRectangle);
+                boundsRectangle = copyRightTermArea.getBounds(equationContainer);
                 copyRightTermArea.x += (boundsRectangle.x - copyRightTightBounds.x);
                 copyRightTermArea.y += (boundsRectangle.y - copyRightTightBounds.y);
                 var rightEdge : Float = boundsRectangle.left;
@@ -244,7 +241,7 @@ class EquationToInventory extends BaseGameScript
                 
                 // Find the inventory button, this gives us the target location from which to move the equation image into
                 var inventoryArea : DisplayObject = m_gameEngine.getUiEntity("inventoryArea");
-                inventoryArea.getBounds(animationLayer, boundsRectangle);
+                boundsRectangle = inventoryArea.getBounds(animationLayer);
                 Starling.juggler.tween(equationContainer, m_moveEquationDuration, {
                             x : boundsRectangle.x,
                             y : boundsRectangle.y,

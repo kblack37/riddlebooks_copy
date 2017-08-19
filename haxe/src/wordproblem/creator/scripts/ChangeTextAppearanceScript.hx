@@ -33,9 +33,9 @@ class ChangeTextAppearanceScript extends BaseProblemCreateScript
         super(createState, assetManager, id, isActive);
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         m_barModelDrawer = new BarModelTypeDrawer();
         
@@ -139,7 +139,7 @@ class ChangeTextAppearanceScript extends BaseProblemCreateScript
         // Changing the background might also force a change to both the colors in the bar model
         // and the highlights in the text
         m_createState.getCurrentLevel().currentlySelectedBackgroundData = item;
-        m_createState.dispatchEventWith(ProblemCreateEvent.BACKGROUND_AND_STYLES_CHANGED);
+        m_createState.dispatchEvent(ProblemCreateEvent.BACKGROUND_AND_STYLES_CHANGED);
     }
     
     private function createBackgroundImage(name : String) : Void

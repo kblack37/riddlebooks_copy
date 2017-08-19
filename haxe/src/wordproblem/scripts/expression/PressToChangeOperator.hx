@@ -3,6 +3,7 @@ package wordproblem.scripts.expression;
 
 import dragonbox.common.math.vectorspace.RealsVectorSpace;
 import flash.geom.Point;
+import openfl.events.Event;
 
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.math.vectorspace.IVectorSpace;
@@ -89,8 +90,8 @@ class PressToChangeOperator extends BaseTermAreaScript
                 {
                     if (m_operatorWidgetPressedLast == operatorUnderPoint && cycleOperator(operatorUnderPoint, termArea)) 
                     {
-                        m_eventDispatcher.dispatchEventWith(GameEvent.CHANGED_OPERATOR);
-                        m_eventDispatcher.dispatchEventWith(GameEvent.EQUATION_CHANGED);
+                        m_eventDispatcher.dispatchEvent(new Event(GameEvent.CHANGED_OPERATOR));
+                        m_eventDispatcher.dispatchEvent(new Event(GameEvent.EQUATION_CHANGED));
                         status = ScriptStatus.SUCCESS;
                     }
                     
@@ -126,9 +127,9 @@ class PressToChangeOperator extends BaseTermAreaScript
         return status;
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         this.setIsActive(m_isActive);
     }

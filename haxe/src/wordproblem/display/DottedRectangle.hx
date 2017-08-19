@@ -1,11 +1,12 @@
 package wordproblem.display;
 
 
-import flash.geom.Rectangle;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.display.DisplayObject;
+import openfl.geom.Rectangle;
 
-import starling.display.Image;
-import starling.display.Sprite;
-import starling.textures.Texture;
+import openfl.display.Sprite;
 
 /**
  * A special display to draw a rectangle with a dotted border
@@ -17,24 +18,22 @@ class DottedRectangle extends Sprite
     /**
      * Reference to a scalable version of the background
      */
-	// TODO: this was a Scale9Image from the feathers library and will
-	// probably have to be fixed
-    private var m_backgroundNineSliceImage : Image;
+    private var m_backgroundNineSliceImage : Bitmap;
     
     /**
      * Reference to background texture that has no nine slice
      */
-    private var m_backgroundRegularImage : Image;
+    private var m_backgroundRegularImage : Bitmap;
     
     /**
      * Reference to the texture that represents a corner of the rectangle
      */
-    private var m_cornerTexture : Texture;
+    private var m_cornerBitmapData : BitmapData;
     
     /**
      * Reference to the texture that represents a segment that will run up and down
      */
-    private var m_lineTexture : Texture;
+    private var m_lineBitmapData : BitmapData;
     
     /**
      * How much bigger or smaller the textures for the dotted outline should appear
@@ -42,7 +41,7 @@ class DottedRectangle extends Sprite
      */
     private var m_dotScaleFactor : Float;
     
-    private var m_dottedLineImages : Array<Image>;
+    private var m_dottedLineImages : Array<DisplayObject>;
     
     /**
      *
@@ -51,26 +50,27 @@ class DottedRectangle extends Sprite
      * @param dotScaleFactor
      *      An extra number to scale up and down the corner and dots (default should be 1.0)
      */
-    public function new(backgroundRegularTexture : Texture,
+    public function new(backgroundRegularBitmapData : BitmapData,
             textureScalingGrid : Rectangle,
             dotScaleFactor : Float,
-            cornerTexture : Texture,
-            lineTexture : Texture)
+            cornerBitmapData : BitmapData,
+            lineBitmapData : BitmapData)
     {
         super();
         
         m_dotScaleFactor = dotScaleFactor;
-        m_cornerTexture = cornerTexture;
-        m_lineTexture = lineTexture;
-        m_dottedLineImages = new Array<Image>();
+        m_cornerBitmapData = cornerBitmapData;
+        m_lineBitmapData = lineBitmapData;
+        m_dottedLineImages = new Array<DisplayObject>();
         
-        if (backgroundRegularTexture != null) 
+        if (backgroundRegularBitmapData != null) 
         {
-            m_backgroundRegularImage = new Image(backgroundRegularTexture);
+            m_backgroundRegularImage = new Bitmap(backgroundRegularBitmapData);
             
             if (textureScalingGrid != null) 
             {
-                m_backgroundNineSliceImage = new Image(Texture.fromTexture(backgroundRegularTexture, textureScalingGrid));
+                m_backgroundNineSliceImage = new Bitmap(backgroundRegularBitmapData);
+				m_backgroundNineSliceImage.scale9Grid = textureScalingGrid;
             }
         }
     }
@@ -83,28 +83,24 @@ class DottedRectangle extends Sprite
         // Delete all previous graphics
         while (m_dottedLineImages.length > 0)
         {
-            m_dottedLineImages.pop().removeFromParent(true);
+			var imageToRemove = m_dottedLineImages.pop();
+            if (imageToRemove.parent != null) imageToRemove.parent.removeChild(imageToRemove);
         }
         
         if (m_backgroundNineSliceImage != null) 
         {
-            m_backgroundNineSliceImage.removeFromParent();
+			if (m_backgroundNineSliceImage.parent != null) m_backgroundNineSliceImage.parent.removeChild(m_backgroundNineSliceImage);
         }
         
         if (m_backgroundRegularImage != null) 
         {
-            m_backgroundRegularImage.removeFromParent();
-        }  // Check which background should be used  
-        
-        
-        
+			if (m_backgroundRegularImage.parent != null) m_backgroundRegularImage.parent.removeChild(m_backgroundRegularImage);
+        }  
+		
+		// Check which background should be used  
         if (m_backgroundNineSliceImage != null &&
-			// TODO: this conversion from a Scale9Image to a starling image
-			// is probably not correct and will need to be fixed
-			m_backgroundNineSliceImage.texture.width * 2 <= width &&
-			m_backgroundNineSliceImage.texture.height * 2 <= height)
-            //m_backgroundNineSliceImage.textures.scale9Grid.left * 2 <= width &&
-            //m_backgroundNineSliceImage.textures.scale9Grid.top * 2 <= height) 
+			m_backgroundNineSliceImage.scale9Grid.width * 2 <= width &&
+			m_backgroundNineSliceImage.scale9Grid.height * 2 <= height)
         {
             m_backgroundNineSliceImage.width = width;
             m_backgroundNineSliceImage.height = height;
@@ -117,10 +113,10 @@ class DottedRectangle extends Sprite
             addChild(m_backgroundRegularImage);
         }
         
-        var cornerTextureWidth : Float = m_cornerTexture.width * m_dotScaleFactor;
-        var cornerTextureHeight : Float = m_cornerTexture.height * m_dotScaleFactor;
-        var lineTextureWidth : Float = m_lineTexture.width * m_dotScaleFactor;
-        var lineTextureHeight : Float = m_lineTexture.height * m_dotScaleFactor;
+        var cornerTextureWidth : Float = m_cornerBitmapData.width * m_dotScaleFactor;
+        var cornerTextureHeight : Float = m_cornerBitmapData.height * m_dotScaleFactor;
+        var lineTextureWidth : Float = m_lineBitmapData.width * m_dotScaleFactor;
+        var lineTextureHeight : Float = m_lineBitmapData.height * m_dotScaleFactor;
         
         // Figure out how many dots can be drawn can be drawn both vertically and horizontally
         var horizontalSpaceForSegment : Float = width - (2 * cornerTextureWidth);
@@ -135,23 +131,26 @@ class DottedRectangle extends Sprite
         var newVerticalSpacing : Float = (verticalSpaceForSegment - (verticalSegmentsAllowed * lineTextureWidth)) / (verticalSegmentsAllowed + 1.0);
         
         // Draw out the background contained within the outline
-        var topLeftCorner : Image = new Image(m_cornerTexture);
+        var topLeftCorner : Bitmap = new Bitmap(m_cornerBitmapData);
         topLeftCorner.scaleX = topLeftCorner.scaleY = m_dotScaleFactor;
         
         // Top right is reflection
-        var topRightCorner : Image = new Image(m_cornerTexture);
+        var topRightCorner : PivotSprite = new PivotSprite();
+		topRightCorner.addChild(new Bitmap(m_cornerBitmapData));
         topRightCorner.scaleX = -1 * m_dotScaleFactor;
         topRightCorner.scaleY = m_dotScaleFactor;
         topRightCorner.pivotX = cornerTextureWidth;
         topRightCorner.x = width - cornerTextureWidth * m_dotScaleFactor;
         
-        var bottomLeftCorner : Image = new Image(m_cornerTexture);
+        var bottomLeftCorner : PivotSprite = new PivotSprite();
+		bottomLeftCorner.addChild(new Bitmap(m_cornerBitmapData));
         bottomLeftCorner.scaleX = bottomLeftCorner.scaleY = m_dotScaleFactor;
         bottomLeftCorner.pivotX = cornerTextureWidth;
         bottomLeftCorner.rotation = Math.PI * -0.5;
         bottomLeftCorner.y = height - cornerTextureHeight * m_dotScaleFactor;
         
-        var bottomRightCorner : Image = new Image(m_cornerTexture);
+        var bottomRightCorner : PivotSprite = new PivotSprite();
+		bottomRightCorner.addChild(new Bitmap(m_cornerBitmapData));
         bottomRightCorner.scaleX = bottomRightCorner.scaleY = m_dotScaleFactor;
         bottomRightCorner.pivotX = cornerTextureWidth;
         bottomRightCorner.pivotY = cornerTextureHeight;
@@ -174,12 +173,12 @@ class DottedRectangle extends Sprite
         var yTop : Float = 0;
         var yBottom : Float = height - lineTextureHeight;
         for (i in 0...horizontalSegmentsAllowed){
-            var topHorizontalSegment : Image = new Image(m_lineTexture);
+            var topHorizontalSegment : Bitmap = new Bitmap(m_lineBitmapData);
             topHorizontalSegment.scaleX = topHorizontalSegment.scaleY = m_dotScaleFactor;
             topHorizontalSegment.x = xOffset;
             addChild(topHorizontalSegment);
             
-            var bottomHorizontalSegment : Image = new Image(m_lineTexture);
+            var bottomHorizontalSegment : Bitmap = new Bitmap(m_lineBitmapData);
             bottomHorizontalSegment.scaleX = bottomHorizontalSegment.scaleY = m_dotScaleFactor;
             bottomHorizontalSegment.x = xOffset;
             bottomHorizontalSegment.y = yBottom;
@@ -190,21 +189,22 @@ class DottedRectangle extends Sprite
             m_dottedLineImages.push(topHorizontalSegment);
             m_dottedLineImages.push(bottomHorizontalSegment);
             
-        }  // ??? When scale factor is less than one the space between the vertical segments does not have the right starting offset  
-        
-        
-        
+        } 
+		
+		// ??? When scale factor is less than one the space between the vertical segments does not have the right starting offset  
         var yOffset : Float = cornerTextureHeight + newVerticalSpacing;
         var xRight : Float = width - lineTextureHeight;
         for (i in 0...verticalSegmentsAllowed){
-            var leftVerticalSegment : Image = new Image(m_lineTexture);
+            var leftVerticalSegment : PivotSprite = new PivotSprite();
+			leftVerticalSegment.addChild(new Bitmap(m_lineBitmapData));
             leftVerticalSegment.scaleX = leftVerticalSegment.scaleY = m_dotScaleFactor;
             leftVerticalSegment.pivotX = lineTextureWidth;
             leftVerticalSegment.rotation = Math.PI * -0.5;
             leftVerticalSegment.y = yOffset;
             addChild(leftVerticalSegment);
             
-            var rightVerticalSegment : Image = new Image(m_lineTexture);
+            var rightVerticalSegment : PivotSprite = new PivotSprite();
+			rightVerticalSegment.addChild(new Bitmap(m_lineBitmapData));
             rightVerticalSegment.scaleX = rightVerticalSegment.scaleY = m_dotScaleFactor;
             rightVerticalSegment.pivotX = lineTextureWidth;
             rightVerticalSegment.rotation = Math.PI * -0.5;
@@ -218,10 +218,5 @@ class DottedRectangle extends Sprite
             m_dottedLineImages.push(rightVerticalSegment);
             
         }
-    }
-    
-    override public function dispose() : Void
-    {
-        super.dispose();
     }
 }

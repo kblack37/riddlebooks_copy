@@ -67,9 +67,9 @@ class PrepopulateBarModel extends BaseBarModelScript
         }
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         setIsActive(m_isActive);
         
         m_documentIdToExpressionMap = { };

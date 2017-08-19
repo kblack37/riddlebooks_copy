@@ -4,6 +4,9 @@ package wordproblem.playercollections;
 import flash.geom.Rectangle;
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.display.DisplayObject;
 
 import cgs.audio.Audio;
 
@@ -15,11 +18,10 @@ import dragonbox.common.util.XColor;
 
 import haxe.Constraints.Function;
 
-import starling.display.Button;
-import starling.display.Image;
-import starling.display.Sprite;
-import starling.events.Event;
-import starling.textures.Texture;
+import wordproblem.display.LabelButton;
+import openfl.display.Sprite;
+import openfl.events.Event;
+import openfl.events.MouseEvent;
 
 import wordproblem.achievements.PlayerAchievementsModel;
 import wordproblem.currency.PlayerCurrencyModel;
@@ -44,7 +46,7 @@ import wordproblem.xp.PlayerXpModel;
 
 class PlayerCollectionsState extends BaseState
 {
-    private var m_background : Image;
+    private var m_background : DisplayObject;
     
     /**
      * This is the screen from which all other subscreens will add content to.
@@ -62,7 +64,7 @@ class PlayerCollectionsState extends BaseState
      * This button is used to back out of the collections screen and back
      * into the main level selection
      */
-    private var m_backButton : Button;
+    private var m_backButton : LabelButton;
     
     /**
      * Required to draw all the various items
@@ -129,7 +131,7 @@ class PlayerCollectionsState extends BaseState
         
         var screenWidth : Float = 800;
         var screenHeight : Float = 600;
-        m_background = new Image(assetManager.getTexture("summary_background"));
+        m_background = new Bitmap(assetManager.getBitmapData("summary_background"));
         m_background.width = screenWidth;
         m_background.height = screenHeight;
         
@@ -154,8 +156,7 @@ class PlayerCollectionsState extends BaseState
         // TODO: uncomment when a suitable toggle button replacement is found
 		//m_categoryButtons = new Array<ToggleButton>();
         
-        var selectedTexture : Texture = m_assetManager.getTexture("button_white");
-        var selectedScale9Texture : Texture = Texture.fromTexture(selectedTexture, new Rectangle(8, 8, 16, 16));
+        var selectedBitmapData : BitmapData = m_assetManager.getBitmapData("button_white");
         var i : Int = 0;
         var fontSize : Int = 20;
         for (i in 0...buttonLabels.length){
@@ -173,32 +174,33 @@ class PlayerCollectionsState extends BaseState
             //categoryToggleButton.isToggle = true;
             //m_categoryButtons.push(categoryToggleButton);
             
-            var categoryIconTexture : Texture = m_assetManager.getTexture(buttonIconTextureNames[i]);
-            var iconScale : Float = (categoryButtonHeight * 0.9) / categoryIconTexture.height;
-            var categoryIcon : Image = new Image(categoryIconTexture);
+            var categoryIconBitmapData : BitmapData = m_assetManager.getBitmapData(buttonIconTextureNames[i]);
+            var iconScale : Float = (categoryButtonHeight * 0.9) / categoryIconBitmapData.height;
+            var categoryIcon : Bitmap = new Bitmap(categoryIconBitmapData);
             categoryIcon.scaleX = categoryIcon.scaleY = iconScale;
             //categoryToggleButton.defaultIcon = categoryIcon;
             //categoryToggleButton.iconOffsetX = categoryIconTexture.width * iconScale * 0.6;
             
             // Set a selection skin
-            var defaultSelectedImage : Image = new Image(selectedScale9Texture);
-            defaultSelectedImage.color = XColor.shadeColor(m_buttonColorData.getUpButtonColor(), 1.0);
+            var defaultSelectedImage : Bitmap = new Bitmap(selectedBitmapData);
+			defaultSelectedImage.scale9Grid = new Rectangle(8, 8, 16, 16);
+			defaultSelectedImage.transform.colorTransform.concat(XColor.rgbToColorTransform(XColor.shadeColor(m_buttonColorData.getUpButtonColor(), 1.0)));
             //categoryToggleButton.defaultSelectedSkin = defaultSelectedImage;
             //categoryToggleButton.defaultSelectedLabelProperties = {
                 //textFormat : new TextFormat(GameFonts.DEFAULT_FONT_NAME, fontSize, 0x000000, null, null, null, null, null, TextFormatAlign.CENTER)
             //};
             //categoryToggleButton.width = categoryButtonWidth;
             //categoryToggleButton.height = categoryButtonHeight;
-            //categoryToggleButton.addEventListener(Event.TRIGGERED, onCategorySelected);
+            //categoryToggleButton.addEventListener(MouseEvent.CLICK, onCategorySelected);
         }
         
         var backButtonWidth : Float = 60;
         var backButtonHeight : Float = 60;
-        var homeIcon : Image = new Image(m_assetManager.getTexture("home_icon"));
+        var homeIcon : Bitmap = new Bitmap(m_assetManager.getBitmapData("home_icon"));
         var iconScaleTarget : Float = (backButtonHeight * 0.8) / homeIcon.height;
         homeIcon.scaleX = homeIcon.scaleY = iconScaleTarget;
-        var backButton : Button = WidgetUtil.createGenericColoredButton(m_assetManager, m_buttonColorData.getUpButtonColor(), null, null);
-        backButton.upState = homeIcon.texture;
+        var backButton : LabelButton = WidgetUtil.createGenericColoredButton(m_assetManager, m_buttonColorData.getUpButtonColor(), null, null);
+        backButton.upState = homeIcon;
         backButton.width = backButtonWidth;
         backButton.height = backButtonHeight;
         backButton.x = m_background.width - backButtonWidth;
@@ -208,7 +210,7 @@ class PlayerCollectionsState extends BaseState
         m_canvasContainer.y = 60;
         addChild(m_canvasContainer);
         addChild(m_backButton);
-        m_backButton.addEventListener(Event.TRIGGERED, onBackButtonClicked);
+        m_backButton.addEventListener(MouseEvent.CLICK, onBackButtonClicked);
         
 		// TODO: uncomment when a suitable toggle button replacement is found
         //var numCategories : Int = m_categoryButtons.length;
@@ -236,10 +238,10 @@ class PlayerCollectionsState extends BaseState
     
     override public function exit(toState : Dynamic) : Void
     {
-        m_background.removeFromParent();
-        m_canvasContainer.removeFromParent();
-        m_backButton.removeFromParent();
-        m_backButton.removeEventListener(Event.TRIGGERED, onBackButtonClicked);
+        if (m_background.parent != null) m_background.parent.removeChild(m_background);
+        if (m_canvasContainer.parent != null) m_canvasContainer.parent.removeChild(m_canvasContainer);
+        if (m_backButton.parent != null) m_backButton.parent.removeChild(m_backButton);
+        m_backButton.removeEventListener(MouseEvent.CLICK, onBackButtonClicked);
         
         // Delete the category buttons (they will be recreated later if necessary)
         //for (categoryButton in m_categoryButtons)
@@ -287,7 +289,7 @@ class PlayerCollectionsState extends BaseState
         }
     }
     
-    private function onBackButtonClicked() : Void
+    private function onBackButtonClicked(event : Dynamic) : Void
     {
         Audio.instance.playSfx("button_click");
         m_exitCallback();
@@ -301,7 +303,7 @@ class PlayerCollectionsState extends BaseState
         //changeToViewerFromSelectedButton(targetButton);
     }
     
-    private function changeToViewerFromSelectedButton(targetButton : Button) : Void
+    private function changeToViewerFromSelectedButton(targetButton : LabelButton) : Void
     {
         // BUG: For some reason setting isSelected to true removes the select state
         // Go through the buttons and set them to the correct selected/unselected value

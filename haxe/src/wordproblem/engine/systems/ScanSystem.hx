@@ -1,7 +1,7 @@
 package wordproblem.engine.systems;
 
 
-import starling.display.DisplayObject;
+import openfl.display.DisplayObject;
 
 import wordproblem.engine.animation.ScanAnimation;
 import wordproblem.engine.component.Component;
@@ -50,10 +50,10 @@ class ScanSystem extends BaseSystemScript
                     }
                     
                     var animation : ScanAnimation = new ScanAnimation(
-                    scanComponent.color, 
-                    scanComponent.velocity, 
-                    scanComponent.width, 
-                    scanComponent.delay
+						scanComponent.color, 
+						scanComponent.velocity, 
+						scanComponent.width, 
+						scanComponent.delay
                     );
                     animation.play(childViewsAsDisplayObject);
                     scanComponent.animation = animation;

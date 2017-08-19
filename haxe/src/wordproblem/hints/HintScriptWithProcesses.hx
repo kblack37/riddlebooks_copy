@@ -2,7 +2,7 @@ package wordproblem.hints;
 
 import haxe.Constraints.Function;
 
-import starling.display.DisplayObject;
+import openfl.display.DisplayObject;
 
 import wordproblem.engine.scripting.graph.ScriptNode;
 import wordproblem.engine.scripting.graph.ScriptStatus;
@@ -150,7 +150,7 @@ class HintScriptWithProcesses extends HintScript
 		}
 		else if (description != null)
 		{
-			description.dispose();
+			description = null;
 		}
 	}
 

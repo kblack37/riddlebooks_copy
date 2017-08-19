@@ -1,11 +1,16 @@
 package wordproblem.levelselect;
 
-import starling.events.EventDispatcher;
+import dragonbox.common.util.XColor;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.events.EventDispatcher;
+import openfl.text.TextFormatAlign;
+import wordproblem.display.PivotSprite;
 import wordproblem.levelselect.LevelSetSelector;
 
 import openfl.geom.Point;
 import openfl.geom.Rectangle;
-import flash.text.TextFormat;
+import openfl.text.TextFormat;
 
 import cgs.audio.Audio;
 import cgs.internationalization.StringTable;
@@ -16,14 +21,12 @@ import dragonbox.common.ui.MouseState;
 
 import haxe.Constraints.Function;
 
-import starling.display.Button;
-import starling.display.DisplayObject;
-import starling.display.Image;
-import starling.display.Sprite;
-import starling.events.Event;
-import starling.text.TextField;
-import starling.textures.Texture;
-import starling.utils.HAlign;
+import wordproblem.display.LabelButton;
+import openfl.display.DisplayObject;
+import openfl.display.Sprite;
+import openfl.events.Event;
+import openfl.events.MouseEvent;
+import openfl.text.TextField;
 
 import wordproblem.display.CurvedText;
 import wordproblem.engine.component.Component;
@@ -48,7 +51,7 @@ import wordproblem.level.nodes.GenreLevelPack;
 import wordproblem.level.nodes.WordProblemLevelLeaf;
 import wordproblem.level.nodes.WordProblemLevelNode;
 import wordproblem.level.nodes.WordProblemLevelPack;
-import wordproblem.levelselect.scripts.DrawItemsOnShelves;
+//import wordproblem.levelselect.scripts.DrawItemsOnShelves;
 import wordproblem.resource.AssetManager;
 
 /**
@@ -58,6 +61,7 @@ import wordproblem.resource.AssetManager;
  * It should display information about the genre and allow the user to start playing levels related this
  * genre.
  */
+// TODO: revisit animation when more basic elements are displayed properly
 class GenreWidget extends Sprite
 {
     /**
@@ -110,17 +114,17 @@ class GenreWidget extends Sprite
      * The button/hit area that detects when the player wants to close this button and pick
      * another genre.
      */
-    private var m_closeButton : Button;
+    private var m_closeButton : LabelButton;
     
     /**
      * Button when clicked will go to the next page of the book 
      */
-    private var m_nextPageHitArea : Button;
+    private var m_nextPageHitArea : LabelButton;
     
     /**
      * Button when clicked will go to the previous page of the book
      */
-    private var m_previousPageHitArea : Button;
+    private var m_previousPageHitArea : LabelButton;
     
     /**
      * Function to trigger when the widget should be closed
@@ -196,21 +200,21 @@ class GenreWidget extends Sprite
         
         var closeButtonHeight : Float = 60;
         var closeButtonWidth : Float = 60;
-        var homeIcon : Image = new Image(m_assetManager.getTexture("home_icon"));
+        var homeIcon : Bitmap = new Bitmap(m_assetManager.getBitmapData("home_icon"));
         var iconScaleTarget : Float = (closeButtonHeight * 0.8) / homeIcon.height;
         homeIcon.scaleX = homeIcon.scaleY = iconScaleTarget;
         m_closeButton = WidgetUtil.createGenericColoredButton(assetManager, homeButtonColor, null, null);
-        m_closeButton.upState = homeIcon.texture;
+        m_closeButton.upState = homeIcon;
         m_closeButton.width = closeButtonWidth;
         m_closeButton.height = closeButtonHeight;
-        m_closeButton.addEventListener(Event.TRIGGERED, onCloseTriggered);
+        m_closeButton.addEventListener(MouseEvent.CLICK, onCloseTriggered);
         m_onCloseCallback = onCloseCallback;
         m_onStartLevelCallback = onStartLevelCallback;
         
-        var arrowTexture : Texture = assetManager.getTexture("arrow_short");
+        var arrowBitmapData : BitmapData = assetManager.getBitmapData("arrow_short");
         var pageChangeButtonScaleFactor : Float = 1.25;
-        var leftUpImage : Image = WidgetUtil.createPointingArrow(arrowTexture, true, pageChangeButtonScaleFactor);
-        var leftOverImage : Image = WidgetUtil.createPointingArrow(arrowTexture, true, pageChangeButtonScaleFactor, 0xCCCCCC);
+        var leftUpImage : DisplayObject = WidgetUtil.createPointingArrow(arrowBitmapData, true, pageChangeButtonScaleFactor);
+        var leftOverImage : DisplayObject = WidgetUtil.createPointingArrow(arrowBitmapData, true, pageChangeButtonScaleFactor, 0xCCCCCC);
         
         m_previousPageHitArea = WidgetUtil.createButtonFromImages(
                         leftUpImage,
@@ -222,10 +226,10 @@ class GenreWidget extends Sprite
                         null
                         );
         m_previousPageHitArea.scaleWhenDown = 0.9;
-        m_previousPageHitArea.addEventListener(Event.TRIGGERED, onPrevTriggered);
+        m_previousPageHitArea.addEventListener(MouseEvent.CLICK, onPrevTriggered);
         
-        var rightUpImage : Image = WidgetUtil.createPointingArrow(arrowTexture, false, pageChangeButtonScaleFactor, 0xFFFFFF);
-        var rightOverImage : Image = WidgetUtil.createPointingArrow(arrowTexture, false, pageChangeButtonScaleFactor, 0xCCCCCC);
+        var rightUpImage : DisplayObject = WidgetUtil.createPointingArrow(arrowBitmapData, false, pageChangeButtonScaleFactor, 0xFFFFFF);
+        var rightOverImage : DisplayObject = WidgetUtil.createPointingArrow(arrowBitmapData, false, pageChangeButtonScaleFactor, 0xCCCCCC);
         m_nextPageHitArea = WidgetUtil.createButtonFromImages(
                         rightUpImage,
                         rightOverImage,
@@ -236,7 +240,7 @@ class GenreWidget extends Sprite
                         null
                         );
         m_nextPageHitArea.scaleWhenDown = m_previousPageHitArea.scaleWhenDown;
-        m_nextPageHitArea.addEventListener(Event.TRIGGERED, onNextTriggered);
+        m_nextPageHitArea.addEventListener(MouseEvent.CLICK, onNextTriggered);
         
 		// TODO: uncomment when layout replacement is designed
         //m_buttonLayout = new HorizontalGridLayout();
@@ -263,12 +267,11 @@ class GenreWidget extends Sprite
         }
     }
     
-    override public function dispose() : Void
+    public function dispose() : Void
     {
-        super.dispose();
-        m_closeButton.removeEventListeners();
-        m_previousPageHitArea.removeEventListeners();
-        m_nextPageHitArea.removeEventListeners();
+		m_closeButton.removeEventListener(MouseEvent.CLICK, onCloseTriggered);
+		m_previousPageHitArea.removeEventListener(MouseEvent.CLICK, onPrevTriggered);
+		m_nextPageHitArea.removeEventListener(MouseEvent.CLICK, onNextTriggered);
     }
     
     /**
@@ -299,8 +302,8 @@ class GenreWidget extends Sprite
             var dictionaryKey : Dynamic = null;
             for (dictionaryKey in Reflect.fields(dictionary))
             {
-                var button : Button = try cast(dictionaryKey, Button) catch(e:Dynamic) null;
-                button.removeEventListeners();
+                var button : LabelButton = try cast(dictionaryKey, LabelButton) catch (e:Dynamic) null;
+				button.removeEventListener(MouseEvent.CLICK, onLevelButtonTriggered);
                 button.dispose();
             }
         };  
@@ -313,10 +316,9 @@ class GenreWidget extends Sprite
         else 
         {
             m_buttonToLevelNode = new Map();
-        }  // Clean out the chapter buttons  
-        
-        
-        
+        }
+		
+		// Clean out the chapter buttons  
         if (m_buttonToChapterNode != null) 
         {
             cleanButtonDictionary(m_buttonToChapterNode);
@@ -329,7 +331,7 @@ class GenreWidget extends Sprite
 		// Remove previous egg image
         if (m_currentImageForGenre != null) 
         {
-            m_currentImageForGenre.removeFromParent(true);
+			if (m_currentImageForGenre.parent != null) m_currentImageForGenre.parent.removeChild(m_currentImageForGenre);
             m_currentImageForGenre = null;
         }		
 		
@@ -349,7 +351,7 @@ class GenreWidget extends Sprite
         
         // Pick the proper background to use from the genre data blob
         var data : Dynamic = getLevelSelectSectionMatchingGenre(genreLevelPack.getThemeId());
-        var bgImage : Image = new Image(m_assetManager.getTexture(data.levelSelectBackgroundTexture));
+        var bgImage : Bitmap = new Bitmap(m_assetManager.getBitmapData(data.levelSelectBackgroundTexture));
         addChild(bgImage);
         
         m_nextPageHitArea.x = 740;
@@ -501,9 +503,9 @@ class GenreWidget extends Sprite
         togglePrevNextPageButtonsEnabled();
     }
     
-    private function onLevelButtonTriggered(event : Event) : Void
+    private function onLevelButtonTriggered(event : Dynamic) : Void
     {
-        var levelNode : ICgsLevelNode = try cast(m_buttonToLevelNode[event.target], ICgsLevelNode) catch(e:Dynamic) null;
+        var levelNode : ICgsLevelNode = m_buttonToLevelNode[event.target];
         var audioName : String = ((levelNode.isLocked)) ? "locked" : "button_click";
         Audio.instance.playSfx(audioName);
         
@@ -523,7 +525,7 @@ class GenreWidget extends Sprite
                 if (levelLeafNodes.length > 0) 
                 {
                     // Assume set number is just baked into the label
-                    var setNumber : Int = Std.parseInt((try cast(event.target, Button) catch(e:Dynamic) null).text);
+                    var setNumber : Int = Std.parseInt((try cast(event.target, LabelButton) catch(e:Dynamic) null).label);
                     var chapterNumber : Int = levelLeafNodes[0].parentChapterLevelPack.index + 1;
                     var data : Dynamic = getLevelSelectSectionMatchingGenre(levelLeafNodes[0].parentGenreLevelPack.getThemeId());
                     setDescription = data.title + ": " + chapterNumber + "-" + setNumber;
@@ -548,7 +550,7 @@ class GenreWidget extends Sprite
     private function onDismissLevelSetSelector() : Void
     {
         m_levelSetSelector.close();
-        m_levelSetSelector.removeFromParent();
+        if (m_levelSetSelector.parent != null) m_levelSetSelector.parent.removeChild(m_levelSetSelector);
     }
     
     private function drawTitlePage(genreLevelPack : GenreLevelPack, pageWidth : Float) : Sprite
@@ -568,15 +570,11 @@ class GenreWidget extends Sprite
         measuringText.defaultTextFormat = titleTextFormat;
         measuringText.width = pageWidth;
         measuringText.text = titleText;
-        var titleTextField : TextField = new TextField(
-			Std.int(measuringText.width), 
-			Std.int(measuringText.textHeight + 20), 
-			titleText, 
-			titleTextFormat.font, 
-			titleTextFormat.size, 
-			try cast(titleTextFormat.color, Int) catch (e:Dynamic) 0
-			);
-        titleTextField.hAlign = HAlign.CENTER;
+        var titleTextField : TextField = new TextField();
+		titleTextField.width = measuringText.width;
+		titleTextField.height = measuringText.textHeight + 20;
+		titleTextField.text = titleText;
+		titleTextField.setTextFormat(new TextFormat(titleTextFormat.font, titleTextFormat.size, titleTextFormat.color, null, null, null, null, null, TextFormatAlign.CENTER));
         titleTextField.x = 0;
         page.addChild(titleTextField);
         
@@ -589,19 +587,16 @@ class GenreWidget extends Sprite
         measuringText.wordWrap = true;
         measuringText.text = flavorText;
         
-        var flavorTextField : TextField = new TextField(
-			Std.int(measuringText.width + 10), 
-			Std.int(measuringText.textHeight + 20), 
-			flavorText, 
-			flavorTextFormat.font, 
-			flavorTextFormat.size, 
-			try cast(flavorTextFormat.color, Int) catch(e:Dynamic) 0
-        );
+        var flavorTextField : TextField = new TextField();
+		flavorTextField.width = measuringText.width + 10;
+		flavorTextField.height = measuringText.textHeight + 20; 
+		flavorTextField.text = flavorText;
+		flavorTextField.setTextFormat(new TextFormat(flavorTextFormat.font, flavorTextFormat.size, flavorTextFormat.color));
         flavorTextField.x = (pageWidth - flavorTextField.width) * 0.5;
         flavorTextField.y = 50;
         page.addChild(flavorTextField);
         
-        var prizeTexturesInGenre : Array<Texture> = new Array<Texture>();
+        var prizeBitmapDataInGenre : Array<BitmapData> = new Array<BitmapData>();
         
         // Need to find all prizes that can be awarded in this genre in the title page
         var levelComponents : Array<Component> = m_playerItemInventory.componentManager.getComponentListForType(LevelComponent.TYPE_ID);
@@ -625,30 +620,34 @@ class GenreWidget extends Sprite
                         ), LevelSelectIconComponent) catch(e:Dynamic) null;
                 var textureName : String = ((hiddenItemComponent.isHidden)) ? 
                 levelSelectIconComponent.hiddenTextureName : levelSelectIconComponent.shownTextureName;
-                prizeTexturesInGenre.push(m_assetManager.getTexture(textureName));
+                prizeBitmapDataInGenre.push(m_assetManager.getBitmapData(textureName));
             }
         }
         
-        if (prizeTexturesInGenre.length > 0) 
+        if (prizeBitmapDataInGenre.length > 0) 
         {
-            var prizesCollectedText : TextField = new TextField(150, 35, "Prizes Collected:", GameFonts.DEFAULT_FONT_NAME, 16, fontColor);
+            var prizesCollectedText : TextField = new TextField();
+			prizesCollectedText.width = 150;
+			prizesCollectedText.height = 35;
+			prizesCollectedText.text = "Prizes Collected:";
+			prizesCollectedText.setTextFormat(new TextFormat(GameFonts.DEFAULT_FONT_NAME, 16, fontColor));
             prizesCollectedText.x = (pageWidth - prizesCollectedText.width) * 0.5;
-            prizesCollectedText.y = flavorTextField.y + flavorTextField.textBounds.height + 25;
+            prizesCollectedText.y = flavorTextField.y + flavorTextField.textHeight + 25;
             page.addChild(prizesCollectedText);
             
             var prizeImageContainer : Sprite = new Sprite();
             prizeImageContainer.x = 0;
-            prizeImageContainer.y = prizesCollectedText.y + prizesCollectedText.textBounds.height + 10;
+            prizeImageContainer.y = prizesCollectedText.y + prizesCollectedText.textHeight + 10;
             page.addChild(prizeImageContainer);
             
             // Center and position the objects in a row
-            var numTextures : Int = prizeTexturesInGenre.length;
+            var numTextures : Int = prizeBitmapDataInGenre.length;
             var textureGap : Float = 18;
             var totalWidth : Float = 0;
-            var texture : Texture = null;
+            var bitmapData : BitmapData = null;
             for (i in 0...numTextures){
-                texture = prizeTexturesInGenre[i];
-                totalWidth += texture.width;
+                bitmapData = prizeBitmapDataInGenre[i];
+                totalWidth += bitmapData.width;
                 
                 // Padding in between
                 if (i != 0) 
@@ -659,23 +658,19 @@ class GenreWidget extends Sprite
             
             var offset : Float = (pageWidth - totalWidth) * 0.5;
             for (i in 0...numTextures){
-                texture = prizeTexturesInGenre[i];
-                var prizeImage : Image = new Image(texture);
+                bitmapData = prizeBitmapDataInGenre[i];
+                var prizeImage : Bitmap = new Bitmap(bitmapData);
                 prizeImage.x = offset;
                 
-                offset += textureGap + texture.width;
+                offset += textureGap + bitmapData.width;
                 prizeImageContainer.addChild(prizeImage);
             }
-        }  // Assuming just one 'active' item per genre    // To do this just loop through all items and find ones that match the genre that was opened.    // Check which items match the appropriate genre    // Draw the single egg  
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        }  
+		
+		// Draw the single egg  
+		// Check which items match the appropriate genre   
+		// To do this just loop through all items and find ones that match the genre that was opened.  
+        // Assuming just one 'active' item per genre   
         var componentManager : ComponentManager = m_playerItemInventory.componentManager;
         var itemIdComponents : Array<Component> = componentManager.getComponentListForType(ItemIdComponent.TYPE_ID);
         
@@ -716,12 +711,12 @@ class GenreWidget extends Sprite
                         var creatureForGenreImage : DisplayObject = null;
                         if (textureDataObject.type == "ImageStatic") 
                         {
-                            creatureForGenreImage = DrawItemsOnShelves.createImageStaticView(textureDataObject, m_assetManager);
+                            //creatureForGenreImage = DrawItemsOnShelves.createImageStaticView(textureDataObject, m_assetManager);
                         }
                         // The image to display on the book is scaled up to a fixed size
                         else if (textureDataObject.type == "SpriteSheetStatic") 
                         {
-                            creatureForGenreImage = DrawItemsOnShelves.createSpriteSheetStaticView(textureDataObject, m_assetManager);
+                            //creatureForGenreImage = DrawItemsOnShelves.createSpriteSheetStaticView(textureDataObject, m_assetManager);
                         }
                         
                         
@@ -751,34 +746,33 @@ class GenreWidget extends Sprite
                             
 							// TODO: uncomment once cgs library is finished
 							var remainingLevelsText : String = StringTools.replace("" /*StringTable.lookup("get_x_more_hatch")*/, "$1", Std.string(remainingLevels));
-                            var remainingLevelsUntilHatchingTextField : TextField = new TextField(
-								290, 50, 
-								remainingLevelsText, 
-								GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF);
+                            var remainingLevelsUntilHatchingTextField : TextField = new TextField();
+							remainingLevelsUntilHatchingTextField.width = 290;
+							remainingLevelsUntilHatchingTextField.height = 50; 
+							remainingLevelsUntilHatchingTextField.text = remainingLevelsText; 
+							remainingLevelsUntilHatchingTextField.setTextFormat(new TextFormat(GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF));
                             remainingLevelsUntilHatchingTextField.x = 21;
                             remainingLevelsUntilHatchingTextField.y = 0;
                             
                             // Draw the text over a black background
                             var nineSlicePadding : Float = 8;
-                            var backgroundTexture : Texture = m_assetManager.getTexture("button_white");
-                            var backgroundImage : Image = new Image(Texture.fromTexture(
-								backgroundTexture, 
-								new Rectangle(
-									nineSlicePadding,
-									nineSlicePadding,
-									backgroundTexture.width - 2 * nineSlicePadding,
-									backgroundTexture.height - 2 * nineSlicePadding)
-								)
+                            var backgroundBitmapData : BitmapData = m_assetManager.getBitmapData("button_white");
+                            var backgroundImage : Bitmap = new Bitmap(backgroundBitmapData);
+							backgroundImage.scale9Grid = new Rectangle(
+								nineSlicePadding,
+								nineSlicePadding,
+								backgroundBitmapData.width - 2 * nineSlicePadding,
+								backgroundBitmapData.height - 2 * nineSlicePadding
 							);
-                            backgroundImage.color = 0x000000;
+							backgroundImage.transform.colorTransform.concat(XColor.rgbToColorTransform(0x000000));
                             backgroundImage.alpha = 0.5;
                             backgroundImage.width = remainingLevelsUntilHatchingTextField.width;
                             backgroundImage.height = remainingLevelsUntilHatchingTextField.height;
                             backgroundImage.x = 0;
                             backgroundImage.y = 0;
                             
-                            var starTexture : Texture = m_assetManager.getTexture("level_button_star");
-                            var starImage : Image = new Image(starTexture);
+                            var starBitmapData : BitmapData = m_assetManager.getBitmapData("level_button_star");
+                            var starImage : Bitmap = new Bitmap(starBitmapData);
                             starImage.x = 0;
                             starImage.y = 0;
                             
@@ -836,20 +830,19 @@ class GenreWidget extends Sprite
             /* Chapter information drawing */
             
             // Specific data about a chapter is encoded in a separate file
-            var chapterTitleText : TextField = new TextField(Std.int(pageWidth), 30, "", GameFonts.DEFAULT_FONT_NAME, 32, fontColor);
-            chapterTitleText.hAlign = HAlign.CENTER;
+            var chapterTitleText : TextField = new TextField();
+			chapterTitleText.width = pageWidth;
+			chapterTitleText.height = 30;
+			chapterTitleText.text = "";
+			chapterTitleText.setTextFormat(new TextFormat(GameFonts.DEFAULT_FONT_NAME, 32, fontColor, null, null, true, null, null, TextFormatAlign.CENTER));
             chapterTitleText.text = Std.string(chapterIndex);
             page.addChild(chapterTitleText);
-            
-            var underlineText : TextField = new TextField(Std.int(pageWidth), 30, "___________________________", GameFonts.DEFAULT_FONT_NAME, 24, fontColor);
-            underlineText.y += 13;
-            page.addChild(underlineText);
             
             // Need to calculate the total number of levels that can possibly completed + the total number they can complete
             // This will tell us the number of stars that could possibly be earned.
             var starsTotalWidth : Float = 0;
-            var starTexture : Texture = m_assetManager.getTexture("level_button_star");
-            starsTotalWidth += starTexture.width * 2;
+            var starBitmapData : BitmapData = m_assetManager.getBitmapData("level_button_star");
+            starsTotalWidth += starBitmapData.width * 2;
             
             // Organize the section devoted to showing the number of stars earned.
             var starTextWidth : Float = 170;
@@ -858,20 +851,24 @@ class GenreWidget extends Sprite
             var starText : String = "";// StringTable.lookup("m_out_n_earned");
 			starText = StringTools.replace(starText, "$1", Std.string(chapterLevelPack.numLevelLeafsCompleted));
 			starText = StringTools.replace(starText, "$2", Std.string(chapterLevelPack.numTotalLevelLeafs));
-            var starInformationText : TextField = new TextField(270, 30, starText, GameFonts.DEFAULT_FONT_NAME, 20, fontColor);
+            var starInformationText : TextField = new TextField();
+			starInformationText.width = 270;
+			starInformationText.height = 30;
+			starInformationText.text = starText;
+			starInformationText.setTextFormat(new TextFormat(GameFonts.DEFAULT_FONT_NAME, 20, fontColor));
             starsTotalWidth += starInformationText.width;
             
             var starOffsetX : Float = (pageWidth - starsTotalWidth) * 0.5;
             var starOffsetY : Float = chapterTitleText.height + 10;
             
-            var starImageLeft : Image = new Image(starTexture);
+            var starImageLeft : Bitmap = new Bitmap(starBitmapData);
             starImageLeft.x = starOffsetX;
             starImageLeft.y = starOffsetY;
             
             starInformationText.x = starImageLeft.width + starImageLeft.x;
             starInformationText.y = starOffsetY + 7;
             
-            var starImageRight : Image = new Image(starTexture);
+            var starImageRight : Bitmap = new Bitmap(starBitmapData);
             starImageRight.x = starInformationText.x + starInformationText.width;
             starImageRight.y = starOffsetY;
             
@@ -884,8 +881,11 @@ class GenreWidget extends Sprite
             if (levelPack != null && levelPack.descriptionData != null) 
             {
                 var sidePadding : Int = 50;
-                var chapterDescriptionText : TextField = new TextField(Std.int(pageWidth - sidePadding * 2), 100, 
-					levelPack.descriptionData.description, GameFonts.DEFAULT_FONT_NAME, 20, fontColor);
+                var chapterDescriptionText : TextField = new TextField();
+				chapterDescriptionText.width = pageWidth - sidePadding * 2;
+				chapterDescriptionText.height = 100; 
+				chapterDescriptionText.text = levelPack.descriptionData.description;
+				chapterDescriptionText.setTextFormat(new TextFormat(GameFonts.DEFAULT_FONT_NAME, 20, fontColor));
 				chapterDescriptionText.x = sidePadding;
 				chapterDescriptionText.y = 23 + starInformationText.y;
                 page.addChild(chapterDescriptionText);
@@ -911,32 +911,27 @@ class GenreWidget extends Sprite
                 var buttonBackgroundImage : DisplayObject = null;
                 if (levelNode.isLocked) 
                 {
-                    buttonBackgroundImage = new Image(m_assetManager.getTexture(levelLockedTexturePrefix + "_up"));
+                    buttonBackgroundImage = new Bitmap(m_assetManager.getBitmapData(levelLockedTexturePrefix + "_up"));
                 }
                 else 
                 {
-                    buttonBackgroundImage = new Image(m_assetManager.getTexture(levelUnlockedTexturePrefix + "_up"));
-                }  // Render the button differently if it is a problem create    // The button is a composite  
-                
-                
-                
-                
-                
-                
+                    buttonBackgroundImage = new Bitmap(m_assetManager.getBitmapData(levelUnlockedTexturePrefix + "_up"));
+                }  
+				
+				// The button is a composite  
+                // Render the button differently if it is a problem create 
                 var isProblemCreation : Bool = Std.is(levelNode, WordProblemLevelLeaf) && (try cast(levelNode, WordProblemLevelLeaf) catch(e:Dynamic) null).getIsProblemCreate();
                 if (isProblemCreation) 
                 {
-                    var problemCreateTexture : Texture = m_assetManager.getTexture("button_white");
+                    var problemCreateBitmapData : BitmapData = m_assetManager.getBitmapData("button_white");
                     var padding : Float = 8;
-                    var problemCreateButtonImage : Image = new Image(Texture.fromTexture(
-						problemCreateTexture, 
-						new Rectangle(padding,
-							padding,
-							problemCreateTexture.width - 2 * padding,
-							problemCreateTexture.height - 2 * padding)
-						)
+                    var problemCreateButtonImage : Bitmap = new Bitmap(problemCreateBitmapData); 
+					problemCreateButtonImage.scale9Grid = new Rectangle(padding,
+						padding,
+						problemCreateBitmapData.width - 2 * padding,
+						problemCreateBitmapData.height - 2 * padding
 					);
-                    problemCreateButtonImage.color = 0xFF0000;
+					problemCreateButtonImage.transform.colorTransform.concat(XColor.rgbToColorTransform(0xFF0000));
                     buttonBackgroundImage = problemCreateButtonImage;
                 }
                 
@@ -944,21 +939,11 @@ class GenreWidget extends Sprite
                 buttonBackgroundImage.height = 70;
                 buttonUpSkinContainer.addChildAt(buttonBackgroundImage, 0);
                 
-				// TODO: uncomment this when a suitable button replacement is found
-                // Select icons to paste on top of the button background
-                //var labelFactory : Function = function() : ITextRenderer
-                //{
-                    //var textRenderer : TextFieldTextRenderer = new TextFieldTextRenderer();
-                    //var fontName : String = GameFonts.DEFAULT_FONT_NAME;
-                    //textRenderer.embedFonts = GameFonts.getFontIsEmbedded(fontName);
-                    //textRenderer.textFormat = new TextFormat(fontName, 18, 0x000000);
-                    //return textRenderer;
-                //};
-                
-                var levelButton : Button = new Button((try cast(buttonBackgroundImage, Image) catch (e : Dynamic) null).texture, " " + (j + 1) + " ");
                 // Extra spaces needed because for some reason if the swf gets scaled down from native
                 // resolution, this text gets cutoff.
-                //levelButton.labelFactory = labelFactory;
+				var levelButton : LabelButton = new LabelButton(buttonBackgroundImage);
+				levelButton.label = " " + (j + 1) + " ";
+				levelButton.textFormatDefault = new TextFormat(GameFonts.DEFAULT_FONT_NAME, 18, 0x000000);
                 levelButton.scaleWhenOver = 1.05;
                 levelButton.scaleWhenDown = 0.95;
                 
@@ -971,13 +956,13 @@ class GenreWidget extends Sprite
                     {
                         var levelSet : WordProblemLevelPack = (try cast(levelNode, WordProblemLevelPack) catch(e:Dynamic) null);
                         doAddStar = levelSet.numTotalLevelLeafs == levelSet.numLevelLeafsCompleted;
-                    }  // If the level is completed, draw a star at the top left corner  
-                    
-                    
-                    
+                    } 
+					
+					// If the level is completed, draw a star at the top left corner  
                     if (doAddStar) 
                     {
-                        var starImage : Image = new Image(m_assetManager.getTexture("level_button_star"));
+                        var starImage : PivotSprite = new PivotSprite();
+						starImage.addChild(new Bitmap(m_assetManager.getBitmapData("level_button_star")));
                         starImage.pivotX = starImage.width * 0.5;
                         starImage.pivotY = starImage.height * 0.5;
                         starImage.x = 6;
@@ -985,11 +970,9 @@ class GenreWidget extends Sprite
                         levelButton.addChild(starImage);
                     }
                 }
-                // Some of the selectable levels might be tagged as 'practice'
-                // Add a banner for these special levels
                 else if (levelNode.isLocked) 
                 {
-                    var lockImage : Image = new Image(m_assetManager.getTexture("level_button_lock"));
+                    var lockImage : Bitmap = new Bitmap(m_assetManager.getBitmapData("level_button_lock"));
                     lockImage.x = (buttonBackgroundImage.width - lockImage.width) * 0.5;
                     lockImage.y = (buttonBackgroundImage.height - lockImage.height) * 0.5;
                     levelButton.addChild(lockImage);
@@ -997,15 +980,14 @@ class GenreWidget extends Sprite
                     levelButton.enabled = false;
                 }
                 
-                
-                
-                
-                
+                // Some of the selectable levels might be tagged as 'practice'
+                // Add a banner for these special levels
                 var isPractice : Bool = (try cast(levelNode, WordProblemLevelNode) catch(e:Dynamic) null).getTagWithNameExists("practice");
                 var isLevelSet : Bool = (Std.is(levelNode, WordProblemLevelPack));
                 if (isPractice || isProblemCreation || isLevelSet) 
                 {
-                    var arch : DisplayObject = new Image(m_assetManager.getTexture("Art_YellowArch"));
+                    var arch : PivotSprite = new PivotSprite();
+					arch.addChild(new Bitmap(m_assetManager.getBitmapData("Art_YellowArch")));
                     arch.scaleX = arch.scaleY = 0.80;
                     arch.x = buttonUpSkinContainer.width * 0.5 * arch.scaleX;
                     arch.y = buttonUpSkinContainer.height - (10 * arch.scaleY);
@@ -1031,24 +1013,22 @@ class GenreWidget extends Sprite
                     bannerText.y = arch.y - arch.pivotY + 10;
                     bannerText.x = arch.x - arch.pivotX + 12;
                     levelButton.addChild(bannerText);
-                }  // Add lightbulb icon if a level is marked as a tutorial  
-                
-                
-                
+                } 
+				
+				// Add lightbulb icon if a level is marked as a tutorial  
                 var isTutorial : Bool = (try cast(levelNode, WordProblemLevelNode) catch(e:Dynamic) null).getTagWithNameExists("tutorial");
                 if (isTutorial) 
                 {
-                    var lightBulbIcon : Image = new Image(m_assetManager.getTexture("light"));
+                    var lightBulbIcon : Bitmap = new Bitmap(m_assetManager.getBitmapData("light"));
                     lightBulbIcon.scaleX = lightBulbIcon.scaleY = 0.8;
                     lightBulbIcon.x = (buttonBackgroundImage.width - lightBulbIcon.width) * 0.5;
                     lightBulbIcon.y = (buttonBackgroundImage.height - lightBulbIcon.height) * 0.5;
                     levelButton.addChild(lightBulbIcon);
                     
                     lightBulbIcon.alpha = ((levelNode.isLocked)) ? 0.3 : 1.0;
-                }  // Check if a reward item is attached to a level at a particular position  
-                
-                
-                
+                } 
+				
+				// Check if a reward item is attached to a level at a particular position  
                 if (m_levelNodeNameToLevelComponent.exists(levelNode.nodeName)) 
                 {
                     // Get the level select icon based on whether the item has been discovered or not
@@ -1077,30 +1057,28 @@ class GenreWidget extends Sprite
                     // The icon should appear around the top right corner of the button
                     var iconTextureName : String = ((hiddenItemComponent.isHidden)) ? 
                     levelSelectIconComponent.hiddenTextureName : levelSelectIconComponent.shownTextureName;
-                    var iconTexture : Texture = m_assetManager.getTexture(iconTextureName);
-                    var rewardItemIcon : DisplayObject = new Image(iconTexture);
-                    rewardItemIcon.pivotX = iconTexture.width * 0.5;
-                    rewardItemIcon.pivotY = iconTexture.height * 0.5;
+                    var iconBitmapData : BitmapData = m_assetManager.getBitmapData(iconTextureName);
+                    var rewardItemIcon : PivotSprite = new PivotSprite();
+					rewardItemIcon.addChild(new Bitmap(iconBitmapData));
+                    rewardItemIcon.pivotX = iconBitmapData.width * 0.5;
+                    rewardItemIcon.pivotY = iconBitmapData.height * 0.5;
                     rewardItemIcon.x = buttonBackgroundImage.width - 5;
                     rewardItemIcon.y = 0;
                     
                     levelButton.addChild(rewardItemIcon);
                 }
                 
-                levelButton.addEventListener(Event.TRIGGERED, onLevelButtonTriggered);
+                levelButton.addEventListener(MouseEvent.CLICK, onLevelButtonTriggered);
                 buttons.push(levelButton);
                 
                 page.addChild(levelButton);
                 
-                Reflect.setField(m_buttonToLevelNode, Std.string(levelButton), levelNode);
-            }  // Those on left require more padding    // The left padding depends on whether the levels buttons are on the left or right page.    // Layout all the buttons in the page  
-            
-            
-            
-            
-            
-            
-            
+				m_buttonToLevelNode.set(levelButton, levelNode);
+            }  
+			
+			// Layout all the buttons in the page  
+			// The left padding depends on whether the levels buttons are on the left or right page.    
+            // Those on left require more padding  
             viewBounds.x = 35;
             viewBounds.y = 170;
 			// TODO: this layout will likely need to be fixed

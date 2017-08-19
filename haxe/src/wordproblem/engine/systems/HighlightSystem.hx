@@ -1,15 +1,16 @@
 package wordproblem.engine.systems;
 
 
-import flash.geom.Rectangle;
-import starling.display.Image;
+import dragonbox.common.util.XColor;
+import motion.Actuate;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.geom.ColorTransform;
+import openfl.geom.Rectangle;
+import wordproblem.display.PivotSprite;
 
-import starling.animation.Juggler;
-import starling.animation.Tween;
-import starling.core.Starling;
-import starling.display.DisplayObject;
-import starling.display.Sprite;
-import starling.textures.Texture;
+import openfl.display.DisplayObject;
+import openfl.display.Sprite;
 
 import wordproblem.engine.component.Component;
 import wordproblem.engine.component.ComponentManager;
@@ -25,30 +26,28 @@ import wordproblem.resource.AssetManager;
  */
 class HighlightSystem extends BaseSystemScript
 {
-    private var m_highlightJuggler : Juggler;
-    
     /**
      * The primary texture representing the base highlight, only need to create this once
      * since all highlights will share this texture.
      */
-    private var m_highlightTexture : Texture;
+    private var m_highlightBitmapData : BitmapData;
     
     private var m_boundsBuffer : Rectangle;
+	
+	private var m_scale9Rect : Rectangle;
     
     public function new(assetManager : AssetManager)
     {
         super("HighlightSystem");
         
-        m_highlightJuggler = Starling.current.juggler;
-        
-        var highlightTexture : Texture = assetManager.getTexture("halo");
+        m_highlightBitmapData = assetManager.getBitmapData("halo");
         var scale9Delta : Float = 2;
-        m_highlightTexture = Texture.fromTexture(highlightTexture, new Rectangle(
-                (highlightTexture.width - scale9Delta) * 0.5, 
-                (highlightTexture.height - scale9Delta) * 0.5, 
-                scale9Delta, 
-                scale9Delta
-        ));
+        m_scale9Rect = new Rectangle(
+            (m_highlightBitmapData.width - scale9Delta) * 0.5, 
+            (m_highlightBitmapData.height - scale9Delta) * 0.5, 
+            scale9Delta, 
+            scale9Delta
+        );
         
         m_boundsBuffer = new Rectangle();
     }
@@ -97,10 +96,9 @@ class HighlightSystem extends BaseSystemScript
                                 if (currentLineBounds != null) 
                                 {
                                     lineBounds.push(currentLineBounds);
-                                }  // Start a new line with the current contents  
-                                
-                                
-                                
+                                } 
+								
+								// Start a new line with the current contents  
                                 currentLineBounds = resultBounds;
                                 currentLineNumber = childView.lineNumber;
                             }
@@ -114,32 +112,29 @@ class HighlightSystem extends BaseSystemScript
                         if (currentLineBounds != null) 
                         {
                             lineBounds.push(currentLineBounds);
-                        }  // for it to paste on the document view    // each line relative to the document view. For each line we want to create a highlight    // The lines vector now contains a list of rectangles describing the outer bounds of  
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
+                        }  
+						
+						// The lines vector now contains a list of rectangles describing the outer bounds of  
+						// each line relative to the document view. For each line we want to create a highlight 
+                        // for it to paste on the document view  
                         var highlightLayer : Sprite = new Sprite();
                         var lineIndex : Int = 0;
                         for (lineIndex in 0...lineBounds.length){
                             resultBounds = lineBounds[lineIndex];
                             
-                            var highlightImage : Image = new Image(m_highlightTexture);
-                            highlightImage.width = Math.max(m_highlightTexture.width, resultBounds.width);
-                            highlightImage.height = Math.max(m_highlightTexture.height, resultBounds.height);
-                            highlightImage.x = resultBounds.x - (highlightImage.width - resultBounds.width) * 0.5;
-                            highlightImage.y = resultBounds.y - (highlightImage.height - resultBounds.height) * 0.5;
-                            highlightImage.color = highlightComponent.color;
+                            var highlightBitmap : Bitmap = new Bitmap(m_highlightBitmapData);
+                            highlightBitmap.width = Math.max(m_scale9Rect.width, resultBounds.width);
+                            highlightBitmap.height = Math.max(m_scale9Rect.height, resultBounds.height);
+                            highlightBitmap.x = resultBounds.x - (highlightBitmap.width - resultBounds.width) * 0.5;
+                            highlightBitmap.y = resultBounds.y - (highlightBitmap.height - resultBounds.height) * 0.5;
+							highlightBitmap.transform.colorTransform.concat(XColor.rgbToColorTransform(highlightComponent.color));
                             
-                            highlightLayer.addChildAt(highlightImage, 0);
+                            highlightLayer.addChildAt(highlightBitmap, 0);
                         }
                         
                         documentView.addChildAt(highlightLayer, 0);
-                        highlightComponent.displayedHighlight = highlightLayer;
+                        highlightComponent.displayedHighlight = new PivotSprite();
+						highlightComponent.displayedHighlight.addChild(highlightLayer);
                         addHighlightAnimation(highlightComponent);
                     }
                 }
@@ -149,26 +144,27 @@ class HighlightSystem extends BaseSystemScript
                     var renderView : DisplayObject = renderableComponent.view;
                     if (highlightComponent.displayedHighlight == null && renderView.stage != null) 
                     {
-                        var highlightImage = new Image(m_highlightTexture);
-                        highlightImage.color = highlightComponent.color;
+                        var highlightBitmap = new Bitmap(m_highlightBitmapData);
+						highlightBitmap.transform.colorTransform.concat(XColor.rgbToColorTransform(highlightComponent.color));
                         
                         // Add the highlight just below the object
                         var displayIndex : Int = renderView.parent.getChildIndex(renderView);
-                        renderView.parent.addChildAt(highlightImage, Std.int(Math.max(0, displayIndex - 1)));
+                        renderView.parent.addChildAt(highlightBitmap, Std.int(Math.max(0, displayIndex - 1)));
                         
-                        highlightComponent.displayedHighlight = highlightImage;
+                        highlightComponent.displayedHighlight = new PivotSprite();
+						highlightComponent.displayedHighlight.addChild(highlightBitmap);
                         addHighlightAnimation(highlightComponent);
                     }
                     
                     if (highlightComponent.displayedHighlight != null) 
                     {
-                        var highlightDisplay : DisplayObject = highlightComponent.displayedHighlight;
-                        renderView.getBounds(renderView.parent, m_boundsBuffer);
+                        var highlightDisplay : PivotSprite = highlightComponent.displayedHighlight;
+                        m_boundsBuffer = renderView.getBounds(renderView.parent);
                         
                         // Make sure the highlight also scales
                         m_boundsBuffer.inflate(20, 20);
-                        highlightDisplay.width = Math.max(m_highlightTexture.width, m_boundsBuffer.width);
-                        highlightDisplay.height = Math.max(m_highlightTexture.height, m_boundsBuffer.height);
+                        highlightDisplay.width = Math.max(m_highlightBitmapData.width, m_boundsBuffer.width);
+                        highlightDisplay.height = Math.max(m_highlightBitmapData.height, m_boundsBuffer.height);
                         
                         // Center the image so it becomes easier later to reposition within the center of the anchor object
                         highlightDisplay.pivotX = highlightDisplay.width * 0.5;
@@ -188,14 +184,7 @@ class HighlightSystem extends BaseSystemScript
         // Create a tween for the highlighting if the component specifies some time frame
         if (highlightComponent.animationPeriod > 0) 
         {
-            var tween : Tween = new Tween(highlightComponent.displayedHighlight, highlightComponent.animationPeriod);
-            tween.animate("alpha", 0.2);
-            tween.repeatCount = 0;
-            tween.reverse = true;
-            m_highlightJuggler.add(tween);
-            
-            highlightComponent.juggler = m_highlightJuggler;
-            highlightComponent.tween = tween;
+			var tween = Actuate.tween(highlightComponent.displayedHighlight, highlightComponent.animationPeriod, { alpha: 0.2 }).repeat().reverse();
         }
     }
 }

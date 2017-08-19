@@ -100,7 +100,7 @@ class Polygon extends DisplayObject
         var transformationMatrix : Matrix = (targetSpace == this) ? 
         null : getTransformationMatrix(targetSpace, sHelperMatrix);
         
-        return mVertexData.getBounds(transformationMatrix, 0, -1, resultRect);
+        return resultRect = mVertexData.getBounds(transformationMatrix, 0, -1);
     }
     
     /** Creates the required vertex- and index data and uploads it to the GPU. */

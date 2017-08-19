@@ -1,17 +1,15 @@
 package wordproblem.settings;
 
 import haxe.Constraints.Function;
+import motion.Actuate;
+import openfl.display.Bitmap;
+import openfl.events.MouseEvent;
+import wordproblem.display.PivotSprite;
 
-import starling.animation.Tween;
-import starling.core.Starling;
-import starling.display.Button;
-import starling.display.DisplayObject;
-import starling.display.Image;
-import starling.display.Sprite;
-import starling.events.Event;
-import starling.events.Touch;
-import starling.events.TouchEvent;
-import starling.events.TouchPhase;
+import wordproblem.display.LabelButton;
+import openfl.display.DisplayObject;
+import openfl.display.Sprite;
+import openfl.events.Event;
 
 import wordproblem.engine.widget.WidgetUtil;
 import wordproblem.resource.AssetManager;
@@ -21,14 +19,13 @@ import wordproblem.resource.AssetManager;
  */
 class OptionButton extends Sprite
 {
-    private var m_button : Button;
+    private var m_button : LabelButton;
     private var m_onClickCallback : Function;
     
     /**
      * Animation of the icon on the button spinning on mouse over
      */
-    private var m_optionsButtonIconTween : Tween;
-	private var m_optionsButtonIcon : Image;
+	private var m_optionsButtonContainer : PivotSprite;
     
     public function new(assetManager : AssetManager,
             color : Int,
@@ -43,22 +40,22 @@ class OptionButton extends Sprite
         m_button.width = 42;
         m_button.height = 42;
         
-        m_button.upState = assetManager.getTexture("gear_yellow_icon");
+        m_button.upState = new Bitmap(assetManager.getBitmapData("gear_yellow_icon"));
         
-        m_button.addEventListener(Event.TRIGGERED, onButtonClicked);
-        m_button.addEventListener(TouchEvent.TOUCH, onButtonTouched);
+        m_button.addEventListener(MouseEvent.CLICK, onButtonClicked);
+        m_button.addEventListener(MouseEvent.MOUSE_OVER, onButtonMouseOver);
+		m_button.addEventListener(MouseEvent.MOUSE_OUT, onButtonMouseOut);
         addChild(m_button);
     }
     
-    override public function dispose() : Void
+    public function dispose() : Void
     {
-        super.dispose();
-        
-        m_button.removeEventListener(Event.TRIGGERED, onButtonClicked);
-        m_button.removeEventListener(TouchEvent.TOUCH, onButtonTouched);
+        m_button.removeEventListener(MouseEvent.CLICK, onButtonClicked);
+        m_button.removeEventListener(MouseEvent.MOUSE_OVER, onButtonMouseOver);
+		m_button.removeEventListener(MouseEvent.MOUSE_OUT, onButtonMouseOut);
     }
     
-    private function onButtonClicked() : Void
+    private function onButtonClicked(event : Dynamic) : Void
     {
         if (m_onClickCallback != null) 
         {
@@ -70,38 +67,27 @@ class OptionButton extends Sprite
      * Bind listener to the options to get an animation of the yellow gear on the
      * button to spin on mouse over
      */
-    private function onButtonTouched(event : TouchEvent) : Void
+    private function onButtonMouseOver(event : Dynamic) : Void
     {
-        var hoverTouch : Touch = event.getTouch(m_button, TouchPhase.HOVER);
-        if (hoverTouch != null && m_optionsButtonIconTween == null) 
+        if (m_optionsButtonContainer == null) 
         {
-			// Lazily initialize the button in the correct position
-			if (m_optionsButtonIcon == null) {
-				m_optionsButtonIcon = new Image(m_button.upState);
-				m_optionsButtonIcon.width = m_button.width;
-				m_optionsButtonIcon.height = m_button.height;
-				m_optionsButtonIcon.alignPivot();
-				m_optionsButtonIcon.x = m_optionsButtonIcon.width / 2;
-				m_optionsButtonIcon.y = m_optionsButtonIcon.height / 2;
-			}
-			// Set the button alpha to 0 and add the spinning icon behind it
-			// so as to 1) actually display the spinning icon and 2) not interrupt
-			// the touch events dispatched to the button
-			m_button.alpha = 0;
-			addChildAt(m_optionsButtonIcon, 0);
-            var iconTween : Tween = new Tween(m_optionsButtonIcon, 2);
-            iconTween.animate("rotation", Math.PI * 2);
-            iconTween.repeatCount = 0;
-            Starling.current.juggler.add(iconTween);
-            m_optionsButtonIconTween = iconTween;
-        }
-        else if (hoverTouch == null && m_optionsButtonIconTween != null) 
-        {
-            m_optionsButtonIcon.rotation = 0.0;
-			removeChild(m_optionsButtonIcon);
-			m_button.alpha = 1;
-            Starling.current.juggler.remove(m_optionsButtonIconTween);
-            m_optionsButtonIconTween = null;
+			m_optionsButtonContainer = new PivotSprite();
+			m_optionsButtonContainer.addChild(m_button);
+			m_optionsButtonContainer.pivotX = m_button.width / 2;
+			m_optionsButtonContainer.pivotY = m_button.height / 2;
+			
+			Actuate.tween(m_optionsButtonContainer, 2, { rotation: 360 }).repeat();
+			addChild(m_optionsButtonContainer);
         }
     }
+	
+	private function onButtonMouseOut(event : Dynamic) {
+		if (m_optionsButtonContainer != null) {
+			Actuate.stop(m_optionsButtonContainer);
+			m_optionsButtonContainer.removeChild(m_button);
+			removeChild(m_optionsButtonContainer);
+			m_optionsButtonContainer.dispose();
+			m_optionsButtonContainer = null;
+		}
+	}
 }

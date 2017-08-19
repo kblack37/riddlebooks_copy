@@ -1,10 +1,17 @@
 package wordproblem.scripts.barmodel;
 
+import dragonbox.common.util.XColor;
+import motion.Actuate;
+import motion.easing.Expo;
+import openfl.display.Bitmap;
+import openfl.text.TextFormat;
+import wordproblem.display.PivotSprite;
+import wordproblem.display.util.BitmapUtil;
 import wordproblem.scripts.barmodel.IRemoveBarElement;
 
-import flash.display.BitmapData;
-import flash.geom.Point;
-import flash.geom.Rectangle;
+import openfl.display.BitmapData;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
 
 import cgs.audio.Audio;
 
@@ -12,16 +19,10 @@ import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.math.util.MathUtil;
 import dragonbox.common.time.Time;
 
-import starling.animation.Transitions;
-import starling.animation.Tween;
-import starling.core.Starling;
-import starling.display.DisplayObject;
-import starling.display.DisplayObjectContainer;
-import starling.display.Image;
-import starling.display.Sprite;
-import starling.extensions.textureutil.TextureUtil;
-import starling.text.TextField;
-import starling.textures.Texture;
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
+import openfl.display.Sprite;
+import openfl.text.TextField;
 
 import wordproblem.engine.IGameEngine;
 import wordproblem.engine.barmodel.view.BarLabelView;
@@ -97,17 +98,12 @@ class HoldToCopy extends BaseBarModelScript
     private var m_holdToCopyDescription : DisplayObject;
     
     /**
-     * Animation of the text bubble popping up
-     */
-    private var m_holdToCopyDescriptionTween : Tween;
-    
-    /**
      * The current image showing the fill progress
      * 
      * This has the dynamically created texture representing the fill.
      * (Make sure this is properly cleaned up whenever a new snapshot is drawn)
      */
-    private var m_currentFillImage : Image;
+    private var m_currentFillImage : Bitmap;
     
     /**
      * This is a running counter of the amount of the image that should be filled
@@ -150,7 +146,7 @@ class HoldToCopy extends BaseBarModelScript
     /**
      * The texture to use when the ring is filled and the copy successfully occured
      */
-    private var m_completedRingTexture : Texture;
+    private var m_completedRingBitmapData : BitmapData;
     
     public function new(gameEngine : IGameEngine,
             expressionCompiler : IExpressionTreeCompiler,
@@ -178,11 +174,16 @@ class HoldToCopy extends BaseBarModelScript
         // Text indicator for hold to copy appears as a thought bubble
         var textWidth : Float = 150;
         var textHeight : Float = 40;
-        var descriptionText : TextField = new TextField(Std.int(textWidth), Std.int(textHeight), "Hold to Copy", "Verdana", 20, 0x000000);
-        var background : Image = new Image(m_assetManager.getTexture("thought_bubble"));
+        var descriptionText : TextField = new TextField();
+		descriptionText.width = textWidth;
+		descriptionText.height = textHeight;
+		descriptionText.text = "Hold to Copy";
+		descriptionText.setTextFormat(new TextFormat("Verdana", 20, 0x000000));
+		
+        var background : Bitmap = new Bitmap(m_assetManager.getBitmapData("thought_bubble"));
         background.scaleX = textWidth / background.width;
         background.scaleY = (textHeight * 2) / background.height;
-        background.color = 0xFFFFFF;
+		background.transform.colorTransform.concat(XColor.rgbToColorTransform(0xFFFFFF));
         
         var descriptionContainer : Sprite = new Sprite();
         descriptionContainer.addChild(background);
@@ -191,9 +192,10 @@ class HoldToCopy extends BaseBarModelScript
         descriptionContainer.addChild(descriptionText);
         m_holdToCopyDescription = descriptionContainer;
         
-        m_holdToCopyDescriptionTween = new Tween(m_holdToCopyDescription, 0.3);
+		Actuate.tween(m_holdToCopyDescription, 0.3, { });
         
-        m_completedRingTexture = TextureUtil.getRingSegmentTexture(
+		// TODO: revisit animation once more basic elements are working
+        m_completedRingBitmapData = BitmapUtil.getRingSegmentBitmapData(
                         m_innerRadius, m_outerRadius, -Math.PI / 2, Math.PI * 2, true, m_fillBitmapData, 0x00FF00, true, 1, 0
                         );
         
@@ -206,17 +208,17 @@ class HoldToCopy extends BaseBarModelScript
         if (!value && m_ready) 
         {
             // On set inactive, do a complete reset of all running state elements
-            Starling.current.juggler.remove(m_holdToCopyDescriptionTween);
+			Actuate.stop(m_holdToCopyDescription);
             
             if (m_holdToCopyDescription != null) 
             {
-                m_holdToCopyDescription.removeFromParent();
+                if (m_holdToCopyDescription.parent != null) m_holdToCopyDescription.parent.removeChild(m_holdToCopyDescription);
             }
             
             if (m_currentFillImage != null) 
             {
-                m_currentFillImage.removeFromParent(true);
-                m_currentFillImage.texture.dispose();
+				if (m_currentFillImage.parent != null) m_currentFillImage.parent.removeChild(m_currentFillImage);
+				m_currentFillImage.bitmapData.dispose();
                 m_currentFillImage = null;
             }
             m_radiansToFill = 0.0;
@@ -238,7 +240,7 @@ class HoldToCopy extends BaseBarModelScript
         super.dispose();
         
         // Clear the texture
-        m_completedRingTexture.dispose();
+        m_completedRingBitmapData.dispose();
     }
     
     /**
@@ -252,7 +254,7 @@ class HoldToCopy extends BaseBarModelScript
         // If already got the ready signal, call the ready signal to the just added script
         if (m_ready) 
         {
-            (try cast(removeScript, BaseGameScript) catch(e:Dynamic) null).overrideLevelReady();
+            (try cast(removeScript, BaseGameScript) catch(e:Dynamic) null).overrideLevelReady({ });
         }
     }
     
@@ -262,7 +264,7 @@ class HoldToCopy extends BaseBarModelScript
         {
             m_globalBuffer.x = m_mouseState.mousePositionThisFrame.x;
             m_globalBuffer.y = m_mouseState.mousePositionThisFrame.y;
-            m_canvas.globalToLocal(m_globalBuffer, m_localBuffer);
+            m_localBuffer = m_canvas.globalToLocal(m_globalBuffer);
             if (m_mouseState.leftMousePressedThisFrame) 
             {
 				m_outParams = new Array<Dynamic>();
@@ -291,9 +293,7 @@ class HoldToCopy extends BaseBarModelScript
                         }
                         
                         m_holdToCopyDescription.alpha = 0.0;
-                        m_holdToCopyDescriptionTween.reset(m_holdToCopyDescription, 0.3);
-                        m_holdToCopyDescriptionTween.animate("alpha", 1.0);
-                        Starling.current.juggler.add(m_holdToCopyDescriptionTween);
+						Actuate.tween(m_holdToCopyDescription, 0.3, { alpha: 1 });
                     }  
 					
 					// Add a blink to the element so it is clear what is being copied  
@@ -419,7 +419,7 @@ class HoldToCopy extends BaseBarModelScript
                 } 
 				
 				// Stop the tween of the dialog box  
-                Starling.current.juggler.remove(m_holdToCopyDescriptionTween);
+				Actuate.stop(m_holdToCopyDescription);
             }
             
             if (m_mouseState.leftMouseDown && m_fillInProgress && this.allowCopy) 
@@ -462,19 +462,15 @@ class HoldToCopy extends BaseBarModelScript
                     
                     // Play animation of a version of the filled image fading away to indicate the
                     // hold was completed
-                    var completedImage : Image = new Image(m_completedRingTexture);
-                    completedImage.pivotX = m_completedRingTexture.width * 0.5;
-                    completedImage.pivotY = m_completedRingTexture.height * 0.5;
+                    var completedImage : PivotSprite = new PivotSprite();
+					completedImage.addChild(new Bitmap(m_completedRingBitmapData));
+                    completedImage.pivotX = m_completedRingBitmapData.width * 0.5;
+                    completedImage.pivotY = m_completedRingBitmapData.height * 0.5;
                     completedImage.x = m_originPoint.x;
                     completedImage.y = m_originPoint.y;
                     m_canvas.addChild(completedImage);
                     
-                    var fadeoutCompletedTween : Tween = new Tween(completedImage, 0.5, Transitions.EASE_OUT);
-                    fadeoutCompletedTween.fadeTo(0);
-                    fadeoutCompletedTween.scaleTo(2.0);
-                    fadeoutCompletedTween.onCompleteArgs = [completedImage];
-                    fadeoutCompletedTween.onComplete = onFadeCompletedRingComplete;
-                    Starling.current.juggler.add(fadeoutCompletedTween);
+					Actuate.tween(completedImage, 0.5, { alpha : 0, scaleX: 2, scaleY: 2 }).ease(Expo.easeOut).onComplete(onFadeCompletedRingComplete, [completedImage]);
                     
                     Audio.instance.playSfx("text2card");
                 }
@@ -490,21 +486,23 @@ class HoldToCopy extends BaseBarModelScript
                 {
                     if (m_currentFillImage != null) 
                     {
-                        m_currentFillImage.removeFromParent(true);
-                        m_currentFillImage.texture.dispose();
+						if (m_currentFillImage.parent != null) m_currentFillImage.parent.removeChild(m_currentFillImage);
+						m_currentFillImage.bitmapData.dispose();
+						m_currentFillImage = null;
                     } 
 					
-					// After every visit we need to update the fill of the radial bar  
-                    var newFillTexture : Texture = TextureUtil.getRingSegmentTexture(
-                            m_innerRadius, m_outerRadius, -Math.PI / 2, m_radiansToFill, true, m_fillBitmapData, 0, true, 1, 0
-                            );
+					// After every visit we need to update the fill of the radial bar
+					// TODO: revisit animation after more basic elements are working
+                    //var newFillBitmapData : BitmapData = TextureUtil.getRingSegmentBitmapData(
+                            //m_innerRadius, m_outerRadius, -Math.PI / 2, m_radiansToFill, true, m_fillBitmapData, 0, true, 1, 0
+                            //);
                     
-                    m_currentFillImage = new Image(newFillTexture);
-                    m_currentFillImage.pivotX = newFillTexture.width * 0.5;
-                    m_currentFillImage.pivotY = newFillTexture.height * 0.5;
-                    m_currentFillImage.x = m_originPoint.x;
-                    m_currentFillImage.y = m_originPoint.y;
-                    m_canvas.addChild(m_currentFillImage);
+                    //m_currentFillImage = new Image(newFillBitmapData);
+                    //m_currentFillImage.pivotX = newFillBitmapData.width * 0.5;
+                    //m_currentFillImage.pivotY = newFillBitmapData.height * 0.5;
+                    //m_currentFillImage.x = m_originPoint.x;
+                    //m_currentFillImage.y = m_originPoint.y;
+                    //m_canvas.addChild(m_currentFillImage);
                 }
             }
         }
@@ -523,17 +521,17 @@ class HoldToCopy extends BaseBarModelScript
         
         for (removeScript in m_removeScripts)
         {
-            (try cast(removeScript, BaseGameScript) catch(e:Dynamic) null).overrideLevelReady();
+            (try cast(removeScript, BaseGameScript) catch(e:Dynamic) null).overrideLevelReady({ });
         }
         
         m_barToCard = barToCard;
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         init(new BarToCard(m_gameEngine, m_expressionCompiler, m_assetManager, true, "BarToCardModelMode"));
-        m_barToCard.overrideLevelReady();
+        m_barToCard.overrideLevelReady(event);
     }
     
     private function stopFill() : Void
@@ -543,14 +541,15 @@ class HoldToCopy extends BaseBarModelScript
         // Kill the fill image if it was playing
         if (m_currentFillImage != null) 
         {
-            m_currentFillImage.removeFromParent(true);
-            m_currentFillImage.texture.dispose();
+			if (m_currentFillImage.parent != null) m_currentFillImage.parent.removeChild(m_currentFillImage);
+			m_currentFillImage.bitmapData.dispose();
+			m_currentFillImage = null;
         }
         
-        m_holdToCopyDescription.removeFromParent();
+        if (m_holdToCopyDescription.parent != null) m_holdToCopyDescription.parent.removeChild(m_holdToCopyDescription);
     }
     
-    private function onFadeCompletedRingComplete(target : Image) : Void
+    private function onFadeCompletedRingComplete(target : DisplayObject) : Void
     {
 		m_canvas.removeChild(target);
     }

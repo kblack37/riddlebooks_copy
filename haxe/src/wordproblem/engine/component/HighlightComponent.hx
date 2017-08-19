@@ -1,10 +1,10 @@
 package wordproblem.engine.component;
 
 
-import starling.animation.Juggler;
-import starling.animation.Tween;
-import starling.core.Starling;
-import starling.display.DisplayObject;
+import motion.Actuate;
+import motion.actuators.GenericActuator;
+import openfl.display.DisplayObject;
+import wordproblem.display.PivotSprite;
 
 class HighlightComponent extends Component
 {
@@ -29,21 +29,7 @@ class HighlightComponent extends Component
      * 
      * (Set by the highlight system)
      */
-    public var displayedHighlight : DisplayObject;
-    
-    /**
-     * Set if the highlight is currently animating
-     * 
-     * (ONLY SET and USED INTERNALLY)
-     */
-    public var tween : Tween;
-    
-    /**
-     * The juggler that is playing the tween
-     * 
-     * (ONLY SET and USED INTERNALLY)
-     */
-    public var juggler : Juggler;
+    public var displayedHighlight : PivotSprite;
     
     /**
      * This component indicates that some part of the game should get some glow around it. 
@@ -59,15 +45,11 @@ class HighlightComponent extends Component
     
     override public function dispose() : Void
     {
-        if (tween != null) 
-        {
-            this.juggler.remove(tween);
-            this.juggler = null;
-        }
+		Actuate.stop(displayedHighlight);
         
         if (displayedHighlight != null) 
         {
-            displayedHighlight.removeFromParent(true);
+			if (displayedHighlight.parent != null) displayedHighlight.parent.removeChild(displayedHighlight);
         }
     }
 }

@@ -78,7 +78,7 @@ class CustomReplaceHiddenBarSegment extends BaseBarModelScript
                     
                     var previousModelDataSnapshot : BarModelData = m_barModelArea.getBarModelData().clone();
                     m_applyReplacementCallback(hitSegmentId, dataToAdd, m_barModelArea.getBarModelData());
-                    m_gameEngine.dispatchEventWith(GameEvent.BAR_MODEL_AREA_CHANGE, false, {
+                    m_gameEngine.dispatchEvent(GameEvent.BAR_MODEL_AREA_CHANGE, false, {
                                 previousSnapshot : previousModelDataSnapshot
 
                             });

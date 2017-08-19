@@ -1,7 +1,7 @@
 package wordproblem.engine.component;
 
 
-import starling.display.DisplayObject;
+import openfl.display.DisplayObject;
 
 /**
  * Indicates that an entity should be rendered on screen.

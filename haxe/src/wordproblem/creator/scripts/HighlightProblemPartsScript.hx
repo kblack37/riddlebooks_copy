@@ -93,11 +93,11 @@ class HighlightProblemPartsScript extends BaseProblemCreateScript
                 };
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
         // TODO: We have a timing dependency, on prepopulating the text we want to immediately modify the text list with predefined highlights
         // At that point however, the list elements may not exist. Thus we only want to apply the highlights AFTER the list elements have been created.
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         m_editableTextArea = try cast(m_createState.getWidgetFromId("editableTextArea"), EditableTextArea) catch(e:Dynamic) null;
         setIsActive(m_isActive);
@@ -177,7 +177,7 @@ class HighlightProblemPartsScript extends BaseProblemCreateScript
             return ScriptStatus.FAIL;
         }
         
-        editableTextArea.getBounds(editableTextArea.stage, m_boundsBuffer);
+        m_boundsBuffer = editableTextArea.getBounds(editableTextArea.stage);
         
         // Current limits to show the arrows 0 at the top
         // if scroll position exceeds zero, show the top arrow
@@ -202,7 +202,7 @@ class HighlightProblemPartsScript extends BaseProblemCreateScript
                     
                     if (m_activeHighlightId != null) 
                     {
-                        m_createState.dispatchEventWith(ProblemCreateEvent.USER_HIGHLIGHT_STARTED, false, {
+                        m_createState.dispatchEvent(ProblemCreateEvent.USER_HIGHLIGHT_STARTED, false, {
                                     id : m_activeHighlightId
 
                                 });
@@ -210,7 +210,7 @@ class HighlightProblemPartsScript extends BaseProblemCreateScript
                     }
                     else 
                     {
-                        m_createState.dispatchEventWith(ProblemCreateEvent.USER_HIGHLIGHT_CANCELLED, false, null);
+                        m_createState.dispatchEvent(ProblemCreateEvent.USER_HIGHLIGHT_CANCELLED, false, null);
                         editableTextArea.removeEmphasisFromAllText();
                     }
                 }
@@ -291,7 +291,7 @@ class HighlightProblemPartsScript extends BaseProblemCreateScript
                                 
                                 // NOTE: It is possible the user highlighted whitespace, in which case the highlight
                                 // does not exist, still counts as a change
-                                m_createState.dispatchEventWith(ProblemCreateEvent.USER_HIGHLIGHT_FINISHED, false, {
+                                m_createState.dispatchEvent(ProblemCreateEvent.USER_HIGHLIGHT_FINISHED, false, {
                                             id : partName
 
                                         });

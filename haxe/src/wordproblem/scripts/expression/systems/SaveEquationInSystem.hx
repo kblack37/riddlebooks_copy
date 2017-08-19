@@ -1,15 +1,13 @@
 package wordproblem.scripts.expression.systems;
 
 
-import flash.geom.Rectangle;
-
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 
-import starling.animation.Tween;
-import starling.core.Starling;
-import starling.display.DisplayObject;
-import starling.display.DisplayObjectContainer;
+import motion.Actuate;
+
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
 
 import wordproblem.engine.IGameEngine;
 import wordproblem.engine.events.GameEvent;
@@ -46,7 +44,9 @@ class SaveEquationInSystem extends BaseGameScript
     {
         super.dispose();
         
-        m_otherEquation.removeFromParent(true);
+		if (m_otherEquation.parent != null) m_otherEquation.parent.removeChild(m_otherEquation);
+		m_otherEquation.dispose();
+		m_otherEquation = null;
     }
     
     override public function setIsActive(value : Bool) : Void
@@ -62,9 +62,9 @@ class SaveEquationInSystem extends BaseGameScript
         }
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         // Create a smaller version of the term area to save the new equation
         var containerWidth : Float = 200;
@@ -73,7 +73,7 @@ class SaveEquationInSystem extends BaseGameScript
                 new ExpressionTree(m_expressionCompiler.getVectorSpace(), null), 
                 m_gameEngine.getExpressionSymbolResources(), 
                 m_assetManager, 
-                m_assetManager.getTexture("term_area_left"), 
+                m_assetManager.getBitmapData("term_area_left"), 
                 containerWidth, 
                 containerHeight, 
                 true
@@ -117,9 +117,7 @@ class SaveEquationInSystem extends BaseGameScript
                     
                     // Have new equation fade into view
                     m_otherEquation.alpha = 0.0;
-                    var tween : Tween = new Tween(m_otherEquation, 1);
-                    tween.animate("alpha", 1.0);
-                    Starling.current.juggler.add(tween);
+					Actuate.tween(m_otherEquation, 1, { alpha: 1 });
                 }
             }
         }

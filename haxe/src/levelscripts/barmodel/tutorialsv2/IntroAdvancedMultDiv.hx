@@ -402,9 +402,9 @@ class IntroAdvancedMultDiv extends BaseCustomLevelScript
         }
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         super.disablePrevNextTextButtons();
         

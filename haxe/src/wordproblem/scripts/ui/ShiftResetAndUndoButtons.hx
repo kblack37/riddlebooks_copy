@@ -3,7 +3,7 @@ package wordproblem.scripts.ui;
 
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 
-import starling.display.DisplayObject;
+import openfl.display.DisplayObject;
 
 import wordproblem.engine.IGameEngine;
 import wordproblem.resource.AssetManager;

@@ -1,34 +1,34 @@
 package wordproblem.scripts.level;
 
-import cgs.internationalization.StringTable;
-
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.ui.MouseState;
 import dragonbox.common.util.PMPRNG;
 import dragonbox.common.util.XColor;
 
-import haxe.xml.Fast;
 import haxe.Constraints.Function;
+import haxe.xml.Fast;
 
-import starling.animation.Tween;
-import starling.core.Starling;
-import starling.display.Button;
-import starling.display.DisplayObject;
-import starling.display.DisplayObjectContainer;
-import starling.events.EventDispatcher;
-import starling.filters.BlurFilter;
-import starling.filters.ColorMatrixFilter;
-import starling.filters.FragmentFilter;
-import starling.text.TextField;
-import starling.utils.HAlign;
+import motion.Actuate;
+
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
+import openfl.events.Event;
+import openfl.events.EventDispatcher;
+import openfl.filters.BitmapFilter;
+import openfl.filters.GlowFilter;
+import openfl.text.TextField;
+import openfl.text.TextFormat;
+import openfl.text.TextFormatAlign;
 
 import wordproblem.callouts.CalloutCreator;
 import wordproblem.characters.HelperCharacterController;
+import wordproblem.display.LabelButton;
 import wordproblem.engine.IGameEngine;
 import wordproblem.engine.component.CalloutComponent;
 import wordproblem.engine.component.Component;
 import wordproblem.engine.component.ComponentManager;
 import wordproblem.engine.component.ExpressionComponent;
+import wordproblem.engine.events.DataEvent;
 import wordproblem.engine.events.GameEvent;
 import wordproblem.engine.expression.SymbolData;
 import wordproblem.engine.level.WordProblemLevelData;
@@ -64,7 +64,7 @@ class BaseCustomLevelScript extends BaseGameScript
     public var CALLOUT_TEXT_DEFAULT_COLOR : Int = 0x5082B9;
     private static inline var CONTINUE_TEXT_DEFAULT_COLOR : Int = 0x006633;
     
-    private var m_continueTextDefaultHighlightFilter : FragmentFilter;
+    private var m_continueTextDefaultHighlightFilter : GlowFilter;
     
     /**
      * Default styling
@@ -138,9 +138,12 @@ class BaseCustomLevelScript extends BaseGameScript
         m_dialogIdToXMLMap = new Map<String, Fast>();
         //m_dialogIdToVisibleWidgetMap = new Dictionary();
 		// TODO: uncomment once cgs library is finished
-        m_continueIndicator = new TextField(200, 60, "", /*StringTable.lookup("click_to_continue"),*/ GameFonts.DEFAULT_FONT_NAME, 24, CONTINUE_TEXT_DEFAULT_COLOR);
-        m_continueTextDefaultHighlightFilter = BlurFilter.createGlow(0xFFFFFF);
-        m_continueIndicator.hAlign = HAlign.CENTER;
+        m_continueIndicator = new TextField();
+		m_continueIndicator.width = 200;
+		m_continueIndicator.height = 60;
+		m_continueIndicator.text = ""; /*StringTable.lookup("click_to_continue"),*/
+		m_continueIndicator.setTextFormat(new TextFormat(GameFonts.DEFAULT_FONT_NAME, 24, CONTINUE_TEXT_DEFAULT_COLOR, null, null, null, null, null, TextFormatAlign.CENTER));
+        m_continueTextDefaultHighlightFilter = new GlowFilter(0xFFFFFF);
         m_playerStatsAndSaveData = playerStatsAndSaveData;
         
         // Bit of a hack, automatically bind audio for bar modeling so the tutorial levels
@@ -272,9 +275,9 @@ class BaseCustomLevelScript extends BaseGameScript
         return ScriptStatus.RUNNING;
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         m_textViewFactory = new TextViewFactory(m_assetManager, m_gameEngine.getExpressionSymbolResources());
         m_textParser = new TextParser();
@@ -307,21 +310,21 @@ class BaseCustomLevelScript extends BaseGameScript
      */
     private function greyOutAndDisableButton(uiEntityId : String, disable : Bool) : Void
     {
-        var targetButton : Button = try cast(m_gameEngine.getUiEntity(uiEntityId), Button) catch(e:Dynamic) null;
+        var targetButton : LabelButton = try cast(m_gameEngine.getUiEntity(uiEntityId), LabelButton) catch(e:Dynamic) null;
         if (targetButton != null) 
         {
             if (disable) 
             {
                 // Set color to grey scale
-                var colorMatrixFilter : ColorMatrixFilter = new ColorMatrixFilter();
-                colorMatrixFilter.adjustSaturation(-1);
-                targetButton.filter = colorMatrixFilter;
+				var filters = new Array<BitmapFilter>();
+				filters.push(XColor.getGrayscaleFilter());
+				targetButton.filters = filters;
                 targetButton.alpha = 0.5;
             }
             else 
             {
                 // Set color to normal
-                targetButton.filter = null;
+				targetButton.filters = new Array<BitmapFilter>();
                 targetButton.alpha = 1.0;
             }
             targetButton.enabled = !disable;
@@ -488,18 +491,19 @@ class BaseCustomLevelScript extends BaseGameScript
             m_continueIndicator.x = x;
             m_continueIndicator.y = y;
             parentContainer.addChild(m_continueIndicator);
-        }  // Set color information for the text if applicable  
-        
-        
-        
-        m_continueIndicator.color = Reflect.hasField(param, "color") ? Reflect.field(param, "color") : CONTINUE_TEXT_DEFAULT_COLOR;
-        m_continueIndicator.filter = Reflect.hasField(param, "outlineColor") ? BlurFilter.createGlow(Reflect.field(param, "outlineColor")) : m_continueTextDefaultHighlightFilter;
+        }  
+		
+		// Set color information for the text if applicable  
+        m_continueIndicator.textColor = Reflect.hasField(param, "color") ? Reflect.field(param, "color") : CONTINUE_TEXT_DEFAULT_COLOR;
+		var filters = new Array<BitmapFilter>();
+		filters.push(Reflect.hasField(param, "outlineColor") ? new GlowFilter(Reflect.field(param, "outlineColor")) : m_continueTextDefaultHighlightFilter);
+		m_continueIndicator.filters = filters;
         
         var mouseState : MouseState = m_gameEngine.getMouseState();
         if (mouseState.leftMousePressedThisFrame) 
         {
             // On click remove the indicator
-            m_continueIndicator.removeFromParent();
+            if (m_continueIndicator.parent != null) m_continueIndicator.parent.removeChild(m_continueIndicator);
             status = ScriptStatus.SUCCESS;
             
             var loggingDetails : Dynamic = {
@@ -507,7 +511,7 @@ class BaseCustomLevelScript extends BaseGameScript
                 locationX : mouseState.mousePositionThisFrame.x,
                 locationY : mouseState.mousePositionThisFrame.y,
             };
-            m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.TUTORIAL_PROGRESS_EVENT, false, loggingDetails);
+            m_gameEngine.dispatchEvent(new DataEvent(AlgebraAdventureLoggingConstants.TUTORIAL_PROGRESS_EVENT, loggingDetails));
         }
         return status;
     }
@@ -557,15 +561,11 @@ class BaseCustomLevelScript extends BaseGameScript
                     endAlpha = 0.0;
                 }
                 targetDocumentView.alpha = initialAlpha;
-                Starling.current.juggler.tween(targetDocumentView, fadeInDuration, {
-                            alpha : endAlpha
-
-                        });
+				Actuate.tween(targetDocumentView, fadeInDuration, { alpha: endAlpha });
             }
-        }  // In a node is made visible, then the bottom scroll limit might change  
-        
-        
-        
+        }  
+		
+		// If a node is made visible, then the bottom scroll limit might change  
         textArea.setBottomScrollLimit();
         
         return ScriptStatus.SUCCESS;
@@ -631,14 +631,10 @@ class BaseCustomLevelScript extends BaseGameScript
         var status : Int = ScriptStatus.FAIL;
         if (param.time > 0) 
         {
-            var tween : Tween = new Tween(m_gameEngine.getUiEntity(param.id), param.time);
-            tween.animate("y", param.y);
-            tween.onComplete = function() : Void
+			Actuate.tween(m_gameEngine.getUiEntity(param.id), param.time, { y: param.y }).onComplete(function() : Void
                     {
-                        Starling.current.juggler.remove(tween);
                         param.finished = true;
-                    };
-            Starling.current.juggler.add(tween);
+                    });
         }
         else 
         {
@@ -709,7 +705,7 @@ class BaseCustomLevelScript extends BaseGameScript
      */
     private function levelSolved(param : Dynamic) : Int
     {
-        m_gameEngine.dispatchEventWith(GameEvent.LEVEL_SOLVED);
+        m_gameEngine.dispatchEvent(new Event(GameEvent.LEVEL_SOLVED));
         return ScriptStatus.SUCCESS;
     }
     
@@ -718,7 +714,7 @@ class BaseCustomLevelScript extends BaseGameScript
      */
     private function levelComplete(param : Dynamic) : Int
     {
-        m_gameEngine.dispatchEventWith(GameEvent.LEVEL_COMPLETE);
+        m_gameEngine.dispatchEvent(new Event(GameEvent.LEVEL_COMPLETE));
         m_gameEngine.setPaused(true);
         return ScriptStatus.SUCCESS;
     }
@@ -760,17 +756,14 @@ class BaseCustomLevelScript extends BaseGameScript
         sequenceSelector.pushChild(new CustomVisitNode(getAllCardsInDeckFound, null));
         sequenceSelector.pushChild(new CustomVisitNode(setTextDraggable, {
                     draggable : false
-
                 }));
         sequenceSelector.pushChild(new CustomVisitNode(moveUiEntityTo, {
                     id : "deckAndTermContainer",
                     y : 360,
                     time : 0.3,
-
                 }));
         sequenceSelector.pushChild(new CustomVisitNode(setModelEntitiesVisible, {
                     visible : true
-
                 }));
     }
     
@@ -779,18 +772,15 @@ class BaseCustomLevelScript extends BaseGameScript
         // Switch the game back to a 'find all expressions' state
         sequenceSelector.pushChild(new CustomVisitNode(setModelEntitiesVisible, {
                     visible : false
-
                 }));
         sequenceSelector.pushChild(new CustomVisitNode(moveUiEntityTo, {
                     id : "deckAndTermContainer",
                     y : 500,
                     time : 0.3,
-
                 }));
         sequenceSelector.pushChild(new CustomVisitNode(problemSetupFunction, null));
         sequenceSelector.pushChild(new CustomVisitNode(setTextDraggable, {
                     draggable : true
-
                 }));
     }
 }

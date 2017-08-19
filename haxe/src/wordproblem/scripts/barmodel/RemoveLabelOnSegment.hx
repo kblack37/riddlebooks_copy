@@ -1,17 +1,17 @@
 package wordproblem.scripts.barmodel;
 
 
-import flash.geom.Point;
-import flash.geom.Rectangle;
-
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.ui.MouseState;
 
-import starling.animation.Tween;
-import starling.core.Starling;
-import starling.display.DisplayObject;
+import motion.Actuate;
+
+import openfl.display.DisplayObject;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
 
 import wordproblem.display.Layer;
+import wordproblem.display.PivotSprite;
 import wordproblem.engine.IGameEngine;
 import wordproblem.engine.barmodel.model.BarLabel;
 import wordproblem.engine.barmodel.model.BarModelData;
@@ -19,6 +19,7 @@ import wordproblem.engine.barmodel.model.BarWhole;
 import wordproblem.engine.barmodel.view.BarLabelView;
 import wordproblem.engine.barmodel.view.BarSegmentView;
 import wordproblem.engine.barmodel.view.BarWholeView;
+import wordproblem.engine.events.DataEvent;
 import wordproblem.engine.events.GameEvent;
 import wordproblem.engine.scripting.graph.ScriptStatus;
 import wordproblem.resource.AssetManager;
@@ -86,31 +87,28 @@ class RemoveLabelOnSegment extends BaseBarModelScript implements IRemoveBarEleme
                             removedLabelView.rescaleAndRedraw(segementViewBounds.width, segementViewBounds.height, 1, 1);
                             removedLabelView.resizeToLength(hitBarLabelView.pixelLength);
                             var globalCoordinates : Point = hitBarLabelView.localToGlobal(new Point(0, 0));
-                            removedLabelView.pivotX = removedLabelView.width * 0.5;
-                            removedLabelView.pivotY = removedLabelView.height * 0.5;
-                            removedLabelView.x = globalCoordinates.x + removedLabelView.pivotX;
-                            removedLabelView.y = globalCoordinates.y + removedLabelView.pivotY;
+							var removedLabelViewPivot : PivotSprite = new PivotSprite();
+							removedLabelViewPivot.addChild(removedLabelView);
+                            removedLabelViewPivot.pivotX = removedLabelView.width * 0.5;
+                            removedLabelViewPivot.pivotY = removedLabelView.height * 0.5;
+                            removedLabelViewPivot.x = globalCoordinates.x + removedLabelViewPivot.pivotX;
+                            removedLabelViewPivot.y = globalCoordinates.y + removedLabelViewPivot.pivotY;
                             
-                            var popOffTween : Tween = new Tween(removedLabelView, 0.5);
-                            popOffTween.animate("rotation", -Math.PI * 0.5);
-                            popOffTween.fadeTo(0.0);
-                            popOffTween.scaleTo(0.2);
-                            popOffTween.moveTo(removedLabelView.x - 200, removedLabelView.y);
-                            popOffTween.onComplete = function() : Void
+							Actuate.tween(removedLabelViewPivot, 0.5,
+								{ rotation: -90, alpha: 0, scaleX: 0.2, scaleY:0.2, x: removedLabelViewPivot.x - 200 }).smartRotation().onComplete(function() : Void
                                     {
-                                        removedLabelView.removeFromParent(true);
-                                        Starling.current.juggler.remove(popOffTween);
-                                    };
+										if (removedLabelViewPivot.parent != null) removedLabelViewPivot.parent.removeChild(removedLabelViewPivot);
+										removedLabelViewPivot.dispose();
+										removedLabelViewPivot = null;
+                                    });
                             
                             m_gameEngine.getSprite().stage.addChild(removedLabelView);
-                            Starling.current.juggler.add(popOffTween);
                             
                             var previousModelDataSnapshot : BarModelData = m_barModelArea.getBarModelData().clone();
                             barWhole.barLabels.splice(j, 1);
-                            m_gameEngine.dispatchEventWith(GameEvent.BAR_MODEL_AREA_CHANGE, false, {
+                            m_gameEngine.dispatchEvent(new DataEvent(GameEvent.BAR_MODEL_AREA_CHANGE, {
                                         previousSnapshot : previousModelDataSnapshot
-
-                                    });
+                                    }));
                             
                             m_barModelArea.redraw();
                             foundMatchingLabel = true;
@@ -136,7 +134,7 @@ class RemoveLabelOnSegment extends BaseBarModelScript implements IRemoveBarEleme
         {
             var mouseState : MouseState = m_gameEngine.getMouseState();
             m_globalMouseBuffer.setTo(mouseState.mousePositionThisFrame.x, mouseState.mousePositionThisFrame.y);
-            m_barModelArea.globalToLocal(m_globalMouseBuffer, m_localMouseBuffer);
+            m_localMouseBuffer = m_barModelArea.globalToLocal(m_globalMouseBuffer);
             
             if (mouseState.leftMousePressedThisFrame) 
             {
@@ -187,7 +185,7 @@ class RemoveLabelOnSegment extends BaseBarModelScript implements IRemoveBarEleme
                     // For labels directly on a segment we only factor in the label graphic
                     // since that is all that is there
                     var labelDescriptionDisplay : DisplayObject = barLabelView.getDescriptionDisplay();
-                    labelDescriptionDisplay.getBounds(m_barModelArea, m_labelDescriptionBounds);
+                    m_labelDescriptionBounds = labelDescriptionDisplay.getBounds(m_barModelArea);
                     if (m_labelDescriptionBounds.containsPoint(m_localMouseBuffer)) 
                     {
                         hitLabel = barLabelView;

@@ -1,13 +1,13 @@
 package wordproblem.engine.widget;
 
 
-import flash.text.TextFormat;
+import openfl.text.TextFormat;
 
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.math.vectorspace.IVectorSpace;
 
-import starling.display.Sprite;
-import starling.text.TextField;
+import openfl.display.Sprite;
+import openfl.text.TextField;
 
 import wordproblem.engine.text.GameFonts;
 import wordproblem.engine.text.MeasuringTextField;
@@ -56,10 +56,15 @@ class EquationToTextWidget extends Sprite
         var targetFontSize : Float = m_measuringTextField.resizeToDimensions(m_maxWidth, m_maxHeight, text);
         if (m_textField != null) 
         {
-            m_textField.removeFromParent(true);
+			if (m_textField.parent != null) m_textField.parent.removeChild(m_textField);
+			m_textField = null;
         }
         
-        m_textField = new TextField(Std.int(m_maxWidth), Std.int(m_maxHeight), text, m_defaultTextFormat.font, targetFontSize, try cast(m_defaultTextFormat.color, Int) catch(e:Dynamic) 0);
+        m_textField = new TextField();
+		m_textField.width = m_maxWidth;
+		m_textField.height = m_maxHeight;
+		m_textField.text = text;
+		m_textField.setTextFormat(new TextFormat(m_defaultTextFormat.font, Std.int(targetFontSize), m_defaultTextFormat.color));
         addChild(m_textField);
         
         m_currentEquationRoot = root;
@@ -74,7 +79,8 @@ class EquationToTextWidget extends Sprite
     {
         if (m_textField != null) 
         {
-            m_textField.removeFromParent(true);
+			if (m_textField.parent != null) m_textField.parent.removeChild(m_textField);
+			m_textField = null;
         }
     }
 }

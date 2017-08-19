@@ -1,18 +1,18 @@
 package wordproblem.engine.level;
 
-import dragonbox.common.math.vectorspace.RealsVectorSpace;
-import haxe.xml.Fast;
-import wordproblem.engine.level.LevelRules;
-import wordproblem.engine.level.WordProblemLevelData;
 
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
-import dragonbox.common.math.vectorspace.IVectorSpace;
+import dragonbox.common.math.vectorspace.RealsVectorSpace;
 import dragonbox.common.util.XString;
+
+import haxe.xml.Fast;
 
 import wordproblem.AlgebraAdventureConfig;
 import wordproblem.engine.component.WidgetAttributesComponent;
 import wordproblem.engine.expression.SymbolData;
+import wordproblem.engine.level.LevelRules;
+import wordproblem.engine.level.WordProblemLevelData;
 import wordproblem.engine.objectives.BaseObjective;
 import wordproblem.engine.objectives.ObjectivesFactory;
 import wordproblem.engine.scripting.ScriptParser;
@@ -20,6 +20,8 @@ import wordproblem.engine.scripting.graph.ScriptNode;
 import wordproblem.engine.text.TextParser;
 import wordproblem.engine.text.model.DocumentNode;
 import wordproblem.scripts.level.BaseCustomLevelScript;
+
+
 
 /**
  * The compiler reads in raw formatted level configurations like xml or json and
@@ -199,7 +201,7 @@ class LevelCompiler
         var scriptXml : Fast = fastLevelConfig.node.script;
         var scriptHead : Fast = scriptXml.node.scriptedActions;
         var scriptRoot : ScriptNode = scriptParser.parse(scriptHead.x);
-        
+		
         // TODO: This is hacky, default width should be part of the style info
         var defaultWidth : Float = 500;
         

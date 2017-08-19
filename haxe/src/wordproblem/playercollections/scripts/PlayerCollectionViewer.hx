@@ -2,13 +2,17 @@ package wordproblem.playercollections.scripts;
 
 
 import dragonbox.common.ui.MouseState;
+import dragonbox.common.util.XColor;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.display.DisplayObject;
+import openfl.text.TextFormat;
 
-import starling.display.Button;
-import starling.display.DisplayObjectContainer;
-import starling.display.Image;
-import starling.events.Event;
-import starling.text.TextField;
-import starling.textures.Texture;
+import wordproblem.display.LabelButton;
+import openfl.display.DisplayObjectContainer;
+import openfl.events.Event;
+import openfl.events.MouseEvent;
+import openfl.text.TextField;
 
 import wordproblem.engine.scripting.graph.ScriptNode;
 import wordproblem.engine.text.GameFonts;
@@ -27,7 +31,7 @@ class PlayerCollectionViewer extends ScriptNode
     /**
      * Button used to back out of all the various view levels
      */
-    private var m_backButton : Button;
+    private var m_backButton : LabelButton;
     private var m_backButtonClickedLastFrame : Bool;
     
     /**
@@ -42,13 +46,13 @@ class PlayerCollectionViewer extends ScriptNode
     /**
      * Button to go to the previous page of content
      */
-    private var m_scrollLeftButton : Button;
+    private var m_scrollLeftButton : LabelButton;
     private var m_scrollLeftClickedLastFrame : Bool;
     
     /**
      * Button to go to the next page of content
      */
-    private var m_scrollRightButton : Button;
+    private var m_scrollRightButton : LabelButton;
     private var m_scrollRightClickedLastFrame : Bool;
     
     /**
@@ -85,10 +89,10 @@ class PlayerCollectionViewer extends ScriptNode
         m_buttonColorData = buttonColorData;
         
         var sidePadding : Float = 15;
-        var arrowTexture : Texture = assetManager.getTexture("arrow_short");
+        var arrowBitmapData : BitmapData = assetManager.getBitmapData("arrow_short");
         var scaleFactor : Float = 1.5;
-        var leftUpImage : Image = WidgetUtil.createPointingArrow(arrowTexture, true, scaleFactor);
-        var leftOverImage : Image = WidgetUtil.createPointingArrow(arrowTexture, true, scaleFactor, 0xCCCCCC);
+        var leftUpImage : DisplayObject = WidgetUtil.createPointingArrow(arrowBitmapData, true, scaleFactor);
+        var leftOverImage : DisplayObject = WidgetUtil.createPointingArrow(arrowBitmapData, true, scaleFactor, 0xCCCCCC);
         
         m_scrollLeftButton = WidgetUtil.createButtonFromImages(
                         leftUpImage,
@@ -104,8 +108,8 @@ class PlayerCollectionViewer extends ScriptNode
         m_scrollLeftButton.scaleWhenDown = 0.9;
         m_scrollLeftClickedLastFrame = false;
         
-        var rightUpImage : Image = WidgetUtil.createPointingArrow(arrowTexture, false, scaleFactor, 0xFFFFFF);
-        var rightOverImage : Image = WidgetUtil.createPointingArrow(arrowTexture, false, scaleFactor, 0xCCCCCC);
+        var rightUpImage : DisplayObject = WidgetUtil.createPointingArrow(arrowBitmapData, false, scaleFactor, 0xFFFFFF);
+        var rightOverImage : DisplayObject = WidgetUtil.createPointingArrow(arrowBitmapData, false, scaleFactor, 0xCCCCCC);
         m_scrollRightButton = WidgetUtil.createButtonFromImages(
                         rightUpImage,
                         rightOverImage,
@@ -120,8 +124,16 @@ class PlayerCollectionViewer extends ScriptNode
         m_scrollRightButton.scaleWhenDown = m_scrollLeftButton.scaleWhenDown;
         m_scrollRightClickedLastFrame = false;
         
-        m_titleText = new TextField(800, 80, "", GameFonts.DEFAULT_FONT_NAME, 38, 0xFFFFFF);
-        m_pageIndicatorText = new TextField(800, 80, "ffff", GameFonts.DEFAULT_FONT_NAME, 24, 0xFFFFFF);
+        m_titleText = new TextField();
+		m_titleText.width = 800;
+		m_titleText.height = 80;
+		m_titleText.text = "";
+		m_titleText.setTextFormat(new TextFormat(GameFonts.DEFAULT_FONT_NAME, 38, 0xFFFFFF));
+        m_pageIndicatorText = new TextField();
+		m_pageIndicatorText.width = 800;
+		m_pageIndicatorText.height = 80;
+		m_pageIndicatorText.text = "ffff";
+		m_pageIndicatorText.setTextFormat(new TextFormat(GameFonts.DEFAULT_FONT_NAME, 24, 0xFFFFFF));
         m_pageIndicatorText.x = 0;
         m_pageIndicatorText.y = 470;
     }
@@ -129,29 +141,29 @@ class PlayerCollectionViewer extends ScriptNode
     public function show() : Void
     {
         this.setIsActive(true);
-        m_scrollLeftButton.addEventListener(Event.TRIGGERED, onScrollLeftButtonClicked);
-        m_scrollRightButton.addEventListener(Event.TRIGGERED, onScrollRightButtonClicked);
+        m_scrollLeftButton.addEventListener(MouseEvent.CLICK, onScrollLeftButtonClicked);
+        m_scrollRightButton.addEventListener(MouseEvent.CLICK, onScrollRightButtonClicked);
         
         if (m_backButton != null) 
         {
-            m_backButton.addEventListener(Event.TRIGGERED, onBackButtonClicked);
+            m_backButton.addEventListener(MouseEvent.CLICK, onBackButtonClicked);
         }
     }
     
     public function hide() : Void
     {
         this.setIsActive(false);
-        m_scrollLeftButton.removeFromParent();
-        m_scrollLeftButton.removeEventListener(Event.TRIGGERED, onScrollLeftButtonClicked);
-        m_scrollRightButton.removeFromParent();
-        m_scrollRightButton.removeEventListener(Event.TRIGGERED, onScrollRightButtonClicked);
+        if (m_scrollLeftButton.parent != null) m_scrollLeftButton.parent.removeChild(m_scrollLeftButton);
+        m_scrollLeftButton.removeEventListener(MouseEvent.CLICK, onScrollLeftButtonClicked);
+        if (m_scrollRightButton.parent != null) m_scrollRightButton.parent.removeChild(m_scrollRightButton);
+        m_scrollRightButton.removeEventListener(MouseEvent.CLICK, onScrollRightButtonClicked);
         
-        m_titleText.removeFromParent();
-        m_pageIndicatorText.removeFromParent();
+        if (m_titleText.parent != null) m_titleText.parent.removeChild(m_titleText);
+        if (m_pageIndicatorText.parent != null) m_pageIndicatorText.parent.removeChild(m_pageIndicatorText);
         
         if (m_backButton != null) 
         {
-            m_backButton.removeEventListener(Event.TRIGGERED, onBackButtonClicked);
+            m_backButton.removeEventListener(MouseEvent.CLICK, onBackButtonClicked);
         }
     }
     
@@ -164,8 +176,8 @@ class PlayerCollectionViewer extends ScriptNode
         }
         else 
         {
-            m_scrollLeftButton.removeFromParent();
-            m_scrollRightButton.removeFromParent();
+            if (m_scrollLeftButton.parent != null) m_scrollLeftButton.parent.removeChild(m_scrollLeftButton);
+            if (m_scrollRightButton.parent != null) m_scrollRightButton.parent.removeChild(m_scrollRightButton);
         }
     }
     
@@ -177,13 +189,13 @@ class PlayerCollectionViewer extends ScriptNode
     
     private function createBackButton() : Void
     {
-        var arrowRotateTexture : Texture = m_assetManager.getTexture("arrow_rotate");
+        var arrowRotateBitmapData : BitmapData = m_assetManager.getBitmapData("arrow_rotate");
         var scaleFactor : Float = 0.65;
-        var backUpImage : Image = new Image(arrowRotateTexture);
-        backUpImage.color = 0xFBB03B;
+        var backUpImage : Bitmap = new Bitmap(arrowRotateBitmapData);
+		backUpImage.transform.colorTransform.concat(XColor.rgbToColorTransform(0xFBB03B));
         backUpImage.scaleX = backUpImage.scaleY = scaleFactor;
-        var backOverImage : Image = new Image(arrowRotateTexture);
-        backOverImage.color = 0xFDDDAC;
+        var backOverImage : Bitmap = new Bitmap(arrowRotateBitmapData);
+		backOverImage.transform.colorTransform.concat(XColor.rgbToColorTransform(0xFDDDAC));
         backOverImage.scaleX = backOverImage.scaleY = scaleFactor;
         m_backButton = WidgetUtil.createButtonFromImages(
                         backUpImage,
@@ -196,17 +208,17 @@ class PlayerCollectionViewer extends ScriptNode
         m_backButtonClickedLastFrame = false;
     }
     
-    private function onScrollLeftButtonClicked() : Void
+    private function onScrollLeftButtonClicked(event : Dynamic) : Void
     {
         m_scrollLeftClickedLastFrame = true;
     }
     
-    private function onScrollRightButtonClicked() : Void
+    private function onScrollRightButtonClicked(event : Dynamic) : Void
     {
         m_scrollRightClickedLastFrame = true;
     }
     
-    private function onBackButtonClicked() : Void
+    private function onBackButtonClicked(event : Dynamic) : Void
     {
         // Buffer the click on the back button
         m_backButtonClickedLastFrame = true;

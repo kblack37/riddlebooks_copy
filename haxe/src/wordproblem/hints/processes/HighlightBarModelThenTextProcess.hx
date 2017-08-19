@@ -1,7 +1,7 @@
 package wordproblem.hints.processes;
 
 
-import starling.display.DisplayObject;
+import openfl.display.DisplayObject;
 
 import wordproblem.engine.barmodel.model.BarLabel;
 import wordproblem.engine.barmodel.model.BarSegment;
@@ -59,10 +59,9 @@ class HighlightBarModelThenTextProcess extends ScriptNode
             for (barEntityId in m_barEntitiesWithHighlights)
             {
                 m_barModelArea.componentManager.removeComponentFromEntity(barEntityId, HighlightComponent.TYPE_ID);
-            }  // Remove highlights on text  
-            
-            
-            
+            }
+			
+			// Remove highlights on text  
             var textComponentManager : ComponentManager = m_textArea.componentManager;
             var i : Int = 0;
             var numDocumentIds : Int = m_documentIds.length;

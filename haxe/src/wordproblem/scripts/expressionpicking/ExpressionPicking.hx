@@ -76,7 +76,7 @@ class ExpressionPicking extends BaseGameScript
                             var pickedId : String = m_gameEngine.getUiEntityIdFromObject(expressionPicker);
                             var eventType : String = ((pickedExpressionContainer.getIsSelected())) ? 
                             GameEvent.EXPRESSION_PICKER_SELECT_OPTION : GameEvent.EXPRESSION_PICKER_DESELECT_OPTION;
-                            m_gameEngine.dispatchEventWith(eventType, false, [expression, pickedId]);
+                            m_gameEngine.dispatchEvent(eventType, false, [expression, pickedId]);
                             
                             //log event as well
                             var loggingDetails : Dynamic = {
@@ -86,7 +86,7 @@ class ExpressionPicking extends BaseGameScript
                                 locationY : mouseState.mousePositionThisFrame.y,
 
                             };
-                            m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.TUTORIAL_PROGRESS_EVENT, false, loggingDetails);
+                            m_gameEngine.dispatchEvent(AlgebraAdventureLoggingConstants.TUTORIAL_PROGRESS_EVENT, false, loggingDetails);
                             
                             Audio.instance.playSfx("expression_option_pick");
                         }
@@ -114,9 +114,9 @@ class ExpressionPicking extends BaseGameScript
         return ScriptStatus.SUCCESS;
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         m_expressionPickers = new Array<ExpressionPickerWidget>();
         var expressionPickerDisplays : Array<DisplayObject> = m_gameEngine.getUiEntitiesByClass(ExpressionPickerWidget);

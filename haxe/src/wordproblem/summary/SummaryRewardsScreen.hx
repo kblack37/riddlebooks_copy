@@ -1,8 +1,13 @@
 package wordproblem.summary;
 
 
-import flash.geom.Rectangle;
-import flash.text.TextFormat;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.display.DisplayObject;
+import openfl.filters.BitmapFilter;
+import openfl.filters.GlowFilter;
+import openfl.geom.Rectangle;
+import openfl.text.TextFormat;
 
 import cgs.internationalization.StringTable;
 
@@ -12,15 +17,12 @@ import dragonbox.common.util.XColor;
 
 import haxe.Constraints.Function;
 
-import starling.display.Button;
-import starling.display.DisplayObjectContainer;
-import starling.display.Image;
-import starling.display.Quad;
-import starling.display.Sprite;
-import starling.events.Event;
-import starling.filters.BlurFilter;
-import starling.text.TextField;
-import starling.textures.Texture;
+import wordproblem.display.LabelButton;
+import openfl.display.DisplayObjectContainer;
+import openfl.display.Sprite;
+import openfl.events.Event;
+import openfl.events.MouseEvent;
+import openfl.text.TextField;
 
 import wordproblem.display.Layer;
 import wordproblem.engine.text.GameFonts;
@@ -62,7 +64,7 @@ class SummaryRewardsScreen extends Layer
      * Reused to dismiss the entire screen and also dismisses the 'subscreen' showing
      * details about a particular reward.
      */
-    private var m_rewardsDismissButton : Button;
+    private var m_rewardsDismissButton : LabelButton;
     
     /**
      * Upon clicking an object in reward scroller we will popup an extra screen to show
@@ -106,12 +108,12 @@ class SummaryRewardsScreen extends Layer
     /**
      * Button to go to the previous page of content
      */
-    private var m_scrollLeftButton : Button;
+    private var m_scrollLeftButton : LabelButton;
     
     /**
      * Button to go to the next page of content
      */
-    private var m_scrollRightButton : Button;
+    private var m_scrollRightButton : LabelButton;
     
     private var m_closeCallback : Function;
     
@@ -142,11 +144,15 @@ class SummaryRewardsScreen extends Layer
         m_rewardButtonHitBuffer = new Rectangle();
         m_rewardDataModels = new Array<Dynamic>();
 		// TODO: uncomment when cgs library is finished
-        m_rewardsTitle = new TextField(800, 60, "", /*StringTable.lookup("rewards")*/ GameFonts.DEFAULT_FONT_NAME, 32, 0xFFFFFF);
+        m_rewardsTitle = new TextField();
+		m_rewardsTitle.width = 800;
+		m_rewardsTitle.height = 60;
+		m_rewardsTitle.text = ""; /*StringTable.lookup("rewards")*/
+		m_rewardsTitle.setTextFormat(new TextFormat(GameFonts.DEFAULT_FONT_NAME, 32, 0xFFFFFF));
         m_closeCallback = closeCallback;
         
         // Add transparent background to block events below
-        var disablingQuad : Quad = new Quad(totalScreenWidth, totalScreenHeight, 0x000000);
+        var disablingQuad : Bitmap = new Bitmap(new BitmapData(Std.int(totalScreenWidth), Std.int(totalScreenHeight), false, 0x000000));
         disablingQuad.alpha = 0.8;
         addChild(disablingQuad);
         
@@ -162,12 +168,12 @@ class SummaryRewardsScreen extends Layer
         m_rewardsDismissButton.height = 70;
         m_rewardsDismissButton.x = (totalScreenWidth - m_rewardsDismissButton.width) * 0.5;
         m_rewardsDismissButton.y = totalScreenHeight - m_rewardsDismissButton.height * 1.5;
-        m_rewardsDismissButton.addEventListener(Event.TRIGGERED, onRewardDismissClick);
+        m_rewardsDismissButton.addEventListener(MouseEvent.CLICK, onRewardDismissClick);
         
-        var arrowTexture : Texture = assetManager.getTexture("arrow_short");
+        var arrowBitmapData : BitmapData = assetManager.getBitmapData("arrow_short");
         var scaleFactor : Float = 1.5;
-        var leftUpImage : Image = WidgetUtil.createPointingArrow(arrowTexture, true, scaleFactor);
-        var leftOverImage : Image = WidgetUtil.createPointingArrow(arrowTexture, true, scaleFactor, 0xCCCCCC);
+        var leftUpImage : DisplayObject = WidgetUtil.createPointingArrow(arrowBitmapData, true, scaleFactor);
+        var leftOverImage : DisplayObject = WidgetUtil.createPointingArrow(arrowBitmapData, true, scaleFactor, 0xCCCCCC);
         
         m_scrollLeftButton = WidgetUtil.createButtonFromImages(
                         leftUpImage,
@@ -181,10 +187,10 @@ class SummaryRewardsScreen extends Layer
         m_scrollLeftButton.x = 0;
         m_scrollLeftButton.y = 200;
         m_scrollLeftButton.scaleWhenDown = 0.9;
-        m_scrollLeftButton.addEventListener(Event.TRIGGERED, onScrollLeftButtonClicked);
+        m_scrollLeftButton.addEventListener(MouseEvent.CLICK, onScrollLeftButtonClicked);
         
-        var rightUpImage : Image = WidgetUtil.createPointingArrow(arrowTexture, false, scaleFactor, 0xFFFFFF);
-        var rightOverImage : Image = WidgetUtil.createPointingArrow(arrowTexture, false, scaleFactor, 0xCCCCCC);
+        var rightUpImage : DisplayObject = WidgetUtil.createPointingArrow(arrowBitmapData, false, scaleFactor, 0xFFFFFF);
+        var rightOverImage : DisplayObject = WidgetUtil.createPointingArrow(arrowBitmapData, false, scaleFactor, 0xCCCCCC);
         m_scrollRightButton = WidgetUtil.createButtonFromImages(
                         rightUpImage,
                         rightOverImage,
@@ -197,7 +203,7 @@ class SummaryRewardsScreen extends Layer
         m_scrollRightButton.x = totalScreenWidth - rightUpImage.width;
         m_scrollRightButton.y = m_scrollLeftButton.y;
         m_scrollRightButton.scaleWhenDown = m_scrollLeftButton.scaleWhenDown;
-        m_scrollRightButton.addEventListener(Event.TRIGGERED, onScrollRightButtonClicked);
+        m_scrollRightButton.addEventListener(MouseEvent.CLICK, onScrollRightButtonClicked);
     }
     
     /**
@@ -215,7 +221,7 @@ class SummaryRewardsScreen extends Layer
             for (i in 0...numRewards){
                 // Go through and set the hit areas after layout is finished
                 var rewardButton : BaseRewardButton = m_rewardButtonsInCurrentPage[i];
-                rewardButton.getBounds(this.stage, m_rewardButtonHitBuffer);
+                m_rewardButtonHitBuffer = rewardButton.getBounds(this.stage);
                 
                 if (m_rewardButtonHitBuffer.contains(mouseState.mousePositionThisFrame.x, mouseState.mousePositionThisFrame.y)) 
                 {
@@ -225,13 +231,13 @@ class SummaryRewardsScreen extends Layer
                         clearMouseOverRewardButtonState();
                         
                         m_currentRewardButtonMousedOver = buttonMouseIsOverThisFrame;
-                        m_currentRewardButtonMousedOver.filter = BlurFilter.createGlow(0x00FF00, 1);
-                    }  // with that item or just more info    // On press of a reward button, show a details screen that shows an animation  
-                    
-                    
-                    
-                    
-                    
+						var filters = new Array<BitmapFilter>();
+						filters.push(new GlowFilter(0x00FF00, 1));
+						m_currentRewardButtonMousedOver.filters = filters;
+                    }  
+					
+					// On press of a reward button, show a details screen that shows an animation  
+                    // with that item or just more info 
                     if (mouseState.leftMousePressedThisFrame) 
                     {
                         m_currentRewardButtonPressed = buttonMouseIsOverThisFrame;
@@ -248,13 +254,12 @@ class SummaryRewardsScreen extends Layer
                         // Make sure the reward buttons are temporarily removed
                         for (rewardButton in m_rewardButtonsInCurrentPage)
                         {
-                            rewardButton.removeFromParent();
-                        }  // Also remove the scroll buttons if present  
-                        
-                        
-                        
-                        m_scrollLeftButton.removeFromParent();
-                        m_scrollRightButton.removeFromParent();
+                            if (rewardButton.parent != null) rewardButton.parent.removeChild(rewardButton);
+                        } 
+						
+						// Also remove the scroll buttons if present  
+                        if (m_scrollLeftButton.parent != null) m_scrollLeftButton.parent.removeChild(m_scrollLeftButton);
+                        if (m_scrollRightButton.parent != null) m_scrollRightButton.parent.removeChild(m_scrollRightButton);
                     }
                     
                     break;
@@ -376,7 +381,7 @@ class SummaryRewardsScreen extends Layer
     {
         if (m_currentRewardButtonMousedOver != null) 
         {
-            m_currentRewardButtonMousedOver.filter = null;
+			m_currentRewardButtonMousedOver.filters = new Array<BitmapFilter>();
             m_currentRewardButtonMousedOver = null;
         }
     }
@@ -388,7 +393,8 @@ class SummaryRewardsScreen extends Layer
         // Clean out previous buttons and textures
         for (existingRewardButton in m_rewardButtonsInCurrentPage)
         {
-            existingRewardButton.removeFromParent(true);
+			if (existingRewardButton.parent != null) existingRewardButton.parent.removeChild(existingRewardButton);
+			existingRewardButton.dispose();
         }
 		m_rewardButtonsInCurrentPage = new Array<BaseRewardButton>();
     }
@@ -407,10 +413,9 @@ class SummaryRewardsScreen extends Layer
                     m_rewardButtonsInCurrentPage.push(rewardButton);
                 }
             }
-        }  // Layout the buttons  
-        
-        
-        
+        } 
+		
+		// Layout the buttons  
         var expectedButtonWidth : Float = BUTTON_WIDTH;
         var expectedButtonHeight : Float = BUTTON_WIDTH;
         var buttonGap : Float = 40;
@@ -480,11 +485,11 @@ class SummaryRewardsScreen extends Layer
         // Dispose of all reward model buttons and data models
 		m_rewardDataModels = new Array<Dynamic>();
         disposeButtons();
-        m_rewardsTitle.removeFromParent();
+        if (m_rewardsTitle.parent != null) m_rewardsTitle.parent.removeChild(m_rewardsTitle);
         m_displayParent.removeChild(this);
         
-        m_scrollLeftButton.removeFromParent();
-        m_scrollRightButton.removeFromParent();
+        if (m_scrollLeftButton.parent != null) m_scrollLeftButton.parent.removeChild(m_scrollLeftButton);
+        if (m_scrollRightButton.parent != null) m_scrollRightButton.parent.removeChild(m_scrollRightButton);
     }
     
     private function onRewardDismissClick(event : Event) : Void
@@ -500,7 +505,7 @@ class SummaryRewardsScreen extends Layer
         else 
         {
             // Clean out the details screen and restore the buttons that were visible before
-            m_activeRewardsDetailScreen.removeFromParent(true);
+			if (m_activeRewardsDetailScreen.parent != null) m_activeRewardsDetailScreen.parent.removeChild(m_activeRewardsDetailScreen);
             m_activeRewardsDetailScreen = null;
             
             // Do not need to dispose textures because the buttons that will
@@ -509,7 +514,7 @@ class SummaryRewardsScreen extends Layer
         }
     }
     
-    private function onScrollLeftButtonClicked() : Void
+    private function onScrollLeftButtonClicked(event : Dynamic) : Void
     {
         m_currentPageIndex--;
         if (m_currentPageIndex < 0) 
@@ -520,7 +525,7 @@ class SummaryRewardsScreen extends Layer
         refreshAndLayoutButtons();
     }
     
-    private function onScrollRightButtonClicked() : Void
+    private function onScrollRightButtonClicked(event : Dynamic) : Void
     {
         m_currentPageIndex++;
         if (m_currentPageIndex > m_rewardIdsPerPage.length - 1) 

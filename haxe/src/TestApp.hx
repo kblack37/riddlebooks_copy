@@ -3,14 +3,20 @@ package;
 import dragonbox.common.console.Console;
 import dragonbox.common.expressiontree.compile.LatexCompiler;
 import dragonbox.common.math.vectorspace.RealsVectorSpace;
+import openfl.display.Bitmap;
+import openfl.display.SimpleButton;
+import openfl.events.MouseEvent;
+import wordproblem.display.LabelButton;
+import wordproblem.engine.barmodel.model.BarModelData;
+import wordproblem.engine.barmodel.view.BarModelView;
+import wordproblem.engine.expression.tree.ExpressionTree;
+import wordproblem.engine.expression.widget.ExpressionTreeWidget;
 import dragonbox.common.state.StateMachine;
 import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
+import openfl.events.Event;
 
-import starling.core.Starling;
-import starling.display.Sprite;
-import starling.events.Event;
-import starling.events.EventDispatcher;
+import openfl.display.Sprite;
 
 import wordproblem.AlgebraAdventureConfig;
 import wordproblem.engine.GameEngine;
@@ -25,6 +31,8 @@ import wordproblem.resource.AssetManager;
 import wordproblem.saves.DummyCache;
 import wordproblem.state.WordProblemGameState;
 
+import wordproblem.scripts.level.GenericBarModelLevelScript;
+
 /**
  * ...
  * @author 
@@ -37,11 +45,12 @@ class TestApp extends Sprite {
 	
 	public function new() {
 		super();
+		addEventListener(Event.ADDED_TO_STAGE, run);
 	}
 	
-	public function run() {
-		Starling.current.stage.stageWidth = 800;
-		Starling.current.stage.stageHeight = 600;
+	public function run(event : Event) {
+		removeEventListener(Event.ADDED_TO_STAGE, run);
+		
 		var assetManager = new AssetManager();
 		var vectorSpace = new RealsVectorSpace();
 		var latexCompiler = new LatexCompiler(vectorSpace);
@@ -49,9 +58,9 @@ class TestApp extends Sprite {
 			assetManager.getXml("assets/layout/predefined_layouts.xml").toString());
 		var algebraConfig = new AlgebraAdventureConfig();
 		var expressionSymbolMap = new ExpressionSymbolMap(assetManager);
-		mouseState = new MouseState(this.stage, new openfl.events.EventDispatcher());
+		mouseState = new MouseState(stage);
 		time = new Time();
-		var stateMachine = new StateMachine(Starling.current.stage.stageWidth, Starling.current.stage.stageHeight);
+		var stateMachine = new StateMachine(stage.stageWidth, stage.stageHeight);
 		var gameEngine = new GameEngine(latexCompiler,
 			assetManager,
 			expressionSymbolMap,
@@ -67,7 +76,7 @@ class TestApp extends Sprite {
 		var textViewFactory = new TextViewFactory(assetManager, expressionSymbolMap);
 		
 		// running the game state
-		 gameState = new WordProblemGameState(
+		gameState = new WordProblemGameState(
 			stateMachine,
 			gameEngine,
 			assetManager,
@@ -78,7 +87,7 @@ class TestApp extends Sprite {
 			new ButtonColorData()
 		);
 		
-		// compiling levels from the xml, testing that text is parsed correctly
+		//compiling levels from the xml, testing that text is parsed correctly
 		var xml = assetManager.getXml("assets/levels/bar_model/turk_brainpop/856.xml");
 		var wordProblemLevelData = levelCompiler.compileWordProblemLevel(xml.firstElement(),
 			"levelTest",
@@ -97,8 +106,8 @@ class TestApp extends Sprite {
 		gameState.enter(null, [wordProblemLevelData]);
 	}
 	
-	private function traceLoop(e : Event) {
+	private function traceLoop(e : Dynamic) {
 		gameState.update(time, mouseState);
-		mouseState.onEnterFrame();
+		mouseState.onEnterFrame(null);
 	}
 }

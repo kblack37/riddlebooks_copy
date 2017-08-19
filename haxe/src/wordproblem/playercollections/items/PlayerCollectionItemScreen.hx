@@ -1,13 +1,14 @@
 package wordproblem.playercollections.items;
 
 
-import flash.text.TextFormat;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.display.DisplayObject;
+import openfl.text.TextFormat;
 
 import dragonbox.common.util.XTextField;
 
-import starling.display.Image;
-import starling.display.Sprite;
-import starling.textures.Texture;
+import openfl.display.Sprite;
 
 import wordproblem.engine.text.GameFonts;
 import wordproblem.engine.text.MeasuringTextField;
@@ -18,8 +19,8 @@ import wordproblem.resource.AssetManager;
  */
 class PlayerCollectionItemScreen extends Sprite
 {
-    private var m_nameImage : Image;
-    private var m_descriptionImage : Image;
+    private var m_nameImage : Bitmap;
+    private var m_descriptionImage : Bitmap;
     
     public function new(textureName : String,
             itemName : String,
@@ -37,11 +38,11 @@ class PlayerCollectionItemScreen extends Sprite
         var minimumWidth : Float = 200;
         var minimumHeight : Float = 200;
         var scaleFactor : Float = 1.0;
-        var texture : Texture = assetManager.getTexture(textureName);
-        if (texture.width < minimumWidth && texture.height < minimumHeight) 
+        var bitmapData : BitmapData = assetManager.getBitmapData(textureName);
+        if (bitmapData.width < minimumWidth && bitmapData.height < minimumHeight) 
         {
-            var horizontalScaleFactor : Float = minimumWidth / texture.width;
-            var verticalScaleFactor : Float = minimumHeight / texture.height;
+            var horizontalScaleFactor : Float = minimumWidth / bitmapData.width;
+            var verticalScaleFactor : Float = minimumHeight / bitmapData.height;
             scaleFactor = Math.max(horizontalScaleFactor, verticalScaleFactor);
         }
         
@@ -49,7 +50,7 @@ class PlayerCollectionItemScreen extends Sprite
         var measuringTextField : MeasuringTextField = new MeasuringTextField();
         measuringTextField.defaultTextFormat = textFormat;
         measuringTextField.text = itemName;
-        var nameImage : Image = XTextField.createWordWrapTextfield(
+        var nameImage : DisplayObject = XTextField.createWordWrapTextfield(
                 textFormat,
                 itemName, measuringTextField.textWidth + 15, 60
                 );
@@ -58,13 +59,13 @@ class PlayerCollectionItemScreen extends Sprite
         addChild(nameImage);
         m_nameImage = nameImage;
         
-        var image : Image = new Image(texture);
+        var image : Bitmap = new Bitmap(bitmapData);
         image.scaleX = image.scaleY = scaleFactor;
         image.x = (width - image.width) * 0.5;  //(imageContainerWidth - image.width) * 0.5;  
         image.y = (imageContainerHeight - image.height) * 0.5 + nameImage.height + nameImage.y;
         addChild(image);
         
-        var descriptionImage : Image = XTextField.createWordWrapTextfield(new TextFormat(GameFonts.DEFAULT_FONT_NAME, 28, 0xFFFFFF), itemDescription, 300, 300);
+        var descriptionImage : DisplayObject = XTextField.createWordWrapTextfield(new TextFormat(GameFonts.DEFAULT_FONT_NAME, 28, 0xFFFFFF), itemDescription, 300, 300);
         descriptionImage.x = Math.max(imageContainerWidth, image.width);
         descriptionImage.y = nameImage.height + 10;
         //addChild(descriptionImage);
@@ -74,11 +75,13 @@ class PlayerCollectionItemScreen extends Sprite
     override public function dispose() : Void
     {
         // Get rid of dynamically created texture
-        m_descriptionImage.removeFromParent(true);
-        m_descriptionImage.texture.dispose();
+		if (m_descriptionImage.parent != null) m_descriptionImage.parent.removeChild(m_descriptionImage);
+		m_descriptionImage.bitmapData.dispose();
+		m_descriptionImage = null;
         
-        m_nameImage.removeFromParent(true);
-        m_nameImage.texture.dispose();
+		if (m_nameImage.parent != null) m_nameImage.parent.removeChild(m_nameImage);
+		m_nameImage.bitmapData.dispose();
+		m_nameImage = null;
         
         super.dispose();
     }

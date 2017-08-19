@@ -1,13 +1,13 @@
 package wordproblem.scripts.barmodel;
 
 
-import flash.geom.Point;
+import openfl.geom.Point;
 
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.ui.MouseState;
 import dragonbox.common.util.XColor;
 
-import starling.events.EventDispatcher;
+import openfl.events.EventDispatcher;
 
 import wordproblem.engine.IGameEngine;
 import wordproblem.engine.events.GameEvent;
@@ -168,9 +168,9 @@ class BaseBarModelScript extends BaseGameScript
         }
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         m_barModelArea = try cast(m_gameEngine.getUiEntity("barModelArea"), BarModelAreaWidget) catch(e:Dynamic) null;
         m_widgetDragSystem = try cast(this.getNodeById("WidgetDragSystem"), WidgetDragSystem) catch(e:Dynamic) null;

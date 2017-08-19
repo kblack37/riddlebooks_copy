@@ -1,11 +1,12 @@
 package wordproblem.engine.component;
 
+
+import motion.Actuate;
+import openfl.display.DisplayObject;
+import openfl.geom.Point;
+
 import wordproblem.engine.component.Component;
 
-import flash.geom.Point;
-
-import starling.animation.Tween;
-import starling.core.Starling;
 
 class BounceComponent extends Component
 {
@@ -16,11 +17,11 @@ class BounceComponent extends Component
      * tween.
      */
     public var paused : Bool;
-    
-    /**
-     * The tween that will apply the changes the target display object
-     */
-    public var tween : Tween;
+	
+	/**
+	 * The target of the bounce animation; null when the animation is inactive
+	 */
+	public var target : DisplayObject;
     
     /**
      * The original position of the object that is bouncing before the animation started.
@@ -35,12 +36,14 @@ class BounceComponent extends Component
     override public function dispose() : Void
     {
         // Kill the animation
-        if (tween != null && Starling.current.juggler.contains(tween)) 
+        if (target != null) 
         {
-            Starling.current.juggler.remove(tween);
+			Actuate.stop(target);
         }
         
         this.resetToOriginalPosition();
+		
+		target = null;
     }
     
     public function setOriginalPosition(x : Float, y : Float) : Void
@@ -50,10 +53,10 @@ class BounceComponent extends Component
     
     public function resetToOriginalPosition() : Void
     {
-        if (tween != null) 
+        if (target != null) 
         {
-            tween.target.x = originalPosition.x;
-            tween.target.y = originalPosition.y;
+            target.x = originalPosition.x;
+            target.y = originalPosition.y;
         }
     }
 }

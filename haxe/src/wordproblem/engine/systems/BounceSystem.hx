@@ -1,10 +1,9 @@
 package wordproblem.engine.systems;
 
+import motion.Actuate;
+import motion.easing.Expo;
 
-import starling.animation.Transitions;
-import starling.animation.Tween;
-import starling.core.Starling;
-import starling.display.DisplayObject;
+import openfl.display.DisplayObject;
 
 import wordproblem.engine.component.BounceComponent;
 import wordproblem.engine.component.Component;
@@ -31,7 +30,7 @@ class BounceSystem extends BaseSystemScript
         for (i in 0...numBounceComponents){
             bounceComponent = try cast(components[i], BounceComponent) catch(e:Dynamic) null;
             
-            if (bounceComponent.tween == null) 
+            if (bounceComponent.target == null) 
             {
                 // Get the main render component that is supposed to be bounced
                 var renderComponent : RenderableComponent = try cast(componentManager.getComponentFromEntityIdAndType(
@@ -44,19 +43,12 @@ class BounceSystem extends BaseSystemScript
                 bounceComponent.setOriginalPosition(targetView.x, targetView.y);
                 
                 var duration : Float = 1.0;
-                var bounceTween : Tween = new Tween(targetView, duration, Transitions.EASE_IN);
-                bounceTween.moveTo(targetView.x, targetView.y - targetView.height);
-                bounceTween.delay = 1.0;
-                bounceTween.reverse = true;
-                bounceTween.repeatCount = 0;
-                bounceComponent.tween = bounceTween;
-                Starling.current.juggler.add(bounceComponent.tween);
-            }  // Check if the given entity has a mouse component    // If the user drags on the view, the bounce should be interuppted  
-            
-            
-            
-            
-            
+				Actuate.tween(targetView, duration, { x: targetView.x, y: targetView.y - targetView.height }).delay(1.0).repeat().reflect().ease(Expo.easeIn);
+				bounceComponent.target = targetView;
+            }  
+			
+			// If the user drags on the view, the bounce should be interuppted  
+            // Check if the given entity has a mouse component  
             var mouseComponent : MouseInteractableComponent = try cast(componentManager.getComponentFromEntityIdAndType(
                     bounceComponent.entityId,
                     MouseInteractableComponent.TYPE_ID
@@ -66,14 +58,14 @@ class BounceSystem extends BaseSystemScript
                 // If selected AND is playing then stop
                 if (mouseComponent.selectedThisFrame && !bounceComponent.paused) 
                 {
-                    Starling.current.juggler.remove(bounceComponent.tween);
+					Actuate.pause(bounceComponent.target);
                     bounceComponent.resetToOriginalPosition();
                     bounceComponent.paused = true;
                 }
                 // If not selected AND not playing then start
                 else if (!mouseComponent.selectedThisFrame && bounceComponent.paused) 
                 {
-                    Starling.current.juggler.add(bounceComponent.tween);
+					Actuate.resume(bounceComponent.target);
                     bounceComponent.paused = false;
                 }
             }

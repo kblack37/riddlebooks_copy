@@ -1,14 +1,14 @@
 package wordproblem.xp;
 
 
-import flash.geom.Point;
-import flash.text.TextFormat;
+import motion.Actuate;
+import openfl.geom.Point;
+import openfl.text.TextFormat;
+import wordproblem.display.PivotSprite;
 
-import starling.animation.Tween;
-import starling.core.Starling;
-import starling.display.DisplayObject;
-import starling.display.Image;
-import starling.display.Sprite;
+import openfl.display.Bitmap;
+import openfl.display.DisplayObject;
+import openfl.display.Sprite;
 
 import wordproblem.display.CurvedText;
 import wordproblem.resource.AssetManager;
@@ -18,29 +18,33 @@ import wordproblem.resource.AssetManager;
  */
 class BrainPoint extends Sprite
 {
-    private var m_tweens : Array<Tween>;
-    
+	private var m_tweenObjects : Array<DisplayObject>;
+	
     public function new(text : String, assetManager : AssetManager)
     {
         super();
+		
+		m_tweenObjects = new Array<DisplayObject>();
         
-        m_tweens = new Array<Tween>();
-        
-        var brain : DisplayObject = new Image(assetManager.getTexture("Art_Brain"));
+        var brain : PivotSprite = new PivotSprite();
+		brain.addChild(new Bitmap(assetManager.getBitmapData("Art_Brain")));
         brain.pivotX = brain.width * 0.5;
         brain.pivotY = brain.height * 0.5;
         
-        var starBurst : DisplayObject = new Image(assetManager.getTexture("Art_StarBurst"));
+        var starBurst : PivotSprite = new PivotSprite();
+		starBurst.addChild(new Bitmap(assetManager.getBitmapData("Art_StarBurst")));
         starBurst.pivotX = starBurst.width * 0.5;
         starBurst.pivotY = starBurst.height * 0.5;
         
-        var arch : DisplayObject = new Image(assetManager.getTexture("Art_YellowArch"));
+        var arch : PivotSprite = new PivotSprite();
+		arch.addChild(new Bitmap(assetManager.getBitmapData("Art_YellowArch")));
         arch.scaleX = arch.scaleY = 1.00;
         arch.y = -(arch.height * 0.6);
         arch.pivotX = arch.width * 0.5;
         arch.pivotY = arch.height * 0.5;
         
-        var glow : DisplayObject = new Image(assetManager.getTexture("Art_YellowGlow"));
+        var glow : PivotSprite = new PivotSprite();
+		glow.addChild(new Bitmap(assetManager.getBitmapData("Art_YellowGlow")));
         glow.pivotX = glow.width * 0.5;
         glow.pivotY = glow.height * 0.5;
         glow.scaleX = glow.scaleY = 0.0;
@@ -59,35 +63,17 @@ class BrainPoint extends Sprite
         The star should rotate around
         */
         starBurst.scaleX = starBurst.scaleY = 0.3;
-        var fadeInStarBurst : Tween = new Tween(starBurst, 0.5);
-        fadeInStarBurst.animate("scaleX", 1.0);
-        fadeInStarBurst.animate("scaleY", 1.0);
-        fadeInStarBurst.onComplete = function() : Void
+		Actuate.tween(starBurst, 0.5, { scaleX: 1, scaleY: 1 }).onComplete(function() : Void
                 {
-                    var rotateStarBurst : Tween = new Tween(starBurst, 8);
-                    rotateStarBurst.repeatCount = 0;
-                    rotateStarBurst.animate("rotation", 2 * Math.PI);
-                    Starling.current.juggler.add(rotateStarBurst);
-                };
-        Starling.current.juggler.add(fadeInStarBurst);
-        m_tweens.push(fadeInStarBurst);
-        
-        var delayedGlow : Tween = new Tween(glow, 0.5);
-        delayedGlow.delay = 0.5;
-        delayedGlow.animate("alpha", 1.0);
-        delayedGlow.animate("scaleX", 1.25);
-        delayedGlow.animate("scaleY", 1.25);
-        delayedGlow.onComplete = function() : Void
+					Actuate.tween(starBurst, 8, { rotation: 360 }).repeat().smartRotation();
+                });
+		m_tweenObjects.push(starBurst);
+		
+        Actuate.tween(glow, 0.5, { alpha: 1, scaleX: 1.25, scaleY: 1.25 }).delay(0.5).onComplete(function() : Void
                 {
-                    var shrinkGlow : Tween = new Tween(glow, 0.5);
-                    shrinkGlow.delay = 0.5;
-                    shrinkGlow.animate("scaleX", 0.7);
-                    shrinkGlow.animate("scaleY", 0.7);
-                    Starling.current.juggler.add(shrinkGlow);
-                    m_tweens.push(shrinkGlow);
-                };
-        Starling.current.juggler.add(delayedGlow);
-        m_tweens.push(delayedGlow);
+					Actuate.tween(glow, 0.5, { scaleX: 0.7, scaleY: 0.7 }).delay(0.5);
+                });
+		m_tweenObjects.push(glow);
         
         var bannerText : CurvedText = new CurvedText(text, new TextFormat("Arial", 10, 0x000000), 
         new Point(0, 20), new Point(25, 0), new Point(65, 0), new Point(90, 20));
@@ -95,16 +81,14 @@ class BrainPoint extends Sprite
         bannerText.x = arch.x - arch.pivotX + 12;
         addChild(bannerText);
         
-        this.touchable = false;
+        this.mouseEnabled = false;
     }
     
-    override public function dispose() : Void
+    public function dispose() : Void
     {
-        super.dispose();
-        
-        for (tween in m_tweens)
+        for (object in m_tweenObjects)
         {
-            Starling.current.juggler.remove(tween);
+			Actuate.stop(object);
         }
     }
 }

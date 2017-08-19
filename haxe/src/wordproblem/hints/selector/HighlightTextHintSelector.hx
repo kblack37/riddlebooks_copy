@@ -1,11 +1,11 @@
 package wordproblem.hints.selector;
 
 
-import flash.geom.Point;
+import openfl.geom.Point;
 
 import dragonbox.common.ui.MouseState;
 
-import starling.display.DisplayObject;
+import openfl.display.DisplayObject;
 
 import wordproblem.characters.HelperCharacterController;
 import wordproblem.engine.IGameEngine;

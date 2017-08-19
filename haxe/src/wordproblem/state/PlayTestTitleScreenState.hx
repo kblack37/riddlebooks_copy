@@ -22,7 +22,7 @@ import feathers.controls.text.StageTextTextEditor;
 import feathers.core.ITextEditor;
 
 import starling.animation.Juggler;
-import starling.display.Button;
+import wordproblem.display.LabelButton;
 import starling.display.Image;
 import starling.events.Event;
 import starling.textures.Texture;
@@ -53,7 +53,7 @@ class PlayTestTitleScreenState extends BaseState
     private var m_flashStage : Stage;
     private var m_config : AlgebraAdventureConfig;
     
-    private var m_startButton : Button;
+    private var m_startButton : LabelButton;
     private var m_textInput : TextInput;
     
     private var m_loginPopup : LoginPopup;
@@ -145,7 +145,7 @@ class PlayTestTitleScreenState extends BaseState
         addChild(new Image(backgroundTexture));
         
         addChild(m_startButton);
-        m_startButton.addEventListener(Event.TRIGGERED, onStartButtonClick);
+        m_startButton.addEventListener(MouseEvent.CLICK, onStartButtonClick);
         
         addChild(m_textInput);
         
@@ -178,11 +178,11 @@ class PlayTestTitleScreenState extends BaseState
             renderComponent = try cast(renderComponents[i], RenderableComponent) catch(e:Dynamic) null;
             if (renderComponent.view != null) 
             {
-                renderComponent.view.removeFromParent();
+                renderComponent.if (view.parent != null) view.parent.removeChild(view);
             }
         }
         
-        m_startButton.removeEventListener(Event.TRIGGERED, onStartButtonClick);
+        m_startButton.removeEventListener(MouseEvent.CLICK, onStartButtonClick);
     }
     
     override public function update(time : Time,
@@ -200,7 +200,7 @@ class PlayTestTitleScreenState extends BaseState
         m_loginPopup.username = loginName;
         m_loginPopup.password = "";
         m_loginPopup.attemptLogin();
-        dispatchEventWith(CommandEvent.WAIT_SHOW);
+        dispatchEvent(CommandEvent.WAIT_SHOW);
     }
     
     /**
@@ -232,8 +232,8 @@ class PlayTestTitleScreenState extends BaseState
                 {
                     tosScreen.dispose();
                     m_flashStage.removeChild(tosScreen);
-                    dispatchEventWith(CommandEvent.WAIT_HIDE);
-                    dispatchEventWith(CommandEvent.USER_AUTHENTICATED);
+                    dispatchEvent(CommandEvent.WAIT_HIDE);
+                    dispatchEvent(CommandEvent.USER_AUTHENTICATED);
                 }, 
                 800, 
                 600, 
@@ -245,8 +245,8 @@ class PlayTestTitleScreenState extends BaseState
                 // On login, if the user is not anonymous and we are linked to dragonbox
                 // Then we may need to poll the player's dragonbox save data to fetch information
                 // that should be imported over to this game. For example rewards.
-                dispatchEventWith(CommandEvent.WAIT_HIDE);
-                dispatchEventWith(CommandEvent.USER_AUTHENTICATED);
+                dispatchEvent(CommandEvent.WAIT_HIDE);
+                dispatchEvent(CommandEvent.USER_AUTHENTICATED);
             }
         }
     }
@@ -274,8 +274,8 @@ class PlayTestTitleScreenState extends BaseState
     private function onRegisterComplete(user : ICgsUser) : Void
     {
         m_logger.setCgsUser(user, -1);
-        dispatchEventWith(CommandEvent.WAIT_HIDE);
-        dispatchEventWith(CommandEvent.USER_AUTHENTICATED);
+        dispatchEvent(CommandEvent.WAIT_HIDE);
+        dispatchEvent(CommandEvent.USER_AUTHENTICATED);
         
         m_flashStage.removeChild(m_registerAccountState);
         m_registerAccountState.dispose();

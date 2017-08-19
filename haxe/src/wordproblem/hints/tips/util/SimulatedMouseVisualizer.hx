@@ -1,21 +1,22 @@
 package wordproblem.hints.tips.util;
 
 
-import flash.geom.Point;
+import openfl.display.Bitmap;
+import openfl.geom.Point;
 
 import dragonbox.common.dispose.IDisposable;
 import dragonbox.common.ui.MouseState;
 import dragonbox.common.util.XColor;
 
-import starling.core.Starling;
-import starling.display.DisplayObject;
-import starling.display.DisplayObjectContainer;
-import starling.display.Image;
-import starling.textures.Texture;
+import openfl.display.BitmapData;
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
 
-import wordproblem.engine.animation.RingPulseAnimation;
+//import wordproblem.engine.animation.RingPulseAnimation;
 import wordproblem.resource.AssetManager;
 
+// TODO: work out the animation code replacement when more
+// basic elements are working
 class SimulatedMouseVisualizer implements IDisposable
 {
     private var m_mouseState : MouseState;
@@ -28,7 +29,7 @@ class SimulatedMouseVisualizer implements IDisposable
     /**
      * Used to indicate presses and releases of the mouse
      */
-    private var m_pulseAnimation : RingPulseAnimation;
+    //private var m_pulseAnimation : RingPulseAnimation;
     
     public function new(mouseState : MouseState,
             canvas : DisplayObjectContainer,
@@ -37,27 +38,28 @@ class SimulatedMouseVisualizer implements IDisposable
         m_mouseState = mouseState;
         m_canvas = canvas;
         
-        var cursorTexture : Texture = assetManager.getTexture("custom_cursor");
-        m_cursor = new Image(cursorTexture);
+        var cursorBitmapData : BitmapData = assetManager.getBitmapData("custom_cursor");
+        m_cursor = new Bitmap(cursorBitmapData);
         
         m_globalBuffer = new Point();
         m_localBuffer = new Point();
         
-        m_pulseAnimation = new RingPulseAnimation(assetManager.getTexture("ring"), onPulseComplete);
+        //m_pulseAnimation = new RingPulseAnimation(assetManager.getBitmapData("ring"), onPulseComplete);
     }
     
     public function dispose() : Void
     {
-        m_cursor.removeFromParent(true);
-        Starling.current.juggler.remove(m_pulseAnimation);
-        m_pulseAnimation.dispose();
+		if (m_cursor.parent != null) m_cursor.parent.removeChild(m_cursor);
+		m_cursor = null;
+        //Starling.current.juggler.remove(m_pulseAnimation);
+        //m_pulseAnimation.dispose();
     }
     
     public function hide() : Void
     {
-        m_cursor.removeFromParent();
-        Starling.current.juggler.remove(m_pulseAnimation);
-        m_pulseAnimation.dispose();
+        if (m_cursor.parent != null) m_cursor.parent.removeChild(m_cursor);
+        //Starling.current.juggler.remove(m_pulseAnimation);
+        //m_pulseAnimation.dispose();
     }
     
     public function update() : Void
@@ -67,7 +69,7 @@ class SimulatedMouseVisualizer implements IDisposable
         // reference. Convert the global coordinates to the canvas space
         m_globalBuffer.x = m_mouseState.mousePositionThisFrame.x;
         m_globalBuffer.y = m_mouseState.mousePositionThisFrame.y;
-        m_canvas.globalToLocal(m_globalBuffer, m_localBuffer);
+        m_localBuffer = m_canvas.globalToLocal(m_globalBuffer);
         
         m_cursor.x = m_localBuffer.x;
         m_cursor.y = m_localBuffer.y;
@@ -75,17 +77,16 @@ class SimulatedMouseVisualizer implements IDisposable
         // Add pulses to indicate press and release
         if (m_mouseState.leftMousePressedThisFrame) 
         {
-            m_pulseAnimation.reset(m_localBuffer.x, m_localBuffer.y, m_canvas, XColor.BRIGHT_ORANGE);
-            Starling.current.juggler.add(m_pulseAnimation);
-        }  // Must make sure the cursor graphic stays on top  
-        
-        
-        
+            //m_pulseAnimation.reset(m_localBuffer.x, m_localBuffer.y, m_canvas, XColor.BRIGHT_ORANGE);
+            //Starling.current.juggler.add(m_pulseAnimation);
+        }  
+		
+		// Must make sure the cursor graphic stays on top  
         m_canvas.addChild(m_cursor);
     }
     
     private function onPulseComplete() : Void
     {
-        Starling.current.juggler.remove(m_pulseAnimation);
+        //Starling.current.juggler.remove(m_pulseAnimation);
     }
 }

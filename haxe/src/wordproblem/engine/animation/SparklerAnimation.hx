@@ -87,7 +87,7 @@ class SparklerAnimation implements IAnimatable
     public function stop() : Void
     {
         m_emitter.reset();
-        m_particleRenderer.removeFromParent();
+        if (m_particleRenderer.parent != null) m_particleRenderer.parent.removeChild(m_particleRenderer);
         
         Starling.current.juggler.remove(this);
     }

@@ -1,11 +1,9 @@
 package wordproblem.engine.component;
 
-import starling.display.Image;
+import openfl.display.DisplayObject;
 import wordproblem.engine.component.Component;
 
-import flash.geom.Point;
-
-import starling.animation.Tween;
+import openfl.geom.Point;
 
 /**
  * This component indicates that an enitity should have some arrow drawn pointing to it
@@ -29,18 +27,13 @@ class ArrowComponent extends Component
     public var midPoint : Point;
     public var length : Float;
     public var rotation : Float;
-    public var arrowView : Image;
+    public var arrowView : DisplayObject;
     
     /**
      * Indicate whether the arrow should animate, the animation would be a basic bobbing
      * movement.
      */
     public var animate : Bool;
-    
-    /**
-     * The tween for the arrow movement animation
-     */
-    public var animation : Tween;
     
     /**
      * The previous position of the origin object the arrow is pointing at.
@@ -63,7 +56,7 @@ class ArrowComponent extends Component
     {
         if (arrowView != null) 
         {
-            arrowView.removeFromParent();
+            if (arrowView.parent != null) arrowView.parent.removeChild(arrowView);
         }
     }
     

@@ -1,12 +1,12 @@
 package wordproblem.engine.widget;
 
 
-import flash.geom.Rectangle;
-import starling.display.Image;
-
-import starling.animation.Tween;
-import starling.core.Starling;
-import starling.textures.Texture;
+import motion.Actuate;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.events.Event;
+import openfl.geom.Rectangle;
+import wordproblem.engine.events.DataEvent;
 
 import wordproblem.engine.animation.CardShiftAnimation;
 import wordproblem.engine.animation.ColorChangeAnimation;
@@ -87,12 +87,12 @@ class TermAreaWidget extends ExpressionTreeWidget implements IBaseWidget
      * Use a scale9 image to prevent background distortion when resizing the term
      * areas
      */
-    private var m_bgImage : Image;
+    private var m_bgImage : Bitmap;
     
     public function new(tree : ExpressionTree,
             expressionSymbolResources : ExpressionSymbolMap,
             assetManager : AssetManager,
-            backgroundTexture : Texture,
+            backgroundBitmapData : BitmapData,
             constraintWidth : Float,
             constraintHeight : Float,
             allowConstraintPadding : Bool = true)
@@ -104,9 +104,10 @@ class TermAreaWidget extends ExpressionTreeWidget implements IBaseWidget
         // texture first.
         var imageCenterX : Float = 30;
         var imageCenterY : Float = 20;
-        var imageCenterWidth : Float = backgroundTexture.width - imageCenterX * 2;
-        var imageCenterHeight : Float = backgroundTexture.height - imageCenterY * 2;
-        var bgImage : Image = new Image(Texture.fromTexture(backgroundTexture, new Rectangle(imageCenterX, imageCenterY, imageCenterWidth, imageCenterHeight)));
+        var imageCenterWidth : Float = backgroundBitmapData.width - imageCenterX * 2;
+        var imageCenterHeight : Float = backgroundBitmapData.height - imageCenterY * 2;
+        var bgImage : Bitmap = new Bitmap(backgroundBitmapData);
+		bgImage.scale9Grid = new Rectangle(imageCenterX, imageCenterY, imageCenterWidth, imageCenterHeight);
         m_bgImage = bgImage;
         
         super(tree, expressionSymbolResources, assetManager, constraintWidth, constraintHeight, allowConstraintPadding);
@@ -206,7 +207,7 @@ class TermAreaWidget extends ExpressionTreeWidget implements IBaseWidget
             m_objectLayer.visible = true;
             if (m_previewExpressionTreeWidget.parent != null) 
             {
-                m_previewExpressionTreeWidget.removeFromParent();
+				if (m_previewExpressionTreeWidget.parent != null) m_previewExpressionTreeWidget.parent.removeChild(m_previewExpressionTreeWidget);
             }
         }
     }
@@ -227,7 +228,9 @@ class TermAreaWidget extends ExpressionTreeWidget implements IBaseWidget
     {
         if (m_tree != null) 
         {
-            m_tree.removeEventListeners();
+			// TODO: openfl doesn't have mass even listener removal; however, it doesn't seem that
+			// the root tree has any event listeners added ever
+            //m_tree.removeEventListeners();
         }
         var previousTree : ExpressionTree = m_tree;
         
@@ -246,7 +249,7 @@ class TermAreaWidget extends ExpressionTreeWidget implements IBaseWidget
         
         if (doDispatchReset) 
         {
-            this.dispatchEventWith(GameEvent.TERM_AREA_RESET);
+            this.dispatchEvent(new Event(GameEvent.TERM_AREA_RESET));
         }
     }
     
@@ -290,21 +293,13 @@ class TermAreaWidget extends ExpressionTreeWidget implements IBaseWidget
         cardShiftAnimation.play(this, m_previewExpressionTreeWidget, onShiftComplete, duration);
         
 		// While the shifting is occuring also apply a scale to the bg image of the current tree
-        var tween : Tween = new Tween(m_bgImage, duration);
-        tween.animate("width", constraintWidth);
-        tween.animate("height", constraintHeight);
-        tween.onComplete = function() : Void
-                {
-                    scaleImageComplete = true;
-                    checkAnimationComplete();
-                };
-        Starling.current.juggler.add(tween);
-        
-        var moveTween : Tween = new Tween(this, duration);
-        moveTween.animate("x", newX);
-        moveTween.animate("y", newY);
-        Starling.current.juggler.add(moveTween);
-        
+		Actuate.tween(m_bgImage, duration, { width: constraintWidth, height: constraintHeight }).onComplete(function() : Void
+            {
+                scaleImageComplete = true;
+                checkAnimationComplete();
+            });
+			
+		Actuate.tween(this, duration, { x: newX, y: newY });
         // At the end we actaully reset the constraints of the tree
     }
     
@@ -362,8 +357,8 @@ class TermAreaWidget extends ExpressionTreeWidget implements IBaseWidget
     public function fadeOutBackground(color : Int) : Void
     {
         // Need to interpolate the color from the given starting value back to its original color
-        m_colorChangeAnimation.play(color, 0xFFFFFF, 1.0, m_bgImage);
-        Starling.current.juggler.add(m_colorChangeAnimation);
+		// TODO: not sure if this is a correct conversion from the ColorChangeAnimation
+		Actuate.transform(m_bgImage, 1.0).color(color);
     }
     
     public function redrawAfterModification(triggeredByUndo : Bool = false) : Void
@@ -388,7 +383,7 @@ class TermAreaWidget extends ExpressionTreeWidget implements IBaseWidget
                         undo : true
                     };
         }
-        this.dispatchEventWith(GameEvent.TERM_AREA_CHANGED, false, param);
+        this.dispatchEvent(new DataEvent(GameEvent.TERM_AREA_CHANGED, param));
     }
     
     private function createRenderComponentForTermAreaEntityId() : Void

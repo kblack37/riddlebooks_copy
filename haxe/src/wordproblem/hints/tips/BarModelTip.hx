@@ -2,12 +2,12 @@ package wordproblem.hints.tips;
 
 import wordproblem.hints.tips.GestureAndTextTip;
 
-import flash.geom.Rectangle;
+import openfl.geom.Rectangle;
 
 import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
 
-import starling.display.DisplayObjectContainer;
+import openfl.display.DisplayObjectContainer;
 
 import wordproblem.engine.expression.ExpressionSymbolMap;
 import wordproblem.engine.systems.BlinkSystem;
@@ -91,13 +91,15 @@ class BarModelTip extends GestureAndTextTip
     override public function hide() : Void
     {
         super.hide();
-        m_barModelArea.removeFromParent();
+        if (m_barModelArea.parent != null) m_barModelArea.parent.removeChild(m_barModelArea);
     }
     
     override public function dispose() : Void
     {
         super.dispose();
         
-        m_barModelArea.removeFromParent(true);
+		if (m_barModelArea.parent != null) m_barModelArea.parent.removeChild(m_barModelArea);
+		m_barModelArea.dispose();
+		m_barModelArea = null;
     }
 }

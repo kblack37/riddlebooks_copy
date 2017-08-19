@@ -30,7 +30,7 @@ import wordproblem.event.CommandEvent;
 import wordproblem.items.ItemDataSource;
 import wordproblem.items.ItemInventory;
 import wordproblem.level.controller.WordProblemCgsLevelManager;
-import wordproblem.levelselect.scripts.DrawItemsOnShelves;
+//import wordproblem.levelselect.scripts.DrawItemsOnShelves;
 import wordproblem.player.ButtonColorData;
 import wordproblem.player.ChangeButtonColorScript;
 import wordproblem.player.ChangeCursorScript;
@@ -53,6 +53,7 @@ import wordproblem.xp.scripts.PlayerXPScript;
 /**
  * This is the main application for versions in which we cannot ask for login.
  */
+// TODO: revisit animation when more basic elements are displaying  properly
 class WordProblemGameBrainpop extends WordProblemGameBase
 {
     private static inline var AB_VAR_GROUP : String = "group";
@@ -301,13 +302,13 @@ class WordProblemGameBrainpop extends WordProblemGameBase
             // Go directly to the level select state
             m_stateMachine.changeState(WordProblemSelectState, null);
             
-            m_fixedGlobalScript.pushChild(new DrawItemsOnShelves(
-                    wordProblemSelectState, 
-                    m_playerItemInventory, 
-                    m_itemDataSource, 
-                    m_assetManager, 
-                    Starling.juggler, 
-                    ));
+            //m_fixedGlobalScript.pushChild(new DrawItemsOnShelves(
+                    //wordProblemSelectState, 
+                    //m_playerItemInventory, 
+                    //m_itemDataSource, 
+                    //m_assetManager, 
+                    //Starling.juggler, 
+                    //));
             
             // Add scripts that have logic that operate across several levels.
             // This deals with things like handing out rewards or modifying rewards

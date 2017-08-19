@@ -1,14 +1,13 @@
 package wordproblem.scripts.barmodel;
 
 
-import flash.geom.Point;
-import flash.geom.Rectangle;
-
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.math.util.MathUtil;
 import dragonbox.common.ui.MouseState;
 
-import starling.display.DisplayObject;
+import openfl.display.DisplayObject;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
 
 import wordproblem.display.Layer;
 import wordproblem.engine.IGameEngine;
@@ -17,6 +16,7 @@ import wordproblem.engine.barmodel.model.BarModelData;
 import wordproblem.engine.barmodel.model.BarWhole;
 import wordproblem.engine.barmodel.view.BarComparisonView;
 import wordproblem.engine.barmodel.view.BarWholeView;
+import wordproblem.engine.events.DataEvent;
 import wordproblem.engine.events.GameEvent;
 import wordproblem.engine.scripting.graph.ScriptStatus;
 import wordproblem.log.AlgebraAdventureLoggingConstants;
@@ -80,7 +80,8 @@ class RemoveBarComparison extends BaseBarModelScript implements IRemoveBarElemen
                     removedComparisonView.y = globalCoordinates.y;
                     var removeBarComparisonAnimation : RemoveResizeableBarPieceAnimation = new RemoveResizeableBarPieceAnimation(function() : Void
                     {
-                        removedComparisonView.removeFromParent(true);
+						if (removedComparisonView.parent != null) removedComparisonView.parent.removeChild(removedComparisonView);
+						removedComparisonView.dispose();
                     });
                     removedComparisonView.scaleX = removedComparisonView.scaleY = m_barModelArea.scaleFactor;
                     m_gameEngine.getSprite().addChild(removedComparisonView);
@@ -88,17 +89,15 @@ class RemoveBarComparison extends BaseBarModelScript implements IRemoveBarElemen
                     
                     var previousModelDataSnapshot : BarModelData = m_barModelArea.getBarModelData().clone();
                     barWhole.barComparison = null;  // Remove the comparison from the model  
-                    m_gameEngine.dispatchEventWith(GameEvent.BAR_MODEL_AREA_CHANGE, false, {
+                    m_gameEngine.dispatchEvent(new DataEvent(GameEvent.BAR_MODEL_AREA_CHANGE, {
                                 previousSnapshot : previousModelDataSnapshot
-
-                            });
+                            }));
                     m_barModelArea.redraw();
                     
                     // Log removal of a bar comparison
-                    m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.REMOVE_BAR_COMPARISON, false, {
+                    m_gameEngine.dispatchEvent(new DataEvent(AlgebraAdventureLoggingConstants.REMOVE_BAR_COMPARISON, {
                                 barModel : m_barModelArea.getBarModelData().serialize()
-
-                            });
+                            }));
                     
                     break;
                 }
@@ -116,7 +115,7 @@ class RemoveBarComparison extends BaseBarModelScript implements IRemoveBarElemen
         {
             var mouseState : MouseState = m_gameEngine.getMouseState();
             m_globalMouseBuffer.setTo(mouseState.mousePositionThisFrame.x, mouseState.mousePositionThisFrame.y);
-            m_barModelArea.globalToLocal(m_globalMouseBuffer, m_localMouseBuffer);
+            m_localMouseBuffer = m_barModelArea.globalToLocal(m_globalMouseBuffer);
             
 			m_outParamsBuffer = new Array<Dynamic>();
             if (mouseState.leftMousePressedThisFrame) 
@@ -169,7 +168,7 @@ class RemoveBarComparison extends BaseBarModelScript implements IRemoveBarElemen
             var barComparisonView : BarComparisonView = barWholeView.comparisonView;
             if (barComparisonView != null) 
             {
-                barComparisonView.getBounds(m_barModelArea, m_boundsBuffer);
+                m_boundsBuffer = barComparisonView.getBounds(m_barModelArea);
                 if (m_boundsBuffer.containsPoint(m_localMouseBuffer)) 
                 {
                     hitComparison = true;

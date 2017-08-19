@@ -128,10 +128,10 @@ class LinkToAnimation implements IAnimatable
     {
         /*
         m_particleEmitter.dispose();
-        m_particleRenderer.removeFromParent();
+        if (m_particleRenderer.parent != null) m_particleRenderer.parent.removeChild(m_particleRenderer);
         
         */
-        m_arrowImage.removeFromParent();
+        if (m_arrowImage.parent != null) m_arrowImage.parent.removeChild(m_arrowImage);
         Starling.current.juggler.remove(this);
     }
     

@@ -1,12 +1,13 @@
 package wordproblem.playercollections.items;
 
 
-import flash.geom.Rectangle;
+import dragonbox.common.util.XColor;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.geom.Rectangle;
 
-import starling.display.DisplayObject;
-import starling.display.Image;
-import starling.display.Sprite;
-import starling.textures.Texture;
+import openfl.display.DisplayObject;
+import openfl.display.Sprite;
 
 import wordproblem.resource.AssetManager;
 
@@ -19,8 +20,8 @@ class PlayerCollectionItemButton extends Sprite
 {
     public var selected(never, set) : Bool;
 
-    private var m_normalBackground : Image;
-    private var m_selectedBackground : Image;
+    private var m_normalBackground : Bitmap;
+    private var m_selectedBackground : Bitmap;
     
     private var m_itemId : String;
     private var m_locked : Bool;
@@ -48,17 +49,18 @@ class PlayerCollectionItemButton extends Sprite
         m_locked = locked;
         m_assetManager = assetManager;
         
-        var scale9Texture : Texture = Texture.fromTexture(
-			assetManager.getTexture("button_white"), 
-			new Rectangle(8, 8, 16, 16)
-        );
-        m_normalBackground = new Image(scale9Texture);
-        m_normalBackground.color = defaultColor;
+		var scale9Rect = new Rectangle(8, 8, 16, 16);
+        var backgroundBitmapData : BitmapData = assetManager.getBitmapData("button_white");
+		
+        m_normalBackground = new Bitmap(backgroundBitmapData);
+		m_normalBackground.scale9Grid = scale9Rect;
+		m_normalBackground.transform.colorTransform.concat(XColor.rgbToColorTransform(defaultColor));
         m_normalBackground.width = width;
         m_normalBackground.height = height;
         
-        m_selectedBackground = new Image(scale9Texture);
-        m_selectedBackground.color = overColor;
+        m_selectedBackground = new Bitmap(backgroundBitmapData);
+		m_selectedBackground.scale9Grid = scale9Rect;
+		m_selectedBackground.transform.colorTransform.concat(XColor.rgbToColorTransform(overColor));
         m_selectedBackground.width = width;
         m_selectedBackground.height = height;
         
@@ -69,26 +71,27 @@ class PlayerCollectionItemButton extends Sprite
         var minimumEdgePadding : Float = 15;
         var maxWidth : Float = (width - 2 * minimumEdgePadding);
         var maxHeight : Float = (height - 2 * minimumEdgePadding);
-        var texture : Texture = assetManager.getTextureWithReferenceCount(itemTextureName);
+		// TODO: revisit this when AssetManager is fully implemented
+        var bitmapData : BitmapData = null;// assetManager.getTextureWithReferenceCount(itemTextureName);
         var scaleFactor : Float = 1.0;
-        if (texture.width > maxWidth || texture.height > maxHeight) 
+        if (bitmapData.width > maxWidth || bitmapData.height > maxHeight) 
         {
-            var horizontalScaleFactor : Float = maxWidth / texture.width;
-            var verticalScaleFactor : Float = maxHeight / texture.height;
+            var horizontalScaleFactor : Float = maxWidth / bitmapData.width;
+            var verticalScaleFactor : Float = maxHeight / bitmapData.height;
             scaleFactor = Math.min(horizontalScaleFactor, verticalScaleFactor);
         }
-        var itemImage : Image = new Image(texture);
+        var itemImage : Bitmap = new Bitmap(bitmapData);
         itemImage.scaleX = itemImage.scaleY = scaleFactor;
         itemImage.x = (width - itemImage.width) * 0.5;
         itemImage.y = (height - itemImage.height) * 0.5;
         
         
-        var lockTexture : Texture = assetManager.getTexture("Art_LockRed");
-        var lockImage : Image = new Image(lockTexture);
+        var lockBitmapData : BitmapData = assetManager.getBitmapData("Art_LockRed");
+        var lockImage : Bitmap = new Bitmap(lockBitmapData);
         var lockScaleFactor : Float = 1.0;
-        if (lockTexture.width > maxWidth || lockTexture.height > maxHeight) 
+        if (lockBitmapData.width > maxWidth || lockBitmapData.height > maxHeight) 
         {
-            lockScaleFactor = Math.min(maxWidth / lockTexture.width, maxHeight / lockTexture.height);
+            lockScaleFactor = Math.min(maxWidth / lockBitmapData.width, maxHeight / lockBitmapData.height);
         }
         lockImage.scaleX = lockImage.scaleY = lockScaleFactor;
         lockImage.x = (width - lockImage.width) * 0.5;
@@ -116,17 +119,16 @@ class PlayerCollectionItemButton extends Sprite
     
     private function set_selected(value : Bool) : Bool
     {
-        m_normalBackground.removeFromParent();
-        m_selectedBackground.removeFromParent();
+        if (m_normalBackground.parent != null) m_normalBackground.parent.removeChild(m_normalBackground);
+        if (m_selectedBackground.parent != null) m_selectedBackground.parent.removeChild(m_selectedBackground);
         
         var backgroundToUse : DisplayObject = ((value)) ? m_selectedBackground : m_normalBackground;
         addChildAt(backgroundToUse, 0);
         return value;
     }
     
-    override public function dispose() : Void
+    public function dispose() : Void
     {
-        super.dispose();
         m_assetManager.releaseTextureWithReferenceCount(m_itemTextureName);
     }
 }

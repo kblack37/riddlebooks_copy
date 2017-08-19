@@ -8,7 +8,7 @@ import dragonbox.common.ui.MouseState;
 
 import haxe.Constraints.Function;
 
-import starling.display.Sprite;
+import openfl.display.Sprite;
 
 import wordproblem.display.Layer;
 
@@ -39,10 +39,9 @@ class BaseState extends Layer implements IState
         return this;
     }
     
-    override public function dispose() : Void
+    public function dispose() : Void
     {
-        removeEventListeners();
-        super.dispose();
+		__eventMap = new Map();
     }
     
     private function getStateMachine() : IStateMachine

@@ -3,7 +3,7 @@ package wordproblem.creator.scripts;
 
 import starling.animation.Tween;
 import starling.core.Starling;
-import starling.display.Button;
+import wordproblem.display.LabelButton;
 import starling.display.DisplayObject;
 import starling.display.Image;
 import starling.events.Event;
@@ -74,12 +74,12 @@ class SubmitProblemScript extends BaseProblemCreateScript
         return ScriptStatus.RUNNING;
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         var submitButton : Button = try cast(m_createState.getWidgetFromId("submitButton"), Button) catch(e:Dynamic) null;
-        submitButton.addEventListener(starling.events.Event.TRIGGERED, onSubmit);
+        submitButton.addEventListener(starling.events.MouseEvent.CLICK, onSubmit);
         submitButton.enabled = false;
         
         // Need to figure out how many parts needed to be tagged in the text area
@@ -175,6 +175,6 @@ class SubmitProblemScript extends BaseProblemCreateScript
         m_submitButtonGlowAnimation = null;
         
         m_submitButtonGlow.scaleX = m_submitButtonGlow.scaleY = 1.0;
-        m_submitButtonGlow.removeFromParent();
+        if (m_submitButtonGlow.parent != null) m_submitButtonGlow.parent.removeChild(m_submitButtonGlow);
     }
 }

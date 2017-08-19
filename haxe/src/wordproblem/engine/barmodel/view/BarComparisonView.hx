@@ -1,16 +1,17 @@
 package wordproblem.engine.barmodel.view;
 
+import dragonbox.common.util.XColor;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
 import wordproblem.engine.barmodel.view.ResizeableBarPieceView;
 
-import flash.geom.Rectangle;
-import flash.text.TextFormat;
+import openfl.geom.Rectangle;
+import openfl.text.TextFormat;
 
-import starling.display.DisplayObject;
-import starling.display.DisplayObjectContainer;
-import starling.display.Image;
-import starling.display.Sprite;
-import starling.text.TextField;
-import starling.textures.Texture;
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
+import openfl.display.Sprite;
+import openfl.text.TextField;
 
 import wordproblem.engine.barmodel.model.BarComparison;
 import wordproblem.engine.component.RigidBodyComponent;
@@ -30,12 +31,12 @@ class BarComparisonView extends ResizeableBarPieceView
     /**
      * The image that can scale without stretching/distorting. It is sliced into three parts
      */
-    private var m_scaledArrowImage : Image;
+    private var m_scaledArrowImage : Bitmap;
     
     /**
      * The image with all pieces already pieces together
      */
-    private var m_fullArrowImage : Image;
+    private var m_fullArrowImage : Bitmap;
     
     /**
      * The image for the descriptor
@@ -55,8 +56,8 @@ class BarComparisonView extends ResizeableBarPieceView
             fontName : String,
             fontColor : Int,
             symbolImage : DisplayObject,
-            threeSliceTexture : Texture,
-            fullTexture : Texture)
+			threeSliceGrid : Rectangle,
+            fullBitmapData : BitmapData)
     {
         super();
         
@@ -66,10 +67,10 @@ class BarComparisonView extends ResizeableBarPieceView
         addChild(lineGraphicDisplayContainer);
         
         var color : Int = data.color;
-        m_scaledArrowImage = new Image(threeSliceTexture);
-        m_scaledArrowImage.color = color;
-        m_fullArrowImage = new Image(fullTexture);
-        m_fullArrowImage.color = color;
+		fullBitmapData.colorTransform(new Rectangle(0, 0, fullBitmapData.width, fullBitmapData.height), XColor.rgbToColorTransform(color));
+        m_scaledArrowImage = new Bitmap(fullBitmapData);
+		m_scaledArrowImage.scale9Grid = threeSliceGrid;
+        m_fullArrowImage = new Bitmap(fullBitmapData);
         
         if (symbolImage == null) 
         {
@@ -77,14 +78,14 @@ class BarComparisonView extends ResizeableBarPieceView
             measuringTextField.defaultTextFormat = new TextFormat(fontName, 22, fontColor);
             measuringTextField.text = labelName;
             
-            var descriptionTextField : TextField = new TextField(
-            Std.int(measuringTextField.textWidth + 15), 
-            Std.int(measuringTextField.textHeight + 5), 
-            labelName, 
-            fontName, 
-            measuringTextField.defaultTextFormat.size, 
-            fontColor
-            );
+            var descriptionTextField : TextField = new TextField();
+            descriptionTextField.width = measuringTextField.textWidth + 15;
+            descriptionTextField.height = measuringTextField.textHeight + 5;
+            descriptionTextField.text = labelName;
+            descriptionTextField.setTextFormat(new TextFormat(fontName, 
+				measuringTextField.defaultTextFormat.size, 
+				fontColor
+            ));
             m_descriptionImage = descriptionTextField;
         }
         else 
@@ -102,7 +103,7 @@ class BarComparisonView extends ResizeableBarPieceView
         this.lineGraphicDisplayContainer.removeChildren();
         this.pixelLength = newLength;
         
-        var canScaleImage : Bool = newLength > (m_scaledArrowImage.texture.nativeWidth * 2);
+        var canScaleImage : Bool = newLength > (m_scaledArrowImage.scale9Grid.left * 2);
         if (canScaleImage) 
         {
             this.lineGraphicDisplayContainer.addChild(m_scaledArrowImage);
@@ -140,9 +141,7 @@ class BarComparisonView extends ResizeableBarPieceView
         {
             // Figure out scale amount indirectly applied
             var scaleAmount : Float = targetBounds.width / m_scaledArrowImage.width;
-			// TODO: this image was replaced from the feathers library and will probably
-			// need to be fixed
-            var endLength : Float = m_scaledArrowImage.texture.width * scaleAmount;
+            var endLength : Float = (m_scaledArrowImage.scale9Grid.right - m_scaledArrowImage.bitmapData.width) * scaleAmount;
             
             // Shift rectangle over to the middle bounds
             outBounds.setTo(

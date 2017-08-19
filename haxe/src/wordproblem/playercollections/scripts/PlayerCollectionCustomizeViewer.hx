@@ -1,11 +1,13 @@
 package wordproblem.playercollections.scripts;
 
-import starling.textures.Texture;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.text.TextFormatAlign;
 import wordproblem.playercollections.scripts.PlayerCollectionViewer;
 
-import flash.geom.Point;
-import flash.geom.Rectangle;
-import flash.text.TextFormat;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
+import openfl.text.TextFormat;
 
 import cgs.internationalization.StringTable;
 
@@ -13,17 +15,15 @@ import dragonbox.common.ui.MouseState;
 import dragonbox.common.util.ListUtil;
 import dragonbox.common.util.XColor;
 
-import starling.core.Starling;
-import starling.display.Button;
-import starling.display.DisplayObject;
-import starling.display.DisplayObjectContainer;
-import starling.display.Image;
-import starling.display.Sprite;
-import starling.events.Event;
-import starling.text.TextField;
-import starling.utils.HAlign;
+import wordproblem.display.LabelButton;
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
+import openfl.display.Sprite;
+import openfl.events.Event;
+import openfl.events.MouseEvent;
+import openfl.text.TextField;
 
-import wordproblem.currency.CurrencyChangeAnimation;
+//import wordproblem.currency.CurrencyChangeAnimation;
 import wordproblem.currency.CurrencyCounter;
 import wordproblem.currency.PlayerCurrencyModel;
 import wordproblem.engine.component.ItemIdComponent;
@@ -44,6 +44,7 @@ import wordproblem.resource.AssetManager;
 /**
  * This screen shows all the customizable parts that the user can purchase or equip.
  */
+// TODO: revisit animation when more basic display elements are working properly
 class PlayerCollectionCustomizeViewer extends PlayerCollectionViewer
 {
     // HACK: These match the names in the customize json
@@ -72,8 +73,8 @@ class PlayerCollectionCustomizeViewer extends PlayerCollectionViewer
      */
     private var m_playerCurrencyModel : PlayerCurrencyModel;
     
-    private var m_currencyCounter : CurrencyCounter;
-    private var m_currencyChangeAnimation : CurrencyChangeAnimation;
+    //private var m_currencyCounter : CurrencyCounter;
+    //private var m_currencyChangeAnimation : CurrencyChangeAnimation;
     
     private var m_playerStatsAndSaveData : PlayerStatsAndSaveData;
     private var m_changeCursorScript : ChangeCursorScript;
@@ -84,7 +85,7 @@ class PlayerCollectionCustomizeViewer extends PlayerCollectionViewer
      */
     private var m_customizableCategoriesPages : Array<Array<String>>;
     private var m_activeCategoryPageIndex : Int;
-    private var m_activeCategoryButtons : Array<Button>;
+    private var m_activeCategoryButtons : Array<LabelButton>;
     
     /**
      * If in the view level of items, need to keep track of the category we are in
@@ -140,7 +141,7 @@ class PlayerCollectionCustomizeViewer extends PlayerCollectionViewer
         
         m_customizableCategoriesPages = new Array<Array<String>>();
         m_activeCategoryPageIndex = -1;
-        m_activeCategoryButtons = new Array<Button>();
+        m_activeCategoryButtons = new Array<LabelButton>();
         
         m_customizableItemIdsPages = new Array<Array<String>>();
         m_activeItemPageIndex = -1;
@@ -151,7 +152,7 @@ class PlayerCollectionCustomizeViewer extends PlayerCollectionViewer
         
         createBackButton();
         
-        m_currencyCounter = new CurrencyCounter(assetManager, 180, 50, 50);
+        //m_currencyCounter = new CurrencyCounter(assetManager, 180, 50, 50);
     }
     
     override public function show() : Void
@@ -174,11 +175,11 @@ class PlayerCollectionCustomizeViewer extends PlayerCollectionViewer
         changeToCategoryView();
         
         // Show coins at the bottom
-        m_currencyCounter.setValue(m_playerCurrencyModel.totalCoins);
-        m_currencyCounter.x = 50;
-        m_currencyCounter.y = 600 - m_currencyCounter.height * 2;
-        m_canvasContainer.addChild(m_currencyCounter);
-        m_currencyChangeAnimation = new CurrencyChangeAnimation(m_currencyCounter);
+        //m_currencyCounter.setValue(m_playerCurrencyModel.totalCoins);
+        //m_currencyCounter.x = 50;
+        //m_currencyCounter.y = 600 - m_currencyCounter.height * 2;
+        //m_canvasContainer.addChild(m_currencyCounter);
+        //m_currencyChangeAnimation = new CurrencyChangeAnimation(m_currencyCounter);
     }
     
     override public function hide() : Void
@@ -188,10 +189,10 @@ class PlayerCollectionCustomizeViewer extends PlayerCollectionViewer
         // Clear out all the different subviews
         clearCategoryViewsInCurrentPage();
         clearItemsViewsInCurrentPage();
-        m_backButton.removeFromParent();
+        if (m_backButton.parent != null) m_backButton.parent.removeChild(m_backButton);
         
-        m_currencyCounter.removeFromParent();
-        Starling.current.juggler.remove(m_currencyChangeAnimation);
+        //if (m_currencyCounter.parent != null) m_currencyCounter.parent.removeChild(m_currencyCounter);
+        //Starling.current.juggler.remove(m_currencyChangeAnimation);
     }
     
     override public function visit() : Int
@@ -205,12 +206,10 @@ class PlayerCollectionCustomizeViewer extends PlayerCollectionViewer
                 // Back can only occur at the item screen level, clear the items
                 clearItemsViewsInCurrentPage();
                 changeToCategoryView();
-            }  // ui components    // Need to do custom picking of the customize item button since they are handwritten  
-            
-            
-            
-            
-            
+            }  
+			
+			// Need to do custom picking of the customize item button since they are handwritten  
+            // ui components  
             if (m_confirmationWidget == null) 
             {
                 m_globalPointBuffer.x = m_mouseState.mousePositionThisFrame.x;
@@ -219,7 +218,7 @@ class PlayerCollectionCustomizeViewer extends PlayerCollectionViewer
                 var i : Int = 0;
                 for (i in 0...numItemButtons){
                     var button : CustomizableItemButton = m_activeItemsButtonsInPage[i];
-                    button.getBounds(m_canvasContainer.stage, m_boundsBuffer);
+                    m_boundsBuffer = button.getBounds(m_canvasContainer.stage);
                     if (m_boundsBuffer.containsPoint(m_globalPointBuffer)) 
                     {
                         if (m_mouseState.leftMousePressedThisFrame) 
@@ -237,7 +236,7 @@ class PlayerCollectionCustomizeViewer extends PlayerCollectionViewer
     {
         drawCategoryButtonsForPage(m_activeCategoryPageIndex);
         
-        m_backButton.removeFromParent();
+        if (m_backButton.parent != null) m_backButton.parent.removeChild(m_backButton);
     }
     
     private function drawCategoryButtonsForPage(pageIndex : Int) : Void
@@ -252,55 +251,50 @@ class PlayerCollectionCustomizeViewer extends PlayerCollectionViewer
         var xOffset : Float = (800 - buttonWidth) * 0.5;
         var yOffset : Float = m_titleText.y + m_titleText.height;
         var nineSliceRectangle : Rectangle = new Rectangle(8, 8, 16, 16);
-        var scale9Texture : Texture = Texture.fromTexture(m_assetManager.getTexture("button_white"), nineSliceRectangle);
+        var bitmapData : BitmapData = m_assetManager.getBitmapData("button_white");
         for (i in 0...numCategories){
-            var defaultBackground : Image = new Image(scale9Texture);
-            defaultBackground.color = m_buttonColorData.getUpButtonColor();
-            var categoryButton : Button = new Button(defaultBackground.texture, categoryIdsForPage[i]);
+            var defaultBackground : Bitmap = new Bitmap(bitmapData);
+			defaultBackground.scale9Grid = nineSliceRectangle;
+			defaultBackground.transform.colorTransform.concat(XColor.rgbToColorTransform(m_buttonColorData.getUpButtonColor()));
+            var categoryButton : LabelButton = new LabelButton(defaultBackground);
+			categoryButton.textFormatDefault = new TextFormat(GameFonts.DEFAULT_FONT_NAME, 24, 0xFFFFFF);
+			categoryButton.label = categoryIdsForPage[i];
             
-            var hoverBackground : Image = new Image(scale9Texture);
-            hoverBackground.color = XColor.shadeColor(m_buttonColorData.getUpButtonColor(), 0.3);
-            categoryButton.overState = hoverBackground.texture;
+            var hoverBackground : Bitmap = new Bitmap(bitmapData);
+			hoverBackground.scale9Grid = nineSliceRectangle;
+			hoverBackground.transform.colorTransform.concat(XColor.rgbToColorTransform(XColor.shadeColor(m_buttonColorData.getUpButtonColor(), 0.3)));
+            categoryButton.overState = hoverBackground;
             
-            categoryButton.downState = hoverBackground.texture;
+            categoryButton.downState = hoverBackground;
             
             categoryButton.width = buttonWidth;
             categoryButton.height = buttonHeight;
             categoryButton.x = xOffset;
             categoryButton.y = yOffset;
-            categoryButton.addEventListener(Event.TRIGGERED, onCategorySelected);
+            categoryButton.addEventListener(MouseEvent.CLICK, onCategorySelected);
             m_canvasContainer.addChild(categoryButton);
             m_activeCategoryButtons.push(categoryButton);
             
             yOffset += buttonHeight + gap;
         }
-        
-		// TODO: replace when we have a suitable button replacement
-        //function categoryLabelFactory() : ITextRenderer
-        //{
-            //var renderer : TextFieldTextRenderer = new TextFieldTextRenderer();
-            //var fontName : String = GameFonts.DEFAULT_FONT_NAME;
-            //renderer.embedFonts = GameFonts.getFontIsEmbedded(fontName);
-            //renderer.textFormat = new TextFormat(fontName, 24, 0xFFFFFF);
-            //return renderer;
-        //};
     }
     
     private function clearCategoryViewsInCurrentPage() : Void
     {
         for (categoryButton in m_activeCategoryButtons)
         {
-            categoryButton.removeEventListener(Event.TRIGGERED, onCategorySelected);
-            categoryButton.removeFromParent(true);
+            categoryButton.removeEventListener(MouseEvent.CLICK, onCategorySelected);
+			if (categoryButton.parent != null) categoryButton.parent.removeChild(categoryButton);
+			categoryButton.dispose();
         }
-		m_activeCategoryButtons = new Array<Button>();
+		m_activeCategoryButtons = new Array<LabelButton>();
     }
     
     private function onCategorySelected(event : Event) : Void
     {
         // Need to find the appropriate category and then open up the
         // items belonging to it
-        var targetButton : Button = try cast(event.currentTarget, Button) catch(e:Dynamic) null;
+        var targetButton : LabelButton = try cast(event.currentTarget, LabelButton) catch(e:Dynamic) null;
         var indexOfButton : Int = Lambda.indexOf(m_activeCategoryButtons, targetButton);
         if (indexOfButton > -1) 
         {
@@ -385,7 +379,8 @@ class PlayerCollectionCustomizeViewer extends PlayerCollectionViewer
     {
         for (itemButton in m_activeItemsButtonsInPage)
         {
-            itemButton.removeFromParent(true);
+			if (itemButton.parent != null) itemButton.parent.removeChild(itemButton);
+			itemButton.dispose();
         }
         
 		m_activeItemsButtonsInPage = new Array<CustomizableItemButton>();
@@ -434,29 +429,26 @@ class PlayerCollectionCustomizeViewer extends PlayerCollectionViewer
 						// TODO: uncomment when cgs library is finished
 						measuringText.text = "";// StringTable.lookup("buy_for") + " ";
 						
-						var askText : TextField = new TextField(Std.int(measuringText.textWidth + 10), 
-							Std.int(measuringText.textHeight + 10),
-							measuringText.text,
-							textFormat.font,
-							textFormat.size,
-							try cast(textFormat.color, Int) catch(e:Dynamic) 0);
-						askText.hAlign = HAlign.LEFT;
+						var askText : TextField = new TextField();
+						askText.width = measuringText.textWidth + 10;
+						askText.height = measuringText.textHeight + 10;
+						askText.text = measuringText.text;
+						askText.setTextFormat(new TextFormat(textFormat.font, textFormat.size, textFormat.color, null, null, null, null, null, TextFormatAlign.START));
 						mainDisplayContainer.addChild(askText);
 						
 						var priceIndicatorHeight : Float = 40;
-						var coin : Image = new Image(m_assetManager.getTexture("coin"));
+						var coin : Bitmap = new Bitmap(m_assetManager.getBitmapData("coin"));
 						coin.scaleX = coin.scaleY = priceIndicatorHeight / coin.height;
 						coin.x = askText.x + askText.width;
 						mainDisplayContainer.addChild(coin);
 						
 						var displayedPrice : String = itemCost + "?";
 						measuringText.text = displayedPrice;
-						var priceText : TextField = new TextField(Std.int(measuringText.textWidth + 10),
-							Std.int(measuringText.textHeight + 10),
-							displayedPrice, 
-							textFormat.font,
-							textFormat.size,
-							try cast(textFormat.color, Int) catch(e:Dynamic) 0);
+						var priceText : TextField = new TextField();
+						priceText.width = measuringText.textWidth + 10;
+						priceText.height = measuringText.textHeight + 10;
+						priceText.text = displayedPrice;
+						priceText.setTextFormat(new TextFormat(textFormat.font, textFormat.size, textFormat.color));
 						priceText.x = coin.x + coin.width + 10;
 						mainDisplayContainer.addChild(priceText);
 						
@@ -472,8 +464,8 @@ class PlayerCollectionCustomizeViewer extends PlayerCollectionViewer
 					{
 						// Subtract item cost from the player's current coins
 						var newCoinValue : Int = m_playerCurrencyModel.totalCoins - itemCost;
-						m_currencyChangeAnimation.start(m_playerCurrencyModel.totalCoins, newCoinValue);
-						Starling.current.juggler.add(m_currencyChangeAnimation);
+						//m_currencyChangeAnimation.start(m_playerCurrencyModel.totalCoins, newCoinValue);
+						//Starling.current.juggler.add(m_currencyChangeAnimation);
 						m_playerCurrencyModel.totalCoins = newCoinValue;
 						m_playerCurrencyModel.save(true);
 						
@@ -498,15 +490,12 @@ class PlayerCollectionCustomizeViewer extends PlayerCollectionViewer
                 m_confirmationWidget = new ConfirmationWidget(800, 600, 
                     function() : DisplayObject
                     {
-                        var contentTextField : TextField = new TextField(
-							400, 
-							200, 
+                        var contentTextField : TextField = new TextField();
+						contentTextField.width = 400; 
+						contentTextField.height = 200;
 							// TODO: uncomment when cgs library is finished
-							"",//StringTable.lookup("not_enough_coins"), 
-							GameFonts.DEFAULT_FONT_NAME, 
-							30,
-							0xFFFFFF
-                        );
+						contentTextField.text = "";//StringTable.lookup("not_enough_coins"), 
+						contentTextField.setTextFormat(new TextFormat(GameFonts.DEFAULT_FONT_NAME, 30, 0xFFFFFF));
                         return contentTextField;
                     }, 
                     discardConfirmation, 
@@ -558,7 +547,7 @@ class PlayerCollectionCustomizeViewer extends PlayerCollectionViewer
     
     private function discardConfirmation() : Void
     {
-        m_confirmationWidget.removeFromParent(true);
+		if (m_confirmationWidget.parent != null) m_confirmationWidget.parent.removeChild(m_confirmationWidget);
         m_confirmationWidget = null;
     }
 }

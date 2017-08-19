@@ -1,25 +1,26 @@
 package wordproblem.engine.text;
 
 
-import flash.display.BitmapData;
-import flash.filters.BitmapFilter;
-import flash.filters.GlowFilter;
-import flash.geom.Point;
-import flash.geom.Rectangle;
-import flash.text.TextField;
-import flash.text.TextFormat;
-import flash.text.TextFormatAlign;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.display.DisplayObject;
+import openfl.filters.BitmapFilter;
+import openfl.filters.GlowFilter;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
+import openfl.text.TextField;
+import openfl.text.TextFormat;
+import openfl.text.TextFormatAlign;
+import wordproblem.display.PivotSprite;
 
-import starling.display.Image;
-import starling.display.Sprite;
-import starling.textures.Texture;
+import openfl.display.Sprite;
 
 /**
  * This is a display object that shows text with an outline glow around the characters.
  * 
  * It uses regular flash textfields and glow filters to create a texture that is to be displayed
  */
-class OutlinedTextField extends Sprite
+class OutlinedTextField extends PivotSprite
 {
     private var m_backingTextfield : TextField;
     private var m_outlineFilter : BitmapFilter;
@@ -27,7 +28,7 @@ class OutlinedTextField extends Sprite
     /**
      * This is the visual piece that is actually displayed within starling
      */
-    private var m_displayedImage : Image;
+    private var m_displayedImage : Bitmap;
     
     public function new(width : Float,
             height : Float,
@@ -46,7 +47,7 @@ class OutlinedTextField extends Sprite
         
         this.setMaxWidth(width);
         this.setMaxHeight(height);
-        this.touchable = false;
+        this.mouseEnabled = false;
     }
     
     /**
@@ -56,7 +57,7 @@ class OutlinedTextField extends Sprite
     {
         if (m_displayedImage != null) 
         {
-            m_displayedImage.texture.dispose();
+            m_displayedImage.bitmapData.dispose();
         }
         
         if (text != null && text != "") 
@@ -68,14 +69,13 @@ class OutlinedTextField extends Sprite
             bitmapData.draw(m_backingTextfield);
             bitmapData.applyFilter(bitmapData, backingFieldDimensions, new Point(0, 0), m_outlineFilter);
             
-            var texture : Texture = Texture.fromBitmapData(bitmapData);
             if (m_displayedImage == null) 
             {
-                m_displayedImage = new Image(texture);
+                m_displayedImage = new Bitmap(bitmapData);
                 addChild(m_displayedImage);
             }
             
-            m_displayedImage.texture = texture;
+            m_displayedImage.bitmapData = bitmapData;
             m_displayedImage.y = (m_backingTextfield.height - m_backingTextfield.textHeight) * 0.6;
         }
     }
@@ -92,11 +92,9 @@ class OutlinedTextField extends Sprite
     
     override public function dispose() : Void
     {
-        super.dispose();
-        
         if (m_displayedImage != null) 
         {
-            m_displayedImage.texture.dispose();
+            m_displayedImage.bitmapData.dispose();
         }
     }
 }

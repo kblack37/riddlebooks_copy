@@ -172,9 +172,9 @@ class ChangeAliasScript extends BaseProblemCreateScript
         }
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         // Get general data about the bar model type the application is asking the user
         // to make a problem for, this is necessary to get info to restrict the allowable
@@ -227,7 +227,7 @@ class ChangeAliasScript extends BaseProblemCreateScript
             
             if (foundDifferenceInMaps) 
             {
-                m_createState.dispatchEventWith(ProblemCreateEvent.BAR_PART_VALUE_CHANGED, false, null);
+                m_createState.dispatchEvent(ProblemCreateEvent.BAR_PART_VALUE_CHANGED, false, null);
             }  // Have the prev values now match the current ones for the next frame  
             
             
@@ -246,7 +246,7 @@ class ChangeAliasScript extends BaseProblemCreateScript
             {
                 var widgetToUse : DisplayObject = ((m_numberpadWidget.stage != null)) ? 
                 m_numberpadWidget : m_keyboardWidget;
-                widgetToUse.getBounds(widgetToUse.stage, m_boundsBuffer);
+                m_boundsBuffer = widgetToUse.getBounds(widgetToUse.stage);
                 
                 var pointNotInWidget : Bool = !m_boundsBuffer.containsPoint(m_globalPointBuffer);
                 
@@ -516,8 +516,8 @@ class ChangeAliasScript extends BaseProblemCreateScript
     
     private function removeAliasInput() : Void
     {
-        m_keyboardWidget.removeFromParent();
-        m_numberpadWidget.removeFromParent();
+        if (m_keyboardWidget.parent != null) m_keyboardWidget.parent.removeChild(m_keyboardWidget);
+        if (m_numberpadWidget.parent != null) m_numberpadWidget.parent.removeChild(m_numberpadWidget);
         
         var editableTextArea : EditableTextArea = try cast(m_createState.getWidgetFromId("editableTextArea"), EditableTextArea) catch(e:Dynamic) null;
         editableTextArea.toggleEditMode(true);
@@ -534,12 +534,12 @@ class ChangeAliasScript extends BaseProblemCreateScript
             m_expressionContainer = null;
         }
         
-        m_disablingQuad.removeFromParent();
+        if (m_disablingQuad.parent != null) m_disablingQuad.parent.removeChild(m_disablingQuad);
         m_elementIdInFocus = null;
         
         if (m_errorText.parent != null) 
         {
-            m_errorText.removeFromParent();
+            if (m_errorText.parent != null) m_errorText.parent.removeChild(m_errorText);
         }
     }
     

@@ -3,7 +3,7 @@ package wordproblem.scripts.barmodel;
 
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 
-import starling.display.DisplayObject;
+import openfl.display.DisplayObject;
 
 import wordproblem.engine.IGameEngine;
 import wordproblem.engine.barmodel.model.BarLabel;
@@ -112,9 +112,9 @@ class RestrictCardsInBarModel extends BaseBarModelScript
         }
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         this.setIsActive(m_isActive);
     }
@@ -174,12 +174,10 @@ class RestrictCardsInBarModel extends BaseBarModelScript
         for (manuallyRestrictedTerm in m_termValuesManuallyDisabled)
         {
             m_termValuesAndNamesUsedBuffer.push(manuallyRestrictedTerm);
-        }  // Otherwise re-enable it    // If an expression is in the deck and is used somewhere in the bar model as a name, disable it  
-        
-        
-        
-        
-        
+        }  
+		
+		// If an expression is in the deck and is used somewhere in the bar model as a name, disable it  
+        // Otherwise re-enable it   
 		m_outUiEntityBuffer = new Array<DisplayObject>();
         m_gameEngine.getUiEntitiesByClass(DeckWidget, m_outUiEntityBuffer);
         if (m_outUiEntityBuffer.length > 0 && Std.is(m_outUiEntityBuffer[0], DeckWidget)) 

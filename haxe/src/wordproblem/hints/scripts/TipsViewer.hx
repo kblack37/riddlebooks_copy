@@ -1,9 +1,14 @@
 package wordproblem.hints.scripts;
 
 
-import flash.geom.Rectangle;
-import flash.text.TextFormat;
-import starling.display.Button;
+import dragonbox.common.util.XColor;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.display.DisplayObject;
+import openfl.events.MouseEvent;
+import openfl.geom.Rectangle;
+import openfl.text.TextFormat;
+import wordproblem.display.LabelButton;
 
 import cgs.audio.Audio;
 
@@ -11,11 +16,9 @@ import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
 import dragonbox.common.util.ListUtil;
 
-import starling.display.DisplayObjectContainer;
-import starling.display.Image;
-import starling.events.Event;
-import starling.text.TextField;
-import starling.textures.Texture;
+import openfl.display.DisplayObjectContainer;
+import openfl.events.Event;
+import openfl.text.TextField;
 
 import wordproblem.engine.expression.ExpressionSymbolMap;
 import wordproblem.engine.expression.SymbolData;
@@ -64,19 +67,19 @@ class TipsViewer extends ScriptNode implements IShowableScript
     private var m_canvasContainer : DisplayObjectContainer;
     private var m_assetManager : AssetManager;
     private var m_buttonColorData : ButtonColorData;
-    private var m_backButton : Button;
+    private var m_backButton : LabelButton;
     
     private var m_tipsTitle : TextField;
     
     /**
      * Button to go to the previous page of content
      */
-    private var m_scrollLeftButton : Button;
+    private var m_scrollLeftButton : LabelButton;
     
     /**
      * Button to go to the next page of content
      */
-    private var m_scrollRightButton : Button;
+    private var m_scrollRightButton : LabelButton;
     
     /**
      * Some text at the bottom of the screen showing the user the page number the player is on
@@ -93,7 +96,7 @@ class TipsViewer extends ScriptNode implements IShowableScript
     /**
      * All the tip buttons that are currently shown
      */
-    private var m_activeNamesButtonsForPage : Array<Button>;
+    private var m_activeNamesButtonsForPage : Array<LabelButton>;
     
     /**
      * Current index of pages of tip names, each page has a list of tips the user can
@@ -137,22 +140,26 @@ class TipsViewer extends ScriptNode implements IShowableScript
         m_screenWidth = screenWidth;
         m_screenHeight = screenHeight;
         m_namesPerPage = new Array<Array<String>>();
-        m_activeNamesButtonsForPage = new Array<Button>();
+        m_activeNamesButtonsForPage = new Array<LabelButton>();
         
         // Much like the item collection screen, we can paginate all the names of the tips
         // Can do that here since they don't change after construction
         ListUtil.subdivideList(names, 4, m_namesPerPage);
         
-        m_tipsTitle = new TextField(Std.int(screenWidth), 60, "How to...", GameFonts.DEFAULT_FONT_NAME, 24, 0xFFFFFF);
+        m_tipsTitle = new TextField();
+		m_tipsTitle.width = screenWidth;
+		m_tipsTitle.height = 60;
+		m_tipsTitle.text = "How to...";
+		m_tipsTitle.setTextFormat(new TextFormat(GameFonts.DEFAULT_FONT_NAME, 24, 0xFFFFFF));
         
         // Create the back button to return from the script view to the tip names view
-        var arrowRotateTexture : Texture = m_assetManager.getTexture("arrow_rotate");
+        var arrowRotateBitmapData : BitmapData = m_assetManager.getBitmapData("arrow_rotate");
         var scaleFactor : Float = 0.65;
-        var backUpImage : Image = new Image(arrowRotateTexture);
-        backUpImage.color = 0xFBB03B;
+        var backUpImage : Bitmap = new Bitmap(arrowRotateBitmapData);
+		backUpImage.transform.colorTransform.concat(XColor.rgbToColorTransform(0xFBB03B));
         backUpImage.scaleX = backUpImage.scaleY = scaleFactor;
-        var backOverImage : Image = new Image(arrowRotateTexture);
-        backOverImage.color = 0xFDDDAC;
+        var backOverImage : Bitmap = new Bitmap(arrowRotateBitmapData);
+		backOverImage.transform.colorTransform.concat(XColor.rgbToColorTransform(0xFDDDAC));
         backOverImage.scaleX = backOverImage.scaleY = scaleFactor;
         m_backButton = WidgetUtil.createButtonFromImages(
                         backUpImage,
@@ -162,12 +169,12 @@ class TipsViewer extends ScriptNode implements IShowableScript
                         null,
                         null
                         );
-        m_backButton.scaleWhenDown = 0.9;
-        m_backButton.scaleWhenOver = 1.1;
+		m_backButton.scaleWhenDown = 0.9;
+		m_backButton.scaleWhenOver = 1.1;
         
         // The custom mouse controls do not bind to any events, code in the script
         // will manipulate the properties directly.
-        m_simulatedMouseState = new MouseState(null, null);
+        m_simulatedMouseState = new MouseState(null);
         
         m_simulatedTimer = new Time();
         
@@ -186,10 +193,10 @@ class TipsViewer extends ScriptNode implements IShowableScript
             m_tipScripts.push(tipScript);
         }
         
-        var arrowTexture : Texture = assetManager.getTexture("arrow_short");
+        var arrowBitmapData : BitmapData = assetManager.getBitmapData("arrow_short");
         scaleFactor = 1.5;
-        var leftUpImage : Image = WidgetUtil.createPointingArrow(arrowTexture, true, scaleFactor);
-        var leftOverImage : Image = WidgetUtil.createPointingArrow(arrowTexture, true, scaleFactor, 0xCCCCCC);
+        var leftUpImage : DisplayObject = WidgetUtil.createPointingArrow(arrowBitmapData, true, scaleFactor);
+        var leftOverImage : DisplayObject = WidgetUtil.createPointingArrow(arrowBitmapData, true, scaleFactor, 0xCCCCCC);
         
         m_scrollLeftButton = WidgetUtil.createButtonFromImages(
                         leftUpImage,
@@ -202,10 +209,10 @@ class TipsViewer extends ScriptNode implements IShowableScript
                         );
         m_scrollLeftButton.x = 0;
         m_scrollLeftButton.y = 200;
-        m_scrollLeftButton.scaleWhenDown = 0.9;
+		m_scrollLeftButton.scaleWhenDown = 0.9;
         
-        var rightUpImage : Image = WidgetUtil.createPointingArrow(arrowTexture, false, scaleFactor, 0xFFFFFF);
-        var rightOverImage : Image = WidgetUtil.createPointingArrow(arrowTexture, false, scaleFactor, 0xCCCCCC);
+        var rightUpImage : DisplayObject = WidgetUtil.createPointingArrow(arrowBitmapData, false, scaleFactor, 0xFFFFFF);
+        var rightOverImage : DisplayObject = WidgetUtil.createPointingArrow(arrowBitmapData, false, scaleFactor, 0xCCCCCC);
         m_scrollRightButton = WidgetUtil.createButtonFromImages(
                         rightUpImage,
                         rightOverImage,
@@ -217,9 +224,13 @@ class TipsViewer extends ScriptNode implements IShowableScript
                         );
         m_scrollRightButton.x = screenWidth - rightUpImage.width;
         m_scrollRightButton.y = m_scrollLeftButton.y;
-        m_scrollRightButton.scaleWhenDown = m_scrollLeftButton.scaleWhenDown;
+		m_scrollRightButton.scaleWhenDown = m_scrollLeftButton.scaleWhenDown;
         
-        m_pageIndicatorText = new TextField(Std.int(screenWidth), 80, "ffff", GameFonts.DEFAULT_FONT_NAME, 24, 0xFFFFFF);
+        m_pageIndicatorText = new TextField();
+		m_pageIndicatorText.width = screenWidth;
+		m_pageIndicatorText.height = 80;
+		m_pageIndicatorText.text = "ffff";
+		m_pageIndicatorText.setTextFormat(new TextFormat(GameFonts.DEFAULT_FONT_NAME, 24, 0xFFFFFF));
         m_pageIndicatorText.x = 0;
         m_pageIndicatorText.y = screenHeight - m_pageIndicatorText.height * 2;
     }
@@ -309,10 +320,10 @@ class TipsViewer extends ScriptNode implements IShowableScript
         // Always start of with the list of tips
         changeToNamesView();
         
-        m_backButton.addEventListener(Event.TRIGGERED, onBackClicked);
+        m_backButton.addEventListener(MouseEvent.CLICK, onBackClicked);
         
-        m_scrollLeftButton.addEventListener(Event.TRIGGERED, onScrollLeftButtonClicked);
-        m_scrollRightButton.addEventListener(Event.TRIGGERED, onScrollRightButtonClicked);
+        m_scrollLeftButton.addEventListener(MouseEvent.CLICK, onScrollLeftButtonClicked);
+        m_scrollRightButton.addEventListener(MouseEvent.CLICK, onScrollRightButtonClicked);
     }
     
     public function hide() : Void
@@ -321,10 +332,10 @@ class TipsViewer extends ScriptNode implements IShowableScript
         hideNamesView();
         hideScriptsView();
         
-        m_backButton.removeEventListener(Event.TRIGGERED, onBackClicked);
+        m_backButton.removeEventListener(MouseEvent.CLICK, onBackClicked);
         
-        m_scrollLeftButton.removeEventListener(Event.TRIGGERED, onScrollLeftButtonClicked);
-        m_scrollRightButton.removeEventListener(Event.TRIGGERED, onScrollRightButtonClicked);
+        m_scrollLeftButton.removeEventListener(MouseEvent.CLICK, onScrollLeftButtonClicked);
+        m_scrollRightButton.removeEventListener(MouseEvent.CLICK, onScrollRightButtonClicked);
     }
     
     override public function dispose() : Void
@@ -357,12 +368,15 @@ class TipsViewer extends ScriptNode implements IShowableScript
         // Clean up all of the buttons for the names.
         for (tipButton in m_activeNamesButtonsForPage)
         {
-            tipButton.removeEventListeners();
-            tipButton.removeFromParent(true);
+			tipButton.removeEventListener(MouseEvent.CLICK, onTipButtonClicked);
+			if (tipButton.parent != null) tipButton.parent.removeChild(tipButton);
+			tipButton.dispose();
         }
+		
+		m_activeNamesButtonsForPage = new Array<LabelButton>();
         
-        m_pageIndicatorText.removeFromParent();
-        m_tipsTitle.removeFromParent();
+        if (m_pageIndicatorText.parent != null) m_pageIndicatorText.parent.removeChild(m_pageIndicatorText);
+        if (m_tipsTitle.parent != null) m_tipsTitle.parent.removeChild(m_tipsTitle);
         
         showScrollButtons(false);
     }
@@ -388,14 +402,14 @@ class TipsViewer extends ScriptNode implements IShowableScript
             
             // Button appearance will differ if the item was already purchased or if it is currently equipped.
             // The logic to change this is all baked inside the button class
-            var tipButton : Button = WidgetUtil.createGenericColoredButton(
+            var tipButton : LabelButton = WidgetUtil.createGenericColoredButton(
                     m_assetManager,
                     m_buttonColorData.getUpButtonColor(),
                     name, new TextFormat(GameFonts.DEFAULT_FONT_NAME, 24, 0xFFFFFF)
                     );
             tipButton.width = buttonWidth;
             tipButton.height = buttonHeight;
-            tipButton.addEventListener(Event.TRIGGERED, onTipButtonClicked);
+            tipButton.addEventListener(MouseEvent.CLICK, onTipButtonClicked);
             
             var rowIndex : Int = Std.int(i / columns);
             var columnIndex : Int = i % columns;
@@ -407,12 +421,12 @@ class TipsViewer extends ScriptNode implements IShowableScript
         }
     }
     
-    private function onTipButtonClicked(event : Event) : Void
+    private function onTipButtonClicked(event : Dynamic) : Void
     {
         // The index of the tip name that was selected will map us to the correct
         // tip script that needs to be executed
-        var targetButton : Button = try cast(event.currentTarget, Button) catch(e:Dynamic) null;
-        changeToScriptsView(targetButton.text);
+        var targetButton : LabelButton = try cast(event.relatedObject, LabelButton) catch (e:Dynamic) null;
+        changeToScriptsView(targetButton.label);
     }
     
     private function changeToScriptsView(tipName : String) : Void
@@ -436,7 +450,7 @@ class TipsViewer extends ScriptNode implements IShowableScript
     private function hideScriptsView() : Void
     {
         // Remove the back button
-        m_backButton.removeFromParent();
+        if (m_backButton.parent != null) m_backButton.parent.removeChild(m_backButton);
         
         if (m_activeTipScript != null) 
         {
@@ -445,14 +459,14 @@ class TipsViewer extends ScriptNode implements IShowableScript
         }
     }
     
-    private function onBackClicked() : Void
+    private function onBackClicked(event : Dynamic) : Void
     {
         Audio.instance.playSfx("button_click");
         hideScriptsView();
         changeToNamesView();
     }
     
-    private function onScrollLeftButtonClicked() : Void
+    private function onScrollLeftButtonClicked(event : Dynamic) : Void
     {
         Audio.instance.playSfx("button_click");
         m_currentPageIndex--;
@@ -464,7 +478,7 @@ class TipsViewer extends ScriptNode implements IShowableScript
         changeToNamesView();
     }
     
-    private function onScrollRightButtonClicked() : Void
+    private function onScrollRightButtonClicked(event : Dynamic) : Void
     {
         Audio.instance.playSfx("button_click");
         m_currentPageIndex++;
@@ -485,8 +499,8 @@ class TipsViewer extends ScriptNode implements IShowableScript
         }
         else 
         {
-            m_scrollLeftButton.removeFromParent();
-            m_scrollRightButton.removeFromParent();
+            if (m_scrollLeftButton.parent != null) m_scrollLeftButton.parent.removeChild(m_scrollLeftButton);
+            if (m_scrollRightButton.parent != null) m_scrollRightButton.parent.removeChild(m_scrollRightButton);
         }
     }
     

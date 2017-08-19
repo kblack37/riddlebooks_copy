@@ -109,7 +109,7 @@ class DrawBarModelTypeHint extends BasicTextAndCharacterHint
     
     override public function disposeDescription(description : DisplayObject) : Void
     {
-        m_descriptionBarModelView.removeFromParent();
+        if (m_descriptionBarModelView.parent != null) m_descriptionBarModelView.parent.removeChild(m_descriptionBarModelView);
         description.removeFromParent(true);
     }
     

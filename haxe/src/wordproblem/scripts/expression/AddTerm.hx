@@ -1,9 +1,14 @@
 package wordproblem.scripts.expression;
 
 import dragonbox.common.math.vectorspace.RealsVectorSpace;
+import motion.Actuate;
+import motion.actuators.GenericActuator;
+import openfl.display.Bitmap;
+import wordproblem.display.PivotSprite;
+import wordproblem.engine.events.DataEvent;
 import wordproblem.scripts.expression.BaseTermAreaScript;
 
-import flash.geom.Point;
+import openfl.geom.Point;
 
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.ExpressionUtil;
@@ -11,13 +16,10 @@ import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.math.vectorspace.IVectorSpace;
 import dragonbox.common.ui.MouseState;
 
-import starling.animation.Tween;
-import starling.core.Starling;
-import starling.display.DisplayObject;
-import starling.display.DisplayObjectContainer;
-import starling.display.Image;
-import starling.events.Event;
-import starling.events.EventDispatcher;
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
+import openfl.events.Event;
+import openfl.events.EventDispatcher;
 
 import wordproblem.engine.IGameEngine;
 import wordproblem.engine.animation.AddCardsAnimation;
@@ -53,8 +55,8 @@ class AddTerm extends BaseTermAreaScript
     /**
      * If not null, then an image of the addition sign pulses next to the dragged widget
      */
-    private var m_additionPreviewTween : Tween;
-    private var m_additionPreviewImage : Image;
+    private var m_additionPreviewTween : GenericActuator<PivotSprite>;
+    private var m_additionPreviewImage : PivotSprite;
     private var m_additionPreviewCanvas : DisplayObjectContainer;
     
     private var m_expressionSymbolMap : ExpressionSymbolMap;
@@ -72,7 +74,8 @@ class AddTerm extends BaseTermAreaScript
         
         m_addCardAnimation = new AddCardsAnimation();
         
-        m_additionPreviewImage = new Image(m_assetManager.getTexture("plus"));
+        m_additionPreviewImage = new PivotSprite();
+		m_additionPreviewImage.addChild(new Bitmap(m_assetManager.getBitmapData("plus")));
         m_additionPreviewImage.pivotX = m_additionPreviewImage.width * 0.5;
         m_additionPreviewImage.pivotY = m_additionPreviewImage.height * 0.5;
     }
@@ -127,9 +130,11 @@ class AddTerm extends BaseTermAreaScript
         super.dispose();
         if (m_additionPreviewTween != null) 
         {
-            Starling.current.juggler.remove(m_additionPreviewTween);
+			Actuate.stop(m_additionPreviewTween);
+			m_additionPreviewTween = null;
         }
-        m_additionPreviewImage.removeFromParent(true);
+		if (m_additionPreviewImage.parent != null) m_additionPreviewImage.parent.removeChild(m_additionPreviewImage);
+		m_additionPreviewImage = null;
     }
     
     override public function visit() : Int
@@ -188,25 +193,21 @@ class AddTerm extends BaseTermAreaScript
                 var scaleUpFactor : Float = 1.5;
                 if (m_additionPreviewTween == null) 
                 {
-                    m_additionPreviewTween = new Tween(m_additionPreviewImage, 0.7);
-                    m_additionPreviewTween.scaleTo(scaleUpFactor);
-                    m_additionPreviewTween.reverse = true;
-                    m_additionPreviewTween.repeatCount = 0;
-                    Starling.current.juggler.add(m_additionPreviewTween);
+                    m_additionPreviewTween = Actuate.tween(m_additionPreviewImage, 0.7, { scaleX: scaleUpFactor, scaleY: scaleUpFactor }).repeat().reflect();
                     
                     m_additionPreviewCanvas.addChild(m_additionPreviewImage);
                 }  
 				
 				// The addition preview should be positioned just around the mouse  
                 // Convert the global mouse point to the reference frame of the canvas 
-                m_additionPreviewCanvas.globalToLocal(m_globalMouseBuffer, m_localMouseBuffer);
+                m_localMouseBuffer = m_additionPreviewCanvas.globalToLocal(m_globalMouseBuffer);
                 m_additionPreviewImage.x = m_localMouseBuffer.x - (draggedWidget.width * 0.5) - m_additionPreviewImage.pivotX * scaleUpFactor;
                 m_additionPreviewImage.y = m_localMouseBuffer.y;
             }
             else if (!showAddPreviewForFrame && m_additionPreviewTween != null) 
             {
-                Starling.current.juggler.remove(m_additionPreviewTween);
-                m_additionPreviewImage.removeFromParent();
+				Actuate.stop(m_additionPreviewTween);
+                if (m_additionPreviewImage.parent != null) m_additionPreviewImage.parent.removeChild(m_additionPreviewImage);
                 m_additionPreviewImage.scaleX = m_additionPreviewImage.scaleY = 1.0;
                 m_additionPreviewTween = null;
             }
@@ -223,9 +224,9 @@ class AddTerm extends BaseTermAreaScript
         }
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         // TODO: Need to repeat some of the initialization
         m_widgetDragSystem = try cast(this.getNodeById("WidgetDragSystem"), WidgetDragSystem) catch(e:Dynamic) null;
@@ -290,13 +291,13 @@ class AddTerm extends BaseTermAreaScript
                     addSuccessful = attemptToAddSelectedNode(data, termArea, snapManagerForArea);
                     
                     // Dispatch event whether adding a card was successful or not
-                    m_eventDispatcher.dispatchEventWith(GameEvent.ADD_TERM_ATTEMPTED, false, {
+                    m_eventDispatcher.dispatchEvent(new DataEvent(GameEvent.ADD_TERM_ATTEMPTED, {
                                 widget : releasedWidgit,
                                 success : addSuccessful,
-                            });
+                            }));
                     if (addSuccessful) 
                     {
-                        m_eventDispatcher.dispatchEventWith(GameEvent.EQUATION_CHANGED);
+                        m_eventDispatcher.dispatchEvent(new Event(GameEvent.EQUATION_CHANGED));
                     }
                     break;
                 }
@@ -304,7 +305,7 @@ class AddTerm extends BaseTermAreaScript
             
             if (readdedToDisplay) 
             {
-                releasedWidgit.removeFromParent();
+                if (releasedWidgit.parent != null) releasedWidgit.parent.removeChild(releasedWidgit);
             }
         }
     }
@@ -401,7 +402,7 @@ class AddTerm extends BaseTermAreaScript
                     for (i in 0...additiveTermNodes.length){
                         additiveTerm = additiveTermNodes[i];
                         nodeLocalBuffer.setTo(additiveTerm.position.x, additiveTerm.position.y);
-                        hitTermArea.localToGlobal(nodeLocalBuffer, nodeGlobalBuffer);
+                        nodeGlobalBuffer = hitTermArea.localToGlobal(nodeLocalBuffer);
                         
                         // Cases to deal with:
                         // -No other terms
@@ -677,8 +678,9 @@ class AddTerm extends BaseTermAreaScript
 		
 		// Convert point from global to this coordinate space  
         var pointBuffer : Point = termArea.globalToLocal(globalMousePoint);
-		function onAddedNode(event : Event, data : Dynamic) : Void
+		function onAddedNode(event : Dynamic) : Void
         {
+			var data = (try cast(event, DataEvent) catch (e : Dynamic) null).getData();
             termArea.getTree().removeEventListener(ExpressionTreeEvent.ADD, onAddedNode);
             if (animate) 
             {
@@ -718,7 +720,7 @@ class AddTerm extends BaseTermAreaScript
         var i : Int = 0;
         for (i in 0...numNodesToAdd){
             startPoint.setTo(dropLocationsX[i], dropLocationsY[i]);
-            termArea.globalToLocal(startPoint, resultPoint);
+            resultPoint = termArea.globalToLocal(startPoint);
             dropLocationsX[i] = resultPoint.x;
             dropLocationsY[i] = resultPoint.y;
         }

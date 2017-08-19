@@ -1,9 +1,12 @@
 package wordproblem.scripts.barmodel;
 
+import openfl.display.Bitmap;
+import wordproblem.display.PivotSprite;
+import wordproblem.engine.events.DataEvent;
 import wordproblem.scripts.barmodel.BaseBarModelScript;
 import wordproblem.scripts.barmodel.IHitAreaScript;
 
-import flash.geom.Rectangle;
+import openfl.geom.Rectangle;
 
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
@@ -11,9 +14,8 @@ import dragonbox.common.ui.MouseState;
 
 import haxe.Constraints.Function;
 
-import starling.display.DisplayObjectContainer;
-import starling.display.Image;
-import starling.events.EventDispatcher;
+import openfl.display.DisplayObjectContainer;
+import openfl.events.EventDispatcher;
 
 import wordproblem.engine.IGameEngine;
 import wordproblem.engine.barmodel.BarModelDataUtil;
@@ -126,7 +128,7 @@ class AddNewBar extends BaseBarModelScript implements IHitAreaScript
         if (m_ready && m_isActive) 
         {
             m_globalMouseBuffer.setTo(m_mouseState.mousePositionThisFrame.x, m_mouseState.mousePositionThisFrame.y);
-            m_barModelArea.globalToLocal(m_globalMouseBuffer, m_localMouseBuffer);
+            m_localMouseBuffer = m_barModelArea.globalToLocal(m_globalMouseBuffer);
             
             if (m_eventTypeBuffer.length > 0) 
             {
@@ -159,18 +161,16 @@ class AddNewBar extends BaseBarModelScript implements IHitAreaScript
                         BarModelDataUtil.stretchVerticalBrackets(m_barModelArea.getBarModelData());
                     }
                     
-                    m_eventDispatcher.dispatchEventWith(GameEvent.BAR_MODEL_AREA_CHANGE, false, {
+                    m_eventDispatcher.dispatchEvent(new DataEvent(GameEvent.BAR_MODEL_AREA_CHANGE, {
                                 previousSnapshot : previousModelDataSnapshot
-
-                            });
+                            }));
                     m_barModelArea.redraw();
                     
                     // Log new bar was added
-                    m_eventDispatcher.dispatchEventWith(AlgebraAdventureLoggingConstants.ADD_NEW_BAR, false, {
+                    m_eventDispatcher.dispatchEvent(new DataEvent(AlgebraAdventureLoggingConstants.ADD_NEW_BAR, {
                                 barModel : m_barModelArea.getBarModelData().serialize(),
                                 value : releasedExpressionNode.data,
-
-                            });
+                            }));
                     
                     status = ScriptStatus.SUCCESS;
                 }
@@ -262,7 +262,8 @@ class AddNewBar extends BaseBarModelScript implements IHitAreaScript
     public function postProcessHitAreas(hitAreas : Array<Rectangle>, hitAreaGraphics : Array<DisplayObjectContainer>) : Void
     {
         for (i in 0...hitAreas.length){
-            var icon : Image = new Image(m_assetManager.getTexture("plus"));
+            var icon : PivotSprite = new PivotSprite();
+			icon.addChild(new Bitmap(m_assetManager.getBitmapData("plus")));
             var hitArea : Rectangle = hitAreas[i];
             icon.pivotX = icon.width * 0.5;
             icon.pivotY = icon.height * 0.5;

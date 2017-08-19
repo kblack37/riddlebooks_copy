@@ -3,6 +3,7 @@ package wordproblem.scripts.deck;
 
 import flash.geom.Point;
 import flash.geom.Rectangle;
+import wordproblem.engine.events.DataEvent;
 
 import cgs.audio.Audio;
 
@@ -51,9 +52,9 @@ class DiscoverTerm extends BaseGameScript
         m_gameEngine.removeEventListener(GameEvent.END_DRAG_TERM_WIDGET, onEndDrag);
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         m_gameEngine.addEventListener(GameEvent.END_DRAG_TERM_WIDGET, onEndDrag);
         
@@ -61,10 +62,11 @@ class DiscoverTerm extends BaseGameScript
         m_widgetDragSystem = try cast(this.getNodeById("WidgetDragSystem"), WidgetDragSystem) catch(e:Dynamic) null;
     }
     
-    private function onEndDrag(event : Event, args : Dynamic) : Void
+    private function onEndDrag(event : Dynamic) : Void
     {
-        var widget : BaseTermWidget = args.widget;
-        var origin : DisplayObject = args.origin;
+		var data = (try cast(event, DataEvent) catch (e : Dynamic) null).getData();
+        var widget : BaseTermWidget = data.widget;
+        var origin : DisplayObject = data.origin;
         
         // On any drag release of something from the text, we create a shortcut for it in the deck
         if (Std.is(origin, TextAreaWidget)) 
@@ -132,9 +134,8 @@ class DiscoverTerm extends BaseGameScript
             var loggingDetails : Dynamic = {
                 expressionName : Std.string(widgetWithMatchingValue.getNode()),
                 isAlreadyFound : false,
-
             };
-            m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.EXPRESSION_FOUND_EVENT, false, loggingDetails);
+            m_gameEngine.dispatchEvent(new DataEvent(AlgebraAdventureLoggingConstants.EXPRESSION_FOUND_EVENT, loggingDetails));
             
             var expressionComponent : ExpressionComponent = try cast(m_deckWidget.componentManager.getComponentFromEntityIdAndType(
                     data,
@@ -159,7 +160,7 @@ class DiscoverTerm extends BaseGameScript
                 component : aComponent
 
             };
-            m_gameEngine.dispatchEventWith(GameEvent.EXPRESSION_REVEALED, false, params);
+            m_gameEngine.dispatchEvent(new DataEvent(GameEvent.EXPRESSION_REVEALED, params));
         }
     }
 }

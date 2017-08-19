@@ -4,8 +4,8 @@ package wordproblem.scripts.expression;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.ui.MouseState;
 
-import starling.display.DisplayObject;
-import starling.events.EventDispatcher;
+import openfl.display.DisplayObject;
+import openfl.events.EventDispatcher;
 
 import wordproblem.engine.IGameEngine;
 import wordproblem.engine.events.GameEvent;
@@ -75,9 +75,9 @@ class BaseTermAreaScript extends BaseGameScript
         m_ready = true;
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         m_termAreas = new Array<TermAreaWidget>();
         var termAreas : Array<DisplayObject> = m_gameEngine.getUiEntitiesByClass(TermAreaWidget);

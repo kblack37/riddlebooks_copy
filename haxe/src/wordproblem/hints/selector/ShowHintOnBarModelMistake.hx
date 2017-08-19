@@ -2,8 +2,8 @@ package wordproblem.hints.selector;
 
 
 import haxe.xml.Fast;
-import starling.display.DisplayObject;
-import starling.events.Event;
+
+import openfl.display.DisplayObject;
 
 import wordproblem.characters.HelperCharacterController;
 import wordproblem.engine.IGameEngine;
@@ -15,6 +15,7 @@ import wordproblem.engine.barmodel.model.BarWhole;
 import wordproblem.engine.barmodel.model.DecomposedBarModelData;
 import wordproblem.engine.component.Component;
 import wordproblem.engine.component.ExpressionComponent;
+import wordproblem.engine.events.DataEvent;
 import wordproblem.engine.events.GameEvent;
 import wordproblem.engine.text.TextParser;
 import wordproblem.engine.text.TextViewFactory;
@@ -348,7 +349,7 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
         m_gameEngine.removeEventListener(GameEvent.BAR_MODEL_AREA_CHANGE, smoothlyRemovePreviousHint);
     }
     
-    private function onBarModelGesturePerformed(event : Event) : Void
+    private function onBarModelGesturePerformed(event : Dynamic) : Void
     {
         var gestureName : String = event.type;
         if (!Reflect.hasField(m_gestureToFrequencyPerformed, gestureName)) 
@@ -358,20 +359,20 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
 		Reflect.setField(m_gestureToFrequencyPerformed, gestureName, Reflect.field(m_gestureToFrequencyPerformed, gestureName) + 1);
     }
     
-    private function onBarModelCorrect() : Void
+    private function onBarModelCorrect(event : Dynamic) : Void
     {
         // If a correct bar model was selected, clear the hint as well
-        smoothlyRemovePreviousHint();
+        smoothlyRemovePreviousHint({ });
     }
     
-    private function smoothlyRemovePreviousHint() : Void
+    private function smoothlyRemovePreviousHint(event : Dynamic) : Void
     {
-        m_gameEngine.dispatchEventWith(GameEvent.REMOVE_HINT, false, {
+        m_gameEngine.dispatchEvent(new DataEvent(GameEvent.REMOVE_HINT, {
                     smoothlyRemove : true
-                });
+                }));
     }
     
-    private function onBarModelIncorrect() : Void
+    private function onBarModelIncorrect(event : Dynamic) : Void
     {
         m_numTimesSubmittedIncorrectModel++;
     }

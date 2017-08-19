@@ -2,17 +2,16 @@ package wordproblem.engine.animation;
 
 
 import dragonbox.common.util.XColor;
-import starling.display.Image;
+import openfl.display.Bitmap;
 
-import starling.animation.IAnimatable;
-import starling.display.DisplayObject;
-import starling.events.Event;
-import starling.events.EventDispatcher;
+import openfl.display.DisplayObject;
+import openfl.events.Event;
+import openfl.events.EventDispatcher;
 
 /**
  * Animation smoothly interpolates the color of a given image from a start to an end value.
  */
-class ColorChangeAnimation extends EventDispatcher implements IAnimatable
+class ColorChangeAnimation extends EventDispatcher
 {
     private var m_image : DisplayObject;
     private var m_startColor : Int;
@@ -37,9 +36,9 @@ class ColorChangeAnimation extends EventDispatcher implements IAnimatable
         m_image = image;
         
         // Make the object the starting color
-        if (Std.is(m_image, Image)) 
+        if (Std.is(m_image, Bitmap)) 
         {
-            (try cast(m_image, Image) catch(e:Dynamic) null).color = startColor;
+            (try cast(m_image, Bitmap) catch(e:Dynamic) null).transform.colorTransform.concat(XColor.rgbToColorTransform(startColor));
         }
     }
     
@@ -47,15 +46,14 @@ class ColorChangeAnimation extends EventDispatcher implements IAnimatable
     {
         m_elapsedTime += time;
         var resultColor : Int = XColor.interpolateColors(m_endColor, m_startColor, m_elapsedTime / m_duration);
-        if (Std.is(m_image, Image)) 
+        if (Std.is(m_image, Bitmap)) 
         {
-            (try cast(m_image, Image) catch(e:Dynamic) null).color = resultColor;
+            (try cast(m_image, Bitmap) catch(e:Dynamic) null).transform.colorTransform.concat(XColor.rgbToColorTransform(resultColor));
         }
         
         if (m_elapsedTime > m_duration) 
         {
-            (try cast(m_image, Image) catch(e:Dynamic) null).color = m_endColor;
-            dispatchEventWith(Event.REMOVE_FROM_JUGGLER);
+            (try cast(m_image, Bitmap) catch(e:Dynamic) null).transform.colorTransform.concat(XColor.rgbToColorTransform(m_endColor));
         }
     }
 }

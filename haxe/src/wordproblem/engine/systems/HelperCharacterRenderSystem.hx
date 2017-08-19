@@ -1,11 +1,10 @@
 package wordproblem.engine.systems;
 
 
-import starling.animation.Juggler;
-import starling.display.DisplayObject;
-import starling.display.DisplayObjectContainer;
-import starling.display.MovieClip;
-import starling.textures.TextureAtlas;
+import motion.Actuate;
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
+import openfl.display.MovieClip;
 
 import wordproblem.engine.component.AnimatedTextureAtlasStateComponent;
 import wordproblem.engine.component.Component;
@@ -32,11 +31,6 @@ class HelperCharacterRenderSystem extends BaseSystemScript
     private var m_assetManager : AssetManager;
     
     /**
-     * We leverage the juggler since we are using starling movie clips to render our spritesheets
-     */
-    private var m_spriteSheetJuggler : Juggler;
-    
-    /**
      * To detect changes on each visit, for each entity id we map to the state
      * value it was on the last visit.
      */
@@ -45,13 +39,12 @@ class HelperCharacterRenderSystem extends BaseSystemScript
     private var m_parentDisplay : DisplayObjectContainer;
     
     public function new(assetManager : AssetManager,
-            spriteSheetJuggler : Juggler,
             parentDisplay : DisplayObjectContainer)
     {
         super("HelperCharacterRenderSystem");
         
         m_assetManager = assetManager;
-        m_spriteSheetJuggler = spriteSheetJuggler;
+        //m_spriteSheetJuggler = spriteSheetJuggler;
         m_previousStateValue = new Map();
         setParentDisplay(parentDisplay);
     }
@@ -99,10 +92,9 @@ class HelperCharacterRenderSystem extends BaseSystemScript
                         renderComponent.renderStatus = ((renderComponent.renderStatus == 0)) ? 1 : 0;
                         indexInCollection = renderComponent.renderStatus;
                     }
-                }  // Set previous state to initial value if not present in map  
-                
-                
-                
+                }  
+				
+				// Set previous state to initial value if not present in map  
                 var previousStateValue : Int = ((m_previousStateValue.exists(entityId))) ? Reflect.field(m_previousStateValue, entityId) : -1;
                 var currentStateValue : Int = renderComponent.renderStatus;
                 Reflect.setField(m_previousStateValue, entityId, currentStateValue);
@@ -112,15 +104,15 @@ class HelperCharacterRenderSystem extends BaseSystemScript
                 {
                     if (renderComponent.view != null) 
                     {
-                        m_spriteSheetJuggler.remove(try cast(renderComponent.view, MovieClip) catch(e:Dynamic) null);
-                        renderComponent.view.removeFromParent(true);
+                        //m_spriteSheetJuggler.remove(try cast(renderComponent.view, MovieClip) catch(e:Dynamic) null);
+						renderComponent.if (view.parent != null) view.parent.removeChild(view);
+						renderComponent.view = null;
                     }
                     
                     drawNewImage = true;
-                }  // Depending on the type of object draw the character  
-                
-                
-                
+                }
+				
+				// Depending on the type of object draw the character  
                 var textureData : Dynamic = textureCollectionComponent.textureCollection[indexInCollection];
                 if (textureData.type == "SpriteSheetAnimated") 
                 {
@@ -128,15 +120,15 @@ class HelperCharacterRenderSystem extends BaseSystemScript
                     // On visit we just need to update the time
                     if (drawNewImage) 
                     {
-                        var textureAtlas : TextureAtlas = m_assetManager.getTextureAtlas(textureData.textureName);
-                        var movieClip : MovieClip = new MovieClip(textureAtlas.getTextures(), 30);
-                        movieClip.pivotX = movieClip.width * 0.5;
-                        movieClip.pivotY = movieClip.height * 0.5;
-                        movieClip.loop = true;
-                        renderComponent.view = movieClip;
+                        //var textureAtlas : TextureAtlas = m_assetManager.getTextureAtlas(textureData.textureName);
+                        //var movieClip : MovieClip = new MovieClip(textureAtlas.getTextures(), 30);
+                        //movieClip.pivotX = movieClip.width * 0.5;
+                        //movieClip.pivotY = movieClip.height * 0.5;
+                        //movieClip.loop = true;
+                        //renderComponent.view = movieClip;
                         
-                        movieClip.play();
-                        m_spriteSheetJuggler.add(movieClip);
+                        //movieClip.play();
+                        //m_spriteSheetJuggler.add(movieClip);
                     }
                     
 					var textureAtlasStateComponent : AnimatedTextureAtlasStateComponent = try cast(componentManager.getComponentFromEntityIdAndType(
@@ -147,15 +139,14 @@ class HelperCharacterRenderSystem extends BaseSystemScript
                     if (textureAtlasStateComponent != null) 
                     {
                         textureAtlasStateComponent.currentFrameCounter++;
-                        if (textureAtlasStateComponent.currentFrameCounter >= (try cast(renderComponent.view, MovieClip) catch(e:Dynamic) null).numFrames) 
-                        {
-                            textureAtlasStateComponent.currentFrameCounter = 0;
-                            textureAtlasStateComponent.currentCyclesComplete++;
-                        }
-                    }  // Advance the time of the movieclip  
-                    
-                    
-                    
+                        //if (textureAtlasStateComponent.currentFrameCounter >= (try cast(renderComponent.view, MovieClip) catch(e:Dynamic) null).numFrames) 
+                        //{
+                            //textureAtlasStateComponent.currentFrameCounter = 0;
+                            //textureAtlasStateComponent.currentCyclesComplete++;
+                        //}
+                    } 
+					
+					// Advance the time of the movieclip  
                     var view : DisplayObject = renderComponent.view;
                     
                     // Re-position the helper character to the right spot
@@ -168,8 +159,9 @@ class HelperCharacterRenderSystem extends BaseSystemScript
                     view.x = positionComponent.x;
                     view.y = positionComponent.y;
                     view.rotation = positionComponent.rotation;
-                }  // Re-add view  
-                
+                }  
+				
+				// Re-add view  
                 var view : DisplayObject = renderComponent.view;
                 
                 if (view.parent == null || view.parent != m_parentDisplay) 
@@ -179,8 +171,8 @@ class HelperCharacterRenderSystem extends BaseSystemScript
             }
             else if (renderComponent.view != null && renderComponent.view.parent != null) 
             {
-                renderComponent.view.removeFromParent();
-                m_spriteSheetJuggler.remove(try cast(renderComponent.view, MovieClip) catch(e:Dynamic) null);
+                renderComponent.if (view.parent != null) view.parent.removeChild(view);
+                //m_spriteSheetJuggler.remove(try cast(renderComponent.view, MovieClip) catch(e:Dynamic) null);
             }
         }
     }

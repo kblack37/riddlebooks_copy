@@ -24,7 +24,7 @@ import dragonbox.common.ui.TextButton;
 import dragonbox.common.util.XColor;
 
 import starling.animation.Juggler;
-import starling.display.Button;
+import wordproblem.display.LabelButton;
 import starling.display.Image;
 import starling.display.Quad;
 import starling.textures.Texture;
@@ -152,7 +152,7 @@ class TitleScreenState extends BaseState
     /**
      * Button for the player to create a new account
      */
-    private var m_signUpButton : Button;
+    private var m_signUpButton : LabelButton;
     
     /**
      * Button for the player to start playing without an account
@@ -362,7 +362,7 @@ class TitleScreenState extends BaseState
                 //m_loginPopup.password = m_autoLoginPassword;
                 //m_loginPopup.attemptLogin();
                 
-                dispatchEventWith(CommandEvent.WAIT_SHOW);
+                dispatchEvent(CommandEvent.WAIT_SHOW);
             }
             else 
             {
@@ -382,7 +382,7 @@ class TitleScreenState extends BaseState
         {
             if (flashStageObject != null && flashStageObject.parent) 
             {
-                flashStageObject.parent.removeChild(flashStageObject);
+                if (flashStageObject.parent != null) flashStageObject.parent.removeChild(flashStageObject);
             }
         }
         
@@ -401,7 +401,7 @@ class TitleScreenState extends BaseState
             renderComponent = try cast(renderComponents[i], RenderableComponent) catch(e:Dynamic) null;
             if (renderComponent.view != null) 
             {
-                renderComponent.view.removeFromParent();
+                renderComponent.if (view.parent != null) view.parent.removeChild(view);
             }
         }
     }
@@ -451,7 +451,7 @@ class TitleScreenState extends BaseState
                     //button.addEventListener(MouseEvent.CLICK, function(event : MouseEvent) : Void
                             //{
                                 //Audio.instance.playSfx("button_click");
-                                //dispatchEventWith(CommandEvent.WAIT_SHOW);
+                                //dispatchEvent(CommandEvent.WAIT_SHOW);
                             //});
                     //return button;
                 //});
@@ -626,8 +626,8 @@ class TitleScreenState extends BaseState
         // For anonymous users immediately send out authenticated signal
         else 
         {
-            dispatchEventWith(CommandEvent.WAIT_HIDE);
-            dispatchEventWith(CommandEvent.USER_AUTHENTICATED);
+            dispatchEvent(CommandEvent.WAIT_HIDE);
+            dispatchEvent(CommandEvent.USER_AUTHENTICATED);
         }
     }
     
@@ -643,8 +643,8 @@ class TitleScreenState extends BaseState
 				{
 					tosScreen.dispose();
 					m_flashStage.removeChild(tosScreen);
-					dispatchEventWith(CommandEvent.WAIT_HIDE);
-					dispatchEventWith(CommandEvent.USER_AUTHENTICATED);
+					dispatchEvent(CommandEvent.WAIT_HIDE);
+					dispatchEvent(CommandEvent.USER_AUTHENTICATED);
 				}, 
 				800, 
 				600
@@ -656,8 +656,8 @@ class TitleScreenState extends BaseState
             // On login, if the user is not anonymous and we are linked to dragonbox
             // Then we may need to poll the player's dragonbox save data to fetch information
             // that should be imported over to this game. For example rewards.
-            dispatchEventWith(CommandEvent.WAIT_HIDE);
-            dispatchEventWith(CommandEvent.USER_AUTHENTICATED, false);
+            dispatchEvent(CommandEvent.WAIT_HIDE);
+            dispatchEvent(CommandEvent.USER_AUTHENTICATED, false);
         }
     }
     
@@ -667,7 +667,7 @@ class TitleScreenState extends BaseState
     private function onUserLoginFail(response : CgsUserResponse) : Void
     {
         // Hide the waiting screen
-        dispatchEventWith(CommandEvent.WAIT_HIDE);
+        dispatchEvent(CommandEvent.WAIT_HIDE);
     }
     
     /**
@@ -733,7 +733,7 @@ class TitleScreenState extends BaseState
             
             
             
-            dispatchEventWith(CommandEvent.WAIT_SHOW);
+            dispatchEvent(CommandEvent.WAIT_SHOW);
             
             handleCgsUserCreated(m_dummyAnonymousUser);
         };

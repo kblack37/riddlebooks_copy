@@ -17,7 +17,7 @@ import gameconfig.versions.replay.events.ReplayEvents;
 import gameconfig.versions.replay.scripts.ReplayBarModelLevel;
 import gameconfig.versions.replay.scripts.ReplayControllerScript;
 
-import starling.display.Button;
+import wordproblem.display.LabelButton;
 import starling.events.Event;
 
 import wordproblem.engine.GameEngine;
@@ -49,7 +49,7 @@ class ReplayGameState extends BaseState
     
     private var m_prebakedScripts : ScriptNode;
     
-    private var m_exitButton : Button;
+    private var m_exitButton : LabelButton;
     
     public function new(stateMachine : IStateMachine,
             gameEngine : GameEngine,
@@ -82,7 +82,7 @@ class ReplayGameState extends BaseState
         //(try cast(m_exitButton.defaultSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.ROYAL_BLUE;
         //(try cast(m_exitButton.hoverSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.BRIGHT_ORANGE;
         //(try cast(m_exitButton.downSkin, Scale9Image) catch(e:Dynamic) null).color = XColor.BRIGHT_ORANGE;
-        m_exitButton.addEventListener(Event.TRIGGERED, onExitClicked);
+        m_exitButton.addEventListener(MouseEvent.CLICK, onExitClicked);
         m_exitButton.width = buttonWidth;
         m_exitButton.height = buttonHeight;
     }
@@ -133,6 +133,6 @@ class ReplayGameState extends BaseState
     
     private function onExitClicked() : Void
     {
-        dispatchEventWith(ReplayEvents.EXIT_REPLAY);
+        dispatchEvent(ReplayEvents.EXIT_REPLAY);
     }
 }

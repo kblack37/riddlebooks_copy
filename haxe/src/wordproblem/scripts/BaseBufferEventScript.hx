@@ -2,6 +2,7 @@ package wordproblem.scripts;
 
 
 import starling.events.Event;
+import wordproblem.engine.events.DataEvent;
 
 import wordproblem.engine.scripting.graph.ScriptNode;
 import wordproblem.engine.scripting.graph.ScriptStatus;
@@ -68,10 +69,12 @@ class BaseBufferEventScript extends ScriptNode
      * Event listeners should bind to this function if we want to process all captured events
      * together on the next frame.
      */
-    private function bufferEvent(event : Event, param : Dynamic) : Void
+    private function bufferEvent(event : Dynamic) : Void
     {
+		if (Std.is(event, DataEvent)) {
+			m_eventParamBuffer.push((try cast(event, DataEvent) catch (e : Dynamic) null).getData());
+		}
         m_eventTypeBuffer.push(event.type);
-        m_eventParamBuffer.push(param);
     }
     
     /**

@@ -1,19 +1,19 @@
 package wordproblem.engine.widget;
 
 
-import flash.text.TextFormat;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.text.TextFormat;
 
 import cgs.audio.Audio;
 
 import haxe.Constraints.Function;
 
-import starling.display.Button;
-import starling.display.DisplayObject;
-import starling.display.Image;
-import starling.display.Quad;
-import starling.display.Sprite;
-import starling.events.Event;
-import starling.textures.Texture;
+import wordproblem.display.LabelButton;
+import openfl.display.DisplayObject;
+import openfl.display.Sprite;
+import openfl.events.Event;
+import openfl.events.MouseEvent;
 
 import wordproblem.display.Layer;
 import wordproblem.engine.text.GameFonts;
@@ -29,9 +29,9 @@ import wordproblem.resource.AssetManager;
  */
 class ConfirmationWidget extends Layer
 {
-    private var m_confirmButton : Button;
+    private var m_confirmButton : LabelButton;
     private var m_confirmCallback : Function;
-    private var m_declineButton : Button;
+    private var m_declineButton : LabelButton;
     private var m_declineCallback : Function;
     
     /**
@@ -56,15 +56,15 @@ class ConfirmationWidget extends Layer
     {
         super();
         
-        var blockingQuad : Quad = new Quad(width, height, 0x000000);
+        var blockingQuad : Bitmap = new Bitmap(new BitmapData(Std.int(width), Std.int(height), false, 0x000000));
         blockingQuad.alpha = 0.7;
         addChild(blockingQuad);
         
         var backgroundContainer : Sprite = new Sprite();
         addChild(backgroundContainer);
         
-        var texture : Texture = assetManager.getTexture("summary_background");
-        var background : Image = new Image(texture);
+        var bitmapData : BitmapData = assetManager.getBitmapData("summary_background");
+        var background : Bitmap = new Bitmap(bitmapData);
         var backgroundWidth : Float = width * 0.5;
         var backgroundHeight : Float = height * 0.5;
         background.width = backgroundWidth;
@@ -94,7 +94,7 @@ class ConfirmationWidget extends Layer
         m_confirmButton.y = backgroundHeight - buttonHeight - 10;
         backgroundContainer.addChild(m_confirmButton);
         m_confirmCallback = confirmCallback;
-        m_confirmButton.addEventListener(Event.TRIGGERED, onConfirmClick);
+        m_confirmButton.addEventListener(MouseEvent.CLICK, onConfirmClick);
         
         if (!isNotification) 
         {
@@ -111,11 +111,11 @@ class ConfirmationWidget extends Layer
             m_declineButton.y = m_confirmButton.y;
             backgroundContainer.addChild(m_declineButton);
             m_declineCallback = declineCallback;
-            m_declineButton.addEventListener(Event.TRIGGERED, onDeclineClick);
+            m_declineButton.addEventListener(MouseEvent.CLICK, onDeclineClick);
         }
     }
     
-    private function onConfirmClick() : Void
+    private function onConfirmClick(event : Dynamic) : Void
     {
         Audio.instance.playSfx("button_click");
         if (m_confirmCallback != null) 
@@ -124,7 +124,7 @@ class ConfirmationWidget extends Layer
         }
     }
     
-    private function onDeclineClick() : Void
+    private function onDeclineClick(event : Dynamic) : Void
     {
         Audio.instance.playSfx("button_click");
         if (m_declineCallback != null) 

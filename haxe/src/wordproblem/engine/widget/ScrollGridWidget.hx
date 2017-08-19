@@ -1,14 +1,14 @@
 package wordproblem.engine.widget;
 
 
-import flash.geom.Point;
-import flash.geom.Rectangle;
+import openfl.events.Event;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
 
 import dragonbox.common.system.RectanglePool;
 
-import starling.animation.Tween;
-import starling.display.DisplayObject;
-import starling.display.Sprite;
+import openfl.display.DisplayObject;
+import openfl.display.Sprite;
 
 /**
  * One important note is that we are assuming that any added component will
@@ -90,11 +90,6 @@ class ScrollGridWidget extends Sprite
     private var m_scrollVelocity : Float = 400.0;
     
     /**
-     * The animation object to get the objects to scroll smoothly
-     */
-    private var m_scrollTween : Tween;
-    
-    /**
      * This is the amount the user has shifted over contents from their default positions
      */
     private var m_scrollXOffset : Float;
@@ -150,8 +145,6 @@ class ScrollGridWidget extends Sprite
         m_objectLayer = new Sprite();
         addChild(m_objectLayer);
         
-        m_scrollTween = new Tween(m_objectLayer, 0);
-        
         m_gap = gap;
         m_scrollVertically = scrollVertically;
         m_fixedItemBounds = fixedItemBounds;
@@ -172,7 +165,7 @@ class ScrollGridWidget extends Sprite
         m_viewPort = new Rectangle(xOffset, yOffset, viewPortWidth, viewPortHeight);
         
         // Set a clipping mask for the scroll contents
-        m_objectLayer.clipRect = m_viewPort;
+		m_objectLayer.scrollRect = m_viewPort;
         
         if (m_backgroundImage != null) 
         {
@@ -247,8 +240,6 @@ class ScrollGridWidget extends Sprite
                     m_scrollXOffset = -(lastObjectStartBounds.x - (viewPortMidX - lastObjectStartBounds.width));
                 }
                 
-                
-                
                 var i : Int = 0;
                 var numObjects : Int = m_objects.length;
                 for (i in 0...numObjects){
@@ -260,12 +251,10 @@ class ScrollGridWidget extends Sprite
                         displayObject.x += m_dummyBoundsBuffer[i].width * 0.5;
                     }
                 }
-            }  // This determines whether the buttons should be enabled    // Check if it is possible to scroll anymore to the left or right  
-            
-            
-            
-            
-            
+            }  
+			
+			// Check if it is possible to scroll anymore to the left or right  
+            // This determines whether the buttons should be enabled  
             var shouldLeftBeEnabled : Bool = firstObjectStartBounds.left + m_scrollXOffset < viewPortMidX;
             var shouldRightBeEnabled : Bool = lastObjectStartBounds.right + m_scrollXOffset > viewPortMidX;
             scrollButtonsEnabled(shouldLeftBeEnabled, shouldRightBeEnabled);
@@ -280,9 +269,8 @@ class ScrollGridWidget extends Sprite
     {
     }
     
-    override public function dispose() : Void
+    public function dispose() : Void
     {
-        super.dispose();
     }
     
     // The grid widget is a fairly dumb class:
@@ -332,7 +320,7 @@ class ScrollGridWidget extends Sprite
         // Need to convert the global to local
         m_globalPointBuffer.x = globalX;
         m_globalPointBuffer.y = globalY;
-        this.globalToLocal(m_globalPointBuffer, m_localPointBuffer);
+        m_localPointBuffer = this.globalToLocal(m_globalPointBuffer);
         if (m_viewPort.containsPoint(m_localPointBuffer)) 
         {
             var renderComponents : Array<DisplayObject> = this.getObjects();
@@ -341,7 +329,7 @@ class ScrollGridWidget extends Sprite
             var numObjects : Int = renderComponents.length;
             for (i in 0...numObjects){
                 renderComponent = renderComponents[i];
-                renderComponent.getBounds(this, m_objectBoundsBuffer);
+                m_objectBoundsBuffer = renderComponent.getBounds(this);
                 if (m_objectBoundsBuffer.containsPoint(m_localPointBuffer)) 
                 {
                     objectUnderPoint = renderComponent;
@@ -368,7 +356,7 @@ class ScrollGridWidget extends Sprite
         var indexToRemove : Int = Lambda.indexOf(m_objects, object);
         if (indexToRemove >= 0) 
         {
-            object.removeFromParent();
+            if (object.parent != null) object.parent.removeChild(object);
             
             m_objects.splice(indexToRemove, 1);
             
@@ -384,8 +372,8 @@ class ScrollGridWidget extends Sprite
         while (m_objects.length > 0)
         {
             var renderComponent : DisplayObject = m_objects.pop();
-            renderComponent.removeFromParent();
-            renderComponent.dispose();
+            if (renderComponent.parent != null) renderComponent.parent.removeChild(renderComponent);
+			renderComponent = null;
         }
     }
     
@@ -574,6 +562,6 @@ class ScrollGridWidget extends Sprite
             m_objectLayer.addChild(actualObject);
         }
         
-        this.dispatchEventWith(ScrollGridWidget.EVENT_LAYOUT_COMPLETE);
+        this.dispatchEvent(new Event(ScrollGridWidget.EVENT_LAYOUT_COMPLETE));
     }
 }

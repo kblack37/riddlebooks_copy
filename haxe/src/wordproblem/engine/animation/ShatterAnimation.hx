@@ -91,7 +91,7 @@ class ShatterAnimation implements IAnimatable
         m_totalTimeElapsedSincePlay += time;
         if (m_totalTimeElapsedSincePlay > m_shatterDuration) 
         {
-            m_particleRenderer.removeFromParent();
+            if (m_particleRenderer.parent != null) m_particleRenderer.parent.removeChild(m_particleRenderer);
             m_juggler.remove(this);
             if (m_completeCallback != null) 
             {

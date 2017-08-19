@@ -149,7 +149,7 @@ class SubstitutionAnimation
         {
             
             if (replacementWidgetRoot.parent != null) 
-                replacementWidgetRoot.parent.removeChild(replacementWidgetRoot)  // Call the oncomplete callback  ;
+                if (replacementWidgetRoot.parent != null) replacementWidgetRoot.parent.removeChild(replacementWidgetRoot)  // Call the oncomplete callback  ;
             
             
             

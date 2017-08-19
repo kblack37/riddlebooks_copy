@@ -1,21 +1,24 @@
 package wordproblem.engine.widget;
 
-import starling.display.Button;
+import dragonbox.common.util.XColor;
+import motion.Actuate;
+import motion.easing.Linear;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import wordproblem.display.LabelButton;
+import openfl.events.MouseEvent;
+import openfl.filters.GlowFilter;
+import wordproblem.display.PivotSprite;
+import wordproblem.engine.events.DataEvent;
 import wordproblem.engine.widget.ScrollGridWidget;
 
-import flash.geom.Rectangle;
+import openfl.geom.Rectangle;
 
-import starling.animation.Transitions;
-import starling.animation.Tween;
-import starling.core.Starling;
-import starling.display.DisplayObject;
-import starling.display.Image;
-import starling.display.Quad;
-import starling.display.Sprite;
-import starling.events.Event;
-import starling.filters.BlurFilter;
-import starling.text.TextField;
-import starling.textures.Texture;
+import openfl.display.DisplayObject;
+import openfl.display.Sprite;
+import openfl.events.Event;
+import openfl.filters.BlurFilter;
+import openfl.text.TextField;
 import wordproblem.resource.AssetManager;
 
 import wordproblem.engine.component.RenderableComponent;
@@ -31,9 +34,9 @@ class EquationInventoryWidget extends Sprite
     /**
      * The button area that helps toggle whether the scroller is expanded or collapsed
      */
-    private var m_expandButton : Button;
-    private var m_expandIconClosed : Image;
-    private var m_expandIconOpen : Image;
+    private var m_expandButtonContainer : PivotSprite;
+    private var m_expandIconClosed : Bitmap;
+    private var m_expandIconOpen : Bitmap;
     
     /**
      * Keep track of whether the equation contents is fully expanded and visible.
@@ -50,10 +53,10 @@ class EquationInventoryWidget extends Sprite
     /**
      * Texture representing the background for the scroll button and equations
      */
-    private var m_background : DisplayObject;
+    private var m_background : PivotSprite;
     
-    private var m_scrollLeftButton : Button;
-    private var m_scrollRightButton : Button;
+    private var m_scrollLeftButton : LabelButton;
+    private var m_scrollRightButton : LabelButton;
     
     // The feathers buttons do not have a width assigned immediately
     private var m_expandButtonWidth : Float;
@@ -83,13 +86,12 @@ class EquationInventoryWidget extends Sprite
         super();
         
         var padding : Float = 20;
-        var texture : Texture = assetManager.getTexture("button_white");
-		// TODO: this was replaced from the Scale3Texture from the feathers library
-		// and will probably need to be fixed
-        var backgroundTexture : Texture = Texture.fromTexture(texture, new Rectangle(padding, 0, texture.width - 2 * padding, texture.height));
-        var backgroundImage : Image = new Image(backgroundTexture);
-        backgroundImage.color = 0xCCCCCC;
-        m_backgroundInitialDimensions = new Rectangle(0, 0, texture.width, texture.height);
+        var backgroundBitmapData : BitmapData = assetManager.getBitmapData("button_white");
+        var backgroundImage : PivotSprite = new PivotSprite();
+		backgroundImage.addChild(new Bitmap(backgroundBitmapData));
+		backgroundImage.scale9Grid = new Rectangle(padding, 0, backgroundBitmapData.width - 2 * padding, backgroundBitmapData.height);
+		backgroundImage.transform.colorTransform.concat(XColor.rgbToColorTransform(0xCCCCCC));
+        m_backgroundInitialDimensions = new Rectangle(0, 0, backgroundBitmapData.width, backgroundBitmapData.height);
         m_background = backgroundImage;
         
         m_scrollArea = new ScrollGridWidget(
@@ -101,25 +103,26 @@ class EquationInventoryWidget extends Sprite
                 );
         
         var scaleFactor : Float = 0.7;
-        var buttonTexture : Texture = assetManager.getTexture("button_sidebar_minimize");
-        m_scrollButtonDimensions = new Rectangle(0, 0, buttonTexture.width * scaleFactor, buttonTexture.height * scaleFactor);
+        var buttonBitmapData : BitmapData = assetManager.getBitmapData("button_sidebar_minimize");
+        m_scrollButtonDimensions = new Rectangle(0, 0, buttonBitmapData.width * scaleFactor, buttonBitmapData.height * scaleFactor);
         m_scrollLeftButton = WidgetUtil.createButton(assetManager, "button_sidebar_minimize", "button_sidebar_minimize_click", null, "button_sidebar_minimize_mouseover", null, null);
         m_scrollLeftButton.scaleX = m_scrollLeftButton.scaleY = scaleFactor;
-        m_scrollLeftButton.addEventListener(Event.TRIGGERED, onClickLeft);
+        m_scrollLeftButton.addEventListener(MouseEvent.CLICK, onClickLeft);
         
         m_scrollRightButton = WidgetUtil.createButton(assetManager, "button_sidebar_maximize", "button_sidebar_maximize_click", null, "button_sidebar_maximize_mouseover", null, null);
         m_scrollRightButton.scaleX = m_scrollRightButton.scaleY = scaleFactor;
-        m_scrollRightButton.addEventListener(Event.TRIGGERED, onClickRight);
+        m_scrollRightButton.addEventListener(MouseEvent.CLICK, onClickRight);
         
-        var expandTexture : Texture = assetManager.getTexture("box_closed");
-        m_expandIconClosed = new Image(expandTexture);
-        m_expandIconOpen = new Image(assetManager.getTexture("box_open"));
+        var expandBitmapData : BitmapData = assetManager.getBitmapData("box_closed");
+        m_expandIconClosed = new Bitmap(expandBitmapData);
+        m_expandIconOpen = new Bitmap(assetManager.getBitmapData("box_open"));
         
-        m_expandButtonWidth = expandTexture.width;
-        m_expandButton = WidgetUtil.createButton(assetManager, "box_closed", null, null, null, null, null);
-        m_expandButton.addEventListener(Event.TRIGGERED, onClickExpand);
-        m_expandButton.pivotY = expandTexture.height * 0.5;
-        addChild(m_expandButton);
+        m_expandButtonWidth = expandBitmapData.width;
+		m_expandButtonContainer = new PivotSprite();
+        m_expandButtonContainer.addChild(WidgetUtil.createButton(assetManager, "box_closed", null, null, null, null, null));
+        m_expandButtonContainer.getChildAt(0).addEventListener(MouseEvent.CLICK, onClickExpand);
+        m_expandButtonContainer.pivotY = expandBitmapData.height * 0.5;
+        addChild(m_expandButtonContainer);
         
         // Initially we need to set whether the contents are visible or not
         m_isAnimating = false;
@@ -127,7 +130,7 @@ class EquationInventoryWidget extends Sprite
         
         // To use outlined text we create a regular flash textfield, add a glow filter to it then
         // flush it to a bitmap which then acts as a texture for a regular starling image.
-        m_equationsTextfield = new OutlinedTextField(expandTexture.width, expandTexture.height, "Verdana", 28, 0xFFFFFF, 0);
+        m_equationsTextfield = new OutlinedTextField(expandBitmapData.width, expandBitmapData.height, "Verdana", 28, 0xFFFFFF, 0);
         m_equationsTextfield.setText("0");
         m_scrollArea.addEventListener(ScrollGridWidget.EVENT_LAYOUT_COMPLETE, onLayoutComplete);
     }
@@ -138,15 +141,15 @@ class EquationInventoryWidget extends Sprite
         m_totalHeight = height;
         
         // Center the expand button
-        m_expandButton.y = height * 0.4;
+        m_expandButtonContainer.y = height * 0.4;
         m_background.y = height * 0.5;
         m_background.height *= 0.75;
         m_background.pivotY = m_background.height * 0.5;
         
-        m_equationsTextfield.y = m_expandButton.y;
-        m_equationsTextfield.x = m_expandButton.x;
+        m_equationsTextfield.y = m_expandButtonContainer.y;
+        m_equationsTextfield.x = m_expandButtonContainer.x;
         m_equationsTextfield.pivotY = m_equationsTextfield.height * 0.5;
-        m_expandButton.addChild(m_equationsTextfield);
+        m_expandButtonContainer.addChild(m_equationsTextfield);
         
         m_scrollLeftButton.x = m_expandButtonWidth;
         m_scrollLeftButton.y = (m_scrollLeftButton.height + m_background.height) * 0.5;
@@ -205,12 +208,7 @@ class EquationInventoryWidget extends Sprite
                         // The equations should not be visible
                         // Once it is finished, each equation should scale up to pop in along with the buttons
                         item.scaleX = item.scaleY = 0;
-                        Starling.current.juggler.tween(item, m_equationDuration, {
-                                    transition : Transitions.LINEAR,
-                                    onComplete : onEquationExpand,
-                                    scaleX : 1,
-                                    scaleY : 1,
-                                });
+						Actuate.tween(item, m_equationDuration, { scaleX: 1, scaleY: 1}).ease(Linear.easeNone).onComplete(onEquationExpand);
                     }
                     
                     if (numComponents == 0) 
@@ -228,10 +226,7 @@ class EquationInventoryWidget extends Sprite
                     }
                 };
 				
-                Starling.current.juggler.tween(m_background, m_backgroundDuration, {
-                            onComplete : onBackgroundExpand,
-                            width : m_totalWidth,
-                });
+				Actuate.tween(m_background, m_backgroundDuration, { width : m_totalWidth }).onComplete(onBackgroundExpand);
             }
             else 
             {
@@ -240,7 +235,7 @@ class EquationInventoryWidget extends Sprite
                     numRemainingToAnimate--;
 					function onBackgroundContract() : Void
                         {
-                            m_background.removeFromParent();
+                            if (m_background.parent != null) m_background.parent.removeChild(m_background);
                             m_isAnimating = false;
                             
                             // For each item return it to items original scale
@@ -254,25 +249,16 @@ class EquationInventoryWidget extends Sprite
                     // One the equations are shrunk, the we will push the background back into the button
                     if (numRemainingToAnimate <= 0) 
                     {
-                        m_scrollArea.removeFromParent();
+                        if (m_scrollArea.parent != null) m_scrollArea.parent.removeChild(m_scrollArea);
                         
-                        Starling.current.juggler.tween(m_background, m_backgroundDuration, {
-                                    transition : Transitions.LINEAR,
-                                    onComplete : onBackgroundContract,
-                                    width : 0,
-                        });
+						Actuate.tween(m_background, m_backgroundDuration, { width : 0 }).ease(Linear.easeNone).onComplete(onBackgroundContract);
                     }
                 };
 				
                 for (i in 0...numComponents){
                     item = renderComponents[i].view;
                     // Quickly scale down the equations and then shift the background into the button
-                    Starling.current.juggler.tween(item, m_equationDuration, {
-                                transition : Transitions.LINEAR,
-                                onComplete : onEquationContract,
-                                scaleX : 0,
-                                scaleY : 0,
-                    });
+					Actuate.tween(item, m_equationDuration, { scaleX: 0, scaleY: 0 }).ease(Linear.easeNone).onComplete(onEquationContract);
                 }
                 
                 if (numComponents == 0) 
@@ -280,10 +266,8 @@ class EquationInventoryWidget extends Sprite
                     onEquationContract();
                 }
                 
-                
-                
-                m_scrollLeftButton.removeFromParent();
-                m_scrollRightButton.removeFromParent();
+                if (m_scrollLeftButton.parent != null) m_scrollLeftButton.parent.removeChild(m_scrollLeftButton);
+                if (m_scrollRightButton.parent != null) m_scrollRightButton.parent.removeChild(m_scrollRightButton);
             }
             
             m_isExpanded = expand;
@@ -309,29 +293,31 @@ class EquationInventoryWidget extends Sprite
             if (m_scrollArea.getObjects().length != 0) 
             {
                 setExpanded(!m_isExpanded);
-                this.dispatchEventWith(GameEvent.EXPAND_INVENTORY_AREA, false, m_isExpanded);
+                this.dispatchEvent(new DataEvent(GameEvent.EXPAND_INVENTORY_AREA, m_isExpanded));
                 
-                m_expandButton.upState = ((m_isExpanded)) ? m_expandIconOpen.texture : m_expandIconClosed.texture;
-                m_expandButton.filter = ((m_isExpanded)) ? BlurFilter.createGlow() : null;
+				var expandButton = try cast(m_expandButtonContainer.getChildAt(0), LabelButton) catch (e : Dynamic) null;
+				
+				if (expandButton != null) {
+					expandButton.upState = m_isExpanded ? m_expandIconOpen : m_expandIconClosed;
+					
+					var filters = expandButton.filters;
+					if (filters != null && m_isExpanded) filters.push(new GlowFilter());
+					expandButton.filters = filters;
+				}
             }
             else 
             {
-                var wiggleTween : Tween = new Tween(m_expandButton, 0.1);
-                wiggleTween.repeatCount = 6;
-                wiggleTween.reverse = true;
-                wiggleTween.animate("x", m_expandButton.x + 10);
-                wiggleTween.onComplete = function() : Void
+				Actuate.tween(m_expandButtonContainer, 0.1, { x: m_expandButtonContainer.x + 10 }).repeat(6).reflect().onComplete(function() : Void
                         {
                             m_isAnimating = false;
-                        };
+                        });
                 
-                Starling.current.juggler.add(wiggleTween);
                 m_isAnimating = true;
             }
         }
     }
     
-    private function onLayoutComplete() : Void
+    private function onLayoutComplete(event : Dynamic) : Void
     {
         // HACK:
         // Possible that layout does not cover all cases where the equations possessed changes in number

@@ -1,9 +1,15 @@
 package wordproblem.state;
 
 
-import flash.display.Stage;
-import flash.geom.Rectangle;
-import flash.text.TextFormat;
+import openfl.Lib;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.display.Stage;
+import openfl.events.Event;
+import openfl.geom.Rectangle;
+import openfl.text.TextFormat;
+import wordproblem.engine.events.DataEvent;
+import wordproblem.display.PivotSprite;
 
 import cgs.audio.Audio;
 import cgs.internationalization.StringTable;
@@ -16,13 +22,9 @@ import dragonbox.common.ui.LogoutWidget;
 import dragonbox.common.ui.MouseState;
 import dragonbox.common.util.XColor;
 
-import starling.animation.Juggler;
-import starling.core.Starling;
-import starling.display.DisplayObject;
-import starling.display.Image;
-import starling.display.Quad;
-import starling.display.Sprite;
-import starling.text.TextField;
+import openfl.display.DisplayObject;
+import openfl.display.Sprite;
+import openfl.text.TextField;
 
 import wordproblem.AlgebraAdventureConfig;
 import wordproblem.credits.CreditsWidget;
@@ -38,7 +40,7 @@ import wordproblem.items.ItemInventory;
 import wordproblem.level.controller.WordProblemCgsLevelManager;
 import wordproblem.level.nodes.GenreLevelPack;
 import wordproblem.levelselect.GenreWidget;
-import wordproblem.levelselect.scripts.LevelSelectCharacterSequence;
+//import wordproblem.levelselect.scripts.LevelSelectCharacterSequence;
 import wordproblem.log.AlgebraAdventureLogger;
 import wordproblem.player.ButtonColorData;
 import wordproblem.resource.AssetManager;
@@ -48,6 +50,7 @@ import wordproblem.settings.OptionsWidget;
  * This class acts like the level select screen (This will need to be revised to incorporate several of 
  * the animations)
  */
+// TODO: revisit animation when more basic display elements are working
 class WordProblemSelectState extends BaseState
 {
     private var m_config : AlgebraAdventureConfig;
@@ -116,7 +119,7 @@ class WordProblemSelectState extends BaseState
     /**
      * Keep reference to un-modified background so we can revert back to it at anytime.
      */
-    private var m_originalBackgroundImage : Image;
+    private var m_originalBackgroundImage : DisplayObject;
     
     /**
      * This is the place where player rewards are pasted. Appears between the background and foreground
@@ -176,7 +179,7 @@ class WordProblemSelectState extends BaseState
      * Have a custom juggler that animates all spritesheets in this screen
      * (Right now just the hamster characters)
      */
-    private var m_spritesheetJuggler : Juggler;
+    //private var m_spritesheetJuggler : Juggler;
     
     private var m_flashStage : flash.display.Stage;
     
@@ -206,7 +209,7 @@ class WordProblemSelectState extends BaseState
         m_flashStage = flashStage;
         m_buttonColorData = buttonColorData;
         
-        m_spritesheetJuggler = new Juggler();
+        //m_spritesheetJuggler = new Juggler();
         
         // Create layers once
         m_rewardLayer = new Layer();
@@ -216,7 +219,7 @@ class WordProblemSelectState extends BaseState
         // Initialize scripted logic
         // Re-use the same scripts for the entire session, just don't update them when not in this screen
         var prebakedRootScript : ScriptNode = new ConcurrentSelector(-1);
-        prebakedRootScript.pushChild(new LevelSelectCharacterSequence(m_assetManager, this, levelManager, m_spritesheetJuggler));
+        //prebakedRootScript.pushChild(new LevelSelectCharacterSequence(m_assetManager, this, levelManager, m_spritesheetJuggler));
         m_prebakedScripts = prebakedRootScript;
     }
     
@@ -243,7 +246,7 @@ class WordProblemSelectState extends BaseState
         addChild(m_backgroundLayer);
         
         // Add library shelf background image
-        m_originalBackgroundImage = new Image(m_assetManager.getTexture("library_bg"));
+        m_originalBackgroundImage = new Bitmap(m_assetManager.getBitmapData("library_bg"));
         m_backgroundLayer.addChild(m_originalBackgroundImage);
         
         // Create middle layer where scripts can paste new objects into the level select
@@ -278,21 +281,22 @@ class WordProblemSelectState extends BaseState
             cachedObjectForSection.hitArea = hitArea;
             
             // For each hit area, assign the background image containing the proper colored hover area
-            cachedObjectForSection.hoverBackgroundImage = new Image(m_assetManager.getTexture(sectionInLevelSelect.hoverBackgroundTexture));
+            cachedObjectForSection.hoverBackgroundImage = new Bitmap(m_assetManager.getBitmapData(sectionInLevelSelect.hoverBackgroundTexture));
 			
 			// Check if the genre has a name display object that should be shown on hover over
             var hoverTextDisplay : DisplayObject = null;
             if (Reflect.hasField(sectionInLevelSelect, "hoverTextArea")) 
             {
                 var textAreaRectangle : Dynamic = sectionInLevelSelect.hoverTextArea;
-                var hoverTextField : TextField = new TextField(
-					textAreaRectangle.width, 
-					textAreaRectangle.height, 
-					sectionInLevelSelect.title, 
+                var hoverTextField : TextField = new TextField();
+				hoverTextField.width = textAreaRectangle.width; 
+				hoverTextField.height = textAreaRectangle.height; 
+				hoverTextField.text = sectionInLevelSelect.title;
+				hoverTextField.setTextFormat(new TextFormat(
 					GameFonts.DEFAULT_FONT_NAME, 
-					((Reflect.hasField(textAreaRectangle, "fontSize"))) ? textAreaRectangle.fontSize : 32, 
+					Reflect.hasField(textAreaRectangle, "fontSize") ? textAreaRectangle.fontSize : 32, 
 					0xFFFFFF
-                );
+                ));
                 hoverTextField.x = textAreaRectangle.x + sectionInLevelSelect.hitArea.x;
                 hoverTextField.y = textAreaRectangle.y + sectionInLevelSelect.hitArea.y;
                 hoverTextDisplay = hoverTextField;
@@ -310,12 +314,13 @@ class WordProblemSelectState extends BaseState
                     // If genre locked, add a disabling sprite on top of the hit area for a genre
                     if (playableGenreLevels.isLocked) 
                     {
-                        var disableQuad : Quad = new Quad(hitAreaData.width, hitAreaData.height, 0x000000);
+                        var disableQuad : Bitmap = new Bitmap(new BitmapData(Std.int(hitAreaData.width), Std.int(hitAreaData.height), false, 0x000000));
                         disableQuad.alpha = 0.8;
                         disableQuad.x = hitAreaData.x;
                         disableQuad.y = hitAreaData.y;
                         
-                        var lockImage : Image = new Image(m_assetManager.getTexture("level_button_lock"));
+                        var lockImage : PivotSprite = new PivotSprite();
+						lockImage.addChild(new Bitmap(m_assetManager.getBitmapData("level_button_lock")));
                         lockImage.pivotX = lockImage.width * 0.5;
                         lockImage.pivotY = lockImage.height * 0.5;
                         lockImage.x = disableQuad.x + hitAreaData.width * 0.5;
@@ -336,10 +341,9 @@ class WordProblemSelectState extends BaseState
         if (m_config.getAllowResetData()) 
         {
             optionNames.push(OptionsWidget.OPTION_RESET);
-        }  // Create the options button on top most layer  
-        
-        
-        
+        }  
+		
+		// Create the options button on top most layer  
         var optionsWidget : OptionsWidget = new OptionsWidget(
 			m_assetManager, 
 			optionNames, 
@@ -366,15 +370,12 @@ class WordProblemSelectState extends BaseState
                 m_config.getHeight(), 
                 function() : DisplayObject
                 {
-                    var contentTextField : TextField = new TextField(
-						400, 
-						200, 
+                    var contentTextField : TextField = new TextField();
+					contentTextField.width = 400;
+					contentTextField.height = 200;
 						// TODO: uncomment when cgs library is finished
-						"",//StringTable.lookup("reset_data_warning"), 
-						GameFonts.DEFAULT_FONT_NAME, 
-						30, 
-						0xFFFFFF
-						);
+					contentTextField.text = "";//StringTable.lookup("reset_data_warning"), 
+					contentTextField.setTextFormat(new TextFormat(GameFonts.DEFAULT_FONT_NAME, 30, 0xFFFFFF));
                     return contentTextField;
 				}, 
 				function() : Void
@@ -383,7 +384,7 @@ class WordProblemSelectState extends BaseState
 					m_foregroundLayer.removeChild(m_resetConfirmationWidget);
 					
 					// Just forward logic to upper level class
-					dispatchEventWith(CommandEvent.RESET_DATA);
+					dispatchEvent(new Event(CommandEvent.RESET_DATA));
 				}, 
 				function() : Void
 				{
@@ -409,12 +410,12 @@ class WordProblemSelectState extends BaseState
             function() : Void
             {
                 // Go to the create account screen
-                dispatchEventWith(CommandEvent.SHOW_ACCOUNT_CREATE);
+                dispatchEvent(new Event(CommandEvent.SHOW_ACCOUNT_CREATE));
             }
         );
         m_logoutWidget.x = ((m_config.showUserNameInSelectScreen)) ? 510 : 600;
         m_logoutWidget.y = 0;
-        var flashToStarlingScale : Float = Starling.current.viewPort.width / m_flashStage.width;
+        var flashToStarlingScale : Float = Lib.current.stage.width / m_flashStage.width;
         m_logoutWidget.x *= flashToStarlingScale;
         //m_flashStage.addChild(m_logoutWidget);
         
@@ -423,21 +424,18 @@ class WordProblemSelectState extends BaseState
             m_config.getHeight(), 
             function() : DisplayObject
             {
-                var contentTextField : TextField = new TextField(
-					400, 
-					200, 
+                var contentTextField : TextField = new TextField();
+				contentTextField.width = 400; 
+				contentTextField.height = 200; 
 					// TODO: uncomment when cgs library is finished
-					"",//StringTable.lookup("signout_warning"), 
-					GameFonts.DEFAULT_FONT_NAME, 
-					30, 
-					0xFFFFFF
-                );
+				contentTextField.text = "";//StringTable.lookup("signout_warning"), 
+				contentTextField.setTextFormat(new TextFormat(GameFonts.DEFAULT_FONT_NAME, 30, 0xFFFFFF));
                 return contentTextField;
             }, 
             function() : Void
             {
                 // Sign out from the current account, clear on data on the client side only
-                dispatchEventWith(CommandEvent.SIGN_OUT);
+                dispatchEvent(new Event(CommandEvent.SIGN_OUT));
                 m_foregroundLayer.removeChild(m_logoutConfirmationWidget);
             }, 
             function() : Void
@@ -482,8 +480,8 @@ class WordProblemSelectState extends BaseState
         // Clean up the background images
         var i : Int = 0;
         for (i in 0...m_cachedDataObjectsForLevelSelect.length){
-            var bgImage : Image = try cast(m_cachedDataObjectsForLevelSelect[i].hoverBackgroundImage, Image) catch(e:Dynamic) null;
-            bgImage.dispose();
+            var bgImage : Bitmap = try cast(m_cachedDataObjectsForLevelSelect[i].hoverBackgroundImage, Bitmap) catch(e:Dynamic) null;
+            bgImage.bitmapData.dispose();
         }
         
         while (this.numChildren > 0)
@@ -494,7 +492,7 @@ class WordProblemSelectState extends BaseState
 		// Remove objects added to flash stage  
         if (m_logoutWidget.parent != null) 
         {
-            m_logoutWidget.parent.removeChild(m_logoutWidget);
+            if (m_logoutWidget.parent != null) m_logoutWidget.parent.removeChild(m_logoutWidget);
         }
         m_logoutWidget.dispose();
         
@@ -510,7 +508,8 @@ class WordProblemSelectState extends BaseState
         // TODO:
         // Dispose of the visual elements (their textures need to be freed from memory)
         // They need to get recreated the next time we enter this screen
-        m_currentGenreWidget.removeFromParent(true);
+		if (m_currentGenreWidget.parent != null) m_currentGenreWidget.parent.removeChild(m_currentGenreWidget);
+		m_currentGenreWidget.dispose();
     }
     
     override public function update(time : Time, mouseState : MouseState) : Void
@@ -518,11 +517,10 @@ class WordProblemSelectState extends BaseState
         if (!isActive) 
         {
             return;
-        }  // Advance time for all the spritesheets  
-        
-        
-        
-        m_spritesheetJuggler.advanceTime(time.currentDeltaSeconds);
+        } 
+		
+		// Advance time for all the spritesheets  
+        //m_spritesheetJuggler.advanceTime(time.currentDeltaSeconds);
         
         // Execute logic in the scripts contained only in the level select
         // (For example a script might have the code to draw the reward creatures)
@@ -562,7 +560,7 @@ class WordProblemSelectState extends BaseState
                             m_currentGenreWidget.setGenre(selectedGenre, -1);
                             m_foregroundLayer.addChild(m_currentGenreWidget);
                             
-                            this.dispatchEventWith(LevelSelectEvent.OPEN_GENRE, false, selectedGenre);
+                            this.dispatchEvent(new DataEvent(LevelSelectEvent.OPEN_GENRE, selectedGenre));
                             
                             Audio.instance.playSfx("book_open");
                         }
@@ -572,7 +570,7 @@ class WordProblemSelectState extends BaseState
                         {
                             if (cachedDataForSection.linkToId == "player_collections") 
                             {
-                                this.dispatchEventWith(CommandEvent.GO_TO_PLAYER_COLLECTIONS);
+                                this.dispatchEvent(new Event(CommandEvent.GO_TO_PLAYER_COLLECTIONS));
                             }
                         }
                     }
@@ -580,7 +578,7 @@ class WordProblemSelectState extends BaseState
                     {
                         // On hover check if the background needs to change,
                         // Right now assume that background layer contains exactly one child
-                        var backgroundImageToChangeTo : Image = cachedDataForSection.hoverBackgroundImage;
+                        var backgroundImageToChangeTo : Bitmap = cachedDataForSection.hoverBackgroundImage;
                         if (m_backgroundLayer.getChildAt(0) != backgroundImageToChangeTo) 
                         {
                             m_backgroundLayer.removeChildren();
@@ -589,10 +587,9 @@ class WordProblemSelectState extends BaseState
                     }
                     break;
                 }
-            }  // If we did not hit anything, revert back to the regular background  
-            
-            
-            
+            }  
+			
+			// If we did not hit anything, revert back to the regular background  
             if (!hitAnArea) 
             {
                 if (m_backgroundLayer.getChildAt(0) != m_originalBackgroundImage) 
@@ -605,10 +602,9 @@ class WordProblemSelectState extends BaseState
         else 
         {
             m_currentGenreWidget.update(mouseState);
-        }  // If click outside the bounds of the options, the options menu should close  
-        
-        
-        
+        } 
+		
+		// If click outside the bounds of the options, the options menu should close  
         if (mouseState.leftMousePressedThisFrame && m_optionsWidget.isOpen()) 
         {
             var optionBounds : Rectangle = m_optionsWidget.getBounds(m_optionsWidget.stage);
@@ -642,15 +638,15 @@ class WordProblemSelectState extends BaseState
     
     private function onCloseGenreWidgetCallback() : Void
     {
-        m_currentGenreWidget.removeFromParent();
-        this.dispatchEventWith(LevelSelectEvent.CLOSE_GENRE, false, null);
+        if (m_currentGenreWidget.parent != null) m_currentGenreWidget.parent.removeChild(m_currentGenreWidget);
+        this.dispatchEvent(new DataEvent(LevelSelectEvent.CLOSE_GENRE, null));
     }
     
     private function onStartLevelGenreWidgetCallback(levelName : String) : Void
     {
         // TODO: Add the genre and page number the player was at when they selected the level
         
-        this.dispatchEventWith(CommandEvent.GO_TO_LEVEL, false, levelName);
+        this.dispatchEvent(new DataEvent(CommandEvent.GO_TO_LEVEL, levelName));
     }
     
     private function onCreditsClicked() : Void

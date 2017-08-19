@@ -1,8 +1,8 @@
 package wordproblem.display;
 
 
-import starling.display.DisplayObject;
-import starling.display.Sprite;
+import openfl.display.DisplayObject;
+import openfl.display.Sprite;
 
 /**
  * A layer represents a special display object container that help fields to keep

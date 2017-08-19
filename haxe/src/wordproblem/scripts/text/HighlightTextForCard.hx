@@ -2,6 +2,7 @@ package wordproblem.scripts.text;
 
 
 import dragonbox.common.ui.MouseState;
+import wordproblem.engine.events.DataEvent;
 
 import starling.events.Event;
 
@@ -68,7 +69,7 @@ class HighlightTextForCard extends ScriptNode
         return ScriptStatus.RUNNING;
     }
     
-    private function onLevelReady() : Void
+    private function onLevelReady(event : Dynamic) : Void
     {
         m_textAreaWidget = try cast(m_gameEngine.getUiEntity("textArea"), TextAreaWidget) catch(e:Dynamic) null;
         
@@ -78,18 +79,20 @@ class HighlightTextForCard extends ScriptNode
         m_gameEngine.addEventListener(GameEvent.START_DRAG_TERM_WIDGET, onStartDrag);
     }
     
-    private function onStartDrag(event : Event, params : Dynamic) : Void
+    private function onStartDrag(event : Dynamic) : Void
     {
         // Remove previous animation
         removeBlinks();
         
-        var widget : BaseTermWidget = try cast(Reflect.field(params, "termWidget"), BaseTermWidget) catch(e:Dynamic) null;
-        
-        // Get the term value of the dragged widget, possibly ignore negative signs if
-        // specified in the level config.
-        
-        var draggedTermValue : String = widget.getNode().data;
-        findAndShimmerTextBoundToTerm(draggedTermValue);
+		if (Std.is(event, DataEvent)) {
+			var data : Dynamic = (try cast(event, DataEvent) catch (e : Dynamic) null).getData();
+			var widget : BaseTermWidget = try cast(Reflect.field(data, "termWidget"), BaseTermWidget) catch (e:Dynamic) null;
+			
+			// Get the term value of the dragged widget, possibly ignore negative signs if
+			// specified in the level config.
+			var draggedTermValue : String = widget.getNode().data;
+			findAndShimmerTextBoundToTerm(draggedTermValue);
+		}
     }
     
     private function findAndShimmerTextBoundToTerm(termValue : String) : Void

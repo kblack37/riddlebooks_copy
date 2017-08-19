@@ -1,14 +1,15 @@
 package wordproblem.achievements;
 
+import dragonbox.common.util.XColor;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
 import wordproblem.achievements.PlayerAchievementGem;
 
-import flash.geom.Rectangle;
-import flash.text.TextFormat;
+import openfl.geom.Rectangle;
+import openfl.text.TextFormat;
 
-import starling.display.Image;
-import starling.display.Sprite;
-import starling.text.TextField;
-import starling.textures.Texture;
+import openfl.display.Sprite;
+import openfl.text.TextField;
 
 import wordproblem.engine.text.MeasuringTextField;
 import wordproblem.resource.AssetManager;
@@ -37,15 +38,12 @@ class PlayerAchievementButton extends Sprite
         super();
         
         var scale9Padding : Float = 8;
-        var bgTexture : Texture = assetManager.getTexture("button_white");
-        var bgImage : Image = new Image(Texture.fromTexture(
-			bgTexture,
-			new Rectangle(scale9Padding,
+        var bgBitmapData : BitmapData = assetManager.getBitmapData("button_white");
+        var bgImage : Bitmap = new Bitmap(bgBitmapData);
+		bgImage.scale9Grid = new Rectangle(scale9Padding,
 				scale9Padding,
-				bgTexture.width - scale9Padding * 2,
-				bgTexture.height - scale9Padding * 2
-			)
-		));
+				bgBitmapData.width - scale9Padding * 2,
+				bgBitmapData.height - scale9Padding * 2);
         bgImage.width = width;
         bgImage.height = height;
         addChild(bgImage);
@@ -54,8 +52,8 @@ class PlayerAchievementButton extends Sprite
         var achievementColor : String = achievementData.color;
         var trophyName : String = achievementData.trophyName;
         
-        bgImage.color = ((achievementCompleted)) ? 
-                PlayerAchievementData.getDarkHexColorFromString(achievementData.color) : 0xB3B4B4;
+        bgImage.transform.colorTransform.concat(XColor.rgbToColorTransform(achievementCompleted ? 
+                PlayerAchievementData.getDarkHexColorFromString(achievementData.color) : 0xB3B4B4));
         
         // The gem needs to be scaled such that it barely fits in side the background
         var achievementGem : PlayerAchievementGem = new PlayerAchievementGem(achievementColor, trophyName, achievementCompleted, assetManager);
@@ -73,9 +71,9 @@ class PlayerAchievementButton extends Sprite
         // If not completed we want to show a lock on the front of the gem
         if (!achievementCompleted) 
         {
-            var lockTexture : Texture = assetManager.getTexture("Art_LockGrey");
-            var lockScaleFactor : Float = (height * 0.4) / lockTexture.height;
-            var lockImage : Image = new Image(lockTexture);
+            var lockBitmapData : BitmapData = assetManager.getBitmapData("Art_LockGrey");
+            var lockScaleFactor : Float = (height * 0.4) / lockBitmapData.height;
+            var lockImage : Bitmap = new Bitmap(lockBitmapData);
             lockImage.scaleX = lockImage.scaleY = lockScaleFactor;
             
             // Offset for the lock depends on the gem color
@@ -91,33 +89,27 @@ class PlayerAchievementButton extends Sprite
         }
         
         var textColor : Int = ((achievementCompleted)) ? 
-        PlayerAchievementData.getLightHexColorFromString(achievementData.color) : 0x666666;
+			PlayerAchievementData.getLightHexColorFromString(achievementData.color) : 0x666666;
         var measuringText : MeasuringTextField = new MeasuringTextField();
         measuringText.defaultTextFormat = m_titleTextFormat;
         measuringText.text = achievementData.name;
         var newFontSize : Int = Std.int(measuringText.resizeToDimensions(width - achievementGem.width - 20, height * 0.5, achievementData.name));
         
-        var titleText : TextField = new TextField(
-			Std.int(width - achievementGem.width), 
-			Std.int(measuringText.textHeight + 10), 
-			achievementData.name, 
-			m_titleTextFormat.font,
-			newFontSize,
-			textColor
-		);
+        var titleText : TextField = new TextField();
+		titleText.width = width - achievementGem.width;
+		titleText.height = measuringText.textHeight + 10; 
+		titleText.text = achievementData.name;
+		titleText.setTextFormat(new TextFormat(m_titleTextFormat.font, newFontSize, textColor));
         titleText.x = achievementGem.width;
         addChild(titleText);
         
         measuringText.defaultTextFormat = m_descriptionTextFormat;
         measuringText.text = achievementData.description;
-        var descriptionText : TextField = new TextField(
-			Std.int(width - achievementGem.width),
-			Std.int(measuringText.textHeight + 5), 
-			achievementData.description, 
-			m_descriptionTextFormat.font,
-			m_descriptionTextFormat.size,
-			textColor
-		);
+        var descriptionText : TextField = new TextField();
+		descriptionText.width = width - achievementGem.width;
+		descriptionText.height = measuringText.textHeight + 5; 
+		descriptionText.text = achievementData.description; 
+		descriptionText.setTextFormat(new TextFormat(m_descriptionTextFormat.font, m_descriptionTextFormat.size, textColor));
         descriptionText.x = titleText.x;
         descriptionText.y = titleText.y + titleText.height;
         addChild(descriptionText);

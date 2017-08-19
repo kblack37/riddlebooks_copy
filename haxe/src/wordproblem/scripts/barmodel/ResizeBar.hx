@@ -140,7 +140,7 @@ class ResizeBar extends BaseBarModelScript
                 {
                     var previousModelDataSnapshot : BarModelData = m_barModelArea.getBarModelData().clone();
                     resizeBarSegments(m_barModelArea.getBarModelData(), previewBarModelView.unitLength);
-                    m_gameEngine.dispatchEventWith(GameEvent.BAR_MODEL_AREA_CHANGE, false, {
+                    m_gameEngine.dispatchEvent(GameEvent.BAR_MODEL_AREA_CHANGE, false, {
                                 previousSnapshot : previousModelDataSnapshot
 
                             });

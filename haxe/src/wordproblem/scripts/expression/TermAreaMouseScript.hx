@@ -1,13 +1,14 @@
 package wordproblem.scripts.expression;
 
 
-import flash.geom.Point;
-import flash.geom.Rectangle;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
+import wordproblem.engine.events.DataEvent;
 
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.math.util.MathUtil;
 
-import starling.display.DisplayObject;
+import openfl.display.DisplayObject;
 
 import wordproblem.display.Layer;
 import wordproblem.engine.IGameEngine;
@@ -103,11 +104,11 @@ class TermAreaMouseScript extends BaseTermAreaScript
                         termArea.pickParenthesisUnderPoint(m_globalMousePoint.x, m_globalMousePoint.y, outParams);
                         if (outParams.length > 0) 
                         {
-                            m_eventDispatcher.dispatchEventWith(GameEvent.PRESS_PARENTHESIS_TERM_AREA, false, {
+                            m_eventDispatcher.dispatchEvent(new DataEvent(GameEvent.PRESS_PARENTHESIS_TERM_AREA, {
                                         widget : outParams[0],
                                         termArea : termArea,
                                         left : outParams[1],
-                                    });
+                                    }));
                         }
                         
                         var pickedWidget : BaseTermWidget = termArea.pickWidgetUnderPoint(
@@ -118,10 +119,10 @@ class TermAreaMouseScript extends BaseTermAreaScript
                             m_termAreaForCurrentWidgetPressed = termArea;
                             m_lastMousePressPoint.setTo(m_globalMousePoint.x, m_globalMousePoint.y);
                             
-                            m_eventDispatcher.dispatchEventWith(GameEvent.PRESS_TERM_AREA, false, {
+                            m_eventDispatcher.dispatchEvent(new DataEvent(GameEvent.PRESS_TERM_AREA, {
                                         widget : pickedWidget,
                                         termArea : termArea,
-                                    });
+                                    }));
                         }
                     }
                     else if (m_mouseState.leftMouseDraggedThisFrame && m_currentWidgetPressed != null) 
@@ -130,10 +131,10 @@ class TermAreaMouseScript extends BaseTermAreaScript
                         if (!MathUtil.pointInCircle(m_lastMousePressPoint, dragPixelRadius, m_globalMousePoint)) 
                         {
                             // Dispatch event that we started a drag on an existing widget
-                            m_eventDispatcher.dispatchEventWith(GameEvent.START_DRAG_TERM_AREA, false, {
+                            m_eventDispatcher.dispatchEvent(new DataEvent(GameEvent.START_DRAG_TERM_AREA, {
                                         widget : m_currentWidgetPressed,
                                         termArea : m_termAreaForCurrentWidgetPressed,
-                                    });
+                                    }));
                             m_termAreaForCurrentWidgetPressed = null;
                             m_currentWidgetPressed = null;
                         }
@@ -141,10 +142,10 @@ class TermAreaMouseScript extends BaseTermAreaScript
                     // Assume term areas don't overlap, if mouse is in one do not process events in the others
                     else if (m_mouseState.leftMouseReleasedThisFrame && m_currentWidgetPressed != null) 
                     {
-                        m_eventDispatcher.dispatchEventWith(GameEvent.CLICK_TERM_AREA, false, {
+                        m_eventDispatcher.dispatchEvent(new DataEvent(GameEvent.CLICK_TERM_AREA, {
                                     widget : m_currentWidgetPressed,
                                     termArea : termArea,
-                                });
+                                }));
                         m_termAreaForCurrentWidgetPressed = null;
                         m_currentWidgetPressed = null;
                     }
@@ -159,9 +160,9 @@ class TermAreaMouseScript extends BaseTermAreaScript
         return ScriptStatus.FAIL;
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         m_widgetDragSystem = try cast(this.getNodeById("WidgetDragSystem"), WidgetDragSystem) catch(e:Dynamic) null;
     }

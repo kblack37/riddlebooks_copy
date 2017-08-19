@@ -2,13 +2,11 @@ package wordproblem.xp.scripts;
 
 
 import cgs.internationalization.StringTable;
+import motion.Actuate;
 
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.ExpressionUtil;
 import dragonbox.common.ui.MouseState;
-
-import starling.animation.Tween;
-import starling.core.Starling;
 
 import wordproblem.engine.IGameEngine;
 import wordproblem.engine.barmodel.model.DecomposedBarModelData;
@@ -324,17 +322,12 @@ class RevisedPlayerXPScript extends BaseBufferEventScript
         brainPointDisplay.x = mouseState.mousePositionThisFrame.x;
         brainPointDisplay.y = mouseState.mousePositionThisFrame.y - 50;
         m_gameEngine.getSprite().addChild(brainPointDisplay);
-        
-        var fadeUpAndOut : Tween = new Tween(brainPointDisplay, 1.0);
-        fadeUpAndOut.animate("alpha", 0.0);
-        fadeUpAndOut.animate("y", brainPointDisplay.y - 50);
-        fadeUpAndOut.delay = 1.0;
-        fadeUpAndOut.onComplete = function() : Void
+		
+		Actuate.tween(brainPointDisplay, 1.0, { alpha: 0, y: brainPointDisplay.y - 50 }).delay(1.0).onComplete(function() : Void
                 {
-                    brainPointDisplay.removeFromParent(true);
-                    Starling.current.juggler.remove(fadeUpAndOut);
-                };
-        Starling.current.juggler.add(fadeUpAndOut);
+					if (brainPointDisplay.parent != null) brainPointDisplay.parent.removeChild(brainPointDisplay);
+					brainPointDisplay.dispose();
+                });
     }
     
     /**

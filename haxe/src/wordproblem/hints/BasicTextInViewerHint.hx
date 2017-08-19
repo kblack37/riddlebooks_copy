@@ -1,10 +1,11 @@
 package wordproblem.hints;
 
+import openfl.text.TextFormat;
 import wordproblem.hints.HintScript;
 
-import starling.display.DisplayObject;
-import starling.display.Sprite;
-import starling.text.TextField;
+import openfl.display.DisplayObject;
+import openfl.display.Sprite;
+import openfl.text.TextField;
 
 import wordproblem.engine.text.GameFonts;
 import wordproblem.engine.text.TextParserUtil;
@@ -32,11 +33,19 @@ class BasicTextInViewerHint extends HintScript
     override public function getDescription(width : Float, height : Float) : DisplayObject
     {
         var container : Sprite = new Sprite();
-        var titleTextfield : TextField = new TextField(Std.int(width), 70, m_title, GameFonts.DEFAULT_FONT_NAME, 24);
+        var titleTextfield : TextField = new TextField();
+		titleTextfield.width = width;
+		titleTextfield.height = 70;
+		titleTextfield.text = m_title;
+		titleTextfield.setTextFormat(new TextFormat(GameFonts.DEFAULT_FONT_NAME, 24));
         titleTextfield.y = -13;
         container.addChild(titleTextfield);
         
-        var descriptionTextfield : TextField = new TextField(Std.int(width), Std.int(height), m_mainContent, GameFonts.DEFAULT_FONT_NAME, 18);
+        var descriptionTextfield : TextField = new TextField();
+		descriptionTextfield.width = width;
+		descriptionTextfield.height = height;
+		descriptionTextfield.text = m_mainContent;
+		descriptionTextfield.setTextFormat(new TextFormat(GameFonts.DEFAULT_FONT_NAME, 18));
         container.addChild(descriptionTextfield);
         return container;
     }

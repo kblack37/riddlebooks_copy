@@ -1,7 +1,7 @@
 package wordproblem.engine.component;
 
 
-import starling.display.DisplayObject;
+import openfl.display.DisplayObject;
 
 /**
  * Used if an entity might have several views attached to it.

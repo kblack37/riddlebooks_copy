@@ -76,7 +76,7 @@ class ShimmerAnimation implements IAnimatable
         var numViewsToShimmer : Int = viewsToShimmer.length;
         for (i in 0...numViewsToShimmer){
             viewToShimmer = viewsToShimmer[i];
-            viewToShimmer.getBounds(canvasToAdd, viewToShimmerBounds);
+            viewToShimmerBounds = viewToShimmer.getBounds(canvasToAdd);
             
             emitter = this.createEmitter(viewToShimmerBounds);
             emitter.start();
@@ -94,7 +94,7 @@ class ShimmerAnimation implements IAnimatable
     {
         if (m_shimmerRenderer.parent) 
         {
-            m_shimmerRenderer.parent.removeChild(m_shimmerRenderer);
+            if (m_shimmerRenderer.parent != null) m_shimmerRenderer.parent.removeChild(m_shimmerRenderer);
         }
         
         while (m_activeShimmerEmitters.length > 0)

@@ -4,12 +4,8 @@ package wordproblem.levelselect.scripts;
 import openfl.geom.Rectangle;
 import openfl.Vector;
 
-import starling.animation.Juggler;
-import starling.display.DisplayObject;
-import starling.display.Image;
-import starling.display.MovieClip;
-import starling.textures.Texture;
-import starling.textures.TextureAtlas;
+import openfl.display.DisplayObject;
+import openfl.display.MovieClip;
 
 import wordproblem.engine.component.AnimatedTextureAtlasStateComponent;
 import wordproblem.engine.component.Component;

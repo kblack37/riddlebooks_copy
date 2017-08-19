@@ -13,7 +13,7 @@ import dragonbox.common.ui.MouseState;
 
 import haxe.Constraints.Function;
 
-import starling.display.Button;
+import wordproblem.display.LabelButton;
 import starling.display.Image;
 import starling.display.Quad;
 import starling.display.Sprite;
@@ -149,7 +149,7 @@ class TestCreatedLevelScreen extends Sprite
                     new TextFormat(GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF),
                     new TextFormat(GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF)
                     );
-            button.addEventListener(Event.TRIGGERED, callback);
+            button.addEventListener(MouseEvent.CLICK, callback);
             button.width = buttonWidth;
             button.height = buttonHeight;
             button.x = x;
@@ -279,7 +279,7 @@ class TestCreatedLevelScreen extends Sprite
         m_levelReady = false;
         m_gameEngine.exit();
         m_gameEngine.getSprite().removeFromParent();
-        m_optionsButton.removeFromParent();
+        if (m_optionsButton.parent != null) m_optionsButton.parent.removeChild(m_optionsButton);
     }
     
     public function update(time : Time, mouseState : MouseState) : Void
@@ -298,17 +298,17 @@ class TestCreatedLevelScreen extends Sprite
     
     private function onOptionResume() : Void
     {
-        m_optionsScreen.removeFromParent();
+        if (m_optionsScreen.parent != null) m_optionsScreen.parent.removeChild(m_optionsScreen);
     }
     
     private function onOptionRestart() : Void
     {
-        m_optionsScreen.removeFromParent();
+        if (m_optionsScreen.parent != null) m_optionsScreen.parent.removeChild(m_optionsScreen);
     }
     
     private function onOptionExit() : Void
     {
-        m_optionsScreen.removeFromParent();
-        dispatchEventWith(ProblemCreateEvent.TEST_LEVEL_EXIT, false, null);
+        if (m_optionsScreen.parent != null) m_optionsScreen.parent.removeChild(m_optionsScreen);
+        dispatchEvent(ProblemCreateEvent.TEST_LEVEL_EXIT, false, null);
     }
 }

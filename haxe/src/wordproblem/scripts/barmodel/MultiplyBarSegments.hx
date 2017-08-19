@@ -1,17 +1,17 @@
 package wordproblem.scripts.barmodel;
 
 
-import flash.geom.Rectangle;
-
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.ExpressionUtil;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.system.RectanglePool;
 import dragonbox.common.ui.MouseState;
 
-import starling.display.DisplayObjectContainer;
-import starling.display.Image;
+import openfl.display.Bitmap;
+import openfl.display.DisplayObjectContainer;
+import openfl.geom.Rectangle;
 
+import wordproblem.display.PivotSprite;
 import wordproblem.engine.IGameEngine;
 import wordproblem.engine.barmodel.BarModelDataUtil;
 import wordproblem.engine.barmodel.model.BarModelData;
@@ -22,6 +22,7 @@ import wordproblem.engine.barmodel.view.BarSegmentView;
 import wordproblem.engine.barmodel.view.BarWholeView;
 import wordproblem.engine.component.BlinkComponent;
 import wordproblem.engine.component.RenderableComponent;
+import wordproblem.engine.events.DataEvent;
 import wordproblem.engine.events.GameEvent;
 import wordproblem.engine.expression.widget.term.BaseTermWidget;
 import wordproblem.engine.expression.widget.term.SymbolTermWidget;
@@ -103,7 +104,7 @@ class MultiplyBarSegments extends BaseBarModelScript implements IHitAreaScript
             // Convert mouse coordinate reference to that of the bar model
             var mouseState : MouseState = m_gameEngine.getMouseState();
             m_globalMouseBuffer.setTo(mouseState.mousePositionThisFrame.x, mouseState.mousePositionThisFrame.y);
-            m_barModelArea.globalToLocal(m_globalMouseBuffer, m_localMouseBuffer);
+            m_localMouseBuffer = m_barModelArea.globalToLocal(m_globalMouseBuffer);
             
 			m_outParamsBuffer = new Array<Dynamic>();
             if (m_eventTypeBuffer.length > 0) 
@@ -134,17 +135,17 @@ class MultiplyBarSegments extends BaseBarModelScript implements IHitAreaScript
                             BarModelDataUtil.stretchHorizontalBrackets(m_barModelArea.getBarModelData());
                         }
                         
-                        m_gameEngine.dispatchEventWith(GameEvent.BAR_MODEL_AREA_CHANGE, false, {
+                        m_gameEngine.dispatchEvent(new DataEvent(GameEvent.BAR_MODEL_AREA_CHANGE, {
                                     previousSnapshot : previousModelDataSnapshot
-                                });
+                                }));
                         m_barModelArea.redraw();
                         status = ScriptStatus.SUCCESS;
                         
                         // Log multiplication action
-                        m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.MULTIPLY_BAR, false, {
+                        m_gameEngine.dispatchEvent(new DataEvent(AlgebraAdventureLoggingConstants.MULTIPLY_BAR, {
                                     barModel : m_barModelArea.getBarModelData().serialize(),
                                     value : releasedExpressionNode.data,
-                                });
+                                }));
                     }
                 }
                 
@@ -268,7 +269,8 @@ class MultiplyBarSegments extends BaseBarModelScript implements IHitAreaScript
     public function postProcessHitAreas(hitAreas : Array<Rectangle>, hitAreaGraphics : Array<DisplayObjectContainer>) : Void
     {
         for (i in 0...hitAreaGraphics.length){
-            var icon : Image = new Image(m_assetManager.getTexture("multiply_x"));
+            var icon : PivotSprite = new PivotSprite();
+			icon.addChild(new Bitmap(m_assetManager.getBitmapData("multiply_x")));
             var hitArea : Rectangle = hitAreas[i];
             icon.pivotX = icon.width * 0.5;
             icon.pivotY = icon.height * 0.5;

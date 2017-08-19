@@ -131,12 +131,12 @@ class WordProblemGameChallengeDemoLogin extends BaseState
      */
     private var m_userNameInput : TextInput;
     
-    private var m_continueGameButton : Button;
+    private var m_continueGameButton : LabelButton;
     
     /**
      * Start a brand new game using the username in the text if appropriate
      */
-    private var m_newGameButton : Button;
+    private var m_newGameButton : LabelButton;
     
     /**
      * Have a custom juggler that animates all spritesheets in this screen
@@ -338,7 +338,7 @@ class WordProblemGameChallengeDemoLogin extends BaseState
                         nineSliceGrid
                         );
         m_newGameButton.width = 330;
-        m_newGameButton.addEventListener(Event.TRIGGERED, onNewGameClick);
+        m_newGameButton.addEventListener(MouseEvent.CLICK, onNewGameClick);
         m_newGameButton.y = (maxHeight - baseContinueGameButtonTexture.height) * 0.5;
         m_newGameButton.x = (maxWidth - m_newGameButton.width) * 0.5;
         addChild(m_newGameButton);
@@ -355,7 +355,7 @@ class WordProblemGameChallengeDemoLogin extends BaseState
                         nineSliceGrid
                         );
         m_continueGameButton.width = 330;
-        m_continueGameButton.addEventListener(Event.TRIGGERED, onContinue);
+        m_continueGameButton.addEventListener(MouseEvent.CLICK, onContinue);
         m_continueGameButton.y = 0;
         m_continueGameButton.x = 0;
         addChild(m_continueGameButton);
@@ -393,11 +393,11 @@ class WordProblemGameChallengeDemoLogin extends BaseState
     
     override public function exit(toState : Dynamic) : Void
     {
-        m_newGameButton.removeEventListener(Event.TRIGGERED, onNewGameClick);
+        m_newGameButton.removeEventListener(MouseEvent.CLICK, onNewGameClick);
         
         if (m_gradeComboBox != null && m_gradeComboBox.parent) 
         {
-            m_gradeComboBox.parent.removeChild(m_gradeComboBox);
+            if (m_gradeComboBox.parent != null) m_gradeComboBox.parent.removeChild(m_gradeComboBox);
             m_gradeComboBox.close();
             m_gradeComboBox = null;
         }
@@ -434,7 +434,7 @@ class WordProblemGameChallengeDemoLogin extends BaseState
         /*
         m_gradeComboBox.visible = false;
         var selectedGradeData:int = m_gradeComboBox.selectedItem.data;
-        dispatchEventWith(CommandEvent.USER_AUTHENTICATED, false, {grade: selectedGradeData});
+        dispatchEvent(CommandEvent.USER_AUTHENTICATED, false, {grade: selectedGradeData});
         */
         var cgsApi : CgsApi = m_logger.getCgsApi();
         var cgsUserProperties : CgsUserProperties = m_logger.getCgsUserProperties(m_saveDataToServer, m_saveCacheKey);
@@ -452,11 +452,11 @@ class WordProblemGameChallengeDemoLogin extends BaseState
     */
     private function onCreateAnonymousUserAccount(response : CgsResponseStatus) : Void
     {
-        dispatchEventWith(CommandEvent.WAIT_HIDE);
+        dispatchEvent(CommandEvent.WAIT_HIDE);
         
         m_gradeComboBox.visible = false;
         var selectedGradeData : Int = m_gradeComboBox.selectedItem.data;
-        dispatchEventWith(CommandEvent.USER_AUTHENTICATED, false, {
+        dispatchEvent(CommandEvent.USER_AUTHENTICATED, false, {
                     grade : selectedGradeData
 
                 });
@@ -469,7 +469,7 @@ class WordProblemGameChallengeDemoLogin extends BaseState
         
         var cgsApi : CgsApi = m_logger.getCgsApi();
         cgsApi.authenticateStudent(m_logger.getCgsUserProperties(m_saveDataToServer, m_saveCacheKey), username, m_teacherCode, password, 0, onAuthenticateStudent);
-        dispatchEventWith(CommandEvent.WAIT_SHOW);
+        dispatchEvent(CommandEvent.WAIT_SHOW);
     }
     
     private function onAuthenticateStudent(userResponse : CgsUserResponse) : Void
@@ -478,7 +478,7 @@ class WordProblemGameChallengeDemoLogin extends BaseState
         {
             m_gradeComboBox.visible = false;
             var selectedGradeData : Int = m_gradeComboBox.selectedItem.data;
-            dispatchEventWith(CommandEvent.USER_AUTHENTICATED, false, {
+            dispatchEvent(CommandEvent.USER_AUTHENTICATED, false, {
                         grade : selectedGradeData
 
                     });
@@ -489,7 +489,7 @@ class WordProblemGameChallengeDemoLogin extends BaseState
             
         }
         
-        dispatchEventWith(CommandEvent.WAIT_HIDE);
+        dispatchEvent(CommandEvent.WAIT_HIDE);
     }
 }
 

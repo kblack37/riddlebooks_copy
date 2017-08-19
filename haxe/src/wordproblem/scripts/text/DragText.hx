@@ -2,6 +2,8 @@ package wordproblem.scripts.text;
 
 
 import flash.geom.Point;
+import openfl.events.Event;
+import wordproblem.engine.events.DataEvent;
 
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.math.util.MathUtil;
@@ -78,10 +80,10 @@ class DragText extends BaseGameScript
                 var startDrag : Bool = !MathUtil.pointInCircle(m_lastMouseDownPoint, 5, m_mousePoint);
                 if (startDrag) 
                 {
-                    this.m_gameEngine.dispatchEventWith(GameEvent.START_DRAG_TEXT_AREA, false, {
+                    this.m_gameEngine.dispatchEvent(new DataEvent(GameEvent.START_DRAG_TEXT_AREA, {
                                 documentView : m_viewPressedDownOn,
                                 location : m_mousePoint.clone(),
-                            });
+                            }));
                     m_viewPressedDownOn = null;
                 }
             }
@@ -118,7 +120,7 @@ class DragText extends BaseGameScript
                         Reflect.setField(loggingDetails_drop, "expressionName", expressionUnder[0]);
                         Reflect.setField(loggingDetails_drop, "hasBeenModeled", expressionUnder[1]);
                     }
-                    m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.PHRASE_DROP_EVENT, false, loggingDetails_drop);
+                    m_gameEngine.dispatchEvent(new DataEvent(AlgebraAdventureLoggingConstants.PHRASE_DROP_EVENT, loggingDetails_drop));
                     
                     // Release the phrase
                     params = {
@@ -127,14 +129,12 @@ class DragText extends BaseGameScript
                                 regionDropped : uiComponentName,
                                 location : m_mousePoint,
                             };
-                    m_gameEngine.dispatchEventWith(GameEvent.RELEASE_TEXT_AREA, false, params);
+                    m_gameEngine.dispatchEvent(new DataEvent(GameEvent.RELEASE_TEXT_AREA, params));
                 }
                 
                 m_viewPressedDownOn = null;
                 m_viewUnderMouse = null;
             }
-            
-            
             
             if (Layer.getDisplayObjectIsInInactiveLayer(m_textAreaWidget)) 
             {
@@ -162,7 +162,7 @@ class DragText extends BaseGameScript
                                 view : m_viewPressedDownOn,
                                 isExpression : ((expressionPressed != null)) ? true : false,
                             };
-                    this.m_gameEngine.dispatchEventWith(GameEvent.PRESS_TEXT_AREA, false, params);
+                    this.m_gameEngine.dispatchEvent(new DataEvent(GameEvent.PRESS_TEXT_AREA, params));
                     
                     if (Std.is(m_viewPressedDownOn, TextView)) 
                     {
@@ -178,7 +178,7 @@ class DragText extends BaseGameScript
                             Reflect.setField(loggingDetails_pickup, "expressionName", expressionPressed);
                         }
                         
-                        m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.PHRASE_PICKUP_EVENT, false, loggingDetails_pickup);
+                        m_gameEngine.dispatchEvent(new DataEvent(AlgebraAdventureLoggingConstants.PHRASE_PICKUP_EVENT, loggingDetails_pickup));
                     }
                 }
             }
@@ -219,9 +219,9 @@ class DragText extends BaseGameScript
         return result;
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         m_textAreaWidget = try cast(this.m_gameEngine.getUiEntity("textArea"), TextAreaWidget) catch(e:Dynamic) null;
     }
 }

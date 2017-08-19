@@ -1,9 +1,12 @@
 package wordproblem.scripts.barmodel;
 
+import motion.Actuate;
+import openfl.display.Bitmap;
+import wordproblem.display.PivotSprite;
 import wordproblem.scripts.barmodel.BaseBarModelScript;
 
-import flash.geom.Point;
-import flash.geom.Rectangle;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
 
 import cgs.audio.Audio;
 
@@ -12,14 +15,11 @@ import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 
 import haxe.Constraints.Function;
 
-import starling.animation.Tween;
-import starling.core.Starling;
-import starling.display.DisplayObject;
-import starling.display.Image;
+import openfl.display.DisplayObject;
 
 import wordproblem.display.Layer;
 import wordproblem.engine.IGameEngine;
-import wordproblem.engine.barmodel.animation.BarModelToExpressionAnimation;
+//import wordproblem.engine.barmodel.animation.BarModelToExpressionAnimation;
 import wordproblem.engine.barmodel.model.BarLabel;
 import wordproblem.engine.barmodel.view.BarComparisonView;
 import wordproblem.engine.barmodel.view.BarLabelView;
@@ -60,16 +60,10 @@ class BarToCard extends BaseBarModelScript
     private var m_barElementsToTransform : Array<DisplayObject>;
     
     /**
-     * Tween that plays when the element copy shrinks down.
-     * We keep a reference in case we need to interrupts it
-     */
-    private var m_barElementTransformTween : Tween;
-    
-    /**
      * This is a copy of the bar views to transform. For a small amount of time this view
      * is visible and follows the mouse until a card appears
      */
-    private var m_barElementCopy : Image;
+    private var m_barElementCopy : PivotSprite;
     
     /**
      * Out parameters used for the hit test checks
@@ -144,9 +138,12 @@ class BarToCard extends BaseBarModelScript
             barElementView.alpha = 1.0;
         }
         
-        var selectedBarModelElementCopy : Image = BarModelToExpressionAnimation.convertBarModelViewsToSingleImage(
-                m_barElementsToTransform, barModelArea.stage, barModelArea.scaleFactor, m_boundsBuffer
-        );
+        //var selectedBarModelElementCopy : Image = BarModelToExpressionAnimation.convertBarModelViewsToSingleImage(
+                //m_barElementsToTransform, barModelArea.stage, barModelArea.scaleFactor, m_boundsBuffer
+        //);
+		
+		// TODO: this is empty due to the above class needing a redesign with the removal of Starling
+		var selectedBarModelElementCopy : PivotSprite = new PivotSprite();
 		
         // If the element should be converted into a card we play a tween where the element shrinks to nothing
         // otherwise we can start dragging the element without any extra tween
@@ -176,9 +173,7 @@ class BarToCard extends BaseBarModelScript
             }
 			
 			// Tween to shrink copy to nothing  
-            var shrinkCopyTween : Tween = new Tween(selectedBarModelElementCopy, 0.3);
-            shrinkCopyTween.scaleTo(0);
-            shrinkCopyTween.onComplete = function() : Void
+			Actuate.tween(m_barElementCopy, 0.3, { scaleX: 0, scaleY: 0 }).onComplete(function() : Void
                 {
                     // Make the dragged part visible after the transform is finished
                     if (widgetDragSystem.getWidgetSelected() != null) 
@@ -191,9 +186,7 @@ class BarToCard extends BaseBarModelScript
                     {
                         onTransformComplete();
                     }
-                };
-            Starling.current.juggler.add(shrinkCopyTween);
-            m_barElementTransformTween = shrinkCopyTween;
+                });
         }
         // Other wise the new dragged segment just appears as it did in the bar model
         else 
@@ -230,11 +223,11 @@ class BarToCard extends BaseBarModelScript
      */
     public function cancelTransform() : Void
     {
-        if (m_barElementTransformTween != null) 
-        {
-            Starling.current.juggler.remove(m_barElementTransformTween);
-            m_barElementCopy.removeFromParent(true);
-        }
+		if (m_barElementCopy != null) {
+			Actuate.stop(m_barElementCopy);
+			if (m_barElementCopy.parent != null) m_barElementCopy.parent.removeChild(m_barElementCopy);
+			m_barElementCopy.dispose();
+		}
     }
     
     /**
@@ -395,7 +388,7 @@ class BarToCard extends BaseBarModelScript
         if (m_ready && m_isActive && !Layer.getDisplayObjectIsInInactiveLayer(m_barModelArea)) 
         {
             m_globalMouseBuffer.setTo(m_mouseState.mousePositionThisFrame.x, m_mouseState.mousePositionThisFrame.y);
-            m_barModelArea.globalToLocal(m_globalMouseBuffer, m_localMouseBuffer);
+            m_localMouseBuffer = m_barModelArea.globalToLocal(m_globalMouseBuffer);
             if (m_mouseState.leftMousePressedThisFrame) 
             {
                 m_termValueSelected = bufferHitElementsAtPoint(m_localMouseBuffer, m_barModelArea, false);
@@ -421,10 +414,7 @@ class BarToCard extends BaseBarModelScript
             
             if (m_mouseState.leftMouseReleasedThisFrame) 
             {
-                if (m_barElementTransformTween != null) 
-                {
-                    clearBarElementCopy();
-                }
+				clearBarElementCopy();
 				m_barElementsToTransform = new Array<DisplayObject>();
                 m_termValueSelected = null;
             }
@@ -435,21 +425,20 @@ class BarToCard extends BaseBarModelScript
     
     private function clearBarElementCopy() : Void
     {
-        m_barElementCopy.removeFromParent(true);
+		Actuate.stop(m_barElementCopy);
+		
+		if (m_barElementCopy.parent != null) m_barElementCopy.parent.removeChild(m_barElementCopy);
         // The dragged copy can be destroyed along with the custom texture
-        m_barElementCopy.texture.dispose();
+        m_barElementCopy.dispose();
         m_barElementCopy = null;
         m_termValueSelected = null;
-        
-        Starling.current.juggler.remove(m_barElementTransformTween);
-        m_barElementTransformTween = null;
     }
     
     private function onCustomDispose(customDisplay : DisplayObject) : Void
     {
-        if (Std.is(customDisplay, Image)) 
+        if (Std.is(customDisplay, Bitmap)) 
         {
-            (try cast(customDisplay, Image) catch(e:Dynamic) null).texture.dispose();
+            (try cast(customDisplay, Bitmap) catch(e:Dynamic) null).bitmapData.dispose();
         }
     }
 }

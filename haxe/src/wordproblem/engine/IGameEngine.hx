@@ -1,16 +1,14 @@
 package wordproblem.engine;
 
 
-import flash.geom.Point;
-
 import dragonbox.common.display.ISprite;
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
 
-import haxe.Constraints.Function;
-
-import starling.display.DisplayObject;
+import openfl.display.DisplayObject;
+import openfl.events.Event;
+import openfl.geom.Point;
 
 import wordproblem.engine.component.ComponentManager;
 import wordproblem.engine.component.RenderableComponent;
@@ -36,13 +34,13 @@ interface IGameEngine extends ISprite
 {
 
     /** Prototype needed to indicate the interface with event dispatcher */
-    function addEventListener(type : String, listener : Function) : Void;
+    function addEventListener(type : String, listener : Dynamic->Void, useCapture : Bool = false, priority : Int = 0, useWeakReference : Bool = false) : Void;
     
     /** Prototype needed to indicate the interface with event dispatcher */
-    function removeEventListener(type : String, listener : Function) : Void;
+    function removeEventListener(type : String, listener : Dynamic->Void, useCapture : Bool = false) : Void;
     
     /** Prototype needed to indicate the interface with event dispatcher */
-    function dispatchEventWith(type : String, bubbles : Bool = false, data : Dynamic = null) : Void;
+    function dispatchEvent(event : Event) : Bool;
     
     /** Frame ticker to update all the data in the game world */
     function update(time : Time, mouseState : MouseState) : Void;

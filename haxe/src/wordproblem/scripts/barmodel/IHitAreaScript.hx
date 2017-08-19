@@ -1,9 +1,9 @@
 package wordproblem.scripts.barmodel;
 
 
-import flash.geom.Rectangle;
+import openfl.geom.Rectangle;
 
-import starling.display.DisplayObjectContainer;
+import openfl.display.DisplayObjectContainer;
 
 /**
  * All scripts that require using hit areas in the bar model construction area should implement

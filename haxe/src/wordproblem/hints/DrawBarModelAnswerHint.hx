@@ -141,7 +141,7 @@ class DrawBarModelAnswerHint extends HintScript
     
     override public function disposeDescription(description : DisplayObject) : Void
     {
-        m_descriptionBarModel.removeFromParent();
+        if (m_descriptionBarModel.parent != null) m_descriptionBarModel.parent.removeChild(m_descriptionBarModel);
     }
     
     private function modifyPropertiesOfBarModel(barModelData : BarModelData) : Void

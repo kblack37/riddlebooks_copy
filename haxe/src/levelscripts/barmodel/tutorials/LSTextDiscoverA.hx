@@ -156,9 +156,9 @@ class LSTextDiscoverA extends BaseCustomLevelScript
         m_gameEngine.removeEventListener(GameEvent.HINT_BUTTON_SELECTED, bufferEvent);
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         disablePrevNextTextButtons();
         

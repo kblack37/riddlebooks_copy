@@ -1,10 +1,10 @@
 package wordproblem.callouts;
 
 
-import flash.text.TextFormat;
+import openfl.text.TextFormat;
 
-import starling.display.DisplayObject;
-import starling.text.TextField;
+import openfl.display.DisplayObject;
+import openfl.text.TextField;
 
 import wordproblem.engine.component.CalloutComponent;
 import wordproblem.engine.text.GameFonts;
@@ -50,7 +50,12 @@ class CalloutCreator
             contentHeight = calloutMeasuringTextField.textHeight + 10;
         }
         
-        return new TextField(Std.int(width), Std.int(contentHeight), text, defaultFontFamily, fontSize, color);
+		var textField : TextField = new TextField();
+		textField.width = width;
+		textField.height = contentHeight;
+		textField.text = text;
+		textField.setTextFormat(new TextFormat(defaultFontFamily, fontSize, color));
+		return textField;
     }
     
     /**

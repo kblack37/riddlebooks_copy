@@ -51,9 +51,9 @@ class DeckFilter extends BaseGameScript
         super.m_gameEngine.removeEventListener(GameEvent.TERM_AREA_CHANGED, filterDeckSymbol);
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         m_deckWidget = try cast(super.m_gameEngine.getUiEntity("deckArea"), DeckWidget) catch(e:Dynamic) null;
         

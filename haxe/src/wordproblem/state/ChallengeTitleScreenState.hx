@@ -1,13 +1,15 @@
 package wordproblem.state;
 
 
-import flash.display.DisplayObject;
-import flash.display.Stage;
-import flash.events.MouseEvent;
-import flash.filters.GlowFilter;
-import flash.text.TextField;
-import flash.text.TextFormat;
-import flash.text.TextFormatAlign;
+import openfl.display.Bitmap;
+import openfl.display.DisplayObject;
+import openfl.display.Stage;
+import openfl.events.Event;
+import openfl.events.MouseEvent;
+import openfl.filters.GlowFilter;
+import openfl.text.TextField;
+import openfl.text.TextFormat;
+import openfl.text.TextFormatAlign;
 
 import cgs.CgsApi;
 import cgs.audio.Audio;
@@ -18,10 +20,9 @@ import cgs.user.ICgsUser;
 import dragonbox.common.state.BaseState;
 import dragonbox.common.state.IStateMachine;
 
-import starling.display.Button;
-import starling.display.Image;
-import starling.display.Sprite;
-import starling.text.TextField;
+import wordproblem.display.LabelButton;
+import openfl.display.Sprite;
+import openfl.text.TextField;
 
 import wordproblem.account.RegisterTosScreen;
 import wordproblem.engine.text.GameFonts;
@@ -100,8 +101,8 @@ class ChallengeTitleScreenState extends BaseState
         m_logger = logger;
         
         m_background = new Sprite();
-        m_background.addChild(new Image(assetManager.getTexture("login_background")));
-        var boxBackground : Image = new Image(assetManager.getTexture("summary_background"));
+        m_background.addChild(new Bitmap(assetManager.getBitmapData("login_background")));
+        var boxBackground : Bitmap = new Bitmap(assetManager.getBitmapData("summary_background"));
         boxBackground.width = 450;
         boxBackground.height = 280;
         boxBackground.x = (m_background.width - boxBackground.width) * 0.5;
@@ -117,11 +118,11 @@ class ChallengeTitleScreenState extends BaseState
     
     override public function exit(toState : Dynamic) : Void
     {
-        m_background.removeFromParent();
+        if (m_background.parent != null) m_background.parent.removeChild(m_background);
         
         if (m_loginPopup != null && m_loginPopup.parent != null) 
         {
-            m_loginPopup.parent.removeChild(m_loginPopup);
+            if (m_loginPopup.parent != null) m_loginPopup.parent.removeChild(m_loginPopup);
         }
     }
     
@@ -167,27 +168,27 @@ class ChallengeTitleScreenState extends BaseState
                     //button.addEventListener(MouseEvent.CLICK, function(event : MouseEvent) : Void
                             //{
                                 //Audio.instance.playSfx("button_click");
-                                //dispatchEventWith(CommandEvent.WAIT_SHOW);
+                                //dispatchEvent(CommandEvent.WAIT_SHOW);
                             //});
                     //return button;
                 //});
         //loginPopup.setCancelButtonFactory(buttonFactory);
         
-        loginPopup.setTitleFactory(function() : TextField
-                {
-                    var title : TextField = new TextField(289, 46, null, GameFonts.DEFAULT_FONT_NAME, 32, 0xCC66FF);
-					title.hAlign = TextFormatAlign.CENTER;
-					title.vAlign = TextFormatAlign.CENTER;
-                    return title;
-                });
+        //loginPopup.setTitleFactory(function() : TextField
+                //{
+                    //var title : TextField = new TextField(289, 46, null, GameFonts.DEFAULT_FONT_NAME, 32, 0xCC66FF);
+					//title.hAlign = TextFormatAlign.CENTER;
+					//title.vAlign = TextFormatAlign.CENTER;
+                    //return title;
+                //});
 		
         // Set styles for the labels next to the text inputs
-        loginPopup.setInputLabelFactory(function() : TextField
-                {
-                    var inputLabel : TextField = new TextField(128, 30, "", GameFonts.DEFAULT_FONT_NAME, 26, 0xFFFFFF);
-                    inputLabel.nativeFilters = [new GlowFilter(0x000000, 1, 2, 2)];
-                    return inputLabel;
-                });
+        //loginPopup.setInputLabelFactory(function() : TextField
+                //{
+                    //var inputLabel : TextField = new TextField(128, 30, "", GameFonts.DEFAULT_FONT_NAME, 26, 0xFFFFFF);
+                    //inputLabel.nativeFilters = [new GlowFilter(0x000000, 1, 2, 2)];
+                    //return inputLabel;
+                //});
         
         // Set styles for the text input fields
 		// TODO: uncomment when a text input replacement is found
@@ -321,8 +322,8 @@ class ChallengeTitleScreenState extends BaseState
         // For anonymous users immediately send out authenticated signal
         else 
         {
-            dispatchEventWith(CommandEvent.WAIT_HIDE);
-            dispatchEventWith(CommandEvent.USER_AUTHENTICATED);
+            dispatchEvent(new Event(CommandEvent.WAIT_HIDE));
+            dispatchEvent(new Event(CommandEvent.USER_AUTHENTICATED));
         }
     }
     
@@ -338,8 +339,8 @@ class ChallengeTitleScreenState extends BaseState
 				{
 					tosScreen.dispose();
 					m_flashStage.removeChild(tosScreen);
-					dispatchEventWith(CommandEvent.WAIT_HIDE);
-					dispatchEventWith(CommandEvent.USER_AUTHENTICATED);
+					dispatchEvent(new Event(CommandEvent.WAIT_HIDE));
+					dispatchEvent(new Event(CommandEvent.USER_AUTHENTICATED));
 				}, 
 				800, 
 				600
@@ -351,8 +352,8 @@ class ChallengeTitleScreenState extends BaseState
             // On login, if the user is not anonymous and we are linked to dragonbox
             // Then we may need to poll the player's dragonbox save data to fetch information
             // that should be imported over to this game. For example rewards.
-            dispatchEventWith(CommandEvent.WAIT_HIDE);
-            dispatchEventWith(CommandEvent.USER_AUTHENTICATED, false);
+            dispatchEvent(new Event(CommandEvent.WAIT_HIDE));
+            dispatchEvent(new Event(CommandEvent.USER_AUTHENTICATED));
         }
     }
     
@@ -362,6 +363,6 @@ class ChallengeTitleScreenState extends BaseState
     private function onUserLoginFail(response : CgsUserResponse) : Void
     {
         // Hide the waiting screen
-        dispatchEventWith(CommandEvent.WAIT_HIDE);
+        dispatchEvent(new Event(CommandEvent.WAIT_HIDE));
     }
 }

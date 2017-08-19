@@ -39,9 +39,9 @@ class ReplayBarModelLevel extends BaseGameScript
         m_uiSetUp = false;
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
     }
     
     override public function visit() : Int

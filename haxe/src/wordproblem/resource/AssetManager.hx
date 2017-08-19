@@ -1,16 +1,13 @@
 package wordproblem.resource;
 
-import flash.errors.ArgumentError;
-import flash.errors.Error;
-import haxe.xml.Fast;
-import openfl.Assets;
-import openfl.Vector;
-//import wordproblem.resource.ImageDataClass;
-//import wordproblem.resource.RawAsset;
+import cgs.audio.IAudioResource;
+import cgs.levelProgression.util.ICgsLevelResourceManager;
 
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.Loader;
+import flash.errors.ArgumentError;
+import flash.errors.Error;
 import flash.events.IOErrorEvent;
 import flash.events.ProgressEvent;
 import flash.media.Sound;
@@ -20,20 +17,16 @@ import flash.net.FileReference;
 import flash.net.URLLoader;
 import flash.net.URLLoaderDataFormat;
 import flash.net.URLRequest;
-//import flash.system.ImageDecodingPolicy;
 import flash.system.LoaderContext;
-import flash.system.System;
 import flash.utils.ByteArray;
-import flash.utils.Dictionary;
-
-//import flash.utils.DescribeType;
-
-import haxe.Constraints.Function;
-
-import cgs.audio.IAudioResource;
-import cgs.levelProgression.util.ICgsLevelResourceManager;
 
 import gameconfig.commonresource.EmbeddedBundle1X;
+
+import haxe.Constraints.Function;
+import haxe.xml.Fast;
+
+import openfl.Assets;
+import openfl.Vector;
 
 import starling.core.Starling;
 import starling.events.Event;
@@ -46,8 +39,18 @@ import starling.textures.RenderTexture;
 import starling.textures.SubTexture;
 import starling.textures.Texture;
 import starling.textures.TextureAtlas;
-
 import wordproblem.resource.bundles.ResourceBundle;
+//import wordproblem.resource.ImageDataClass;
+//import wordproblem.resource.RawAsset;
+
+//import flash.system.ImageDecodingPolicy;
+
+//import flash.utils.DescribeType;
+
+
+
+
+
 
 /** Dispatched when all textures have been restored after a context loss. */
 @:meta(Event(name="texturesRestored",type="starling.events.Event"))
@@ -740,6 +743,11 @@ class AssetManager extends EventDispatcher implements ICgsLevelResourceManager i
         
         ;
     }
+	
+	/** Removes a certain bitmap data */
+	public function removeBitmapData(name : String, dispose : Bool = true) : Void {
+		log("Remove bitmap data '" + name + "'");
+	}
     
     /** Removes a certain sound. */
     public function removeSound(name : String) : Void
@@ -1065,7 +1073,7 @@ class AssetManager extends EventDispatcher implements ICgsLevelResourceManager i
                                             mNumRestoredTextures++;
                                             
                                             if (mNumLostTextures == mNumRestoredTextures) 
-                                                dispatchEventWith(Event.TEXTURES_RESTORED);
+                                                dispatchEvent(new Event(Event.TEXTURES_RESTORED));
                                         });
                             };
                     

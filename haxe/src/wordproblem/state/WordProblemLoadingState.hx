@@ -1,6 +1,11 @@
 package wordproblem.state;
 
-import flash.geom.Point;
+import motion.Actuate;
+import openfl.display.Bitmap;
+import openfl.geom.Point;
+import openfl.text.TextFormat;
+import openfl.text.TextFormatAlign;
+import wordproblem.display.PivotSprite;
 
 import dragonbox.common.particlesystem.zone.DiskZone;
 import dragonbox.common.state.BaseState;
@@ -9,14 +14,10 @@ import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
 import dragonbox.common.util.XColor;
 
-import starling.animation.Tween;
-import starling.core.Starling;
-import starling.display.DisplayObject;
-import starling.display.Image;
-import starling.display.Sprite;
-import starling.text.TextField;
-import starling.textures.Texture;
-import starling.utils.HAlign;
+import openfl.display.BitmapData;
+import openfl.display.DisplayObject;
+import openfl.display.Sprite;
+import openfl.text.TextField;
 
 import wordproblem.engine.text.GameFonts;
 import wordproblem.resource.AssetManager;
@@ -40,7 +41,7 @@ class WordProblemLoadingState extends BaseState
 	private static var THOUGHT_VERBS : Array<String>;
 	private static var THOUGHT_NOUNS : Array<String>;
 
-	private var m_activeAnimations : Array<Dynamic>;
+	private var m_activeAnimations : Array<DisplayObject>;
 	private var m_thoughtBubbleColors : Array<Int>;
 
 	public function new(stateMachine : IStateMachine,
@@ -96,23 +97,29 @@ class WordProblemLoadingState extends BaseState
 
 	override public function enter(fromState : Dynamic, params : Array<Dynamic> = null) : Void
 	{
-		m_activeAnimations = new Array<Dynamic>();
+		m_activeAnimations = new Array<DisplayObject>();
 		m_thoughtBubbleColors = XColor.getCandidateColorsForSession();
-
-		var backgroundTexture : Texture = m_assetManager.getTexture("login_background");
-		var backgroundImage : Image = new Image(backgroundTexture);
+		
+		var backgroundBitmapData : BitmapData = m_assetManager.getBitmapData("login_background");
+		var backgroundImage : Bitmap = new Bitmap(backgroundBitmapData);
 		backgroundImage.width = m_width;
 		backgroundImage.height = m_height;
 		addChild(backgroundImage);
-
-		m_ratioTextField = new TextField(Std.int(width), Std.int(height + 100), "", "Verdana", 40, 0x000000);
-		m_ratioTextField.hAlign = HAlign.LEFT;
-
-		m_loadingTextField = new TextField(Std.int(width), Std.int(height), "Loading", "Verdana", 40, 0x000000);
-		m_loadingTextField.hAlign = HAlign.LEFT;
-
+		
+		m_ratioTextField = new TextField();
+		m_ratioTextField.width = width;
+		m_ratioTextField.height = height + 100;
+		m_ratioTextField.text = "";
+		m_ratioTextField.setTextFormat(new TextFormat("Verdana", 40, 0x000000, null, null, null, null, null, TextFormatAlign.START));
+		
+		m_loadingTextField = new TextField();
+		m_loadingTextField.width = width;
+		m_loadingTextField.height = height;
+		m_loadingTextField.text = "Loading";
+		m_loadingTextField.setTextFormat(new TextFormat("Verdana", 40, 0x000000, null, null, null, null, null, TextFormatAlign.START));
+		
 		m_msSinceLastThoughtBubble = Std.int(Math.pow(2, 30));
-
+		
 		m_thoughBubblePositions = new Array<Point>();
 		m_positionPicker = new DiskZone(m_width * 0.5, m_height * 0.5, Math.min(m_width, m_height) * 0.45, Math.min(m_width, m_height) * 0.35, m_height / m_width);
 	}
@@ -120,19 +127,11 @@ class WordProblemLoadingState extends BaseState
 	override public function exit(toState : Dynamic) : Void
 	{
 		// Any existing tweens or though bubble images should be disposed of
-		removeChildren(0, -1, true);
-
+		removeChildren(0, -1);
+		
 		for (animationObject in m_activeAnimations)
 		{
-			if (Reflect.hasField(animationObject, "start"))
-			{
-				Starling.current.juggler.remove(animationObject.start);
-			}
-
-			if (Reflect.hasField(animationObject, "end"))
-			{
-				Starling.current.juggler.remove(animationObject.end);
-			}
+			Actuate.stop(animationObject);
 		}
 	}
 
@@ -154,10 +153,10 @@ class WordProblemLoadingState extends BaseState
 		{
 			m_loadingTextField.text = "Loading...";
 		}
-
+		
 		m_loadingTextField.x = m_loadingTextField.width / 2 - 100;
 		addChild(m_loadingTextField);
-
+		
 		// Check whether enough time has elapsed to add another thought bubble
 		var fadeInDuration : Float = 1.0;
 		var fadeOutDuration : Float = 1.0;
@@ -165,10 +164,10 @@ class WordProblemLoadingState extends BaseState
 		if (m_msSinceLastThoughtBubble > msBetweenThoughtBubbles)
 		{
 			m_msSinceLastThoughtBubble = 0;
-
+			
 			var initialAlpha : Float = 0.6;
 			var initialScaleFactor : Float = 0.5;
-
+			
 			var randomPosition : Point = m_positionPicker.getLocation();
 			var selectedX : Float = randomPosition.x;
 			var selectedY : Float = randomPosition.y;
@@ -177,33 +176,20 @@ class WordProblemLoadingState extends BaseState
 			newThoughtBubble.scaleX = newThoughtBubble.scaleY = initialScaleFactor;
 			newThoughtBubble.x = selectedX;
 			newThoughtBubble.y = selectedY;
-
-			var fadeInTween : Tween = new Tween(newThoughtBubble, fadeInDuration);
-			fadeInTween.fadeTo(1.0);
-			fadeInTween.scaleTo(0.7);
-			Starling.current.juggler.add(fadeInTween);
+			
+			Actuate.tween(newThoughtBubble, fadeInDuration, { alpha: 1, scaleX: 0.7, scaleY: 0.7 });
 			addChild(newThoughtBubble);
-
+			
 			// Fade out should trigger at slightly random duration
-			var fadeOutTween : Tween = new Tween(newThoughtBubble, fadeOutDuration);
-			fadeOutTween.fadeTo(0.0);
-			fadeOutTween.delay = fadeInDuration + Math.random() + 2.0;
-			fadeOutTween.onComplete = function() : Void
-			{
-				removeChild(newThoughtBubble);
-
-				// Assuming the head of the list always finishes first so it is the one to remove
-				m_activeAnimations.shift();
-			};
-			Starling.current.juggler.add(fadeOutTween);
-
-			var animationObject : Dynamic =
-			{
-				start : fadeInTween,
-				end : fadeOutTween,
-
-			};
-			m_activeAnimations.push(animationObject);
+			Actuate.tween(newThoughtBubble, fadeInDuration + Math.random() + 2.0, { alpha: 0 }).onComplete(function() : Void
+				{
+					removeChild(newThoughtBubble);
+					
+					// Assuming the head of the list always finishes first so it is the one to remove
+					m_activeAnimations.shift();
+				});
+			
+			m_activeAnimations.push(newThoughtBubble);
 		}
 		else
 		{
@@ -223,7 +209,7 @@ class WordProblemLoadingState extends BaseState
 	{
 		var percentage : String = Std.string(Std.int(ratio * 100)) + "%";
 		addChild(m_ratioTextField);
-
+		
 		if (ratio <= 1.01)
 		{
 			m_ratioTextField.text = percentage;
@@ -233,23 +219,28 @@ class WordProblemLoadingState extends BaseState
 
 	private function getThoughtBubble() : DisplayObject
 	{
-		var thoughtBubbleContainer : Sprite = new Sprite();
-		var thoughtBubbleBg : Image = new Image(m_assetManager.getTexture("thought_bubble"));
-
+		var thoughtBubbleContainer : PivotSprite = new PivotSprite();
+		var thoughtBubbleBg : Bitmap = new Bitmap(m_assetManager.getBitmapData("thought_bubble"));
+		
 		// Pick random tint
-		thoughtBubbleBg.color = m_thoughtBubbleColors[Math.floor(Math.random() * m_thoughtBubbleColors.length)];
-
+		var color = m_thoughtBubbleColors[Math.floor(Math.random() * m_thoughtBubbleColors.length)];
+		thoughtBubbleBg.transform.colorTransform.concat(XColor.rgbToColorTransform(color));
+		
 		thoughtBubbleContainer.addChild(thoughtBubbleBg);
-
+		
 		var action : String = WordProblemLoadingState.THOUGHT_VERBS[Math.floor(Math.random() * WordProblemLoadingState.THOUGHT_VERBS.length)];
 		var noun : String = WordProblemLoadingState.THOUGHT_NOUNS[Math.floor(Math.random() * WordProblemLoadingState.THOUGHT_NOUNS.length)];
-		var textField : TextField = new TextField(Std.int(thoughtBubbleBg.width * 0.8), Std.int(thoughtBubbleBg.height), action + " " + noun, "Verdana", 24, 0x000000);
+		var textField : TextField = new TextField();
+		textField.width = thoughtBubbleBg.width * 0.8;
+		textField.height = thoughtBubbleBg.height;
+		textField.text = action + " " + noun;
+		textField.setTextFormat(new TextFormat("Verdana", 24, 0x000000));
 		textField.x = (thoughtBubbleBg.width - textField.width) * 0.5;
 		thoughtBubbleContainer.addChild(textField);
-
+		
 		thoughtBubbleContainer.pivotX = thoughtBubbleBg.width * 0.5;
 		thoughtBubbleContainer.pivotY = thoughtBubbleBg.height * 0.5;
-
+		
 		return thoughtBubbleContainer;
 	}
 }

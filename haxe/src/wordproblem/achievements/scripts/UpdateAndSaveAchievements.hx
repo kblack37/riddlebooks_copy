@@ -5,7 +5,7 @@ import cgs.levelProgression.nodes.ICgsLevelNode;
 
 import haxe.Constraints.Function;
 
-import starling.display.DisplayObjectContainer;
+import openfl.display.DisplayObjectContainer;
 
 import wordproblem.achievements.AchievementUnlockedAnimation;
 import wordproblem.achievements.PlayerAchievementsModel;

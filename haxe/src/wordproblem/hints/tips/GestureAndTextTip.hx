@@ -1,12 +1,14 @@
 package wordproblem.hints.tips;
 
 import dragonbox.common.math.vectorspace.RealsVectorSpace;
-import flash.errors.Error;
-import starling.display.Image;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.errors.Error;
+import openfl.text.TextFormatAlign;
 
-import flash.geom.Point;
-import flash.geom.Rectangle;
-import flash.text.TextFormat;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
+import openfl.text.TextFormat;
 
 import dragonbox.common.eventsequence.EventSequencer;
 import dragonbox.common.expressiontree.ExpressionNode;
@@ -14,13 +16,10 @@ import dragonbox.common.math.vectorspace.IVectorSpace;
 import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
 
-import starling.display.DisplayObjectContainer;
-import starling.display.Sprite;
-import starling.events.EventDispatcher;
-import starling.text.TextField;
-import starling.textures.Texture;
-import starling.utils.HAlign;
-import starling.utils.VAlign;
+import openfl.display.DisplayObjectContainer;
+import openfl.display.Sprite;
+import openfl.events.EventDispatcher;
+import openfl.text.TextField;
 
 import wordproblem.engine.expression.ExpressionSymbolMap;
 import wordproblem.engine.scripting.graph.ScriptNode;
@@ -116,7 +115,7 @@ class GestureAndTextTip extends ScriptNode implements IShowableScript
     override public function visit() : Int
     {
         // Reset simulated mouse on every frame
-        m_simulatedMouseState.onEnterFrame();
+        m_simulatedMouseState.onEnterFrame(null);
         
         // Heavy Lifting done here
         // The mouse needs to take the dragged object and move it to
@@ -139,7 +138,7 @@ class GestureAndTextTip extends ScriptNode implements IShowableScript
         m_simulatedMouseVisualizer.hide();
         
         m_mainDisplay.removeChildren();
-        m_mainDisplay.removeFromParent();
+        if (m_mainDisplay.parent != null) m_mainDisplay.parent.removeChild(m_mainDisplay);
     }
     
     override public function dispose() : Void
@@ -162,13 +161,13 @@ class GestureAndTextTip extends ScriptNode implements IShowableScript
         measuringText.width = maxTitleWidth;
         measuringText.text = m_titleText;
         
-        var titleTextfield : TextField = new TextField(Std.int(maxTitleWidth), Std.int(measuringText.textHeight + 10), 
-			m_titleText, 
-			textFormat.font, textFormat.size, try cast(textFormat.color, Int) catch(e:Dynamic) 0);
+        var titleTextfield : TextField = new TextField();
+		titleTextfield.width = maxTitleWidth;
+		titleTextfield.height = measuringText.textHeight + 10;
+		titleTextfield.text = m_titleText;
+		titleTextfield.setTextFormat(new TextFormat(textFormat.font, textFormat.size, textFormat.color, null, null, null, null, null, TextFormatAlign.CENTER));
 		titleTextfield.y = titleY;
 		titleTextfield.x = titleX;
-		titleTextfield.vAlign = VAlign.TOP;
-		titleTextfield.hAlign = HAlign.CENTER;
 		m_mainDisplay.addChild(titleTextfield);
         
         // Need some space between the text and the outline
@@ -177,15 +176,17 @@ class GestureAndTextTip extends ScriptNode implements IShowableScript
         measuringText.width = descriptionWidth - 2 * outlinePadding;
         measuringText.text = m_descriptionText;
         
-        var descriptionTextField : TextField = new TextField(Std.int(measuringText.width), Std.int(measuringText.textHeight + 10), m_descriptionText, 
-			textFormat.font, 26, try cast(textFormat.color, Int) catch(e:Dynamic) 0);
-        descriptionTextField.vAlign = VAlign.TOP;
+        var descriptionTextField : TextField = new TextField();
+		descriptionTextField.width = measuringText.width;
+		descriptionTextField.height = measuringText.textHeight + 10;
+		descriptionTextField.text = m_descriptionText;
+		descriptionTextField.setTextFormat(new TextFormat(textFormat.font, 26, textFormat.color));
         var scale9Padding : Float = 12;
         
         // TEMP: No chalk outline as it may cause unneeded clutter
-        var chalkOutlineTexture : Texture = m_assetManager.getTexture("chalk_outline");
-        var chalkOutline : Image = new Image(Texture.fromTexture(chalkOutlineTexture, 
-			new Rectangle(scale9Padding, scale9Padding, chalkOutlineTexture.width - 2 * scale9Padding, chalkOutlineTexture.height - 2 * scale9Padding)));
+		var chalkOutlineBitmapData : BitmapData = m_assetManager.getBitmapData("chalk_outline");
+        var chalkOutline : Bitmap = new Bitmap(chalkOutlineBitmapData);
+		chalkOutline.scale9Grid = new Rectangle(scale9Padding, scale9Padding, chalkOutlineBitmapData.width - 2 * scale9Padding, chalkOutlineBitmapData.height - 2 * scale9Padding);
         chalkOutline.width = descriptionWidth;
         chalkOutline.height = descriptionTextField.height + outlinePadding * 2;
         chalkOutline.x = descriptionX;

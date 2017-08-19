@@ -1,9 +1,9 @@
 package wordproblem.engine.text.view;
 
 
-import flash.geom.Point;
+import openfl.geom.Point;
 
-import starling.display.DisplayObject;
+import openfl.display.DisplayObject;
 
 import wordproblem.engine.text.model.ImageNode;
 
@@ -19,9 +19,9 @@ class ImageView extends DocumentView
         this.addChild(image);
     }
     
-    override public function hitTestPoint(globalPoint : Point, ignoreNonSelectable : Bool = true) : DocumentView
+    override public function customHitTestPoint(globalPoint : Point, ignoreNonSelectable : Bool = true) : DocumentView
     {
-        var hitView : Bool = this.hitTest(this.globalToLocal(globalPoint)) != null;
+        var hitView : Bool = this.hitTestPoint(globalPoint.x, globalPoint.y) != null;
         var viewToReturn : DocumentView = null;
         if (hitView && (this.node.getSelectable() || !ignoreNonSelectable)) 
         {

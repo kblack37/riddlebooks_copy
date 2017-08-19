@@ -449,7 +449,7 @@ class FractionSprite extends Sprite
             // Remove it from the display list
             if (aNumberRenderer.parent != null)
             {
-                aNumberRenderer.parent.removeChild(aNumberRenderer);
+                if (aNumberRenderer.parent != null) aNumberRenderer.parent.removeChild(aNumberRenderer);
             }
             
             // Recycle

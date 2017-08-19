@@ -1,7 +1,7 @@
 package wordproblem.scripts.barmodel;
 
 
-import starling.display.DisplayObject;
+import openfl.display.DisplayObject;
 
 interface ICardOnSegmentEdgeScript
 {

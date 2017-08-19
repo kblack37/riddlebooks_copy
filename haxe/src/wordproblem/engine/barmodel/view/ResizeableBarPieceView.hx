@@ -3,7 +3,7 @@ package wordproblem.engine.barmodel.view;
 
 import dragonbox.common.dispose.IDisposable;
 
-import starling.display.Sprite;
+import openfl.display.Sprite;
 
 class ResizeableBarPieceView extends Sprite implements IDisposable
 {
@@ -21,4 +21,7 @@ class ResizeableBarPieceView extends Sprite implements IDisposable
     public function resizeToLength(newLength : Float) : Void
     {
     }
+	
+	public function dispose() {
+	}
 }

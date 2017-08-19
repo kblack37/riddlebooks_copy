@@ -143,7 +143,7 @@ class BarModelHitAreaUtil
                     // Check if hit a comparison view
                     // The rigid body does not take into account the textfield so we just take the bound of the
                     // view directly
-                    barComparisonView.getBounds(barModelView, rectBuffer);
+                    rectBuffer = barComparisonView.getBounds(barModelView);
                     if (rectBuffer.containsPoint(localPoint)) 
                     {
                         outParams.push(barComparisonView);
@@ -219,7 +219,7 @@ class BarModelHitAreaUtil
             }
             else if (barLabelView.getDescriptionDisplay().stage != null) 
             {
-                barLabelView.getDescriptionDisplay().getBounds(barModelArea, rectBuffer);
+                rectBuffer = barLabelView.getDescriptionDisplay().getBounds(barModelArea);
                 if (rectBuffer.containsPoint(localPoint)) 
                 {
                     outParams.push(barLabelView);

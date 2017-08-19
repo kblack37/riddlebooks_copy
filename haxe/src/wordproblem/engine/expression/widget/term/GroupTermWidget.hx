@@ -2,14 +2,15 @@ package wordproblem.engine.expression.widget.term;
 
 
 import dragonbox.common.math.vectorspace.RealsVectorSpace;
-import flash.geom.Rectangle;
-import starling.display.Image;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.geom.Rectangle;
+import wordproblem.display.PivotSprite;
 
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.math.vectorspace.IVectorSpace;
 
-import starling.display.DisplayObject;
-import starling.textures.Texture;
+import openfl.display.DisplayObject;
 import wordproblem.resource.AssetManager;
 
 import wordproblem.engine.expression.ExpressionSymbolMap;
@@ -23,7 +24,7 @@ class GroupTermWidget extends BaseTermWidget
     /**
      * The image of just the operator graphic, is independent of any display children
      */
-    public var groupImage : DisplayObject;
+    public var groupImage : PivotSprite;
     
     public function new(node : ExpressionNode,
             vectorSpace : RealsVectorSpace,
@@ -32,22 +33,21 @@ class GroupTermWidget extends BaseTermWidget
     {
         super(node, assetManager);
         
-        var textureName : String = null;
         this.mainGraphicBounds = new Rectangle(0, 0, 0, 0);
         
         if (node.isSpecificOperator(vectorSpace.getDivisionOperator())) 
         {
             // The division symbol needs to be able to scale horizontally if it is the bar
-            var texture : Texture = assetManager.getTexture("divide_bar");
+            var bitmapData : BitmapData = assetManager.getBitmapData("divide_bar");
             var centerX : Float = 10;
-            var centerWidth : Float = texture.width - 2 * centerX;
-			// TODO: this was converted from a Scale3Texture from the feathers library
-			// and will probably need to be fixed
-            this.groupImage = new Image(texture);
+            var centerWidth : Float = bitmapData.width - 2 * centerX;
+            this.groupImage = new PivotSprite();
+			this.groupImage.addChild(new Bitmap(bitmapData));
+			this.groupImage.scale9Grid = new Rectangle(centerX, 0, centerWidth, bitmapData.height);
         }
         else 
         {
-            this.groupImage = expressionSymbolMap.getCardFromSymbolValue(node.data);
+            this.groupImage = try cast(expressionSymbolMap.getCardFromSymbolValue(node.data), PivotSprite) catch (e : Dynamic) null;
         }
         
         this.groupImage.pivotX = this.groupImage.width * 0.5;

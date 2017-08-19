@@ -1,4 +1,6 @@
 package dragonbox.common.util;
+import openfl.filters.ColorMatrixFilter;
+import openfl.geom.ColorTransform;
 
 
 class XColor
@@ -26,6 +28,15 @@ class XColor
                 0xFFFDD1FF,   // Light Pink  
                 0xFFD1FFDC  //0xFFFFAA99 // Peach    //0xFF99CC99, // Sea Green    // Light Green  
 				];
+				
+	private static var rLum = 0.2225;
+	private static var gLum = 0.7169;
+	private static var bLum = 0.0606;
+	private static var grayscaleFilter : ColorMatrixFilter = new ColorMatrixFilter(
+		[rLum, gLum, bLum, 0, 0,
+		 rLum, gLum, bLum, 0, 0,
+		 rLum, gLum, bLum, 0, 0,
+		 0,    0,    0,    1, 0]);
     
     public static function getCandidateColorsForSession() : Array<Int>
     {
@@ -120,6 +131,33 @@ class XColor
         var b : Int = Math.floor(blue * 256);
         return (255 << 24) | (r << 16) | (g << 8) | b;
     }
+	
+	/**
+	 * Takes in an RGB color and returns a color transform used for shading to that color
+	 */
+	public static function rgbToColorTransform(color : Int) : ColorTransform {
+		var colorTransform = new ColorTransform();
+		colorTransform.redMultiplier = extractRed(color) / 255.0;
+		colorTransform.greenMultiplier = extractGreen(color) / 255.0;
+		colorTransform.blueMultiplier = extractBlue(color) / 255.0;
+		return colorTransform;
+	}
+	
+	public static function extractRed(color : Int) : Int {
+		return (color >> 16) & 0xFF;
+	}
+	
+	public static function extractGreen(color : Int) : Int {
+		return (color >> 8) & 0xFF;
+	}
+	
+	public static function extractBlue(color : Int) : Int {
+		return color & 0xFF;
+	}
+	
+	public static function getGrayscaleFilter() : ColorMatrixFilter {
+		return grayscaleFilter;
+	}
     
     /**
      * Use the golden ratio to pick out a nicer looking distribution of colors

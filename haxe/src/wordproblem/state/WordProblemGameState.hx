@@ -1,6 +1,9 @@
 package wordproblem.state;
 
 import cgs.audio.Audio;
+import openfl.filters.GlowFilter;
+import openfl.text.TextFormat;
+import wordproblem.engine.events.DataEvent;
 
 import dragonbox.common.console.IConsole;
 import dragonbox.common.console.IConsoleInterfacable;
@@ -12,12 +15,11 @@ import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
 import dragonbox.common.util.XString;
 
-import starling.display.Button;
-import starling.display.DisplayObject;
-import starling.display.Sprite;
-import starling.events.Event;
-import starling.filters.BlurFilter;
-import starling.text.TextField;
+import wordproblem.display.LabelButton;
+import openfl.display.DisplayObject;
+import openfl.display.Sprite;
+import openfl.events.Event;
+import openfl.text.TextField;
 
 import wordproblem.AlgebraAdventureConfig;
 import wordproblem.engine.GameEngine;
@@ -176,11 +178,17 @@ class WordProblemGameState extends BaseState implements IConsoleInterfacable
             console.registerConsoleInterfacable(this);
         }
         
-        m_levelInformationText = new TextField(250, 40, "", "Verdana", 14, 0x291400);
-        m_levelInformationText.filter = BlurFilter.createGlow(0xFFFFFF, 1.0, 0.5);
+        m_levelInformationText = new TextField();
+		m_levelInformationText.width = 250;
+		m_levelInformationText.height = 40;
+		m_levelInformationText.text = "";
+		m_levelInformationText.setTextFormat(new TextFormat("Verdana", 14, 0x291400));
+		var filters = m_levelInformationText.filters.copy();
+		filters.push(new GlowFilter(0xFFFFFF, 1, 0.5));
+		m_levelInformationText.filters = filters;
         m_levelInformationText.x = 30;
         m_levelInformationText.y = 0;
-        m_levelInformationText.touchable = false;
+        m_levelInformationText.mouseEnabled = false;
         
         m_audioDriver = Audio.instance;
         
@@ -240,8 +248,8 @@ class WordProblemGameState extends BaseState implements IConsoleInterfacable
             case "completeLevel":
             {
                 // Fake the game engine sending solve and complete events
-                m_gameEngine.dispatchEventWith(GameEvent.LEVEL_SOLVED);
-                m_gameEngine.dispatchEventWith(GameEvent.LEVEL_COMPLETE);
+                m_gameEngine.dispatchEvent(new Event(GameEvent.LEVEL_SOLVED));
+                m_gameEngine.dispatchEvent(new Event(GameEvent.LEVEL_COMPLETE));
             }
             case "setContent":
             {
@@ -275,10 +283,9 @@ class WordProblemGameState extends BaseState implements IConsoleInterfacable
             }
             case "goToTip":
             {
-                m_gameEngine.dispatchEventWith(GameEvent.LINK_TO_TIP, false, {
+                m_gameEngine.dispatchEvent(new DataEvent(GameEvent.LINK_TO_TIP, {
                             tipName : TipsViewer.MULTIPLY_WITH_BOXES
-
-                        });
+                        }));
             }
             case "solveBarModel":
             {
@@ -393,7 +400,7 @@ class WordProblemGameState extends BaseState implements IConsoleInterfacable
         cleanAndDisposeLevel();
         
         // After exiting, the engine should have cleaned up all resources related to the last level
-        m_gameEngine.getSprite().removeFromParent();
+		m_gameEngine.getSprite().parent.removeChild(m_gameEngine.getSprite());
         
         // Clear out the scripts to run
         m_preBakedScript.dispose();
@@ -404,23 +411,27 @@ class WordProblemGameState extends BaseState implements IConsoleInterfacable
         // Make sure game is unpaused
         setPaused(false);
         
-        m_optionsButton.removeFromParent(true);
+		if (m_optionsButton.parent != null) m_optionsButton.parent.removeChild(m_optionsButton);
+		m_optionsButton.dispose();
         
         // Dispose all the event listeners
         var buttonContainer : Sprite = try cast(m_optionsScreen.getChildAt(1), Sprite) catch(e:Dynamic) null;
         while (buttonContainer.numChildren > 0)
         {
             var child : DisplayObject = buttonContainer.getChildAt(0);
-            if (Std.is(child, Button)) 
+            if (Std.is(child, LabelButton)) 
             {
-                child.removeEventListeners();
+				// TODO: openfl has no method for mass removing event listeners, so 
+				// the following may not be enough to dipose of the memory correctly
+                //child.removeEventListeners();
             }
-            child.removeFromParent(true);
+			if (child.parent != null) child.parent.removeChild(child);
+			child = null;
         }  
 		
 		// Remove option screen if visible, otherwise it will still be visible underneath  
         // the ui components of the new level.
-        m_optionsScreen.removeFromParent();
+        if (m_optionsScreen.parent != null) m_optionsScreen.parent.removeChild(m_optionsScreen);
         
         // Clean up and remove the help screen
         m_helpScreenViewer.hide();
@@ -455,7 +466,7 @@ class WordProblemGameState extends BaseState implements IConsoleInterfacable
                 if (mouseX < optionsBackground.x || mouseY < optionsBackground.y || mouseX > rightEdge || mouseY > bottomEdge) 
                 {
                     m_paused = false;
-                    m_optionsScreen.removeFromParent();
+                    if (m_optionsScreen.parent != null) m_optionsScreen.parent.removeChild(m_optionsScreen);
                 }
             }
         }
@@ -550,70 +561,70 @@ class WordProblemGameState extends BaseState implements IConsoleInterfacable
             buttonName : "OptionsButton"
 
         };
-        m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.BUTTON_PRESSED_EVENT, false, loggingDetails);
+        m_gameEngine.dispatchEvent(new DataEvent(AlgebraAdventureLoggingConstants.BUTTON_PRESSED_EVENT, loggingDetails));
         
         // Show the level name at the top of the options
-        
         addChild(m_optionsScreen);
         setPaused(true);
     }
     
-    private function onResume() : Void
+    private function onResume(event : Dynamic) : Void
     {
         var loggingDetails : Dynamic = {
             buttonName : "ResumeButton"
 
         };
-        m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.BUTTON_PRESSED_EVENT, false, loggingDetails);
+        m_gameEngine.dispatchEvent(new DataEvent(AlgebraAdventureLoggingConstants.BUTTON_PRESSED_EVENT, loggingDetails));
         
         m_paused = false;
-        m_optionsScreen.removeFromParent();
+        if (m_optionsScreen.parent != null) m_optionsScreen.parent.removeChild(m_optionsScreen);
     }
     
-    private function onRestart() : Void
+    private function onRestart(event : Dynamic) : Void
     {
         // On reset, the entire level restarts at the begining.
         // (Easiest way to implement is to trigger a go to level command
         // with the same level id as before)
-        dispatchEventWith(CommandEvent.LEVEL_RESTART, false, {
+        dispatchEvent(new DataEvent(CommandEvent.LEVEL_RESTART, {
                     level : m_gameEngine.getCurrentLevel()
-
-                });
+                }));
     }
     
-    private function onSkip() : Void
+    private function onSkip(event : Dynamic) : Void
     {
-        m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.SKIP);
+        m_gameEngine.dispatchEvent(new Event(AlgebraAdventureLoggingConstants.SKIP));
         
         // On skip signal send up a signal that the level should be terminated with some skip tag
         var levelToEnd : WordProblemLevelData = m_gameEngine.getCurrentLevel();
-        dispatchEventWith(CommandEvent.LEVEL_SKIP, false, {
+        dispatchEvent(new DataEvent(CommandEvent.LEVEL_SKIP, {
                     level : levelToEnd
-
-                });
+                }));
     }
     
-    private function forwardEvent(event : Event, params : Dynamic) : Void
+    private function forwardEvent(event : Dynamic) : Void
     {
-        m_gameEngine.dispatchEventWith(event.type, params);
+		var data : Dynamic = { };
+		if (Std.is(event, DataEvent)) {
+			data = (try cast(event, DataEvent) catch (e : Dynamic) null).getData();
+		}
+        m_gameEngine.dispatchEvent(new DataEvent(event.type, data));
     }
     
-    private function onExitToMainMenu() : Void
+    private function onExitToMainMenu(event : Dynamic) : Void
     {
-        m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.EXIT_BEFORE_COMPLETION);
+        m_gameEngine.dispatchEvent(new Event(AlgebraAdventureLoggingConstants.EXIT_BEFORE_COMPLETION));
         
         var levelToEnd : WordProblemLevelData = m_gameEngine.getCurrentLevel();
-        dispatchEventWith(CommandEvent.LEVEL_QUIT_BEFORE_COMPLETION, false, {
+        dispatchEvent(new DataEvent(CommandEvent.LEVEL_QUIT_BEFORE_COMPLETION, {
                     level : levelToEnd
-
-                });
+                }));
     }
     
-    private function onHelpSelected() : Void
+    private function onHelpSelected(event : Dynamic) : Void
     {
         // Close the options menu
         m_paused = false;
-        m_optionsScreen.removeFromParent();
+        if (m_optionsScreen.parent != null) m_optionsScreen.parent.removeChild(m_optionsScreen);
         
         m_helpScreenViewer.show();
     }

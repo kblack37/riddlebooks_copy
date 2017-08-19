@@ -4,7 +4,7 @@ import wordproblem.playercollections.scripts.PlayerCollectionViewer;
 
 import dragonbox.common.ui.MouseState;
 
-import starling.display.DisplayObjectContainer;
+import openfl.display.DisplayObjectContainer;
 
 import wordproblem.achievements.PlayerAchievementButton;
 import wordproblem.achievements.PlayerAchievementsModel;

@@ -161,7 +161,7 @@ class RevealTextAnimation implements IAnimatable implements IDisposable
         {
             Starling.juggler.remove(this);
             m_emitter.reset();
-            m_particleRenderer.removeFromParent();
+            if (m_particleRenderer.parent != null) m_particleRenderer.parent.removeChild(m_particleRenderer);
         }
     }
     

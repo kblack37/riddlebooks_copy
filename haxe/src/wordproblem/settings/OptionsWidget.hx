@@ -1,19 +1,21 @@
 package wordproblem.settings;
 
 
-import flash.text.TextFormat;
+import motion.Actuate;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.text.TextFormat;
 
 import cgs.audio.Audio;
 import cgs.internationalization.StringTable;
 
 import haxe.Constraints.Function;
 
-import starling.core.Starling;
-import starling.display.Button;
-import starling.display.DisplayObject;
-import starling.display.Quad;
-import starling.display.Sprite;
-import starling.events.Event;
+import wordproblem.display.LabelButton;
+import openfl.display.DisplayObject;
+import openfl.display.Sprite;
+import openfl.events.Event;
+import openfl.events.MouseEvent;
 
 import wordproblem.audio.AudioButton;
 import wordproblem.audio.MusicToggleButton;
@@ -121,7 +123,7 @@ class OptionsWidget extends Sprite
             }
             else 
             {
-                var callbackFunction : Function = null;
+                var callbackFunction : Dynamic->Void = null;
                 var buttonTextLabel : String = null;
                 if (optionName == OPTION_CREDITS) 
                 {
@@ -145,7 +147,7 @@ class OptionsWidget extends Sprite
                 );
                 button.width = buttonWidth;
                 button.height = buttonHeight;
-                button.addEventListener(Event.TRIGGERED, callbackFunction);
+                button.addEventListener(MouseEvent.CLICK, callbackFunction);
             }
             
             m_buttonsAudio.push(button);
@@ -154,7 +156,7 @@ class OptionsWidget extends Sprite
         }
         
         var optionsContainerHeight : Float = (buttonHeight + gap) * buttons.length + gap;
-        var optionsBackground : Quad = new Quad(optionsContainerWidth, optionsContainerHeight, 0x000000);
+        var optionsBackground : Bitmap = new Bitmap(new BitmapData(Std.int(optionsContainerWidth), Std.int(optionsContainerHeight), false, 0x000000));
         optionsBackground.alpha = 0.5;
         optionsButtonContainer.addChildAt(optionsBackground, 0);
         m_optionsButtonContainer = optionsButtonContainer;
@@ -166,13 +168,13 @@ class OptionsWidget extends Sprite
         // Add audio to clicks on the buttons
         for (button in m_buttonsAudio)
         {
-            if (Std.is(button, Button)) 
+            if (Std.is(button, LabelButton)) 
             {
-                button.addEventListener(Event.TRIGGERED, onButtonPlayClickAudio);
+                button.addEventListener(MouseEvent.CLICK, onButtonPlayClickAudio);
             }
             else if (Std.is(button, AudioButton)) 
             {
-                (try cast(button, AudioButton) catch(e:Dynamic) null).button.addEventListener(Event.TRIGGERED, onButtonPlayClickAudio);
+                (try cast(button, AudioButton) catch(e:Dynamic) null).button.addEventListener(MouseEvent.CLICK, onButtonPlayClickAudio);
             }
         }
     }
@@ -192,44 +194,42 @@ class OptionsWidget extends Sprite
             addChild(m_optionsButtonContainer);
             
             m_optionsButtonContainer.alpha = 0.0;
-            Starling.current.juggler.tween(m_optionsButtonContainer, 0.3, {
-                alpha : 1.0
-            });
+			Actuate.tween(m_optionsButtonContainer, 0.3, { alpha: 1 });
         }
         else if (!value) 
         {
-            Starling.current.juggler.tween(m_optionsButtonContainer, 0.3, {
-                alpha : 0.0,
-                onComplete : function() : Void
+			Actuate.tween(m_optionsButtonContainer, 0.3, { alpha: 0}).onComplete(function() : Void
                 {
                     if (m_optionsButtonContainer.parent != null) 
                     {
-                        m_optionsButtonContainer.removeFromParent();
+                        if (m_optionsButtonContainer.parent != null) m_optionsButtonContainer.parent.removeChild(m_optionsButtonContainer);
                     }
-                },
-            });
+                }
+            );
         }
     }
     
-    override public function dispose() : Void
+    public function dispose() : Void
     {
-        super.dispose();
-        
         // Remove the audio click listeners for every button
         for (button in m_buttonsAudio)
         {
-            if (Std.is(button, Button)) 
+            if (Std.is(button, LabelButton)) 
             {
-                button.removeEventListeners();
+				var castedButton = try cast(button, LabelButton) catch (e : Dynamic) null;
+				castedButton.removeEventListener(MouseEvent.CLICK, onButtonPlayClickAudio);
+				castedButton.dispose();
             }
             else if (Std.is(button, AudioButton)) 
             {
-                (try cast(button, AudioButton) catch(e:Dynamic) null).button.removeEventListeners();
+                var castedButton = try cast(button, AudioButton) catch (e:Dynamic) null;
+				castedButton.button.removeEventListener(MouseEvent.CLICK, onButtonPlayClickAudio);
+				castedButton.dispose();
             }
-            button.dispose();
         }
         
-        m_optionsButton.removeFromParent(true);
+		if (m_optionsButton.parent != null) m_optionsButton.parent.removeChild(m_optionsButton);
+		m_optionsButton.dispose();
     }
     
     private function onOptionsButtonClicked() : Void
@@ -237,7 +237,7 @@ class OptionsWidget extends Sprite
         toggleOptionsOpen(!isOpen());
     }
     
-    private function onCreditsClicked() : Void
+    private function onCreditsClicked(event : Dynamic) : Void
     {
         onOptionsButtonClicked();
         
@@ -247,7 +247,7 @@ class OptionsWidget extends Sprite
         }
     }
     
-    private function onResetClicked() : Void
+    private function onResetClicked(event : Dynamic) : Void
     {
         onOptionsButtonClicked();
         
@@ -257,7 +257,7 @@ class OptionsWidget extends Sprite
         }
     }
     
-    private function onButtonPlayClickAudio() : Void
+    private function onButtonPlayClickAudio(event : Dynamic) : Void
     {
         Audio.instance.playSfx("button_click");
     }

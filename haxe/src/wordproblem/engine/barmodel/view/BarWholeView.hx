@@ -1,11 +1,11 @@
 package wordproblem.engine.barmodel.view;
 
 
-import flash.geom.Rectangle;
+import openfl.geom.Rectangle;
 
 import dragonbox.common.dispose.IDisposable;
 
-import starling.display.Sprite;
+import openfl.display.Sprite;
 
 import wordproblem.engine.barmodel.model.BarLabel;
 import wordproblem.engine.barmodel.model.BarWhole;
@@ -100,7 +100,7 @@ class BarWholeView extends Sprite implements IDisposable
             }
             else 
             {
-                labelView.removeFromParent();
+                if (labelView.parent != null) labelView.parent.removeChild(labelView);
             }
         }
     }
@@ -115,7 +115,7 @@ class BarWholeView extends Sprite implements IDisposable
     {
         var indx : Int = Lambda.indexOf(segmentViews, segmentView);
         if (indx > -1)             segmentViews.splice(indx, 1);
-        if (segmentView.parent == this)             segmentView.removeFromParent();
+        if (segmentView.parent == this)             if (segmentView.parent != null) segmentView.parent.removeChild(segmentView);
     }
     
     public function addLabelView(labelView : BarLabelView) : Void
@@ -134,23 +134,26 @@ class BarWholeView extends Sprite implements IDisposable
     {
         var indx : Int = Lambda.indexOf(labelViews, labelView);
         if (indx > -1)             labelViews.splice(indx, 1);
-        if (labelView.parent == this)             labelView.removeFromParent();
+        if (labelView.parent == this)             if (labelView.parent != null) labelView.parent.removeChild(labelView);
     }
     
-    override public function dispose() : Void
+    public function dispose() : Void
     {
         while (segmentViews.length > 0)
         {
-            segmentViews.pop().removeFromParent(true);
+			var segmentView = segmentViews.pop();
+			if (segmentView.parent != null) segmentView.parent.removeChild(segmentView);
+			segmentView.dispose();
+			segmentView = null;
         }
         
         while (labelViews.length > 0)
         {
-            labelViews.pop().removeFromParent(true);
+			var labelView = labelViews.pop();
+			if (labelView.parent != null) labelView.parent.removeChild(labelView);
+			labelView = null;
         }
         
         this.removeChildren();
-        
-        super.dispose();
     }
 }

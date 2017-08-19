@@ -2,24 +2,28 @@ package wordproblem.achievements;
 
 import haxe.Constraints.Function;
 
-import starling.animation.Transitions;
-import starling.animation.Tween;
-import starling.core.Starling;
-import starling.display.Image;
-import starling.display.Sprite;
-import starling.textures.Texture;
+import motion.Actuate;
 
+import motion.easing.Bounce;
+
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.display.Sprite;
+
+import wordproblem.display.PivotSprite;
 import wordproblem.resource.AssetManager;
+
+
 
 /**
  * This is the display object representing the main gem graphic for an achievement
  */
-class PlayerAchievementGem extends Sprite
+class PlayerAchievementGem extends PivotSprite
 {
-    private var m_filledImage : Image;
-    private var m_emptyImage : Image;
-    private var m_centerImage : Image;
-    private var m_trophyImage : Image;
+    private var m_filledImage : PivotSprite;
+    private var m_emptyImage : PivotSprite;
+    private var m_centerImage : PivotSprite;
+    private var m_trophyImage : PivotSprite;
     
     private var m_gemContainer : Sprite;
     
@@ -34,7 +38,7 @@ class PlayerAchievementGem extends Sprite
         
         // Since we want to perform scaling operation on several of the pieces,
         // we need to readjust the pivot of these items
-        var filledImage : Image = getCenteredImage(colorName, "Filled", assetManager);
+        var filledImage : PivotSprite = getCenteredImage(colorName, "Filled", assetManager);
         var fillXOffset : Float = 0;
         var fillYOffset : Float = 0;
         if (colorName == "Blue") 
@@ -49,9 +53,9 @@ class PlayerAchievementGem extends Sprite
         filledImage.y = fillYOffset;
         filledImage.x = fillXOffset;
         m_filledImage = filledImage;
-        var emptyImage : Image = getCenteredImage(colorName, "Blank", assetManager);
+        var emptyImage : PivotSprite = getCenteredImage(colorName, "Blank", assetManager);
         m_emptyImage = emptyImage;
-        var centerImage : Image = getCenteredImage(colorName, "Center", assetManager);
+        var centerImage : PivotSprite = getCenteredImage(colorName, "Center", assetManager);
         m_centerImage = centerImage;
         
         // The orientation of each of these textures depends on the color type
@@ -61,11 +65,12 @@ class PlayerAchievementGem extends Sprite
         m_gemContainer.addChild(centerImage);
         addChild(m_gemContainer);
         
-        var trophyTexture : Texture = assetManager.getTexture(trophyName);
-        m_trophyImage = new Image(trophyTexture);
+        var trophyBitmapData : BitmapData = assetManager.getBitmapData(trophyName);
+        m_trophyImage = new PivotSprite();
+		m_trophyImage.addChild(new Bitmap(trophyBitmapData));
         m_trophyImage.scaleX = m_trophyImage.scaleY = 0.7;
-        m_trophyImage.pivotX = trophyTexture.width * 0.5;
-        m_trophyImage.pivotY = trophyTexture.height * 0.5;
+        m_trophyImage.pivotX = trophyBitmapData.width * 0.5;
+        m_trophyImage.pivotY = trophyBitmapData.height * 0.5;
         
         if (isFilledInitially) 
         {
@@ -80,34 +85,27 @@ class PlayerAchievementGem extends Sprite
     public function startFillAnimation(duration : Float, onComplete : Function) : Void
     {
         // Animation where the center shrinks to nothing and the filled image pops in fully
-        var centerShrink : Tween = new Tween(m_centerImage, duration * 0.5);
-        centerShrink.scaleTo(0);
-        centerShrink.onComplete = function() : Void
+		Actuate.tween(m_centerImage, duration * 0.5, { scaleX: 0, scaleY: 0 }).onComplete(function() : Void
                 {
                     m_filledImage.scaleX = m_filledImage.scaleY = 0.0;
                     m_gemContainer.addChild(m_filledImage);
                     m_gemContainer.removeChild(m_centerImage);
                     var expandDuration : Float = duration * 0.5;
-                    var fillExpand : Tween = new Tween(m_filledImage, expandDuration, Transitions.EASE_OUT_BOUNCE);
-                    fillExpand.scaleTo(1);
-                    Starling.current.juggler.add(fillExpand);
+					Actuate.tween(m_filledImage, expandDuration, { scaleX: 1, scaleY: 1 }).ease(Bounce.easeOut);
                     
                     m_trophyImage.scaleX = m_trophyImage.scaleY = 0.0;
                     m_gemContainer.addChild(m_trophyImage);
-                    var trophyExpand : Tween = new Tween(m_trophyImage, expandDuration, Transitions.EASE_OUT_BOUNCE);
-                    trophyExpand.scaleTo(1);
-                    trophyExpand.onComplete = onComplete;
-                    Starling.current.juggler.add(trophyExpand);
-                };
-        Starling.current.juggler.add(centerShrink);
+					Actuate.tween(m_trophyImage, expandDuration, { scaleX: 1, scaleY: 1}).ease(Bounce.easeOut).onComplete(onComplete);
+                });
     }
     
-    private function getCenteredImage(colorName : String, suffix : String, assetManager : AssetManager) : Image
+    private function getCenteredImage(colorName : String, suffix : String, assetManager : AssetManager) : PivotSprite
     {
-        var texture : Texture = assetManager.getTexture("Art_Gem" + colorName + suffix);
-        var image : Image = new Image(texture);
-        image.pivotX = texture.width * 0.5;
-        image.pivotY = texture.height * 0.5;
+        var bitmapData : BitmapData = assetManager.getBitmapData("Art_Gem" + colorName + suffix);
+        var image : PivotSprite = new PivotSprite();
+		image.addChild(new Bitmap(bitmapData));
+        image.pivotX = bitmapData.width * 0.5;
+        image.pivotY = bitmapData.height * 0.5;
         return image;
     }
 }

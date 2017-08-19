@@ -1,13 +1,16 @@
 package wordproblem;
 
-import flash.errors.Error;
+import openfl.Lib;
+import openfl.display.Bitmap;
+import openfl.errors.Error;
 import haxe.xml.Fast;
+import wordproblem.engine.events.DataEvent;
 //import wordproblem.PREDEFINEDLAYOUTS;
 
-import flash.display.DisplayObjectContainer;
-import flash.display.Sprite;
-import flash.display.Stage;
-import flash.geom.Rectangle;
+import openfl.display.DisplayObjectContainer;
+import openfl.display.Sprite;
+import openfl.display.Stage;
+import openfl.geom.Rectangle;
 
 import cgs.audio.Audio;
 import cgs.cache.ICgsUserCache;
@@ -31,12 +34,8 @@ import dragonbox.common.ui.LoadingSpinner;
 import dragonbox.common.ui.MouseState;
 import dragonbox.common.util.XString;
 
-import starling.core.Starling;
-import starling.display.Quad;
-import starling.display.Sprite;
-import starling.display.Stage;
-import starling.events.Event;
-import starling.textures.Texture;
+import openfl.display.Sprite;
+import openfl.events.Event;
 
 import wordproblem.engine.GameEngine;
 import wordproblem.engine.IGameEngine;
@@ -71,7 +70,7 @@ import wordproblem.state.WordProblemLoadingState;
  * The main difference for each target is just the configuration settings that is loads and
  * the resources it should use.
  */
-class WordProblemGameBase extends starling.display.Sprite implements IDisposable implements IConsoleInterfacable
+class WordProblemGameBase extends Sprite implements IDisposable implements IConsoleInterfacable
 {
     @:meta(Embed(source="/../assets/fonts/Immortal.ttf",fontName="Immortal",mimeType="application/x-font-truetype",embedAsCFF="false"))
 
@@ -179,7 +178,7 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
      * This quad is used to block out mouse events on the stage3d layer.
      * The reason is that the block sprite on the flash layer still allows the options button to be clicked
      */
-    private var m_disablingStage3dQuad : Quad;
+    private var m_disablingStage3dQuad : Bitmap;
     
     /**
      * For logging to Server. This is an updatable script that must be added to the m_fixedGlobalScript
@@ -258,7 +257,7 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
         switch (alias)
         {
             case "start":
-                this.onGoToLevel(null, args[0]);
+                this.onGoToLevel(args[0]);
             case "createUsers":
                 var numUsers : Int = Std.parseInt(args[0]);
                 var usernamePrefix : String = args[1];
@@ -278,7 +277,7 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
             case "logout":
                 onSignOut();
             case "load":
-                this.onGoToLevel(null, args[0]);
+                this.onGoToLevel(args[0]);
         }
     }
     
@@ -607,8 +606,15 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
     /**
      * Intended to be a callback to catch a CommandEvent.GO_TO_LEVEL event
      */
-    private function onGoToLevel(event : Event, levelId : String) : Void
+    private function onGoToLevel(event : Dynamic) : Void
     {
+		var levelId = null;
+		if (Std.is(event, DataEvent)) {
+			levelId = (try cast(event, DataEvent) catch (e : Dynamic) null).getData();
+		} else {
+			// We call this not as an event callback in places, so we must safeguard that
+			levelId = event;
+		}
         // Let the controller determine what the contents to play are
         m_levelManager.goToLevelById(levelId);
     }
@@ -947,7 +953,7 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
             
             m_loadingScreen = null;
             
-            m_disablingStage3dQuad.removeFromParent();
+            if (m_disablingStage3dQuad.parent != null) m_disablingStage3dQuad.parent.removeChild(m_disablingStage3dQuad);
         }
     }
     

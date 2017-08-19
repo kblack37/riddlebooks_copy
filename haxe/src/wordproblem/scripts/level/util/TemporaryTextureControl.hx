@@ -2,9 +2,8 @@ package wordproblem.scripts.level.util;
 
 
 import dragonbox.common.dispose.IDisposable;
-
-import starling.display.Image;
-import starling.textures.Texture;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
 
 import wordproblem.resource.AssetManager;
 
@@ -28,7 +27,7 @@ class TemporaryTextureControl implements IDisposable
      * List of all textures accessed since last dispose call that need to be cleaned up
      * at the end.
      */
-    private var m_textureNamesToDispose : Array<String>;
+    private var m_bitmapDataNamesToDispose : Array<String>;
     
     /**
      * Map from assigned id to an image
@@ -38,33 +37,33 @@ class TemporaryTextureControl implements IDisposable
     public function new(assetManager : AssetManager)
     {
         m_assetManager = assetManager;
-        m_textureNamesToDispose = new Array<String>();
+        m_bitmapDataNamesToDispose = new Array<String>();
         m_savedImages = { };
     }
     
     /**
      * Warning: Be sure to only access textures that are only used within this level.
      */
-    public function getDisposableTexture(textureName : String) : Texture
+    public function getDisposableTexture(bitmapDataName : String) : BitmapData
     {
-        var disposableTexture : Texture = m_assetManager.getTexture(textureName);
-        if (disposableTexture != null && Lambda.indexOf(m_textureNamesToDispose, textureName) == -1) 
+        var disposableBitmapData : BitmapData = m_assetManager.getBitmapData(bitmapDataName);
+        if (disposableBitmapData != null && Lambda.indexOf(m_bitmapDataNamesToDispose, bitmapDataName) == -1) 
         {
-            m_textureNamesToDispose.push(textureName);
+            m_bitmapDataNamesToDispose.push(bitmapDataName);
         }
         
-        return disposableTexture;
+        return disposableBitmapData;
     }
     
     public function dispose() : Void
     {
         var i : Int = 0;
-        for (i in 0...m_textureNamesToDispose.length){
-            var textureName : String = m_textureNamesToDispose[i];
-            m_assetManager.removeTexture(textureName, true);
+        for (i in 0...m_bitmapDataNamesToDispose.length){
+            var bitmapDataName : String = m_bitmapDataNamesToDispose[i];
+            m_assetManager.removeBitmapData(bitmapDataName, true);
         }
         
-		m_textureNamesToDispose = new Array<String>();
+		m_bitmapDataNamesToDispose = new Array<String>();
         
         // Delete all temp image saved within here
         for (id in Reflect.fields(m_savedImages))
@@ -77,7 +76,7 @@ class TemporaryTextureControl implements IDisposable
      * Avatars are custom created textures that aren't very re-usable.
      * We need to be careful about how these images are managed
      */
-    public function saveImageWithId(id : String, avatarImage : Image) : Void
+    public function saveImageWithId(id : String, avatarImage : Bitmap) : Void
     {
         Reflect.setField(m_savedImages, id, avatarImage);
     }
@@ -85,10 +84,10 @@ class TemporaryTextureControl implements IDisposable
     /**
      * Get back a saved avatar from the id
      */
-    public function getImageWithId(id : String) : Image
+    public function getImageWithId(id : String) : Bitmap
     {
         return ((m_savedImages.exists(id))) ? 
-        Reflect.field(m_savedImages, id) : null;
+			Reflect.field(m_savedImages, id) : null;
     }
     
     /**
@@ -98,9 +97,9 @@ class TemporaryTextureControl implements IDisposable
     {
         if (m_savedImages.exists(id)) 
         {
-            var savedImage : Image = try cast(Reflect.field(m_savedImages, id), Image) catch(e:Dynamic) null;
-            savedImage.removeFromParent(true);
-            savedImage.texture.dispose();
+            var savedImage : Bitmap = try cast(Reflect.field(m_savedImages, id), Bitmap) catch (e:Dynamic) null;
+			if (savedImage.parent != null) savedImage.parent.removeChild(savedImage);
+			savedImage.bitmapData.dispose();
         }
     }
 }

@@ -1,15 +1,14 @@
 package wordproblem.playercollections.items;
 
 
-import flash.geom.Rectangle;
-import starling.textures.Texture;
+import openfl.display.Bitmap;
+import openfl.geom.Rectangle;
 
 import dragonbox.common.util.XColor;
 
-import starling.display.DisplayObject;
-import starling.display.Image;
-import starling.display.Sprite;
-import starling.text.TextField;
+import openfl.display.DisplayObject;
+import openfl.display.Sprite;
+import openfl.text.TextField;
 
 import wordproblem.engine.component.EquippableComponent;
 import wordproblem.engine.component.ItemIdComponent;
@@ -42,7 +41,7 @@ class CustomizableItemButton extends Sprite
      * The main rectangle background for the button keep a reference so it is easy to color
      * it depending on state changes on the item
      */
-    private var m_mainBackground : Image;
+    private var m_mainBackground : DisplayObject;
     
     /**
      * Display component showing the price of an item. (Only used in some cases)
@@ -79,11 +78,8 @@ class CustomizableItemButton extends Sprite
         setDefaultColor(defaultColor);
         setSelectedColor(selectedColor);
         
-        var upBackgroundTexture : Texture = Texture.fromTexture(
-			assetManager.getTexture("button_white"),
-			new Rectangle(8, 8, 16, 16)
-        );
-        var backgroundImage : Image = new Image(upBackgroundTexture);
+        var backgroundImage : Bitmap = new Bitmap(assetManager.getBitmapData("button_white"));
+		backgroundImage.scale9Grid = new Rectangle(8, 8, 16, 16);
         backgroundImage.width = totalWidth;
         backgroundImage.height = totalHeight;
         addChild(backgroundImage);
@@ -118,12 +114,12 @@ class CustomizableItemButton extends Sprite
         var backgroundColor : Int = m_defaultColor;
         if (m_priceContainer != null) 
         {
-            m_priceContainer.removeFromParent();
+            if (m_priceContainer.parent != null) m_priceContainer.parent.removeChild(m_priceContainer);
         }
         
         if (m_equippedNotice != null) 
         {
-            m_equippedNotice.removeFromParent();
+            if (m_equippedNotice.parent != null) m_equippedNotice.parent.removeChild(m_equippedNotice);
         }
         
         var playerHasItemAlready : Bool = m_playerItemInventory.componentManager.getComponentFromEntityIdAndType(m_itemId, ItemIdComponent.TYPE_ID) != null;

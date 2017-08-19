@@ -2,18 +2,19 @@ package wordproblem.scripts.expression;
 
 
 import cgs.audio.Audio;
-import dragonbox.common.math.vectorspace.RealsVectorSpace;
+import wordproblem.engine.events.DataEvent;
 
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.ExpressionUtil;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
-import dragonbox.common.math.vectorspace.IVectorSpace;
+import dragonbox.common.math.vectorspace.RealsVectorSpace;
 
-import starling.display.Button;
-import starling.display.DisplayObject;
-import starling.events.Event;
+import openfl.display.DisplayObject;
+import openfl.events.Event;
+import openfl.events.MouseEvent;
 
 import wordproblem.callouts.TooltipControl;
+import wordproblem.display.LabelButton;
 import wordproblem.engine.IGameEngine;
 import wordproblem.engine.events.GameEvent;
 import wordproblem.engine.expression.tree.ExpressionTree;
@@ -41,7 +42,7 @@ class UndoTermArea extends BaseGameScript
      * Reference to the button that when clicked should trigger an undo. If there is nothing to
      * undo then it should be disabled.
      */
-    private var m_undoButton : Button;
+    private var m_undoButton : LabelButton;
     
     /**
      * Logic to get tooltip to appear on the undo button
@@ -82,7 +83,7 @@ class UndoTermArea extends BaseGameScript
                 termArea.removeEventListener(GameEvent.TERM_AREA_CHANGED, onTermAreaChanged);
             }
             
-            m_undoButton.removeEventListener(Event.TRIGGERED, clickUndo);
+            m_undoButton.removeEventListener(MouseEvent.CLICK, clickUndo);
             
             if (value) 
             {
@@ -92,18 +93,18 @@ class UndoTermArea extends BaseGameScript
                     termArea = try cast(termAreaWidgets[i], TermAreaWidget) catch(e:Dynamic) null;
                     termArea.addEventListener(GameEvent.TERM_AREA_CHANGED, onTermAreaChanged);
                 }
-                m_undoButton.addEventListener(Event.TRIGGERED, clickUndo);
+                m_undoButton.addEventListener(MouseEvent.CLICK, clickUndo);
                 
                 toggleUndoButtonEnabled(m_historyManager.canUndo());
             }
         }
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
-        m_undoButton = try cast(m_gameEngine.getUiEntity("undoButton"), Button) catch(e:Dynamic) null;
+        m_undoButton = try cast(m_gameEngine.getUiEntity("undoButton"), LabelButton) catch(e:Dynamic) null;
         
         // Once a player has modeled an equation we need to add it the history manager
         if (m_undoButton != null) 
@@ -162,8 +163,8 @@ class UndoTermArea extends BaseGameScript
             buttonName : "UndoButton"
 
         };
-        m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.BUTTON_PRESSED_EVENT, false, loggingDetails);
-        m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.UNDO_EQUATION, false, loggingDetails);
+        m_gameEngine.dispatchEvent(new DataEvent(AlgebraAdventureLoggingConstants.BUTTON_PRESSED_EVENT, loggingDetails));
+        m_gameEngine.dispatchEvent(new DataEvent(AlgebraAdventureLoggingConstants.UNDO_EQUATION, loggingDetails));
         
         if (historyManager.canUndo()) 
         {
@@ -186,8 +187,12 @@ class UndoTermArea extends BaseGameScript
         }
     }
     
-    private function onTermAreaChanged(event : Event, param : Dynamic) : Void
+    private function onTermAreaChanged(event : Dynamic) : Void
     {
+		var param = null;
+		if (Std.is(event, DataEvent)) {
+			param = (try cast(event, DataEvent) catch (e : Dynamic) null).getData();
+		}
         // Ignore changes triggered by this undo itself
         if (param == null || !param.undo) 
         {
@@ -220,7 +225,7 @@ class UndoTermArea extends BaseGameScript
         m_undoButton.enabled = enabled;
     }
     
-    private function clickUndo() : Void
+    private function clickUndo(event : Dynamic) : Void
     {
         Audio.instance.playSfx("button_click");
         undo();

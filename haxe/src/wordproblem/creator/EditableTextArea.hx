@@ -510,7 +510,7 @@ class EditableTextArea extends Layer
         {
             while (m_pendingEventsToDispatch.length > 0)
             {
-                dispatchEventWith(m_pendingEventsToDispatch.pop());
+                dispatchEvent(m_pendingEventsToDispatch.pop());
             }
         }
         
@@ -1214,7 +1214,7 @@ class EditableTextArea extends Layer
     {
         if (m_textBlockLayer.parent != null) 
         {
-            m_textBlockLayer.parent.removeChild(m_textBlockLayer);
+            if (m_textBlockLayer.parent != null) m_textBlockLayer.parent.removeChild(m_textBlockLayer);
         }
     }
     

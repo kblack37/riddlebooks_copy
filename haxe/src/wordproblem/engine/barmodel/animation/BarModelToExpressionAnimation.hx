@@ -304,7 +304,7 @@ class BarModelToExpressionAnimation implements IAnimatable
             subexpressionBoundsForComparison = subexpressionView.getWidgetRoot().rigidBodyComponent.boundingRectangle;
         }
         var scaleAmount : Float = (targetLocalBounds.width * originalSubexpressionScale) / subexpressionBoundsForComparison.width;
-        subexpressionView.removeFromParent();
+        if (subexpressionView.parent != null) subexpressionView.parent.removeChild(subexpressionView);
         m_subexpressionViews.push(subexpressionView);
         
         // The tween sequence is the bar model pieces collapse into the subexpression

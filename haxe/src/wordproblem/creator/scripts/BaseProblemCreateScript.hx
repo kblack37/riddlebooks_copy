@@ -33,7 +33,7 @@ class BaseProblemCreateScript extends BaseBufferEventScript
         m_createState.removeEventListener(ProblemCreateEvent.PROBLEM_CREATE_INIT, onLevelReady);
     }
     
-    private function onLevelReady() : Void
+    private function onLevelReady(event : Dynamic) : Void
     {
         m_isReady = true;
     }

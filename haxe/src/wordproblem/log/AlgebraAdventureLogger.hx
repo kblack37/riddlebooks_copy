@@ -8,6 +8,7 @@ import cgs.server.logging.actions.QuestAction;
 import cgs.server.responses.QuestLogResponseStatus;
 import cgs.user.CgsUserProperties;
 import cgs.user.ICgsUser;
+import wordproblem.engine.events.DataEvent;
 
 import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
@@ -536,9 +537,14 @@ class AlgebraAdventureLogger extends BaseBufferEventScript
         m_inMiddleOfQuest = false;
     }
     
-    private function onGameAction(event : Event, params : Dynamic = null) : Void
+    private function onGameAction(event : Dynamic) : Void
     {
-        this.logQuestAction(event.type, params);
+		var castedEvent = try cast(event, Event) catch (e : Dynamic) null;
+		var data : Dynamic = null;
+		if (Std.is(event, DataEvent)) {
+			data = (try cast(event, DataEvent) catch (e : Dynamic) null).getData();
+		}
+        this.logQuestAction(castedEvent.type, data);
     }
 }
 

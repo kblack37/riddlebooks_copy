@@ -1,7 +1,7 @@
 package wordproblem.scripts.barmodel;
 
 
-import starling.display.DisplayObject;
+import openfl.display.DisplayObject;
 
 /**
  * All scripts that remove elements must implement this.

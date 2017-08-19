@@ -1,13 +1,14 @@
 package wordproblem.display;
 
 
-import flash.geom.Point;
-import flash.text.TextFormat;
+import openfl.geom.Point;
+import openfl.text.TextFormat;
 
 import dragonbox.common.math.util.MathUtil;
 
-import starling.display.Sprite;
-import starling.text.TextField;
+import openfl.display.DisplayObject;
+import openfl.display.Sprite;
+import openfl.text.TextField;
 
 import wordproblem.engine.text.MeasuringTextField;
 
@@ -25,7 +26,7 @@ class CurvedText extends Sprite
      * HACK:
      * We want the normals of the curve to eminate AWAY from some central point
      */
-    private var m_textFieldsForCharacters : Array<TextField>;
+    private var m_textFieldsForCharacters : Array<DisplayObject>;
     
     public function new(text : String,
             textFormat : TextFormat,
@@ -36,7 +37,7 @@ class CurvedText extends Sprite
     {
         super();
         
-        m_textFieldsForCharacters = new Array<TextField>();
+        m_textFieldsForCharacters = new Array<DisplayObject>();
         
         // Measure how wide a character should be, use that as the spacing when
         // laying out objects in a curve.
@@ -56,22 +57,20 @@ class CurvedText extends Sprite
         var totalCharacterWidth : Float = 0;
         for (i in 0...numCharacters){
             var character : String = text.charAt(i);
-            var textField : TextField = null;
+            var textField : PivotSprite = null;
             measuringTextField.text = character;
             
             if (character != " ") 
             {
-                textField = new TextField(
-                    widthForSingleCharacter + 6, 
-                    heightForSingleCharacter, 
-                    character, 
-                    textFormat.font, 
-                    try cast(textFormat.size, Float) catch(e:Dynamic) 0, 
-                    try cast(textFormat.color, Int) catch(e:Dynamic) 0, 
-                    true
-                );
-                textField.pivotX = textField.width * 0.5;
-                textField.pivotY = textField.height * 0.5;
+                textField = new PivotSprite();
+				var textFieldInContainer = new TextField();
+                textFieldInContainer.width = widthForSingleCharacter + 6;
+                textFieldInContainer.height = heightForSingleCharacter;
+                textFieldInContainer.text = character;
+                textFieldInContainer.setTextFormat(new TextFormat(textFormat.font, textFormat.size, textFormat.color, true));
+                textField.pivotX = textFieldInContainer.width * 0.5;
+                textField.pivotY = textFieldInContainer.height * 0.5;
+				textField.addChild(textFieldInContainer);
             }
             
             xOffsets.push(xOffset);
@@ -111,12 +110,10 @@ class CurvedText extends Sprite
                 if (angle > Math.PI * 0.5) 
                 {
                     angle -= Math.PI;
-                }  // The calculation handles this case incorrectly so we manually override it.    // HACK: If the normal is completely vertical, then there should not be any angle.  
-                
-                
-                
-                
-                
+                }  
+				
+				// HACK: If the normal is completely vertical, then there should not be any angle.  
+                // The calculation handles this case incorrectly so we manually override it.  
                 if (normalY == -1) 
                 {
                     angle = 0;
@@ -126,19 +123,18 @@ class CurvedText extends Sprite
         }
     }
     
-    override public function dispose() : Void
+    public function dispose() : Void
     {
-        super.dispose();
-        
         var i : Int = 0;
         for (i in 0...m_textFieldsForCharacters.length){
-            var textField : TextField = m_textFieldsForCharacters[i];
+            var textField : DisplayObject = m_textFieldsForCharacters[i];
             if (textField != null) 
             {
-                textField.removeFromParent(true);
+				if (textField.parent != null) textField.parent.removeChild(textField);
+				textField = null;
             }
         }
         
-		m_textFieldsForCharacters = new Array<TextField>();
+		m_textFieldsForCharacters = new Array<DisplayObject>();
     }
 }

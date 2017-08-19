@@ -1,13 +1,15 @@
 package wordproblem.scripts.expression;
 
 
-import flash.geom.Point;
-
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.math.util.MathUtil;
 import dragonbox.common.ui.MouseState;
 
+import openfl.events.Event;
+import openfl.geom.Point;
+
 import wordproblem.engine.IGameEngine;
+import wordproblem.engine.events.DataEvent;
 import wordproblem.engine.events.GameEvent;
 import wordproblem.engine.expression.ExpressionSymbolMap;
 import wordproblem.engine.expression.widget.term.BaseTermWidget;
@@ -104,11 +106,11 @@ class RemoveTerm extends BaseTermAreaScript
                             // Use an external system to drag around the new object
                             m_widgetDragSystem.selectAndStartDrag(m_selectedWidget.getNode(), m_mousePoint.x, m_mousePoint.y, m_selectedTermArea, null);
                             m_draggedWidget = null;
-                            m_gameEngine.dispatchEventWith(GameEvent.REMOVE_TERM, false, {
+                            m_gameEngine.dispatchEvent(new DataEvent(GameEvent.REMOVE_TERM, {
                                         widget : m_selectedWidget
-                                    });
+                                    }));
                             
-                            m_gameEngine.dispatchEventWith(GameEvent.EQUATION_CHANGED);
+                            m_gameEngine.dispatchEvent(new Event(GameEvent.EQUATION_CHANGED));
                         }
                     }
                 }
@@ -143,7 +145,7 @@ class RemoveTerm extends BaseTermAreaScript
                 // dragged copy's parent
                 m_selectedWidget = selectedWidget;
                 m_selectedWidget.alpha = 0.3;
-                selectedWidget.parent.localToGlobal(new Point(selectedWidget.x, selectedWidget.y), m_selectedWidgetAnchorPoint);
+                m_selectedWidgetAnchorPoint = selectedWidget.parent.localToGlobal(new Point(selectedWidget.x, selectedWidget.y));
             }
         }
     }
@@ -161,9 +163,9 @@ class RemoveTerm extends BaseTermAreaScript
         }
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         m_widgetDragSystem = try cast(this.getNodeById("WidgetDragSystem"), WidgetDragSystem) catch(e:Dynamic) null;
         m_expressionSymbolMap = this.m_gameEngine.getExpressionSymbolResources();
@@ -191,6 +193,6 @@ class RemoveTerm extends BaseTermAreaScript
             locationX : m_mousePoint.x,
             locationY : m_mousePoint.y,
         };
-        m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.EXPRESSION_PICKUP_EVENT, false, loggingDetails_pickup);
+        m_gameEngine.dispatchEvent(new DataEvent(AlgebraAdventureLoggingConstants.EXPRESSION_PICKUP_EVENT, loggingDetails_pickup));
     }
 }

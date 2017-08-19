@@ -2,16 +2,15 @@ package wordproblem.engine.widget;
 
 
 import dragonbox.common.math.vectorspace.RealsVectorSpace;
-import flash.geom.Rectangle;
-import starling.display.Image;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.geom.Rectangle;
 
 import dragonbox.common.dispose.IDisposable;
 import dragonbox.common.math.vectorspace.IVectorSpace;
 
-import starling.display.DisplayObject;
-import starling.display.Quad;
-import starling.display.Sprite;
-import starling.textures.Texture;
+import openfl.display.DisplayObject;
+import openfl.display.Sprite;
 
 import wordproblem.engine.component.ExpressionComponent;
 import wordproblem.engine.expression.ExpressionSymbolMap;
@@ -149,30 +148,27 @@ class ExpressionContainer extends Sprite implements IDisposable
         }
     }
     
-    override public function dispose() : Void
+    public function dispose() : Void
     {
         while (numChildren > 0)
         {
             removeChildAt(0);
         }
-        
-        super.dispose();
     }
     
-    private function createBackgroundImage(textureName : String, assetManager : AssetManager) : DisplayObject
+    private function createBackgroundImage(bitmapDataName : String, assetManager : AssetManager) : DisplayObject
     {
         var backgroundImage : DisplayObject = null;
-        if (textureName != null) 
+        if (bitmapDataName != null) 
         {
-            var texture : Texture = assetManager.getTexture(textureName);
+            var bitmapData : BitmapData = assetManager.getBitmapData(bitmapDataName);
             var bgPadding : Float = 15;
-			// TODO: these were textures from the feathers library and may need to be fixed
-            var scale9Texture : Texture = Texture.fromTexture(texture, new Rectangle(bgPadding, bgPadding, texture.width - 2 * bgPadding, texture.height - 2 * bgPadding));
-            backgroundImage = new Image(scale9Texture);
+            backgroundImage = new Bitmap(bitmapData);
+			backgroundImage.scale9Grid = new Rectangle(bgPadding, bgPadding, bitmapData.width - 2 * bgPadding, bitmapData.height - 2 * bgPadding);
         }
         else 
         {
-            backgroundImage = new Quad(50, 50, 0xFFFFFF);
+			backgroundImage = new Bitmap(new BitmapData(50, 50, false, 0xFFFFFFFF));
         }
         
         return backgroundImage;

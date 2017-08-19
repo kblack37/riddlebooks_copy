@@ -1,26 +1,25 @@
 package wordproblem.hints.scripts;
 
 
-import flash.geom.Point;
-import flash.geom.Rectangle;
-
 import cgs.audio.Audio;
 
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
 
-import starling.display.Button;
-import starling.display.DisplayObject;
-import starling.display.DisplayObjectContainer;
-import starling.display.Image;
-import starling.display.Quad;
-import starling.display.Sprite;
-import starling.events.Event;
-import starling.textures.Texture;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
+import openfl.display.Sprite;
+import openfl.events.MouseEvent;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
 
+import wordproblem.display.LabelButton;
 import wordproblem.display.Layer;
 import wordproblem.engine.IGameEngine;
+import wordproblem.engine.events.DataEvent;
 import wordproblem.engine.events.GameEvent;
 import wordproblem.engine.scripting.graph.ScriptNode;
 import wordproblem.engine.scripting.graph.ScriptStatus;
@@ -43,8 +42,8 @@ class ShowTipFromLink extends BaseGameScript
     // Reference background so we can detect clicks outside of it
     private var m_backgroundImage : DisplayObject;
     private var m_hintDisplayContainer : Sprite;
-    private var m_disablingQuad : Quad;
-    private var m_closeButton : Button;
+    private var m_disablingQuad : Bitmap;
+    private var m_closeButton : LabelButton;
     
     private var m_screenWidth : Float = 800;
     private var m_screenHeight : Float = 600;
@@ -60,10 +59,10 @@ class ShowTipFromLink extends BaseGameScript
         super(gameEngine, expressionCompiler, assetManager, id, isActive);
         
         m_mainDisplayContainer = new Layer();
-        var blockingQuad : Quad = new Quad(m_screenWidth, m_screenHeight, 0x000000);
+        var blockingQuad : Bitmap = new Bitmap(new BitmapData(Std.int(m_screenWidth), Std.int(m_screenHeight), false, 0x000000));
         blockingQuad.alpha = 0.7;
         m_mainDisplayContainer.addChild(blockingQuad);
-        var backgroundImage : Image = new Image(m_assetManager.getTexture("summary_background"));
+        var backgroundImage : Bitmap = new Bitmap(m_assetManager.getBitmapData("summary_background"));
         backgroundImage.width = m_screenWidth * 0.8;
         backgroundImage.height = m_screenHeight * 0.8;
         backgroundImage.x = (m_screenWidth - backgroundImage.width) * 0.5;
@@ -76,17 +75,17 @@ class ShowTipFromLink extends BaseGameScript
         m_hintDisplayContainer.y = backgroundImage.y;
         m_mainDisplayContainer.addChild(m_hintDisplayContainer);
         
-        m_simulatedMouseState = new MouseState(null, null);
+        m_simulatedMouseState = new MouseState(null);
         m_simulatedTimer = new Time();
         
         var closeWidth : Float = 40;
-        var closeIconTexture : Texture = assetManager.getTexture("wrong");
-        var closeIcon : Image = new Image(closeIconTexture);
-        m_closeButton = new Button(closeIcon.texture);
+        var closeIconBitmapData : BitmapData = assetManager.getBitmapData("wrong");
+        var closeIcon : Bitmap = new Bitmap(closeIconBitmapData);
+        m_closeButton = new LabelButton(closeIcon);
         m_closeButton.scaleWhenOver = 1.2;
         m_closeButton.scaleWhenDown = 0.8;
         m_closeButton.width = m_closeButton.height = closeWidth;
-        m_closeButton.addEventListener(Event.TRIGGERED, onCloseClicked);
+        m_closeButton.addEventListener(MouseEvent.CLICK, onCloseClicked);
         
         // The button needs to be positioned such that the edges just slightly touch the wooden border of the
         // screen (need to hardcode the width of the borders)
@@ -101,16 +100,15 @@ class ShowTipFromLink extends BaseGameScript
     
     override public function visit() : Int
     {
-        m_simulatedMouseState.onEnterFrame();
+        m_simulatedMouseState.onEnterFrame({ });
         m_simulatedTimer.update();
         
         if (m_currentlyPlayingScript != null) 
         {
             m_currentlyPlayingScript.visit();
-        }  // If click outside the boundary, dismiss the tip  
-        
-        
-        
+        } 
+		
+		// If click outside the boundary, dismiss the tip  
         var mouseState : MouseState = m_gameEngine.getMouseState();
         m_mousePoint.x = mouseState.mousePositionThisFrame.x;
         m_mousePoint.y = mouseState.mousePositionThisFrame.y;
@@ -131,7 +129,7 @@ class ShowTipFromLink extends BaseGameScript
             if (m_mousePoint.x < m_backgroundImage.x || m_mousePoint.y < m_backgroundImage.y ||
                 m_mousePoint.x > m_backgroundImage.width + m_backgroundImage.x || m_mousePoint.y > m_backgroundImage.height + m_backgroundImage.y) 
             {
-                onCloseClicked();
+                onCloseClicked({ });
             }
             m_pressedOutsideBackground = false;
         }
@@ -157,31 +155,34 @@ class ShowTipFromLink extends BaseGameScript
     {
         super.dispose();
         
-        m_mainDisplayContainer.removeFromParent(true);
-        m_closeButton.removeEventListener(Event.TRIGGERED, onCloseClicked);
+		if (m_mainDisplayContainer.parent != null) m_mainDisplayContainer.parent.removeChild(m_mainDisplayContainer);
+		m_mainDisplayContainer = null;
+        m_closeButton.removeEventListener(MouseEvent.CLICK, onCloseClicked);
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         setIsActive(m_isActive);
     }
     
-    private function onLinkToTip(event : Event, param : Dynamic) : Void
+    private function onLinkToTip(event : Dynamic) : Void
     {
-        // The bounds to put the replay should be the same as the background
-        var screenBounds : Rectangle = new Rectangle(0, 0, m_screenWidth - m_hintDisplayContainer.x * 2, m_screenHeight - m_hintDisplayContainer.y * 2);
-        var tipName : String = param.tipName;
-        var tipScript : IShowableScript = TipsViewer.getTipScriptFromName(tipName, m_gameEngine.getExpressionSymbolResources(),
-                m_hintDisplayContainer, m_simulatedMouseState, m_simulatedTimer, m_assetManager, screenBounds);
-        tipScript.show();
-        m_currentlyPlayingScript = try cast(tipScript, ScriptNode) catch(e:Dynamic) null;
-        
-        (try cast(m_gameEngine.getUiEntity("topLayer"), DisplayObjectContainer) catch(e:Dynamic) null).addChild(m_mainDisplayContainer);
+		if (Std.is(event, DataEvent)) {
+			// The bounds to put the replay should be the same as the background
+			var screenBounds : Rectangle = new Rectangle(0, 0, m_screenWidth - m_hintDisplayContainer.x * 2, m_screenHeight - m_hintDisplayContainer.y * 2);
+			var tipName : String = (try cast(event, DataEvent) catch (e : Dynamic) null).getData().tipName;
+			var tipScript : IShowableScript = TipsViewer.getTipScriptFromName(tipName, m_gameEngine.getExpressionSymbolResources(),
+					m_hintDisplayContainer, m_simulatedMouseState, m_simulatedTimer, m_assetManager, screenBounds);
+			tipScript.show();
+			m_currentlyPlayingScript = try cast(tipScript, ScriptNode) catch(e:Dynamic) null;
+			
+			(try cast(m_gameEngine.getUiEntity("topLayer"), DisplayObjectContainer) catch(e:Dynamic) null).addChild(m_mainDisplayContainer);
+		}
     }
     
-    private function onCloseClicked() : Void
+    private function onCloseClicked(event : Dynamic) : Void
     {
         Audio.instance.playSfx("button_click");
         if (m_currentlyPlayingScript != null) 
@@ -190,6 +191,6 @@ class ShowTipFromLink extends BaseGameScript
             m_currentlyPlayingScript = null;
         }
         
-        m_mainDisplayContainer.removeFromParent();
+        if (m_mainDisplayContainer.parent != null) m_mainDisplayContainer.parent.removeChild(m_mainDisplayContainer);
     }
 }

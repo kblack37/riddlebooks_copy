@@ -1,12 +1,12 @@
 package wordproblem.display;
 
-
-import starling.display.DisplayObject;
-import starling.display.Sprite;
+import openfl.display.Bitmap;
+import openfl.display.DisplayObject;
+import openfl.display.Sprite;
 
 class Scale9CompositeImage extends Sprite
 {
-    public function new(args : Array<Dynamic>)
+    public function new(args : Array<Bitmap>)
     {
         super();
         

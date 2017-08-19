@@ -1,19 +1,18 @@
 package wordproblem.scripts.barmodel;
 
 
-import flash.geom.Matrix;
-import flash.geom.Point;
-import flash.geom.Rectangle;
+import openfl.geom.Matrix;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
+import wordproblem.engine.events.DataEvent;
 
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 
-import starling.core.Starling;
-import starling.display.DisplayObject;
-import starling.textures.RenderTexture;
+import openfl.display.DisplayObject;
 
 import wordproblem.display.Layer;
 import wordproblem.engine.IGameEngine;
-import wordproblem.engine.animation.RingPulseAnimation;
+//import wordproblem.engine.animation.RingPulseAnimation;
 import wordproblem.engine.animation.ShatterAnimation;
 import wordproblem.engine.barmodel.BarModelDataUtil;
 import wordproblem.engine.barmodel.model.BarComparison;
@@ -31,6 +30,7 @@ import wordproblem.resource.AssetManager;
 /**
  * This scripts handles the removal of a bar segment
  */
+// TODO: revisit animation when more basic elements are working
 class RemoveBarSegment extends BaseBarModelScript implements IRemoveBarElement
 {
     /**
@@ -53,7 +53,7 @@ class RemoveBarSegment extends BaseBarModelScript implements IRemoveBarElement
     /**
      * Pulse that plays when user presses on an edge that resizes
      */
-    private var m_ringPulseAnimation : RingPulseAnimation;
+    //private var m_ringPulseAnimation : RingPulseAnimation;
     
     /**
      * Keep track of area the mouse pressed down on
@@ -71,7 +71,7 @@ class RemoveBarSegment extends BaseBarModelScript implements IRemoveBarElement
         this.segmentIdsCannotRemove = new Array<String>();
         
         m_outParamsBuffer = new Array<Dynamic>();
-        m_ringPulseAnimation = new RingPulseAnimation(assetManager.getTexture("ring"), onRingPulseAnimationComplete);
+        //m_ringPulseAnimation = new RingPulseAnimation(assetManager.getTexture("ring"), onRingPulseAnimationComplete);
         m_hitAnchor = new Point();
     }
     
@@ -104,22 +104,22 @@ class RemoveBarSegment extends BaseBarModelScript implements IRemoveBarElement
 			// Get the segment and single label (if applicable) and play the shatter animation on it  
             hitSegmentView.alpha = 1.0;
             
-            var segmentViewBounds : Rectangle = hitSegmentView.rigidBody.boundingRectangle;
-            var renderTexture : RenderTexture = new RenderTexture(Std.int(segmentViewBounds.width), Std.int(segmentViewBounds.height), false);
-            var barLabelId : String = BarModelHitAreaUtil.getBarLabelIdOnTopOfSegment(m_barModelArea, i, j);
-            if (barLabelId != null) 
-            {
-                var labelViewToRemove : BarLabelView = m_barModelArea.getBarLabelViewById(barLabelId);
-                renderTexture.drawBundled(function(DisplayObject, Matrix, Float) : Void
-                        {
-                            renderTexture.draw(hitSegmentView, new Matrix(1, 0, 0, 1, 0, 0));
-                            renderTexture.draw(labelViewToRemove, new Matrix(1, 0, 0, 1, 0, 0));
-                        });
-            }
-            else 
-            {
-                renderTexture.draw(hitSegmentView, new Matrix(1, 0, 0, 1, 0, 0));
-            }
+            //var segmentViewBounds : Rectangle = hitSegmentView.rigidBody.boundingRectangle;
+            //var renderTexture : RenderTexture = new RenderTexture(Std.int(segmentViewBounds.width), Std.int(segmentViewBounds.height), false);
+            //var barLabelId : String = BarModelHitAreaUtil.getBarLabelIdOnTopOfSegment(m_barModelArea, i, j);
+            //if (barLabelId != null) 
+            //{
+                //var labelViewToRemove : BarLabelView = m_barModelArea.getBarLabelViewById(barLabelId);
+                //renderTexture.drawBundled(function(DisplayObject, Matrix, Float) : Void
+                        //{
+                            //renderTexture.draw(hitSegmentView, new Matrix(1, 0, 0, 1, 0, 0));
+                            //renderTexture.draw(labelViewToRemove, new Matrix(1, 0, 0, 1, 0, 0));
+                        //});
+            //}
+            //else 
+            //{
+                //renderTexture.draw(hitSegmentView, new Matrix(1, 0, 0, 1, 0, 0));
+            //}
             
 			// TODO: uncomment when animation issues are fixed
             //var shatterAnimation : ShatterAnimation = new ShatterAnimation(renderTexture, onShatterAnimationComplete, 0.7);
@@ -128,15 +128,15 @@ class RemoveBarSegment extends BaseBarModelScript implements IRemoveBarElement
             var previousModelDataSnapshot : BarModelData = m_barModelArea.getBarModelData().clone();
             removeBarSegment(m_barModelArea.getBarModelData(), hitSegmentView.data.id);
             BarModelDataUtil.stretchHorizontalBrackets(m_barModelArea.getBarModelData());
-            m_eventDispatcher.dispatchEventWith(GameEvent.BAR_MODEL_AREA_CHANGE, false, {
+            m_eventDispatcher.dispatchEvent(new DataEvent(GameEvent.BAR_MODEL_AREA_CHANGE, {
                         previousSnapshot : previousModelDataSnapshot
-                    });
+                    }));
             m_barModelArea.redraw();
             
             // Log removal of a bar segment
-            m_eventDispatcher.dispatchEventWith(AlgebraAdventureLoggingConstants.REMOVE_BAR_SEGMENT, false, {
+            m_eventDispatcher.dispatchEvent(new DataEvent(AlgebraAdventureLoggingConstants.REMOVE_BAR_SEGMENT, {
                         barModel : m_barModelArea.getBarModelData().serialize()
-                    });
+                    }));
             
             canRemove = true;
         }
@@ -150,7 +150,7 @@ class RemoveBarSegment extends BaseBarModelScript implements IRemoveBarElement
         if (m_ready && m_isActive && !Layer.getDisplayObjectIsInInactiveLayer(m_barModelArea)) 
         {
             m_globalMouseBuffer.setTo(m_mouseState.mousePositionThisFrame.x, m_mouseState.mousePositionThisFrame.y);
-            m_barModelArea.globalToLocal(m_globalMouseBuffer, m_localMouseBuffer);
+            m_localMouseBuffer = m_barModelArea.globalToLocal(m_globalMouseBuffer);
 			m_outParamsBuffer = new Array<Dynamic>();
             
             if (m_mouseState.leftMousePressedThisFrame) 
@@ -161,8 +161,8 @@ class RemoveBarSegment extends BaseBarModelScript implements IRemoveBarElement
                     m_hitSegmentView = m_barModelArea.getBarWholeViews()[m_outParamsBuffer[0]].segmentViews[m_outParamsBuffer[1]];
                     m_hitSegmentView.alpha = 0.3;
                     
-                    m_ringPulseAnimation.reset(m_localMouseBuffer.x, m_localMouseBuffer.y, m_barModelArea.getForegroundLayer(), 0xFF0000);
-                    Starling.current.juggler.add(m_ringPulseAnimation);
+                    //m_ringPulseAnimation.reset(m_localMouseBuffer.x, m_localMouseBuffer.y, m_barModelArea.getForegroundLayer(), 0xFF0000);
+                    //Starling.current.juggler.add(m_ringPulseAnimation);
                     status = ScriptStatus.SUCCESS;
                     
                     m_hitAnchor.x = m_localMouseBuffer.x;
@@ -379,6 +379,6 @@ class RemoveBarSegment extends BaseBarModelScript implements IRemoveBarElement
     private function onRingPulseAnimationComplete() : Void
     {
         // Make sure animation isn't showing
-        Starling.current.juggler.remove(m_ringPulseAnimation);
+        //Starling.current.juggler.remove(m_ringPulseAnimation);
     }
 }

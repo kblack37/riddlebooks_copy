@@ -3,11 +3,13 @@ package wordproblem.scripts.barmodel;
 
 import cgs.audio.Audio;
 import cgs.internationalization.StringTable;
+import wordproblem.engine.events.DataEvent;
 
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 
-import starling.display.Button;
-import starling.events.Event;
+import wordproblem.display.LabelButton;
+import openfl.events.Event;
+import openfl.events.MouseEvent;
 
 import wordproblem.callouts.TooltipControl;
 import wordproblem.engine.IGameEngine;
@@ -30,7 +32,7 @@ class UndoBarModelArea extends BaseBarModelScript
     /**
      * The button when pressed that should trigger the undo
      */
-    private var m_undoButton : Button;
+    private var m_undoButton : LabelButton;
     
     private var m_tooltipControl : TooltipControl;
     
@@ -51,11 +53,11 @@ class UndoBarModelArea extends BaseBarModelScript
         {
             if (m_undoButton != null) 
             {
-                m_undoButton.removeEventListener(Event.TRIGGERED, onUndoButtonClick);
+                m_undoButton.removeEventListener(MouseEvent.CLICK, onUndoButtonClick);
                 m_gameEngine.removeEventListener(GameEvent.BAR_MODEL_AREA_CHANGE, onBarModelAreaChange);
                 if (value) 
                 {
-                    m_undoButton.addEventListener(Event.TRIGGERED, onUndoButtonClick);
+                    m_undoButton.addEventListener(MouseEvent.CLICK, onUndoButtonClick);
                     m_gameEngine.addEventListener(GameEvent.BAR_MODEL_AREA_CHANGE, onBarModelAreaChange);
                 }
             }
@@ -71,11 +73,11 @@ class UndoBarModelArea extends BaseBarModelScript
         return ScriptStatus.SUCCESS;
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
-        m_undoButton = try cast(m_gameEngine.getUiEntity("undoButton"), Button) catch (e:Dynamic) null;
+        m_undoButton = try cast(m_gameEngine.getUiEntity("undoButton"), LabelButton) catch (e:Dynamic) null;
 		// TODO: uncomment when cgs library is finished
         m_tooltipControl = new TooltipControl(m_gameEngine, "undoButton", "" /*StringTable.lookup("undo")*/);
         
@@ -102,24 +104,25 @@ class UndoBarModelArea extends BaseBarModelScript
         this.toggleUndoButtonEnabled(m_barModelDataHistory.length > 0);
     }
     
-    private function onUndoButtonClick() : Void
+    private function onUndoButtonClick(event : Dynamic) : Void
     {
         Audio.instance.playSfx("button_click");
         undo();
         
         // Log that an undo was performed on the bar model
-        m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.UNDO_BAR_MODEL, false, {
+        m_gameEngine.dispatchEvent(new DataEvent(AlgebraAdventureLoggingConstants.UNDO_BAR_MODEL, {
                     barModel : m_barModelArea.getBarModelData().serialize()
-                });
+                }));
     }
     
     /**
      * Need to detect all changes in the bar model data. On each change need to create a snapshot
      * of the model data and save it for later
      */
-    private function onBarModelAreaChange(event : Event, params : Dynamic) : Void
+    private function onBarModelAreaChange(event : Dynamic) : Void
     {
-        m_barModelDataHistory.push(params.previousSnapshot);
+		var data = (try cast(event, DataEvent) catch (e : Dynamic) null).getData();
+        m_barModelDataHistory.push(data.previousSnapshot);
         
         this.toggleUndoButtonEnabled(m_barModelDataHistory.length > 0);
     }

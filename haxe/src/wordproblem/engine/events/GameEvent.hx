@@ -465,8 +465,4 @@ class GameEvent
      * not actually change in length)
      */
     public static inline var END_RESIZE_HORIZONTAL_LABEL : String = "end_resize_horizontal_label";
-
-    public function new()
-    {
-    }
 }

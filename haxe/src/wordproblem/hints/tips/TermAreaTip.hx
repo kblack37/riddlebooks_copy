@@ -1,13 +1,13 @@
 package wordproblem.hints.tips;
 
 
-import flash.geom.Rectangle;
+import openfl.geom.Rectangle;
 
 import dragonbox.common.math.vectorspace.RealsVectorSpace;
 import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
 
-import starling.display.DisplayObjectContainer;
+import openfl.display.DisplayObjectContainer;
 
 import wordproblem.engine.expression.ExpressionSymbolMap;
 import wordproblem.engine.expression.tree.ExpressionTree;
@@ -40,7 +40,7 @@ class TermAreaTip extends GestureAndTextTip
         
         m_screenBounds = screenBounds;
         m_termArea = new TermAreaWidget(new ExpressionTree(new RealsVectorSpace(), null), 
-                expressionSymbolMap, assetManager, assetManager.getTexture("term_area_left"), termAreaTotalWidth, termAreaTotalHeight);
+                expressionSymbolMap, assetManager, assetManager.getBitmapData("term_area_left"), termAreaTotalWidth, termAreaTotalHeight);
     }
     
     override public function show() : Void
@@ -67,7 +67,7 @@ class TermAreaTip extends GestureAndTextTip
     {
         super.hide();
         
-        m_termArea.removeFromParent();
+        if (m_termArea.parent != null) m_termArea.parent.removeChild(m_termArea);
     }
     
     override public function dispose() : Void

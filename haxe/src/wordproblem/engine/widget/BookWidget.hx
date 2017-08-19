@@ -3,7 +3,7 @@ package wordproblem.engine.widget;
 
 import dragonbox.common.dispose.IDisposable;
 
-import starling.display.Sprite;
+import openfl.display.Sprite;
 
 /**
  * The widget attempts to treat multiple screens like the pages in a book.
@@ -205,14 +205,12 @@ class BookWidget extends Sprite implements IDisposable
         return m_leftPageStack.length >= 2;
     }
     
-    override public function dispose() : Void
+    public function dispose() : Void
     {
         while (this.numChildren > 0)
         {
-            this.removeChildAt(0, true);
+            this.removeChildAt(0);
         }
-        
-        super.dispose();
     }
     
     /**
@@ -227,7 +225,7 @@ class BookWidget extends Sprite implements IDisposable
             var page : Sprite = null;
             for (page in pageStack)
             {
-                page.removeFromParent();
+                if (page.parent != null) page.parent.removeChild(page);
             }
         };
 		

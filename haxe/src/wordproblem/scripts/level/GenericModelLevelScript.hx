@@ -1,14 +1,14 @@
 package wordproblem.scripts.level;
 
 
-import flash.geom.Rectangle;
-
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.time.Time;
 
-import starling.core.Starling;
-import starling.display.DisplayObject;
-import starling.events.Event;
+import motion.Actuate;
+
+import openfl.display.DisplayObject;
+import openfl.events.Event;
+import openfl.geom.Rectangle;
 
 import wordproblem.callouts.CalloutCreator;
 import wordproblem.characters.HelperCharacterController;
@@ -42,14 +42,14 @@ import wordproblem.scripts.expression.AddTerm;
 import wordproblem.scripts.expression.FlipTerm;
 import wordproblem.scripts.expression.PressToChangeOperator;
 import wordproblem.scripts.expression.RemoveTerm;
+import wordproblem.scripts.expression.ResetTermArea;
 import wordproblem.scripts.expression.TermAreaCallout;
+import wordproblem.scripts.expression.UndoTermArea;
 import wordproblem.scripts.level.util.ChangeTextStyleAndSelectabilityControl;
 import wordproblem.scripts.model.ModelSpecificEquation;
-import wordproblem.scripts.expression.ResetTermArea;
 import wordproblem.scripts.text.DragText;
 import wordproblem.scripts.text.HighlightTextForCard;
 import wordproblem.scripts.text.TextToCard;
-import wordproblem.scripts.expression.UndoTermArea;
 
 /**
  * This script will handle the execution of the logic for simple levels that we expect to be
@@ -146,9 +146,9 @@ class GenericModelLevelScript extends BaseCustomLevelScript
         super.dispose();
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         // Add in more custom scripts
         // We need to label a priority to each one so that we can short-circuit ones that we don't care about
@@ -164,23 +164,23 @@ class GenericModelLevelScript extends BaseCustomLevelScript
         {
             newGameScript = new AddAndChangeParenthesis(m_gameEngine, m_expressionCompiler, m_assetManager, "AddAndChangeParenthesis");
             termAreaPrioritySelector.pushChild(newGameScript);
-            newGameScript.overrideLevelReady();
+            newGameScript.overrideLevelReady({ });
         }
         
         if (levelRules.allowCardFlip) 
         {
             newGameScript = new FlipTerm(m_gameEngine, m_expressionCompiler, m_assetManager);
             termAreaPrioritySelector.pushChild(newGameScript);
-            newGameScript.overrideLevelReady();
+            newGameScript.overrideLevelReady({ });
         }
         
         newGameScript = new PressToChangeOperator(m_gameEngine, m_expressionCompiler, m_assetManager);
         termAreaPrioritySelector.pushChild(newGameScript);
-        newGameScript.overrideLevelReady();
+        newGameScript.overrideLevelReady({ });
         
         newGameScript = new RemoveTerm(m_gameEngine, m_expressionCompiler, m_assetManager, "RemoveTerm");
         termAreaPrioritySelector.pushChild(newGameScript);
-        newGameScript.overrideLevelReady();
+        newGameScript.overrideLevelReady({ });
         
         // Create a hinting child
         var helperCharacterController : HelperCharacterController = new HelperCharacterController(
@@ -215,12 +215,12 @@ class GenericModelLevelScript extends BaseCustomLevelScript
         
         m_hintingScript = new HelpController(m_gameEngine, m_expressionCompiler, m_assetManager);
         super.pushChild(m_hintingScript);
-        m_hintingScript.overrideLevelReady();
+        m_hintingScript.overrideLevelReady({ });
         m_hintingScript.setRootHintSelectorNode(hintSelector);
         
         var highlightHintButton : HighlightHintButtonScript = new HighlightHintButtonScript(m_gameEngine, m_expressionCompiler, m_assetManager, m_hintingScript, m_time);
         super.pushChild(highlightHintButton);
-        highlightHintButton.overrideLevelReady();
+        highlightHintButton.overrideLevelReady({ });
         
         // Bind variables to parts of the text
         // Need an array of pairs
@@ -228,10 +228,9 @@ class GenericModelLevelScript extends BaseCustomLevelScript
         for (termDocumentPair in termsToDocumentIds)
         {
             m_gameEngine.addTermToDocument(Reflect.field(termDocumentPair, "termValue"), Reflect.field(termDocumentPair, "documentId"));
-        }  // Listen for the equation modeled  
-        
-        
-        
+        }
+		
+		// Listen for the equation modeled  
         m_gameEngine.addEventListener(GameEvent.EQUATION_MODEL_SUCCESS, onEquationModeled);
         
         // Hide the equation layer below the viewport at the start
@@ -263,7 +262,7 @@ class GenericModelLevelScript extends BaseCustomLevelScript
     }
     
     // HACK: Multiple redraws screws this up completely
-    private function onTextAreaRedrawn() : Void
+    private function onTextAreaRedrawn(params : Dynamic) : Void
     {
 		m_documentViewsMatchingHideableClass = new Array<DocumentView>();
         m_textAreaWidget.getDocumentViewsByClass("delay_reveal", m_documentViewsMatchingHideableClass);
@@ -333,33 +332,27 @@ class GenericModelLevelScript extends BaseCustomLevelScript
     private function showHiddenClassDocumentViewByIndex(param : Dynamic) : Int
     {
         var documentViewToReveal : DocumentView = m_documentViewsMatchingHideableClass[param.index];
-        Starling.current.juggler.tween(documentViewToReveal, 0.5,
-                {
-                    alpha : 1.0,
-                    onComplete : function() : Void
-                    {
-                        documentViewToReveal.node.setSelectable(true);
-                    },
-
-                }
-                );
+		Actuate.tween(documentViewToReveal, 0.5, { alpha : 1.0 }).onComplete(function() : Void
+            {
+                documentViewToReveal.node.setSelectable(true);
+            }
+        );
         return ScriptStatus.SUCCESS;
     }
     
-    private function onEquationModeled(event : Event, arguments : Dynamic) : Void
+    private function onEquationModeled(event : Dynamic) : Void
     {
         if (!m_foundFinalAnswer) 
         {
             m_foundFinalAnswer = true;
-            m_gameEngine.dispatchEventWith(GameEvent.LEVEL_SOLVED);
+            m_gameEngine.dispatchEvent(new Event(GameEvent.LEVEL_SOLVED));
             
             // Wait for some short time before marking the level as totally complete
-            Starling.current.juggler.delayCall(function() : Void
-                    {
-                        m_gameEngine.dispatchEventWith(GameEvent.LEVEL_COMPLETE);
-                    },
-                    1.5
-                    );
+			Actuate.timer(1.5).onComplete(function() : Void
+                {
+                    m_gameEngine.dispatchEvent(new Event(GameEvent.LEVEL_COMPLETE));
+                }
+            );
         }
     }
     
@@ -368,12 +361,7 @@ class GenericModelLevelScript extends BaseCustomLevelScript
         // Assuming we don't care about the space for the inventory in these levels
         // since we always deal with one equation.
         var equationLayer : DisplayObject = m_gameEngine.getUiEntity("equationLayer");
-        Starling.current.juggler.tween(equationLayer, 0.5, {
-                    y : 0,
-                    onComplete : function() : Void
-                    {
-                    },
-                });
+		Actuate.tween(equationLayer, 0.5, { y : 0 });
         
         // Show all the parts needed for modeling
         var leftTermArea : DisplayObject = m_gameEngine.getUiEntity("leftTermArea");

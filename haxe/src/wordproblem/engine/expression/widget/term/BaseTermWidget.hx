@@ -1,12 +1,12 @@
 package wordproblem.engine.expression.widget.term;
 
 
-import flash.geom.Rectangle;
+import openfl.geom.Rectangle;
 
 import dragonbox.common.dispose.IDisposable;
 import dragonbox.common.expressiontree.ExpressionNode;
 
-import starling.display.Sprite;
+import openfl.display.Sprite;
 import wordproblem.resource.AssetManager;
 
 import wordproblem.engine.component.RigidBodyComponent;
@@ -129,8 +129,7 @@ class BaseTermWidget extends Sprite implements IDisposable
         }
     }
     
-    override public function dispose() : Void
+    public function dispose() : Void
     {
-        super.dispose();
     }
 }

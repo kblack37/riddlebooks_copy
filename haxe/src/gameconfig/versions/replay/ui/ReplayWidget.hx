@@ -25,11 +25,11 @@ import wordproblem.resource.AssetManager;
  */
 class ReplayWidget extends Sprite
 {
-    private var m_prevActionButton : Button;
-    private var m_nextActionButton : Button;
+    private var m_prevActionButton : LabelButton;
+    private var m_nextActionButton : LabelButton;
     
     private var m_goToActionIndexInput : TextInput;
-    private var m_goToActionIndexButton : Button;
+    private var m_goToActionIndexButton : LabelButton;
     
     /**
      * Current action that is being displayed
@@ -61,7 +61,7 @@ class ReplayWidget extends Sprite
         m_prevActionButton.width = 42;
         m_prevActionButton.height = 42;
         m_prevActionButton.label = "PREV";
-        m_prevActionButton.addEventListener(Event.TRIGGERED, onPrevActionClicked);
+        m_prevActionButton.addEventListener(MouseEvent.CLICK, onPrevActionClicked);
         addChild(m_prevActionButton);
         
         m_actionCounter = new TextField(100, m_prevActionButton.height, "", "Verdana", 12, 0xCCCCCC);
@@ -73,7 +73,7 @@ class ReplayWidget extends Sprite
         m_nextActionButton.width = 42;
         m_nextActionButton.height = 42;
         m_nextActionButton.label = "NEXT";
-        m_nextActionButton.addEventListener(Event.TRIGGERED, onNextActionClicked);
+        m_nextActionButton.addEventListener(MouseEvent.CLICK, onNextActionClicked);
         m_nextActionButton.x = m_actionCounter.x + m_actionCounter.width;
         addChild(m_nextActionButton);
         
@@ -104,7 +104,7 @@ class ReplayWidget extends Sprite
         m_goToActionIndexButton.width = 42;
         m_goToActionIndexButton.height = 42;
         m_goToActionIndexButton.label = "Go To";
-        m_goToActionIndexButton.addEventListener(Event.TRIGGERED, onGoToActionClicked);
+        m_goToActionIndexButton.addEventListener(MouseEvent.CLICK, onGoToActionClicked);
         m_goToActionIndexButton.x = m_goToActionIndexInput.x + m_goToActionIndexInput.width;
         addChild(m_goToActionIndexButton);
         
@@ -121,8 +121,8 @@ class ReplayWidget extends Sprite
     {
         super.dispose();
         
-        m_prevActionButton.removeEventListener(Event.TRIGGERED, onPrevActionClicked);
-        m_nextActionButton.removeEventListener(Event.TRIGGERED, onNextActionClicked);
+        m_prevActionButton.removeEventListener(MouseEvent.CLICK, onPrevActionClicked);
+        m_nextActionButton.removeEventListener(MouseEvent.CLICK, onNextActionClicked);
     }
     
     private function onPrevActionClicked() : Void
@@ -160,7 +160,7 @@ class ReplayWidget extends Sprite
     
     private function goToActionAtCurrentIndex() : Void
     {
-        dispatchEventWith(ReplayEvents.GO_TO_ACTION_AT_INDEX, false, {
+        dispatchEvent(ReplayEvents.GO_TO_ACTION_AT_INDEX, false, {
                     actionIndex : m_currentQuestActionIndex
 
                 });

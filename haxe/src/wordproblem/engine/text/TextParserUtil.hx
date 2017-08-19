@@ -3,7 +3,7 @@ package wordproblem.engine.text;
 import haxe.xml.Fast;
 import wordproblem.engine.text.TextViewFactory;
 
-import starling.display.DisplayObject;
+import openfl.display.DisplayObject;
 
 import wordproblem.engine.text.model.DocumentNode;
 import wordproblem.engine.text.view.DocumentView;
@@ -97,9 +97,5 @@ class TextParserUtil
         var dialogView : DocumentView = textViewFactory.createView(dialogNode);
         
         return dialogView;
-    }
-
-    public function new()
-    {
     }
 }

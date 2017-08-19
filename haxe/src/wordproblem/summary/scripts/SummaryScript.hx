@@ -1,8 +1,9 @@
 package wordproblem.summary.scripts;
 
-import flash.geom.Point;
+import openfl.geom.Point;
 import flash.geom.Rectangle;
 import flash.text.TextFormat;
+import openfl.display.Bitmap;
 
 import cgs.audio.Audio;
 import cgs.internationalization.StringTable;
@@ -16,7 +17,7 @@ import dragonbox.common.ui.MouseState;
 import starling.animation.Juggler;
 import starling.animation.Tween;
 import starling.core.Starling;
-import starling.display.Button;
+import wordproblem.display.LabelButton;
 import starling.display.DisplayObject;
 import starling.display.Image;
 import starling.display.Sprite;
@@ -29,7 +30,7 @@ import starling.utils.VAlign;
 
 import wordproblem.callouts.CalloutCreator;
 import wordproblem.characters.HelperCharacterController;
-import wordproblem.currency.CurrencyAwardedAnimation;
+//import wordproblem.currency.CurrencyAwardedAnimation;
 import wordproblem.currency.CurrencyChangeAnimation;
 import wordproblem.currency.CurrencyCounter;
 import wordproblem.currency.PlayerCurrencyModel;
@@ -59,11 +60,11 @@ import wordproblem.player.ButtonColorData;
 import wordproblem.resource.AssetManager;
 import wordproblem.scripts.BaseBufferEventScript;
 import wordproblem.state.WordProblemGameState;
-import wordproblem.summary.NewNotificationScreen;
+//import wordproblem.summary.NewNotificationScreen;
 import wordproblem.summary.SummaryGradeWidget;
 import wordproblem.summary.SummaryObjectivesWidget;
 import wordproblem.summary.SummaryRewardsScreen;
-import wordproblem.summary.SummaryWidget;
+//import wordproblem.summary.SummaryWidget;
 import wordproblem.xp.PlayerXPBar;
 import wordproblem.xp.PlayerXpBarAnimation;
 import wordproblem.xp.PlayerXpModel;
@@ -102,13 +103,13 @@ class SummaryScript extends BaseBufferEventScript
 	 * This is the canvas in which several of the end of level progress indicators
 	 * should be pasted on top of.
 	 */
-	private var m_summaryWidget : SummaryWidget;
+	//private var m_summaryWidget : SummaryWidget;
 
 	/**
 	 * After the level summary is shown, sometimes we show another notification to tell the player
 	 * some important message, like they finished all the levels in a chapter or a new world is unlocked.
 	 */
-	private var m_newNotificationScreen : NewNotificationScreen;
+	//private var m_newNotificationScreen : NewNotificationScreen;
 
 	/**
 	 * Extra layer to show extra details about the rewards earned by the player
@@ -124,7 +125,7 @@ class SummaryScript extends BaseBufferEventScript
 	/**
 	 * Button to open up new rewards earned
 	 */
-	private var m_rewardsButton : Button;
+	private var m_rewardsButton : LabelButton;
 
 	/**
 	 * Juggler controlling animation for the summary screen.
@@ -212,16 +213,16 @@ class SummaryScript extends BaseBufferEventScript
 		m_buttonColorData = buttonColorData;
 
 		m_summaryJuggler = new Juggler();
-		m_summaryWidget = new SummaryWidget(
-			m_assetManager,
-			onNextClicked,
-			onExitClicked,
-			m_summaryJuggler,
-			allowExit,
-			totalScreenWidth,
-			totalScreenHeight,
-			buttonColorData
-		);
+		//m_summaryWidget = new SummaryWidget(
+			//m_assetManager,
+			//onNextClicked,
+			//onExitClicked,
+			//m_summaryJuggler,
+			//allowExit,
+			//totalScreenWidth,
+			//totalScreenHeight,
+			//buttonColorData
+		//);
 
 		m_newNotificationJuggler = new Juggler();
 
@@ -229,24 +230,23 @@ class SummaryScript extends BaseBufferEventScript
 				gameState.getSprite(),
 				playerItemInventory, itemDataSource, assetManager, function() : Void
 		{
-			m_rewardsScreen.removeFromParent();
-			m_summaryWidget.filter = null;
+			if (m_rewardsScreen.parent != null) m_rewardsScreen.parent.removeChild(m_rewardsScreen);
+			//m_summaryWidget.filter = null;
 		});
 
-		// TODO: this will only display half the image and will need to be fixed
-		m_rewardsButton = new Button(m_assetManager.getTexture("present_bottom_yellow"));
+		m_rewardsButton = new LabelButton(m_assetManager.getBitmapData("present_bottom_yellow"));
 		var presentIcon : Sprite = new Sprite();
-		//var presentBottom : Image = new Image(m_assetManager.getTexture("present_bottom_yellow"));
-		//var presentTop : Image = new Image(m_assetManager.getTexture("present_top_yellow"));
-		//presentIcon.addChild(presentBottom);
-		//presentIcon.addChild(presentTop);
-		//presentBottom.y += presentTop.height * 0.3;
-		//presentBottom.x += presentTop.width * 0.02;
+		var presentBottom : Bitmap = new Bitmap(m_assetManager.getBitmapData("present_bottom_yellow"));
+		var presentTop : Bitmap = new Bitmap(m_assetManager.getBitmapData("present_top_yellow"));
+		presentIcon.addChild(presentBottom);
+		presentIcon.addChild(presentTop);
+		presentBottom.y += presentTop.height * 0.3;
+		presentBottom.x += presentTop.width * 0.02;
 		presentIcon.scaleX = presentIcon.scaleY = 0.5;
 
 		m_rewardsButton.scaleWhenOver = 1.1;
 		m_rewardsButton.scaleWhenDown = 0.95;
-		m_rewardsButton.addEventListener(Event.TRIGGERED, onRewardsOpen);
+		m_rewardsButton.addEventListener(MouseEvent.CLICK, onRewardsOpen);
 
 		m_rewardsButton.x = 100;
 		m_rewardsButton.y = 420;
@@ -541,10 +541,10 @@ class SummaryScript extends BaseBufferEventScript
 			if (coinsEarned > 0)
 			{
 				var objectiveBounds : Rectangle = objectiveDisplay.getBounds(m_summaryWidget);
-				var currencyAnimation : CurrencyAwardedAnimation = new CurrencyAwardedAnimation(coinsEarned, m_assetManager, m_summaryJuggler);
-				currencyAnimation.x = objectiveBounds.right;
-				currencyAnimation.y = objectiveBounds.top + objectiveBounds.height * 0.5;
-				m_summaryWidget.addChild(currencyAnimation);
+				//var currencyAnimation : CurrencyAwardedAnimation = new CurrencyAwardedAnimation(coinsEarned, m_assetManager, m_summaryJuggler);
+				//currencyAnimation.x = objectiveBounds.right;
+				//currencyAnimation.y = objectiveBounds.top + objectiveBounds.height * 0.5;
+				//m_summaryWidget.addChild(currencyAnimation);
 
 				m_summaryJuggler.delayCall(function() : Void
 				{
@@ -577,18 +577,18 @@ class SummaryScript extends BaseBufferEventScript
 		m_summaryJuggler.remove(m_fireworksAnimation);
 
 		// Delete everything in the rewards screen
-		m_rewardButtonBurstBackground.removeFromParent();
-		m_rewardsButton.removeFromParent();
+		if (m_rewardButtonBurstBackground.parent != null) m_rewardButtonBurstBackground.parent.removeChild(m_rewardButtonBurstBackground);
+		if (m_rewardsButton.parent != null) m_rewardsButton.parent.removeChild(m_rewardsButton);
 		m_summaryJuggler.remove(m_rewardButtonBurstTween);
 		m_rewardsScreen.close();
 
 		// Clear coin counter
-		m_currencyCounter.removeFromParent();
+		if (m_currencyCounter.parent != null) m_currencyCounter.parent.removeChild(m_currencyCounter);
 
 		// Clear the xp bar
 		m_playerXpBarFillAnimation.stop();
 		m_playerXpBar.endCycleAnimation();
-		m_playerXpBar.removeFromParent();
+		if (m_playerXpBar.parent != null) m_playerXpBar.parent.removeChild(m_playerXpBar);
 	}
 
 	private function onNextClicked() : Void
@@ -597,7 +597,7 @@ class SummaryScript extends BaseBufferEventScript
 			buttonName : "NextButton"
 
 		};
-		m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.BUTTON_PRESSED_EVENT, false, loggingDetails);
+		m_gameEngine.dispatchEvent(AlgebraAdventureLoggingConstants.BUTTON_PRESSED_EVENT, false, loggingDetails);
 
 		var levelStats : LevelStatistics = m_gameEngine.getCurrentLevel().statistics;
 		if (levelStats.masteryIdAchieved > -1)
@@ -608,7 +608,7 @@ class SummaryScript extends BaseBufferEventScript
 		{
 			// If do not need to show the notification screen, then
 			// hitting next immediately goes to the next level.
-			m_gameState.dispatchEventWith(CommandEvent.GO_TO_NEXT_LEVEL);
+			m_gameState.dispatchEvent(CommandEvent.GO_TO_NEXT_LEVEL);
 		}
 
 		onSummaryWidgetButtonPressed();
@@ -620,7 +620,7 @@ class SummaryScript extends BaseBufferEventScript
 			buttonName : "ExitButton"
 
 		};
-		m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.BUTTON_PRESSED_EVENT, false, loggingDetails);
+		m_gameEngine.dispatchEvent(AlgebraAdventureLoggingConstants.BUTTON_PRESSED_EVENT, false, loggingDetails);
 
 		// Display special mastery message if last level triggered that event
 		var levelStats : LevelStatistics = m_gameEngine.getCurrentLevel().statistics;
@@ -630,7 +630,7 @@ class SummaryScript extends BaseBufferEventScript
 		}
 		else
 		{
-			m_gameState.dispatchEventWith(CommandEvent.LEVEL_QUIT_AFTER_COMPLETION, false, {
+			m_gameState.dispatchEvent(CommandEvent.LEVEL_QUIT_AFTER_COMPLETION, false, {
 				level : m_gameEngine.getCurrentLevel()
 
 			});
@@ -697,7 +697,7 @@ class SummaryScript extends BaseBufferEventScript
 			m_newNotificationJuggler,
 			function() : Void
 			{
-				m_gameState.dispatchEventWith(commandNameOnContinue);
+				m_gameState.dispatchEvent(commandNameOnContinue);
 				if (m_newNotificationScreen != null)
 				{
 					m_newNotificationScreen.removeFromParent(true);

@@ -14,7 +14,7 @@ import dragonbox.common.dispose.IDisposable;
 
 import haxe.Constraints.Function;
 
-import starling.display.Button;
+import wordproblem.display.LabelButton;
 
 /**
  * This is the screen to display the reward that gets earned after registering a new account
@@ -41,7 +41,7 @@ class RegisterRewardScreen extends Sprite implements IDisposable
     private var m_descriptionText : TextField;
     
     /** Button to continue with the game */
-    private var m_okButton : Button;
+    private var m_okButton : LabelButton;
     
     /** Callback when the player want to close this screen */
     private var m_closeCallback : Function;

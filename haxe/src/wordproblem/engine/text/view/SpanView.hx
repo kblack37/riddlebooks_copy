@@ -21,7 +21,7 @@ class SpanView extends DocumentView
     /**
      * HACK: If the span is set to not selectable, no way for one of its children to be selectable
      */
-    override public function hitTestPoint(globalPoint : Point, ignoreNonSelectable : Bool = true) : DocumentView
+    override public function customHitTestPoint(globalPoint : Point, ignoreNonSelectable : Bool = true) : DocumentView
     {
         var targetChildView : DocumentView = null;
         
@@ -37,7 +37,7 @@ class SpanView extends DocumentView
                 // Assumes no overlap between view terms
                 var childView : DocumentView = this.childViews[i];
                 
-                targetChildView = childView.hitTestPoint(globalPoint, ignoreNonSelectable);
+                targetChildView = childView.customHitTestPoint(globalPoint, ignoreNonSelectable);
                 
                 if (targetChildView != null) 
                 {

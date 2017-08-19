@@ -1,16 +1,14 @@
 package wordproblem.scripts.barmodel;
 
 
-import flash.geom.Rectangle;
+import motion.Actuate;
+import openfl.display.BitmapData;
+import openfl.geom.Rectangle;
 
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 
-import starling.animation.Juggler;
-import starling.animation.Tween;
-import starling.core.Starling;
-import starling.display.DisplayObject;
-import starling.display.DisplayObjectContainer;
-import starling.textures.Texture;
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
 
 import wordproblem.display.DottedRectangle;
 import wordproblem.engine.IGameEngine;
@@ -55,8 +53,6 @@ class ShowBarModelHitAreas extends BaseBarModelScript
      */
     private var m_postProcessHitAreaBuffer : Array<DisplayObjectContainer>;
     
-    private var m_animationJuggler : Juggler;
-    
     public function new(gameEngine : IGameEngine,
             expressionCompiler : IExpressionTreeCompiler,
             assetManager : AssetManager,
@@ -70,7 +66,6 @@ class ShowBarModelHitAreas extends BaseBarModelScript
         m_nodeIdToCalculateHitAreas = nodeIdToCalculateHitAreas;
         m_displayedHitAreaImages = new Array<DisplayObject>();
         m_postProcessHitAreaBuffer = new Array<DisplayObjectContainer>();
-        m_animationJuggler = Starling.current.juggler;
     }
     
     /**
@@ -98,11 +93,11 @@ class ShowBarModelHitAreas extends BaseBarModelScript
                 if (!m_hitAreasShown) 
                 {
 					m_postProcessHitAreaBuffer = new Array<DisplayObjectContainer>();
-                    var hitAreaBackgroundTexture : Texture = m_assetManager.getTexture("wildcard");
+                    var hitAreaBackgroundBitmapData : BitmapData = m_assetManager.getBitmapData("wildcard");
                     var nineslicePadding : Int = 10;
-                    var ninesliceGrid : Rectangle = new Rectangle(nineslicePadding, nineslicePadding, hitAreaBackgroundTexture.width - 2 * nineslicePadding, hitAreaBackgroundTexture.height - 2 * nineslicePadding);
-                    var cornerTexture : Texture = m_assetManager.getTexture("dotted_line_corner");
-                    var segmentTexture : Texture = m_assetManager.getTexture("dotted_line_segment");
+                    var ninesliceGrid : Rectangle = new Rectangle(nineslicePadding, nineslicePadding, hitAreaBackgroundBitmapData.width - 2 * nineslicePadding, hitAreaBackgroundBitmapData.height - 2 * nineslicePadding);
+                    var cornerBitmapData : BitmapData = m_assetManager.getBitmapData("dotted_line_corner");
+                    var segmentBitmapData : BitmapData = m_assetManager.getBitmapData("dotted_line_segment");
                     
                     var hitAreas : Array<Rectangle> = m_hitAreaScript.getActiveHitAreas();
                     var i : Int = 0;
@@ -112,7 +107,7 @@ class ShowBarModelHitAreas extends BaseBarModelScript
                         hitArea = hitAreas[i];
                         
                         var finalTransparency : Float = 0.25;
-                        var dottedRectangle : DottedRectangle = new DottedRectangle(hitAreaBackgroundTexture, ninesliceGrid, 0.6, cornerTexture, segmentTexture);
+                        var dottedRectangle : DottedRectangle = new DottedRectangle(hitAreaBackgroundBitmapData, ninesliceGrid, 0.6, cornerBitmapData, segmentBitmapData);
                         dottedRectangle.resize(hitArea.width, hitArea.height, 5, 5);
                         dottedRectangle.x = hitArea.x;
                         dottedRectangle.y = hitArea.y;
@@ -120,13 +115,7 @@ class ShowBarModelHitAreas extends BaseBarModelScript
                         
                         // Animate the fading in of the hit boxes
                         dottedRectangle.alpha = 0.0;
-                        var fadeInTween : Tween = new Tween(dottedRectangle, 0.4);
-                        fadeInTween.fadeTo(finalTransparency);
-                        fadeInTween.onComplete = function() : Void
-                                {
-                                    m_animationJuggler.remove(fadeInTween);
-                                };
-                        m_animationJuggler.add(fadeInTween);
+						Actuate.tween(dottedRectangle, 0.4, { alpha: finalTransparency });
                         
                         m_displayedHitAreaImages.push(dottedRectangle);
                         m_postProcessHitAreaBuffer.push(dottedRectangle);
@@ -162,22 +151,17 @@ class ShowBarModelHitAreas extends BaseBarModelScript
                 var hitAreaImage : DisplayObject = m_displayedHitAreaImages.pop();
                 
                 // Animate the fade out of the hit boxes
-                var fadeOutTween : Tween = new Tween(hitAreaImage, 0.4);
-                fadeOutTween.fadeTo(0.0);
-                //fadeOutTween.onCompleteArgs = [fadeOutTween, hitAreaImage];
-                fadeOutTween.onComplete = function() : Void
-                        {
-                            hitAreaImage.removeFromParent(true);
-                            m_animationJuggler.remove(fadeOutTween);
-                        };
-                m_animationJuggler.add(fadeOutTween);
+				Actuate.tween(hitAreaImage, 0.4, { alpha: 0 }).onComplete(function() : Void {
+					if (hitAreaImage.parent != null) hitAreaImage.parent.removeChild(hitAreaImage);
+					hitAreaImage = null;
+				});
             }
         }
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         m_hitAreaScript = try cast(this.getNodeById(m_nodeIdToCalculateHitAreas), IHitAreaScript) catch (e:Dynamic) null;
     }

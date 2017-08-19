@@ -73,8 +73,8 @@ class Layering extends ScriptNode
             if (!blockLayers) 
             {
                 layer.activeForFrame = true;
-                layer.globalToLocal(m_mousePoint, m_resultPoint);
-                if (layer.hitTest(m_resultPoint) != null) 
+                m_resultPoint = layer.globalToLocal(m_mousePoint);
+                if (layer.hitTestPoint(m_resultPoint.x, m_resultPoint.y) != null) 
                 {
                     blockLayers = true;
                 }
