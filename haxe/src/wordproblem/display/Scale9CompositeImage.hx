@@ -1,12 +1,13 @@
 package wordproblem.display;
 
+import dragonbox.common.dispose.IDisposable;
 import openfl.display.Bitmap;
 import openfl.display.DisplayObject;
 import openfl.display.Sprite;
 
-class Scale9CompositeImage extends Sprite
+class Scale9CompositeImage extends Sprite implements IDisposable
 {
-    public function new(args : Array<Bitmap>)
+    public function new(args : Array<DisplayObject>)
     {
         super();
         
@@ -38,4 +39,13 @@ class Scale9CompositeImage extends Sprite
         }
         return value;
     }
+	
+	public function dispose() {
+		while (numChildren > 0) {
+			var child = removeChildAt(0);
+			if (Std.is(child, IDisposable)) {
+				cast(child, IDisposable).dispose();
+			}
+		}
+	}
 }

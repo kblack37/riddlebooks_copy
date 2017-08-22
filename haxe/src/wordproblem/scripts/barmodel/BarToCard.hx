@@ -226,7 +226,6 @@ class BarToCard extends BaseBarModelScript
 		if (m_barElementCopy != null) {
 			Actuate.stop(m_barElementCopy);
 			if (m_barElementCopy.parent != null) m_barElementCopy.parent.removeChild(m_barElementCopy);
-			m_barElementCopy.dispose();
 		}
     }
     

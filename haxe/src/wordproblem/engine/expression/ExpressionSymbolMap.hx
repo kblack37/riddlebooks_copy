@@ -6,11 +6,13 @@ import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.display.BlendMode;
 import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
 import openfl.display.Sprite;
 import openfl.geom.Rectangle;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
+import wordproblem.display.Scale9Image;
 
 import wordproblem.display.PivotSprite;
 import wordproblem.engine.expression.SymbolData;
@@ -230,6 +232,9 @@ class ExpressionSymbolMap
             renderBitmapData.draw(cardObject, null, null, BlendMode.NORMAL);
             m_idToDynamicBitmapDataMap.set(value, renderBitmapData);
             cardBitmapData = renderBitmapData;
+			
+			// Dispose of the scale9Image in the card object
+			//(try cast((try cast((try cast(cardObject, DisplayObjectContainer) catch (e : Dynamic) null).getChildAt(0), DisplayObjectContainer) catch (e : Dynamic) null).getChildAt(0), Scale9Image) catch (e : Dynamic) null).dispose();
         }
         var cardObject = new PivotSprite();
 		cardObject.addChild(new Bitmap(cardBitmapData));
@@ -311,19 +316,23 @@ class ExpressionSymbolMap
             var backgroundBitmapData : BitmapData = m_assetManager.getBitmapData(symbolData.backgroundTextureName);
             var backgroundOriginalWidth : Float = backgroundBitmapData.width;
             var backgroundOriginalHeight : Float = backgroundBitmapData.height;
-            var backgroundImage : Bitmap = new Bitmap(backgroundBitmapData);
-			backgroundImage.transform.colorTransform.concat(XColor.rgbToColorTransform(symbolData.backgroundColor));
+            var backgroundImage : DisplayObject = null;
             if (scaleBackgroundToFitTextWidth > backgroundOriginalWidth) 
             {
                 // If the background needs to be expanded, then we need to do a nine-slice on the background
                 var nineScalePadding : Float = 8;
-				backgroundImage.scale9Grid = new Rectangle(nineScalePadding,
+				backgroundImage = new Scale9Image(backgroundBitmapData, new Rectangle(nineScalePadding,
 					nineScalePadding,
 					backgroundOriginalWidth - 2 * nineScalePadding,
 					backgroundOriginalHeight - 2 * nineScalePadding
-				);
+				));
                 backgroundImage.width = scaleBackgroundToFitTextWidth;
-            }
+            } 
+			else 
+			{
+				backgroundImage = new Bitmap(backgroundBitmapData);
+			}
+			backgroundImage.transform.colorTransform = XColor.rgbToColorTransform(symbolData.backgroundColor);
             cardContainer.addChildAt(backgroundImage, 0);
             
             // Reposition the text base on the background size

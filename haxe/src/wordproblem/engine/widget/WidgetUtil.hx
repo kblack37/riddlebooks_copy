@@ -7,6 +7,7 @@ import openfl.geom.Rectangle;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
 import wordproblem.display.PivotSprite;
+import wordproblem.display.Scale9Image;
 
 import dragonbox.common.util.XColor;
 
@@ -35,24 +36,19 @@ class WidgetUtil
         var scaleNineRect : Rectangle = new Rectangle(8, 8, 16, 16);
         var buttonBackground : BitmapData = assetManager.getBitmapData("button_white");
         var buttonOutline : BitmapData = assetManager.getBitmapData("button_outline_white");
-        var defaultSkin : Bitmap = new Bitmap(buttonBackground);
-		defaultSkin.scale9Grid = scaleNineRect;
+        var defaultSkin : Scale9Image = new Scale9Image(buttonBackground, scaleNineRect);
         
-		var compositeArray = new Array<Bitmap>();
-        var hoverBackground : Bitmap = new Bitmap(buttonBackground);
-		hoverBackground.scale9Grid = scaleNineRect;
-        var hoverOutline : Bitmap = new Bitmap(buttonOutline);
-		hoverOutline.scale9Grid = scaleNineRect;
+		var compositeArray = new Array<DisplayObject>();
+        var hoverBackground : Scale9Image = new Scale9Image(buttonBackground, scaleNineRect);
+        var hoverOutline : Scale9Image = new Scale9Image(buttonOutline, scaleNineRect);
 		compositeArray.push(hoverBackground);
 		compositeArray.push(hoverOutline);
         var hoverSkin : Sprite = new Scale9CompositeImage(compositeArray);
 		
-		compositeArray = new Array<Bitmap>();
+		compositeArray = new Array<DisplayObject>();
         
-        var downBackground : Bitmap = new Bitmap(buttonBackground);
-		downBackground.scale9Grid = scaleNineRect;
-        var downOutline : Bitmap = new Bitmap(buttonOutline);
-		downOutline.scale9Grid = scaleNineRect;
+        var downBackground : Scale9Image = new Scale9Image(buttonBackground, scaleNineRect);
+        var downOutline : Scale9Image = new Scale9Image(buttonOutline, scaleNineRect);
 		downOutline.transform.colorTransform.concat(XColor.rgbToColorTransform(0x000000));
 		compositeArray.push(downBackground);
 		compositeArray.push(downOutline);
@@ -99,9 +95,12 @@ class WidgetUtil
         {
             var useNineSlice : Bool = (nineSlice != null);
             var bitmapData : BitmapData = assetManager.getBitmapData(bitmapDataName);
-			var skin = new Bitmap(bitmapData);
-			// Since a null scale9Grid means no dynamic scaling, we can just assign like this
-			skin.scale9Grid = nineSlice;
+			var skin :DisplayObject = null;
+			if (nineSlice != null) {
+				skin = new Scale9Image(bitmapData, nineSlice);
+			} else {
+				skin = new Bitmap(bitmapData);
+			}
             
             return skin;
         };

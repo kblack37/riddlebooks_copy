@@ -10,7 +10,7 @@ import openfl.display.Sprite;
  * 
  * This is useful if we choose to do custom click detection using rectangle hit tests.
  */
-class Layer extends Sprite
+class Layer extends DisposableSprite
 {
     /**
      * Flag that is toggled to indicate whether the components contained in this

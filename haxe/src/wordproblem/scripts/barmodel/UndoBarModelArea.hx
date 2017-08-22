@@ -57,7 +57,6 @@ class UndoBarModelArea extends BaseBarModelScript
                 m_gameEngine.removeEventListener(GameEvent.BAR_MODEL_AREA_CHANGE, onBarModelAreaChange);
                 if (value) 
                 {
-                    m_undoButton.addEventListener(MouseEvent.CLICK, onUndoButtonClick);
                     m_gameEngine.addEventListener(GameEvent.BAR_MODEL_AREA_CHANGE, onBarModelAreaChange);
                 }
             }
@@ -129,6 +128,11 @@ class UndoBarModelArea extends BaseBarModelScript
     
     private function toggleUndoButtonEnabled(enabled : Bool) : Void
     {
+		if (!enabled && m_undoButton.hasEventListener(MouseEvent.CLICK)) {
+			m_undoButton.removeEventListener(MouseEvent.CLICK, onUndoButtonClick);
+		} else if (enabled && !m_undoButton.hasEventListener(MouseEvent.CLICK)) {
+			m_undoButton.addEventListener(MouseEvent.CLICK, onUndoButtonClick);
+		}
         m_undoButton.alpha = ((enabled)) ? 1.0 : 0.4;
         m_undoButton.enabled = enabled;
     }

@@ -1,5 +1,6 @@
 package wordproblem.engine.component;
 
+import dragonbox.common.dispose.IDisposable;
 import openfl.display.DisplayObject;
 import wordproblem.engine.component.Component;
 
@@ -57,6 +58,7 @@ class ArrowComponent extends Component
         if (arrowView != null) 
         {
             if (arrowView.parent != null) arrowView.parent.removeChild(arrowView);
+			(try cast(arrowView, IDisposable) catch (e : Dynamic) null).dispose();
         }
     }
     

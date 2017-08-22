@@ -57,7 +57,7 @@ class ResetBarModelArea extends BaseBarModelScript
             }
         }
     }
-    
+	
     override public function visit() : Int
     {
         if (m_ready && m_isActive) 
@@ -70,8 +70,8 @@ class ResetBarModelArea extends BaseBarModelScript
     override private function onLevelReady(event : Dynamic) : Void
     {
         super.onLevelReady(event);
-        m_resetButton = try cast(m_gameEngine.getUiEntity("resetButton"), LabelButton) catch(e:Dynamic) null;
-        
+        m_resetButton = try cast(m_gameEngine.getUiEntity("resetButton"), LabelButton) catch (e:Dynamic) null;
+		
         m_tooltipControl = new TooltipControl(m_gameEngine, "resetButton", "Reset");
         
         // Activate again to make sure the event listener is bound to the button we just found

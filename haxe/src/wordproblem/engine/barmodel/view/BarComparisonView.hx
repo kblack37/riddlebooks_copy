@@ -3,6 +3,7 @@ package wordproblem.engine.barmodel.view;
 import dragonbox.common.util.XColor;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
+import wordproblem.display.Scale9Image;
 import wordproblem.engine.barmodel.view.ResizeableBarPieceView;
 
 import openfl.geom.Rectangle;
@@ -31,7 +32,7 @@ class BarComparisonView extends ResizeableBarPieceView
     /**
      * The image that can scale without stretching/distorting. It is sliced into three parts
      */
-    private var m_scaledArrowImage : Bitmap;
+    private var m_scaledArrowImage : Scale9Image;
     
     /**
      * The image with all pieces already pieces together
@@ -68,8 +69,7 @@ class BarComparisonView extends ResizeableBarPieceView
         
         var color : Int = data.color;
 		fullBitmapData.colorTransform(new Rectangle(0, 0, fullBitmapData.width, fullBitmapData.height), XColor.rgbToColorTransform(color));
-        m_scaledArrowImage = new Bitmap(fullBitmapData);
-		m_scaledArrowImage.scale9Grid = threeSliceGrid;
+        m_scaledArrowImage = new Scale9Image(fullBitmapData, threeSliceGrid);
         m_fullArrowImage = new Bitmap(fullBitmapData);
         
         if (symbolImage == null) 
@@ -103,7 +103,7 @@ class BarComparisonView extends ResizeableBarPieceView
         this.lineGraphicDisplayContainer.removeChildren();
         this.pixelLength = newLength;
         
-        var canScaleImage : Bool = newLength > (m_scaledArrowImage.scale9Grid.left * 2);
+        var canScaleImage : Bool = newLength > (m_scaledArrowImage.getScale9Rect().left * 2);
         if (canScaleImage) 
         {
             this.lineGraphicDisplayContainer.addChild(m_scaledArrowImage);
@@ -141,7 +141,7 @@ class BarComparisonView extends ResizeableBarPieceView
         {
             // Figure out scale amount indirectly applied
             var scaleAmount : Float = targetBounds.width / m_scaledArrowImage.width;
-            var endLength : Float = (m_scaledArrowImage.scale9Grid.right - m_scaledArrowImage.bitmapData.width) * scaleAmount;
+            var endLength : Float = (m_scaledArrowImage.getScale9Rect().right - m_fullArrowImage.bitmapData.width) * scaleAmount;
             
             // Shift rectangle over to the middle bounds
             outBounds.setTo(
@@ -164,4 +164,8 @@ class BarComparisonView extends ResizeableBarPieceView
                     );
         }
     }
+	
+	override public function dispose() {
+		m_scaledArrowImage.dispose();
+	}
 }

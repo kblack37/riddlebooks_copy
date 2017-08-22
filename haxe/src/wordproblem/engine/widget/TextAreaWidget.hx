@@ -236,7 +236,7 @@ class TextAreaWidget extends Sprite implements IBaseWidget
         for (textPage in m_textPages)
         {
 			if (textPage.parent != null) textPage.parent.removeChild(textPage);
-			textPage = null;
+			textPage.dispose();
         }
 		this.removeChildren(0, -1);
     }

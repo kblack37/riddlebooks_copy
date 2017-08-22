@@ -181,9 +181,11 @@ class HelpController extends BaseGameScript
     
     override private function bufferEvent(event : Dynamic) : Void
     {
-		var dataEvent : DataEvent = cast(event, DataEvent);
-		var data = dataEvent.getData();
-        var type : String = event.type;
+		var data = null;
+		if (Std.is(event, DataEvent)) {
+			data = (try cast(event, DataEvent) catch (e : Dynamic) null).getData();
+		}
+        var type : String = (try cast(event, Event) catch (e : Dynamic) null).type;
         var smoothlyRemove : Bool = false;
         if (type == GameEvent.SHOW_HINT) 
         {

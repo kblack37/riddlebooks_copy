@@ -5,6 +5,7 @@ import dragonbox.common.util.XColor;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.geom.Rectangle;
+import wordproblem.display.Scale9Image;
 
 import openfl.display.DisplayObject;
 import openfl.display.Sprite;
@@ -20,8 +21,8 @@ class PlayerCollectionItemButton extends Sprite
 {
     public var selected(never, set) : Bool;
 
-    private var m_normalBackground : Bitmap;
-    private var m_selectedBackground : Bitmap;
+    private var m_normalBackground : Scale9Image;
+    private var m_selectedBackground : Scale9Image;
     
     private var m_itemId : String;
     private var m_locked : Bool;
@@ -52,14 +53,12 @@ class PlayerCollectionItemButton extends Sprite
 		var scale9Rect = new Rectangle(8, 8, 16, 16);
         var backgroundBitmapData : BitmapData = assetManager.getBitmapData("button_white");
 		
-        m_normalBackground = new Bitmap(backgroundBitmapData);
-		m_normalBackground.scale9Grid = scale9Rect;
+        m_normalBackground = new Scale9Image(backgroundBitmapData, scale9Rect);
 		m_normalBackground.transform.colorTransform.concat(XColor.rgbToColorTransform(defaultColor));
         m_normalBackground.width = width;
         m_normalBackground.height = height;
         
-        m_selectedBackground = new Bitmap(backgroundBitmapData);
-		m_selectedBackground.scale9Grid = scale9Rect;
+        m_selectedBackground = new Scale9Image(backgroundBitmapData, scale9Rect);
 		m_selectedBackground.transform.colorTransform.concat(XColor.rgbToColorTransform(overColor));
         m_selectedBackground.width = width;
         m_selectedBackground.height = height;
@@ -130,5 +129,9 @@ class PlayerCollectionItemButton extends Sprite
     public function dispose() : Void
     {
         m_assetManager.releaseTextureWithReferenceCount(m_itemTextureName);
+		
+		m_normalBackground.dispose();
+		
+		m_selectedBackground.dispose();
     }
 }

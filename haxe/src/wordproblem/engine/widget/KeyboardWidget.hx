@@ -234,7 +234,7 @@ class KeyboardWidget extends Layer
         m_textInput.text = value;
     }
     
-    public function dispose() : Void
+    override public function dispose() : Void
     {
         m_textInput.removeEventListener(TextEvent.TEXT_INPUT, onTextInputEnter);
         m_textInput.removeEventListener(Event.CHANGE, onTextChange);

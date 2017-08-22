@@ -219,6 +219,7 @@ class DeckController extends BaseGameScript
                     widgetToSnap.stage.addChild(widget);
                     //m_snapBackAnimation.setParameters(widget, widgetToSnap, 800, onAnimationDone);
                     //Starling.current.juggler.add(m_snapBackAnimation);
+					onAnimationDone();
                 }
             }
             else 

@@ -151,8 +151,11 @@ class BarWholeView extends Sprite implements IDisposable
         {
 			var labelView = labelViews.pop();
 			if (labelView.parent != null) labelView.parent.removeChild(labelView);
+			labelView.dispose();
 			labelView = null;
         }
+		
+		if (hiddenImage != null) hiddenImage.dispose();
         
         this.removeChildren();
     }

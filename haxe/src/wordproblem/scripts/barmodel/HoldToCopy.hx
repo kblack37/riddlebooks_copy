@@ -194,7 +194,6 @@ class HoldToCopy extends BaseBarModelScript
         
 		Actuate.tween(m_holdToCopyDescription, 0.3, { });
         
-		// TODO: revisit animation once more basic elements are working
         m_completedRingBitmapData = BitmapUtil.getRingSegmentBitmapData(
                         m_innerRadius, m_outerRadius, -Math.PI / 2, Math.PI * 2, true, m_fillBitmapData, 0x00FF00, true, 1, 0
                         );

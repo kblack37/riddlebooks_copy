@@ -8,6 +8,7 @@ import openfl.display.BitmapData;
 import openfl.filters.BitmapFilter;
 import openfl.geom.Rectangle;
 import wordproblem.display.PivotSprite;
+import wordproblem.display.Scale9Image;
 
 import openfl.display.DisplayObject;
 import openfl.display.Sprite;
@@ -85,11 +86,10 @@ class PlayerXPBar extends Sprite
         var padding : Float = 10;
         var xpBarBackBitmapData : BitmapData = assetManager.getBitmapData("xp_bar_back");
 		
-        var xpBarBackImage : Bitmap = new Bitmap(xpBarBackBitmapData);
-		xpBarBackImage.scale9Grid = new Rectangle(padding,
+        var xpBarBackImage : Scale9Image = new Scale9Image(xpBarBackBitmapData, new Rectangle(padding,
 			0,
 			xpBarBackBitmapData.width - 2 * padding,
-			xpBarBackBitmapData.height);
+			xpBarBackBitmapData.height));
         xpBarBackImage.width = maxBarLength;
         fillContainer.addChild(xpBarBackImage);
         
@@ -99,11 +99,10 @@ class PlayerXPBar extends Sprite
         m_fillWidthWhenFull = maxBarLength - fillPaddingLeft * 2;
         var xpBarFillBitmapData : BitmapData = assetManager.getBitmapData("xp_bar_fill");
         
-        m_xpBarFillImageSliced = new Bitmap(xpBarFillBitmapData);
-		m_xpBarFillImageSliced.scale9Grid = new Rectangle(padding,
+        m_xpBarFillImageSliced = new Scale9Image(xpBarFillBitmapData, new Rectangle(padding,
 			0,
 			xpBarFillBitmapData.width - 2 * padding,
-			xpBarFillBitmapData.height);
+			xpBarFillBitmapData.height));
         m_xpBarFillImageSliced.x = fillPaddingLeft;
         m_xpBarFillImageSliced.y = fillPaddingTop;
         
@@ -118,11 +117,10 @@ class PlayerXPBar extends Sprite
         // Add grayscale filter to make the fill look white
         var colorMatrixFilter : ColorMatrixFilter = XColor.getGrayscaleFilter();
 		
-        m_xpBackgroundFillSliced = new Bitmap(xpBarFillBitmapData);
-		m_xpBackgroundFillSliced.scale9Grid = new Rectangle(padding,
+        m_xpBackgroundFillSliced = new Scale9Image(xpBarFillBitmapData, new Rectangle(padding,
 			0,
 			xpBarFillBitmapData.width - 2 * padding,
-			xpBarFillBitmapData.height);
+			xpBarFillBitmapData.height));
         m_xpBackgroundFillSliced.x = fillPaddingLeft;
         m_xpBackgroundFillSliced.y = fillPaddingTop;
 		var filters = new Array<BitmapFilter>();

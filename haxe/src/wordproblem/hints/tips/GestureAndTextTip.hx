@@ -5,6 +5,7 @@ import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.errors.Error;
 import openfl.text.TextFormatAlign;
+import wordproblem.display.Scale9Image;
 
 import openfl.geom.Point;
 import openfl.geom.Rectangle;
@@ -185,8 +186,12 @@ class GestureAndTextTip extends ScriptNode implements IShowableScript
         
         // TEMP: No chalk outline as it may cause unneeded clutter
 		var chalkOutlineBitmapData : BitmapData = m_assetManager.getBitmapData("chalk_outline");
-        var chalkOutline : Bitmap = new Bitmap(chalkOutlineBitmapData);
-		chalkOutline.scale9Grid = new Rectangle(scale9Padding, scale9Padding, chalkOutlineBitmapData.width - 2 * scale9Padding, chalkOutlineBitmapData.height - 2 * scale9Padding);
+        var chalkOutline : Scale9Image = new Scale9Image(chalkOutlineBitmapData, new Rectangle(
+			scale9Padding,
+			scale9Padding,
+			chalkOutlineBitmapData.width - 2 * scale9Padding,
+			chalkOutlineBitmapData.height - 2 * scale9Padding
+		));
         chalkOutline.width = descriptionWidth;
         chalkOutline.height = descriptionTextField.height + outlinePadding * 2;
         chalkOutline.x = descriptionX;

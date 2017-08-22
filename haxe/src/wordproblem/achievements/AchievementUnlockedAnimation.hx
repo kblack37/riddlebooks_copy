@@ -4,6 +4,7 @@ import dragonbox.common.util.XColor;
 import motion.Actuate;
 import openfl.display.Bitmap;
 import wordproblem.achievements.PlayerAchievementGem;
+import wordproblem.display.Scale9Image;
 
 import openfl.geom.Point;
 import openfl.geom.Rectangle;
@@ -37,7 +38,7 @@ class AchievementUnlockedAnimation implements IDisposable
 {
     private var m_displayContainer : Sprite;
     private var m_achievementGem : PlayerAchievementGem;
-    private var m_achievementBackground : DisplayObject;
+    private var m_achievementBackground : Scale9Image;
     private var m_achievementName : OutlinedTextField;
     private var m_animationObjects : Array<DisplayObject>;
     
@@ -104,8 +105,7 @@ class AchievementUnlockedAnimation implements IDisposable
         var textAndBgContainer : Sprite = new Sprite();
         var padding : Float = 8;
         var backgroundHeight : Float = maxHeight * 0.75;
-        m_achievementBackground = new Bitmap(backgroundBitmapData);
-        m_achievementBackground.scale9Grid = new Rectangle(padding, padding, backgroundBitmapData.width - padding * 2, backgroundBitmapData.height - padding * 2);
+        m_achievementBackground = new Scale9Image(backgroundBitmapData, new Rectangle(padding, padding, backgroundBitmapData.width - padding * 2, backgroundBitmapData.height - padding * 2));
         
         // Convert string colors to hex
 		m_achievementBackground.transform.colorTransform.concat(XColor.rgbToColorTransform(achievementData.color));
@@ -153,6 +153,7 @@ class AchievementUnlockedAnimation implements IDisposable
     
     public function dispose() : Void
     {
+		m_achievementBackground.dispose();
         m_displayContainer.removeChildren(0, -1);
 		if (m_displayContainer.parent != null) m_displayContainer.parent.removeChild(m_displayContainer);
         while (m_animationObjects.length > 0)

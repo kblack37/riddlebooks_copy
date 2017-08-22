@@ -3,6 +3,7 @@ package wordproblem.playercollections.scripts;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.text.TextFormatAlign;
+import wordproblem.display.Scale9Image;
 import wordproblem.playercollections.scripts.PlayerCollectionViewer;
 
 import openfl.geom.Point;
@@ -253,15 +254,13 @@ class PlayerCollectionCustomizeViewer extends PlayerCollectionViewer
         var nineSliceRectangle : Rectangle = new Rectangle(8, 8, 16, 16);
         var bitmapData : BitmapData = m_assetManager.getBitmapData("button_white");
         for (i in 0...numCategories){
-            var defaultBackground : Bitmap = new Bitmap(bitmapData);
-			defaultBackground.scale9Grid = nineSliceRectangle;
+            var defaultBackground : Scale9Image = new Scale9Image(bitmapData, nineSliceRectangle);
 			defaultBackground.transform.colorTransform.concat(XColor.rgbToColorTransform(m_buttonColorData.getUpButtonColor()));
             var categoryButton : LabelButton = new LabelButton(defaultBackground);
 			categoryButton.textFormatDefault = new TextFormat(GameFonts.DEFAULT_FONT_NAME, 24, 0xFFFFFF);
 			categoryButton.label = categoryIdsForPage[i];
             
-            var hoverBackground : Bitmap = new Bitmap(bitmapData);
-			hoverBackground.scale9Grid = nineSliceRectangle;
+            var hoverBackground : Scale9Image = new Scale9Image(bitmapData, nineSliceRectangle);
 			hoverBackground.transform.colorTransform.concat(XColor.rgbToColorTransform(XColor.shadeColor(m_buttonColorData.getUpButtonColor(), 0.3)));
             categoryButton.overState = hoverBackground;
             

@@ -3,6 +3,7 @@ package wordproblem.scripts.text;
 import dragonbox.common.util.XColor;
 import motion.Actuate;
 import openfl.display.Bitmap;
+import wordproblem.display.Scale9Image;
 import wordproblem.display.util.BitmapUtil;
 import wordproblem.engine.events.DataEvent;
 
@@ -385,12 +386,11 @@ class TextToCard extends BaseGameScript
                     
                     var padding : Float = 10;
 					var buttonBitmapData : BitmapData = m_assetManager.getBitmapData("card_background_square");
-					var nineImageButton : Bitmap = new Bitmap(buttonBitmapData);
-					nineImageButton.scale9Grid = new Rectangle(padding,
+					var nineImageButton : Scale9Image = new Scale9Image(buttonBitmapData, new Rectangle(padding,
 						padding,
 						buttonBitmapData.width - 2 * padding,
 						buttonBitmapData.height - 2 * padding
-					);
+					));
                     
                     nineImageButton.x = currentLineBounds.x - padding * 0.5;
                     nineImageButton.y = currentLineBounds.y;
@@ -410,14 +410,13 @@ class TextToCard extends BaseGameScript
             for (i in 0...lines.length){
                 currentLineBounds = lines[i];
                 
+				var padding = 10;
                 var backgroundBitmapData : BitmapData = m_assetManager.getBitmapData("wildcard");
-				var nineImageBackground : Bitmap = new Bitmap(backgroundBitmapData);
-                var padding = 10;
-				nineImageBackground.scale9Grid = new Rectangle(padding,
+				var nineImageBackground : Scale9Image = new Scale9Image(backgroundBitmapData, new Rectangle(padding,
 					padding,
 					backgroundBitmapData.width - 2 * padding,
 					backgroundBitmapData.height - 2 * padding
-				);
+				));
 				
                 nineImageBackground.x = currentLineBounds.x - padding * 0.5;
                 nineImageBackground.y = currentLineBounds.y - padding * 0.5;

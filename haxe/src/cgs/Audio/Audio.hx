@@ -6,6 +6,7 @@ import flash.media.SoundChannel;
 import flash.media.SoundMixer;
 import flash.media.SoundTransform;
 import flash.net.URLRequest;
+import haxe.CallStack;
 import haxe.xml.Fast;
 
 /**

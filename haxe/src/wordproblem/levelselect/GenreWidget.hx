@@ -6,6 +6,7 @@ import openfl.display.BitmapData;
 import openfl.events.EventDispatcher;
 import openfl.text.TextFormatAlign;
 import wordproblem.display.PivotSprite;
+import wordproblem.display.Scale9Image;
 import wordproblem.levelselect.LevelSetSelector;
 
 import openfl.geom.Point;
@@ -272,6 +273,8 @@ class GenreWidget extends Sprite
 		m_closeButton.removeEventListener(MouseEvent.CLICK, onCloseTriggered);
 		m_previousPageHitArea.removeEventListener(MouseEvent.CLICK, onPrevTriggered);
 		m_nextPageHitArea.removeEventListener(MouseEvent.CLICK, onNextTriggered);
+		
+		m_book.dispose();
     }
     
     /**
@@ -757,13 +760,12 @@ class GenreWidget extends Sprite
                             // Draw the text over a black background
                             var nineSlicePadding : Float = 8;
                             var backgroundBitmapData : BitmapData = m_assetManager.getBitmapData("button_white");
-                            var backgroundImage : Bitmap = new Bitmap(backgroundBitmapData);
-							backgroundImage.scale9Grid = new Rectangle(
+                            var backgroundImage : Scale9Image = new Scale9Image(backgroundBitmapData, new Rectangle(
 								nineSlicePadding,
 								nineSlicePadding,
 								backgroundBitmapData.width - 2 * nineSlicePadding,
 								backgroundBitmapData.height - 2 * nineSlicePadding
-							);
+							));
 							backgroundImage.transform.colorTransform.concat(XColor.rgbToColorTransform(0x000000));
                             backgroundImage.alpha = 0.5;
                             backgroundImage.width = remainingLevelsUntilHatchingTextField.width;
@@ -925,12 +927,11 @@ class GenreWidget extends Sprite
                 {
                     var problemCreateBitmapData : BitmapData = m_assetManager.getBitmapData("button_white");
                     var padding : Float = 8;
-                    var problemCreateButtonImage : Bitmap = new Bitmap(problemCreateBitmapData); 
-					problemCreateButtonImage.scale9Grid = new Rectangle(padding,
+                    var problemCreateButtonImage : Scale9Image = new Scale9Image(problemCreateBitmapData), new Rectangle(padding,
 						padding,
 						problemCreateBitmapData.width - 2 * padding,
 						problemCreateBitmapData.height - 2 * padding
-					);
+					));
 					problemCreateButtonImage.transform.colorTransform.concat(XColor.rgbToColorTransform(0xFF0000));
                     buttonBackgroundImage = problemCreateButtonImage;
                 }

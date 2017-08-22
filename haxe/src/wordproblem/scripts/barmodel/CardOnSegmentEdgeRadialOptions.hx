@@ -153,6 +153,7 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
         super.dispose();
         
         hideMouseOverHitAreaPreview();
+		m_currentMouseOverHitAreaDisplay.dispose();
 		m_currentMouseOverHitAreaDisplay = null;
         
         if (m_currentAddSubtractIcon != null) 

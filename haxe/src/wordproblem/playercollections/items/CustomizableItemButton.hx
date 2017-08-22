@@ -1,8 +1,10 @@
 package wordproblem.playercollections.items;
 
 
+import dragonbox.common.dispose.IDisposable;
 import openfl.display.Bitmap;
 import openfl.geom.Rectangle;
+import wordproblem.display.Scale9Image;
 
 import dragonbox.common.util.XColor;
 
@@ -24,7 +26,7 @@ import wordproblem.resource.AssetManager;
  * Button composed of a name at the top, an icon in the middle, and then
  * some indicator or price or whether the item is equipped
  */
-class CustomizableItemButton extends Sprite
+class CustomizableItemButton extends Sprite implements IDisposable
 {
     // HACK:
     // This button knows how to redraw itself for all different cases
@@ -41,7 +43,7 @@ class CustomizableItemButton extends Sprite
      * The main rectangle background for the button keep a reference so it is easy to color
      * it depending on state changes on the item
      */
-    private var m_mainBackground : DisplayObject;
+    private var m_mainBackground : Scale9Image;
     
     /**
      * Display component showing the price of an item. (Only used in some cases)
@@ -78,8 +80,7 @@ class CustomizableItemButton extends Sprite
         setDefaultColor(defaultColor);
         setSelectedColor(selectedColor);
         
-        var backgroundImage : Bitmap = new Bitmap(assetManager.getBitmapData("button_white"));
-		backgroundImage.scale9Grid = new Rectangle(8, 8, 16, 16);
+        var backgroundImage : Scale9Image = new Scale9Image(assetManager.getBitmapData("button_white"), new Rectangle(8, 8, 16, 16));
         backgroundImage.width = totalWidth;
         backgroundImage.height = totalHeight;
         addChild(backgroundImage);
@@ -180,7 +181,7 @@ class CustomizableItemButton extends Sprite
         m_mainBackground.color = backgroundColor;
     }
     
-    override public function dispose() : Void
+    public function dispose() : Void
     {
         super.dispose();
         
@@ -189,6 +190,8 @@ class CustomizableItemButton extends Sprite
         {
             m_priceContainer.removeFromParent(true);
         }
+		
+		m_mainBackground.dispose();
     }
     
     public function createItemIcon() : DisplayObject

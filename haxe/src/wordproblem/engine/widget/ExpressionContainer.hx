@@ -5,6 +5,7 @@ import dragonbox.common.math.vectorspace.RealsVectorSpace;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.geom.Rectangle;
+import wordproblem.display.Scale9Image;
 
 import dragonbox.common.dispose.IDisposable;
 import dragonbox.common.math.vectorspace.IVectorSpace;
@@ -154,6 +155,24 @@ class ExpressionContainer extends Sprite implements IDisposable
         {
             removeChildAt(0);
         }
+		
+		if (Std.is(m_unselectedUpImage, Scale9Image)) {
+			cast(m_unselectedUpImage, Scale9Image).dispose();
+		} else {
+			cast(m_unselectedUpImage, Bitmap).bitmapData.dispose();
+		}
+		
+		if (Std.is(m_unselectedOverImage, Scale9Image)) {
+			cast(m_unselectedOverImage, Scale9Image).dispose();
+		} else {
+			cast(m_unselectedOverImage, Bitmap).bitmapData.dispose();
+		}
+		
+		if (Std.is(m_selectedUpImage, Scale9Image)) {
+			cast(m_selectedUpImage, Scale9Image).dispose();
+		} else {
+			cast(m_selectedUpImage, Bitmap).bitmapData.dispose();
+		}
     }
     
     private function createBackgroundImage(bitmapDataName : String, assetManager : AssetManager) : DisplayObject
@@ -163,8 +182,7 @@ class ExpressionContainer extends Sprite implements IDisposable
         {
             var bitmapData : BitmapData = assetManager.getBitmapData(bitmapDataName);
             var bgPadding : Float = 15;
-            backgroundImage = new Bitmap(bitmapData);
-			backgroundImage.scale9Grid = new Rectangle(bgPadding, bgPadding, bitmapData.width - 2 * bgPadding, bitmapData.height - 2 * bgPadding);
+            backgroundImage = new Scale9Image(bitmapData, new Rectangle(bgPadding, bgPadding, bitmapData.width - 2 * bgPadding, bitmapData.height - 2 * bgPadding));
         }
         else 
         {

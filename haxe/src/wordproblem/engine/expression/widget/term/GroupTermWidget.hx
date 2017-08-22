@@ -6,6 +6,7 @@ import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.geom.Rectangle;
 import wordproblem.display.PivotSprite;
+import wordproblem.display.Scale9Image;
 
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.math.vectorspace.IVectorSpace;
@@ -42,8 +43,7 @@ class GroupTermWidget extends BaseTermWidget
             var centerX : Float = 10;
             var centerWidth : Float = bitmapData.width - 2 * centerX;
             this.groupImage = new PivotSprite();
-			this.groupImage.addChild(new Bitmap(bitmapData));
-			this.groupImage.scale9Grid = new Rectangle(centerX, 0, centerWidth, bitmapData.height);
+			this.groupImage.addChild(new Scale9Image(bitmapData, new Rectangle(centerX, 0, centerWidth, bitmapData.height)));
         }
         else 
         {
@@ -56,4 +56,11 @@ class GroupTermWidget extends BaseTermWidget
         
         this.mainGraphicBounds = this.groupImage.getBounds(this);
     }
+	
+	override public function dispose() {
+		if (groupImage.numChildren > 0)
+			cast(groupImage.getChildAt(0), Scale9Image).dispose();
+		
+		groupImage.dispose();
+	}
 }

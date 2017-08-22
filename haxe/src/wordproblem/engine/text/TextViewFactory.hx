@@ -6,6 +6,7 @@ import openfl.display.DisplayObject;
 import openfl.errors.Error;
 import openfl.geom.Rectangle;
 import openfl.text.TextFormat;
+import wordproblem.display.Scale9Image;
 
 import wordproblem.display.PivotSprite;
 import wordproblem.engine.constants.Alignment;
@@ -257,12 +258,9 @@ class TextViewFactory
         else 
         {
             var originalBitmapData : BitmapData = m_assetManager.getBitmapData(name);
-            image = new Bitmap(originalBitmapData);
 			
             if (nineSlicePadding != null) 
             {
-                var scale9Object : Dynamic = imageProperties.nineSlice;
-                
                 // Create nine-slice texture and use that as the image
                 // Note nine-slice breaks if the width to change to is less than the width of the original
                 // texture. Same goes for height.
@@ -272,30 +270,27 @@ class TextViewFactory
                 
                 if (targetHeightSmaller) 
                 {
-					// TODO: replaced from Scale3Texture from the feathers library, check the correctness
-					image.scale9Grid = new Rectangle(0,
+					image = new Scale9Image(originalBitmapData, new Rectangle(0,
 						nineSlicePadding[0],
 						originalBitmapData.width,
 						originalBitmapData.height - nineSlicePadding[0] - nineSlicePadding[2]
-					);
+					));
                 }
                 else if (targetWidthSmaller) 
                 {
-					// TODO: replaced from Scale3Texture from the feathers library, check the correctness
-					image.scale9Grid = new Rectangle(nineSlicePadding[3],
+					image = new Scale9Image(originalBitmapData, new Rectangle(nineSlicePadding[3],
 						0,
 						originalBitmapData.width - nineSlicePadding[1] - nineSlicePadding[3],
 						originalBitmapData.height
-					);
+					));
                 }
                 else 
                 {
-					// TODO: replaced from Scale3Texture from the feathers library, check the correctness
-					image.scale9Grid = new Rectangle(nineSlicePadding[0],
+					image = new Scale9Image(originalBitmapData, new Rectangle(nineSlicePadding[0],
 						nineSlicePadding[1],
 						originalBitmapData.width - nineSlicePadding[1] - nineSlicePadding[3],
 						originalBitmapData.height - nineSlicePadding[0] - nineSlicePadding[2]
-					);
+					));
                 }
             }
         }

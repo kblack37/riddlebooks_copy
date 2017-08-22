@@ -7,6 +7,7 @@ import flash.text.TextFormatAlign;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.display.DisplayObject;
+import wordproblem.display.Scale9Image;
 
 import cgs.audio.Audio;
 
@@ -182,8 +183,7 @@ class PlayerCollectionsState extends BaseState
             //categoryToggleButton.iconOffsetX = categoryIconTexture.width * iconScale * 0.6;
             
             // Set a selection skin
-            var defaultSelectedImage : Bitmap = new Bitmap(selectedBitmapData);
-			defaultSelectedImage.scale9Grid = new Rectangle(8, 8, 16, 16);
+            var defaultSelectedImage : Scale9Image = new Scale9Image(selectedBitmapData, new Rectangle(8, 8, 16, 16));
 			defaultSelectedImage.transform.colorTransform.concat(XColor.rgbToColorTransform(XColor.shadeColor(m_buttonColorData.getUpButtonColor(), 1.0)));
             //categoryToggleButton.defaultSelectedSkin = defaultSelectedImage;
             //categoryToggleButton.defaultSelectedLabelProperties = {

@@ -39,7 +39,7 @@ class BaseState extends Layer implements IState
         return this;
     }
     
-    public function dispose() : Void
+    override public function dispose() : Void
     {
 		__eventMap = new Map();
     }

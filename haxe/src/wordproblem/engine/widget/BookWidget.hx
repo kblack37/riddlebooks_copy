@@ -2,6 +2,7 @@ package wordproblem.engine.widget;
 
 
 import dragonbox.common.dispose.IDisposable;
+import wordproblem.display.Scale9Image;
 
 import openfl.display.Sprite;
 
@@ -120,14 +121,11 @@ class BookWidget extends Sprite implements IDisposable
             if (requestedPageIsOdd && !m_firstPageOnLeft || !requestedPageIsOdd && m_firstPageOnLeft) 
             {
                 pageIndex += 1;
-            }  // positive value indicates the number of times to flip right    // A negative value indicates the number of times to flip left and    // Due to the above increment, delta is always a multiple of two.  
-            
-            
-            
-            
-            
-            
-            
+            }  
+			
+			// Due to the above increment, delta is always a multiple of two.  
+			// A negative value indicates the number of times to flip left and 
+            // positive value indicates the number of times to flip right   
             var delta : Int = Std.int((pageIndex - m_currentPageIndexVisibleOnRight) / 2);
             
             // Re-arrange the stacks such that new pages are on top and visible
@@ -209,7 +207,10 @@ class BookWidget extends Sprite implements IDisposable
     {
         while (this.numChildren > 0)
         {
-            this.removeChildAt(0);
+            var child = this.removeChildAt(0);
+			if (Std.is(child, Scale9Image)) {
+				(try cast(child, Scale9Image) catch (e : Dynamic) null).dispose();
+			}
         }
     }
     

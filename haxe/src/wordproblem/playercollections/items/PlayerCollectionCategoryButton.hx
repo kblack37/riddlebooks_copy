@@ -6,6 +6,7 @@ import openfl.display.BitmapData;
 import openfl.geom.Rectangle;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
+import wordproblem.display.Scale9Image;
 
 import dragonbox.common.util.XColor;
 import dragonbox.common.util.XTextField;
@@ -26,8 +27,8 @@ class PlayerCollectionCategoryButton extends Sprite
 
     private var m_categoryInformationObject : Dynamic;
     
-    private var m_normalBackground : Bitmap;
-    private var m_selectedBackground : Bitmap;
+    private var m_normalBackground : Scale9Image;
+    private var m_selectedBackground : Scale9Image;
     
     public function new(categoryInformationObject : Dynamic,
             assetManager : AssetManager,
@@ -41,12 +42,10 @@ class PlayerCollectionCategoryButton extends Sprite
         
 		var scale9Rect = new Rectangle(8, 8, 16, 16);
         var bitmapData : BitmapData = assetManager.getBitmapData("button_white");
-        m_normalBackground = new Bitmap(bitmapData);
-		m_normalBackground.scale9Grid = scale9Rect;
+        m_normalBackground = new Scale9Image(bitmapData, scale9Rect);
 		m_normalBackground.transform.colorTransform.concat(XColor.rgbToColorTransform(upColor));
         
-        m_selectedBackground = new Bitmap(bitmapData);
-		m_selectedBackground.scale9Grid = scale9Rect;
+        m_selectedBackground = new Bitmap(bitmapData, scale9Rect);
 		m_selectedBackground.transform.colorTransform.concat(XColor.rgbToColorTransform(XColor.shadeColor(upColor, 0.3)));
         
         var totalWidth : Float = width;
@@ -94,10 +93,10 @@ class PlayerCollectionCategoryButton extends Sprite
     {
         // Clear out the background textures
 		if (m_normalBackground.parent != null) m_normalBackground.parent.removeChild(m_normalBackground);
-		m_normalBackground.bitmapData.dispose();
+		m_normalBackground.dispose();
 		m_normalBackground = null;
 		if (m_selectedBackground.parent != null) m_selectedBackground.parent.removeChild(m_selectedBackground);
-		m_selectedBackground.bitmapData.dispose();
+		m_selectedBackground.dispose();
 		m_selectedBackground = null;
     }
 }

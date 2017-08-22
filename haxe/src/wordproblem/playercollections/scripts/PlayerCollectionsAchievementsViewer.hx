@@ -164,7 +164,8 @@ class PlayerCollectionsAchievementsViewer extends PlayerCollectionViewer
         var numButtons : Int = m_activeAchievementButtons.length;
         for (i in 0...numButtons){
             var achievementButton : PlayerAchievementButton = m_activeAchievementButtons[i];
-            achievementButton.removeFromParent(true);
+			achievementButton.parent.removeChild(achievementButton);
+			achievementButton.dispose();
         }
         
 		m_activeAchievementButtons = new Array<PlayerAchievementButton>();

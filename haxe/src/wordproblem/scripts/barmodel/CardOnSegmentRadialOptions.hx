@@ -4,6 +4,7 @@ import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.ui.MouseState;
 import dragonbox.common.util.XColor;
+import wordproblem.display.Scale9Image;
 
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
@@ -414,9 +415,20 @@ class CardOnSegmentRadialOptions extends BaseBarModelScript
     private function disposeMenuSegment(segment : DisplayObject,
             mode : String) : Void
     {
-        // Assume the ring texture is the bottom most child
-        var ringImage : Bitmap = try cast((try cast(segment, DisplayObjectContainer) catch(e:Dynamic) null).getChildAt(0), Bitmap) catch(e:Dynamic) null;
-        ringImage.bitmapData.dispose();
+		var segmentAsContainer : DisplayObjectContainer = try cast(segment, DisplayObjectContainer) catch (e : Dynamic) null;
+		
+		if (segmentAsContainer != null) {
+			// Assume the ring texture is the bottom most child
+			var ringImage : Bitmap = try cast(segmentAsContainer.getChildAt(0), Bitmap) catch(e:Dynamic) null;
+			ringImage.bitmapData.dispose();
+			
+			// We need to know if the second child is a display object container; if so, it contains a Scale9Image, which must be disposed
+			var iconAsContainer : DisplayObjectContainer = try cast(segmentAsContainer.getChildAt(1), DisplayObjectContainer) catch (e : Dynamic) null;
+			if (iconAsContainer != null) {
+				// The Scale9Image is the first child, so we dispose it
+				(try cast(iconAsContainer.getChildAt(0), Scale9Image) catch (e : Dynamic) null).dispose();
+			}
+		}
         
         if (mode == "up") 
             { }
@@ -445,11 +457,10 @@ class CardOnSegmentRadialOptions extends BaseBarModelScript
             
             var barBackgroundBitmapData : BitmapData = m_assetManager.getBitmapData("card_background_square");
             var scale9Offset : Float = 8;
-            var barBackground : Bitmap = new Bitmap(barBackgroundBitmapData); 
-			barBackground.scale9Grid = new Rectangle(scale9Offset,
+            var barBackground : Scale9Image = new Scale9Image(barBackgroundBitmapData, new Rectangle(scale9Offset,
 				scale9Offset,
 				barBackgroundBitmapData.width - 2 * scale9Offset,
-				barBackgroundBitmapData.height - 2 * scale9Offset);
+				barBackgroundBitmapData.height - 2 * scale9Offset));
             barBackground.transform.colorTransform.concat(XColor.rgbToColorTransform(symbolData.useCustomBarColor ? symbolData.customBarColor : 0xFFFFFF));
             
             var nameOnBar : String = symbolData.name;
@@ -503,10 +514,9 @@ class CardOnSegmentRadialOptions extends BaseBarModelScript
         {
             var gestureToExecute : ICardOnSegmentScript = m_gestures[optionIndex];
             gestureToExecute.performAction(m_savedDraggedValue, m_savedSelectedSegmentId);
-        }  // Close the menu on click  
-        
-        
-        
+        } 
+		
+		// Close the menu on click  
         m_radialMenuControl.close();
         
         // On close, discard the blink

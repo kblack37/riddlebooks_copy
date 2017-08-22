@@ -1,6 +1,7 @@
 package wordproblem.engine.systems;
 
 import motion.Actuate;
+import wordproblem.display.Scale9Image;
 
 import openfl.display.Bitmap;
 import openfl.display.DisplayObject;
@@ -85,9 +86,10 @@ class ArrowDrawingSystem extends BaseSystemScript
         // If an arrow has not been drawn then add it to the display
         if (arrowComponent.arrowView == null) 
         {
-            var arrowBitmap : Bitmap = new Bitmap(m_assetManager.getBitmapData("arrow_short"));
-			arrowBitmap.scale9Grid = new Rectangle(20, 0, 30, arrowBitmap.height);
+			var arrowBitmapData = m_assetManager.getBitmapData("arrow_short");
+            var arrowBitmap : Scale9Image = new Scale9Image(arrowBitmapData, new Rectangle(20, 0, 30, arrowBitmapData.height));
             var arrowImage : PivotSprite = new PivotSprite();
+			arrowImage.addChild(arrowBitmap);
             
             arrowImage.pivotX = arrowImage.width * 0.5;
             arrowImage.pivotY = arrowImage.height * 0.5;

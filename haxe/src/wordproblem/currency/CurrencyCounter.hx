@@ -46,6 +46,7 @@ class CurrencyCounter extends Sprite
         
         var scale9Padding : Float = 8;
 		var textBackgroundBitmapData : BitmapData = assetManager.getBitmapData("button_white");
+		// TODO: change the bitmaps with scale9Grids to Scale9Images
         var currencyTextBackground : Bitmap = new Bitmap(assetManager.getBitmapData("button_white"));
 		currencyTextBackground.scale9Grid = new Rectangle(
 			scale9Padding, 

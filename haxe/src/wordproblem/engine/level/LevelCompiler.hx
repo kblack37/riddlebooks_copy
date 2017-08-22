@@ -241,7 +241,7 @@ class LevelCompiler
         {
             if (layoutXML.has.name) 
             {
-                layoutData = getLayoutFromName(Std.string(layoutXML.att.name)).clone(vectorSpace);
+                layoutData = getLayoutFromName(layoutXML.att.name).clone(vectorSpace);
             }
             else 
             {
@@ -291,7 +291,7 @@ class LevelCompiler
             for (i in 0...widgetSources.length){
                 if (widgetSources[i].type == "url") 
                 {
-                    imagesToLoad.push(widgetSources[i].name);
+                    outImages.push(widgetSources[i].name);
                 }
             }
             
@@ -667,7 +667,7 @@ class LevelCompiler
      */
     private function getLayoutFromName(layoutName : String) : WidgetAttributesComponent
     {
-        return ((m_predefinedLayoutMap.exists(layoutName))) ? 
+        return m_predefinedLayoutMap.exists(layoutName) ? 
 			m_predefinedLayoutMap.get(layoutName) : m_predefinedLayoutMap.get("default");
     }
 }

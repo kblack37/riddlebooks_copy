@@ -9,6 +9,7 @@ import wordproblem.display.LabelButton;
 import openfl.events.MouseEvent;
 import openfl.filters.GlowFilter;
 import wordproblem.display.PivotSprite;
+import wordproblem.display.Scale9Image;
 import wordproblem.engine.events.DataEvent;
 import wordproblem.engine.widget.ScrollGridWidget;
 
@@ -88,8 +89,7 @@ class EquationInventoryWidget extends Sprite
         var padding : Float = 20;
         var backgroundBitmapData : BitmapData = assetManager.getBitmapData("button_white");
         var backgroundImage : PivotSprite = new PivotSprite();
-		backgroundImage.addChild(new Bitmap(backgroundBitmapData));
-		backgroundImage.scale9Grid = new Rectangle(padding, 0, backgroundBitmapData.width - 2 * padding, backgroundBitmapData.height);
+		backgroundImage.addChild(new Scale9Image(backgroundBitmapData, new Rectangle(padding, 0, backgroundBitmapData.width - 2 * padding, backgroundBitmapData.height)));
 		backgroundImage.transform.colorTransform.concat(XColor.rgbToColorTransform(0xCCCCCC));
         m_backgroundInitialDimensions = new Rectangle(0, 0, backgroundBitmapData.width, backgroundBitmapData.height);
         m_background = backgroundImage;

@@ -7,6 +7,7 @@ import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.events.Event;
 import wordproblem.display.PivotSprite;
+import wordproblem.display.Scale9Image;
 import wordproblem.scripts.expression.BaseTermAreaScript;
 
 import openfl.geom.Point;
@@ -48,7 +49,7 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
     private var m_parenthesisButton : Layer;
     
     // Stuff related to the drawing of the button
-    private var m_buttonBackground : Bitmap;
+    private var m_buttonBackground : Scale9Image;
     
     /**
      * A copy of the left paren to show when the player is dragging an edge
@@ -180,6 +181,7 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
 		if (m_draggedWholeParenthesis.parent != null) m_draggedWholeParenthesis.parent.removeChild(m_draggedWholeParenthesis);
 		m_draggedWholeParenthesis = null;
 		if (m_parenthesisButton.parent != null) m_parenthesisButton.parent.removeChild(m_parenthesisButton);
+		m_parenthesisButton.dispose();
 		m_parenthesisButton = null;
     }
     
@@ -507,8 +509,12 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
         
         var backgroundBitmapData : BitmapData = m_assetManager.getBitmapData("card_background_square");
         var cornerPadding : Float = 8;
-        m_buttonBackground = new Bitmap(backgroundBitmapData);
-        m_buttonBackground.scale9Grid = new Rectangle(cornerPadding, cornerPadding, backgroundBitmapData.width - 2 * cornerPadding, backgroundBitmapData.height - 2 * cornerPadding);
+        m_buttonBackground = new Scale9Image(backgroundBitmapData, new Rectangle(
+			cornerPadding,
+			cornerPadding,
+			backgroundBitmapData.width - 2 * cornerPadding,
+			backgroundBitmapData.height - 2 * cornerPadding
+		));
 		m_buttonBackground.transform.colorTransform.concat(XColor.rgbToColorTransform(m_inactiveColor));
         m_buttonBackground.width = parenthesisButtonWidth;
         m_buttonBackground.height = parenthesisButtonHeight;
@@ -645,12 +651,6 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
                 i--;
             }
         }
-        
-        
-        
-        
-        
-        
         
         return foundWidget;
     }

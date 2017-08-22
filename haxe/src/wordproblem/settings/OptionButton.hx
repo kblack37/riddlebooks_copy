@@ -2,6 +2,7 @@ package wordproblem.settings;
 
 import haxe.Constraints.Function;
 import motion.Actuate;
+import motion.easing.Linear;
 import openfl.display.Bitmap;
 import openfl.events.MouseEvent;
 import wordproblem.display.PivotSprite;
@@ -21,11 +22,8 @@ class OptionButton extends Sprite
 {
     private var m_button : LabelButton;
     private var m_onClickCallback : Function;
-    
-    /**
-     * Animation of the icon on the button spinning on mouse over
-     */
-	private var m_optionsButtonContainer : PivotSprite;
+	
+	private var m_isAnimating : Bool;
     
     public function new(assetManager : AssetManager,
             color : Int,
@@ -39,8 +37,18 @@ class OptionButton extends Sprite
                         assetManager, color, null, null);
         m_button.width = 42;
         m_button.height = 42;
+		m_button.scaleWhenUp = m_button.scaleX;
+		m_button.scaleWhenOver = m_button.scaleX;
+		m_button.scaleWhenDown = m_button.scaleX;
         
         m_button.upState = new Bitmap(assetManager.getBitmapData("gear_yellow_icon"));
+		m_button.overState = m_button.upState;
+		m_button.downState = m_button.upState;
+		
+		m_button.x += m_button.width / 2;
+		m_button.y += m_button.height / 2;
+		m_button.pivotX = m_button.width / 2;
+		m_button.pivotY = m_button.height / 2;
         
         m_button.addEventListener(MouseEvent.CLICK, onButtonClicked);
         m_button.addEventListener(MouseEvent.MOUSE_OVER, onButtonMouseOver);
@@ -69,25 +77,17 @@ class OptionButton extends Sprite
      */
     private function onButtonMouseOver(event : Dynamic) : Void
     {
-        if (m_optionsButtonContainer == null) 
-        {
-			m_optionsButtonContainer = new PivotSprite();
-			m_optionsButtonContainer.addChild(m_button);
-			m_optionsButtonContainer.pivotX = m_button.width / 2;
-			m_optionsButtonContainer.pivotY = m_button.height / 2;
-			
-			Actuate.tween(m_optionsButtonContainer, 2, { rotation: 360 }).repeat();
-			addChild(m_optionsButtonContainer);
-        }
+		if (!m_isAnimating) {
+			Actuate.tween(m_button, 2, { rotation: 360 }).ease(Linear.easeNone).repeat();
+			m_isAnimating = true;
+		}
     }
 	
 	private function onButtonMouseOut(event : Dynamic) {
-		if (m_optionsButtonContainer != null) {
-			Actuate.stop(m_optionsButtonContainer);
-			m_optionsButtonContainer.removeChild(m_button);
-			removeChild(m_optionsButtonContainer);
-			m_optionsButtonContainer.dispose();
-			m_optionsButtonContainer = null;
+		if (m_isAnimating) {
+			Actuate.stop(m_button);
+			m_button.rotation = 0;
+			m_isAnimating = false;
 		}
 	}
 }

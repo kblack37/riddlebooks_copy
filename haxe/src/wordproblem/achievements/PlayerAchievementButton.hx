@@ -1,9 +1,11 @@
 package wordproblem.achievements;
 
+import dragonbox.common.dispose.IDisposable;
 import dragonbox.common.util.XColor;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import wordproblem.achievements.PlayerAchievementGem;
+import wordproblem.display.Scale9Image;
 
 import openfl.geom.Rectangle;
 import openfl.text.TextFormat;
@@ -18,7 +20,7 @@ import wordproblem.resource.AssetManager;
  * A simple achievement container holder a main gem and showing various text descriptors
  * about the achievement
  */
-class PlayerAchievementButton extends Sprite
+class PlayerAchievementButton extends Sprite implements IDisposable
 {
     /**
      * Styling for the title of the achievement in the summary screen
@@ -39,11 +41,10 @@ class PlayerAchievementButton extends Sprite
         
         var scale9Padding : Float = 8;
         var bgBitmapData : BitmapData = assetManager.getBitmapData("button_white");
-        var bgImage : Bitmap = new Bitmap(bgBitmapData);
-		bgImage.scale9Grid = new Rectangle(scale9Padding,
+        var bgImage : Scale9Image = new Scale9Image(bgBitmapData, new Rectangle(scale9Padding,
 				scale9Padding,
 				bgBitmapData.width - scale9Padding * 2,
-				bgBitmapData.height - scale9Padding * 2);
+				bgBitmapData.height - scale9Padding * 2));
         bgImage.width = width;
         bgImage.height = height;
         addChild(bgImage);
@@ -114,4 +115,9 @@ class PlayerAchievementButton extends Sprite
         descriptionText.y = titleText.y + titleText.height;
         addChild(descriptionText);
     }
+	
+	public function dispose() {
+		// The first child is a scale9Image so it must be disposed
+		(try cast(getChildAt(0), Scale9Image) catch (e : Dynamic) null).dispose();
+	}
 }

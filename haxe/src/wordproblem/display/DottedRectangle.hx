@@ -1,6 +1,7 @@
 package wordproblem.display;
 
 
+import dragonbox.common.dispose.IDisposable;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.display.DisplayObject;
@@ -13,12 +14,12 @@ import openfl.display.Sprite;
  * 
  * (used mainly to indicate hit areas for particular parts of the bar modeling ui)
  */
-class DottedRectangle extends Sprite
+class DottedRectangle extends Sprite implements IDisposable
 {
     /**
      * Reference to a scalable version of the background
      */
-    private var m_backgroundNineSliceImage : Bitmap;
+    private var m_backgroundNineSliceImage : Scale9Image;
     
     /**
      * Reference to background texture that has no nine slice
@@ -51,7 +52,7 @@ class DottedRectangle extends Sprite
      *      An extra number to scale up and down the corner and dots (default should be 1.0)
      */
     public function new(backgroundRegularBitmapData : BitmapData,
-            textureScalingGrid : Rectangle,
+            BitmapScalingGrid : Rectangle,
             dotScaleFactor : Float,
             cornerBitmapData : BitmapData,
             lineBitmapData : BitmapData)
@@ -67,10 +68,9 @@ class DottedRectangle extends Sprite
         {
             m_backgroundRegularImage = new Bitmap(backgroundRegularBitmapData);
             
-            if (textureScalingGrid != null) 
+            if (BitmapScalingGrid != null) 
             {
-                m_backgroundNineSliceImage = new Bitmap(backgroundRegularBitmapData);
-				m_backgroundNineSliceImage.scale9Grid = textureScalingGrid;
+                m_backgroundNineSliceImage = new Scale9Image(backgroundRegularBitmapData, BitmapScalingGrid);
             }
         }
     }
@@ -97,10 +97,11 @@ class DottedRectangle extends Sprite
 			if (m_backgroundRegularImage.parent != null) m_backgroundRegularImage.parent.removeChild(m_backgroundRegularImage);
         }  
 		
-		// Check which background should be used  
+		// Check which background should be used
+		var scale9Rect = m_backgroundNineSliceImage.getScale9Rect();
         if (m_backgroundNineSliceImage != null &&
-			m_backgroundNineSliceImage.scale9Grid.width * 2 <= width &&
-			m_backgroundNineSliceImage.scale9Grid.height * 2 <= height)
+			scale9Rect.width * 2 <= width && 
+			scale9Rect.height * 2 <= height)
         {
             m_backgroundNineSliceImage.width = width;
             m_backgroundNineSliceImage.height = height;
@@ -219,4 +220,8 @@ class DottedRectangle extends Sprite
             
         }
     }
+	
+	public function dispose() {
+		m_backgroundNineSliceImage.dispose();
+	}
 }

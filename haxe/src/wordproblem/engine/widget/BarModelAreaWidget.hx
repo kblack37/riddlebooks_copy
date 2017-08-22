@@ -2,6 +2,7 @@ package wordproblem.engine.widget;
 
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
+import wordproblem.display.Scale9Image;
 import wordproblem.engine.widget.IBaseWidget;
 
 import openfl.geom.Rectangle;
@@ -71,13 +72,12 @@ class BarModelAreaWidget extends BarModelView implements IBaseWidget
         var horizontalPadding : Float = 20;
         var verticalPadding : Float = 30;
         var backgroundImageBitmapData : BitmapData = assetManager.getBitmapData("term_area_left");
-        var bgImage : Bitmap = new Bitmap(backgroundImageBitmapData);
-		bgImage.scale9Grid = new Rectangle(
+        var bgImage : Scale9Image = new Scale9Image(backgroundImageBitmapData, new Rectangle(
 			horizontalPadding,
 			verticalPadding, 
 			backgroundImageBitmapData.width - 2 * horizontalPadding,
 			backgroundImageBitmapData.height - 2 * verticalPadding
-        );
+        ));
         m_background = bgImage;
     }
     

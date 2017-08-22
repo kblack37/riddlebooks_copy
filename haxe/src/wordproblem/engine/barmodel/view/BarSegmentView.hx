@@ -13,6 +13,7 @@ import openfl.display.Sprite;
 import wordproblem.engine.barmodel.model.BarSegment;
 import wordproblem.engine.component.RigidBodyComponent;
 import wordproblem.display.DottedRectangle;
+import wordproblem.display.Scale9Image;
 
 /**
  * The most basic unit for drawing a segment
@@ -26,11 +27,9 @@ class BarSegmentView extends Sprite implements IDisposable
      */
     public var rigidBody : RigidBodyComponent;
     
-	// TODO: these were scaled image classes from the feathers library and
-	// will probably have to be fixed
-    private var m_nineSliceImage : Bitmap;
-    private var m_threeSliceHorizontalImage : Bitmap;
-    private var m_threeSliceVerticalImage : Bitmap;
+    private var m_nineSliceImage : Scale9Image;
+    private var m_threeSliceHorizontalImage : Scale9Image;
+    private var m_threeSliceVerticalImage : Scale9Image;
     private var m_originalImage : Bitmap;
     
     /**
@@ -52,7 +51,6 @@ class BarSegmentView extends Sprite implements IDisposable
         // However this fails if one of the dimensions is LESS than the padding we start the slice from
         // (i.e. if non-scaling parts exceeds the desired width)
         // In this instance we need to fall back to drawing the unsliced image
-        m_nineSliceImage = new Bitmap(segmentBitmapData);
 		var nineSlicePadding : Float = 8;
 		var nineSliceGrid : Rectangle = new Rectangle(
 			nineSlicePadding, 
@@ -60,23 +58,22 @@ class BarSegmentView extends Sprite implements IDisposable
 			segmentBitmapData.width - 2 * nineSlicePadding, 
 			segmentBitmapData.height - 2 * nineSlicePadding
 		);
-		m_nineSliceImage.scale9Grid = nineSliceGrid;
 		
-        m_threeSliceHorizontalImage = new Bitmap(segmentBitmapData);
-		m_threeSliceHorizontalImage.scale9Grid = new Rectangle(
+        m_nineSliceImage = new Scale9Image(segmentBitmapData, nineSliceGrid);
+		
+        m_threeSliceHorizontalImage = new Scale9Image(segmentBitmapData, new Rectangle(
 			nineSliceGrid.left,
 			0,
-			nineSliceGrid.right,
+			nineSliceGrid.width,
 			segmentBitmapData.height
-		);
+		));
 		
-        m_threeSliceVerticalImage = new Bitmap(segmentBitmapData);
-		m_threeSliceVerticalImage.scale9Grid = new Rectangle(
+        m_threeSliceVerticalImage = new Scale9Image(segmentBitmapData, new Rectangle(
 			0,
 			nineSliceGrid.top,
 			segmentBitmapData.width,
-			nineSliceGrid.bottom
-		);
+			nineSliceGrid.height
+		));
 		
         m_originalImage = new Bitmap(segmentBitmapData);
         
@@ -139,5 +136,10 @@ class BarSegmentView extends Sprite implements IDisposable
     public function dispose() : Void
     {
         this.removeChildren();
+		m_nineSliceImage.dispose();
+		m_threeSliceHorizontalImage.dispose();
+		m_threeSliceVerticalImage.dispose();
+		
+		if (m_hiddenImage != null) m_hiddenImage.dispose();
     }
 }

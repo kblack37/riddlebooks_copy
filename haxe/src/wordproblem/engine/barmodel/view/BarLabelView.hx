@@ -512,6 +512,7 @@ class BarLabelView extends ResizeableBarPieceView
 					fontSize, 
 					m_measuringTextfield.defaultTextFormat.color
                 ));
+				descriptionTextField.selectable = false;
                 m_descriptionTextfield = descriptionTextField;
                 m_descriptionTextfield.x = (boundingWidth - m_descriptionTextfield.width) * 0.5;
                 m_descriptionTextfield.y = (boundingHeight - m_descriptionTextfield.height) * 0.5;
@@ -653,4 +654,9 @@ class BarLabelView extends ResizeableBarPieceView
 		buttonImage.transform.colorTransform.concat(XColor.rgbToColorTransform(0xFFFFFF));
         return buttonImage;
     }
+	
+	override public function dispose() {
+		if (m_hiddenImage != null) m_hiddenImage.dispose();
+		if (m_bracketContainer != null) m_bracketContainer.dispose();
+	}
 }

@@ -96,7 +96,6 @@ class MouseState implements IDisposable
     }
 	
 	private function onMouseDown(event : Dynamic) {
-		trace(mousePositionThisFrame.x + ", " + mousePositionThisFrame.y);
 		this.leftMousePressedThisFrame = true;
 		this.leftMouseDown = true;
 	}

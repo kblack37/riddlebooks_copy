@@ -6,6 +6,7 @@ import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.events.Event;
 import openfl.geom.Rectangle;
+import wordproblem.display.Scale9Image;
 import wordproblem.engine.events.DataEvent;
 
 import wordproblem.engine.animation.CardShiftAnimation;
@@ -87,7 +88,7 @@ class TermAreaWidget extends ExpressionTreeWidget implements IBaseWidget
      * Use a scale9 image to prevent background distortion when resizing the term
      * areas
      */
-    private var m_bgImage : Bitmap;
+    private var m_bgImage : Scale9Image;
     
     public function new(tree : ExpressionTree,
             expressionSymbolResources : ExpressionSymbolMap,
@@ -106,8 +107,7 @@ class TermAreaWidget extends ExpressionTreeWidget implements IBaseWidget
         var imageCenterY : Float = 20;
         var imageCenterWidth : Float = backgroundBitmapData.width - imageCenterX * 2;
         var imageCenterHeight : Float = backgroundBitmapData.height - imageCenterY * 2;
-        var bgImage : Bitmap = new Bitmap(backgroundBitmapData);
-		bgImage.scale9Grid = new Rectangle(imageCenterX, imageCenterY, imageCenterWidth, imageCenterHeight);
+        var bgImage : Scale9Image = new Scale9Image(backgroundBitmapData, new Rectangle(imageCenterX, imageCenterY, imageCenterWidth, imageCenterHeight));
         m_bgImage = bgImage;
         
         super(tree, expressionSymbolResources, assetManager, constraintWidth, constraintHeight, allowConstraintPadding);
@@ -137,6 +137,7 @@ class TermAreaWidget extends ExpressionTreeWidget implements IBaseWidget
         super.dispose();
         
         m_componentManager.clear();
+		m_bgImage.dispose();
     }
     
     /**

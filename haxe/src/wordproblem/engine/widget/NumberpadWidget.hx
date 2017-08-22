@@ -201,7 +201,7 @@ class NumberpadWidget extends Layer
         return value;
     }
     
-    public function dispose() : Void
+    override public function dispose() : Void
     {
         var numButtons : Int = m_buttons.length;
         var i : Int = 0;

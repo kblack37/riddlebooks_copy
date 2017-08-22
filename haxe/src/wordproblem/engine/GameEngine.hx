@@ -7,6 +7,7 @@ import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.math.vectorspace.RealsVectorSpace;
 import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
+import wordproblem.display.Scale9Image;
 
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
@@ -293,7 +294,7 @@ class GameEngine extends Sprite implements IGameEngine
     public function getUiEntity(entityId : String) : DisplayObject
     {
         var component : Component = m_uiComponentManager.getComponentFromEntityIdAndType(entityId, RenderableComponent.TYPE_ID);
-        return ((component != null)) ? (try cast(component, RenderableComponent) catch(e:Dynamic) null).view : null;
+        return component != null ? (try cast(component, RenderableComponent) catch(e:Dynamic) null).view : null;
     }
     
     public function getUiEntitiesByClass(classDefinition : Class<Dynamic>,
@@ -1041,8 +1042,7 @@ class GameEngine extends Sprite implements IGameEngine
                 if (bitmapData != null) 
                 {
                     var imagePadding : Float = 10;
-                    var scaledImage : Bitmap = new Bitmap(bitmapData);
-					scaledImage.scale9Grid = new Rectangle(0, imagePadding, bitmapData.width, bitmapData.height - imagePadding * 2);
+                    var scaledImage : Scale9Image = new Scale9Image(bitmapData, new Rectangle(0, imagePadding, bitmapData.width, bitmapData.height - imagePadding * 2));
                     groupWidget.addChild(scaledImage);
                 }
                 
@@ -1105,10 +1105,10 @@ class GameEngine extends Sprite implements IGameEngine
                         numberResources,
                         resourceList,
                         extraData.label,
-                        ((extraData.label != null)) ? new TextFormat(extraData.fontName, extraData.fontSize, extraData.fontColor) : null,
+                        extraData.label != null ? new TextFormat(extraData.fontName, extraData.fontSize, extraData.fontColor) : null,
                         nineSlice
                 );
-                
+				
                 widget = button;
             }
             else if (widgetType == "equationToText") 
@@ -1144,8 +1144,6 @@ class GameEngine extends Sprite implements IGameEngine
                         );
             }
             
-            
-            
             var uiRenderComponent : RenderableComponent = new RenderableComponent(widgetAttributeRoot.entityId);
             uiRenderComponent.view = widget;
             m_uiComponentManager.addComponentToEntity(uiRenderComponent);
@@ -1175,14 +1173,14 @@ class GameEngine extends Sprite implements IGameEngine
             nineSlice : Rectangle) : LabelButton
     {
         var buttonImageNormal : String = ((numberResources > 0)) ? 
-        resourceList[0].name : null;
-        var buttonImageClick : String = ((numberResources > 1)) ? 
-        resourceList[1].name : null;
+			resourceList[0].name : null;
+		var buttonImageClick : String = ((numberResources > 1)) ? 
+			resourceList[1].name : null;
         var buttonImageOver : String = ((numberResources > 2)) ? 
-        resourceList[2].name : null;
+			resourceList[2].name : null;
         var buttonImageInactive : String = ((numberResources > 3)) ? 
-        resourceList[3].name : null;
-        
+			resourceList[3].name : null;
+		
         var button : LabelButton = WidgetUtil.createButton(
                 m_assetManager,
                 buttonImageNormal,

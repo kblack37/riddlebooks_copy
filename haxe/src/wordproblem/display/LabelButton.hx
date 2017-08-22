@@ -1,7 +1,6 @@
 package wordproblem.display;
 
 import dragonbox.common.dispose.IDisposable;
-import openfl.display.SimpleButton;
 
 import openfl.display.DisplayObject;
 import openfl.events.MouseEvent;
@@ -23,18 +22,28 @@ class LabelButton extends PivotSprite implements IDisposable {
 	public var textFormatHover(get, set) : TextFormat;
 	
 	/**
-	 * Properties to interface directly with the backing button
+	 * Properties for the button icon
 	 */
 	public var upState(get, set) : DisplayObject;
 	public var overState(get, set) : DisplayObject;
 	public var downState(get, set) : DisplayObject;
-	public var hitTestState(get, set) : DisplayObject;
+	public var disabledState(get, set) : DisplayObject;
 	public var enabled(get, set) : Bool;
 	public var scaleWhenUp(get, set) : Float;
 	public var scaleWhenOver(get, set) : Float;
 	public var scaleWhenDown(get, set) : Float;
 	
-	private var m_backingButton : SimpleButton;
+	private var m_currentState : DisplayObject;
+	private var m_upState : DisplayObject;
+	private var m_overState : DisplayObject;
+	private var m_downState : DisplayObject;
+	private var m_disabledState : DisplayObject;
+	
+	/**
+	 * Whether the button receives events & displays the disabled state
+	 */
+	private var m_enabled : Bool = true;
+	
 	private var m_backingTextField : TextField;
 	
 	/**
@@ -50,46 +59,71 @@ class LabelButton extends PivotSprite implements IDisposable {
 	private var overScale : Float = 1.0;
 	private var downScale : Float = 1.0;
 	
-	public function new(upState:DisplayObject = null, overState:DisplayObject = null, downState:DisplayObject = null, hitTestState:DisplayObject = null) {
+	public function new(upState:DisplayObject, overState:DisplayObject = null, downState:DisplayObject = null, disabledState:DisplayObject = null) {
+		if (upState == null) throw "Null default button state";
+		
 		super();
 		
-		m_backingButton = new SimpleButton(upState, overState, downState, hitTestState);
-		addChild(m_backingButton);
+		this.mouseChildren = false;
+		this.buttonMode = true;
+		
+		m_upState = upState;
+		m_overState = overState != null ? overState : upState;
+		m_downState = downState != null ? downState : upState;
+		m_disabledState = disabledState != null ? disabledState : upState;
+		
+		m_currentState = m_upState;
+		addChild(m_currentState);
 		
 		m_backingTextField = new TextField();
+		m_backingTextField.width = this.width;
+		m_backingTextField.height = this.height;
+		m_backingTextField.text = "";
 		m_backingTextField.wordWrap = true;
-		m_backingTextField.mouseEnabled = false;
 		m_defaultTextFormat = m_backingTextField.getTextFormat(); // Make sure this is never null even if it's not set
 		addChild(m_backingTextField);
 		
-		addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
-		addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
-		addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
+		addListeners();
 	}
 	
 	override public function dispose() {
-		super.dispose();
+		removeListeners();
 		
-		removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
-		removeEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
-		removeEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
+		removeChild(m_currentState);
+		removeChild(m_backingTextField);
 		
-		m_backingButton = null;
+		m_currentState = null;
 		m_backingTextField = null;
+		
+		m_upState = null;
+		m_overState = null;
+		m_downState = null;
+		m_disabledState = null;
+		
+		while (numChildren > 0) {
+			var child = removeChildAt(0);
+			if (Std.is(child, IDisposable)) {
+				(try cast(child, IDisposable) catch (e : Dynamic) null).dispose();
+			}
+		}
+	}
+	
+	private function onMouseUp(event : Dynamic) {
+		changeStateTo(m_upState);
+		
+		scaleX = scaleY = upScale;
 	}
 	
 	private function onMouseDown(event : Dynamic) {
-		var mouseEvent = cast(event, MouseEvent);
-		if (this.hitTestPoint(mouseEvent.stageX, mouseEvent.stageY)) {
-			this.scaleX = this.scaleY = downScale;
-		}
+		changeStateTo(m_downState);
+		
+		scaleX = scaleY = downScale;
 	}
 	
 	private function onMouseOver(event : Dynamic) {
-		var mouseEvent = cast(event, MouseEvent);
-		if (!mouseEvent.buttonDown) {
-			this.scaleX = this.scaleY = overScale;
-		}
+		changeStateTo(m_overState);
+		
+		scaleX = scaleY = overScale;
 		
 		if (m_hoverTextFormat != null) {
 			m_backingTextField.setTextFormat(m_hoverTextFormat);
@@ -97,8 +131,31 @@ class LabelButton extends PivotSprite implements IDisposable {
 	}
 	
 	private function onMouseOut(event : Dynamic) {
-		this.scaleX = this.scaleY = upScale;
+		changeStateTo(m_upState);
+		
+		scaleX = scaleY = upScale;
+		
 		m_backingTextField.setTextFormat(m_defaultTextFormat);
+	}
+	
+	private function changeStateTo(newState : DisplayObject) {
+		removeChild(m_currentState);
+		m_currentState = newState;
+		addChildAt(m_currentState, 0);
+	}
+	
+	private function addListeners() {
+		addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+		addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+		addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
+		addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
+	}
+	
+	private function removeListeners() {
+		removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+		removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+		removeEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
+		removeEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
 	}
 	
 	/**** Text Field Properties ****/
@@ -130,43 +187,59 @@ class LabelButton extends PivotSprite implements IDisposable {
 	
 	/**** Button Properties ****/
 	function set_upState(upState : DisplayObject) : DisplayObject {
-		return m_backingButton.upState = upState;
+		if (m_currentState == m_upState) changeStateTo(upState);
+		if (m_downState == null) m_downState = upState;
+		if (m_overState == null) m_overState = upState;
+		if (m_disabledState == null) m_disabledState = upState;
+		return m_upState = upState;
 	}
 	
 	function get_upState() : DisplayObject {
-		return m_backingButton.upState;
+		return m_upState;
 	}
 	
 	function set_downState(downState : DisplayObject) : DisplayObject {
-		return m_backingButton.downState = downState;
+		if (m_currentState == m_downState) changeStateTo(downState);
+		return m_downState = downState;
 	}
 	
 	function get_downState() : DisplayObject {
-		return m_backingButton.downState;
+		return m_downState;
 	}
 	
 	function set_overState(overState : DisplayObject) : DisplayObject {
-		return m_backingButton.overState = overState;
+		if (m_currentState == m_overState) changeStateTo(overState);
+		return m_overState = overState;
 	}
 	
 	function get_overState() : DisplayObject {
-		return m_backingButton.overState;
+		return m_overState;
 	}
 	
-	function set_hitTestState(hitTestState : DisplayObject) : DisplayObject {
-		return m_backingButton.hitTestState = hitTestState;
+	function set_disabledState(disabledState : DisplayObject) : DisplayObject {
+		if (m_currentState == m_disabledState) changeStateTo(disabledState);
+		return m_disabledState = disabledState;
 	}
 	
-	function get_hitTestState() : DisplayObject {
-		return m_backingButton.hitTestState;
+	function get_disabledState() : DisplayObject {
+		return m_disabledState;
 	}
 	
 	function set_enabled(value : Bool) : Bool {
-		return m_backingButton.enabled = value;
+		if (value) {
+			addListeners();
+			this.buttonMode = true;
+			m_currentState = m_upState;
+		} else {
+			removeListeners();
+			this.buttonMode = false;
+			m_currentState = m_disabledState;
+		}
+		return m_enabled = value;
 	}
 	
 	function get_enabled() : Bool {
-		return m_backingButton.enabled;
+		return m_enabled;
 	}
 	
 	function set_scaleWhenUp(value : Float) : Float {
