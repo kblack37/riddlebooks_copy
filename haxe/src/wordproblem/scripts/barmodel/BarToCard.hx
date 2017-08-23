@@ -225,7 +225,7 @@ class BarToCard extends BaseBarModelScript
     {
 		if (m_barElementCopy != null) {
 			Actuate.stop(m_barElementCopy);
-			if (m_barElementCopy.parent != null) m_barElementCopy.parent.removeChild(m_barElementCopy);
+			if (m_barElementCopy != null && m_barElementCopy.parent != null) m_barElementCopy.parent.removeChild(m_barElementCopy);
 		}
     }
     
@@ -426,10 +426,12 @@ class BarToCard extends BaseBarModelScript
     {
 		Actuate.stop(m_barElementCopy);
 		
-		if (m_barElementCopy.parent != null) m_barElementCopy.parent.removeChild(m_barElementCopy);
-        // The dragged copy can be destroyed along with the custom texture
-        m_barElementCopy.dispose();
-        m_barElementCopy = null;
+		if (m_barElementCopy != null && m_barElementCopy.parent != null) {
+			m_barElementCopy.parent.removeChild(m_barElementCopy);
+			// The dragged copy can be destroyed along with the custom texture
+			m_barElementCopy.dispose();
+			m_barElementCopy = null;
+		}
         m_termValueSelected = null;
     }
     

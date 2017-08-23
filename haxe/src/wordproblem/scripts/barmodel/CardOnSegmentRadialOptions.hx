@@ -419,7 +419,7 @@ class CardOnSegmentRadialOptions extends BaseBarModelScript
 		
 		if (segmentAsContainer != null) {
 			// Assume the ring texture is the bottom most child
-			var ringImage : Bitmap = try cast(segmentAsContainer.getChildAt(0), Bitmap) catch(e:Dynamic) null;
+			var ringImage : Bitmap = try cast((try cast(segmentAsContainer.getChildAt(0), DisplayObjectContainer) catch(e:Dynamic) null).getChildAt(0), Bitmap) catch (e : Dynamic) null;
 			ringImage.bitmapData.dispose();
 			
 			// We need to know if the second child is a display object container; if so, it contains a Scale9Image, which must be disposed
@@ -518,7 +518,6 @@ class CardOnSegmentRadialOptions extends BaseBarModelScript
 		
 		// Close the menu on click  
         m_radialMenuControl.close();
-        
         // On close, discard the blink
         m_barModelArea.componentManager.removeComponentFromEntity(m_savedSelectedSegmentId, BlinkComponent.TYPE_ID);
         

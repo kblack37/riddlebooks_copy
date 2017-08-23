@@ -210,8 +210,6 @@ class RadialMenuControl implements IDisposable
                     }
                 }
                 
-                
-                
                 if (m_separatingAngles.length >= 2) 
                 {
                     var i : Int = 0;
@@ -367,7 +365,7 @@ class RadialMenuControl implements IDisposable
                 {
                     
                     // Dispose of the resources
-                    containerToDispose.removeChildren(0, -1);
+                    containerToDispose.removeChildren();
                     if (containerToDispose.parent != null) containerToDispose.parent.removeChild(containerToDispose);
                     
                     // Need to properly dispose of all the elements in each list

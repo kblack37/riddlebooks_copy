@@ -220,7 +220,6 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
                     if (numValidGestures > 0) 
                     {
                         status = ScriptStatus.SUCCESS;
-                        
                         // Remember the bar segment hovered on this frame so we can remove it if needed on
                         // later frames.
                         if (targetBarWhole.id != m_hoveredBarIdOnLastFrame) 
@@ -274,18 +273,13 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
                 // pick an option. This might result in a conflict.
                 status = ScriptStatus.SUCCESS;
             }
-        }  // an action in this script, two changes are applied to the model instead of one    // For example the add vertical label hit area may overlap and on a release it gets executed along with    // The case where this is a problem is when another gesture has a hit area overlapping with this one.    // circuit other scripts that might try to act on that event as well.    // HACK: On a buffered event that causes a change to the bar model we return success to short  
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        }  
+		
+		// HACK: On a buffered event that causes a change to the bar model we return success to short  
+		// circuit other scripts that might try to act on that event as well.  
+		// The case where this is a problem is when another gesture has a hit area overlapping with this one.  
+		// For example the add vertical label hit area may overlap and on a release it gets executed along with 
+        // an action in this script, two changes are applied to the model instead of one
         if (m_bufferedEventOnFrameCausedChange) 
         {
             status = ScriptStatus.SUCCESS;
@@ -762,7 +756,7 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
             mode : String) : Void
     {
         // Assume the ring texture is the bottom most child
-        var ringImage : Bitmap = try cast((try cast(segment, DisplayObjectContainer) catch(e:Dynamic) null).getChildAt(0), Bitmap) catch(e:Dynamic) null;
+		var ringImage : Bitmap = try cast((try cast((try cast(segment, DisplayObjectContainer) catch (e : Dynamic) null).getChildAt(0), DisplayObjectContainer) catch (e : Dynamic) null).getChildAt(0), Bitmap) catch (e : Dynamic) null;
         ringImage.bitmapData.dispose();
         
         if (mode == "up") 
@@ -835,7 +829,7 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
 		
 		// Close the menu on click  
         m_radialMenuControl.close();
-        
+		
         // If radial menu is closed and the mouse is not currently over a hit area, make sure the
         // hit area preview is not visible
         hideMouseOverHitAreaPreview();

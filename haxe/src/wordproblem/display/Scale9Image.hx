@@ -2,6 +2,7 @@ package wordproblem.display;
 
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
+import openfl.display.DisplayObject;
 import openfl.display.Sprite;
 import openfl.geom.Point;
 import openfl.geom.Rectangle;
@@ -12,12 +13,6 @@ import openfl.geom.Rectangle;
  */
 class Scale9Image extends DisposableSprite {
 
-	/**
-	 * The scale9Rect passed in the constructor. Used to set properties of the
-	 * scale9Rect used for positioning
-	 */
-	private var m_originalScale9Rect : Rectangle;
-	
 	private var m_scale9Rect : Rectangle;
 	
 	/**
@@ -26,6 +21,9 @@ class Scale9Image extends DisposableSprite {
 	 */
 	private var m_originalWidth : Float;
 	private var m_originalHeight : Float;
+	
+	private var m_height : Float;
+	private var m_width : Float;
 	
 	private var m_center : Bitmap;
 	
@@ -49,13 +47,11 @@ class Scale9Image extends DisposableSprite {
 	public function new(bitmapData : BitmapData, scale9Rect : Rectangle) {
 		super();
 		
-		m_originalScale9Rect = new Rectangle();
-		m_originalScale9Rect.copyFrom(scale9Rect);
 		m_scale9Rect = new Rectangle();
 		m_scale9Rect.copyFrom(scale9Rect);
 		
-		m_originalWidth = bitmapData.width;
-		m_originalHeight = bitmapData.height;
+		m_width = m_originalWidth = bitmapData.width;
+		m_height = m_originalHeight = bitmapData.height;
 		
 		// We're always copying pixels into the origin of the new bitmap data
 		var origin = new Point(0, 0);
@@ -126,7 +122,49 @@ class Scale9Image extends DisposableSprite {
 			addChild(m_bottom);
 		}
 		
-		layoutImages();
+		applyScale9();
+	}
+	
+	/**
+	 * Adjusts both the size & position of the contained elements
+	 */
+	private function applyScale9() {
+		var horizAddFactor = m_originalWidth - m_scale9Rect.width;
+		var vertAddFactor = m_originalHeight - m_scale9Rect.height;
+		var horizMultFactor = m_width / m_originalWidth;
+		var vertMultFactor = m_height / m_originalHeight;
+		
+		m_center.x = m_scale9Rect.left;
+		m_center.y = m_scale9Rect.top;
+		m_center.width = m_width - horizAddFactor;
+		m_center.height = m_height - vertAddFactor;
+		
+		if (m_scale3Mode == null) {
+			m_topRight.x = m_scale9Rect.left + m_center.width;
+			
+			m_bottomLeft.y = m_scale9Rect.top + m_center.height;
+			
+			m_bottomRight.x = m_topRight.x;
+			m_bottomRight.y = m_bottomLeft.y;
+		}
+		
+		if (m_scale3Mode == null || m_scale3Mode == "horizontal") {
+			m_left.y = m_scale9Rect.top;
+			m_left.height = m_center.height;
+			
+			m_right.x = m_scale9Rect.left + m_center.width;
+			m_right.y = m_left.y;
+			m_right.height = m_left.height;
+		}
+		
+		if (m_scale3Mode == null || m_scale3Mode == "vertical") {
+			m_top.x = m_scale9Rect.left;
+			m_top.width = m_center.width;
+			
+			m_bottom.x = m_top.x;
+			m_bottom.y = m_scale9Rect.top + m_center.height;
+			m_bottom.width = m_top.width;
+		}
 	}
 	
 	override public function dispose() {
@@ -175,102 +213,27 @@ class Scale9Image extends DisposableSprite {
 		return returnRect;
 	}
 	
-	private function layoutImages() {
-		m_center.x = m_scale9Rect.left;
-		m_center.y = m_scale9Rect.top;
-		
-		if (m_scale3Mode == null) layoutCorners();
-		if (m_scale3Mode == null || m_scale3Mode == "horizontal") layoutHorizontal();
-		if (m_scale3Mode == null || m_scale3Mode == "vertical") layoutVertical();
-	}
-	
-	private function layoutCorners() {
-		var right = m_scale9Rect.right;
-		var bottom = m_scale9Rect.bottom;
-		
-		m_topLeft.x = 0;
-		m_topLeft.y = 0;
-		
-		m_topRight.x = right;
-		m_topRight.y = 0;
-		
-		m_bottomLeft.x = 0;
-		m_bottomLeft.y = bottom;
-		
-		m_bottomRight.x = right;
-		m_bottomRight.y = bottom;
-	}
-	
-	private function layoutHorizontal() {
-		var top = m_scale9Rect.top;
-		var right = m_scale9Rect.right;
-		
-		m_left.x = 0;
-		m_left.y = top;
-		
-		m_right.x = right;
-		m_right.y = top;
-	}
-	
-	private function layoutVertical() {
-		var left = m_scale9Rect.left;
-		var bottom = m_scale9Rect.bottom;
-		
-		m_top.x = left;
-		m_top.y = 0;
-		
-		m_bottom.x = left;
-		m_bottom.y = bottom;
-	}
-	
-	// When the x scaling is changed, we only want to change the center, top, & bottom
-	override function set_scaleX(scaleX : Float) : Float {
-		if (m_scale3Mode == null || m_scale3Mode == "vertical") {
-			m_top.scaleX = scaleX;
-			m_bottom.scaleX = scaleX;
-		}
-		m_center.scaleX = scaleX;
-		m_scale9Rect.width = m_originalScale9Rect.width * scaleX;
-		layoutImages();
-		return scaleX;
-	}
-	
-	override function get_scaleX() : Float {
-		return m_center.scaleX;
-	}
-	
-	// When the y scaling is changed, we only want to change the center, left, & right
-	override function set_scaleY(scaleY : Float) : Float {
-		if (m_scale3Mode == null || m_scale3Mode == "horizontal") {
-			m_left.scaleY = scaleY;
-			m_right.scaleY = scaleY;
-		}
-		m_center.scaleY = scaleY;
-		m_scale9Rect.height = m_originalScale9Rect.height * scaleY;
-		layoutImages();
-		return scaleY;
-	}
-	
-	override function get_scaleY() : Float {
-		return m_center.scaleY;
-	}
-	
 	override function set_width(width : Float) : Float {
-		this.scaleX = (width / m_originalWidth);
-		return width;
+		if (m_width != width) {
+			m_width = width;
+			applyScale9();
+		}
+		return m_width;
 	}
 	
 	override function get_width() : Float {
-		return m_originalWidth * m_center.scaleX;
+		return m_width;
 	}
 	
 	override function set_height(height : Float) : Float {
-		this.scaleY = (height / m_originalHeight);
-		return height;
+		if (m_height != height) {
+			m_height = height;
+			applyScale9();
+		}
+		return m_height;
 	}
 	
 	override function get_height() : Float {
-		return m_originalHeight * m_center.scaleY;
+		return m_height;
 	}
-	
 }

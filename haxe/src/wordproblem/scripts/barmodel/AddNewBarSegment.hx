@@ -285,10 +285,9 @@ class AddNewBarSegment extends BaseBarModelScript implements IHitAreaScript impl
                 hitAreaY = lastSegmentViewBounds.top - (maxHeight - lastSegmentViewBounds.height) * 0.5;
                 hitAreaWidth = rightOffsetXFromAnchor + xInsetIntoSegment;
                 hitAreaHeight = maxHeight;
-            }  // Grab a rectangle from the pool  
-            
-            
-            
+            }
+			
+			// Grab a rectangle from the pool  
             var segmentHitArea : Rectangle = ((m_hitAreaPool.length > 0)) ? m_hitAreaPool.pop() : new Rectangle();
             segmentHitArea.setTo(hitAreaX, hitAreaY, hitAreaWidth, hitAreaHeight);
             m_addNewBarSegmentHitAreas.push(segmentHitArea);
@@ -333,18 +332,13 @@ class AddNewBarSegment extends BaseBarModelScript implements IHitAreaScript impl
             var newBarSegmentIndex : Int = targetBarWhole.barSegments.length - 1;
             var newBarLabel : BarLabel = new BarLabel(labelOnTop, newBarSegmentIndex, newBarSegmentIndex, true, false, BarLabel.BRACKET_NONE, null);
             targetBarWhole.barLabels.push(newBarLabel);
-        }  // is always attached to the shorter bar.    // If this is detected than the comparison must be removed because we are under the assumption the comparison    // To do this we check if the value of the target bar exceed the value of the other one    // it must be deleted OR comparison no longer is attached to a single bar    // If the addition of the new segment causes the comparison to no longer be correct,  
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        }  
+		
+		// If the addition of the new segment causes the comparison to no longer be correct,  
+		// it must be deleted OR comparison no longer is attached to a single bar
+		// To do this we check if the value of the target bar exceed the value of the other one 
+		// If this is detected than the comparison must be removed because we are under the assumption the comparison 
+        // is always attached to the shorter bar.  
         if (targetBarWhole.barComparison != null) 
         {
             var barComparison : BarComparison = targetBarWhole.barComparison;
@@ -396,10 +390,9 @@ class AddNewBarSegment extends BaseBarModelScript implements IHitAreaScript impl
                 if (m_gameEngine.getCurrentLevel().getLevelRules().autoResizeHorizontalBrackets) 
                 {
                     BarModelDataUtil.stretchHorizontalBrackets(m_barModelArea.getBarModelData());
-                }  // Redraw at the end to refresh  
-                
-                
-                
+                } 
+				
+				// Redraw at the end to refresh  
                 m_barModelArea.redraw();
                 
                 // Log action

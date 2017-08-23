@@ -112,10 +112,9 @@ class ResizeBar extends BaseBarModelScript
                     {
                         break;
                     }
-                }  // Need to clamp to some minimum value (i.e. a segment cannot be less than some minimum width)  
-                
-                
-                
+                }
+				
+				// Need to clamp to some minimum value (i.e. a segment cannot be less than some minimum width)  
                 var newWidthUpToTarget : Float = Math.max(1, distanceDelta + originalWidthUpToTarget);
                 var scaleFactor : Float = newWidthUpToTarget / originalWidthUpToTarget;
                 var newUnitLength : Float = scaleFactor * m_barModelArea.unitLength;
@@ -142,7 +141,6 @@ class ResizeBar extends BaseBarModelScript
                     resizeBarSegments(m_barModelArea.getBarModelData(), previewBarModelView.unitLength);
                     m_gameEngine.dispatchEvent(GameEvent.BAR_MODEL_AREA_CHANGE, false, {
                                 previousSnapshot : previousModelDataSnapshot
-
                             });
                 }
                 

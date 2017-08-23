@@ -874,7 +874,7 @@ class GameEngine extends Sprite implements IGameEngine
             }
             else if (widgetType == "barModelArea") 
             {
-                (try cast(renderComponent.view, BarModelAreaWidget) catch(e:Dynamic) null).setDimensions(targetWidth, targetHeight);
+                (try cast(renderComponent.view, BarModelAreaWidget) catch (e:Dynamic) null).setDimensions(targetWidth, targetHeight);
             }
             else if (widgetType == "group") 
             {
@@ -885,11 +885,8 @@ class GameEngine extends Sprite implements IGameEngine
                 if (group.numChildren > 0) 
                 {
                     var firstChild : DisplayObject = group.getChildAt(0);
-                    if (Std.is(firstChild, Bitmap)) 
-                    {
-                        firstChild.width = targetWidth;
-                        firstChild.height = targetHeight;
-                    }
+                    firstChild.width = targetWidth;
+                    firstChild.height = targetHeight;
                 }
             }
             // Seting the x,y can be done using the DisplayObject interface

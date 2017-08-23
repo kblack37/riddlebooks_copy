@@ -1039,11 +1039,9 @@ class BarModelView extends Sprite
             {
                 newUnitLength = desiredUnitLength;
             }
-            
             m_unitLength = newUnitLength;
             this.layout();
         }
-        
         this.recalculateBounds();
     }
     

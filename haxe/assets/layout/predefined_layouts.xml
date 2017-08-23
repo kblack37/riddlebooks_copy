@@ -123,7 +123,7 @@
 	            <button id="validateButton" x="670" y="215" src="embed(button_check_bar_model_up), embed(button_check_bar_model_down), embed(button_check_bar_model_over)"/>
 	            <group id="switchModelButton" x="10" y="10"/>
 	            <button id="hintButton" x="75" y="10" src="embed(button_hint_blue), embed(button_hint_orange), embed(button_hint_blue)"/>
-
+				
                 <group id="parenthesisButton" x="10" y="320"/>
 	            <termArea id="leftTermArea" width="310" height="130" x="20" y="385" src="embed(term_area_left)"/>
 	            <termArea id="rightTermArea" width="310" height="130" x="800-rightTermArea_width-20" y="leftTermArea_y" src="embed(term_area_left)"/>
