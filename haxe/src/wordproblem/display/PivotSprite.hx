@@ -1,10 +1,7 @@
 package wordproblem.display;
 
-import dragonbox.common.dispose.IDisposable;
 import openfl.display.DisplayObject;
-import openfl.display.DisplayObjectContainer;
-import openfl.display.Sprite;
-import openfl.events.EventDispatcher;
+import openfl.geom.Rectangle;
 
 /**
  * ...
@@ -65,15 +62,6 @@ class PivotSprite extends DisposableSprite {
 			removeChildPivot(child);
 		}
 		super.removeChildren(beginIndex, endIndex);
-	}
-	
-	override public function dispose() {
-		while (numChildren > 0) {
-			var child = removeChildAt(0);
-			if (Std.is(child, IDisposable)) {
-				cast(child, IDisposable).dispose();
-			}
-		}
 	}
 	
 	private function addChildPivot(child : DisplayObject) {

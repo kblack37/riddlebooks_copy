@@ -5,6 +5,7 @@ import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.events.MouseEvent;
 import openfl.text.TextFormat;
+import wordproblem.display.DisposableSprite;
 
 import cgs.audio.Audio;
 import cgs.internationalization.StringTable;
@@ -24,8 +25,12 @@ import wordproblem.resource.AssetManager;
 /**
  * A screen used to give credits to various parties for using their resources
  */
-class CreditsWidget extends Sprite
+class CreditsWidget extends DisposableSprite
 {
+	
+	private var m_backgroundQuad : Bitmap;
+	private var m_backButton : LabelButton;
+	
     private var m_onCloseCallback : Function;
     
     public function new(width : Float,
@@ -41,6 +46,7 @@ class CreditsWidget extends Sprite
         // Add darkened background sprite
         var backgroundQuad : Bitmap = new Bitmap(new BitmapData(Std.int(width), Std.int(height), false, 0x000000));
         backgroundQuad.alpha = 0.5;
+		m_backgroundQuad = backgroundQuad;
         addChild(backgroundQuad);
         
         // Add actual background image
@@ -96,6 +102,7 @@ class CreditsWidget extends Sprite
                 new TextFormat(GameFonts.DEFAULT_FONT_NAME, 24, 0xFFFFFF)
                 );
         backButton.addEventListener(MouseEvent.CLICK, onTriggered);
+		m_backButton = backButton;
         
         var backButtonWidth : Float = 200;
         backButton.width = backButtonWidth;
@@ -103,6 +110,14 @@ class CreditsWidget extends Sprite
         backButton.y = backgroundContainerHeight - 70;
         backgroundContainer.addChild(backButton);
     }
+	
+	override public function dispose() {
+		super.dispose();
+		
+		m_backButton.removeEventListener(MouseEvent.CLICK, onTriggered);
+		
+		m_backgroundQuad.bitmapData.dispose();
+	}
     
     private function onTriggered(event : Dynamic) : Void
     {

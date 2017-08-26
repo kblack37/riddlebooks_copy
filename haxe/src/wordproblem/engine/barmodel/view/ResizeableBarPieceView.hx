@@ -1,11 +1,8 @@
 package wordproblem.engine.barmodel.view;
 
+import wordproblem.display.DisposableSprite;
 
-import dragonbox.common.dispose.IDisposable;
-
-import openfl.display.Sprite;
-
-class ResizeableBarPieceView extends Sprite implements IDisposable
+class ResizeableBarPieceView extends DisposableSprite
 {
     /**
      * Total length in pixels of this display.
@@ -22,6 +19,6 @@ class ResizeableBarPieceView extends Sprite implements IDisposable
     {
     }
 	
-	public function dispose() {
+	override public function dispose() {
 	}
 }

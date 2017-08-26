@@ -207,7 +207,7 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
 				if (m_draggedWholeParenthesis.parent != null) m_draggedWholeParenthesis.parent.removeChild(m_draggedWholeParenthesis);
                 
                 // Make sure the paren button is deactived as well
-				m_buttonBackground.transform.colorTransform.concat(XColor.rgbToColorTransform(m_inactiveColor));
+				m_buttonBackground.transform.colorTransform = XColor.rgbToColorTransform(m_inactiveColor);
                 m_parenthesisButton.alpha = 1.0;
             }
         }
@@ -246,7 +246,7 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
                     } 
 					
 					// Revert the color of the button background to inactive state  
-					m_buttonBackground.transform.colorTransform.concat(XColor.rgbToColorTransform(m_inactiveColor));
+					m_buttonBackground.transform.colorTransform = XColor.rgbToColorTransform(m_inactiveColor);
                     m_parenthesisButton.alpha = 1.0;
                 }
                 else 
@@ -403,7 +403,7 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
 					Actuate.tween(m_draggedWholeParenthesis, 0.4, { scaleX: 1.0, scaleY: 1.0 }).ease(Expo.easeOut);
                     
                     // Change color to active
-					m_buttonBackground.transform.colorTransform.concat(XColor.rgbToColorTransform(m_activeColor));
+					m_buttonBackground.transform.colorTransform = XColor.rgbToColorTransform(m_activeColor);
                     m_parenthesisButton.alpha = 0.7;
                 }
             }  
@@ -515,7 +515,7 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
 			backgroundBitmapData.width - 2 * cornerPadding,
 			backgroundBitmapData.height - 2 * cornerPadding
 		));
-		m_buttonBackground.transform.colorTransform.concat(XColor.rgbToColorTransform(m_inactiveColor));
+		m_buttonBackground.transform.colorTransform = XColor.rgbToColorTransform(m_inactiveColor);
         m_buttonBackground.width = parenthesisButtonWidth;
         m_buttonBackground.height = parenthesisButtonHeight;
         

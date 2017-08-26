@@ -1,24 +1,23 @@
 package wordproblem.engine.barmodel.view;
 
 
-import dragonbox.common.dispose.IDisposable;
 import dragonbox.common.util.XColor;
+
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
+import openfl.display.DisplayObject;
 import openfl.geom.Rectangle;
 
-import openfl.display.DisplayObject;
-import openfl.display.Sprite;
-
-import wordproblem.engine.barmodel.model.BarSegment;
-import wordproblem.engine.component.RigidBodyComponent;
+import wordproblem.display.DisposableSprite;
 import wordproblem.display.DottedRectangle;
 import wordproblem.display.Scale9Image;
+import wordproblem.engine.barmodel.model.BarSegment;
+import wordproblem.engine.component.RigidBodyComponent;
 
 /**
  * The most basic unit for drawing a segment
  */
-class BarSegmentView extends Sprite implements IDisposable
+class BarSegmentView extends DisposableSprite
 {
     public var data : BarSegment;
     
@@ -107,22 +106,22 @@ class BarSegmentView extends Sprite implements IDisposable
         {
             if (targetWidth >= minimumWidthForNineSlice && height >= minimumHeightForNineSlice) 
             {
-				m_nineSliceImage.transform.colorTransform.concat(XColor.rgbToColorTransform(data.color));
+				m_nineSliceImage.transform.colorTransform = XColor.rgbToColorTransform(data.color);
                 segmentImage = m_nineSliceImage;
             }
             else if (targetWidth >= minimumWidthForNineSlice && height < minimumHeightForNineSlice) 
             {
-				m_threeSliceHorizontalImage.transform.colorTransform.concat(XColor.rgbToColorTransform(data.color));
+				m_threeSliceHorizontalImage.transform.colorTransform = XColor.rgbToColorTransform(data.color);
                 segmentImage = m_threeSliceHorizontalImage;
             }
             else if (targetWidth < minimumWidthForNineSlice && height >= minimumHeightForNineSlice) 
             {
-				m_threeSliceVerticalImage.transform.colorTransform.concat(XColor.rgbToColorTransform(data.color));
+				m_threeSliceVerticalImage.transform.colorTransform = XColor.rgbToColorTransform(data.color);
                 segmentImage = m_threeSliceVerticalImage;
             }
             else 
             {
-				m_originalImage.transform.colorTransform.concat(XColor.rgbToColorTransform(data.color));
+				m_originalImage.transform.colorTransform = XColor.rgbToColorTransform(data.color);
                 segmentImage = m_originalImage;
             }
             
@@ -133,12 +132,9 @@ class BarSegmentView extends Sprite implements IDisposable
         addChild(segmentImage);
     }
     
-    public function dispose() : Void
+    override public function dispose() : Void
     {
-        this.removeChildren();
-		m_nineSliceImage.dispose();
-		m_threeSliceHorizontalImage.dispose();
-		m_threeSliceVerticalImage.dispose();
+		super.dispose();
 		
 		if (m_hiddenImage != null) m_hiddenImage.dispose();
     }

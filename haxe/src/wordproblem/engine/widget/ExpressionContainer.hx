@@ -2,17 +2,15 @@ package wordproblem.engine.widget;
 
 
 import dragonbox.common.math.vectorspace.RealsVectorSpace;
+
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
-import openfl.geom.Rectangle;
-import wordproblem.display.Scale9Image;
-
-import dragonbox.common.dispose.IDisposable;
-import dragonbox.common.math.vectorspace.IVectorSpace;
-
 import openfl.display.DisplayObject;
 import openfl.display.Sprite;
+import openfl.geom.Rectangle;
 
+import wordproblem.display.DisposableSprite;
+import wordproblem.display.Scale9Image;
 import wordproblem.engine.component.ExpressionComponent;
 import wordproblem.engine.expression.ExpressionSymbolMap;
 import wordproblem.engine.expression.tree.ExpressionTree;
@@ -25,7 +23,7 @@ import wordproblem.resource.AssetManager;
  * 
  * It shows the equation itself as well as some indication that it is selected.
  */
-class ExpressionContainer extends Sprite implements IDisposable
+class ExpressionContainer extends DisposableSprite
 {
     private var m_isSelected : Bool;
     
@@ -49,7 +47,7 @@ class ExpressionContainer extends Sprite implements IDisposable
     private var m_vectorSpace : RealsVectorSpace;
     private var m_expressionResources : ExpressionSymbolMap;
     
-    private var m_bgLayer : Sprite;
+    private var m_bgLayer : DisposableSprite;
     
     public function new(vectorSpace : RealsVectorSpace,
             assetManager : AssetManager,
@@ -75,7 +73,7 @@ class ExpressionContainer extends Sprite implements IDisposable
         m_unselectedUpImage = createBackgroundImage(backgroundImageUnselectedUp, assetManager);
         m_unselectedOverImage = createBackgroundImage(backgroundImageUnselectedOver, assetManager);
         m_selectedUpImage = createBackgroundImage(backgroundImageSelectedUp, assetManager);
-        m_bgLayer = new Sprite();
+        m_bgLayer = new DisposableSprite();
         addChild(m_bgLayer);
         
         // Create a brand new copy of the view, note that it is possible to create
@@ -149,12 +147,9 @@ class ExpressionContainer extends Sprite implements IDisposable
         }
     }
     
-    public function dispose() : Void
+    override public function dispose() : Void
     {
-        while (numChildren > 0)
-        {
-            removeChildAt(0);
-        }
+		super.dispose();
 		
 		if (Std.is(m_unselectedUpImage, Scale9Image)) {
 			cast(m_unselectedUpImage, Scale9Image).dispose();

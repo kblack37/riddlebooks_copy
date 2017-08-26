@@ -417,12 +417,10 @@ class ChangeAliasScript extends BaseProblemCreateScript
         if (m_expressionContainer != null) 
         {
             m_expressionContainer.removeFromParent(true);
-        }  // make it clear that element is supposed to equal the entered in value    // The card should appear right next to the entry along with an equals sign to try to  
-        
-        
-        
-        
-        
+        }  
+		
+		// The card should appear right next to the entry along with an equals sign to try to  
+        // make it clear that element is supposed to equal the entered in value  
         var expressionSymbolMap : ExpressionSymbolMap = (try cast(m_createState.getWidgetFromId("barModelArea"), BarModelView) catch(e:Dynamic) null).getExpressionSymbolMap();
         m_expressionContainer = new Sprite();
         var cardForElement : DisplayObject = expressionSymbolMap.getCardFromSymbolValue(elementId);

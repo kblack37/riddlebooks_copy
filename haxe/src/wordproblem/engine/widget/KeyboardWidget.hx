@@ -116,9 +116,9 @@ class KeyboardWidget extends Layer
                 );
 		// TODO: starling buttons use textures, not images, and the color cannot be changed
 		// like this
-		shiftButton.downState.transform.colorTransform.concat(XColor.rgbToColorTransform(XColor.ROYAL_BLUE));
-		shiftButton.overState.transform.colorTransform.concat(XColor.rgbToColorTransform(XColor.BRIGHT_ORANGE));
-		shiftButton.downState.transform.colorTransform.concat(XColor.rgbToColorTransform(XColor.BRIGHT_ORANGE));
+		shiftButton.downState.transform.colorTransform = XColor.rgbToColorTransform(XColor.ROYAL_BLUE);
+		shiftButton.overState.transform.colorTransform = XColor.rgbToColorTransform(XColor.BRIGHT_ORANGE);
+		shiftButton.downState.transform.colorTransform = XColor.rgbToColorTransform(XColor.BRIGHT_ORANGE);
         shiftButton.addEventListener(MouseEvent.CLICK, onShiftClicked);
         shiftButton.width = buttonWidth * 1.5 + buttonGap;
         shiftButton.height = buttonHeight;
@@ -139,9 +139,9 @@ class KeyboardWidget extends Layer
                 null,
                 new Rectangle(8, 8, 16, 16)
                 );
-		backButton.upState.transform.colorTransform.concat(XColor.rgbToColorTransform(XColor.ROYAL_BLUE));
-		backButton.overState.transform.colorTransform.concat(XColor.rgbToColorTransform(XColor.BRIGHT_ORANGE));
-		backButton.downState.transform.colorTransform.concat(XColor.rgbToColorTransform(XColor.BRIGHT_ORANGE));
+		backButton.upState.transform.colorTransform = XColor.rgbToColorTransform(XColor.ROYAL_BLUE);
+		backButton.overState.transform.colorTransform = XColor.rgbToColorTransform(XColor.BRIGHT_ORANGE);
+		backButton.downState.transform.colorTransform = XColor.rgbToColorTransform(XColor.BRIGHT_ORANGE);
         var backIcon : Bitmap = new Bitmap(assetManager.getBitmapData("arrow_rotate"));
         backIcon.scaleX = backIcon.scaleY = (buttonHeight / backIcon.height);
         backButton.upState = backIcon;
@@ -165,9 +165,9 @@ class KeyboardWidget extends Layer
                 null,
                 new Rectangle(8, 8, 16, 16)
                 );		
-		acceptButton.upState.transform.colorTransform.concat(XColor.rgbToColorTransform(XColor.ROYAL_BLUE));
-		acceptButton.overState.transform.colorTransform.concat(XColor.rgbToColorTransform(XColor.BRIGHT_ORANGE));
-		acceptButton.downState.transform.colorTransform.concat(XColor.rgbToColorTransform(XColor.BRIGHT_ORANGE));
+		acceptButton.upState.transform.colorTransform = XColor.rgbToColorTransform(XColor.ROYAL_BLUE);
+		acceptButton.overState.transform.colorTransform = XColor.rgbToColorTransform(XColor.BRIGHT_ORANGE);
+		acceptButton.downState.transform.colorTransform = XColor.rgbToColorTransform(XColor.BRIGHT_ORANGE);
         
         var acceptIcon : Bitmap = new Bitmap(assetManager.getBitmapData("correct"));
         acceptIcon.scaleX = acceptIcon.scaleY = (buttonHeight / acceptIcon.height);
@@ -193,9 +193,9 @@ class KeyboardWidget extends Layer
                 null,
                 new Rectangle(8, 8, 16, 16)
                 );
-		spaceButton.upState.transform.colorTransform.concat(XColor.rgbToColorTransform(XColor.ROYAL_BLUE));
-		spaceButton.overState.transform.colorTransform.concat(XColor.rgbToColorTransform(XColor.BRIGHT_ORANGE));
-		spaceButton.downState.transform.colorTransform.concat(XColor.rgbToColorTransform(XColor.BRIGHT_ORANGE));
+		spaceButton.upState.transform.colorTransform = XColor.rgbToColorTransform(XColor.ROYAL_BLUE);
+		spaceButton.overState.transform.colorTransform = XColor.rgbToColorTransform(XColor.BRIGHT_ORANGE);
+		spaceButton.downState.transform.colorTransform = XColor.rgbToColorTransform(XColor.BRIGHT_ORANGE);
         spaceButton.addEventListener(MouseEvent.CLICK, onCharacterButtonClicked);
         spaceButton.width = buttonWidth * 5 + buttonGap * 4;
         spaceButton.height = buttonHeight;
@@ -305,9 +305,9 @@ class KeyboardWidget extends Layer
                         null,
                         new Rectangle(8, 8, 16, 16)
                         );
-				button.upState.transform.colorTransform.concat(XColor.rgbToColorTransform(XColor.ROYAL_BLUE));
-				button.overState.transform.colorTransform.concat(XColor.rgbToColorTransform(XColor.BRIGHT_ORANGE));
-				button.downState.transform.colorTransform.concat(XColor.rgbToColorTransform(XColor.BRIGHT_ORANGE));
+				button.upState.transform.colorTransform = XColor.rgbToColorTransform(XColor.ROYAL_BLUE);
+				button.overState.transform.colorTransform = XColor.rgbToColorTransform(XColor.BRIGHT_ORANGE);
+				button.downState.transform.colorTransform = XColor.rgbToColorTransform(XColor.BRIGHT_ORANGE);
                 button.addEventListener(MouseEvent.CLICK, onCharacterButtonClicked);
                 button.width = buttonWidth;
                 button.height = buttonHeight;

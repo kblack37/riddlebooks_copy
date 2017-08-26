@@ -129,10 +129,8 @@ class Scale9Image extends DisposableSprite {
 	 * Adjusts both the size & position of the contained elements
 	 */
 	private function applyScale9() {
-		var horizAddFactor = m_originalWidth - m_scale9Rect.width;
-		var vertAddFactor = m_originalHeight - m_scale9Rect.height;
-		var horizMultFactor = m_width / m_originalWidth;
-		var vertMultFactor = m_height / m_originalHeight;
+		var horizAddFactor = (m_originalWidth - m_scale9Rect.width) * scaleX;
+		var vertAddFactor = (m_originalHeight - m_scale9Rect.height) * scaleY;
 		
 		m_center.x = m_scale9Rect.left;
 		m_center.y = m_scale9Rect.top;
@@ -168,42 +166,25 @@ class Scale9Image extends DisposableSprite {
 	}
 	
 	override public function dispose() {
+		super.dispose();
 		// Get rid of all the custom bitmap data we created
-		removeChild(m_center);
 		m_center.bitmapData.dispose();
-		m_center = null;
 		
 		if (m_scale3Mode == null) {
-			removeChild(m_topLeft);
-			removeChild(m_topRight);
-			removeChild(m_bottomLeft);
-			removeChild(m_bottomRight);
 			m_topLeft.bitmapData.dispose();
 			m_topRight.bitmapData.dispose();
 			m_bottomLeft.bitmapData.dispose();
 			m_bottomRight.bitmapData.dispose();
-			m_topLeft = null;
-			m_topRight = null;
-			m_bottomLeft = null;
-			m_bottomRight = null;
 		}
 		
 		if (m_scale3Mode == null || m_scale3Mode == "horizontal") {
-			removeChild(m_left);
-			removeChild(m_right);
 			m_left.bitmapData.dispose();
 			m_right.bitmapData.dispose();
-			m_left = null;
-			m_right = null;
 		}
 		
 		if (m_scale3Mode == null || m_scale3Mode == "vertical") {
-			removeChild(m_top);
-			removeChild(m_bottom);
 			m_top.bitmapData.dispose();
 			m_bottom.bitmapData.dispose();
-			m_top = null;
-			m_bottom = null;
 		}
 	}
 	

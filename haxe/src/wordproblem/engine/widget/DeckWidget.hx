@@ -25,13 +25,13 @@ import wordproblem.engine.expression.widget.term.SymbolTermWidget;
 import wordproblem.resource.AssetManager;
 
 /**
-	 * This is a tool box type widget that is restricted to dragging and flipping cards
+ * This is a tool box type widget that is restricted to dragging and flipping cards
  * only representing expressions.
-	 * 
-	 * Given a set of symbols, it will create a deck of cards that can be picked up
-	 * and dragged. Usually it should just not be making changes to the component manager,
+ * 
+ * Given a set of symbols, it will create a deck of cards that can be picked up
+ * and dragged. Usually it should just not be making changes to the component manager,
  * it simply reads in the data that was modified by some of the systems.
-	 */
+ */
 class DeckWidget extends ScrollGridWidget implements IDisposable implements IBaseWidget
 {
     public var componentManager(get, never) : ComponentManager;
@@ -121,8 +121,8 @@ class DeckWidget extends ScrollGridWidget implements IDisposable implements IBas
     {
         if (m_background != null) 
         {
-            m_background.scaleX = maxWidth / m_background.width;
-            m_background.scaleY = maxHeight / m_background.height;
+			m_background.width = maxWidth;
+			m_background.height = maxHeight;
         }
         
         m_leftScrollButton.x = 0;
@@ -181,14 +181,11 @@ class DeckWidget extends ScrollGridWidget implements IDisposable implements IBas
 		componentsToAddBuffer = new Array<DisplayObject>();
         for (i in 0...numEntitiesToAdd){
             componentsToAddBuffer.push(entitiesToAdd[i]);
-        }  // We assume the disposal of a render component does not automatically remove it from the display list    // to fetch the render components from the scroll widget.    // Since at this point the components have already been removed we have no choice but  
-        
-        
-        
-        
-        
-        
-        
+        }  
+		
+		// Since at this point the components have already been removed we have no choice but  
+		// to fetch the render components from the scroll widget. 
+        // We assume the disposal of a render component does not automatically remove it from the display list  
         var existingObjects : Array<DisplayObject> = super.getObjects();
         var numExistingObjects : Int = existingObjects.length;
         var numEntitiesToRemove : Int = entitiesToRemove.length;
@@ -424,9 +421,9 @@ class DeckWidget extends ScrollGridWidget implements IDisposable implements IBas
     
     /**
      * @param x
-		 * 		global x coordinate
-		 * @param y
-		 * 		global y coordinate
+	 * 		global x coordinate
+	 * @param y
+	 * 		global y coordinate
      * @param allowHidden
      *      if true then we allow for widgets that are hidden to be picked
      */
@@ -488,10 +485,10 @@ class DeckWidget extends ScrollGridWidget implements IDisposable implements IBas
         super.dispose();
         m_leftScrollButton.removeEventListener(MouseEvent.CLICK, onLeftScrollClick);
 		if (m_leftScrollButton.parent != null) m_leftScrollButton.parent.removeChild(m_leftScrollButton);
-		m_leftScrollButton = null;
+		m_leftScrollButton.dispose();
         m_rightScrollButton.removeEventListener(MouseEvent.CLICK, onRightScrollClick);
 		if (m_rightScrollButton.parent != null) m_rightScrollButton.parent.removeChild(m_rightScrollButton);
-		m_rightScrollButton = null;
+		m_rightScrollButton.dispose();
     }
     
     override private function scrollButtonsEnabled(leftEnabled : Bool, rightEnabled : Bool) : Void
@@ -524,14 +521,11 @@ class DeckWidget extends ScrollGridWidget implements IDisposable implements IBas
         if (this.parent == null || this.stage == null) 
         {
             return;
-        }  // Note the rigid body is relative to this widget    // of the object is refreshed as it is what is used to check hits    // After layout is completed for each object we need to make sure the rigid body component  
-        
-        
-        
-        
-        
-        
-        
+        }  
+		
+		// After layout is completed for each object we need to make sure the rigid body component  
+		// of the object is refreshed as it is what is used to check hits 
+        // Note the rigid body is relative to this widget 
         var rigidBodyComponents : Array<Component> = m_componentManager.getComponentListForType(RigidBodyComponent.TYPE_ID);
         var rigidBodyComponent : RigidBodyComponent = null;
         var i : Int = 0;

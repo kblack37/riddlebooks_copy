@@ -4,6 +4,7 @@ package wordproblem.xp;
 import motion.Actuate;
 import openfl.geom.Point;
 import openfl.text.TextFormat;
+import wordproblem.display.DisposableSprite;
 import wordproblem.display.PivotSprite;
 
 import openfl.display.Bitmap;
@@ -16,7 +17,7 @@ import wordproblem.resource.AssetManager;
 /**
  * A brain point is the small icon of a brain that pops up whenver the player earns enough experience
  */
-class BrainPoint extends Sprite
+class BrainPoint extends DisposableSprite
 {
 	private var m_tweenObjects : Array<DisplayObject>;
 	
@@ -84,8 +85,10 @@ class BrainPoint extends Sprite
         this.mouseEnabled = false;
     }
     
-    public function dispose() : Void
+    override public function dispose() : Void
     {
+		super.dispose();
+		
         for (object in m_tweenObjects)
         {
 			Actuate.stop(object);

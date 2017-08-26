@@ -7,6 +7,7 @@ import openfl.display.BitmapData;
 import openfl.events.MouseEvent;
 import openfl.filters.BitmapFilter;
 import openfl.text.TextFormat;
+import wordproblem.display.DisposableSprite;
 
 import cgs.audio.Audio;
 import cgs.internationalization.StringTable;
@@ -32,7 +33,7 @@ import wordproblem.resource.AssetManager;
  * 
  * The options available will include things like quiting, restarting, or adjusting sound
  */
-class OptionsScreen extends Sprite
+class OptionsScreen extends DisposableSprite
 {
     /**
      * Hold reference to the skip button because each level might have a different option to
@@ -92,7 +93,7 @@ class OptionsScreen extends Sprite
         //resumeButton.iconOffsetX = -resumeIconBitmapData.width * resumeIconScale;
         resumeButton.width = buttonWidth;
         resumeButton.height = buttonHeight;
-        resumeButton.addEventListener(MouseEvent.CLICK, onResume);
+        resumeButton.addEventListener(MouseEvent.CLICK, onResume, false, 0, true);
         m_buttons.push(resumeButton);
         
         if (onHelpSelected != null) 
@@ -107,7 +108,7 @@ class OptionsScreen extends Sprite
                     );
             helpButton.width = buttonWidth;
             helpButton.height = buttonHeight;
-            helpButton.addEventListener(MouseEvent.CLICK, onHelpSelected);
+            helpButton.addEventListener(MouseEvent.CLICK, onHelpSelected, false, 0, true);
             m_buttons.push(helpButton);
         }  
 		
@@ -122,7 +123,7 @@ class OptionsScreen extends Sprite
                 );
         resetButton.width = buttonWidth;
         resetButton.height = buttonHeight;
-        resetButton.addEventListener(MouseEvent.CLICK, onRestart);
+        resetButton.addEventListener(MouseEvent.CLICK, onRestart, false, 0, true);
         m_buttons.push(resetButton);
         
         // Button to skip this level
@@ -146,7 +147,7 @@ class OptionsScreen extends Sprite
             //skipButton.iconOffsetX = -skipIconBitmapData.width * skipIconScale;
             skipButton.width = buttonWidth;
             skipButton.height = buttonHeight;
-            skipButton.addEventListener(MouseEvent.CLICK, onSkip);
+            skipButton.addEventListener(MouseEvent.CLICK, onSkip, false, 0, true);
             m_buttons.push(skipButton);
             m_skipButton = skipButton;
         }
@@ -159,7 +160,7 @@ class OptionsScreen extends Sprite
 			assetManager, 
 			buttonColor
         );
-        musicButton.addEventListener(AlgebraAdventureLoggingConstants.BUTTON_PRESSED_EVENT, onAudioToggle);
+        musicButton.addEventListener(AlgebraAdventureLoggingConstants.BUTTON_PRESSED_EVENT, onAudioToggle, false, 0, true);
         m_buttons.push(musicButton);
         
         var sfxButton : SfxToggleButton = new SfxToggleButton(
@@ -170,7 +171,7 @@ class OptionsScreen extends Sprite
 			assetManager, 
 			buttonColor
         );
-        sfxButton.addEventListener(AlgebraAdventureLoggingConstants.BUTTON_PRESSED_EVENT, onAudioToggle);
+        sfxButton.addEventListener(AlgebraAdventureLoggingConstants.BUTTON_PRESSED_EVENT, onAudioToggle, false, 0, true);
         m_buttons.push(sfxButton);
         
         if (allowExit) 
@@ -185,7 +186,7 @@ class OptionsScreen extends Sprite
                     );
             exitButton.width = buttonWidth;
             exitButton.height = buttonHeight;
-            exitButton.addEventListener(MouseEvent.CLICK, onExit);
+            exitButton.addEventListener(MouseEvent.CLICK, onExit, false, 0, true);
             m_buttons.push(exitButton);
         }
         
@@ -197,7 +198,7 @@ class OptionsScreen extends Sprite
             button.addEventListener(MouseEvent.CLICK, function(event : Dynamic) : Void
                     {
                         Audio.instance.playSfx("button_click");
-                    });
+                    }, false, 0, true);
         }
 		
 		// Dimension of background depends on the total size of the buttons  
@@ -217,15 +218,9 @@ class OptionsScreen extends Sprite
         addChild(optionsButtonContainer);
     }
     
-    public function dispose() : Void
+    override public function dispose() : Void
     {
-        for (button in m_buttons)
-        {
-			// TODO: openfl has no way to mass remove all event listeners;
-			// this may not dispose of memory properly
-			button = null;
-            //button.removeEventListeners();
-        }
+		super.dispose();
 		
 		m_buttons = new Array<DisplayObject>();
     }

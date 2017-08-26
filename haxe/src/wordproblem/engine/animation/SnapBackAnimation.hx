@@ -1,17 +1,20 @@
 package wordproblem.engine.animation;
 
 
-import flash.geom.Point;
+import motion.Actuate;
+import motion.actuators.GenericActuator;
+import motion.easing.Quart;
+import openfl.geom.Point;
+import openfl.display.DisplayObject;
+import wordproblem.display.DisposableSprite;
+import wordproblem.display.PivotSprite;
 
 import haxe.Constraints.Function;
-
-import starling.animation.IAnimatable;
-import starling.display.DisplayObject;
 
 /**
  * Basic animation to snap a bit of text to a target location
  */
-class SnapBackAnimation implements IAnimatable
+class SnapBackAnimation
 {
     private var m_deltaX : Float;
     private var m_deltaY : Float;
@@ -44,12 +47,15 @@ class SnapBackAnimation implements IAnimatable
             onComplete : Function) : Void
     {
         // Normalize both views to global coordinates
-        viewToMove.localToGlobal(pointBuffer, m_startingPoint);
-        viewToSnapTo.localToGlobal(pointBuffer, m_destinationPoint);
+        m_startingPoint = viewToMove.localToGlobal(pointBuffer);
+        m_destinationPoint = viewToSnapTo.localToGlobal(pointBuffer);
         
         // Reposition if view to move has different registration point
-        viewToMove.pivotX = 0;
-        viewToMove.pivotY = 0;
+		if (Std.is(viewToMove, PivotSprite)) {
+			var castedView : PivotSprite = try cast(viewToMove, PivotSprite) catch (e : Dynamic) null;
+			castedView.pivotX = 0;
+			castedView.pivotY = 0;
+		}
         
         // Transfer the view to move to global coordinates
         viewToMove.x = m_startingPoint.x;
@@ -66,12 +72,27 @@ class SnapBackAnimation implements IAnimatable
         m_onComplete = onComplete;
         m_elapsedTime = 0;
     }
+	
+	public function start() : Void {
+		var actuator = Actuate.tween(m_viewToMove, m_duration, { x: m_destinationPoint.x, y: m_destinationPoint.y }).ease(Quart.easeOut);
+		if (m_onComplete != null) {
+			actuator.onComplete(m_onComplete);
+		}
+	}
+	
+	public function stop() : Void {
+		Actuate.stop(m_viewToMove);
+	}
     
     public function dispose() : Void
     {
+		Actuate.stop(m_viewToMove);
         if (m_viewToMove != null) 
         {
-            m_viewToMove.removeFromParent(true);
+			m_viewToMove.parent.removeChild(m_viewToMove);
+			if (Std.is(m_viewToMove, DisposableSprite)) {
+				(try cast(m_viewToMove, DisposableSprite) catch (e : Dynamic) null).dispose();
+			}
         }
     }
     

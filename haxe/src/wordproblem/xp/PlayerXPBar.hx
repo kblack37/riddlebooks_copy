@@ -7,6 +7,7 @@ import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.filters.BitmapFilter;
 import openfl.geom.Rectangle;
+import wordproblem.display.DisposableSprite;
 import wordproblem.display.PivotSprite;
 import wordproblem.display.Scale9Image;
 
@@ -21,7 +22,7 @@ import wordproblem.resource.AssetManager;
  * This is the ui component to represent how much the player has filled
  * up an experience bar to reach a certain level.
  */
-class PlayerXPBar extends Sprite
+class PlayerXPBar extends DisposableSprite
 {
     /**
      * Other classes need to access the fill bar so it gets set to the correct ratio

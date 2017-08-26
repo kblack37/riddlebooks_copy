@@ -38,7 +38,7 @@ class ColorChangeAnimation extends EventDispatcher
         // Make the object the starting color
         if (Std.is(m_image, Bitmap)) 
         {
-            (try cast(m_image, Bitmap) catch(e:Dynamic) null).transform.colorTransform.concat(XColor.rgbToColorTransform(startColor));
+            (try cast(m_image, Bitmap) catch(e:Dynamic) null).transform.colorTransform = XColor.rgbToColorTransform(startColor);
         }
     }
     
@@ -48,12 +48,12 @@ class ColorChangeAnimation extends EventDispatcher
         var resultColor : Int = XColor.interpolateColors(m_endColor, m_startColor, m_elapsedTime / m_duration);
         if (Std.is(m_image, Bitmap)) 
         {
-            (try cast(m_image, Bitmap) catch(e:Dynamic) null).transform.colorTransform.concat(XColor.rgbToColorTransform(resultColor));
+            (try cast(m_image, Bitmap) catch(e:Dynamic) null).transform.colorTransform = XColor.rgbToColorTransform(resultColor);
         }
         
         if (m_elapsedTime > m_duration) 
         {
-            (try cast(m_image, Bitmap) catch(e:Dynamic) null).transform.colorTransform.concat(XColor.rgbToColorTransform(m_endColor));
+            (try cast(m_image, Bitmap) catch(e:Dynamic) null).transform.colorTransform = XColor.rgbToColorTransform(m_endColor);
         }
     }
 }

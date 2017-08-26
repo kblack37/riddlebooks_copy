@@ -5,6 +5,7 @@ import motion.Actuate;
 import motion.easing.Linear;
 import openfl.display.Bitmap;
 import openfl.events.MouseEvent;
+import wordproblem.display.DisposableSprite;
 import wordproblem.display.PivotSprite;
 
 import wordproblem.display.LabelButton;
@@ -18,7 +19,7 @@ import wordproblem.resource.AssetManager;
 /**
  * Use this so the option button can appear+behave uniform in several places without duplicating code
  */
-class OptionButton extends Sprite
+class OptionButton extends DisposableSprite
 {
     private var m_button : LabelButton;
     private var m_onClickCallback : Function;
@@ -56,8 +57,10 @@ class OptionButton extends Sprite
         addChild(m_button);
     }
     
-    public function dispose() : Void
+    override public function dispose() : Void
     {
+		super.dispose();
+		
         m_button.removeEventListener(MouseEvent.CLICK, onButtonClicked);
         m_button.removeEventListener(MouseEvent.MOUSE_OVER, onButtonMouseOver);
 		m_button.removeEventListener(MouseEvent.MOUSE_OUT, onButtonMouseOut);

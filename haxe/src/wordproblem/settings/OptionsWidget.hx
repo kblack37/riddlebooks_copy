@@ -5,6 +5,7 @@ import motion.Actuate;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.text.TextFormat;
+import wordproblem.display.DisposableSprite;
 
 import cgs.audio.Audio;
 import cgs.internationalization.StringTable;
@@ -31,7 +32,7 @@ import wordproblem.resource.AssetManager;
  * 
  * It can be adjusted to remove certain options.
  */
-class OptionsWidget extends Sprite
+class OptionsWidget extends DisposableSprite
 {
     public static inline var OPTION_MUSIC : String = "music";
     public static inline var OPTION_SFX : String = "sfx";
@@ -209,8 +210,10 @@ class OptionsWidget extends Sprite
         }
     }
     
-    public function dispose() : Void
+    override public function dispose() : Void
     {
+		super.dispose();
+		
         // Remove the audio click listeners for every button
         for (button in m_buttonsAudio)
         {

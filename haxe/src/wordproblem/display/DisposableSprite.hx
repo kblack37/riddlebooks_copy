@@ -13,7 +13,13 @@ class DisposableSprite extends Sprite implements IDisposable {
 		super();
 	}
 	
-	public function dispose():Void {
+	public function dispose() : Void {
+		while (numChildren > 0) {
+			var child = removeChildAt(0);
+			if (Std.is(child, DisposableSprite)) {
+				(try cast(child, DisposableSprite) catch (e : Dynamic) null).dispose();
+			}
+		}
 	}
 	
 }

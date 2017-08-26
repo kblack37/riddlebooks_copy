@@ -5,6 +5,7 @@ import openfl.display.Bitmap;
 import openfl.events.MouseEvent;
 import openfl.net.SharedObject;
 import openfl.text.TextFormat;
+import wordproblem.display.DisposableSprite;
 
 import openfl.display.BitmapData;
 import wordproblem.display.LabelButton;
@@ -15,7 +16,7 @@ import openfl.events.Event;
 import wordproblem.engine.widget.WidgetUtil;
 import wordproblem.resource.AssetManager;
 
-class AudioButton extends Sprite
+class AudioButton extends DisposableSprite
 {
     public var button(get, never) : LabelButton;
 
@@ -74,8 +75,10 @@ class AudioButton extends Sprite
         return m_mainButton;
     }
     
-    public function dispose() : Void
+    override public function dispose() : Void
     {
+		super.dispose();
+		
         m_mainButton.removeEventListener(MouseEvent.CLICK, onClick);
     }
     

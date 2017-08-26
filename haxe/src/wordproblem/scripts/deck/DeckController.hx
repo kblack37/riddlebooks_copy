@@ -26,7 +26,7 @@ import wordproblem.resource.AssetManager;
 import wordproblem.scripts.BaseGameScript;
 import wordproblem.scripts.drag.WidgetDragSystem;
 
-//import wordproblem.engine.animation.SnapBackAnimation;
+import wordproblem.engine.animation.SnapBackAnimation;
 
 /**
  * Manages all the interactions the player has exclusively with the deck.
@@ -34,7 +34,6 @@ import wordproblem.scripts.drag.WidgetDragSystem;
  * 
  * (Most of these should be self contained)
  */
-// TODO: revisit animation when more basic displays are working properly
 class DeckController extends BaseGameScript
 {
     private var m_globalMouseBuffer : Point = new Point();
@@ -67,7 +66,7 @@ class DeckController extends BaseGameScript
      */
     private var m_widgetDragSystem : WidgetDragSystem;
     
-    //private var m_snapBackAnimation : SnapBackAnimation;
+    private var m_snapBackAnimation : SnapBackAnimation;
     
     public function new(gameEngine : IGameEngine,
             expressionCompiler : IExpressionTreeCompiler,
@@ -153,11 +152,10 @@ class DeckController extends BaseGameScript
     {
         super.dispose();
         
-        //if (m_snapBackAnimation != null) 
-        //{
-            //Starling.current.juggler.remove(m_snapBackAnimation);
-            //m_snapBackAnimation.dispose();
-        //}
+        if (m_snapBackAnimation != null) 
+        {
+            m_snapBackAnimation.dispose();
+        }
     }
     
     override private function onLevelReady(event : Dynamic) : Void
@@ -167,7 +165,7 @@ class DeckController extends BaseGameScript
         m_deckArea = try cast(m_gameEngine.getUiEntity("deckArea"), DeckWidget) catch(e:Dynamic) null;
         m_widgetDragSystem = try cast(this.getNodeById("WidgetDragSystem"), WidgetDragSystem) catch(e:Dynamic) null;
         
-        //m_snapBackAnimation = new SnapBackAnimation();
+        m_snapBackAnimation = new SnapBackAnimation();
         
         this.setIsActive(m_isActive);
     }
@@ -204,7 +202,7 @@ class DeckController extends BaseGameScript
 			function onAnimationDone() : Void
             {
                 if (widget.parent != null) widget.parent.removeChild(widget);
-                //Starling.current.juggler.remove(m_snapBackAnimation);
+				m_snapBackAnimation.stop();
                 
                 if (m_originalOfDraggedWidget != null) 
                 {
@@ -217,9 +215,8 @@ class DeckController extends BaseGameScript
                 if (m_deckArea.stage != null) 
                 {
                     widgetToSnap.stage.addChild(widget);
-                    //m_snapBackAnimation.setParameters(widget, widgetToSnap, 800, onAnimationDone);
-                    //Starling.current.juggler.add(m_snapBackAnimation);
-					onAnimationDone();
+                    m_snapBackAnimation.setParameters(widget, widgetToSnap, 800, onAnimationDone);
+					m_snapBackAnimation.start();
                 }
             }
             else 

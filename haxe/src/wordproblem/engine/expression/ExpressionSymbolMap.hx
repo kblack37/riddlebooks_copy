@@ -233,13 +233,12 @@ class ExpressionSymbolMap
             m_idToDynamicBitmapDataMap.set(value, renderBitmapData);
             cardBitmapData = renderBitmapData;
 			
-			// Dispose of the scale9Image in the card object
-			//(try cast((try cast((try cast(cardObject, DisplayObjectContainer) catch (e : Dynamic) null).getChildAt(0), DisplayObjectContainer) catch (e : Dynamic) null).getChildAt(0), Scale9Image) catch (e : Dynamic) null).dispose();
+			// TODO: need to dispose of the scale9Image in the cardObject
         }
         var cardObject = new PivotSprite();
 		cardObject.addChild(new Bitmap(cardBitmapData));
-        cardObject.pivotX = cardObject.width / 2;
-        cardObject.pivotY = cardObject.height / 2;
+        cardObject.pivotX = cardBitmapData.width / 2;
+        cardObject.pivotY = cardBitmapData.height / 2;
         
         return cardObject;
     }
@@ -363,7 +362,7 @@ class ExpressionSymbolMap
 			// Apply tint to the symbol image if specified  
             if (symbolData.useSymbolTextureColor) 
             {
-				symbolImage.transform.colorTransform.concat(XColor.rgbToColorTransform(symbolData.symbolTextureColor));
+				symbolImage.transform.colorTransform = XColor.rgbToColorTransform(symbolData.symbolTextureColor);
             }
             
             cardContainer.addChild(symbolImage);

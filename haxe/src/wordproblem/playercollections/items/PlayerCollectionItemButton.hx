@@ -5,6 +5,7 @@ import dragonbox.common.util.XColor;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.geom.Rectangle;
+import wordproblem.display.DisposableSprite;
 import wordproblem.display.Scale9Image;
 
 import openfl.display.DisplayObject;
@@ -17,7 +18,7 @@ import wordproblem.resource.AssetManager;
  * 
  * It should show the texture or some locked icon
  */
-class PlayerCollectionItemButton extends Sprite
+class PlayerCollectionItemButton extends DisposableSprite
 {
     public var selected(never, set) : Bool;
 
@@ -54,12 +55,12 @@ class PlayerCollectionItemButton extends Sprite
         var backgroundBitmapData : BitmapData = assetManager.getBitmapData("button_white");
 		
         m_normalBackground = new Scale9Image(backgroundBitmapData, scale9Rect);
-		m_normalBackground.transform.colorTransform.concat(XColor.rgbToColorTransform(defaultColor));
+		m_normalBackground.transform.colorTransform = XColor.rgbToColorTransform(defaultColor);
         m_normalBackground.width = width;
         m_normalBackground.height = height;
         
         m_selectedBackground = new Scale9Image(backgroundBitmapData, scale9Rect);
-		m_selectedBackground.transform.colorTransform.concat(XColor.rgbToColorTransform(overColor));
+		m_selectedBackground.transform.colorTransform = XColor.rgbToColorTransform(overColor);
         m_selectedBackground.width = width;
         m_selectedBackground.height = height;
         
@@ -126,8 +127,10 @@ class PlayerCollectionItemButton extends Sprite
         return value;
     }
     
-    public function dispose() : Void
+    override public function dispose() : Void
     {
+		super.dispose();
+		
         m_assetManager.releaseTextureWithReferenceCount(m_itemTextureName);
 		
 		m_normalBackground.dispose();

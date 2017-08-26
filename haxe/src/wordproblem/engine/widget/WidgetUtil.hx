@@ -49,7 +49,7 @@ class WidgetUtil
         
         var downBackground : Scale9Image = new Scale9Image(buttonBackground, scaleNineRect);
         var downOutline : Scale9Image = new Scale9Image(buttonOutline, scaleNineRect);
-		downOutline.transform.colorTransform.concat(XColor.rgbToColorTransform(0x000000));
+		downOutline.transform.colorTransform = XColor.rgbToColorTransform(0x000000);
 		compositeArray.push(downBackground);
 		compositeArray.push(downOutline);
         var downSkin : Sprite = new Scale9CompositeImage(compositeArray);
@@ -66,13 +66,13 @@ class WidgetUtil
     public static function changeColorForGenericButton(genericButton : LabelButton, color : Int) : Void
     {
         var defaultSkin : DisplayObject = try cast(genericButton.upState, DisplayObject) catch (e:Dynamic) null;
-		defaultSkin.transform.colorTransform.concat(XColor.rgbToColorTransform(color));
+		defaultSkin.transform.colorTransform = XColor.rgbToColorTransform(color);
         
         var hoverSkin : DisplayObject = try cast(genericButton.overState, DisplayObject) catch (e:Dynamic) null;
-		hoverSkin.transform.colorTransform.concat(XColor.rgbToColorTransform(XColor.shadeColor(color, 0.2)));
+		hoverSkin.transform.colorTransform = XColor.rgbToColorTransform(XColor.shadeColor(color, 0.2));
         
         var downSkin : DisplayObject = try cast(genericButton.downState, DisplayObject) catch (e:Dynamic) null;
-		downSkin.transform.colorTransform.concat(XColor.rgbToColorTransform(XColor.shadeColor(color, -0.2)));
+		downSkin.transform.colorTransform = XColor.rgbToColorTransform(XColor.shadeColor(color, -0.2));
     }
     
     /**
@@ -178,8 +178,9 @@ class WidgetUtil
         {
             arrowImage.scaleX *= -1;
             arrowImage.pivotX = arrowBitmapData.width;
+			arrowImage.x += arrowBitmapData.width;
         }
-		arrowImage.transform.colorTransform.concat(XColor.rgbToColorTransform(color));
+		arrowImage.transform.colorTransform = XColor.rgbToColorTransform(color);
         return arrowImage;
     }
     

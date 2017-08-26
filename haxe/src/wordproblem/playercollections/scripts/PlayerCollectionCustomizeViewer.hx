@@ -255,13 +255,13 @@ class PlayerCollectionCustomizeViewer extends PlayerCollectionViewer
         var bitmapData : BitmapData = m_assetManager.getBitmapData("button_white");
         for (i in 0...numCategories){
             var defaultBackground : Scale9Image = new Scale9Image(bitmapData, nineSliceRectangle);
-			defaultBackground.transform.colorTransform.concat(XColor.rgbToColorTransform(m_buttonColorData.getUpButtonColor()));
+			defaultBackground.transform.colorTransform = XColor.rgbToColorTransform(m_buttonColorData.getUpButtonColor());
             var categoryButton : LabelButton = new LabelButton(defaultBackground);
 			categoryButton.textFormatDefault = new TextFormat(GameFonts.DEFAULT_FONT_NAME, 24, 0xFFFFFF);
 			categoryButton.label = categoryIdsForPage[i];
             
             var hoverBackground : Scale9Image = new Scale9Image(bitmapData, nineSliceRectangle);
-			hoverBackground.transform.colorTransform.concat(XColor.rgbToColorTransform(XColor.shadeColor(m_buttonColorData.getUpButtonColor(), 0.3)));
+			hoverBackground.transform.colorTransform = XColor.rgbToColorTransform(XColor.shadeColor(m_buttonColorData.getUpButtonColor(), 0.3));
             categoryButton.overState = hoverBackground;
             
             categoryButton.downState = hoverBackground;

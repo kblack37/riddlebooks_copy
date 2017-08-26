@@ -113,7 +113,7 @@ class BarLabelView extends ResizeableBarPieceView
         // If the label length is below some threshold, use the unscaled texture
         var bracketColor : Int = barLabel.color;
         m_unscaledBracketImage = new Bitmap(unscaledBracketBitmapData);
-		m_unscaledBracketImage.transform.colorTransform.concat(XColor.rgbToColorTransform(bracketColor));
+		m_unscaledBracketImage.transform.colorTransform = XColor.rgbToColorTransform(bracketColor);
         
         this.data = barLabel;
         this.rigidBody = new RigidBodyComponent(barLabel.id);
@@ -130,11 +130,11 @@ class BarLabelView extends ResizeableBarPieceView
             // The default orientation of the textures has the bracket going horizontally with
             // the open end on the bottom
             var edgeAImage : Bitmap = new Bitmap(bracketEdgeLeftBitmapData);
-			edgeAImage.transform.colorTransform.concat(XColor.rgbToColorTransform(bracketColor));
+			edgeAImage.transform.colorTransform = XColor.rgbToColorTransform(bracketColor);
             var edgeBImage : Bitmap = new Bitmap(bracketEdgeRightBitmapData);
-			edgeBImage.transform.colorTransform.concat(XColor.rgbToColorTransform(bracketColor));
+			edgeBImage.transform.colorTransform = XColor.rgbToColorTransform(bracketColor);
             var midImage : Bitmap = new Bitmap(bracketMiddleBitmapData);
-			midImage.transform.colorTransform.concat(XColor.rgbToColorTransform(bracketColor));
+			midImage.transform.colorTransform = XColor.rgbToColorTransform(bracketColor);
             
             // For now we draw a very thin line
 			var lineA : Bitmap = new Bitmap(new BitmapData(1, 5, false, bracketColor));
@@ -594,7 +594,7 @@ class BarLabelView extends ResizeableBarPieceView
         var edgeButtonToUse : Bitmap = ((edgeA)) ? m_edgeAResizeButton : m_edgeBResizeButton;
         if (edgeButtonToUse != null) 
         {
-			edgeButtonToUse.transform.colorTransform.concat(XColor.rgbToColorTransform(color));
+			edgeButtonToUse.transform.colorTransform = XColor.rgbToColorTransform(color);
             edgeButtonToUse.alpha = alpha;
         }
     }
@@ -651,7 +651,7 @@ class BarLabelView extends ResizeableBarPieceView
         }
         
         buttonImage = m_resizeEdgeButtonPool.pop();
-		buttonImage.transform.colorTransform.concat(XColor.rgbToColorTransform(0xFFFFFF));
+		buttonImage.transform.colorTransform = XColor.rgbToColorTransform(0xFFFFFF);
         return buttonImage;
     }
 	

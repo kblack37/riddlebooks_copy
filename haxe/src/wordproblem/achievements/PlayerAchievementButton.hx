@@ -5,6 +5,7 @@ import dragonbox.common.util.XColor;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import wordproblem.achievements.PlayerAchievementGem;
+import wordproblem.display.DisposableSprite;
 import wordproblem.display.Scale9Image;
 
 import openfl.geom.Rectangle;
@@ -20,7 +21,7 @@ import wordproblem.resource.AssetManager;
  * A simple achievement container holder a main gem and showing various text descriptors
  * about the achievement
  */
-class PlayerAchievementButton extends Sprite implements IDisposable
+class PlayerAchievementButton extends DisposableSprite
 {
     /**
      * Styling for the title of the achievement in the summary screen
@@ -115,9 +116,4 @@ class PlayerAchievementButton extends Sprite implements IDisposable
         descriptionText.y = titleText.y + titleText.height;
         addChild(descriptionText);
     }
-	
-	public function dispose() {
-		// The first child is a scale9Image so it must be disposed
-		(try cast(getChildAt(0), Scale9Image) catch (e : Dynamic) null).dispose();
-	}
 }

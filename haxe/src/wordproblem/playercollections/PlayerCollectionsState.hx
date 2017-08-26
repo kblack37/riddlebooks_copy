@@ -184,7 +184,7 @@ class PlayerCollectionsState extends BaseState
             
             // Set a selection skin
             var defaultSelectedImage : Scale9Image = new Scale9Image(selectedBitmapData, new Rectangle(8, 8, 16, 16));
-			defaultSelectedImage.transform.colorTransform.concat(XColor.rgbToColorTransform(XColor.shadeColor(m_buttonColorData.getUpButtonColor(), 1.0)));
+			defaultSelectedImage.transform.colorTransform = XColor.rgbToColorTransform(XColor.shadeColor(m_buttonColorData.getUpButtonColor(), 1.0));
             //categoryToggleButton.defaultSelectedSkin = defaultSelectedImage;
             //categoryToggleButton.defaultSelectedLabelProperties = {
                 //textFormat : new TextFormat(GameFonts.DEFAULT_FONT_NAME, fontSize, 0x000000, null, null, null, null, null, TextFormatAlign.CENTER)

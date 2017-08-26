@@ -2,6 +2,7 @@ package wordproblem.engine.barmodel.view;
 
 
 import openfl.geom.Rectangle;
+import wordproblem.display.DisposableSprite;
 
 import dragonbox.common.dispose.IDisposable;
 
@@ -11,7 +12,7 @@ import wordproblem.engine.barmodel.model.BarLabel;
 import wordproblem.engine.barmodel.model.BarWhole;
 import wordproblem.display.DottedRectangle;
 
-class BarWholeView extends Sprite implements IDisposable
+class BarWholeView extends DisposableSprite
 {
     public var data : BarWhole;
     public var segmentViews : Array<BarSegmentView>;
@@ -137,26 +138,10 @@ class BarWholeView extends Sprite implements IDisposable
         if (labelView.parent == this)             if (labelView.parent != null) labelView.parent.removeChild(labelView);
     }
     
-    public function dispose() : Void
+    override public function dispose() : Void
     {
-        while (segmentViews.length > 0)
-        {
-			var segmentView = segmentViews.pop();
-			if (segmentView.parent != null) segmentView.parent.removeChild(segmentView);
-			segmentView.dispose();
-			segmentView = null;
-        }
-        
-        while (labelViews.length > 0)
-        {
-			var labelView = labelViews.pop();
-			if (labelView.parent != null) labelView.parent.removeChild(labelView);
-			labelView.dispose();
-			labelView = null;
-        }
+		super.dispose();
 		
 		if (hiddenImage != null) hiddenImage.dispose();
-        
-        this.removeChildren();
     }
 }

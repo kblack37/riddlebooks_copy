@@ -68,7 +68,7 @@ class TextReplacementControl
             var documentView : DocumentView = m_outDocumentViewBuffer[i];
             if (Std.is(documentView, ImageView)) 
             {
-                (try cast((try cast(documentView, ImageView) catch (e:Dynamic) null).getChildAt(0), Bitmap) catch (e:Dynamic) null).transform.colorTransform.concat(XColor.rgbToColorTransform(color));
+                (try cast((try cast(documentView, ImageView) catch (e:Dynamic) null).getChildAt(0), Bitmap) catch (e:Dynamic) null).transform.colorTransform = XColor.rgbToColorTransform(color);
             }
         }
     }

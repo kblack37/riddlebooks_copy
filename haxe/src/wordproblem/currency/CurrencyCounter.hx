@@ -56,7 +56,7 @@ class CurrencyCounter extends Sprite
         );
         currencyTextBackground.width = textMaxWidth;
         currencyTextBackground.height = textMaxHeight;
-		currencyTextBackground.transform.colorTransform.concat(XColor.rgbToColorTransform(0xC2A100));
+		currencyTextBackground.transform.colorTransform = XColor.rgbToColorTransform(0xC2A100);
         addChild(currencyTextBackground);
         
         var coinBitmapData : BitmapData = assetManager.getBitmapData("coin");
@@ -102,7 +102,7 @@ class CurrencyCounter extends Sprite
         );
         //extraCurrencyTextBackground.width = textfieldWidth - 2 * extraBackgroundPadding;
         extraCurrencyTextBackground.height = textMaxHeight - 2 * extraBackgroundPadding;
-		extraCurrencyTextBackground.transform.colorTransform.concat(XColor.rgbToColorTransform(0xF7CD00));
+		extraCurrencyTextBackground.transform.colorTransform = XColor.rgbToColorTransform(0xF7CD00);
         //extraCurrencyTextBackground.x = currencyTextBackground.x + threeDimensionalCoin.pivotX + extraBackgroundPadding;
         extraCurrencyTextBackground.y = (textMaxHeight - extraCurrencyTextBackground.height) * 0.5 + currencyTextBackground.y;
         addChild(extraCurrencyTextBackground);

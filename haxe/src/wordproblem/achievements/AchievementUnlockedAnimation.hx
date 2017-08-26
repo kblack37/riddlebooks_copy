@@ -108,7 +108,7 @@ class AchievementUnlockedAnimation implements IDisposable
         m_achievementBackground = new Scale9Image(backgroundBitmapData, new Rectangle(padding, padding, backgroundBitmapData.width - padding * 2, backgroundBitmapData.height - padding * 2));
         
         // Convert string colors to hex
-		m_achievementBackground.transform.colorTransform.concat(XColor.rgbToColorTransform(achievementData.color));
+		m_achievementBackground.transform.colorTransform = XColor.rgbToColorTransform(achievementData.color);
         m_achievementBackground.height = backgroundHeight;
         m_achievementBackground.width = 0;
         textAndBgContainer.addChild(m_achievementBackground);

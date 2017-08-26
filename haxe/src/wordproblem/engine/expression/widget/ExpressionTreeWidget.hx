@@ -3,6 +3,7 @@ package wordproblem.engine.expression.widget;
 import dragonbox.common.math.vectorspace.RealsVectorSpace;
 import openfl.display.Bitmap;
 import openfl.errors.Error;
+import wordproblem.display.DisposableSprite;
 import wordproblem.display.PivotSprite;
 
 import openfl.geom.Point;
@@ -42,7 +43,7 @@ import wordproblem.resource.AssetManager;
  * (Extending classes will need to figure out mouse interaction on their own)
  * 
  */
-class ExpressionTreeWidget extends Sprite implements IDisposable
+class ExpressionTreeWidget extends DisposableSprite
 {
     /**
      * A bit of a hack, in a few rare instances we don't even want things labeled as wild
@@ -391,14 +392,6 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
             {
                 outNodesToCreate.push(node);
             }
-        }
-    }
-    
-    public function dispose() : Void
-    {
-        if (m_widgetRoot != null) 
-        {
-            removeChild(m_widgetRoot);
         }
     }
     

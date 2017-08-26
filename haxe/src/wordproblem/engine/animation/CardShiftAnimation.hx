@@ -3,13 +3,11 @@ package wordproblem.engine.animation;
 
 import flash.geom.Point;
 import flash.geom.Vector3D;
+import motion.Actuate;
 
 import dragonbox.common.expressiontree.ExpressionNode;
 
 import haxe.Constraints.Function;
-
-import starling.animation.Tween;
-import starling.core.Starling;
 
 import wordproblem.engine.expression.widget.ExpressionTreeWidget;
 import wordproblem.engine.expression.widget.term.BaseTermWidget;
@@ -106,11 +104,7 @@ class CardShiftAnimation
                     m_numberWidgetsToShift++;
                     
                     // The final value is amount to actually tween the widget by
-                    var tween : Tween = new Tween(widget, duration);
-                    tween.moveTo(widget.x + xDelta, widget.y + yDelta);
-                    tween.scaleTo(scaleFactor);
-                    tween.onComplete = onSmoothShiftComplete;
-                    Starling.current.juggler.add(tween);
+					Actuate.tween(widget, duration, { x: widget.x + xDelta, y: widget.y + yDelta, scaleX: scaleFactor, scaleY: scaleFactor }).onComplete(onSmoothShiftComplete);
                 }
             }
             else 

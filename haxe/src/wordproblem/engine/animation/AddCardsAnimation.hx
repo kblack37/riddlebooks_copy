@@ -1,13 +1,11 @@
 package wordproblem.engine.animation;
 
+import motion.Actuate;
 import wordproblem.engine.animation.CardShiftAnimation;
 
 import flash.geom.Point;
 
 import haxe.Constraints.Function;
-
-import starling.animation.Tween;
-import starling.core.Starling;
 
 import wordproblem.engine.expression.ExpressionSymbolMap;
 import wordproblem.engine.expression.widget.ExpressionTreeWidget;
@@ -100,10 +98,7 @@ class AddCardsAnimation
         var deltaX : Float = dropX - finalPoint.x;
         var deltaY : Float = dropY - finalPoint.y;
         var addedCardShiftDuration : Float = Math.sqrt(deltaX * deltaX + deltaY * deltaY) / 800;
-        var tween : Tween = new Tween(addedLeafWidgetCopy, addedCardShiftDuration);
-        tween.moveTo(finalPoint.x, finalPoint.y);
-        tween.scaleTo(scaleFactor);
-		function onCompleteMove() : Void
+		Actuate.tween(addedLeafWidgetCopy, addedCardShiftDuration, { x: finalPoint.x, y: finalPoint.y, scaleX: scaleFactor, scaleY: scaleFactor }).onComplete(function onCompleteMove() : Void
         {
             addedCardShiftComplete = true;
             if (cardShiftAnimationComplete && addedCardShiftComplete) 
@@ -115,8 +110,6 @@ class AddCardsAnimation
                     onComplete();
                 }
             }
-        };
-        tween.onComplete = onCompleteMove;
-        Starling.current.juggler.add(tween);
+        });
     }
 }

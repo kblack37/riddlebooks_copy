@@ -126,8 +126,8 @@ class NumberpadWidget extends Layer
                                 new Rectangle(8, 8, 16, 16)
                                 );
 				// TODO: starling buttons use textures, not images, and so you can't change the color like this
-				button.upState.transform.colorTransform.concat(XColor.rgbToColorTransform(XColor.ROYAL_BLUE));
-				button.downState.transform.colorTransform.concat(XColor.rgbToColorTransform(XColor.BRIGHT_ORANGE));
+				button.upState.transform.colorTransform = XColor.rgbToColorTransform(XColor.ROYAL_BLUE);
+				button.downState.transform.colorTransform = XColor.rgbToColorTransform(XColor.BRIGHT_ORANGE);
                 button.width = buttonWidth;
                 button.height = buttonHeight;
                 button.addEventListener(MouseEvent.CLICK, onButtonClick);

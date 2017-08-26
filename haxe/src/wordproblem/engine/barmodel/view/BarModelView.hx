@@ -1,23 +1,21 @@
 package wordproblem.engine.barmodel.view;
 
 import openfl.display.BitmapData;
-import openfl.events.Event;
-import wordproblem.display.PivotSprite;
-import wordproblem.engine.barmodel.view.BarSegmentView;
-import wordproblem.engine.barmodel.view.BarWholeView;
-
-import openfl.geom.Rectangle;
-
 import openfl.display.DisplayObject;
 import openfl.display.DisplayObjectContainer;
 import openfl.display.Sprite;
+import openfl.events.Event;
+import openfl.geom.Rectangle;
 
 import wordproblem.display.DottedRectangle;
+import wordproblem.display.PivotSprite;
 import wordproblem.engine.barmodel.model.BarComparison;
 import wordproblem.engine.barmodel.model.BarLabel;
 import wordproblem.engine.barmodel.model.BarModelData;
 import wordproblem.engine.barmodel.model.BarSegment;
 import wordproblem.engine.barmodel.model.BarWhole;
+import wordproblem.engine.barmodel.view.BarSegmentView;
+import wordproblem.engine.barmodel.view.BarWholeView;
 import wordproblem.engine.events.GameEvent;
 import wordproblem.engine.expression.ExpressionSymbolMap;
 import wordproblem.engine.expression.SymbolData;

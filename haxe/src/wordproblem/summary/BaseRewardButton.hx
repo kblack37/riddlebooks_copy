@@ -5,6 +5,7 @@ import motion.Actuate;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.display.Sprite;
+import wordproblem.display.DisposableSprite;
 import wordproblem.display.PivotSprite;
 
 import wordproblem.resource.AssetManager;
@@ -12,7 +13,7 @@ import wordproblem.resource.AssetManager;
 /**
  * Base display representing a single reward shown on the summary screen
  */
-class BaseRewardButton extends Sprite
+class BaseRewardButton extends DisposableSprite
 {
     public var data : Dynamic;
     
@@ -55,8 +56,10 @@ class BaseRewardButton extends Sprite
         return null;
     }
     
-    public function dispose() : Void
+    override public function dispose() : Void
     {
+		super.dispose();
+		
 		Actuate.stop(m_backgroundGlowImage);
     }
 }

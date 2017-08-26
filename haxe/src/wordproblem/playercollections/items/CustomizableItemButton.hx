@@ -1,17 +1,15 @@
 package wordproblem.playercollections.items;
 
 
-import dragonbox.common.dispose.IDisposable;
-import openfl.display.Bitmap;
-import openfl.geom.Rectangle;
-import wordproblem.display.Scale9Image;
-
 import dragonbox.common.util.XColor;
 
 import openfl.display.DisplayObject;
 import openfl.display.Sprite;
+import openfl.geom.Rectangle;
 import openfl.text.TextField;
 
+import wordproblem.display.DisposableSprite;
+import wordproblem.display.Scale9Image;
 import wordproblem.engine.component.EquippableComponent;
 import wordproblem.engine.component.ItemIdComponent;
 import wordproblem.engine.component.PriceComponent;
@@ -26,7 +24,7 @@ import wordproblem.resource.AssetManager;
  * Button composed of a name at the top, an icon in the middle, and then
  * some indicator or price or whether the item is equipped
  */
-class CustomizableItemButton extends Sprite implements IDisposable
+class CustomizableItemButton extends DisposableSprite
 {
     // HACK:
     // This button knows how to redraw itself for all different cases
@@ -48,7 +46,7 @@ class CustomizableItemButton extends Sprite implements IDisposable
     /**
      * Display component showing the price of an item. (Only used in some cases)
      */
-    private var m_priceContainer : Sprite;
+    private var m_priceContainer : DisposableSprite;
     
     /**
      * Display component showing if item is equipped. (Only used in some cases)
@@ -181,14 +179,15 @@ class CustomizableItemButton extends Sprite implements IDisposable
         m_mainBackground.color = backgroundColor;
     }
     
-    public function dispose() : Void
+    override public function dispose() : Void
     {
         super.dispose();
         
         // Custom cleanup here if necessary
         if (m_priceContainer != null) 
         {
-            m_priceContainer.removeFromParent(true);
+			m_priceContainer.parent.removeChild(m_priceContainer);
+			m_priceContainer.dispose();
         }
 		
 		m_mainBackground.dispose();

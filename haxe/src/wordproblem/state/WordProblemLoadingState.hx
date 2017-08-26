@@ -224,7 +224,7 @@ class WordProblemLoadingState extends BaseState
 		
 		// Pick random tint
 		var color = m_thoughtBubbleColors[Math.floor(Math.random() * m_thoughtBubbleColors.length)];
-		thoughtBubbleBg.transform.colorTransform.concat(XColor.rgbToColorTransform(color));
+		thoughtBubbleBg.transform.colorTransform = XColor.rgbToColorTransform(color);
 		
 		thoughtBubbleContainer.addChild(thoughtBubbleBg);
 		

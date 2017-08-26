@@ -5,6 +5,7 @@ import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.events.EventDispatcher;
 import openfl.text.TextFormatAlign;
+import wordproblem.display.DisposableSprite;
 import wordproblem.display.PivotSprite;
 import wordproblem.display.Scale9Image;
 import wordproblem.levelselect.LevelSetSelector;
@@ -63,7 +64,7 @@ import wordproblem.resource.AssetManager;
  * genre.
  */
 // TODO: revisit animation when more basic elements are displayed properly
-class GenreWidget extends Sprite
+class GenreWidget extends DisposableSprite
 {
     /**
      * Use this to fetch textures
@@ -270,6 +271,8 @@ class GenreWidget extends Sprite
     
     public function dispose() : Void
     {
+		super.dispose();
+		
 		m_closeButton.removeEventListener(MouseEvent.CLICK, onCloseTriggered);
 		m_previousPageHitArea.removeEventListener(MouseEvent.CLICK, onPrevTriggered);
 		m_nextPageHitArea.removeEventListener(MouseEvent.CLICK, onNextTriggered);
@@ -766,7 +769,7 @@ class GenreWidget extends Sprite
 								backgroundBitmapData.width - 2 * nineSlicePadding,
 								backgroundBitmapData.height - 2 * nineSlicePadding
 							));
-							backgroundImage.transform.colorTransform.concat(XColor.rgbToColorTransform(0x000000));
+							backgroundImage.transform.colorTransform = XColor.rgbToColorTransform(0x000000);
                             backgroundImage.alpha = 0.5;
                             backgroundImage.width = remainingLevelsUntilHatchingTextField.width;
                             backgroundImage.height = remainingLevelsUntilHatchingTextField.height;
@@ -932,7 +935,7 @@ class GenreWidget extends Sprite
 						problemCreateBitmapData.width - 2 * padding,
 						problemCreateBitmapData.height - 2 * padding
 					));
-					problemCreateButtonImage.transform.colorTransform.concat(XColor.rgbToColorTransform(0xFF0000));
+					problemCreateButtonImage.transform.colorTransform = XColor.rgbToColorTransform(0xFF0000);
                     buttonBackgroundImage = problemCreateButtonImage;
                 }
                 

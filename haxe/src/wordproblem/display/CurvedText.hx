@@ -17,7 +17,7 @@ import wordproblem.engine.text.MeasuringTextField;
  * 
  * All control points should be relative to the coordinate system of this canvas
  */
-class CurvedText extends Sprite
+class CurvedText extends DisposableSprite
 {
     /**
      * Maintain a list of textfields for each character as we will need to orient each one manually
@@ -121,20 +121,5 @@ class CurvedText extends Sprite
                 textField.rotation = angle;
             }
         }
-    }
-    
-    public function dispose() : Void
-    {
-        var i : Int = 0;
-        for (i in 0...m_textFieldsForCharacters.length){
-            var textField : DisplayObject = m_textFieldsForCharacters[i];
-            if (textField != null) 
-            {
-				if (textField.parent != null) textField.parent.removeChild(textField);
-				textField = null;
-            }
-        }
-        
-		m_textFieldsForCharacters = new Array<DisplayObject>();
     }
 }

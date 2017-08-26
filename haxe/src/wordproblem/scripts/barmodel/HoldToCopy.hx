@@ -183,7 +183,7 @@ class HoldToCopy extends BaseBarModelScript
         var background : Bitmap = new Bitmap(m_assetManager.getBitmapData("thought_bubble"));
         background.scaleX = textWidth / background.width;
         background.scaleY = (textHeight * 2) / background.height;
-		background.transform.colorTransform.concat(XColor.rgbToColorTransform(0xFFFFFF));
+		background.transform.colorTransform = XColor.rgbToColorTransform(0xFFFFFF);
         
         var descriptionContainer : Sprite = new Sprite();
         descriptionContainer.addChild(background);

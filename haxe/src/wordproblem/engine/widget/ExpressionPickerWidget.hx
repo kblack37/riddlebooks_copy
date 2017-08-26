@@ -1,16 +1,15 @@
 package wordproblem.engine.widget;
 
 
-import openfl.filters.BitmapFilter;
-import openfl.geom.Rectangle;
-
-import dragonbox.common.dispose.IDisposable;
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
+import dragonbox.common.util.XColor;
 
-import openfl.display.Sprite;
+import openfl.filters.BitmapFilter;
 import openfl.filters.ColorMatrixFilter;
+import openfl.geom.Rectangle;
 
+import wordproblem.display.DisposableSprite;
 import wordproblem.engine.component.ExpressionComponent;
 import wordproblem.engine.expression.ExpressionSymbolMap;
 import wordproblem.resource.AssetManager;
@@ -21,7 +20,7 @@ import wordproblem.resource.AssetManager;
  * 
  * This widget is mainly just a container for equations or expressions
  */
-class ExpressionPickerWidget extends Sprite implements IDisposable
+class ExpressionPickerWidget extends DisposableSprite
 {
     private var m_totalWidth : Float;
     private var m_totalHeight : Float;
@@ -88,8 +87,10 @@ class ExpressionPickerWidget extends Sprite implements IDisposable
         isActive = true;
     }
     
-    public function dispose() : Void
+    override public function dispose() : Void
     {
+		super.dispose(); 
+		
         this.removeAllExpressions();
     }
     
@@ -177,8 +178,8 @@ class ExpressionPickerWidget extends Sprite implements IDisposable
         while (m_expressionContainers.length > 0)
         {
             var expressionContainer : ExpressionContainer = m_expressionContainers.pop();
-            expressionContainer.dispose();
             if (expressionContainer.parent != null) expressionContainer.parent.removeChild(expressionContainer);
+			expressionContainer.dispose();
         }
         
         m_selectedExpressionContainersBuffer = new Array<ExpressionContainer>();
@@ -207,10 +208,7 @@ class ExpressionPickerWidget extends Sprite implements IDisposable
         {
             if (!expressionContainer.getIsSelected()) 
             {
-				// TODO: this needs to properly convert to grayscale in openfl
-                var colorMatrixFilter : ColorMatrixFilter = new ColorMatrixFilter();
-                //colorMatrixFilter.adjustSaturation(-1);
-                //expressionContainer.filter = colorMatrixFilter;
+				expressionContainer.filters = [XColor.getGrayscaleFilter()];
             }
         }
     }

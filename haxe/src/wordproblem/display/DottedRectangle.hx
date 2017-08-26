@@ -14,7 +14,7 @@ import openfl.display.Sprite;
  * 
  * (used mainly to indicate hit areas for particular parts of the bar modeling ui)
  */
-class DottedRectangle extends Sprite implements IDisposable
+class DottedRectangle extends DisposableSprite
 {
     /**
      * Reference to a scalable version of the background
@@ -147,7 +147,7 @@ class DottedRectangle extends Sprite implements IDisposable
 		bottomLeftCorner.addChild(new Bitmap(m_cornerBitmapData));
         bottomLeftCorner.scaleX = bottomLeftCorner.scaleY = m_dotScaleFactor;
         bottomLeftCorner.pivotX = cornerTextureWidth;
-        bottomLeftCorner.rotation = Math.PI * -0.5;
+        bottomLeftCorner.rotation = -90;
         bottomLeftCorner.y = height - cornerTextureHeight * m_dotScaleFactor;
         
         var bottomRightCorner : PivotSprite = new PivotSprite();
@@ -155,7 +155,7 @@ class DottedRectangle extends Sprite implements IDisposable
         bottomRightCorner.scaleX = bottomRightCorner.scaleY = m_dotScaleFactor;
         bottomRightCorner.pivotX = cornerTextureWidth;
         bottomRightCorner.pivotY = cornerTextureHeight;
-        bottomRightCorner.rotation = Math.PI;
+        bottomRightCorner.rotation = 180;
         bottomRightCorner.x = topRightCorner.x;
         bottomRightCorner.y = bottomLeftCorner.y;
         
@@ -200,7 +200,7 @@ class DottedRectangle extends Sprite implements IDisposable
 			leftVerticalSegment.addChild(new Bitmap(m_lineBitmapData));
             leftVerticalSegment.scaleX = leftVerticalSegment.scaleY = m_dotScaleFactor;
             leftVerticalSegment.pivotX = lineTextureWidth;
-            leftVerticalSegment.rotation = Math.PI * -0.5;
+            leftVerticalSegment.rotation = -90;
             leftVerticalSegment.y = yOffset;
             addChild(leftVerticalSegment);
             
@@ -208,7 +208,7 @@ class DottedRectangle extends Sprite implements IDisposable
 			rightVerticalSegment.addChild(new Bitmap(m_lineBitmapData));
             rightVerticalSegment.scaleX = rightVerticalSegment.scaleY = m_dotScaleFactor;
             rightVerticalSegment.pivotX = lineTextureWidth;
-            rightVerticalSegment.rotation = Math.PI * -0.5;
+            rightVerticalSegment.rotation = -90;
             rightVerticalSegment.y = yOffset;
             rightVerticalSegment.x = xRight;
             addChild(rightVerticalSegment);
@@ -221,7 +221,12 @@ class DottedRectangle extends Sprite implements IDisposable
         }
     }
 	
-	public function dispose() {
+	override public function dispose() {
 		m_backgroundNineSliceImage.dispose();
+		
+		while (m_dottedLineImages.length > 0) {
+			var image = m_dottedLineImages.pop();
+			image.parent.removeChild(image);
+		}
 	}
 }

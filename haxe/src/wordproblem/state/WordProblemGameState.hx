@@ -183,11 +183,9 @@ class WordProblemGameState extends BaseState implements IConsoleInterfacable
 		m_levelInformationText.height = 40;
 		m_levelInformationText.text = "";
 		m_levelInformationText.setTextFormat(new TextFormat("Verdana", 14, 0x291400));
-		var filters = m_levelInformationText.filters.copy();
-		filters.push(new GlowFilter(0xFFFFFF, 1, 0.5));
-		m_levelInformationText.filters = filters;
-        m_levelInformationText.x = 30;
-        m_levelInformationText.y = 0;
+		m_levelInformationText.filters = [new GlowFilter(0xFFFFFF, 0.7, 0.7, 0.7)];
+        m_levelInformationText.x = 50;
+        m_levelInformationText.y = 7;
         m_levelInformationText.mouseEnabled = false;
         
         m_audioDriver = Audio.instance;

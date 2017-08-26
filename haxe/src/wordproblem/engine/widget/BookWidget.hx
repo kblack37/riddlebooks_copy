@@ -1,10 +1,10 @@
 package wordproblem.engine.widget;
 
 
-import dragonbox.common.dispose.IDisposable;
-import wordproblem.display.Scale9Image;
-
 import openfl.display.Sprite;
+
+import wordproblem.display.DisposableSprite;
+import wordproblem.display.Scale9Image;
 
 /**
  * The widget attempts to treat multiple screens like the pages in a book.
@@ -17,7 +17,7 @@ import openfl.display.Sprite;
  * One important config setting is whether one or two pages are visible at the start. The case of one would
  * be like having a front cover, the left side has nothing in this case.
  */
-class BookWidget extends Sprite implements IDisposable
+class BookWidget extends DisposableSprite
 {
     /**
      * Stack of screens on the left side. Only the very top is visible.
@@ -201,17 +201,6 @@ class BookWidget extends Sprite implements IDisposable
     public function canGoToPreviousPage() : Bool
     {
         return m_leftPageStack.length >= 2;
-    }
-    
-    public function dispose() : Void
-    {
-        while (this.numChildren > 0)
-        {
-            var child = this.removeChildAt(0);
-			if (Std.is(child, Scale9Image)) {
-				(try cast(child, Scale9Image) catch (e : Dynamic) null).dispose();
-			}
-        }
     }
     
     /**

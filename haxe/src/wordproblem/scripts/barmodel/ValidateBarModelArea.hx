@@ -276,8 +276,9 @@ class ValidateBarModelArea extends BaseBarModelScript
 			// TODO: it remains to be seen if this tween conversion is correct
             //m_colorChangeAnimation.play(backgroundColorToFadeTo, 0xFFFFFF, 1.0, m_barModelArea.getBackgroundImage());
             //Starling.current.juggler.add(m_colorChangeAnimation);
+			m_barModelArea.getBackgroundImage().transform.colorTransform = XColor.rgbToColorTransform(backgroundColorToFadeTo);
 			
-			Actuate.transform(m_barModelArea.getBackgroundImage(), 1.0).color(backgroundColorToFadeTo);
+			Actuate.transform(m_barModelArea.getBackgroundImage(), 1.0).color(0xFFFFFF);
             
             m_gameEngine.dispatchEvent(new Event(GameEvent.BAR_MODEL_CORRECT));
             Audio.instance.playSfx("find_correct_equation");

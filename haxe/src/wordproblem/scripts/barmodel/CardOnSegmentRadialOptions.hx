@@ -296,10 +296,9 @@ class CardOnSegmentRadialOptions extends BaseBarModelScript
                     {
                         numValidGestures++;
                     }
-                }  // Open the radial menu only if there are enough gestures  
-                
-                
-                
+                } 
+				
+				// Open the radial menu only if there are enough gestures  
                 if (numValidGestures > 0) 
                 {
                     // Special case, if there is only one valid gesture then just execute that gesture directly
@@ -425,8 +424,11 @@ class CardOnSegmentRadialOptions extends BaseBarModelScript
 			// We need to know if the second child is a display object container; if so, it contains a Scale9Image, which must be disposed
 			var iconAsContainer : DisplayObjectContainer = try cast(segmentAsContainer.getChildAt(1), DisplayObjectContainer) catch (e : Dynamic) null;
 			if (iconAsContainer != null) {
-				// The Scale9Image is the first child, so we dispose it
-				(try cast(iconAsContainer.getChildAt(0), Scale9Image) catch (e : Dynamic) null).dispose();
+				var iconAsContainerAsContainer : DisplayObjectContainer = try cast(iconAsContainer.getChildAt(0), DisplayObjectContainer) catch (e : Dynamic) null;
+				if (iconAsContainerAsContainer != null) {
+					// The Scale9Image is the first child, so we dispose it
+					(try cast(iconAsContainerAsContainer.getChildAt(0), Scale9Image) catch (e : Dynamic) null).dispose();
+				}
 			}
 		}
         
@@ -461,7 +463,7 @@ class CardOnSegmentRadialOptions extends BaseBarModelScript
 				scale9Offset,
 				barBackgroundBitmapData.width - 2 * scale9Offset,
 				barBackgroundBitmapData.height - 2 * scale9Offset));
-            barBackground.transform.colorTransform.concat(XColor.rgbToColorTransform(symbolData.useCustomBarColor ? symbolData.customBarColor : 0xFFFFFF));
+            barBackground.transform.colorTransform = XColor.rgbToColorTransform(symbolData.useCustomBarColor ? symbolData.customBarColor : 0xFFFFFF);
             
             var nameOnBar : String = symbolData.name;
             if (nameOnBar == null) 

@@ -2,22 +2,22 @@
 package wordproblem.engine.widget;
 
 
-import openfl.display.Bitmap;
-import openfl.display.BitmapData;
-import openfl.events.MouseEvent;
-import openfl.geom.Point;
-import openfl.geom.Rectangle;
-
 import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
 
 import haxe.Constraints.Function;
 
-import wordproblem.display.LabelButton;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
 import openfl.display.DisplayObject;
 import openfl.display.Sprite;
 import openfl.events.Event;
+import openfl.events.MouseEvent;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
 
+import wordproblem.display.DisposableSprite;
+import wordproblem.display.LabelButton;
 import wordproblem.engine.component.Component;
 import wordproblem.engine.component.ComponentManager;
 import wordproblem.engine.component.ExpressionComponent;
@@ -47,7 +47,7 @@ import wordproblem.resource.AssetManager;
  */
 
  // TODO: uncomment all scrollbar references after scrollbar is redesigned
-class TextAreaWidget extends Sprite implements IBaseWidget
+class TextAreaWidget extends DisposableSprite implements IBaseWidget
 {
     public var componentManager(get, never) : ComponentManager;
 
@@ -226,8 +226,10 @@ class TextAreaWidget extends Sprite implements IBaseWidget
         m_componentManager = new ComponentManager();
     }
     
-    public function dispose() : Void
+    override public function dispose() : Void
     {
+		super.dispose();
+		
         m_componentManager.clear();
         
         m_isActive = false;
@@ -238,7 +240,6 @@ class TextAreaWidget extends Sprite implements IBaseWidget
 			if (textPage.parent != null) textPage.parent.removeChild(textPage);
 			textPage.dispose();
         }
-		this.removeChildren(0, -1);
     }
     
     public function getDocumentIdToExpressionMap() : Dynamic

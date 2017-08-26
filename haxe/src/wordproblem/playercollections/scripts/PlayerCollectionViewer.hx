@@ -192,10 +192,10 @@ class PlayerCollectionViewer extends ScriptNode
         var arrowRotateBitmapData : BitmapData = m_assetManager.getBitmapData("arrow_rotate");
         var scaleFactor : Float = 0.65;
         var backUpImage : Bitmap = new Bitmap(arrowRotateBitmapData);
-		backUpImage.transform.colorTransform.concat(XColor.rgbToColorTransform(0xFBB03B));
+		backUpImage.transform.colorTransform = XColor.rgbToColorTransform(0xFBB03B);
         backUpImage.scaleX = backUpImage.scaleY = scaleFactor;
         var backOverImage : Bitmap = new Bitmap(arrowRotateBitmapData);
-		backOverImage.transform.colorTransform.concat(XColor.rgbToColorTransform(0xFDDDAC));
+		backOverImage.transform.colorTransform = XColor.rgbToColorTransform(0xFDDDAC);
         backOverImage.scaleX = backOverImage.scaleY = scaleFactor;
         m_backButton = WidgetUtil.createButtonFromImages(
                         backUpImage,

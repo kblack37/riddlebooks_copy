@@ -5,7 +5,7 @@ import openfl.display.Bitmap;
 import openfl.display.DisplayObject;
 import openfl.display.Sprite;
 
-class Scale9CompositeImage extends Sprite implements IDisposable
+class Scale9CompositeImage extends DisposableSprite
 {
     public function new(args : Array<DisplayObject>)
     {
@@ -39,13 +39,4 @@ class Scale9CompositeImage extends Sprite implements IDisposable
         }
         return value;
     }
-	
-	public function dispose() {
-		while (numChildren > 0) {
-			var child = removeChildAt(0);
-			if (Std.is(child, IDisposable)) {
-				cast(child, IDisposable).dispose();
-			}
-		}
-	}
 }

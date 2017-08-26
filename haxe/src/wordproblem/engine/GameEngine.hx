@@ -7,6 +7,7 @@ import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.math.vectorspace.RealsVectorSpace;
 import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
+import wordproblem.display.DisposableSprite;
 import wordproblem.display.Scale9Image;
 
 import openfl.display.Bitmap;
@@ -769,10 +770,10 @@ class GameEngine extends Sprite implements IGameEngine
                                 widgetAttributes.entityId,
                                 RenderableComponent.TYPE_ID
                                 ), RenderableComponent) catch (e:Dynamic) null;
-				// TODO: not sure if this is effective cleanup, but the other methods
-				// aren't supported by openfl
 				if (renderComponent.view.parent != null) renderComponent.view.parent.removeChild(renderComponent.view);
-				renderComponent.view = null;
+				if (Std.is(renderComponent.view, DisposableSprite)) {
+					(try cast(renderComponent.view, DisposableSprite) catch (e : Dynamic) null).dispose();
+				}
             }
         }  
 		
@@ -1105,6 +1106,8 @@ class GameEngine extends Sprite implements IGameEngine
                         extraData.label != null ? new TextFormat(extraData.fontName, extraData.fontSize, extraData.fontColor) : null,
                         nineSlice
                 );
+				
+				if (widgetAttributeRoot.entityId == "hintButton") trace(button.width);
 				
                 widget = button;
             }

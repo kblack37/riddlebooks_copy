@@ -1,15 +1,14 @@
 package wordproblem.engine.expression.widget.term;
 
 
-import openfl.geom.Rectangle;
-
-import dragonbox.common.dispose.IDisposable;
 import dragonbox.common.expressiontree.ExpressionNode;
 
 import openfl.display.Sprite;
-import wordproblem.resource.AssetManager;
+import openfl.geom.Rectangle;
 
+import wordproblem.display.DisposableSprite;
 import wordproblem.engine.component.RigidBodyComponent;
+import wordproblem.resource.AssetManager;
 
 /**
  * NOTE: We make the assumption that all graphics we add on top of this widget will
@@ -17,7 +16,7 @@ import wordproblem.engine.component.RigidBodyComponent;
  * 
  * So a call to addChild already positions the graphic in the correct spot
  */
-class BaseTermWidget extends Sprite implements IDisposable
+class BaseTermWidget extends DisposableSprite
 {
     /** 
 		 * This component always gives the body location relative to the main tree container,
@@ -127,9 +126,5 @@ class BaseTermWidget extends Sprite implements IDisposable
         {
             m_childrenTermWidgetCanvas.removeChildAt(0);
         }
-    }
-    
-    public function dispose() : Void
-    {
     }
 }

@@ -1,14 +1,15 @@
 package wordproblem.engine.widget;
 
 
-import openfl.events.Event;
-import openfl.geom.Point;
-import openfl.geom.Rectangle;
-
 import dragonbox.common.system.RectanglePool;
 
 import openfl.display.DisplayObject;
 import openfl.display.Sprite;
+import openfl.events.Event;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
+
+import wordproblem.display.DisposableSprite;
 
 /**
  * One important note is that we are assuming that any added component will
@@ -19,7 +20,7 @@ import openfl.display.Sprite;
  * 
  * For simplicity we will just always assume things are a single row.
  */
-class ScrollGridWidget extends Sprite
+class ScrollGridWidget extends DisposableSprite
 {
     public static inline var EVENT_LAYOUT_COMPLETE : String = "event_layout_complete";
     
@@ -269,10 +270,6 @@ class ScrollGridWidget extends Sprite
     {
     }
     
-    public function dispose() : Void
-    {
-    }
-    
     // The grid widget is a fairly dumb class:
     // Its only responsibility is to properly layout containing objects
     // Scroll through objects
@@ -414,10 +411,9 @@ class ScrollGridWidget extends Sprite
         {
             maxWidth = m_fixedItemBounds.width;
             maxHeight = m_fixedItemBounds.height;
-        }  // Get the bounds to use for layout  
-        
-        
-        
+        } 
+		
+		// Get the bounds to use for layout  
         var i : Int = 0;
         var actualObject : DisplayObject = null;
         var numActualObjects : Int = m_objects.length;
@@ -437,12 +433,10 @@ class ScrollGridWidget extends Sprite
                 dummyBounds.setTo(0, 0, m_fixedItemBounds.width, m_fixedItemBounds.height);
             }
             m_dummyBoundsBuffer.push(dummyBounds);
-        }  // line. If it spills over the width limit then we need to create a new row    // First pass, go through each bounds and just try to position them in a single  
-        
-        
-        
-        
-        
+        }  
+		
+		// First pass, go through each bounds and just try to position them in a single  
+        // line. If it spills over the width limit then we need to create a new row 
         var itemsPerRow : Array<Int> = new Array<Int>();
         if (numActualObjects > 0) 
         {
@@ -470,10 +464,9 @@ class ScrollGridWidget extends Sprite
                 itemsPerRow[activeRowIndex] = itemsPerRow[activeRowIndex] + 1;
                 xOffset += dummyBounds.width + m_gap;
             }
-        }  // The last pass tries to just center the contents of each row  
-        
-        
-        
+        }
+		
+		// The last pass tries to just center the contents of each row  
         var currentItemIndex : Int = 0;
         var numRows : Int = itemsPerRow.length;
         
@@ -500,20 +493,17 @@ class ScrollGridWidget extends Sprite
             }
             
             currentItemIndex += numItemsInRow;
-        }  // HACK: Assuming everything in one row  
-        
-        
-        
+        }
+		
+		// HACK: Assuming everything in one row  
         var maxRowWidth : Float = 0;
         if (m_dummyBoundsBuffer.length > 0) 
         {
             maxRowWidth = m_dummyBoundsBuffer[m_dummyBoundsBuffer.length - 1].right - m_dummyBoundsBuffer[0].left + m_gap * 2;
-        }  // This only applies if the total row width fits in the viewport    // Find the xOffset needed to center all the items in the view and apply them to all the objects  
-        
-        
-        
-        
-        
+        }  
+		
+		// Find the xOffset needed to center all the items in the view and apply them to all the objects  
+        // This only applies if the total row width fits in the viewport 
         if (maxRowWidth < m_viewPort.width) 
         {
             currentItemIndex = 0;
@@ -538,12 +528,10 @@ class ScrollGridWidget extends Sprite
             // More items in row then what is visible in the viewport, we need to show
             // scroll buttons so the user can view all options
             
-        }  // the dummy bounds to the pool    // Set the objects to use the determined x and y bounds and return  
-        
-        
-        
-        
-        
+        }  
+		
+		// Set the objects to use the determined x and y bounds and return  
+        // the dummy bounds to the pool    
         for (i in 0...numActualObjects){
             actualObject = m_objects[i];
             var dummyBounds = m_dummyBoundsBuffer[i];

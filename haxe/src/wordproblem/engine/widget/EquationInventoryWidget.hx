@@ -90,7 +90,7 @@ class EquationInventoryWidget extends Sprite
         var backgroundBitmapData : BitmapData = assetManager.getBitmapData("button_white");
         var backgroundImage : PivotSprite = new PivotSprite();
 		backgroundImage.addChild(new Scale9Image(backgroundBitmapData, new Rectangle(padding, 0, backgroundBitmapData.width - 2 * padding, backgroundBitmapData.height)));
-		backgroundImage.transform.colorTransform.concat(XColor.rgbToColorTransform(0xCCCCCC));
+		backgroundImage.transform.colorTransform = XColor.rgbToColorTransform(0xCCCCCC);
         m_backgroundInitialDimensions = new Rectangle(0, 0, backgroundBitmapData.width, backgroundBitmapData.height);
         m_background = backgroundImage;
         

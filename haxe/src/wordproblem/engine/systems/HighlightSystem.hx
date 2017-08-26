@@ -127,7 +127,7 @@ class HighlightSystem extends BaseSystemScript
                             highlightBitmap.height = Math.max(m_scale9Rect.height, resultBounds.height);
                             highlightBitmap.x = resultBounds.x - (highlightBitmap.width - resultBounds.width) * 0.5;
                             highlightBitmap.y = resultBounds.y - (highlightBitmap.height - resultBounds.height) * 0.5;
-							highlightBitmap.transform.colorTransform.concat(XColor.rgbToColorTransform(highlightComponent.color));
+							highlightBitmap.transform.colorTransform = XColor.rgbToColorTransform(highlightComponent.color);
                             
                             highlightLayer.addChildAt(highlightBitmap, 0);
                         }
@@ -145,7 +145,7 @@ class HighlightSystem extends BaseSystemScript
                     if (highlightComponent.displayedHighlight == null && renderView.stage != null) 
                     {
                         var highlightBitmap = new Bitmap(m_highlightBitmapData);
-						highlightBitmap.transform.colorTransform.concat(XColor.rgbToColorTransform(highlightComponent.color));
+						highlightBitmap.transform.colorTransform = XColor.rgbToColorTransform(highlightComponent.color);
                         
                         // Add the highlight just below the object
                         var displayIndex : Int = renderView.parent.getChildIndex(renderView);
