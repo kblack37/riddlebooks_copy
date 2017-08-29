@@ -103,7 +103,7 @@ class HoldToCopy extends BaseBarModelScript
      * This has the dynamically created texture representing the fill.
      * (Make sure this is properly cleaned up whenever a new snapshot is drawn)
      */
-    private var m_currentFillImage : Bitmap;
+    private var m_currentFillImage : PivotSprite;
     
     /**
      * This is a running counter of the amount of the image that should be filled
@@ -217,8 +217,9 @@ class HoldToCopy extends BaseBarModelScript
             if (m_currentFillImage != null) 
             {
 				if (m_currentFillImage.parent != null) m_currentFillImage.parent.removeChild(m_currentFillImage);
-				m_currentFillImage.bitmapData.dispose();
-                m_currentFillImage = null;
+				cast(m_currentFillImage.getChildAt(0), Bitmap).bitmapData.dispose();
+				m_currentFillImage.dispose();
+				m_currentFillImage = null;
             }
             m_radiansToFill = 0.0;
             
@@ -486,22 +487,23 @@ class HoldToCopy extends BaseBarModelScript
                     if (m_currentFillImage != null) 
                     {
 						if (m_currentFillImage.parent != null) m_currentFillImage.parent.removeChild(m_currentFillImage);
-						m_currentFillImage.bitmapData.dispose();
+						cast(m_currentFillImage.getChildAt(0), Bitmap).bitmapData.dispose();
+						m_currentFillImage.dispose();
 						m_currentFillImage = null;
                     } 
 					
 					// After every visit we need to update the fill of the radial bar
-					// TODO: revisit animation after more basic elements are working
-                    //var newFillBitmapData : BitmapData = TextureUtil.getRingSegmentBitmapData(
-                            //m_innerRadius, m_outerRadius, -Math.PI / 2, m_radiansToFill, true, m_fillBitmapData, 0, true, 1, 0
-                            //);
+                    var newFillBitmapData : BitmapData = BitmapUtil.getRingSegmentBitmapData(
+                            m_innerRadius, m_outerRadius, -Math.PI / 2, m_radiansToFill, true, m_fillBitmapData, 0, true, 1, 0
+                            );
                     
-                    //m_currentFillImage = new Image(newFillBitmapData);
-                    //m_currentFillImage.pivotX = newFillBitmapData.width * 0.5;
-                    //m_currentFillImage.pivotY = newFillBitmapData.height * 0.5;
-                    //m_currentFillImage.x = m_originPoint.x;
-                    //m_currentFillImage.y = m_originPoint.y;
-                    //m_canvas.addChild(m_currentFillImage);
+                    m_currentFillImage = new PivotSprite();
+					m_currentFillImage.addChild(new Bitmap(newFillBitmapData));
+                    m_currentFillImage.pivotX = newFillBitmapData.width * 0.5;
+                    m_currentFillImage.pivotY = newFillBitmapData.height * 0.5;
+                    m_currentFillImage.x = m_originPoint.x;
+                    m_currentFillImage.y = m_originPoint.y;
+                    m_canvas.addChild(m_currentFillImage);
                 }
             }
         }
@@ -541,7 +543,8 @@ class HoldToCopy extends BaseBarModelScript
         if (m_currentFillImage != null) 
         {
 			if (m_currentFillImage.parent != null) m_currentFillImage.parent.removeChild(m_currentFillImage);
-			m_currentFillImage.bitmapData.dispose();
+			cast(m_currentFillImage.getChildAt(0), Bitmap).bitmapData.dispose();
+			m_currentFillImage.dispose();
 			m_currentFillImage = null;
         }
         

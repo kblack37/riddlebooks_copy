@@ -1,13 +1,14 @@
 package wordproblem.display;
 
 
-import dragonbox.common.dispose.IDisposable;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.display.DisplayObject;
+import openfl.display.Tile;
+import openfl.display.Tilemap;
+import openfl.display.Tileset;
 import openfl.geom.Rectangle;
 
-import openfl.display.Sprite;
 
 /**
  * A special display to draw a rectangle with a dotted border
@@ -41,8 +42,14 @@ class DottedRectangle extends DisposableSprite
      * relative to the default
      */
     private var m_dotScaleFactor : Float;
+	
+	private var m_corners : Array<DisplayObject>;
     
-    private var m_dottedLineImages : Array<DisplayObject>;
+	/**
+	 * Using the OpenFL solution to batching to improve performance
+	 */
+    private var m_tilemap : Tilemap;
+	private var m_tileset : Tileset;
     
     /**
      *
@@ -62,7 +69,8 @@ class DottedRectangle extends DisposableSprite
         m_dotScaleFactor = dotScaleFactor;
         m_cornerBitmapData = cornerBitmapData;
         m_lineBitmapData = lineBitmapData;
-        m_dottedLineImages = new Array<DisplayObject>();
+		m_corners = new Array<DisplayObject>();
+		m_tileset = new Tileset(m_lineBitmapData, [ new Rectangle(0, 0, m_lineBitmapData.width, m_lineBitmapData.height) ]);
         
         if (backgroundRegularBitmapData != null) 
         {
@@ -81,11 +89,15 @@ class DottedRectangle extends DisposableSprite
             desiredVerticalSpacing : Float) : Void
     {
         // Delete all previous graphics
-        while (m_dottedLineImages.length > 0)
-        {
-			var imageToRemove = m_dottedLineImages.pop();
-            if (imageToRemove.parent != null) imageToRemove.parent.removeChild(imageToRemove);
-        }
+		while (m_corners.length > 0) {
+			this.removeChild(m_corners.pop());
+		}
+		
+		if (m_tilemap != null) {
+			this.removeChild(m_tilemap);
+			m_tilemap.removeTiles();
+		}
+		m_tilemap = new Tilemap(Std.int(width), Std.int(height), m_tileset);
         
         if (m_backgroundNineSliceImage != null) 
         {
@@ -136,97 +148,63 @@ class DottedRectangle extends DisposableSprite
         topLeftCorner.scaleX = topLeftCorner.scaleY = m_dotScaleFactor;
         
         // Top right is reflection
-        var topRightCorner : PivotSprite = new PivotSprite();
-		topRightCorner.addChild(new Bitmap(m_cornerBitmapData));
-        topRightCorner.scaleX = -1 * m_dotScaleFactor;
-        topRightCorner.scaleY = m_dotScaleFactor;
-        topRightCorner.pivotX = cornerTextureWidth;
-        topRightCorner.x = width - cornerTextureWidth * m_dotScaleFactor;
+		var topRightCorner : Bitmap = new Bitmap(m_cornerBitmapData);
+        topRightCorner.scaleX = topRightCorner.scaleY = m_dotScaleFactor;
+		topRightCorner.rotation = 90;
+		topRightCorner.x = width;
         
-        var bottomLeftCorner : PivotSprite = new PivotSprite();
-		bottomLeftCorner.addChild(new Bitmap(m_cornerBitmapData));
+		var bottomLeftCorner : Bitmap = new Bitmap(m_cornerBitmapData);
         bottomLeftCorner.scaleX = bottomLeftCorner.scaleY = m_dotScaleFactor;
-        bottomLeftCorner.pivotX = cornerTextureWidth;
-        bottomLeftCorner.rotation = -90;
-        bottomLeftCorner.y = height - cornerTextureHeight * m_dotScaleFactor;
+		bottomLeftCorner.rotation = -90;
+		bottomLeftCorner.y = height;
         
-        var bottomRightCorner : PivotSprite = new PivotSprite();
-		bottomRightCorner.addChild(new Bitmap(m_cornerBitmapData));
+		var bottomRightCorner : Bitmap = new Bitmap(m_cornerBitmapData);
         bottomRightCorner.scaleX = bottomRightCorner.scaleY = m_dotScaleFactor;
-        bottomRightCorner.pivotX = cornerTextureWidth;
-        bottomRightCorner.pivotY = cornerTextureHeight;
-        bottomRightCorner.rotation = 180;
-        bottomRightCorner.x = topRightCorner.x;
-        bottomRightCorner.y = bottomLeftCorner.y;
+		bottomRightCorner.rotation = 180;
+		bottomRightCorner.x = topRightCorner.x;
+		bottomRightCorner.y = bottomLeftCorner.y;
         
         addChild(topLeftCorner);
         addChild(topRightCorner);
         addChild(bottomLeftCorner);
         addChild(bottomRightCorner);
-        m_dottedLineImages.push(topLeftCorner);
-        m_dottedLineImages.push(topRightCorner);
-        m_dottedLineImages.push(bottomLeftCorner);
-        m_dottedLineImages.push(bottomRightCorner);
-        
+		m_corners.push(topLeftCorner);
+		m_corners.push(topRightCorner);
+		m_corners.push(bottomLeftCorner);
+		m_corners.push(bottomRightCorner);
         
         var i : Int = 0;
         var xOffset : Float = cornerTextureWidth + newHorizontalSpacing;
-        var yTop : Float = 0;
         var yBottom : Float = height - lineTextureHeight;
         for (i in 0...horizontalSegmentsAllowed){
-            var topHorizontalSegment : Bitmap = new Bitmap(m_lineBitmapData);
-            topHorizontalSegment.scaleX = topHorizontalSegment.scaleY = m_dotScaleFactor;
-            topHorizontalSegment.x = xOffset;
-            addChild(topHorizontalSegment);
+			var topHorizontalSegment : Tile = new Tile(0, xOffset, 0, m_dotScaleFactor, m_dotScaleFactor);
+			m_tilemap.addTile(topHorizontalSegment);
             
-            var bottomHorizontalSegment : Bitmap = new Bitmap(m_lineBitmapData);
-            bottomHorizontalSegment.scaleX = bottomHorizontalSegment.scaleY = m_dotScaleFactor;
-            bottomHorizontalSegment.x = xOffset;
-            bottomHorizontalSegment.y = yBottom;
-            addChild(bottomHorizontalSegment);
+			var bottomHorizontalSegment : Tile = new Tile(0, xOffset, yBottom, m_dotScaleFactor, m_dotScaleFactor);
+			m_tilemap.addTile(bottomHorizontalSegment);
             
             xOffset += newHorizontalSpacing + lineTextureWidth;
-            
-            m_dottedLineImages.push(topHorizontalSegment);
-            m_dottedLineImages.push(bottomHorizontalSegment);
-            
-        } 
+        }
 		
 		// ??? When scale factor is less than one the space between the vertical segments does not have the right starting offset  
         var yOffset : Float = cornerTextureHeight + newVerticalSpacing;
         var xRight : Float = width - lineTextureHeight;
         for (i in 0...verticalSegmentsAllowed){
-            var leftVerticalSegment : PivotSprite = new PivotSprite();
-			leftVerticalSegment.addChild(new Bitmap(m_lineBitmapData));
-            leftVerticalSegment.scaleX = leftVerticalSegment.scaleY = m_dotScaleFactor;
-            leftVerticalSegment.pivotX = lineTextureWidth;
-            leftVerticalSegment.rotation = -90;
-            leftVerticalSegment.y = yOffset;
-            addChild(leftVerticalSegment);
+			var leftVerticalSegment : Tile = new Tile(0, lineTextureHeight, yOffset, m_dotScaleFactor, m_dotScaleFactor, 90);
+			m_tilemap.addTile(leftVerticalSegment);
             
-            var rightVerticalSegment : PivotSprite = new PivotSprite();
-			rightVerticalSegment.addChild(new Bitmap(m_lineBitmapData));
-            rightVerticalSegment.scaleX = rightVerticalSegment.scaleY = m_dotScaleFactor;
-            rightVerticalSegment.pivotX = lineTextureWidth;
-            rightVerticalSegment.rotation = -90;
-            rightVerticalSegment.y = yOffset;
-            rightVerticalSegment.x = xRight;
-            addChild(rightVerticalSegment);
+			var rightVerticalSegment : Tile = new Tile(0, xRight + lineTextureHeight, yOffset, m_dotScaleFactor, m_dotScaleFactor, 90);
+			m_tilemap.addTile(rightVerticalSegment);
             
             yOffset += newVerticalSpacing + lineTextureWidth;
-            
-            m_dottedLineImages.push(leftVerticalSegment);
-            m_dottedLineImages.push(rightVerticalSegment);
-            
         }
+		
+		this.addChild(m_tilemap);
     }
 	
 	override public function dispose() {
-		m_backgroundNineSliceImage.dispose();
+		super.dispose();
 		
-		while (m_dottedLineImages.length > 0) {
-			var image = m_dottedLineImages.pop();
-			image.parent.removeChild(image);
-		}
+		if (m_tilemap != null) m_tilemap.removeTiles();
 	}
 }
