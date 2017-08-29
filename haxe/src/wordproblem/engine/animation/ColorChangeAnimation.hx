@@ -1,6 +1,7 @@
 package wordproblem.engine.animation;
 
-
+import haxe.Timer;
+import motion.Actuate;
 import dragonbox.common.util.XColor;
 import openfl.display.Bitmap;
 
@@ -11,17 +12,20 @@ import openfl.events.EventDispatcher;
 /**
  * Animation smoothly interpolates the color of a given image from a start to an end value.
  */
-class ColorChangeAnimation extends EventDispatcher
+class ColorChangeAnimation
 {
+	private static inline var TIMER_INTERVAL_MS : Float = 16;
+	
     private var m_image : DisplayObject;
     private var m_startColor : Int;
     private var m_endColor : Int;
     private var m_elapsedTime : Float;
     private var m_duration : Float;
+	private var m_timer : Timer;
     
     public function new()
     {
-        super();
+		
     }
     
     public function play(startColor : Int,
@@ -36,24 +40,22 @@ class ColorChangeAnimation extends EventDispatcher
         m_image = image;
         
         // Make the object the starting color
-        if (Std.is(m_image, Bitmap)) 
-        {
-            (try cast(m_image, Bitmap) catch(e:Dynamic) null).transform.colorTransform = XColor.rgbToColorTransform(startColor);
-        }
+        m_image.transform.colorTransform = XColor.rgbToColorTransform(startColor);
+		
+		m_timer = new Timer(Std.int(TIMER_INTERVAL_MS));
+		m_timer.run = advanceTime;
     }
     
-    public function advanceTime(time : Float) : Void
+    private function advanceTime() : Void
     {
-        m_elapsedTime += time;
+        m_elapsedTime += TIMER_INTERVAL_MS / 1000.0;
         var resultColor : Int = XColor.interpolateColors(m_endColor, m_startColor, m_elapsedTime / m_duration);
-        if (Std.is(m_image, Bitmap)) 
-        {
-            (try cast(m_image, Bitmap) catch(e:Dynamic) null).transform.colorTransform = XColor.rgbToColorTransform(resultColor);
-        }
+        m_image.transform.colorTransform = XColor.rgbToColorTransform(resultColor);
         
         if (m_elapsedTime > m_duration) 
         {
-            (try cast(m_image, Bitmap) catch(e:Dynamic) null).transform.colorTransform = XColor.rgbToColorTransform(m_endColor);
-        }
+            m_image.transform.colorTransform = XColor.rgbToColorTransform(m_endColor);
+			m_timer.stop();
+		}
     }
 }

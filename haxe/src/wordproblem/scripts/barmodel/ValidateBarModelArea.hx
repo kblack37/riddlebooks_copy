@@ -261,6 +261,7 @@ class ValidateBarModelArea extends BaseBarModelScript
         // of the model data and save it for later
         var matchedReferenceIndices : Array<Int> = new Array<Int>();
         var isValidModel : Bool = getCurrentModelMatchesReference(matchedReferenceIndices);
+		var backgroundColorToFadeTo : Int = 0;
         if (isValidModel) 
         {
             for (matchedIndex in matchedReferenceIndices)
@@ -268,26 +269,19 @@ class ValidateBarModelArea extends BaseBarModelScript
                 m_referenceBarModelValidated[matchedIndex] = true;
             }
             
-            var backgroundColorToFadeTo : Int = 0x00FF00;
-            if (!isValidModel) 
-            {
-                backgroundColorToFadeTo = 0xFF0000;
-            }
-			// TODO: it remains to be seen if this tween conversion is correct
-            //m_colorChangeAnimation.play(backgroundColorToFadeTo, 0xFFFFFF, 1.0, m_barModelArea.getBackgroundImage());
-            //Starling.current.juggler.add(m_colorChangeAnimation);
-			m_barModelArea.getBackgroundImage().transform.colorTransform = XColor.rgbToColorTransform(backgroundColorToFadeTo);
-			
-			Actuate.transform(m_barModelArea.getBackgroundImage(), 1.0).color(0xFFFFFF);
+            backgroundColorToFadeTo = 0x00FF00;
             
             m_gameEngine.dispatchEvent(new Event(GameEvent.BAR_MODEL_CORRECT));
             Audio.instance.playSfx("find_correct_equation");
         }
         else 
         {
+			backgroundColorToFadeTo = 0xFF0000;
+			
             m_gameEngine.dispatchEvent(new Event(GameEvent.BAR_MODEL_INCORRECT));
             Audio.instance.playSfx("wrong");
         }  
+		m_colorChangeAnimation.play(backgroundColorToFadeTo, 0xFFFFFF, 1.0, m_barModelArea.getBackgroundImage());
 		
 		// The serialized object is used mainly for logging purposes  
         // We replace the values in the labels with the name visible to the player in case they are different
@@ -342,7 +336,6 @@ class ValidateBarModelArea extends BaseBarModelScript
                             {
 								if (targetIcon.parent != null) targetIcon.parent.removeChild(targetIcon);
 								targetIcon.dispose();
-								targetIcon = null;
                             });
                 });
     }

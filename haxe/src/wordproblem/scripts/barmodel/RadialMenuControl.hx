@@ -2,6 +2,7 @@ package wordproblem.scripts.barmodel;
 
 
 import dragonbox.common.dispose.IDisposable;
+import dragonbox.common.math.util.MathUtil;
 import dragonbox.common.ui.MouseState;
 
 import haxe.Constraints.Function;
@@ -415,7 +416,7 @@ class RadialMenuControl implements IDisposable
         var segmentImage : PivotSprite = new PivotSprite();
 		segmentImage.addChild(new Bitmap(segmentBitmapData));
         segmentImage.pivotX = segmentImage.pivotY = m_outerRadius;
-        segmentImage.rotation = rotation;
+        segmentImage.rotation = MathUtil.radsToDegrees(rotation);
         
         return segmentImage;
     }

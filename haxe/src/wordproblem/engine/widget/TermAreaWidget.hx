@@ -357,9 +357,7 @@ class TermAreaWidget extends ExpressionTreeWidget implements IBaseWidget
     
     public function fadeOutBackground(color : Int) : Void
     {
-        // Need to interpolate the color from the given starting value back to its original color
-		// TODO: not sure if this is a correct conversion from the ColorChangeAnimation
-		Actuate.transform(m_bgImage, 1.0).color(color);
+		m_colorChangeAnimation.play(color, 0xFFFFFF, 1.0, m_bgImage);
     }
     
     public function redrawAfterModification(triggeredByUndo : Bool = false) : Void

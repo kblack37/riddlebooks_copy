@@ -32,7 +32,7 @@ import wordproblem.resource.AssetManager;
  * and dragged. Usually it should just not be making changes to the component manager,
  * it simply reads in the data that was modified by some of the systems.
  */
-class DeckWidget extends ScrollGridWidget implements IDisposable implements IBaseWidget
+class DeckWidget extends ScrollGridWidget implements IBaseWidget
 {
     public var componentManager(get, never) : ComponentManager;
 
@@ -130,7 +130,7 @@ class DeckWidget extends ScrollGridWidget implements IDisposable implements IBas
         
         // View port shrinks slightly to accomadate possible scroll buttons
         maxWidth -= (m_scrollButtonWidth * 2);
-        super.setViewport(m_scrollButtonWidth, 0, maxWidth, maxHeight);
+        super.setViewport(m_scrollButtonWidth / 2, 0, maxWidth, maxHeight);
     }
     
     /**

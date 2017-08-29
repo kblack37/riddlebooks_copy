@@ -2,6 +2,7 @@ package wordproblem.scripts.barmodel;
 
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
+import dragonbox.common.math.util.MathUtil;
 import dragonbox.common.ui.MouseState;
 import dragonbox.common.util.XColor;
 import wordproblem.display.Scale9Image;
@@ -398,7 +399,7 @@ class CardOnSegmentRadialOptions extends BaseBarModelScript
         var segmentImage : PivotSprite = new PivotSprite();
 		segmentImage.addChild(new Bitmap(outerBitmapData));
         segmentImage.pivotX = segmentImage.pivotY = outerRadius;
-        segmentImage.rotation = rotation;
+        segmentImage.rotation = MathUtil.radsToDegrees(rotation);
         
         if (mode == "disabled") 
         {

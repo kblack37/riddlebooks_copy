@@ -427,7 +427,7 @@ class ModelSpecificEquation extends BaseGameScript
             
             // Provide visual feedback of whether the equation was correct or not
             var i : Int = 0;
-            var color : Int = ((solvedEquation)) ? 0x00FF00 : 0xFF0000;
+            var color : Int = solvedEquation ? 0x8800FF00 : 0x88FF0000;
             for (i in 0...m_termAreas.length){
                 m_termAreas[i].fadeOutBackground(color);
             } 

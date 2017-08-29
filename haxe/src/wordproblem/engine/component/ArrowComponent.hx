@@ -1,6 +1,7 @@
 package wordproblem.engine.component;
 
 import dragonbox.common.dispose.IDisposable;
+import dragonbox.common.math.util.MathUtil;
 import openfl.display.DisplayObject;
 import wordproblem.engine.component.Component;
 
@@ -82,6 +83,6 @@ class ArrowComponent extends Component
         var deltaY : Float = endY - startY;
         this.length = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
         
-        this.rotation = Math.atan2(deltaY, deltaX);
+        this.rotation = MathUtil.radsToDegrees(Math.atan2(deltaY, deltaX));
     }
 }

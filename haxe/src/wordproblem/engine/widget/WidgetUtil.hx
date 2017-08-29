@@ -147,7 +147,7 @@ class WidgetUtil
 			disabledSkin
 		);
 		
-		button.label = label;
+		if (label != null) button.label = label;
         
         if (textFormatDefault != null) 
         {
@@ -176,9 +176,12 @@ class WidgetUtil
         arrowImage.scaleX = arrowImage.scaleY = scaleFactor;
         if (pointLeft) 
         {
-            arrowImage.scaleX *= -1;
-            arrowImage.pivotX = arrowBitmapData.width;
-			arrowImage.x += arrowBitmapData.width;
+			arrowImage.pivotX = arrowImage.width / 2;
+			arrowImage.pivotY = arrowImage.height / 2;
+			arrowImage.rotation = 180;
+			// Have to subtract instead of add because of the rotation
+			arrowImage.x -= arrowImage.width / 2;
+			arrowImage.y += arrowImage.height / 2;
         }
 		arrowImage.transform.colorTransform = XColor.rgbToColorTransform(color);
         return arrowImage;

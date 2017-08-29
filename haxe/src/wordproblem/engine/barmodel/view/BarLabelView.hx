@@ -1,5 +1,6 @@
 package wordproblem.engine.barmodel.view;
 
+import dragonbox.common.math.util.MathUtil;
 import dragonbox.common.util.XColor;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
@@ -276,7 +277,7 @@ class BarLabelView extends ResizeableBarPieceView
                 if (data.isAboveSegment) 
                 {
                     // rotate each of the edges by pi radians and swap them
-                    m_bracketContainer.rotation = Math.PI;
+                    m_bracketContainer.rotation = MathUtil.radsToDegrees(Math.PI);
                     m_bracketContainer.pivotX = this.lineGraphicDisplayContainer.width;
                     m_bracketContainer.pivotY = this.lineGraphicDisplayContainer.height;
                     
@@ -296,7 +297,7 @@ class BarLabelView extends ResizeableBarPieceView
                 // rotate by -pi/2 radians and shift over by the width
                 // (Remember some of the properties of the image DO NOT re-align with
                 // the axis on rotate, an exception is x,y)
-                m_bracketContainer.rotation = Math.PI * -0.5;
+                m_bracketContainer.rotation = MathUtil.radsToDegrees(Math.PI * -0.5);
                 m_bracketContainer.y = m_bracketContainer.height;
                 
                 labelDescriptionDisplayObject.x = this.lineGraphicDisplayContainer.width;

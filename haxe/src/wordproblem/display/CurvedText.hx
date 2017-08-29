@@ -118,7 +118,7 @@ class CurvedText extends DisposableSprite
                 {
                     angle = 0;
                 }
-                textField.rotation = angle;
+                textField.rotation = MathUtil.radsToDegrees(angle);
             }
         }
     }

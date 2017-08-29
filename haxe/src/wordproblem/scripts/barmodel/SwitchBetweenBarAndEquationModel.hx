@@ -2,6 +2,7 @@ package wordproblem.scripts.barmodel;
 
 
 import cgs.audio.Audio;
+import dragonbox.common.math.util.MathUtil;
 
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.util.XColor;
@@ -147,7 +148,7 @@ class SwitchBetweenBarAndEquationModel extends BaseGameScript
         
         // Initial graphic has arrow pointing to the right
         // Make it point down
-        switchModelButton.rotation = Math.PI * 0.5;
+        switchModelButton.rotation = MathUtil.radsToDegrees(Math.PI * 0.5);
         m_inSlideDownState = true;
         
         switchModelButton.x += switchModelButton.pivotX;

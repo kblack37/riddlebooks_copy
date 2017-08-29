@@ -4,19 +4,23 @@ import openfl.display.DisplayObject;
 import openfl.geom.Rectangle;
 
 /**
- * ...
- * @author 
+ * A wrapper class to replace the pivot property that Starling display
+ * objects had
+ * @author kristen autumn blackburn
  */
 class PivotSprite extends DisposableSprite {
 
-	@:isVar public var pivotX(get, set) : Float;
-	@:isVar public var pivotY(get, set) : Float;
+	public var pivotX(get, set) : Float;
+	public var pivotY(get, set) : Float;
+	
+	private var m_pivotX : Float;
+	private var m_pivotY : Float;
 	
 	public function new() {
 		super();
 		
-		pivotX = 0;
-		pivotY = 0;
+		m_pivotX = 0;
+		m_pivotY = 0;
 	}
 	
 	/**
@@ -65,13 +69,13 @@ class PivotSprite extends DisposableSprite {
 	}
 	
 	private function addChildPivot(child : DisplayObject) {
-		child.x -= pivotX / this.scaleX;
-		child.y -= pivotY / this.scaleY;
+		child.x -= m_pivotX / this.scaleX;
+		child.y -= m_pivotY / this.scaleY;
 	}
 	
 	private function removeChildPivot(child : DisplayObject) {
-		child.x += pivotX / this.scaleX;
-		child.y += pivotY / this.scaleY;
+		child.x += m_pivotX / this.scaleX;
+		child.y += m_pivotY / this.scaleY;
 	}
 	
 	/**
@@ -82,24 +86,24 @@ class PivotSprite extends DisposableSprite {
 	function set_pivotX(pivotX : Float) {
 		for (i in 0...numChildren) {
 			var child = this.getChildAt(i);
-			child.x += (this.pivotX - pivotX) / this.scaleX;
+			child.x += (m_pivotX - pivotX) / this.scaleX;
 		}
-		return this.pivotX = pivotX;
+		return m_pivotX = pivotX;
 	}
 	
 	function set_pivotY(pivotY : Float) {
 		for (i in 0...numChildren) {
 			var child = this.getChildAt(i);
-			child.y += (this.pivotY - pivotY) / this.scaleY;
+			child.y += (m_pivotY - pivotY) / this.scaleY;
 		}
-		return this.pivotY = pivotY;
+		return m_pivotY = pivotY;
 	}
 	
 	function get_pivotX() {
-		return pivotX;
+		return m_pivotX;
 	}
 	
 	function get_pivotY() {
-		return pivotY;
+		return m_pivotY;
 	}
 }

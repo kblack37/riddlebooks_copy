@@ -2,6 +2,7 @@ package wordproblem.scripts.barmodel;
 
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
+import dragonbox.common.math.util.MathUtil;
 import dragonbox.common.ui.MouseState;
 import dragonbox.common.util.XColor;
 
@@ -489,14 +490,14 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
         slashIcon.scaleX = slashIcon.scaleY = 0.8;
         slashIcon.pivotX = slashIcon.width * 0.5;
         slashIcon.pivotY = slashIcon.height * 0.5;
-        slashIcon.rotation = Math.PI * -0.30;
-        var slashOppositeSideLength : Float = -Math.sin(slashIcon.rotation) * slashIcon.width;
+        slashIcon.rotation = MathUtil.radsToDegrees(Math.PI * -0.30);
+        var slashOppositeSideLength : Float = -Math.sin(MathUtil.degreesToRads(slashIcon.rotation)) * slashIcon.width;
         addIcon.x = 0;
         addIcon.y = 0;
         addIcon.scaleX = addIcon.scaleY = 0.9;
-        slashIcon.x = addIcon.width + slashIcon.width * Math.cos(slashIcon.rotation) * 0.5 - 7;
+        slashIcon.x = addIcon.width + slashIcon.width * Math.cos(MathUtil.degreesToRads(slashIcon.rotation)) * 0.5 - 7;
         slashIcon.y = slashOppositeSideLength;
-        subtractIcon.x = slashIcon.x + slashIcon.width * Math.cos(slashIcon.rotation) * 0.5;
+        subtractIcon.x = slashIcon.x + slashIcon.width * Math.cos(MathUtil.degreesToRads(slashIcon.rotation)) * 0.5;
         subtractIcon.y = slashOppositeSideLength * 0.5 + subtractIcon.height + 4;
         subtractIcon.scaleX = subtractIcon.scaleY = 0.9;
         compositeOperators.addChild(slashIcon);
@@ -739,7 +740,7 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
         var segmentImage : PivotSprite = new PivotSprite();
 		segmentImage.addChild(new Bitmap(outerBitmapData));
         segmentImage.pivotX = segmentImage.pivotY = outerRadius;
-        segmentImage.rotation = rotation;
+        segmentImage.rotation = MathUtil.radsToDegrees(rotation);
         
         if (mode == "disabled") 
         {

@@ -5,6 +5,7 @@ import dragonbox.common.dispose.IDisposable;
 import motion.Actuate;
 import openfl.display.BitmapData;
 import openfl.geom.Rectangle;
+import wordproblem.display.DisposableSprite;
 
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 
@@ -154,8 +155,8 @@ class ShowBarModelHitAreas extends BaseBarModelScript
                 // Animate the fade out of the hit boxes
 				Actuate.tween(hitAreaImage, 0.4, { alpha: 0 }).onComplete(function() : Void {
 					if (hitAreaImage.parent != null) hitAreaImage.parent.removeChild(hitAreaImage);
-					if (Std.is(hitAreaImage, IDisposable)) {
-						(try cast(hitAreaImage, IDisposable) catch (e : Dynamic) null).dispose();
+					if (Std.is(hitAreaImage, DisposableSprite)) {
+						(try cast(hitAreaImage, DisposableSprite) catch (e : Dynamic) null).dispose();
 					}
 					hitAreaImage = null;
 				});

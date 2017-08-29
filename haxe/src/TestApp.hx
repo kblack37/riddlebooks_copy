@@ -88,7 +88,7 @@ class TestApp extends Sprite {
 		);
 		
 		//compiling levels from the xml, testing that text is parsed correctly
-		var xml = assetManager.getXml("assets/levels/bar_model/turk_brainpop/510.xml");
+		var xml = assetManager.getXml("assets/levels/bar_model/turk_brainpop/856.xml");
 		var wordProblemLevelData = levelCompiler.compileWordProblemLevel(xml.firstElement(),
 			"levelTest",
 			0,

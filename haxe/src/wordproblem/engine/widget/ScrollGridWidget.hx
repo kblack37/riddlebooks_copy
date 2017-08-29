@@ -163,7 +163,10 @@ class ScrollGridWidget extends DisposableSprite
      */
     public function setViewport(xOffset : Float, yOffset : Float, viewPortWidth : Float, viewPortHeight : Float) : Void
     {
-        m_viewPort = new Rectangle(xOffset, yOffset, viewPortWidth, viewPortHeight);
+        m_viewPort = new Rectangle(0, 0, viewPortWidth, viewPortHeight);
+		
+		m_objectLayer.x += xOffset;
+		m_objectLayer.y += yOffset;
         
         // Set a clipping mask for the scroll contents
 		m_objectLayer.scrollRect = m_viewPort;

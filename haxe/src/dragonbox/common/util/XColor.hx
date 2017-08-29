@@ -143,6 +143,10 @@ class XColor
 		return colorTransform;
 	}
 	
+	public static function extractAlpha(color : Int) : Int {
+		return (color >> 24) & 0xFF;
+	}
+	
 	public static function extractRed(color : Int) : Int {
 		return (color >> 16) & 0xFF;
 	}

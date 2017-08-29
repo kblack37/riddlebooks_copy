@@ -1,18 +1,15 @@
 package wordproblem.display;
 
-import dragonbox.common.dispose.IDisposable;
-
 import openfl.display.DisplayObject;
 import openfl.events.MouseEvent;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
 
 /**
- * A simple button that will also display text. It probably needs some work,
- * but I just wanted to get a basic button able to display text
- * @author 
+ * A simple button that will also display text. It probably needs some work
+ * @author kristen autumn blackburn
  */
-class LabelButton extends PivotSprite implements IDisposable {
+class LabelButton extends PivotSprite {
 	
 	/**
 	 * Properties to interface directly with the backing text field
@@ -44,6 +41,9 @@ class LabelButton extends PivotSprite implements IDisposable {
 	 */
 	private var m_enabled : Bool = true;
 	
+	/**
+	 * The text field object used to display the label
+	 */
 	private var m_backingTextField : TextField;
 	
 	/**
@@ -55,9 +55,9 @@ class LabelButton extends PivotSprite implements IDisposable {
 	/**
 	 * In case we want to scale differently when certain conditions are met
 	 */
-	private var upScale : Float = 1.0;
-	private var overScale : Float = 1.0;
-	private var downScale : Float = 1.0;
+	private var m_upScale : Float = 1.0;
+	private var m_overScale : Float = 1.0;
+	private var m_downScale : Float = 1.0;
 	
 	public function new(upState:DisplayObject, overState:DisplayObject = null, downState:DisplayObject = null, disabledState:DisplayObject = null) {
 		if (upState == null) throw "Null default button state";
@@ -75,14 +75,6 @@ class LabelButton extends PivotSprite implements IDisposable {
 		m_currentState = m_upState;
 		addChild(m_currentState);
 		
-		m_backingTextField = new TextField();
-		m_backingTextField.width = this.width;
-		m_backingTextField.height = this.height;
-		m_backingTextField.text = "";
-		m_backingTextField.wordWrap = true;
-		m_defaultTextFormat = m_backingTextField.getTextFormat(); // Make sure this is never null even if it's not set
-		addChild(m_backingTextField);
-		
 		addListeners();
 	}
 	
@@ -90,42 +82,42 @@ class LabelButton extends PivotSprite implements IDisposable {
 		removeListeners();
 		
 		removeChild(m_currentState);
-		removeChild(m_backingTextField);
+		if (m_backingTextField != null) removeChild(m_backingTextField);
+	}
+	
+	private function initializeBackingTextField() {
+		var bounds = this.getBounds(this);
+		m_backingTextField = new TextField();
+		m_backingTextField.x = bounds.x;
+		m_backingTextField.y = bounds.y;
+		m_backingTextField.width = bounds.width;
+		m_backingTextField.height = bounds.height;
+		m_backingTextField.wordWrap = true;
+		addChild(m_backingTextField);
 		
-		m_currentState = null;
-		m_backingTextField = null;
-		
-		m_upState = null;
-		m_overState = null;
-		m_downState = null;
-		m_disabledState = null;
-		
-		while (numChildren > 0) {
-			var child = removeChildAt(0);
-			if (Std.is(child, IDisposable)) {
-				(try cast(child, IDisposable) catch (e : Dynamic) null).dispose();
-			}
-		}
+		m_defaultTextFormat = m_backingTextField.getTextFormat();
 	}
 	
 	private function onMouseUp(event : Dynamic) {
-		changeStateTo(m_upState);
+		changeStateTo(m_overState);
 		
-		scaleX = scaleY = upScale;
+		scaleX = scaleY = m_overScale;
 	}
 	
 	private function onMouseDown(event : Dynamic) {
 		changeStateTo(m_downState);
 		
-		scaleX = scaleY = downScale;
+		scaleX = scaleY = m_downScale;
 	}
 	
 	private function onMouseOver(event : Dynamic) {
 		changeStateTo(m_overState);
 		
-		scaleX = scaleY = overScale;
+		if (scaleX != m_overScale || scaleY != m_overScale) {
+			scaleX = scaleY = m_overScale;
+		}
 		
-		if (m_hoverTextFormat != null) {
+		if (m_backingTextField != null && m_hoverTextFormat != null) {
 			m_backingTextField.setTextFormat(m_hoverTextFormat);
 		}
 	}
@@ -133,15 +125,19 @@ class LabelButton extends PivotSprite implements IDisposable {
 	private function onMouseOut(event : Dynamic) {
 		changeStateTo(m_upState);
 		
-		scaleX = scaleY = upScale;
+		scaleX = scaleY = m_upScale;
 		
-		m_backingTextField.setTextFormat(m_defaultTextFormat);
+		if (m_backingTextField != null) {
+			m_backingTextField.setTextFormat(m_defaultTextFormat);
+		}
 	}
 	
 	private function changeStateTo(newState : DisplayObject) {
-		removeChild(m_currentState);
-		m_currentState = newState;
-		addChildAt(m_currentState, 0);
+		if (m_currentState != newState) {
+			removeChild(m_currentState);
+			m_currentState = newState;
+			addChildAt(m_currentState, 0);
+		}
 	}
 	
 	private function addListeners() {
@@ -161,14 +157,22 @@ class LabelButton extends PivotSprite implements IDisposable {
 	/**** Text Field Properties ****/
 	function set_label(text : String) : String {
 		if (text == null) return null;
+		if (m_backingTextField == null) {
+			initializeBackingTextField();
+		}
 		return m_backingTextField.text = text;
 	}
 	
 	function get_label() : String {
-		return m_backingTextField.text;
+		var label = null;
+		if (m_backingTextField != null) label = m_backingTextField.text;
+		return label;
 	}
 	
 	function set_textFormatDefault(textFormat : TextFormat) : TextFormat {
+		if (m_backingTextField == null) {
+			initializeBackingTextField();
+		}
 		m_backingTextField.setTextFormat(textFormat);
 		return m_defaultTextFormat = textFormat;
 	}
@@ -178,6 +182,9 @@ class LabelButton extends PivotSprite implements IDisposable {
 	}
 	
 	function set_textFormatHover(textFormat : TextFormat) : TextFormat {
+		if (m_backingTextField == null) {
+			initializeBackingTextField();
+		}
 		return m_hoverTextFormat = textFormat;
 	}
 	
@@ -229,11 +236,12 @@ class LabelButton extends PivotSprite implements IDisposable {
 		if (value) {
 			addListeners();
 			this.buttonMode = true;
-			m_currentState = m_upState;
+			changeStateTo(m_upState);
 		} else {
 			removeListeners();
 			this.buttonMode = false;
-			m_currentState = m_disabledState;
+			changeStateTo(m_disabledState);
+			scaleX = scaleY = m_upScale;
 		}
 		return m_enabled = value;
 	}
@@ -243,26 +251,26 @@ class LabelButton extends PivotSprite implements IDisposable {
 	}
 	
 	function set_scaleWhenUp(value : Float) : Float {
-		return upScale = value;
+		return m_upScale = value;
 	}
 	
 	function get_scaleWhenUp() : Float {
-		return upScale;
+		return m_upScale;
 	}
 	
 	function set_scaleWhenOver(value : Float) : Float {
-		return overScale = value;
+		return m_overScale = value;
 	}
 	
 	function get_scaleWhenOver() : Float {
-		return overScale;
+		return m_overScale;
 	}
 	
 	function set_scaleWhenDown(value : Float) : Float {
-		return downScale = value;
+		return m_downScale = value;
 	}
 	
 	function get_scaleWhenDown() : Float {
-		return downScale;
+		return m_downScale;
 	}
 }
