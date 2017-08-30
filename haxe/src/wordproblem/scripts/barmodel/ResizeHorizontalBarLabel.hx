@@ -11,7 +11,7 @@ import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import openfl.events.Event;
 
 import wordproblem.engine.IGameEngine;
-//import wordproblem.engine.animation.RingPulseAnimation;
+import wordproblem.engine.animation.RingPulseAnimation;
 import wordproblem.engine.barmodel.model.BarLabel;
 import wordproblem.engine.barmodel.model.BarModelData;
 import wordproblem.engine.barmodel.view.BarLabelView;
@@ -31,7 +31,6 @@ import wordproblem.resource.AssetManager;
  * Each label at a minimum must span over one segment/bar. Labels edges also automatically snap
  * to the bounds of each segment/bar
  */
-// TODO: revisit animation when more basic elements are working
 class ResizeHorizontalBarLabel extends BaseBarModelScript
 {
     /**
@@ -86,7 +85,7 @@ class ResizeHorizontalBarLabel extends BaseBarModelScript
     /**
      * Pulse that plays when user presses on an edge that resizes
      */
-    //private var m_ringPulseAnimation : RingPulseAnimation;
+    private var m_ringPulseAnimation : RingPulseAnimation;
     
     public function new(gameEngine : IGameEngine,
             expressionCompiler : IExpressionTreeCompiler,
@@ -96,7 +95,7 @@ class ResizeHorizontalBarLabel extends BaseBarModelScript
     {
         super(gameEngine, expressionCompiler, assetManager, id, isActive);
         m_outParamsBuffer = new Array<Dynamic>();
-        //m_ringPulseAnimation = new RingPulseAnimation(assetManager.getTexture("ring"), onRingPulseAnimationComplete);
+        m_ringPulseAnimation = new RingPulseAnimation(assetManager.getBitmapData("ring"), onRingPulseAnimationComplete);
     }
     
     override public function visit() : Int
@@ -163,8 +162,7 @@ class ResizeHorizontalBarLabel extends BaseBarModelScript
                         status = ScriptStatus.SUCCESS;
                         
                         // Show a small pulse on hit of the label
-                        //m_ringPulseAnimation.reset(m_localMouseBuffer.x, m_localMouseBuffer.y, m_barModelArea, 0x00FF00);
-                        //Starling.current.juggler.add(m_ringPulseAnimation);
+                        m_ringPulseAnimation.reset(m_localMouseBuffer.x, m_localMouseBuffer.y, m_barModelArea, 0x00FF00);
                         
                         m_previewBarLabelView.addButtonImagesToEdges(m_assetManager.getBitmapData("card_background_circle"));
                         m_previewBarLabelView.colorEdgeButton(m_draggingLeftEdge, 0x00FF00, 1.0);
@@ -513,7 +511,7 @@ class ResizeHorizontalBarLabel extends BaseBarModelScript
     private function onRingPulseAnimationComplete() : Void
     {
         // Make sure animation isn't showing
-        //Starling.current.juggler.remove(m_ringPulseAnimation);
+		m_ringPulseAnimation.stop();
     }
     
     private function onBarModelRedrawn(event : Event) : Void

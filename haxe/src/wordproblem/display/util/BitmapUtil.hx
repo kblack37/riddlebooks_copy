@@ -40,7 +40,7 @@ class BitmapUtil
         displayObject.y = 0;
         
         // Draw a copy of the dragged view
-        var renderBitmapData : BitmapData = new BitmapData(Std.int(displayObject.width * scaleFactor), Std.int(displayObject.height * scaleFactor), false);
+        var renderBitmapData : BitmapData = new BitmapData(Std.int(displayObject.width * scaleFactor), Std.int(displayObject.height * scaleFactor), true, 0x00FFFFFF);
         var matrix : Matrix = new Matrix(scaleFactor, 0, 0, scaleFactor, tx, ty);
         renderBitmapData.draw(displayObject, matrix);
         var viewCopy : Bitmap = new Bitmap(renderBitmapData);
