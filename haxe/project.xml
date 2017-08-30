@@ -20,7 +20,9 @@
 	
 	<!-- assets -->
 	<icon path="assets/openfl.svg" />
-	<assets path="assets" rename="assets" />
+	<assets path="assets/layout" rename="layout" />
+	<assets path="assets/levels" rename="levels" />
+	<assets path="assets/strings" rename="strings" />
 	
 	<!-- optimize output
 	<haxeflag name="-dce full" /> -->

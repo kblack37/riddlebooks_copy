@@ -12,7 +12,7 @@ import openfl.display.DisplayObject;
 
 import wordproblem.display.Layer;
 import wordproblem.engine.IGameEngine;
-//import wordproblem.engine.animation.RingPulseAnimation;
+import wordproblem.engine.animation.RingPulseAnimation;
 import wordproblem.engine.barmodel.animation.RemoveResizeableBarPieceAnimation;
 import wordproblem.engine.barmodel.model.BarLabel;
 import wordproblem.engine.barmodel.model.BarModelData;
@@ -21,8 +21,6 @@ import wordproblem.engine.events.GameEvent;
 import wordproblem.engine.scripting.graph.ScriptStatus;
 import wordproblem.log.AlgebraAdventureLoggingConstants;
 import wordproblem.resource.AssetManager;
-
-// TODO: revisit animation when more basic display elements are working
 
 class RemoveVerticalLabel extends BaseBarModelScript implements IRemoveBarElement
 {
@@ -35,7 +33,7 @@ class RemoveVerticalLabel extends BaseBarModelScript implements IRemoveBarElemen
     /**
      * Pulse that plays when user presses on an edge that resizes
      */
-    //private var m_ringPulseAnimation : RingPulseAnimation;
+    private var m_ringPulseAnimation : RingPulseAnimation;
     
     /**
      * To remove a label, we detect a press on the descrption area for that label
@@ -50,7 +48,7 @@ class RemoveVerticalLabel extends BaseBarModelScript implements IRemoveBarElemen
     {
         super(gameEngine, expressionCompiler, assetManager, id, isActive);
         
-        //m_ringPulseAnimation = new RingPulseAnimation(assetManager.getTexture("ring"), onRingPulseAnimationComplete);
+        m_ringPulseAnimation = new RingPulseAnimation(assetManager.getBitmapData("ring"), onRingPulseAnimationComplete);
         m_labelDescriptionBounds = new Rectangle();
     }
     
@@ -136,8 +134,7 @@ class RemoveVerticalLabel extends BaseBarModelScript implements IRemoveBarElemen
                 if (m_hitBarLabelView != null) 
                 {
                     m_hitBarLabelView.setBracketAndDescriptionAlpha(0.3);
-                    //m_ringPulseAnimation.reset(m_localMouseBuffer.x, m_localMouseBuffer.y, m_barModelArea, 0xFF0000);
-                    //Starling.current.juggler.add(m_ringPulseAnimation);
+                    m_ringPulseAnimation.reset(m_localMouseBuffer.x, m_localMouseBuffer.y, m_barModelArea, 0xFF0000);
                     status = ScriptStatus.SUCCESS;
                 }
             }
@@ -199,6 +196,6 @@ class RemoveVerticalLabel extends BaseBarModelScript implements IRemoveBarElemen
     private function onRingPulseAnimationComplete() : Void
     {
         // Make sure animation isn't showing
-        //Starling.current.juggler.remove(m_ringPulseAnimation);
+		m_ringPulseAnimation.stop();
     }
 }

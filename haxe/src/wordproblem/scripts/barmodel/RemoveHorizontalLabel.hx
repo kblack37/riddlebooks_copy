@@ -22,9 +22,7 @@ import wordproblem.engine.scripting.graph.ScriptStatus;
 import wordproblem.log.AlgebraAdventureLoggingConstants;
 import wordproblem.resource.AssetManager;
 
-//import wordproblem.engine.animation.RingPulseAnimation;
-
-// TODO: revisit animation when more basic display elements are working
+import wordproblem.engine.animation.RingPulseAnimation;
 
 class RemoveHorizontalLabel extends BaseBarModelScript implements IRemoveBarElement
 {
@@ -37,7 +35,7 @@ class RemoveHorizontalLabel extends BaseBarModelScript implements IRemoveBarElem
     /**
      * Pulse that plays when user presses on an edge that resizes
      */
-    //private var m_ringPulseAnimation : RingPulseAnimation;
+    private var m_ringPulseAnimation : RingPulseAnimation;
     
     /**
      * To remove a label, we detect a press on the descrption area for that label
@@ -52,7 +50,7 @@ class RemoveHorizontalLabel extends BaseBarModelScript implements IRemoveBarElem
     {
         super(gameEngine, expressionCompiler, assetManager, id, isActive);
         
-        //m_ringPulseAnimation = new RingPulseAnimation(assetManager.getTexture("ring"), onRingPulseAnimationComplete);
+        m_ringPulseAnimation = new RingPulseAnimation(assetManager.getBitmapData("ring"), onRingPulseAnimationComplete);
         m_labelDescriptionBounds = new Rectangle();
     }
     
@@ -156,8 +154,7 @@ class RemoveHorizontalLabel extends BaseBarModelScript implements IRemoveBarElem
                 if (m_hitBarLabelView != null) 
                 {
                     m_hitBarLabelView.setBracketAndDescriptionAlpha(0.3);
-                    //m_ringPulseAnimation.reset(m_localMouseBuffer.x, m_localMouseBuffer.y, m_barModelArea, 0xFF0000);
-                    //Starling.current.juggler.add(m_ringPulseAnimation);
+                    m_ringPulseAnimation.reset(m_localMouseBuffer.x, m_localMouseBuffer.y, m_barModelArea, 0xFF0000);
                     
                     status = ScriptStatus.SUCCESS;
                 }
@@ -229,6 +226,6 @@ class RemoveHorizontalLabel extends BaseBarModelScript implements IRemoveBarElem
     private function onRingPulseAnimationComplete() : Void
     {
         // Make sure animation isn't showing
-        //Starling.current.juggler.remove(m_ringPulseAnimation);
+		m_ringPulseAnimation.stop();
     }
 }

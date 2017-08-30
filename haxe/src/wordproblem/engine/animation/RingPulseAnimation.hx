@@ -2,19 +2,21 @@ package wordproblem.engine.animation;
 
 
 import dragonbox.common.dispose.IDisposable;
+import dragonbox.common.util.XColor;
+import motion.Actuate;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.display.DisplayObject;
+import wordproblem.display.PivotSprite;
 
 import haxe.Constraints.Function;
 
-import starling.animation.IAnimatable;
-import starling.animation.Tween;
-import starling.display.DisplayObjectContainer;
-import starling.display.Image;
-import starling.textures.Texture;
+import openfl.display.DisplayObjectContainer;
 
 /**
  * This animation plays
  */
-class RingPulseAnimation implements IAnimatable implements IDisposable
+class RingPulseAnimation implements IDisposable
 {
     /**
      * Maximum radius that a ring can be
@@ -37,9 +39,9 @@ class RingPulseAnimation implements IAnimatable implements IDisposable
      */
     private var m_displayContainer : DisplayObjectContainer;
     
-    private var m_activeTweens : Array<Tween>;
+    private var m_activeObjects : Array<DisplayObject>;
     
-    private var m_ringTexture : Texture;
+    private var m_ringBitmapData : BitmapData;
     
     /**
      * Trigger when the animation has completed
@@ -54,10 +56,10 @@ class RingPulseAnimation implements IAnimatable implements IDisposable
      */
     private var m_numCompletedTweens : Int;
     
-    public function new(ringTexture : Texture, onComplete : Function)
+    public function new(ringBitmapData : BitmapData, onComplete : Function)
     {
-        m_ringTexture = ringTexture;
-        m_activeTweens = new Array<Tween>();
+        m_ringBitmapData = ringBitmapData;
+        m_activeObjects = new Array<DisplayObject>();
         m_onComplete = onComplete;
         m_numCompletedTweens = 0;
     }
@@ -65,71 +67,69 @@ class RingPulseAnimation implements IAnimatable implements IDisposable
     public function dispose() : Void
     {
         // Clear all textures that are active
-        for (activeTween in m_activeTweens)
+        for (activeObject in m_activeObjects)
         {
-            (try cast(activeTween.target, Image) catch(e:Dynamic) null).removeFromParent(true);
-        }
-    }
-    
-    public function advanceTime(time : Float) : Void
-    {
-        var i : Int = 0;
-        var numTweens : Int = m_activeTweens.length;
-        for (i in 0...numTweens){
-            m_activeTweens[i].advanceTime(time);
+			Actuate.stop(activeObject);
+			var castedObject = try cast(activeObject, PivotSprite) catch (e : Dynamic) null;
+            if (castedObject.parent != null) castedObject.parent.removeChild(castedObject);
+			castedObject.dispose();
         }
     }
     
     public function reset(xPosition : Float, yPosition : Float, displayContainer : DisplayObjectContainer, color : Int) : Void
     {
         // Interrupt currently playing tweens
-        var i : Int = 0;
-        var numTweens : Int = m_activeTweens.length;
-        for (i in 0...numTweens){
-            (try cast(m_activeTweens[i].target, Image) catch(e:Dynamic) null).removeFromParent(true);
+        for (activeObject in m_activeObjects){
+            var castedObject = try cast(activeObject, PivotSprite) catch (e : Dynamic) null;
+            if (castedObject.parent != null) castedObject.parent.removeChild(castedObject);
+			castedObject.dispose();
         }
-		m_activeTweens = new Array<Tween>();
+		m_activeObjects = new Array<DisplayObject>();
         
         // Each individual ring should start out minimized and then expand outwards while fading
         m_displayContainer = displayContainer;
         m_numCompletedTweens = 0;
-        var endScaleFactor : Float = m_maxRingRadius / (m_ringTexture.width * 0.5);
+        var endScaleFactor : Float = m_maxRingRadius / (m_ringBitmapData.width * 0.5);
         
         // The number of tweens to create is determined by the number that can be active at any given
         // time.
         var numSimultaneousActiveRings : Int = Math.ceil(m_singleRingDuration / m_frequency);
         for (i in 0...numSimultaneousActiveRings){
-            var ringImage : Image = new Image(m_ringTexture);
-            ringImage.pivotX = m_ringTexture.width * 0.5;
-            ringImage.pivotY = m_ringTexture.height * 0.5;
+            var ringImage : PivotSprite = new PivotSprite();
+			ringImage.addChild(new Bitmap(m_ringBitmapData));
+            ringImage.pivotX = m_ringBitmapData.width * 0.5;
+            ringImage.pivotY = m_ringBitmapData.height * 0.5;
             ringImage.scaleX = ringImage.scaleY = 0.0;
             ringImage.x = xPosition;
             ringImage.y = yPosition;
-            ringImage.color = color;
-            
-            var ringExpandTween : Tween = new Tween(ringImage, m_singleRingDuration);
-            ringExpandTween.delay = i * m_frequency;
-            ringExpandTween.animate("scaleX", endScaleFactor);
-            ringExpandTween.animate("scaleY", endScaleFactor);
-            ringExpandTween.animate("alpha", 0.1);
-            ringExpandTween.repeatCount = 1;
-            ringExpandTween.onComplete = onTweenComplete;
-            m_activeTweens.push(ringExpandTween);
-            
+			ringImage.transform.colorTransform = XColor.rgbToColorTransform(color);
+			
+			Actuate.tween(ringImage, m_singleRingDuration, { scaleX: endScaleFactor, scaleY: endScaleFactor, alpha: 0.1 }).delay(i * m_frequency).repeat(1).onComplete(onTweenComplete);
+            m_activeObjects.push(ringImage);
             displayContainer.addChild(ringImage);
         }
         
-        m_totalTweensToPlay = m_activeTweens.length;
+        m_totalTweensToPlay = m_activeObjects.length;
     }
+	
+	public function stop() {
+		for (activeObject in m_activeObjects) {
+			Actuate.stop(activeObject);
+			
+			if (activeObject.parent != null) activeObject.parent.removeChild(activeObject);
+		}
+		
+		m_activeObjects = new Array<DisplayObject>();
+	}
     
     private function onTweenComplete() : Void
     {
-        m_displayContainer.removeChild(try cast(m_activeTweens.pop().target, Image) catch(e:Dynamic) null);
+		m_displayContainer.removeChild(m_activeObjects.shift());
         
         m_numCompletedTweens++;
         if (m_numCompletedTweens >= m_totalTweensToPlay) 
         {
-			m_activeTweens = new Array<Tween>();
+			m_activeObjects = new Array<DisplayObject>();
             m_onComplete();
         }
     }

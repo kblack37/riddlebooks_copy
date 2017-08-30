@@ -107,7 +107,7 @@ class DocumentViewToCardAnimation extends Sprite
 			Actuate.stop(viewCopy);
         }
 		
-		viewCopy = null;
+		this.viewCopy = null;
     }
     
     // The original view can be composed of several visual elements, we want to perform the
@@ -131,7 +131,6 @@ class DocumentViewToCardAnimation extends Sprite
         // to that of the parent container.
         // NOTE that the drawn copy gets rebounded to a tight box
         var localPoint : Point = originalView.globalToLocal(mousePoint);
-		// TODO: revisit this animation when more basic display elements are working
         var drawnCopy : PivotSprite = new PivotSprite();
 		drawnCopy.addChild(BitmapUtil.getImageFromDisplayObject(originalView));
         drawnCopy.pivotX = localPoint.x - tightBounds.left;

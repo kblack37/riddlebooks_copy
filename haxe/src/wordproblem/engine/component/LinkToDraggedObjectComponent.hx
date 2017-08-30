@@ -3,7 +3,7 @@ package wordproblem.engine.component;
 
 import starling.display.DisplayObject;
 
-import wordproblem.engine.animation.LinkToAnimation;
+//import wordproblem.engine.animation.LinkToAnimation;
 
 /**
  * Component is used to link an entity to it a secondary dragged object.
@@ -52,7 +52,7 @@ class LinkToDraggedObjectComponent extends Component
      * Need to keep a reference to the animation that is playing. This disposal of this component needs to immediately
      * trigger the disposal of the connected animation
      */
-    public var animation : LinkToAnimation;
+    //public var animation : LinkToAnimation;
     
     public function new(entityId : String,
             draggedObjectId : String,
@@ -68,10 +68,10 @@ class LinkToDraggedObjectComponent extends Component
     {
         super.dispose();
         
-        if (this.animation != null) 
-        {
-            this.animation.stop();
-        }
+        //if (this.animation != null) 
+        //{
+            //this.animation.stop();
+        //}
     }
     
     override public function deserialize(data : Dynamic) : Void
@@ -89,6 +89,6 @@ class LinkToDraggedObjectComponent extends Component
         this.targetObjectDisplay = null;
         this.xOffset = xOffset;
         this.yOffset = yOffset;
-        this.animation = null;
+        //this.animation = null;
     }
 }

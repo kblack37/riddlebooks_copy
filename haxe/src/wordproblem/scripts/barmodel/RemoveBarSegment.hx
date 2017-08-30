@@ -12,8 +12,8 @@ import openfl.display.DisplayObject;
 
 import wordproblem.display.Layer;
 import wordproblem.engine.IGameEngine;
-//import wordproblem.engine.animation.RingPulseAnimation;
-import wordproblem.engine.animation.ShatterAnimation;
+import wordproblem.engine.animation.RingPulseAnimation;
+//import wordproblem.engine.animation.ShatterAnimation;
 import wordproblem.engine.barmodel.BarModelDataUtil;
 import wordproblem.engine.barmodel.model.BarComparison;
 import wordproblem.engine.barmodel.model.BarLabel;
@@ -53,7 +53,7 @@ class RemoveBarSegment extends BaseBarModelScript implements IRemoveBarElement
     /**
      * Pulse that plays when user presses on an edge that resizes
      */
-    //private var m_ringPulseAnimation : RingPulseAnimation;
+    private var m_ringPulseAnimation : RingPulseAnimation;
     
     /**
      * Keep track of area the mouse pressed down on
@@ -71,7 +71,7 @@ class RemoveBarSegment extends BaseBarModelScript implements IRemoveBarElement
         this.segmentIdsCannotRemove = new Array<String>();
         
         m_outParamsBuffer = new Array<Dynamic>();
-        //m_ringPulseAnimation = new RingPulseAnimation(assetManager.getTexture("ring"), onRingPulseAnimationComplete);
+        m_ringPulseAnimation = new RingPulseAnimation(assetManager.getBitmapData("ring"), onRingPulseAnimationComplete);
         m_hitAnchor = new Point();
     }
     
@@ -161,8 +161,7 @@ class RemoveBarSegment extends BaseBarModelScript implements IRemoveBarElement
                     m_hitSegmentView = m_barModelArea.getBarWholeViews()[m_outParamsBuffer[0]].segmentViews[m_outParamsBuffer[1]];
                     m_hitSegmentView.alpha = 0.3;
                     
-                    //m_ringPulseAnimation.reset(m_localMouseBuffer.x, m_localMouseBuffer.y, m_barModelArea.getForegroundLayer(), 0xFF0000);
-                    //Starling.current.juggler.add(m_ringPulseAnimation);
+                    m_ringPulseAnimation.reset(m_localMouseBuffer.x, m_localMouseBuffer.y, m_barModelArea.getForegroundLayer(), 0xFF0000);
                     status = ScriptStatus.SUCCESS;
                     
                     m_hitAnchor.x = m_localMouseBuffer.x;
@@ -370,15 +369,15 @@ class RemoveBarSegment extends BaseBarModelScript implements IRemoveBarElement
         }
     }
     
-    private function onShatterAnimationComplete(animation : ShatterAnimation) : Void
-    {
-        animation.dispose();
-        animation.activeTexture.dispose();
-    }
+    //private function onShatterAnimationComplete(animation : ShatterAnimation) : Void
+    //{
+        //animation.dispose();
+        //animation.activeTexture.dispose();
+    //}
     
     private function onRingPulseAnimationComplete() : Void
     {
         // Make sure animation isn't showing
-        //Starling.current.juggler.remove(m_ringPulseAnimation);
+		m_ringPulseAnimation.stop();
     }
 }

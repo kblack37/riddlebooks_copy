@@ -3,6 +3,8 @@ package;
 import dragonbox.common.console.Console;
 import dragonbox.common.expressiontree.compile.LatexCompiler;
 import dragonbox.common.math.vectorspace.RealsVectorSpace;
+import gameconfig.commonresource.EmbeddedBarModelResources;
+import gameconfig.commonresource.EmbeddedBundle1X;
 import openfl.display.Bitmap;
 import openfl.display.SimpleButton;
 import openfl.events.MouseEvent;
@@ -52,10 +54,11 @@ class TestApp extends Sprite {
 		removeEventListener(Event.ADDED_TO_STAGE, run);
 		
 		var assetManager = new AssetManager();
+		assetManager.loadResourceBundles([ new EmbeddedBundle1X(), new EmbeddedBarModelResources() ], null, null);
 		var vectorSpace = new RealsVectorSpace();
 		var latexCompiler = new LatexCompiler(vectorSpace);
 		var levelCompiler = new LevelCompiler(latexCompiler,
-			assetManager.getXml("assets/layout/predefined_layouts.xml").toString());
+			assetManager.getXml("layout/predefined_layouts.xml").toString());
 		var algebraConfig = new AlgebraAdventureConfig();
 		var expressionSymbolMap = new ExpressionSymbolMap(assetManager);
 		mouseState = new MouseState(stage);
@@ -88,7 +91,7 @@ class TestApp extends Sprite {
 		);
 		
 		//compiling levels from the xml, testing that text is parsed correctly
-		var xml = assetManager.getXml("assets/levels/bar_model/turk_brainpop/856.xml");
+		var xml = assetManager.getXml("levels/bar_model/turk_brainpop/856.xml");
 		var wordProblemLevelData = levelCompiler.compileWordProblemLevel(xml.firstElement(),
 			"levelTest",
 			0,

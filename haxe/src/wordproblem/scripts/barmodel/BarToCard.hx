@@ -19,7 +19,7 @@ import openfl.display.DisplayObject;
 
 import wordproblem.display.Layer;
 import wordproblem.engine.IGameEngine;
-//import wordproblem.engine.barmodel.animation.BarModelToExpressionAnimation;
+import wordproblem.engine.barmodel.animation.BarModelToExpressionAnimation;
 import wordproblem.engine.barmodel.model.BarLabel;
 import wordproblem.engine.barmodel.view.BarComparisonView;
 import wordproblem.engine.barmodel.view.BarLabelView;
@@ -138,12 +138,10 @@ class BarToCard extends BaseBarModelScript
             barElementView.alpha = 1.0;
         }
         
-        //var selectedBarModelElementCopy : Image = BarModelToExpressionAnimation.convertBarModelViewsToSingleImage(
-                //m_barElementsToTransform, barModelArea.stage, barModelArea.scaleFactor, m_boundsBuffer
-        //);
-		
-		// TODO: this is empty due to the above class needing a redesign with the removal of Starling
-		var selectedBarModelElementCopy : PivotSprite = new PivotSprite();
+        var selectedBarModelElementCopy : PivotSprite = new PivotSprite();
+		selectedBarModelElementCopy.addChild(BarModelToExpressionAnimation.convertBarModelViewsToSingleImage(
+                m_barElementsToTransform, barModelArea.stage, barModelArea.scaleFactor, m_boundsBuffer
+        ));
 		
         // If the element should be converted into a card we play a tween where the element shrinks to nothing
         // otherwise we can start dragging the element without any extra tween

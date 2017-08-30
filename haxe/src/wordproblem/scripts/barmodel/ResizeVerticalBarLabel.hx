@@ -21,13 +21,12 @@ import wordproblem.engine.scripting.graph.ScriptStatus;
 import wordproblem.log.AlgebraAdventureLoggingConstants;
 import wordproblem.resource.AssetManager;
 
-//import wordproblem.engine.animation.RingPulseAnimation;
+import wordproblem.engine.animation.RingPulseAnimation;
 
 /**
  * The script adjust the length of the vertical labels, this means changing the number of whole bars the 
  * label spans over.
  */
-// TODO: revisit animation when more basic display elements are working properly
 class ResizeVerticalBarLabel extends BaseBarModelScript
 {
     /**
@@ -69,7 +68,7 @@ class ResizeVerticalBarLabel extends BaseBarModelScript
     /**
      * Pulse that plays when user presses on an edge that resizes
      */
-    //private var m_ringPulseAnimation : RingPulseAnimation;
+    private var m_ringPulseAnimation : RingPulseAnimation;
     
     public function new(gameEngine : IGameEngine,
             expressionCompiler : IExpressionTreeCompiler,
@@ -80,7 +79,7 @@ class ResizeVerticalBarLabel extends BaseBarModelScript
         super(gameEngine, expressionCompiler, assetManager, id, isActive);
         
         m_outParamsBuffer = new Array<Dynamic>();
-        //m_ringPulseAnimation = new RingPulseAnimation(assetManager.getTexture("ring"), onRingPulseAnimationComplete);
+        m_ringPulseAnimation = new RingPulseAnimation(assetManager.getBitmapData("ring"), onRingPulseAnimationComplete);
     }
     
     override public function visit() : Int
@@ -143,8 +142,7 @@ class ResizeVerticalBarLabel extends BaseBarModelScript
                     m_previewBarLabelView = getBarLabelViewFromId(originalBarLabelView.data.id, previewView.getVerticalBarLabelViews());
                     
                     // Show a small pulse on hit of the label
-                    //m_ringPulseAnimation.reset(m_localMouseBuffer.x, m_localMouseBuffer.y, m_barModelArea, 0x00FF00);
-                    //Starling.current.juggler.add(m_ringPulseAnimation);
+                    m_ringPulseAnimation.reset(m_localMouseBuffer.x, m_localMouseBuffer.y, m_barModelArea, 0x00FF00);
                     
                     m_previewBarLabelView.addButtonImagesToEdges(m_assetManager.getBitmapData("card_background_circle"));
                     m_previewBarLabelView.colorEdgeButton(m_draggingTopEdge, 0x00FF00, 1.0);
@@ -450,7 +448,7 @@ class ResizeVerticalBarLabel extends BaseBarModelScript
     private function onRingPulseAnimationComplete() : Void
     {
         // Make sure animation isn't showing
-        //Starling.current.juggler.remove(m_ringPulseAnimation);
+		m_ringPulseAnimation.stop();
     }
     
     private function onBarModelRedrawn(event : Event) : Void
