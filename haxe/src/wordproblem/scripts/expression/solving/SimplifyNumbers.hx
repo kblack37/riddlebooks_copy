@@ -79,7 +79,7 @@ class SimplifyNumbers extends BaseTermAreaScript
                     
                     
                     
-                    widget.removeFromParent();
+                    if (widget.parent != null) widget.parent.removeChild(widget);
                 }
                 reset();
             }  /*

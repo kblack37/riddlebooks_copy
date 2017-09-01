@@ -3,11 +3,11 @@ package dragonbox.common.console.components;
 
 import dragonbox.common.console.expression.MethodExpression;
 
-import starling.text.TextField;
+import openfl.text.TextField;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
 
-import starling.display.Sprite;
+import openfl.display.Sprite;
 
 class HistoryWindow extends Sprite
 {
@@ -30,10 +30,12 @@ class HistoryWindow extends Sprite
     public function new(historyBufferSize : Int = 100)
     {
         super();
-        m_historyView = new TextField(0, 0, "");
-		// TODO: Starling TextFields don't have these equivalents
-        //m_historyView.selectable = true;
-        //m_historyView.wordWrap = false;
+        m_historyView = new TextField();
+		m_historyView.width = 0;
+		m_historyView.height = 0;
+		m_historyView.text = "";
+        m_historyView.selectable = true;
+        m_historyView.wordWrap = false;
         
         addChild(m_historyView);
         
@@ -66,16 +68,8 @@ class HistoryWindow extends Sprite
         m_historyView.width = stage.stageWidth;
         m_historyView.height = stage.stageHeight / 3;
 		
-		// TODO: this is likely not the intended result of the commented
-		// out code below, but a Starling solution would require much
-		// more refactoring
 		m_historyView.border = true;
-		m_historyView.redraw();
-        
-        //this.graphics.clear();
-        //this.graphics.beginFill(0x444444, 0.35);
-        //this.graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight / 3);
-        //this.graphics.endFill();
+		m_historyView.borderColor = 0x444444;
         
         var historyString : String = "";
         for (historyLine in m_historyLines)

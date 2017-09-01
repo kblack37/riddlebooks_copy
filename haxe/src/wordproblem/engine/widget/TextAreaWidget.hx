@@ -2,21 +2,22 @@
 package wordproblem.engine.widget;
 
 
-import flash.geom.Point;
-import flash.geom.Rectangle;
-
 import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
 
 import haxe.Constraints.Function;
 
-import starling.display.Button;
-import starling.display.DisplayObject;
-import starling.display.Image;
-import starling.display.Sprite;
-import starling.events.Event;
-import starling.textures.Texture;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.display.DisplayObject;
+import openfl.display.Sprite;
+import openfl.events.Event;
+import openfl.events.MouseEvent;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
 
+import wordproblem.display.DisposableSprite;
+import wordproblem.display.LabelButton;
 import wordproblem.engine.component.Component;
 import wordproblem.engine.component.ComponentManager;
 import wordproblem.engine.component.ExpressionComponent;
@@ -46,7 +47,7 @@ import wordproblem.resource.AssetManager;
  */
 
  // TODO: uncomment all scrollbar references after scrollbar is redesigned
-class TextAreaWidget extends Sprite implements IBaseWidget
+class TextAreaWidget extends DisposableSprite implements IBaseWidget
 {
     public var componentManager(get, never) : ComponentManager;
 
@@ -85,7 +86,7 @@ class TextAreaWidget extends Sprite implements IBaseWidget
      * 
      * This requires all textures to be the same dimensions though
      */
-    private var m_backgroundImageStack : Array<Image>;
+    private var m_backgroundImageStack : Array<Bitmap>;
     
     /**
      * This layer contains the pages of text but not the background.
@@ -133,14 +134,14 @@ class TextAreaWidget extends Sprite implements IBaseWidget
      */
     private var m_currentPageIndex : Int;
     
-    private var m_nextPageButton : Button;
-    private var m_prevPageButton : Button;
+    private var m_nextPageButton : LabelButton;
+    private var m_prevPageButton : LabelButton;
     private var m_prevNextButtonBounds : Rectangle;
     
     /**
      * The texture to use for the scrolling page background
      */
-    private var m_pageTexture : Texture;
+    private var m_pageBitmapData : BitmapData;
     
     /**
      * Keep track of whether this widget should be display information
@@ -165,7 +166,7 @@ class TextAreaWidget extends Sprite implements IBaseWidget
     private var m_onGoToPageCallback : Function;
     
     public function new(assetManager : AssetManager,
-            pageTexture : Texture,
+            pageBitmapData : BitmapData,
             backgroundScroll : String,
             backgroundRepeat : String,
             autoCenterPages : Bool,
@@ -174,7 +175,7 @@ class TextAreaWidget extends Sprite implements IBaseWidget
         super();
         m_scrollContainerLayer = new Sprite();
         m_foregroundLayer = new Sprite();
-        m_pageTexture = pageTexture;
+        m_pageBitmapData = pageBitmapData;
         //m_scrollbar = WidgetUtil.createScrollbar(assetManager);
         //m_scrollbar.addEventListener(Event.CHANGE, onScrollbarChange);
         
@@ -183,10 +184,10 @@ class TextAreaWidget extends Sprite implements IBaseWidget
         m_backgroundScroll = (backgroundScroll == "scroll");
         m_backgroundRepeat = (backgroundRepeat == "repeat");
         
-        var arrowTexture : Texture = assetManager.getTexture("arrow_short");
+        var arrowTexture : BitmapData = assetManager.getBitmapData("arrow_short");
         var scaleFactor : Float = 1.5;
-        var leftUpImage : Image = WidgetUtil.createPointingArrow(arrowTexture, true, scaleFactor);
-        var leftOverImage : Image = WidgetUtil.createPointingArrow(arrowTexture, true, scaleFactor, 0xCCCCCC);
+        var leftUpImage : DisplayObject = WidgetUtil.createPointingArrow(arrowTexture, true, scaleFactor);
+        var leftOverImage : DisplayObject = WidgetUtil.createPointingArrow(arrowTexture, true, scaleFactor, 0xCCCCCC);
         
         m_prevPageButton = WidgetUtil.createButtonFromImages(
                         leftUpImage,
@@ -197,11 +198,11 @@ class TextAreaWidget extends Sprite implements IBaseWidget
                         null,
                         null
                         );
-        m_prevPageButton.scaleWhenDown = scaleFactor * 0.9;
-        m_prevPageButton.addEventListener(Event.TRIGGERED, onClickPrevPage);
+		m_prevPageButton.scaleWhenDown = scaleFactor * 0.9;
+        m_prevPageButton.addEventListener(MouseEvent.CLICK, onClickPrevPage);
         
-        var rightUpImage : Image = WidgetUtil.createPointingArrow(arrowTexture, false, scaleFactor, 0xFFFFFF);
-        var rightOverImage : Image = WidgetUtil.createPointingArrow(arrowTexture, false, scaleFactor, 0xCCCCCC);
+        var rightUpImage : DisplayObject = WidgetUtil.createPointingArrow(arrowTexture, false, scaleFactor, 0xFFFFFF);
+        var rightOverImage : DisplayObject = WidgetUtil.createPointingArrow(arrowTexture, false, scaleFactor, 0xCCCCCC);
         m_nextPageButton = WidgetUtil.createButtonFromImages(
                         rightUpImage,
                         rightOverImage,
@@ -211,8 +212,8 @@ class TextAreaWidget extends Sprite implements IBaseWidget
                         null,
                         null
                         );
-        m_nextPageButton.scaleWhenDown = m_prevPageButton.scaleWhenDown;
-        m_nextPageButton.addEventListener(Event.TRIGGERED, onClickNextPage);
+		m_nextPageButton.scaleWhenDown = m_prevPageButton.scaleWhenDown;
+        m_nextPageButton.addEventListener(MouseEvent.CLICK, onClickNextPage);
         
         m_prevNextButtonBounds = new Rectangle(0, 0, arrowTexture.width * scaleFactor, arrowTexture.height * scaleFactor);
         
@@ -227,17 +228,18 @@ class TextAreaWidget extends Sprite implements IBaseWidget
     
     override public function dispose() : Void
     {
+		super.dispose();
+		
         m_componentManager.clear();
         
         m_isActive = false;
-        super.dispose();
         
         // TODO: Proper cleanup of all the assets
         for (textPage in m_textPages)
         {
-            textPage.removeFromParent(true);
+			if (textPage.parent != null) textPage.parent.removeChild(textPage);
+			textPage.dispose();
         }
-        this.removeChildren(0, -1, true);
     }
     
     public function getDocumentIdToExpressionMap() : Dynamic
@@ -380,18 +382,18 @@ class TextAreaWidget extends Sprite implements IBaseWidget
         // Dispose of previous contents
         super.removeChildren();
         
-        m_backgroundImageStack = new Array<Image>();
+        m_backgroundImageStack = new Array<Bitmap>();
         
-        if (m_pageTexture != null) 
+        if (m_pageBitmapData != null) 
         {
-            var pageTextureHeight : Float = m_pageTexture.height;
+            var pageTextureHeight : Float = m_pageBitmapData.height;
             
             // If we repeat we initially create as many background texture display block as needed,
             // otherwise we just create one
             var numTexturesNeeded : Int = Std.int(((m_backgroundRepeat)) ? Math.ceil(m_viewPort.height / pageTextureHeight) + 1 : 1);
             var i : Int = 0;
             for (i in 0...numTexturesNeeded){
-                var backgroundImage : Image = new Image(m_pageTexture);
+                var backgroundImage : Bitmap = new Bitmap(m_pageBitmapData);
                 m_backgroundImageStack.push(backgroundImage);
                 addChildAt(backgroundImage, 0);
             }
@@ -413,16 +415,15 @@ class TextAreaWidget extends Sprite implements IBaseWidget
         m_foregroundLayer.addChild(m_prevPageButton);
         
         // Add mask
-        this.clipRect = new Rectangle(0, 0, m_totalWidth, m_totalHeight);
+        this.scrollRect = new Rectangle(0, 0, m_totalWidth, m_totalHeight);
         
         if (m_textPages.length > 0) 
         {
             showPageAtIndex(0);
-        }  // Signal that the text area has finished redrawing a set of pages  
-        
-        
-        
-        this.dispatchEventWith(GameEvent.TEXT_AREA_REDRAWN);
+        } 
+		
+		// Signal that the text area has finished redrawing a set of pages  
+        this.dispatchEvent(new Event(GameEvent.TEXT_AREA_REDRAWN));
     }
     
     public function showPageAtIndex(pageIndex : Int) : Void
@@ -603,7 +604,7 @@ class TextAreaWidget extends Sprite implements IBaseWidget
     public function hitTestDocumentView(globalPoint : Point, ignoreNonSelectable : Bool = true) : DocumentView
     {
         var currentPage : DocumentView = m_textPages[m_currentPageIndex];
-        var hitView : DocumentView = currentPage.hitTestPoint(globalPoint, ignoreNonSelectable);
+        var hitView : DocumentView = currentPage.customHitTestPoint(globalPoint, ignoreNonSelectable);
         return hitView;
     }
     
@@ -657,7 +658,7 @@ class TextAreaWidget extends Sprite implements IBaseWidget
         
         
         
-        m_scrollContainerLayer.getBounds(this, scrollContainerBuffer);
+        scrollContainerBuffer = m_scrollContainerLayer.getBounds(this);
         var heightOfVisibleTextContent : Float = scrollContainerBuffer.height;
         
         // Set a new bottom scroll limit
@@ -675,7 +676,7 @@ class TextAreaWidget extends Sprite implements IBaseWidget
         //// Iterate through the document views and apply updates to the backing data
         //else if (!pageNeedsToScroll && m_scrollbar.parent != null) 
         //{
-            //m_scrollbar.removeFromParent();
+            //if (m_scrollbar.parent != null) m_scrollbar.parent.removeChild(m_scrollbar);
         //}
         
         
@@ -725,7 +726,7 @@ class TextAreaWidget extends Sprite implements IBaseWidget
         //var scrollbarDisplay : DisplayObject = try cast(m_scrollbar, DisplayObject) catch(e:Dynamic) null;
         //if (scrollbarDisplay.parent && !value) 
         //{
-            //scrollbarDisplay.removeFromParent();
+            //if (scrollbarDisplay.parent != null) scrollbarDisplay.parent.removeChild(scrollbarDisplay);
         //}
     }
     
@@ -750,13 +751,13 @@ class TextAreaWidget extends Sprite implements IBaseWidget
                 var documentViewLocal : Point = new Point();
                 var documentViewGlobal : Point = new Point();
                 documentViewLocal.setTo(documentView.x, documentView.y);
-                documentView.parent.localToGlobal(documentViewLocal, documentViewGlobal);
+                documentViewGlobal = documentView.parent.localToGlobal(documentViewLocal);
                 
                 // Find the current scroll position
                 var scrollLocal : Point = new Point();
                 var scrollGlobal : Point = new Point();
                 scrollLocal.setTo(0, m_viewPortMiddleY);
-                m_scrollContainerLayer.parent.localToGlobal(scrollLocal, scrollGlobal);
+                scrollGlobal = m_scrollContainerLayer.parent.localToGlobal(scrollLocal);
                 
                 // Calculate the difference between the midpoint y and and the target y
                 var scrollAmount : Float = Math.floor(scrollGlobal.y - documentViewGlobal.y);
@@ -795,7 +796,7 @@ class TextAreaWidget extends Sprite implements IBaseWidget
                 var gapAtBottom : Bool = false;
                 var i : Int = 0;
                 for (i in 0...numIterations){
-                    var image : Image = m_backgroundImageStack[i];
+                    var image : Bitmap = m_backgroundImageStack[i];
                     image.y += scrollDelta;
                     
                     if (i == 0 && image.y > 0) 
@@ -806,10 +807,9 @@ class TextAreaWidget extends Sprite implements IBaseWidget
                     if (i == numIterations - 1 && image.y + imageHeight < m_viewPort.height) 
                     {
                         gapAtBottom = true;
-                    }  // Image gets clipped entirely at the top  
-                    
-                    
-                    
+                    }  
+					
+					// Image gets clipped entirely at the top  
                     if (image.y + imageHeight < 0) 
                     {
                         // Shift it to the end
@@ -825,7 +825,7 @@ class TextAreaWidget extends Sprite implements IBaseWidget
                     }
                 }
                 
-                var clippedImage : Image = null;
+                var clippedImage : Bitmap = null;
                 var shiftAmountY : Float = 0.0;
                 if (maxIndexClippedTop >= 0) 
                 {
@@ -857,15 +857,15 @@ class TextAreaWidget extends Sprite implements IBaseWidget
     /**
      * Reorient the background 
      */
-    private function positionImages(imageStack : Array<Image>) : Void
+    private function positionImages(imageStack : Array<Bitmap>) : Void
     {
         if (imageStack.length > 0) 
         {
-            var anchorImage : Image = imageStack[0];
+            var anchorImage : Bitmap = imageStack[0];
             var imageHeight : Float = anchorImage.height;
             var yOffset : Float = anchorImage.y + imageHeight;
             for (i in 1...imageStack.length){
-                var image : Image = imageStack[i];
+                var image : Bitmap = imageStack[i];
                 image.y = yOffset;
                 yOffset += imageHeight;
             }
@@ -883,7 +883,7 @@ class TextAreaWidget extends Sprite implements IBaseWidget
         scrollContainerBuffer.setTo(0, 0, 0, 0);
         if (furthestView != null && furthestView.stage != null) 
         {
-            furthestView.getBounds(m_scrollContainerLayer, scrollContainerBuffer);
+            scrollContainerBuffer = furthestView.getBounds(m_scrollContainerLayer);
         }
         
         var bounds : Rectangle = scrollContainerBuffer;
@@ -972,12 +972,12 @@ class TextAreaWidget extends Sprite implements IBaseWidget
         return -ratio * m_possibleScrollLocations.height + m_possibleScrollLocations.bottom;
     }
     
-    private function onClickNextPage() : Void
+    private function onClickNextPage(params : Dynamic) : Void
     {
         this.showPageAtIndex(m_currentPageIndex + 1);
     }
     
-    private function onClickPrevPage() : Void
+    private function onClickPrevPage(params : Dynamic) : Void
     {
         this.showPageAtIndex(m_currentPageIndex - 1);
     }

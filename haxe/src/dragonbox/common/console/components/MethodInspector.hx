@@ -1,11 +1,14 @@
 package dragonbox.common.console.components;
 
 
-import starling.text.TextField;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.display.DisplayObject;
+import openfl.text.TextField;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
 
-import starling.display.Sprite;
+import openfl.display.Sprite;
 
 class MethodInspector extends Sprite
 {
@@ -13,7 +16,7 @@ class MethodInspector extends Sprite
     
     private static var FORMAT : TextFormat = new TextFormat("Kalinga");
     
-    private var m_background : Sprite;
+    private var m_background : DisplayObject;
     private var m_contentLabel : TextField;
     
     public function new()
@@ -21,10 +24,12 @@ class MethodInspector extends Sprite
         super();
         m_background = new Sprite();
         
-        m_contentLabel = new TextField(0, 0, "");
-		// TODO: Starling TextFields don't have these equivalents
-        //m_contentLabel.selectable = false;
-        //m_contentLabel.wordWrap = true;
+        m_contentLabel = new TextField();
+		m_contentLabel.width = 0;
+		m_contentLabel.height = 0;
+		m_contentLabel.text = "";
+        m_contentLabel.selectable = false;
+        m_contentLabel.wordWrap = true;
         m_contentLabel.width = MAX_WIDTH;
         
         addChild(m_background);
@@ -34,15 +39,12 @@ class MethodInspector extends Sprite
     public function populate(content : String) : Void
     {
         m_contentLabel.text = content;
-        //m_contentLabel.setTextFormat(FORMAT);
+        m_contentLabel.setTextFormat(FORMAT);
         m_contentLabel.height = m_contentLabel.height + 5;  // Bug: Without the +5, the last line can't be displayed (flash bug?)  
         
-		// TODO: a Starling solution to this code would require more effort
-		// that is better expended elsewhere, since it is going to be replaced
-        //m_background.graphics.clear();
-        //m_background.graphics.beginFill(0x999977, 0.95);
-        //m_background.graphics.drawRect(-1, -1, m_contentLabel.width + 2, m_contentLabel.height + 2);
-        //m_background.graphics.endFill();
+		m_background = new Bitmap(new BitmapData(Std.int(m_contentLabel.width), Std.int(m_contentLabel.height), false, 0x999977));
+		m_background.x = -1;
+		m_background.y = -1;
     }
     private static var init = {
         FORMAT.color = 0xffffff;

@@ -1,37 +1,40 @@
 package wordproblem.scripts.barmodel;
 
-import wordproblem.scripts.barmodel.ICardOnSegmentEdgeScript;
-import wordproblem.scripts.barmodel.IHitAreaScript;
-import wordproblem.scripts.barmodel.RadialMenuControl;
-
-import flash.geom.Point;
-import flash.geom.Rectangle;
-
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
+import dragonbox.common.math.util.MathUtil;
 import dragonbox.common.ui.MouseState;
+import dragonbox.common.util.XColor;
 
-import starling.animation.Tween;
-import starling.core.Starling;
-import starling.display.DisplayObject;
-import starling.display.DisplayObjectContainer;
-import starling.display.Image;
-import starling.display.Sprite;
-import starling.extensions.textureutil.TextureUtil;
-import starling.filters.ColorMatrixFilter;
-import starling.textures.Texture;
+import motion.Actuate;
+
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
+import openfl.display.Sprite;
+import openfl.events.Event;
+import openfl.filters.BitmapFilter;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
 
 import wordproblem.display.DottedRectangle;
+import wordproblem.display.PivotSprite;
+import wordproblem.display.util.BitmapUtil;
 import wordproblem.engine.IGameEngine;
 import wordproblem.engine.barmodel.model.BarWhole;
 import wordproblem.engine.barmodel.view.BarSegmentView;
 import wordproblem.engine.barmodel.view.BarWholeView;
+import wordproblem.engine.events.DataEvent;
 import wordproblem.engine.events.GameEvent;
 import wordproblem.engine.expression.widget.term.BaseTermWidget;
 import wordproblem.engine.expression.widget.term.SymbolTermWidget;
 import wordproblem.engine.scripting.graph.ScriptStatus;
 import wordproblem.resource.AssetManager;
 import wordproblem.scripts.BaseGameScript;
+import wordproblem.scripts.barmodel.ICardOnSegmentEdgeScript;
+import wordproblem.scripts.barmodel.IHitAreaScript;
+import wordproblem.scripts.barmodel.RadialMenuControl;
 
 /**
  * This script controls showing all the actions possible when the user drops a card
@@ -105,8 +108,7 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
      * For know we just redraw the hit box.
      */
     private var m_currentMouseOverHitAreaDisplay : DottedRectangle;
-    private var m_currentAddSubtractIcon : DisplayObject;
-    private var m_currentMouseOverHitAreaTween : Tween;
+    private var m_currentAddSubtractIcon : PivotSprite;
     private var m_currentMouseOverHitArea : Rectangle;
     
     /**
@@ -139,12 +141,12 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
         m_hitAreaIndexToBarWholeIndex = new Array<Int>();
         m_bufferedEventOnFrameCausedChange = false;
         
-        var hitAreaBackgroundTexture : Texture = m_assetManager.getTexture("wildcard");
+        var hitAreaBackgroundBitmapData : BitmapData = m_assetManager.getBitmapData("wildcard");
         var nineslicePadding : Int = 10;
-        var ninesliceGrid : Rectangle = new Rectangle(nineslicePadding, nineslicePadding, hitAreaBackgroundTexture.width - 2 * nineslicePadding, hitAreaBackgroundTexture.height - 2 * nineslicePadding);
-        var cornerTexture : Texture = m_assetManager.getTexture("dotted_line_corner");
-        var segmentTexture : Texture = m_assetManager.getTexture("dotted_line_segment");
-        m_currentMouseOverHitAreaDisplay = new DottedRectangle(hitAreaBackgroundTexture, ninesliceGrid, 1, cornerTexture, segmentTexture);
+        var ninesliceGrid : Rectangle = new Rectangle(nineslicePadding, nineslicePadding, hitAreaBackgroundBitmapData.width - 2 * nineslicePadding, hitAreaBackgroundBitmapData.height - 2 * nineslicePadding);
+        var cornerBitmapData : BitmapData = m_assetManager.getBitmapData("dotted_line_corner");
+        var segmentBitmapData : BitmapData = m_assetManager.getBitmapData("dotted_line_segment");
+        m_currentMouseOverHitAreaDisplay = new DottedRectangle(hitAreaBackgroundBitmapData, ninesliceGrid, 1, cornerBitmapData, segmentBitmapData);
     }
     
     override public function dispose() : Void
@@ -152,11 +154,14 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
         super.dispose();
         
         hideMouseOverHitAreaPreview();
-        m_currentMouseOverHitAreaDisplay.dispose();
+		m_currentMouseOverHitAreaDisplay.dispose();
+		m_currentMouseOverHitAreaDisplay = null;
         
         if (m_currentAddSubtractIcon != null) 
         {
-            m_currentAddSubtractIcon.removeFromParent(true);
+			if (m_currentAddSubtractIcon.parent != null) m_currentAddSubtractIcon.parent.removeChild(m_currentAddSubtractIcon);
+			m_currentAddSubtractIcon.dispose();
+			m_currentAddSubtractIcon = null;
         }
     }
     
@@ -168,7 +173,7 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
         {
             var mouseState : MouseState = m_gameEngine.getMouseState();
             m_globalMouseBuffer.setTo(mouseState.mousePositionThisFrame.x, mouseState.mousePositionThisFrame.y);
-            m_barModelArea.globalToLocal(m_globalMouseBuffer, m_localMouseBuffer);
+            m_localMouseBuffer = m_barModelArea.globalToLocal(m_globalMouseBuffer);
             
             iterateThroughBufferedEvents();
             
@@ -216,7 +221,6 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
                     if (numValidGestures > 0) 
                     {
                         status = ScriptStatus.SUCCESS;
-                        
                         // Remember the bar segment hovered on this frame so we can remove it if needed on
                         // later frames.
                         if (targetBarWhole.id != m_hoveredBarIdOnLastFrame) 
@@ -270,18 +274,13 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
                 // pick an option. This might result in a conflict.
                 status = ScriptStatus.SUCCESS;
             }
-        }  // an action in this script, two changes are applied to the model instead of one    // For example the add vertical label hit area may overlap and on a release it gets executed along with    // The case where this is a problem is when another gesture has a hit area overlapping with this one.    // circuit other scripts that might try to act on that event as well.    // HACK: On a buffered event that causes a change to the bar model we return success to short  
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        }  
+		
+		// HACK: On a buffered event that causes a change to the bar model we return success to short  
+		// circuit other scripts that might try to act on that event as well.  
+		// The case where this is a problem is when another gesture has a hit area overlapping with this one.  
+		// For example the add vertical label hit area may overlap and on a release it gets executed along with 
+        // an action in this script, two changes are applied to the model instead of one
         if (m_bufferedEventOnFrameCausedChange) 
         {
             status = ScriptStatus.SUCCESS;
@@ -427,7 +426,7 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
         
         for (i in 0...hitAreas.length){
             var barValue = barWholes[i].getValue();
-            var mainIcon : DisplayObject = null;
+            var mainIcon : PivotSprite = new PivotSprite();
             var hitArea : Rectangle = hitAreas[i];
             if (allowAddComparison && allowAddNewSegment) 
             {
@@ -438,19 +437,19 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
                 }
                 else 
                 {
-                    var addIcon : Image = new Image(m_assetManager.getTexture("plus"));
-                    mainIcon = addIcon;
+                    var addIcon : Bitmap = new Bitmap(m_assetManager.getBitmapData("plus"));
+                    mainIcon.addChild(addIcon);
                 }
             }
             else if (allowAddComparison) 
             {
-                var subtractIcon : Image = new Image(m_assetManager.getTexture("subtract"));
-                mainIcon = subtractIcon;
+                var subtractIcon : Bitmap = new Bitmap(m_assetManager.getBitmapData("subtract"));
+                mainIcon.addChild(subtractIcon);
             }
             else if (allowAddNewSegment) 
             {
-                var addIcon = new Image(m_assetManager.getTexture("plus"));
-                mainIcon = addIcon;
+                var addIcon = new Bitmap(m_assetManager.getBitmapData("plus"));
+                mainIcon.addChild(addIcon);
             }
             
             if (mainIcon != null) 
@@ -481,23 +480,24 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
         }
     }
     
-    private function createAddSubtractIcon() : DisplayObject
+    private function createAddSubtractIcon() : PivotSprite
     {
-        var compositeOperators : Sprite = new Sprite();
-        var addIcon : Image = new Image(m_assetManager.getTexture("plus"));
-        var subtractIcon : Image = new Image(m_assetManager.getTexture("subtract"));
-        var slashIcon : Image = new Image(m_assetManager.getTexture("divide_bar"));
+        var compositeOperators : PivotSprite = new PivotSprite();
+        var addIcon : Bitmap = new Bitmap(m_assetManager.getBitmapData("plus"));
+        var subtractIcon : Bitmap = new Bitmap(m_assetManager.getBitmapData("subtract"));
+        var slashIcon : PivotSprite = new PivotSprite();
+		slashIcon.addChild(new Bitmap(m_assetManager.getBitmapData("divide_bar")));
         slashIcon.scaleX = slashIcon.scaleY = 0.8;
         slashIcon.pivotX = slashIcon.width * 0.5;
         slashIcon.pivotY = slashIcon.height * 0.5;
-        slashIcon.rotation = Math.PI * -0.30;
-        var slashOppositeSideLength : Float = -Math.sin(slashIcon.rotation) * slashIcon.width;
+        slashIcon.rotation = MathUtil.radsToDegrees(Math.PI * -0.30);
+        var slashOppositeSideLength : Float = -Math.sin(MathUtil.degreesToRads(slashIcon.rotation)) * slashIcon.width;
         addIcon.x = 0;
         addIcon.y = 0;
         addIcon.scaleX = addIcon.scaleY = 0.9;
-        slashIcon.x = addIcon.width + slashIcon.width * Math.cos(slashIcon.rotation) * 0.5 - 7;
+        slashIcon.x = addIcon.width + slashIcon.width * Math.cos(MathUtil.degreesToRads(slashIcon.rotation)) * 0.5 - 7;
         slashIcon.y = slashOppositeSideLength;
-        subtractIcon.x = slashIcon.x + slashIcon.width * Math.cos(slashIcon.rotation) * 0.5;
+        subtractIcon.x = slashIcon.x + slashIcon.width * Math.cos(MathUtil.degreesToRads(slashIcon.rotation)) * 0.5;
         subtractIcon.y = slashOppositeSideLength * 0.5 + subtractIcon.height + 4;
         subtractIcon.scaleX = subtractIcon.scaleY = 0.9;
         compositeOperators.addChild(slashIcon);
@@ -528,15 +528,10 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
             m_barModelArea.addChild(m_currentMouseOverHitAreaDisplay);
             
             m_currentMouseOverHitAreaDisplay.alpha = 1.0;
-            var blinkTween : Tween = new Tween(m_currentMouseOverHitAreaDisplay, 0.6);
-            blinkTween.repeatCount = 0;
-            blinkTween.reverse = true;
-            blinkTween.fadeTo(0.3);
-            Starling.current.juggler.add(blinkTween);
-            m_currentMouseOverHitAreaTween = blinkTween;
+			Actuate.tween(m_currentMouseOverHitAreaDisplay, 0.6, { alpha: 0.3 }).repeat().reflect();
             
             // Add the add/subtract icon
-            var addSubtractIcon : DisplayObject = ((m_currentAddSubtractIcon != null)) ? m_currentAddSubtractIcon : createAddSubtractIcon();
+            var addSubtractIcon : PivotSprite = m_currentAddSubtractIcon != null ? m_currentAddSubtractIcon : createAddSubtractIcon();
             m_currentAddSubtractIcon = addSubtractIcon;
             var spacePadding : Float = 4;
             addSubtractIcon.scaleX = addSubtractIcon.scaleY = 1.0;
@@ -566,13 +561,12 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
     {
         if (m_currentMouseOverHitAreaDisplay.parent != null) 
         {
-            m_currentMouseOverHitAreaDisplay.removeFromParent();
+            if (m_currentMouseOverHitAreaDisplay.parent != null) m_currentMouseOverHitAreaDisplay.parent.removeChild(m_currentMouseOverHitAreaDisplay);
         }
         
-        if (m_currentMouseOverHitAreaTween != null) 
+        if (m_currentMouseOverHitAreaDisplay != null) 
         {
-            Starling.current.juggler.remove(m_currentMouseOverHitAreaTween);
-            m_currentMouseOverHitAreaTween = null;
+			Actuate.stop(m_currentMouseOverHitAreaDisplay);
         }
     }
     
@@ -583,16 +577,16 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
             // HACK: Doesn't fire at the right time
             // Override needs to be called after the nodes are added to the graph since some of the ready function trace up the
             // parent pointers to find other script nodes.
-            (try cast(gestureScript, BaseGameScript) catch(e:Dynamic) null).overrideLevelReady();
+            (try cast(gestureScript, BaseGameScript) catch(e:Dynamic) null).overrideLevelReady({ });
         }
         
         m_gestures.push(gestureScript);
         m_isGestureValid.push(false);
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         // Set up controls for the radial menu
         m_radialMenuControl = new RadialMenuControl(
@@ -695,9 +689,9 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
                         termWidget.scaleX = termWidget.scaleY = Math.min(targetScaleX, targetScaleY);
                         m_radialMenuControl.getRadialMenuContainer().addChildAt(termWidget, 0);
                         
-                        m_gameEngine.dispatchEventWith(GameEvent.OPEN_RADIAL_OPTIONS, false, {
+                        m_gameEngine.dispatchEvent(new DataEvent(GameEvent.OPEN_RADIAL_OPTIONS, {
                                     display : m_radialMenuControl.getRadialMenuContainer()
-                                });
+                                }));
                     }
                 }
             }
@@ -715,36 +709,38 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
         
         // Map index to the gesture to get the icon name
         var radiusDelta : Float = outerRadius - innerRadius;
-        var icon : DisplayObject = getIconAtSegmentIndex(optionIndex);
+        var icon : PivotSprite = new PivotSprite();
+		icon.addChild(getIconAtSegmentIndex(optionIndex));
         icon.pivotX = icon.width * 0.5;
         icon.pivotY = icon.height * 0.5;
         icon.scaleX = icon.scaleY = (radiusDelta - 8) / Math.max(icon.width, icon.height);
         icon.x = Math.cos(rotation + arcLength * 0.5) * (outerRadius - radiusDelta * 0.5);
         icon.y = Math.sin(rotation + arcLength * 0.5) * (outerRadius - radiusDelta * 0.5);
         
-        var outerTexture : Texture = null;
+        var outerBitmapData : BitmapData = null;
         var outlineThickness : Float = 2;
         if (mode == "up") 
         {
-            outerTexture = TextureUtil.getRingSegmentTexture(30, outerRadius, 0, arcLength, true, null, 0x6AA2C8, true, outlineThickness, 0x000000);
+            outerBitmapData = BitmapUtil.getRingSegmentBitmapData(30, outerRadius, 0, arcLength, true, null, 0x6AA2C8, true, outlineThickness, 0x000000);
         }
         else if (mode == "over") 
         {
-            outerTexture = TextureUtil.getRingSegmentTexture(30, outerRadius, 0, arcLength, true, null, 0xF7A028, true, outlineThickness, 0x000000);
+            outerBitmapData = BitmapUtil.getRingSegmentBitmapData(30, outerRadius, 0, arcLength, true, null, 0xF7A028, true, outlineThickness, 0x000000);
         }
         else 
         {
-            outerTexture = TextureUtil.getRingSegmentTexture(30, outerRadius, 0, arcLength, true, null, 0xCCCCCC, true, outlineThickness, 0x000000);
+            outerBitmapData = BitmapUtil.getRingSegmentBitmapData(30, outerRadius, 0, arcLength, true, null, 0xCCCCCC, true, outlineThickness, 0x000000);
             
             // Set icon to grey scale
-            var colorMatrixFilter : ColorMatrixFilter = new ColorMatrixFilter();
-            colorMatrixFilter.adjustSaturation(-1);
-            icon.filter = colorMatrixFilter;
+			var filters = new Array<BitmapFilter>();
+			filters.push(XColor.getGrayscaleFilter());
+			icon.filters = filters;
         }
         
-        var segmentImage : Image = new Image(outerTexture);
+        var segmentImage : PivotSprite = new PivotSprite();
+		segmentImage.addChild(new Bitmap(outerBitmapData));
         segmentImage.pivotX = segmentImage.pivotY = outerRadius;
-        segmentImage.rotation = rotation;
+        segmentImage.rotation = MathUtil.radsToDegrees(rotation);
         
         if (mode == "disabled") 
         {
@@ -761,8 +757,8 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
             mode : String) : Void
     {
         // Assume the ring texture is the bottom most child
-        var ringImage : Image = try cast((try cast(segment, DisplayObjectContainer) catch(e:Dynamic) null).getChildAt(0), Image) catch(e:Dynamic) null;
-        ringImage.texture.dispose();
+		var ringImage : Bitmap = try cast((try cast((try cast(segment, DisplayObjectContainer) catch (e : Dynamic) null).getChildAt(0), DisplayObjectContainer) catch (e : Dynamic) null).getChildAt(0), Bitmap) catch (e : Dynamic) null;
+        ringImage.bitmapData.dispose();
         
         if (mode == "up") 
             { }
@@ -787,12 +783,12 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
         // name value pasted on top (just make the bar the  same color
         if (Std.is(gestureScript, AddNewBarComparison)) 
         {
-            var subtractIcon : Image = new Image(m_assetManager.getTexture("subtract"));
+            var subtractIcon : Bitmap = new Bitmap(m_assetManager.getBitmapData("subtract"));
             icon = subtractIcon;
         }
         else if (Std.is(gestureScript, AddNewBarSegment)) 
         {
-            var addIcon : Image = new Image(m_assetManager.getTexture("plus"));
+            var addIcon : Bitmap = new Bitmap(m_assetManager.getBitmapData("plus"));
             icon = addIcon;
         }
         
@@ -830,16 +826,15 @@ class CardOnSegmentEdgeRadialOptions extends BaseBarModelScript implements IHitA
         {
             var gestureToExecute : ICardOnSegmentEdgeScript = m_gestures[optionIndex];
             gestureToExecute.performAction(m_savedDraggedWidget, m_savedDraggedWidgetExtraParams, m_savedSelectedBarId);
-        }  // Close the menu on click  
-        
-        
-        
+        } 
+		
+		// Close the menu on click  
         m_radialMenuControl.close();
-        
+		
         // If radial menu is closed and the mouse is not currently over a hit area, make sure the
         // hit area preview is not visible
         hideMouseOverHitAreaPreview();
         
-        m_gameEngine.dispatchEventWith(GameEvent.CLOSE_RADIAL_OPTIONS);
+        m_gameEngine.dispatchEvent(new Event(GameEvent.CLOSE_RADIAL_OPTIONS));
     }
 }

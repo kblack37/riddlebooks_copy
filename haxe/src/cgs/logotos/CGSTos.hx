@@ -53,14 +53,14 @@ class CGSTos extends Sprite
     private var m_tos_by_clicking_background : Sprite;
     private var m_tos_format : TextFormat = new TextFormat(FONT_DEFAULT, 18, 0x0, null, null, null, null, null, TextFormatAlign.CENTER);
     private var m_button_format : TextFormat = new TextFormat(FONT_DEFAULT, 28, 0x0, true, null, null, null, null, TextFormatAlign.LEFT);
-    private var m_agree_button : Button;
-    private var m_disagree_button : Button;
+    private var m_agree_button : LabelButton;
+    private var m_disagree_button : LabelButton;
     private var m_disagree_screen_text : TextField;
     private var m_disagree_screen_text_background : Sprite;
-    private var m_back_to_tos_button : Button;
+    private var m_back_to_tos_button : LabelButton;
     private var m_under_13_instructions : TextField;
     private var m_under_13_instructions_background : Sprite;
-    private var m_under_13_button : Button;
+    private var m_under_13_button : LabelButton;
     
     //Variables used to determine what text and components should be displayed.
     private var m_show_13_under_button : Bool;

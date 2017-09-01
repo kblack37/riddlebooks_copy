@@ -1,14 +1,14 @@
 package wordproblem.scripts.barmodel;
 
 
-import flash.geom.Point;
-import flash.geom.Rectangle;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
+import wordproblem.engine.events.DataEvent;
 
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.ui.MouseState;
 
-import starling.core.Starling;
-import starling.display.DisplayObject;
+import openfl.display.DisplayObject;
 
 import wordproblem.display.Layer;
 import wordproblem.engine.IGameEngine;
@@ -48,7 +48,7 @@ class RemoveVerticalLabel extends BaseBarModelScript implements IRemoveBarElemen
     {
         super(gameEngine, expressionCompiler, assetManager, id, isActive);
         
-        m_ringPulseAnimation = new RingPulseAnimation(assetManager.getTexture("ring"), onRingPulseAnimationComplete);
+        m_ringPulseAnimation = new RingPulseAnimation(assetManager.getBitmapData("ring"), onRingPulseAnimationComplete);
         m_labelDescriptionBounds = new Rectangle();
     }
     
@@ -80,7 +80,8 @@ class RemoveVerticalLabel extends BaseBarModelScript implements IRemoveBarElemen
                         removedLabelView.y = globalCoordinates.y;
                         var removeBarLabelAnimation : RemoveResizeableBarPieceAnimation = new RemoveResizeableBarPieceAnimation(function() : Void
                         {
-                            removedLabelView.removeFromParent(true);
+							if (removedLabelView.parent != null) removedLabelView.parent.removeChild(removedLabelView);
+							removedLabelView.dispose();
                         });
                         removedLabelView.scaleX = removedLabelView.scaleY = m_barModelArea.scaleFactor;
                         m_gameEngine.getSprite().addChild(removedLabelView);
@@ -88,17 +89,15 @@ class RemoveVerticalLabel extends BaseBarModelScript implements IRemoveBarElemen
                         
                         var previousModelDataSnapshot : BarModelData = m_barModelArea.getBarModelData().clone();
                         verticalBarLabels.splice(i, 1);
-                        m_gameEngine.dispatchEventWith(GameEvent.BAR_MODEL_AREA_CHANGE, false, {
+                        m_gameEngine.dispatchEvent(new DataEvent(GameEvent.BAR_MODEL_AREA_CHANGE, {
                                     previousSnapshot : previousModelDataSnapshot
-
-                                });
+                                }));
                         m_barModelArea.redraw();
                         
                         // Log removal of a label across whole bars
-                        m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.REMOVE_VERTICAL_LABEL, false, {
+                        m_gameEngine.dispatchEvent(new DataEvent(AlgebraAdventureLoggingConstants.REMOVE_VERTICAL_LABEL, {
                                     barModel : m_barModelArea.getBarModelData().serialize()
-
-                                });
+                                }));
                         
                         break;
                     }
@@ -127,7 +126,7 @@ class RemoveVerticalLabel extends BaseBarModelScript implements IRemoveBarElemen
         {
             var mouseState : MouseState = m_gameEngine.getMouseState();
             m_globalMouseBuffer.setTo(mouseState.mousePositionThisFrame.x, mouseState.mousePositionThisFrame.y);
-            m_barModelArea.globalToLocal(m_globalMouseBuffer, m_localMouseBuffer);
+            m_localMouseBuffer = m_barModelArea.globalToLocal(m_globalMouseBuffer);
             
             if (mouseState.leftMousePressedThisFrame) 
             {
@@ -136,7 +135,6 @@ class RemoveVerticalLabel extends BaseBarModelScript implements IRemoveBarElemen
                 {
                     m_hitBarLabelView.setBracketAndDescriptionAlpha(0.3);
                     m_ringPulseAnimation.reset(m_localMouseBuffer.x, m_localMouseBuffer.y, m_barModelArea, 0xFF0000);
-                    Starling.current.juggler.add(m_ringPulseAnimation);
                     status = ScriptStatus.SUCCESS;
                 }
             }
@@ -180,7 +178,7 @@ class RemoveVerticalLabel extends BaseBarModelScript implements IRemoveBarElemen
                 {
                     // We also factor in the label graphic
                     var labelDescriptionDisplay : DisplayObject = verticalBarLabelView.getDescriptionDisplay();
-                    labelDescriptionDisplay.getBounds(m_barModelArea, m_labelDescriptionBounds);
+                    m_labelDescriptionBounds = labelDescriptionDisplay.getBounds(m_barModelArea);
                     didHitLabel = m_labelDescriptionBounds.containsPoint(m_localMouseBuffer);
                 }
                 
@@ -198,6 +196,6 @@ class RemoveVerticalLabel extends BaseBarModelScript implements IRemoveBarElemen
     private function onRingPulseAnimationComplete() : Void
     {
         // Make sure animation isn't showing
-        Starling.current.juggler.remove(m_ringPulseAnimation);
+		m_ringPulseAnimation.stop();
     }
 }

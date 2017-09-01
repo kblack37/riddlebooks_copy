@@ -2,15 +2,14 @@ package wordproblem.playercollections.scripts;
 
 import wordproblem.playercollections.scripts.PlayerCollectionViewer;
 
-import flash.geom.Point;
-import flash.geom.Rectangle;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
 
 import dragonbox.common.ui.MouseState;
 import dragonbox.common.util.ListUtil;
 import dragonbox.common.util.XColor;
 
-import starling.display.DisplayObjectContainer;
-import starling.textures.Texture;
+import openfl.display.DisplayObjectContainer;
 
 import wordproblem.engine.component.Component;
 import wordproblem.engine.component.DescriptionComponent;
@@ -134,7 +133,7 @@ class PlayerCollectionItemViewer extends PlayerCollectionViewer
             // the second is viewing all items in one category, the last is viewing details about a
             // particular item.
             m_globalMouseBuffer.setTo(m_mouseState.mousePositionThisFrame.x, m_mouseState.mousePositionThisFrame.y);
-            m_canvasContainer.globalToLocal(m_globalMouseBuffer, m_localMouseBuffer);
+            m_localMouseBuffer = m_canvasContainer.globalToLocal(m_globalMouseBuffer);
             if (m_currentViewLevel == PlayerCollectionItemViewer.VIEW_LEVEL_CATEGORIES) 
             {
                 var categoryButtonIndexContainingPoint : Int = -1;
@@ -142,7 +141,7 @@ class PlayerCollectionItemViewer extends PlayerCollectionViewer
                 var numButtons : Int = m_activeCategoryButtons.length;
                 for (i in 0...numButtons){
                     var categoryButton : PlayerCollectionCategoryButton = m_activeCategoryButtons[i];
-                    categoryButton.getBounds(m_canvasContainer, m_localBoundsBuffer);
+                    m_localBoundsBuffer = categoryButton.getBounds(m_canvasContainer);
                     if (m_localBoundsBuffer.containsPoint(m_localMouseBuffer)) 
                     {
                         categoryButtonIndexContainingPoint = i;
@@ -174,7 +173,7 @@ class PlayerCollectionItemViewer extends PlayerCollectionViewer
                 var numButtons = m_activeItemButtons.length;
                 for (i in 0...numButtons){
                     var itemButton : PlayerCollectionItemButton = m_activeItemButtons[i];
-                    itemButton.getBounds(m_canvasContainer, m_localBoundsBuffer);
+                    m_localBoundsBuffer = itemButton.getBounds(m_canvasContainer);
                     if (m_localBoundsBuffer.containsPoint(m_localMouseBuffer)) 
                     {
                         itemButtonIndexContainingPoint = i;
@@ -352,7 +351,7 @@ class PlayerCollectionItemViewer extends PlayerCollectionViewer
     {
         super.hide();
         
-        m_backButton.removeFromParent();
+        if (m_backButton.parent != null) m_backButton.parent.removeChild(m_backButton);
         
         // Dispose of all currently visible pieces
         clearCategoryItemsView(true);
@@ -437,12 +436,13 @@ class PlayerCollectionItemViewer extends PlayerCollectionViewer
                     ), TextureCollectionComponent) catch(e:Dynamic) null;
             
             // HACK: Flash resources need to be drawn then dumped into asset manager manually
+			// TODO: revisit this when AssetManager is fully functional
             var textureDataObject : Dynamic = textureComponent.textureCollection[0];
             if (textureDataObject.type == "FlashMovieClip") 
             {
                 var rigidBodyComponent : RigidBodyComponent = try cast(m_itemDataSource.getComponentFromEntityIdAndType(itemId, RigidBodyComponent.TYPE_ID), RigidBodyComponent) catch(e:Dynamic) null;
-                var textureFromFlash : Texture = FlashResourceUtil.getTextureFromFlashString(textureDataObject.flashId, textureDataObject.params, 1, rigidBodyComponent.boundingRectangle);
-                m_assetManager.addTexture(textureDataObject.textureName, textureFromFlash);
+                //var textureFromFlash : Texture = FlashResourceUtil.getTextureFromFlashString(textureDataObject.flashId, textureDataObject.params, 1, rigidBodyComponent.boundingRectangle);
+                //m_assetManager.addTexture(textureDataObject.textureName, textureFromFlash);
             }
             var textureName : String = textureDataObject.textureName;
             
@@ -498,7 +498,8 @@ class PlayerCollectionItemViewer extends PlayerCollectionViewer
         // Clear out the category buttons
         for (categoryButton in m_activeCategoryButtons)
         {
-            categoryButton.removeFromParent(true);
+			if (categoryButton.parent != null) categoryButton.parent.removeChild(categoryButton);
+			categoryButton.dispose();
         }
 		m_activeCategoryButtons = new Array<PlayerCollectionCategoryButton>();
     }
@@ -548,20 +549,21 @@ class PlayerCollectionItemViewer extends PlayerCollectionViewer
             // (DISPOSE button to release textures if necessary)
             for (itemButton in m_activeItemButtons)
             {
-                itemButton.removeFromParent(true);
+				if (itemButton.parent != null) itemButton.parent.removeChild(itemButton);
+				itemButton.dispose();
             }
 			m_activeItemButtons = new Array<PlayerCollectionItemButton>();
 			m_collectionItemPages = new Array<Array<String>>();
             
             // undo button is no longer needed
-            m_backButton.removeFromParent();
+            if (m_backButton.parent != null) m_backButton.parent.removeChild(m_backButton);
         }
         else 
         {
             // Remove item buttons from the screen for now
             for (itemButton in m_activeItemButtons)
             {
-                itemButton.removeFromParent();
+                if (itemButton.parent != null) itemButton.parent.removeChild(itemButton);
             }
         }
     }
@@ -591,8 +593,8 @@ class PlayerCollectionItemViewer extends PlayerCollectionViewer
         m_canvasContainer.addChild(m_activeItemScreen);
         
         // Make sure scroll arrows hidden
-        m_scrollLeftButton.removeFromParent();
-        m_scrollRightButton.removeFromParent();
+        if (m_scrollLeftButton.parent != null) m_scrollLeftButton.parent.removeChild(m_scrollLeftButton);
+        if (m_scrollRightButton.parent != null) m_scrollRightButton.parent.removeChild(m_scrollRightButton);
     }
     
     private function clearItemView() : Void
@@ -600,7 +602,8 @@ class PlayerCollectionItemViewer extends PlayerCollectionViewer
         // Remove the item description screen
         if (m_activeItemScreen != null) 
         {
-            m_activeItemScreen.removeFromParent(true);
+			if (m_activeItemScreen.parent != null) m_activeItemScreen.parent.removeChild(m_activeItemScreen);
+			m_activeItemScreen.dispose();
             m_activeItemScreen = null;
         }
     }

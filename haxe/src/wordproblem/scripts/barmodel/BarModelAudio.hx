@@ -2,7 +2,7 @@ package wordproblem.scripts.barmodel;
 
 import cgs.audio.Audio;
 
-import starling.events.EventDispatcher;
+import openfl.events.EventDispatcher;
 
 import wordproblem.log.AlgebraAdventureLoggingConstants;
 import wordproblem.scripts.BaseBufferEventScript;
@@ -59,72 +59,72 @@ class BarModelAudio extends BaseBufferEventScript
         m_eventDispatcher.removeEventListener(AlgebraAdventureLoggingConstants.MULTIPLY_BAR, onSplitBarSegment);
     }
     
-    private function onAddNewBar() : Void
+    private function onAddNewBar(event : Dynamic) : Void
     {
         Audio.instance.playSfx("carddrop");
     }
     
-    private function onAddNewBarComparison() : Void
+    private function onAddNewBarComparison(event : Dynamic) : Void
     {
         Audio.instance.playSfx("carddrop");
     }
     
-    private function onAddNewBarSegment() : Void
+    private function onAddNewBarSegment(event : Dynamic) : Void
     {
         Audio.instance.playSfx("carddrop");
     }
     
-    private function onAddNewHorizontalLabel() : Void
+    private function onAddNewHorizontalLabel(event : Dynamic) : Void
     {
         Audio.instance.playSfx("carddrop");
     }
     
-    private function onAddNewUnitBar() : Void
+    private function onAddNewUnitBar(event : Dynamic) : Void
     {
         Audio.instance.playSfx("carddrop");
     }
     
-    private function onAddNewVerticalLabel() : Void
+    private function onAddNewVerticalLabel(event : Dynamic) : Void
     {
         Audio.instance.playSfx("carddrop");
     }
     
-    private function onRemoveBarComparison() : Void
+    private function onRemoveBarComparison(event : Dynamic) : Void
     {
         Audio.instance.playSfx("button_click");
     }
     
-    private function onRemoveBarSegment() : Void
+    private function onRemoveBarSegment(event : Dynamic) : Void
     {
         Audio.instance.playSfx("button_click");
     }
     
-    private function onRemoveHorizontalLabel() : Void
+    private function onRemoveHorizontalLabel(event : Dynamic) : Void
     {
         Audio.instance.playSfx("card2deck");
     }
     
-    private function onRemoveVerticalLabel() : Void
+    private function onRemoveVerticalLabel(event : Dynamic) : Void
     {
         Audio.instance.playSfx("card2deck");
     }
     
-    private function onResizeBarComparison() : Void
+    private function onResizeBarComparison(event : Dynamic) : Void
     {
         Audio.instance.playSfx("card2deck");
     }
     
-    private function onResizeHorizontalLabel() : Void
+    private function onResizeHorizontalLabel(event : Dynamic) : Void
     {
         Audio.instance.playSfx("card2deck");
     }
     
-    private function onResizeVerticalLabel() : Void
+    private function onResizeVerticalLabel(event : Dynamic) : Void
     {
         Audio.instance.playSfx("card2deck");
     }
     
-    private function onSplitBarSegment() : Void
+    private function onSplitBarSegment(event : Dynamic) : Void
     {
         Audio.instance.playSfx("card2deck");
     }

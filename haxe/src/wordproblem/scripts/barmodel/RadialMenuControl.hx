@@ -1,24 +1,25 @@
 package wordproblem.scripts.barmodel;
 
 
-import flash.geom.Point;
-
 import dragonbox.common.dispose.IDisposable;
+import dragonbox.common.math.util.MathUtil;
 import dragonbox.common.ui.MouseState;
 
 import haxe.Constraints.Function;
 
-import starling.animation.Transitions;
-import starling.animation.Tween;
-import starling.core.Starling;
-import starling.display.DisplayObject;
-import starling.display.DisplayObjectContainer;
-import starling.display.Image;
-import starling.display.Sprite;
-import starling.extensions.textureutil.TextureUtil;
-import starling.textures.Texture;
+import motion.Actuate;
+import motion.easing.Expo;
+
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
+import openfl.display.Sprite;
+import openfl.geom.Point;
 
 import wordproblem.display.Layer;
+import wordproblem.display.PivotSprite;
+import wordproblem.display.util.BitmapUtil;
 
 /**
  * This class encompasses all the logic necessary to bring up a radial menu prompt
@@ -167,7 +168,7 @@ class RadialMenuControl implements IDisposable
             // theta should within the 'arms' constraining each segment.
             m_globalLocationBuffer.x = m_mouseState.mousePositionThisFrame.x;
             m_globalLocationBuffer.y = m_mouseState.mousePositionThisFrame.y;
-            m_radialMenuContainer.globalToLocal(m_globalLocationBuffer, m_localLocationBuffer);
+            m_localLocationBuffer = m_radialMenuContainer.globalToLocal(m_globalLocationBuffer);
             var mouseRSq : Float = m_localLocationBuffer.x * m_localLocationBuffer.x + m_localLocationBuffer.y * m_localLocationBuffer.y;
             if (mouseRSq >= m_innerRadiusSq && mouseRSq <= m_outerRadiusSq) 
             {
@@ -210,8 +211,6 @@ class RadialMenuControl implements IDisposable
                     }
                 }
                 
-                
-                
                 if (m_separatingAngles.length >= 2) 
                 {
                     var i : Int = 0;
@@ -245,7 +244,8 @@ class RadialMenuControl implements IDisposable
             {
                 if (m_enabledGestures[m_hitSegmentIndexOnLastFrame]) 
                 {
-                    m_radialMenuSegmentsOver[m_hitSegmentIndexOnLastFrame].removeFromParent();
+					var radialMenuSegmentOver = m_radialMenuSegmentsOver[m_hitSegmentIndexOnLastFrame];
+					if (radialMenuSegmentOver.parent != null) radialMenuSegmentOver.parent.removeChild(radialMenuSegmentOver);
                 }
                 
                 m_mouseOutOptionCallback(m_hitSegmentIndexOnLastFrame);
@@ -342,22 +342,18 @@ class RadialMenuControl implements IDisposable
                 newAngle -= Math.PI * 2;
             }
             m_separatingAngles.push(newAngle);
-        }  // Position the radial menu  
-        
-        
-        
+        } 
+		
+		// Position the radial menu  
         m_radialMenuContainer.x = xLocation;
         m_radialMenuContainer.y = yLocation;
         canvas.addChild(m_radialMenuContainer);
         
         m_radialMenuContainer.scaleX = m_radialMenuContainer.scaleY = 0.0;
-        var popOpenTween : Tween = new Tween(m_radialMenuContainer, 0.4, Transitions.EASE_OUT);
-        popOpenTween.scaleTo(1.0);
-        popOpenTween.onComplete = function() : Void
+		Actuate.tween(m_radialMenuContainer, 0.4, { scaleX: 1, scaleY: 1 }).ease(Expo.easeOut).onComplete(function() : Void
                 {
                     isOpen = true;
-                };
-        Starling.current.juggler.add(popOpenTween);
+                });
     }
     
     public function close() : Void
@@ -366,15 +362,12 @@ class RadialMenuControl implements IDisposable
         
         var containerToDispose : Layer = m_radialMenuContainer;
         m_radialMenuContainer = null;
-        var closeTween : Tween = new Tween(containerToDispose, 0.2);
-        closeTween.scaleTo(0.0);
-        closeTween.fadeTo(0.0);
-        closeTween.onComplete = function() : Void
+		Actuate.tween(containerToDispose, 0.2, { scaleX: 0, scaleY: 0, alpha: 0 }).onComplete(function() : Void
                 {
                     
                     // Dispose of the resources
-                    containerToDispose.removeChildren(0, -1);
-                    containerToDispose.removeFromParent();
+                    containerToDispose.removeChildren();
+                    if (containerToDispose.parent != null) containerToDispose.parent.removeChild(containerToDispose);
                     
                     // Need to properly dispose of all the elements in each list
                     // (Very important to do this since textures use up valuable graphics memory)
@@ -390,8 +383,7 @@ class RadialMenuControl implements IDisposable
                     disposeSegments(m_radialMenuSegments, "up");
                     disposeSegments(m_radialMenuSegmentsOver, "over");
                     disposeSegments(m_radialMenuSegmentsDisabled, "disabled");
-                };
-        Starling.current.juggler.add(closeTween);
+                });
     }
     
     // An external script is responsible for specifying the actual draw
@@ -401,36 +393,40 @@ class RadialMenuControl implements IDisposable
     {
         // Make sure each piece rotates around the center of the circle,
         // will make positioning them later easier
-        var segmentTexture : Texture = null;
+        var segmentBitmapData : BitmapData = null;
         if (mode == "up") 
         {
-            segmentTexture = TextureUtil.getRingSegmentTexture(
+            segmentBitmapData = BitmapUtil.getRingSegmentBitmapData(
                             m_innerRadius, m_outerRadius, 0, arcLength, true
                             );
         }
         else if (mode == "over") 
         {
-            segmentTexture = TextureUtil.getRingSegmentTexture(
+            segmentBitmapData = BitmapUtil.getRingSegmentBitmapData(
                             m_innerRadius, m_outerRadius, 0, arcLength, true, null, 0xFF0000
                             );
         }
         else 
         {
-            segmentTexture = TextureUtil.getRingSegmentTexture(
+            segmentBitmapData = BitmapUtil.getRingSegmentBitmapData(
                             m_innerRadius, m_outerRadius, 0, arcLength, true, null, 0xCCCCCC
                             );
         }
         
-        var segmentImage : Image = new Image(segmentTexture);
+        var segmentImage : PivotSprite = new PivotSprite();
+		segmentImage.addChild(new Bitmap(segmentBitmapData));
         segmentImage.pivotX = segmentImage.pivotY = m_outerRadius;
-        segmentImage.rotation = rotation;
+        segmentImage.rotation = MathUtil.radsToDegrees(rotation);
         
         return segmentImage;
     }
     
     private function defaultDispose(segment : DisplayObject, mode : String) : Void
     {
-        (try cast(segment, Image) catch(e:Dynamic) null).texture.dispose();
-        segment.dispose();
+		var castedSegment : PivotSprite = try cast(segment, PivotSprite) catch (e : Dynamic) null;
+		if (castedSegment != null) {
+			(try cast(castedSegment.getChildAt(0), Bitmap) catch (e : Dynamic) null).bitmapData.dispose();
+			castedSegment.dispose();
+		}
     }
 }

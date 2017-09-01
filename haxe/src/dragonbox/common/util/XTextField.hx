@@ -63,7 +63,7 @@ class XTextField
         
         var ty : Float = ((verticalAlign)) ? (height - descriptionMeasuringTextField.textHeight) * 0.5 : 0;
         
-        var textBitmapData : BitmapData = new BitmapData(Std.int(descriptionMeasuringTextField.width), Std.int(descriptionMeasuringTextField.height), true, 0xFF0000);
+        var textBitmapData : BitmapData = new BitmapData(Std.int(descriptionMeasuringTextField.width), Std.int(descriptionMeasuringTextField.height), false, 0xFF0000);
         textBitmapData.draw(descriptionMeasuringTextField, new Matrix(1, 0, 0, 1, 0, ty));
         
         var textFieldTexture : Texture = Texture.fromBitmapData(textBitmapData, false);

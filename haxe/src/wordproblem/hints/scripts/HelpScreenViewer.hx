@@ -1,24 +1,24 @@
 package wordproblem.hints.scripts;
 
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.events.MouseEvent;
 import wordproblem.hints.scripts.HintsViewer;
 import wordproblem.hints.scripts.IShowableScript;
 import wordproblem.hints.scripts.TipsViewer;
 
-import flash.geom.Rectangle;
-import flash.text.TextFormat;
-import flash.text.TextFormatAlign;
+import openfl.geom.Rectangle;
+import openfl.text.TextFormat;
+import openfl.text.TextFormatAlign;
 
 import dragonbox.common.util.XColor;
 
 import haxe.Constraints.Function;
 
-import starling.display.Button;
-import starling.display.DisplayObjectContainer;
-import starling.display.Image;
-import starling.display.Quad;
-import starling.display.Sprite;
-import starling.events.Event;
-import starling.textures.Texture;
+import wordproblem.display.LabelButton;
+import openfl.display.DisplayObjectContainer;
+import openfl.display.Sprite;
+import openfl.events.Event;
 
 import wordproblem.display.Layer;
 import wordproblem.engine.IGameEngine;
@@ -41,7 +41,7 @@ class HelpScreenViewer extends ScriptNode
     /**
      * Dismiss the screen without doing anything
      */
-    private var m_closeButton : Button;
+    private var m_closeButton : LabelButton;
     
     /**
      * The primary container in which to paste the screen on top of
@@ -75,7 +75,7 @@ class HelpScreenViewer extends ScriptNode
     /**
      * The categories of help options available for viewing.
      */
-    private var m_categoryButtons : Array<Button>;
+    private var m_categoryButtons : Array<LabelButton>;
     //private var m_categoryToggleGroup : ToggleGroup;
     private var m_helpCategoryScripts : Array<IShowableScript>;
     private var m_currentlyShownScript : IShowableScript;
@@ -92,16 +92,16 @@ class HelpScreenViewer extends ScriptNode
         m_parentCanvas = parentCanvas;
         m_mainLayer = new Layer();
         
-        var totalWidth : Float = 800;
-        var totalHeight : Float = 600;
-        var disablingQuad : Quad = new Quad(totalWidth, totalHeight, 0);
+        var totalWidth : Int = 800;
+        var totalHeight : Int = 600;
+        var disablingQuad : Bitmap = new Bitmap(new BitmapData(totalWidth, totalHeight, false, 0));
         disablingQuad.alpha = 0.6;
         m_mainLayer.addChild(disablingQuad);
         
         var screenLayer : Sprite = new Sprite();
-        var screenWidth : Float = totalWidth - 100;
-        var screenHeight : Float = totalHeight - 70;
-        var backgroundImage : Image = new Image(assetManager.getTexture("summary_background"));
+        var screenWidth : Int = totalWidth - 100;
+        var screenHeight : Int = totalHeight - 70;
+        var backgroundImage : Bitmap = new Bitmap(assetManager.getBitmapData("summary_background"));
         backgroundImage.width = screenWidth;
         backgroundImage.height = screenHeight;
         screenLayer.addChild(backgroundImage);
@@ -113,9 +113,8 @@ class HelpScreenViewer extends ScriptNode
         // perform subtraction is a tip, while telling them what should be subtracted is a hint)
         var buttonLabels : Array<String> = ["Tips", "Controls"];
         var numButtons : Int = buttonLabels.length;
-        m_categoryButtons = new Array<Button>();
-        var whiteButtonTexture : Texture = assetManager.getTexture("button_white");
-        var whiteScale9Texture : Texture = Texture.fromTexture(whiteButtonTexture, new Rectangle(8, 8, 16, 16));
+        m_categoryButtons = new Array<LabelButton>();
+        var whiteButtonBitmapData : BitmapData = assetManager.getBitmapData("button_white");
         var i : Int = 0;
         var fontSize : Int = 20;
         var categoryButtonWidth : Float = 170;
@@ -140,12 +139,12 @@ class HelpScreenViewer extends ScriptNode
             //m_categoryButtons.push(categoryToggleButton);
             //
             //// Set a selection skin
+			//// TODO: when radio button group is designed, the correct scale9Grid is: new Rectangle(8, 8, 16, 16)
             //var defaultSelectedImage : Scale9Image = new Scale9Image(whiteScale9Texture);
             //defaultSelectedImage.color = XColor.shadeColor(buttonColorData.getUpButtonColor(), 1.0);
             //categoryToggleButton.defaultSelectedSkin = defaultSelectedImage;
             //categoryToggleButton.defaultSelectedLabelProperties = {
                         //textFormat : new TextFormat(GameFonts.DEFAULT_FONT_NAME, fontSize, 0x000000, null, null, null, null, null, TextFormatAlign.CENTER)
-//
                     //};
             //categoryToggleButton.width = categoryButtonWidth;
             //categoryToggleButton.height = categoryButtonHeight;
@@ -161,13 +160,13 @@ class HelpScreenViewer extends ScriptNode
         //}
         
         var closeWidth : Float = 80;
-        var closeIconTexture : Texture = assetManager.getTexture("wrong");
-        var closeIcon : Image = new Image(closeIconTexture);
-        m_closeButton = new Button(closeIconTexture);
-        m_closeButton.scaleWhenOver = 1.2;
-        m_closeButton.scaleWhenDown = 0.8;
+        var closeIconBitmapData : BitmapData = assetManager.getBitmapData("wrong");
+        var closeIcon : Bitmap = new Bitmap(closeIconBitmapData);
+        m_closeButton = new LabelButton(closeIcon);
+		m_closeButton.scaleWhenOver = 1.2;
+		m_closeButton.scaleWhenDown = 0.8;
         m_closeButton.width = m_closeButton.height = closeWidth;
-        m_closeButton.addEventListener(Event.TRIGGERED, onCloseClicked);
+        m_closeButton.addEventListener(MouseEvent.CLICK, onCloseClicked);
         // The button needs to be positioned such that the edges just slightly touch the wooden border of the
         // screen (need to hardcode the width of the borders)
         var woodBorderThickness : Float = 27;
@@ -287,7 +286,7 @@ class HelpScreenViewer extends ScriptNode
     
     public function hide() : Void
     {
-        m_mainLayer.removeFromParent();
+        if (m_mainLayer.parent != null) m_mainLayer.parent.removeChild(m_mainLayer);
         
 		// TODO: uncomment once radio button toggle group is designed
         //if (m_categoryToggleGroup.selectedIndex >= 0) 
@@ -301,14 +300,18 @@ class HelpScreenViewer extends ScriptNode
     {
         super.dispose();
         
-        m_closeButton.removeEventListener(Event.TRIGGERED, onCloseClicked);
+        m_closeButton.removeEventListener(MouseEvent.CLICK, onCloseClicked);
         
         for (categoryButton in m_categoryButtons)
         {
-            categoryButton.removeEventListeners();
-            categoryButton.removeFromParent(true);
+			// TODO: once toggle buttons are designed we need to designate exactly
+			// which listeners we are removing; openfl has no mass removal
+            //categoryButton.removeEventListeners();
+			if (categoryButton.parent != null) categoryButton.parent.removeChild(categoryButton);
+			categoryButton.dispose();
+			categoryButton = null;
         }
-        
+		
         for (helpCategoryScript in m_helpCategoryScripts)
         {
             if (Std.is(helpCategoryScript, ScriptNode)) 
@@ -331,7 +334,7 @@ class HelpScreenViewer extends ScriptNode
         return ScriptStatus.SUCCESS;
     }
     
-    private function onCloseClicked() : Void
+    private function onCloseClicked(event : Dynamic) : Void
     {
         if (m_onCloseCallback != null) 
         {

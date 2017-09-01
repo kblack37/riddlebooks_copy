@@ -1,19 +1,11 @@
 package dragonbox.common.ui;
 
 
-import flash.events.EventDispatcher;
-import flash.events.MouseEvent;
-import flash.geom.Vector3D;
+import openfl.events.EventDispatcher;
+import openfl.events.MouseEvent;
+import openfl.geom.Vector3D;
 
 import dragonbox.common.dispose.IDisposable;
-
-import openfl.Vector;
-
-import starling.events.Event;
-import starling.events.EventDispatcher;
-import starling.events.Touch;
-import starling.events.TouchEvent;
-import starling.events.TouchPhase;
 
 class MouseState implements IDisposable
 {
@@ -44,35 +36,32 @@ class MouseState implements IDisposable
     public var mouseWheelDeltaThisFrame : Int;
     
     /**
-     * Binding to starling events
-     */
-    private var binding : starling.events.EventDispatcher;
-    
-    /**
      * Binding to flash events that are not handled by starling.
      */
-    private var nativeFlashBinding : flash.events.EventDispatcher;
+    private var binding : EventDispatcher;
     
-    public function new(binding : starling.events.EventDispatcher,
-            nativeFlashDispatcher : flash.events.EventDispatcher)
+    public function new(binding : EventDispatcher)
     {
-        this.nativeFlashBinding = nativeFlashDispatcher;
-        bind(binding);
+		bind(binding);
     }
     
-    public function bind(binding : starling.events.EventDispatcher) : Void
+    public function bind(binding : EventDispatcher) : Void
     {
         if (this.binding != null) 
         {
-            this.binding.removeEventListener(TouchEvent.TOUCH, onTouch);
-            this.nativeFlashBinding.removeEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
+			this.binding.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+			this.binding.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+			this.binding.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+            this.binding.removeEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
         }
         
         this.binding = binding;
         if (this.binding != null) 
         {
-            this.binding.addEventListener(TouchEvent.TOUCH, onTouch);
-            this.nativeFlashBinding.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
+			this.binding.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+			this.binding.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+			this.binding.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+            this.binding.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
         }
     }
     
@@ -80,12 +69,14 @@ class MouseState implements IDisposable
     {
         if (this.binding != null) 
         {
-            this.binding.removeEventListener(TouchEvent.TOUCH, onTouch);
-            this.nativeFlashBinding.removeEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
+			this.binding.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+			this.binding.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+			this.binding.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+            this.binding.removeEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
         }
     }
     
-    public function onEnterFrame(e : Event = null) : Void
+    public function onEnterFrame(e : Dynamic) : Void
     {
         // For some reason the mouse state values are being reset before
         // any other part of the application can read them in, thus the we need
@@ -99,64 +90,41 @@ class MouseState implements IDisposable
         this.mouseWheelDeltaThisFrame = 0;
     }
     
-    private function onMouseWheel(e : MouseEvent) : Void
+    private function onMouseWheel(event : Dynamic) : Void
     {
-        this.mouseWheelDeltaThisFrame = e.delta;
+        this.mouseWheelDeltaThisFrame = cast(event, MouseEvent).delta;
     }
-    
-    private function onTouch(event : TouchEvent) : Void
-    {
-        var touches : Vector<Touch> = event.touches;
-        var touchCount : Int = touches.length;
-        
-        // Touches exceeds one only if multiple pressure points have been detected
-        // On a touch-screen device this would be multiple fingers
-        if (touchCount == 1) 
-        {
-            this.target = event.target;
-            
-            var touch : Touch = touches[0];
-            var touchPhase : String = touch.phase;
-            var x : Float = touch.globalX;
-            var y : Float = touch.globalY;
-            this.mousePositionThisFrame.x = x;
-            this.mousePositionThisFrame.y = y;
-            
-            var prevX : Float = touch.previousGlobalX;
-            var prevY : Float = touch.previousGlobalY;
-            this.mousePositionLastFrame.x = prevX;
-            this.mousePositionLastFrame.y = prevY;
-            
-            this.mouseDeltaThisFrame.x = x - prevX;
-            this.mouseDeltaThisFrame.y = y - prevY;
-            
-            // User moves without pressing down
-            if (touchPhase == TouchPhase.HOVER) 
-            {
-                this.leftMouseMovedThisFrame = true;
-            }
-            // User moves while still pressing down
-            else if (touchPhase == TouchPhase.MOVED) 
-            {
-                this.leftMouseDown = true;
-                this.leftMouseMovedThisFrame = true;
-                this.leftMouseDraggedThisFrame = true;
-            }
-            // User pressed down
-            else if (touchPhase == TouchPhase.BEGAN) 
-            {
-                this.leftMousePressedThisFrame = true;
-                this.leftMouseDown = true;
-            }
-            // User released a press
-            else if (touchPhase == TouchPhase.ENDED) 
-            {
-                this.leftMouseReleasedThisFrame = true;
-                this.leftMouseDraggedThisFrame = false;
-                this.leftMouseDown = false;
-            }
-            else if (touchPhase == TouchPhase.STATIONARY) 
-                { }
-        }
-    }
+	
+	private function onMouseDown(event : Dynamic) {
+		this.leftMousePressedThisFrame = true;
+		this.leftMouseDown = true;
+	}
+	
+	private function onMouseUp(event : Dynamic) {
+		this.leftMouseReleasedThisFrame = true;
+		this.leftMouseDraggedThisFrame = false;
+		this.leftMouseDown = false;
+	}
+	
+	private function onMouseMove(event : Dynamic) {
+		var mouseEvent : MouseEvent = try cast(event, MouseEvent) catch (e : Dynamic) null;
+		
+		var prevX = mousePositionLastFrame.x = mousePositionThisFrame.x;
+		var prevY = mousePositionLastFrame.y = mousePositionThisFrame.y;
+		
+		var x : Float = mouseEvent.stageX;
+		var y : Float = mouseEvent.stageY;
+		this.mousePositionThisFrame.x = x;
+		this.mousePositionThisFrame.y = y;
+		
+		this.mouseDeltaThisFrame.x = x - prevX;
+		this.mouseDeltaThisFrame.y = y - prevY;
+		
+		this.leftMouseMovedThisFrame = true;
+		
+		if (mouseEvent.buttonDown) {
+			this.leftMouseDown = true;
+			this.leftMouseDraggedThisFrame = true;
+		}
+	}
 }

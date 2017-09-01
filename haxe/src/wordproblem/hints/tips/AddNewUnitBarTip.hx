@@ -2,8 +2,8 @@ package wordproblem.hints.tips;
 
 import wordproblem.hints.tips.BarModelTip;
 
-import flash.geom.Point;
-import flash.geom.Rectangle;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
 
 import dragonbox.common.eventsequence.CustomSequenceEvent;
 import dragonbox.common.eventsequence.EventSequencer;
@@ -16,8 +16,8 @@ import dragonbox.common.math.vectorspace.RealsVectorSpace;
 import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
 
-import starling.display.DisplayObject;
-import starling.display.DisplayObjectContainer;
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
 
 import wordproblem.engine.barmodel.model.BarModelData;
 import wordproblem.engine.expression.ExpressionSymbolMap;

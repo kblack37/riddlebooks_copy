@@ -1,10 +1,13 @@
 package wordproblem.scripts.barmodel;
 
+import openfl.display.Bitmap;
+import wordproblem.display.PivotSprite;
+import wordproblem.engine.events.DataEvent;
 import wordproblem.scripts.barmodel.BaseBarModelScript;
 import wordproblem.scripts.barmodel.IHitAreaScript;
 
-import flash.geom.Point;
-import flash.geom.Rectangle;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
 
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.ExpressionUtil;
@@ -12,9 +15,8 @@ import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.system.RectanglePool;
 import dragonbox.common.ui.MouseState;
 
-import starling.display.DisplayObjectContainer;
-import starling.display.Image;
-import starling.events.EventDispatcher;
+import openfl.display.DisplayObjectContainer;
+import openfl.events.EventDispatcher;
 
 import wordproblem.engine.IGameEngine;
 import wordproblem.engine.barmodel.model.BarModelData;
@@ -129,7 +131,7 @@ class AddNewUnitBar extends BaseBarModelScript implements IHitAreaScript
         if (m_ready && m_isActive) 
         {
             m_globalMouseBuffer.setTo(m_mouseState.mousePositionThisFrame.x, m_mouseState.mousePositionThisFrame.y);
-            m_barModelArea.globalToLocal(m_globalMouseBuffer, m_localMouseBuffer);
+            m_localMouseBuffer = m_barModelArea.globalToLocal(m_globalMouseBuffer);
             
             var barWholeViews : Array<BarWholeView> = m_barModelArea.getBarWholeViews();
             var valuePerSegment : Int = ((m_gameEngine == null)) ? m_fixedDefaultUnitValue : m_gameEngine.getCurrentLevel().defaultUnitValue;
@@ -175,18 +177,16 @@ class AddNewUnitBar extends BaseBarModelScript implements IHitAreaScript
                         
                         if (m_gameEngine != null) 
                         {
-                            m_gameEngine.dispatchEventWith(GameEvent.BAR_MODEL_AREA_CHANGE, false, {
+                            m_gameEngine.dispatchEvent(new DataEvent(GameEvent.BAR_MODEL_AREA_CHANGE, {
                                         previousSnapshot : previousModelDataSnapshot
-
-                                    });
+                                    }));
                             m_barModelArea.redraw();
                             
                             // Log addition of new unit bar
-                            m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.ADD_NEW_UNIT_BAR, false, {
+                            m_gameEngine.dispatchEvent(new DataEvent(AlgebraAdventureLoggingConstants.ADD_NEW_UNIT_BAR, {
                                         barModel : m_barModelArea.getBarModelData().serialize(),
                                         value : releasedWidget.getNode().data,
-
-                                    });
+                                    }));
                         }
                         
                         status = ScriptStatus.SUCCESS;
@@ -285,7 +285,8 @@ class AddNewUnitBar extends BaseBarModelScript implements IHitAreaScript
     public function postProcessHitAreas(hitAreas : Array<Rectangle>, hitAreaGraphics : Array<DisplayObjectContainer>) : Void
     {
         for (i in 0...hitAreaGraphics.length){
-            var icon : Image = new Image(m_assetManager.getTexture("multiply_x"));
+            var icon : PivotSprite = new PivotSprite();
+			icon.addChild(new Bitmap(m_assetManager.getBitmapData("multiply_x")));
             var hitArea : Rectangle = hitAreas[i];
             icon.pivotX = icon.width * 0.5;
             icon.pivotY = icon.height * 0.5;
@@ -309,7 +310,7 @@ class AddNewUnitBar extends BaseBarModelScript implements IHitAreaScript
             // the y should be where the new bar is expected to go
             var lastBarWholeView : BarWholeView = barWholeViews[numBarWholeViews - 1];
             var barWholeViewBounds : Rectangle = m_hitAreaPool.getRectangle();
-            lastBarWholeView.getBounds(m_barModelArea, barWholeViewBounds);
+            barWholeViewBounds = lastBarWholeView.getBounds(m_barModelArea);
             newBarY = barWholeViewBounds.bottom + m_barModelArea.barGap;
         }
         
@@ -355,9 +356,9 @@ class AddNewUnitBar extends BaseBarModelScript implements IHitAreaScript
         barWholes.push(newBarWhole);
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         m_expressionSymbolMap = m_gameEngine.getExpressionSymbolResources();
     }

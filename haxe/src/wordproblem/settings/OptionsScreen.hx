@@ -1,21 +1,24 @@
 package wordproblem.settings;
 
 
-import flash.text.TextFormat;
+import dragonbox.common.util.XColor;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.events.MouseEvent;
+import openfl.filters.BitmapFilter;
+import openfl.text.TextFormat;
+import wordproblem.display.DisposableSprite;
 
 import cgs.audio.Audio;
 import cgs.internationalization.StringTable;
 
 import haxe.Constraints.Function;
 
-import starling.display.Button;
-import starling.display.DisplayObject;
-import starling.display.Image;
-import starling.display.Quad;
-import starling.display.Sprite;
-import starling.events.Event;
-import starling.filters.ColorMatrixFilter;
-import starling.textures.Texture;
+import wordproblem.display.LabelButton;
+import openfl.display.DisplayObject;
+import openfl.display.Sprite;
+import openfl.events.Event;
+import openfl.filters.ColorMatrixFilter;
 
 import wordproblem.audio.MusicToggleButton;
 import wordproblem.audio.SfxToggleButton;
@@ -30,13 +33,13 @@ import wordproblem.resource.AssetManager;
  * 
  * The options available will include things like quiting, restarting, or adjusting sound
  */
-class OptionsScreen extends Sprite
+class OptionsScreen extends DisposableSprite
 {
     /**
      * Hold reference to the skip button because each level might have a different option to
      * disable it.
      */
-    private var m_skipButton : Button;
+    private var m_skipButton : LabelButton;
     
     /**
      * Keep track of all the displayed buttons
@@ -51,27 +54,28 @@ class OptionsScreen extends Sprite
             allowExit : Bool,
             buttonColor : Int,
             assetManager : AssetManager,
-            onResume : Function,
-            onRestart : Function,
-            onSkip : Function,
-            onAudioToggle : Function,
-            onExit : Function, onHelpSelected : Function = null)
+            onResume : Dynamic->Void,
+            onRestart : Dynamic->Void,
+            onSkip : Dynamic->Void,
+            onAudioToggle : Dynamic->Void,
+            onExit : Dynamic->Void,
+			onHelpSelected : Dynamic->Void = null)
     {
         super();
         
         // Create a disabling quad to block out the application behind
-        var optionsBackingQuad : Quad = new Quad(screenWidth, screenHeight, 0x000000);
+        var optionsBackingQuad : Bitmap = new Bitmap(new BitmapData(Std.int(screenWidth), Std.int(screenHeight), false, 0x000000));
         optionsBackingQuad.alpha = 0.5;
         addChild(optionsBackingQuad);
         
         var optionsButtonContainer : Sprite = new Sprite();
-        var optionsBackground : Image = new Image(assetManager.getTexture("summary_background"));
+        var optionsBackground : Bitmap = new Bitmap(assetManager.getBitmapData("summary_background"));
         optionsButtonContainer.addChild(optionsBackground);
         
         // Button to close menu and resume the game
         m_buttons = new Array<DisplayObject>();
         
-        var resumeButton : Button = WidgetUtil.createGenericColoredButton(
+        var resumeButton : LabelButton = WidgetUtil.createGenericColoredButton(
                 assetManager,
                 buttonColor,
 				// TODO: uncomment this once cgs library is finished
@@ -79,22 +83,22 @@ class OptionsScreen extends Sprite
                 new TextFormat(GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF),
                 new TextFormat(GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF)
                 );
-        var resumeIconTexture : Texture = assetManager.getTexture("arrow_yellow_icon");
-        var resumeIcon : Image = new Image(resumeIconTexture);
-        var resumeIconScale : Float = (buttonHeight * 0.8) / resumeIconTexture.height;
+        var resumeIconBitmapData : BitmapData = assetManager.getBitmapData("arrow_yellow_icon");
+        var resumeIcon : Bitmap = new Bitmap(resumeIconBitmapData);
+        var resumeIconScale : Float = (buttonHeight * 0.8) / resumeIconBitmapData.height;
         resumeIcon.scaleX = resumeIcon.scaleY = resumeIconScale;
-        resumeButton.upState = resumeIcon.texture;
-		// TODO: this was a feathers button and will likely have to be fixed
+        resumeButton.upState = resumeIcon;
+		// TODO: openfl buttons don't have many features; this will need to be fixed
         //resumeButton.iconPosition = Button.ICON_POSITION_RIGHT;
-        //resumeButton.iconOffsetX = -resumeIconTexture.width * resumeIconScale;
+        //resumeButton.iconOffsetX = -resumeIconBitmapData.width * resumeIconScale;
         resumeButton.width = buttonWidth;
         resumeButton.height = buttonHeight;
-        resumeButton.addEventListener(Event.TRIGGERED, onResume);
+        resumeButton.addEventListener(MouseEvent.CLICK, onResume, false, 0, true);
         m_buttons.push(resumeButton);
         
         if (onHelpSelected != null) 
         {
-            var helpButton : Button = WidgetUtil.createGenericColoredButton(
+            var helpButton : LabelButton = WidgetUtil.createGenericColoredButton(
                     assetManager,
                     buttonColor,
                     // TODO: uncomment this once cgs library is finished
@@ -104,13 +108,12 @@ class OptionsScreen extends Sprite
                     );
             helpButton.width = buttonWidth;
             helpButton.height = buttonHeight;
-            helpButton.addEventListener(Event.TRIGGERED, onHelpSelected);
+            helpButton.addEventListener(MouseEvent.CLICK, onHelpSelected, false, 0, true);
             m_buttons.push(helpButton);
-        }  // Option to reset the current level from the beginning  
-        
-        
-        
-        var resetButton : Button = WidgetUtil.createGenericColoredButton(
+        }  
+		
+		// Option to reset the current level from the beginning  
+        var resetButton : LabelButton = WidgetUtil.createGenericColoredButton(
                 assetManager,
                 buttonColor,
 				// TODO: uncomment this once cgs library is finished
@@ -120,13 +123,13 @@ class OptionsScreen extends Sprite
                 );
         resetButton.width = buttonWidth;
         resetButton.height = buttonHeight;
-        resetButton.addEventListener(Event.TRIGGERED, onRestart);
+        resetButton.addEventListener(MouseEvent.CLICK, onRestart, false, 0, true);
         m_buttons.push(resetButton);
         
         // Button to skip this level
         if (allowSkipping) 
         {
-            var skipButton : Button = WidgetUtil.createGenericColoredButton(
+            var skipButton : LabelButton = WidgetUtil.createGenericColoredButton(
                     assetManager,
                     buttonColor,
 					// TODO: uncomment this once cgs library is finished
@@ -134,17 +137,17 @@ class OptionsScreen extends Sprite
                     new TextFormat(GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF),
                     new TextFormat(GameFonts.DEFAULT_FONT_NAME, 22, 0xFFFFFF)
                     );
-            var skipIconTexture : Texture = assetManager.getTexture("busy_icon");
-            var skipIcon : Image = new Image(skipIconTexture);
+            var skipIconBitmapData : BitmapData = assetManager.getBitmapData("busy_icon");
+            var skipIcon : Bitmap = new Bitmap(skipIconBitmapData);
             var skipIconScale : Float = (buttonHeight * 0.8) / skipIcon.height;
             skipIcon.scaleX = skipIcon.scaleY = skipIconScale;
-            skipButton.upState = skipIcon.texture;
-			// TODO: this was a feathers button and will probably have to be fixed
+            skipButton.upState = skipIcon;
+			// TODO: openfl buttons don't have many features; this will need to be fixed
             //skipButton.iconPosition = Button.ICON_POSITION_RIGHT;
-            //skipButton.iconOffsetX = -skipIconTexture.width * skipIconScale;
+            //skipButton.iconOffsetX = -skipIconBitmapData.width * skipIconScale;
             skipButton.width = buttonWidth;
             skipButton.height = buttonHeight;
-            skipButton.addEventListener(Event.TRIGGERED, onSkip);
+            skipButton.addEventListener(MouseEvent.CLICK, onSkip, false, 0, true);
             m_buttons.push(skipButton);
             m_skipButton = skipButton;
         }
@@ -157,7 +160,7 @@ class OptionsScreen extends Sprite
 			assetManager, 
 			buttonColor
         );
-        musicButton.addEventListener(AlgebraAdventureLoggingConstants.BUTTON_PRESSED_EVENT, onAudioToggle);
+        musicButton.addEventListener(AlgebraAdventureLoggingConstants.BUTTON_PRESSED_EVENT, onAudioToggle, false, 0, true);
         m_buttons.push(musicButton);
         
         var sfxButton : SfxToggleButton = new SfxToggleButton(
@@ -168,12 +171,12 @@ class OptionsScreen extends Sprite
 			assetManager, 
 			buttonColor
         );
-        sfxButton.addEventListener(AlgebraAdventureLoggingConstants.BUTTON_PRESSED_EVENT, onAudioToggle);
+        sfxButton.addEventListener(AlgebraAdventureLoggingConstants.BUTTON_PRESSED_EVENT, onAudioToggle, false, 0, true);
         m_buttons.push(sfxButton);
         
         if (allowExit) 
         {
-            var exitButton : Button = WidgetUtil.createGenericColoredButton(
+            var exitButton : LabelButton = WidgetUtil.createGenericColoredButton(
                     assetManager,
                     buttonColor,
 					// TODO: uncomment this once cgs library is finished
@@ -183,7 +186,7 @@ class OptionsScreen extends Sprite
                     );
             exitButton.width = buttonWidth;
             exitButton.height = buttonHeight;
-            exitButton.addEventListener(Event.TRIGGERED, onExit);
+            exitButton.addEventListener(MouseEvent.CLICK, onExit, false, 0, true);
             m_buttons.push(exitButton);
         }
         
@@ -192,10 +195,10 @@ class OptionsScreen extends Sprite
             optionsButtonContainer.addChild(button);
             
             // Add audio to each click
-            button.addEventListener(Event.TRIGGERED, function() : Void
+            button.addEventListener(MouseEvent.CLICK, function(event : Dynamic) : Void
                     {
                         Audio.instance.playSfx("button_click");
-                    });
+                    }, false, 0, true);
         }
 		
 		// Dimension of background depends on the total size of the buttons  
@@ -217,12 +220,9 @@ class OptionsScreen extends Sprite
     
     override public function dispose() : Void
     {
-        super.dispose();
-        
-        for (button in m_buttons)
-        {
-            button.removeEventListeners();
-        }
+		super.dispose();
+		
+		m_buttons = new Array<DisplayObject>();
     }
     
     public function toggleSkipButtonEnabled(value : Bool) : Void
@@ -231,13 +231,13 @@ class OptionsScreen extends Sprite
         {
             if (value) 
             {
-                m_skipButton.filter = null;
+				m_skipButton.filters = new Array<BitmapFilter>();
             }
             else 
             {
-                var colorMatrixFilter : ColorMatrixFilter = new ColorMatrixFilter();
-                colorMatrixFilter.adjustSaturation(-1);
-                m_skipButton.filter = colorMatrixFilter;
+				var filters = m_skipButton.filters.copy();
+				filters.push(XColor.getGrayscaleFilter());
+				m_skipButton.filters = filters;
             }
             m_skipButton.enabled = value;
         }

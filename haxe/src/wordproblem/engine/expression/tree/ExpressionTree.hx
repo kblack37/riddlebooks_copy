@@ -5,11 +5,12 @@ import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.ExpressionUtil;
 import dragonbox.common.expressiontree.WildCardNode;
 import dragonbox.common.math.util.MathUtil;
-import dragonbox.common.math.vectorspace.IVectorSpace;
 import dragonbox.common.math.vectorspace.RealsVectorSpace;
+import openfl.events.Event;
 
-import starling.events.EventDispatcher;
+import openfl.events.EventDispatcher;
 
+import wordproblem.engine.events.DataEvent;
 import wordproblem.engine.expression.event.ExpressionTreeEvent;
 
 /**
@@ -91,14 +92,11 @@ class ExpressionTree extends EventDispatcher
             addedNodes.push(addedNode);
         }
         
-        dispatchEventWith(ExpressionTreeEvent.ADD_BATCH, false,
-                {
+        dispatchEvent(new DataEvent(ExpressionTreeEvent.ADD_BATCH, {
                     nodesAdded : addedNodes,
                     initialXPositions : initialXPositions,
                     initialYPositions : initialYPositions,
-
-                }
-                );
+                }));
     }
     
     /**
@@ -129,15 +127,11 @@ class ExpressionTree extends EventDispatcher
     {
         
         var newNode : ExpressionNode = _addLeafNode(operator, newLeafSymbol, isNewLeafLeft, givenNode, xPosition, yPosition);
-        dispatchEventWith(
-                ExpressionTreeEvent.ADD,
-                false,
-                {
+        dispatchEvent(new DataEvent(ExpressionTreeEvent.ADD, {
                     nodeAdded : newNode,
                     initialXPosition : xPosition,
                     initialYPosition : yPosition,
-                }
-                );
+                }));
     }
     
     /**
@@ -605,7 +599,7 @@ class ExpressionTree extends EventDispatcher
         this._removeNode(nodeToMove);
         this.addOperatorToNewNode(nodeToMove, neighborNode, operator, leftOfNeighbor);
         
-        dispatchEventWith(ExpressionTreeEvent.MOVE, false);
+        dispatchEvent(new Event(ExpressionTreeEvent.MOVE));
     }
     
     /**
@@ -621,9 +615,9 @@ class ExpressionTree extends EventDispatcher
         _removeNode(node);
         
         // Dispatch a removal event
-        dispatchEventWith(ExpressionTreeEvent.REMOVE, false, {
+        dispatchEvent(new DataEvent(ExpressionTreeEvent.REMOVE, {
             nodeId : node.id
-		});
+		}));
     }
     
     /**
@@ -647,14 +641,10 @@ class ExpressionTree extends EventDispatcher
         // For each of replacement nodes create a new copy following the same structure.
         var replacementRootCopy : ExpressionNode = ExpressionUtil.copy(replacementRoot, m_vectorSpace);
         this._replaceNode(nodeToReplace, replacementRootCopy);
-        dispatchEventWith(
-                ExpressionTreeEvent.SUBSTITUTE,
-                false,
-                {
+        dispatchEvent(new DataEvent(ExpressionTreeEvent.SUBSTITUTE, {
                     nodeIdToReplace : nodeToReplace.id,
                     subtreeToReplace : replacementRootCopy,
-                }
-                );
+                }));
         
         // Replacement might cause new parentheses to crop up, we need to explicitly insert them
         ExpressionUtil.addImplicitParentheses(m_root, m_vectorSpace);
@@ -778,10 +768,9 @@ class ExpressionTree extends EventDispatcher
         {
             var nodeIdsToSimplify : Array<Int> = new Array<Int>();
             nodeIdsToSimplify.push(node.id);
-            dispatchEventWith(ExpressionTreeEvent.SIMPLIFY_SINGLE, false, {
+            dispatchEvent(new DataEvent(ExpressionTreeEvent.SIMPLIFY_SINGLE, {
                         nodeIds : nodeIdsToSimplify
-
-                    });
+                    }));
         }
         
         return canSimplify;
@@ -898,9 +887,9 @@ class ExpressionTree extends EventDispatcher
             nodeIdsToSimplify.push(nodeA.id);
             nodeIdsToSimplify.push(nodeB.id);
             
-            dispatchEventWith(ExpressionTreeEvent.SIMPLIFY_PAIR, false, {
+            dispatchEvent(new DataEvent(ExpressionTreeEvent.SIMPLIFY_PAIR, {
                 nodeIds : nodeIdsToSimplify
-            });
+            }));
         }
         
         return canSimplify;
@@ -1101,7 +1090,7 @@ class ExpressionTree extends EventDispatcher
 				// Prune the node to distribute  
                 _removeNode(nodeToDistribute);
                 
-                this.dispatchEventWith(ExpressionTreeEvent.DISTRIBUTE);
+                this.dispatchEvent(new Event(ExpressionTreeEvent.DISTRIBUTE));
             }
         }
     }
@@ -1211,10 +1200,9 @@ class ExpressionTree extends EventDispatcher
             {
                 nodeIds.push(node.id);
             }
-            dispatchEventWith(ExpressionTreeEvent.SIMPLIFY_CLUSTER, false, {
+            dispatchEvent(new DataEvent(ExpressionTreeEvent.SIMPLIFY_CLUSTER, {
                         nodeIds : nodeIds
-
-                    });
+                    }));
         }
         
         return canSimplify;

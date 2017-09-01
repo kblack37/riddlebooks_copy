@@ -5,8 +5,8 @@ import wordproblem.playercollections.scripts.PlayerCollectionViewer;
 import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
 
-import starling.display.DisplayObjectContainer;
-import starling.text.TextField;
+import openfl.display.DisplayObjectContainer;
+import openfl.text.TextField;
 
 import wordproblem.currency.CurrencyCounter;
 import wordproblem.currency.PlayerCurrencyModel;
@@ -144,11 +144,11 @@ class PlayerCollectionStatsViewer extends PlayerCollectionViewer
     override public function hide() : Void
     {
         super.hide();
-        m_playerXpBar.removeFromParent();
-        m_totalXpText.removeFromParent();
-        m_xpUntilNextLevelText.removeFromParent();
-        m_totalLevelsText.removeFromParent();
+        if (m_playerXpBar.parent != null) m_playerXpBar.parent.removeChild(m_playerXpBar);
+        if (m_totalXpText.parent != null) m_totalXpText.parent.removeChild(m_totalXpText);
+        if (m_xpUntilNextLevelText.parent != null) m_xpUntilNextLevelText.parent.removeChild(m_xpUntilNextLevelText);
+        if (m_totalLevelsText.parent != null) m_totalLevelsText.parent.removeChild(m_totalLevelsText);
         
-        m_currencyCounter.removeFromParent();
+        if (m_currencyCounter.parent != null) m_currencyCounter.parent.removeChild(m_currencyCounter);
     }
 }

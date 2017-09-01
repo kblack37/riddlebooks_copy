@@ -1,7 +1,8 @@
 package wordproblem.scripts.drag;
 
 
-import flash.geom.Point;
+import openfl.geom.Point;
+import wordproblem.engine.events.DataEvent;
 
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
@@ -9,9 +10,9 @@ import dragonbox.common.ui.MouseState;
 
 import haxe.Constraints.Function;
 
-import starling.display.DisplayObject;
-import starling.display.DisplayObjectContainer;
-import starling.events.EventDispatcher;
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
+import openfl.events.EventDispatcher;
 
 import wordproblem.engine.IGameEngine;
 import wordproblem.engine.events.GameEvent;
@@ -116,7 +117,9 @@ class WidgetDragSystem extends BaseGameScript
         
         if (m_draggedWidget != null) 
         {
-            m_draggedWidget.removeFromParent(true);
+			if (m_draggedWidget.parent != null) m_draggedWidget.parent.removeChild(m_draggedWidget);
+			m_draggedWidget.dispose();
+			m_draggedWidget = null;
             disposeCustomDisplay();
         }
     }
@@ -131,7 +134,7 @@ class WidgetDragSystem extends BaseGameScript
             if (m_mouseState.leftMouseDraggedThisFrame) 
             {
                 // Update drag position
-                m_draggedWidget.parent.globalToLocal(m_globalMouseBuffer, m_localMouseBuffer);
+                m_localMouseBuffer = m_draggedWidget.parent.globalToLocal(m_globalMouseBuffer);
                 m_draggedWidget.x = m_localMouseBuffer.x;
                 m_draggedWidget.y = m_localMouseBuffer.y;
             }
@@ -141,7 +144,7 @@ class WidgetDragSystem extends BaseGameScript
                 var releaseWidgetOrigin : DisplayObject = m_draggedWidgetOrigin;
                 
                 // Tentatively remove the dragged object from the screen
-                releasedWidget.removeFromParent();
+				if (releasedWidget.parent != null) releasedWidget.parent.removeChild(releasedWidget);
                 m_draggedWidget = null;
                 m_draggedWidgetOrigin = null;
                 
@@ -162,7 +165,7 @@ class WidgetDragSystem extends BaseGameScript
                     }
                 }
                 
-                m_eventDispatcher.dispatchEventWith(eventType, false, eventParams);
+                m_eventDispatcher.dispatchEvent(new DataEvent(eventType, eventParams));
                 
                 m_extraParams = null;
                 disposeCustomDisplay();
@@ -172,9 +175,9 @@ class WidgetDragSystem extends BaseGameScript
         return scriptStatus;
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         m_mouseState = m_gameEngine.getMouseState();
         m_expressionSymbolMap = m_gameEngine.getExpressionSymbolResources();
@@ -221,7 +224,9 @@ class WidgetDragSystem extends BaseGameScript
         // Can only have one dragged copy at any instance
         if (m_draggedWidget != null) 
         {
-            m_draggedWidget.removeFromParent(true);
+			if (m_draggedWidget.parent != null) m_draggedWidget.parent.removeChild(m_draggedWidget);
+			m_draggedWidget.dispose();
+			m_draggedWidget = null;
             disposeCustomDisplay();
         }
         
@@ -249,7 +254,7 @@ class WidgetDragSystem extends BaseGameScript
         
         m_globalMouseBuffer.x = x;
         m_globalMouseBuffer.y = y;
-        m_draggedWidgetCanvas.globalToLocal(m_globalMouseBuffer, m_localMouseBuffer);
+        m_localMouseBuffer = m_draggedWidgetCanvas.globalToLocal(m_globalMouseBuffer);
         widgetCopy.x = m_localMouseBuffer.x;
         widgetCopy.y = m_localMouseBuffer.y;
         
@@ -265,7 +270,7 @@ class WidgetDragSystem extends BaseGameScript
             termWidget : m_draggedWidget,
             location : new Point(x, y),
         };
-        m_eventDispatcher.dispatchEventWith(eventType, false, params);
+        m_eventDispatcher.dispatchEvent(new DataEvent(eventType, params));
     }
     
     /**
@@ -285,7 +290,7 @@ class WidgetDragSystem extends BaseGameScript
         // Tentatively remove the dragged object from the screen
         if (m_draggedWidget != null) 
         {
-            m_draggedWidget.removeFromParent();
+			if (m_draggedWidget.parent != null) m_draggedWidget.parent.removeChild(m_draggedWidget);
             m_draggedWidget = null;
         }
         m_draggedWidgetOrigin = null;

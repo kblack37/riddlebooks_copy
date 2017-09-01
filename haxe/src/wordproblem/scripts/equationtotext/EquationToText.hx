@@ -1,16 +1,13 @@
 package wordproblem.scripts.equationtotext;
 
 
-import dragonbox.common.math.vectorspace.RealsVectorSpace;
-
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.ExpressionUtil;
 import dragonbox.common.expressiontree.WildCardNode;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
-import dragonbox.common.math.vectorspace.IVectorSpace;
+import dragonbox.common.math.vectorspace.RealsVectorSpace;
 
-import starling.display.DisplayObject;
-import wordproblem.resource.AssetManager;
+import openfl.display.DisplayObject;
 
 import wordproblem.engine.IGameEngine;
 import wordproblem.engine.events.GameEvent;
@@ -18,6 +15,7 @@ import wordproblem.engine.expression.ExpressionSymbolMap;
 import wordproblem.engine.level.WordProblemLevelData;
 import wordproblem.engine.widget.EquationToTextWidget;
 import wordproblem.engine.widget.TermAreaWidget;
+import wordproblem.resource.AssetManager;
 import wordproblem.scripts.BaseGameScript;
 
 class EquationToText extends BaseGameScript
@@ -38,9 +36,9 @@ class EquationToText extends BaseGameScript
         super(gameEngine, expressionCompiler, assetManager, id, isActive);
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         var currentLevel : WordProblemLevelData = m_gameEngine.getCurrentLevel();
         
@@ -92,7 +90,7 @@ class EquationToText extends BaseGameScript
         }
     }
     
-    private function onTermAreaChanged() : Void
+    private function onTermAreaChanged(event : Dynamic) : Void
     {
         var i : Int = 0;
         var termAreasReady : Bool = true;
@@ -120,7 +118,7 @@ class EquationToText extends BaseGameScript
         }
     }
     
-    private function onTermAreaReset() : Void
+    private function onTermAreaReset(event : Dynamic) : Void
     {
         var subtrees : Array<ExpressionNode> = new Array<ExpressionNode>();
         for (termArea in m_termAreas)

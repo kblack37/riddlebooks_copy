@@ -2,6 +2,7 @@ package wordproblem.scripts.expression;
 
 
 import flash.geom.Point;
+import wordproblem.engine.events.DataEvent;
 
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.WildCardNode;
@@ -72,9 +73,9 @@ class SubstituteTerm extends BaseGameScript
         super(gameEngine, expressionCompiler, assetManager, id, isActive);
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         m_termAreas = new Array<TermAreaWidget>();
         var termAreaDisplays : Array<DisplayObject> = m_gameEngine.getUiEntitiesByClass(TermAreaWidget);
@@ -206,8 +207,10 @@ class SubstituteTerm extends BaseGameScript
                     evaluationArea.getTree().addEventListener(ExpressionTreeEvent.SUBSTITUTE, onSubstituteNode);
                     evaluationArea.getTree().replaceNode(pickedNode.getNode(), replacementSubtree);
                     
-                    function onSubstituteNode(event : Event, data : Dynamic) : Void
+                    function onSubstituteNode(event : Dynamic) : Void
                     {
+						var data = (try cast(event, DataEvent) catch (e : Dynamic) null).getData();
+						
                         evaluationArea.getTree().removeEventListener(ExpressionTreeEvent.SUBSTITUTE, onSubstituteNode);
                         
                         var nodeIdToReplace : Int = data.nodeIdToReplace;
@@ -250,7 +253,7 @@ class SubstituteTerm extends BaseGameScript
         {
             if (m_draggedSubstitutionWidget.parent != null) 
             {
-                m_draggedSubstitutionWidget.parent.removeChild(m_draggedSubstitutionWidget);
+                if (m_draggedSubstitutionWidget.parent != null) m_draggedSubstitutionWidget.parent.removeChild(m_draggedSubstitutionWidget);
             }
             
             m_draggedSubstitutionWidget = null;

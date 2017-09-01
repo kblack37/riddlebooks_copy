@@ -3,7 +3,7 @@ package wordproblem.scripts.layering;
 
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 
-import starling.display.DisplayObject;
+import openfl.display.DisplayObject;
 
 import wordproblem.display.Layer;
 import wordproblem.engine.IGameEngine;

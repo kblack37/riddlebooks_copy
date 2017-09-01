@@ -4,6 +4,7 @@ import dragonbox.common.console.ConsoleVisibilityEvent;
 import dragonbox.common.console.IConsole;
 import dragonbox.common.console.IConsoleInterfacable;
 import flash.errors.Error;
+import openfl.Lib;
 
 import dragonbox.common.console.components.HistoryWindow;
 import dragonbox.common.console.components.InputWindow;
@@ -16,11 +17,10 @@ import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
 import openfl.ui.Keyboard;
 
-import starling.core.Starling;
-import starling.display.Sprite;
-import starling.events.Event;
-import starling.events.KeyboardEvent;
-import starling.text.TextField;
+import openfl.display.Sprite;
+import openfl.events.Event;
+import openfl.events.KeyboardEvent;
+import openfl.text.TextField;
 
 class Console extends Sprite implements IConsole
 {
@@ -41,53 +41,53 @@ class Console extends Sprite implements IConsole
     public function new()
     {
         super();
-        width = Starling.current.stage.stageWidth;
-        height = Starling.current.stage.stageHeight;
-        
-        m_consoleInterfacables = new Array<IConsoleInterfacable>();
-        
-        m_historyWindow = new HistoryWindow();
-        addChild(m_historyWindow);
-        
-        m_inputWindow = new InputWindow();
-        addChild(m_inputWindow);
-        
-        m_intellisense = new Intellisense();
-        m_intellisense.visible = false;
-        m_inputWindow.addChild(m_intellisense);
-        
-        m_methodInspector = new MethodInspector();
-        m_methodInspector.visible = false;
-        m_inputWindow.addChild(m_methodInspector);
-        
-        m_history = new Array<String>();
-        m_historyPointer = 0;
-        
-        Starling.current.stage.addChild(this);
-        
-        repaint();
-        
-        Starling.current.stage.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-        Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, onStageKeyDown);
-        
-		// TODO: Starling KeyboardEvents are dispatched only to the stage, so this
-		// may not work
-        m_inputWindow.addEventListener(DynamicInvokeEvent.EVENT_TYPE, onDynamicInvoke);
-        var inputField : TextField = m_inputWindow.getInputField();
-        inputField.addEventListener(KeyboardEvent.KEY_DOWN, onInputWindowKeyDown);
-        inputField.addEventListener(KeyboardEvent.KEY_UP, onInputWindowKeyUp);
-        
-        visible = false;
-        
-        m_historyWindow.pushLine("For a list of available objects type 'help'", HELP_FORMAT);
+        //width = Lib.current.stage.stageWidth;
+        //height = Lib.current.stage.stageHeight;
+        //
+        //m_consoleInterfacables = new Array<IConsoleInterfacable>();
+        //
+        //m_historyWindow = new HistoryWindow();
+        //addChild(m_historyWindow);
+        //
+        //m_inputWindow = new InputWindow();
+        //addChild(m_inputWindow);
+        //
+        //m_intellisense = new Intellisense();
+        //m_intellisense.visible = false;
+        //m_inputWindow.addChild(m_intellisense);
+        //
+        //m_methodInspector = new MethodInspector();
+        //m_methodInspector.visible = false;
+        //m_inputWindow.addChild(m_methodInspector);
+        //
+        //m_history = new Array<String>();
+        //m_historyPointer = 0;
+        //
+        //Lib.current.stage.addChild(this);
+        //
+        //repaint();
+        //
+        //Lib.current.stage.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+        //Lib.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, onStageKeyDown);
+        //
+		//// TODO: Starling KeyboardEvents are dispatched only to the stage, so this
+		//// may not work
+        //m_inputWindow.addEventListener(DynamicInvokeEvent.EVENT_TYPE, onDynamicInvoke);
+        //var inputField : TextField = m_inputWindow.getInputField();
+        //inputField.addEventListener(KeyboardEvent.KEY_DOWN, onInputWindowKeyDown);
+        //inputField.addEventListener(KeyboardEvent.KEY_UP, onInputWindowKeyUp);
+        //
+        //visible = false;
+        //
+        //m_historyWindow.pushLine("For a list of available objects type 'help'", HELP_FORMAT);
     }
     
     public function registerConsoleInterfacable(consoleInterfacable : IConsoleInterfacable) : Void
     {
-        this.m_consoleInterfacables.push(consoleInterfacable);
+        //this.m_consoleInterfacables.push(consoleInterfacable);
     }
     
-    override public function dispose() : Void
+    public function dispose() : Void
     {
         m_consoleInterfacables = null;
         
@@ -119,10 +119,10 @@ class Console extends Sprite implements IConsole
     
     private function onAddedToStage(e : Event) : Void
     {
-        Starling.current.stage.removeChild(this);
-        Starling.current.stage.addChild(this);
-        
-        repaint();
+        //stage.removeChild(this);
+        //stage.addChild(this);
+        //
+        //repaint();
     }
     
     private function onStageKeyDown(e : KeyboardEvent) : Void
@@ -443,7 +443,7 @@ class Console extends Sprite implements IConsole
         
         m_inputWindow.y = m_historyWindow.height;
         
-        width = Starling.current.stage.stageWidth;
+        width = stage.stageWidth;
         height = m_historyWindow.height + m_inputWindow.height;
     }
     private static var init = {

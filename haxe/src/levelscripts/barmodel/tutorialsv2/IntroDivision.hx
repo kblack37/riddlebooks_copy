@@ -332,9 +332,9 @@ class IntroDivision extends BaseCustomLevelScript
         m_gameEngine.removeEventListener(GameEvent.CLOSE_RADIAL_OPTIONS, bufferEvent);
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         m_progressControl = new ProgressControl();
         m_textReplacementControl = new TextReplacementControl(m_gameEngine, m_assetManager, m_playerStatsAndSaveData, m_textParser);

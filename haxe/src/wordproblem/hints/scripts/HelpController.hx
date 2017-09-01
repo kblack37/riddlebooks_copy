@@ -4,14 +4,17 @@ package wordproblem.hints.scripts;
 import cgs.audio.Audio;
 
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
+import dragonbox.common.util.XColor;
 
-import starling.display.Button;
-import starling.display.DisplayObject;
-import starling.events.Event;
-import starling.filters.ColorMatrixFilter;
+import openfl.display.DisplayObject;
+import openfl.events.Event;
+import openfl.events.MouseEvent;
+import openfl.filters.BitmapFilter;
 
 import wordproblem.callouts.TooltipControl;
+import wordproblem.display.LabelButton;
 import wordproblem.engine.IGameEngine;
+import wordproblem.engine.events.DataEvent;
 import wordproblem.engine.events.GameEvent;
 import wordproblem.engine.scripting.graph.ScriptStatus;
 import wordproblem.hints.HintCommonUtil;
@@ -152,59 +155,62 @@ class HelpController extends BaseGameScript
             {
                 m_gameEngine.removeEventListener(GameEvent.SHOW_HINT, bufferEvent);
                 m_gameEngine.removeEventListener(GameEvent.REMOVE_HINT, bufferEvent);
-                m_getHelpButton.removeEventListener(Event.TRIGGERED, bufferEvent);
-                if (Std.is(m_getHelpButton, Button)) 
+                m_getHelpButton.removeEventListener(MouseEvent.CLICK, bufferEvent);
+                if (Std.is(m_getHelpButton, LabelButton)) 
                 {
-                    (try cast(m_getHelpButton, Button) catch(e:Dynamic) null).enabled = value;
+                    (try cast(m_getHelpButton, LabelButton) catch(e:Dynamic) null).enabled = value;
                 }
                 if (value) 
                 {
                     m_gameEngine.addEventListener(GameEvent.SHOW_HINT, bufferEvent);
                     m_gameEngine.addEventListener(GameEvent.REMOVE_HINT, bufferEvent);
-                    m_getHelpButton.addEventListener(Event.TRIGGERED, bufferEvent);
-                    m_getHelpButton.filter = null;
+                    m_getHelpButton.addEventListener(MouseEvent.CLICK, bufferEvent);
+					m_getHelpButton.filters = new Array<BitmapFilter>();
                     m_getHelpButton.alpha = 1.0;
                 }
                 else 
                 {
                     // Set color to grey scale
-                    var colorMatrixFilter : ColorMatrixFilter = new ColorMatrixFilter();
-                    colorMatrixFilter.adjustSaturation(-1);
-                    m_getHelpButton.filter = colorMatrixFilter;
+					var filters = new Array<BitmapFilter>();
+					filters.push(XColor.getGrayscaleFilter());
                     m_getHelpButton.alpha = 0.5;
                 }
             }
         }
     }
     
-    override private function bufferEvent(event : Event, param : Dynamic) : Void
+    override private function bufferEvent(event : Dynamic) : Void
     {
-        var type : String = event.type;
+		var data = null;
+		if (Std.is(event, DataEvent)) {
+			data = (try cast(event, DataEvent) catch (e : Dynamic) null).getData();
+		}
+        var type : String = (try cast(event, Event) catch (e : Dynamic) null).type;
         var smoothlyRemove : Bool = false;
         if (type == GameEvent.SHOW_HINT) 
         {
-            if (Reflect.hasField(param, "smoothlyRemove")) 
+            if (Reflect.hasField(data, "smoothlyRemove")) 
             {
-                smoothlyRemove = param.smoothlyRemove;
+                smoothlyRemove = data.smoothlyRemove;
             }
-            manuallyShowHint(param.hint, smoothlyRemove);
+            manuallyShowHint(data.hint, smoothlyRemove);
         }
         else if (type == GameEvent.REMOVE_HINT) 
         {
             // Smoothly delete hint
-            if (Reflect.hasField(param, "smoothlyRemove")) 
+            if (Reflect.hasField(data, "smoothlyRemove")) 
             {
-                smoothlyRemove = param.smoothlyRemove;
+                smoothlyRemove = data.smoothlyRemove;
             }
             manuallyRemoveAllHints(smoothlyRemove);
         }
-        else if (type == Event.TRIGGERED) 
+        else if (type == MouseEvent.CLICK) 
         {
             if (m_isActive) 
             {
-                m_gameEngine.dispatchEventWith(GameEvent.HINT_BUTTON_SELECTED);
+                m_gameEngine.dispatchEvent(new Event(GameEvent.HINT_BUTTON_SELECTED));
                 Audio.instance.playSfx("button_click");
-                m_gameEngine.dispatchEventWith(GameEvent.GET_NEW_HINT);
+                m_gameEngine.dispatchEvent(new Event(GameEvent.GET_NEW_HINT));
             }  
 			
 			// The selection of the next hint to show is a simple iteration through the  
@@ -216,15 +222,15 @@ class HelpController extends BaseGameScript
                 
                 // Log the hint displayed (figure out what modeling mode that player is in)
                 var hintLoggingType : String = ((HintCommonUtil.getLevelStillNeedsBarModelToSolve(m_gameEngine))) ? 
-                AlgebraAdventureLoggingConstants.HINT_REQUESTED_BARMODEL : AlgebraAdventureLoggingConstants.HINT_REQUESTED_EQUATION;
-                m_gameEngine.dispatchEventWith(hintLoggingType, false, hintScript.getSerializedData());
+					AlgebraAdventureLoggingConstants.HINT_REQUESTED_BARMODEL : AlgebraAdventureLoggingConstants.HINT_REQUESTED_EQUATION;
+                m_gameEngine.dispatchEvent(new DataEvent(hintLoggingType, hintScript.getSerializedData()));
             }
         }
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         // Get the hint button and add the event listener to it
         m_getHelpButton = m_gameEngine.getUiEntity("hintButton");

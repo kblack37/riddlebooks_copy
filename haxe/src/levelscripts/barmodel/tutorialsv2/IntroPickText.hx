@@ -262,9 +262,9 @@ class IntroPickText extends BaseCustomLevelScript
         return 5;
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         super.disablePrevNextTextButtons();
         

@@ -1,7 +1,8 @@
 package dragonbox.common.expressiontree.compile;
-import haxe.ds.GenericStack;
+
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.math.vectorspace.RealsVectorSpace;
+import haxe.ds.GenericStack;
 
 /**
  * ...

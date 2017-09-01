@@ -3,6 +3,14 @@ package wordproblem.scripts.model;
 
 import cgs.audio.Audio;
 import dragonbox.common.math.vectorspace.RealsVectorSpace;
+import dragonbox.common.util.XColor;
+import motion.Actuate;
+import motion.easing.Linear;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.filters.BitmapFilter;
+import wordproblem.display.PivotSprite;
+import wordproblem.engine.events.DataEvent;
 
 import dragonbox.common.expressiontree.EquationSolver;
 import dragonbox.common.expressiontree.ExpressionNode;
@@ -10,16 +18,12 @@ import dragonbox.common.expressiontree.ExpressionUtil;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.math.vectorspace.IVectorSpace;
 
-import starling.animation.Transitions;
-import starling.animation.Tween;
-import starling.core.Starling;
-import starling.display.Button;
-import starling.display.DisplayObject;
-import starling.display.DisplayObjectContainer;
-import starling.display.Image;
-import starling.events.Event;
-import starling.filters.ColorMatrixFilter;
-import starling.textures.Texture;
+import wordproblem.display.LabelButton;
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
+import openfl.events.Event;
+import openfl.events.MouseEvent;
+import openfl.filters.ColorMatrixFilter;
 
 import wordproblem.engine.IGameEngine;
 import wordproblem.engine.component.ExpressionComponent;
@@ -128,7 +132,7 @@ class ModelSpecificEquation extends BaseGameScript
         super.setIsActive(value);
         if (m_ready) 
         {
-            m_checkEquationButton.removeEventListener(Event.TRIGGERED, onCheckEquationClicked);
+            m_checkEquationButton.removeEventListener(MouseEvent.CLICK, onCheckEquationClicked);
             for (termArea in m_termAreas)
             {
                 termArea.removeEventListener(GameEvent.TERM_AREA_CHANGED, onTermAreaChange);
@@ -136,31 +140,31 @@ class ModelSpecificEquation extends BaseGameScript
             
             if (value) 
             {
-                m_checkEquationButton.filter = null;
-                m_checkEquationButton.addEventListener(Event.TRIGGERED, onCheckEquationClicked);
+				m_checkEquationButton.filters = new Array<BitmapFilter>();
+                m_checkEquationButton.addEventListener(MouseEvent.CLICK, onCheckEquationClicked);
                 for (termArea in m_termAreas)
                 {
                     termArea.addEventListener(GameEvent.TERM_AREA_CHANGED, onTermAreaChange);
                 }
             }
-            else if (m_checkEquationButton.filter == null) 
+            else if (m_checkEquationButton.filters.length == 0) 
             {
                 // Set color to grey scale
-                var colorMatrixFilter : ColorMatrixFilter = new ColorMatrixFilter();
-                colorMatrixFilter.adjustSaturation(-1);
-                m_checkEquationButton.filter = colorMatrixFilter;
+				var filters = new Array<BitmapFilter>();
+				filters.push(XColor.getGrayscaleFilter());
+				m_checkEquationButton.filters = filters;
             }
             
-            if (Std.is(m_checkEquationButton, Button)) 
+            if (Std.is(m_checkEquationButton, LabelButton)) 
             {
-                (try cast(m_checkEquationButton, Button) catch(e:Dynamic) null).enabled = value;
+                (try cast(m_checkEquationButton, LabelButton) catch(e:Dynamic) null).enabled = value;
             }
         }
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         var termAreaDisplayObjects : Array<DisplayObject> = m_gameEngine.getUiEntitiesByClass(TermAreaWidget);
         m_termAreas = new Array<TermAreaWidget>();
@@ -208,9 +212,9 @@ class ModelSpecificEquation extends BaseGameScript
             addEquationSet([id]);
         }
         
-        m_gameEngine.dispatchEventWith(GameEvent.ADD_NEW_EQUATION, false, {
+        m_gameEngine.dispatchEvent(new DataEvent(GameEvent.ADD_NEW_EQUATION, {
                     expression : expressionRoot
-                });
+                }));
     }
     
     /**
@@ -309,7 +313,7 @@ class ModelSpecificEquation extends BaseGameScript
         return m_equations;
     }
     
-    private function onTermAreaChange() : Void
+    private function onTermAreaChange(event : Dynamic) : Void
     {
         /*
          * Returns the current equation (String) and whether or not it is correct (Boolean)
@@ -332,22 +336,21 @@ class ModelSpecificEquation extends BaseGameScript
                     equation : m_expressionCompiler.decompileAtNode(givenEquation),
                     isCorrect : matchingCorrectEquation != null,
                     goalEquation : ((matchingCorrectEquation != null)) ? matchingCorrectEquation.expressionString : "",
-
                 };
         
         Reflect.setField(loggingDetails, "previousEquation", m_previousEquation);
-        m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.EQUATION_CHANGED_EVENT, false, loggingDetails);
+        m_gameEngine.dispatchEvent(new DataEvent(AlgebraAdventureLoggingConstants.EQUATION_CHANGED_EVENT, loggingDetails));
         
         // cache the current given equation for the Before state upon the next change
         m_previousEquation = Reflect.field(loggingDetails, "equation");
     }
     
-    private function onCheckEquationClicked() : Void
+    private function onCheckEquationClicked(event : Dynamic) : Void
     {
         //log the button click first before checking the equation modeling.
-        m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.EQUALS_CLICKED_EVENT, false, {
+        m_gameEngine.dispatchEvent(new DataEvent(AlgebraAdventureLoggingConstants.EQUALS_CLICKED_EVENT, {
                     buttonName : "EqualsButton"
-                });
+                }));
         
         var currentLevel : WordProblemLevelData = m_gameEngine.getCurrentLevel();
         var allEquationsModeled : Bool = (this.getNumberEquationsLeftToModel() == 0);
@@ -372,11 +375,10 @@ class ModelSpecificEquation extends BaseGameScript
                 decompiledEquation = m_expressionCompiler.decompileAtNode(givenEquation);
                 
                 // Signal that an equation was finished
-                m_gameEngine.dispatchEventWith(GameEvent.EQUATION_MODEL_SUCCESS, false, {
+                m_gameEngine.dispatchEvent(new DataEvent(GameEvent.EQUATION_MODEL_SUCCESS, {
                             id : modeledEquation.entityId,
                             equation : decompiledEquation,
-
-                        });
+                        }));
             }
             else 
             {
@@ -395,10 +397,9 @@ class ModelSpecificEquation extends BaseGameScript
                     decompiledEquation = m_expressionCompiler.decompileAtNode(givenEquation);
                 }
                 
-                m_gameEngine.dispatchEventWith(GameEvent.EQUATION_MODEL_FAIL, false, {
+                m_gameEngine.dispatchEvent(new DataEvent(GameEvent.EQUATION_MODEL_FAIL, {
                             equation : decompiledEquation
-
-                        });
+                        }));
                 
                 // Get the first unmodeled equation
                 for (i in 0...m_equations.length){
@@ -413,41 +414,38 @@ class ModelSpecificEquation extends BaseGameScript
             if (decompiledEquation == "=") 
             {
                 decompiledEquation = "";
-            }  // Log that an attempt was made to model a target equation regardless of whether it succeeded.  
-            
-            
-            
+            } 
+			
+			// Log that an attempt was made to model a target equation regardless of whether it succeeded.  
             var loggingDetails : Dynamic = {
                 equation : decompiledEquation,
                 isCorrect : solvedEquation,
                 goalEquation : goalEquationAttempted,
                 setComplete : getAtLeastOneSetComplete(),
-
             };
-            m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.VALIDATE_EQUATION_MODEL, false, loggingDetails);
+            m_gameEngine.dispatchEvent(new DataEvent(AlgebraAdventureLoggingConstants.VALIDATE_EQUATION_MODEL, loggingDetails));
             
             // Provide visual feedback of whether the equation was correct or not
             var i : Int = 0;
-            var color : Int = ((solvedEquation)) ? 0x00FF00 : 0xFF0000;
+            var color : Int = solvedEquation ? 0x8800FF00 : 0x88FF0000;
             for (i in 0...m_termAreas.length){
                 m_termAreas[i].fadeOutBackground(color);
-            }  // Tween in the icon    // Show an incorrect or correct icon on top of the model button  
-            
-            
-            
-            
-            
+            } 
+			
+			// Show an incorrect or correct icon on top of the model button  
+            // Tween in the icon 
             var modelEquationButton : DisplayObject = m_gameEngine.getUiEntity("modelEquationButton");
             var targetTextureName : String = ((solvedEquation)) ? "correct" : "wrong";
-            var targetTexture : Texture = m_assetManager.getTexture(targetTextureName);
-            var targetIcon : Image = new Image(targetTexture);
-            targetIcon.pivotX = targetTexture.width * 0.5;
-            targetIcon.pivotY = targetTexture.height * 0.5;
+            var targetBitmapData : BitmapData = m_assetManager.getBitmapData(targetTextureName);
+            var targetIcon : PivotSprite = new PivotSprite();
+			targetIcon.addChild(new Bitmap(targetBitmapData));
+            targetIcon.pivotX = targetBitmapData.width * 0.5;
+            targetIcon.pivotY = targetBitmapData.height * 0.5;
             targetIcon.x = modelEquationButton.width * 0.5 + modelEquationButton.x;
             targetIcon.y = modelEquationButton.height * 0.5 + modelEquationButton.y;
-            targetIcon.touchable = false;
+            targetIcon.mouseEnabled = false;
             
-            var endingScaleFactor : Float = modelEquationButton.width / targetTexture.width;
+            var endingScaleFactor : Float = modelEquationButton.width / targetBitmapData.width;
             var startingScaleFactor : Float = endingScaleFactor * 3;
             targetIcon.scaleX = targetIcon.scaleY = startingScaleFactor;
             targetIcon.alpha = 0.0;
@@ -455,23 +453,15 @@ class ModelSpecificEquation extends BaseGameScript
             {
                 modelEquationButton.parent.addChild(targetIcon);
             }
-            
-            var fadeInTween : Tween = new Tween(targetIcon, 0.7, Transitions.LINEAR);
-            fadeInTween.animate("scaleX", endingScaleFactor);
-            fadeInTween.animate("scaleY", endingScaleFactor);
-            fadeInTween.animate("alpha", 1.0);
-            fadeInTween.onComplete = function() : Void
+			
+			Actuate.tween(targetIcon, 0.7, { scaleX: endingScaleFactor, scaleY: endingScaleFactor, alpha: 1 }).ease(Linear.easeNone).onComplete(function() : Void
                     {
-                        var fadeOutTween : Tween = new Tween(targetIcon, 0.3);
-                        fadeOutTween.animate("alpha", 0.0);
-                        fadeOutTween.delay = 0.4;
-                        fadeOutTween.onComplete = function() : Void
+						Actuate.tween(targetIcon, 0.3, { alpha: 0 }).delay(0.4).onComplete(function() : Void
                                 {
-                                    targetIcon.removeFromParent(true);
-                                };
-                        Starling.current.juggler.add(fadeOutTween);
-                    };
-            Starling.current.juggler.add(fadeInTween);
+									if (targetIcon.parent != null) targetIcon.parent.removeChild(targetIcon);
+									targetIcon.dispose();
+                                });
+                    });
             
             //Provide audio feedback too.
             if (solvedEquation) 

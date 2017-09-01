@@ -1,13 +1,14 @@
 package wordproblem.engine.text.view;
 
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.geom.ColorTransform;
+import openfl.geom.Point;
+import openfl.text.TextFormat;
+import openfl.text.TextFormatAlign;
 
-import flash.geom.ColorTransform;
-import flash.geom.Point;
-
-import starling.display.DisplayObject;
-import starling.display.Quad;
-import starling.text.TextField;
-import starling.utils.HAlign;
+import openfl.display.DisplayObject;
+import openfl.text.TextField;
 
 import wordproblem.engine.text.model.DocumentNode;
 
@@ -38,11 +39,16 @@ class TextView extends DocumentView
     {
         if (m_textField != null) 
         {
-            m_textField.removeFromParent(true);
+			if (m_textField.parent != null) m_textField.parent.removeChild(m_textField);
+			m_textField = null;
         }
         
-        var textField : TextField = new TextField(Std.int(width), Std.int(height), text, fontName, size, color);
-        textField.hAlign = HAlign.LEFT;
+        var textField : TextField = new TextField();
+		textField.width = Std.int(width);
+		textField.height = Std.int(height);
+		textField.text = text;
+		textField.setTextFormat(new TextFormat(fontName, size, color, null, null, null, null, null, TextFormatAlign.LEFT));
+		textField.selectable = false;
         addChild(textField);
         
         m_textField = textField;
@@ -53,7 +59,7 @@ class TextView extends DocumentView
         // Remove and dispose old decoration
         if (m_textDecorationDisplay != null) 
         {
-            m_textDecorationDisplay.removeFromParent(true);
+			if (m_textDecorationDisplay.parent != null) m_textDecorationDisplay.parent.removeChild(m_textDecorationDisplay);
             m_textDecorationDisplay = null;
         }
         
@@ -61,10 +67,9 @@ class TextView extends DocumentView
         {
             // Places a rectangular sprite over the the textfield
             // The color is a darker shade of the original text
-            
             var textFromField : String = m_textField.text;
             var lineWidth : Float = m_textField.width;
-            var lineThinkness : Float = Math.max(m_textField.height * 0.05, 1.0);
+            var lineThickness : Float = Math.max(m_textField.height * 0.05, 1.0);
             
             // If text ends in a space, do not have the line go through the whitespace
             if (textFromField.charAt(textFromField.length - 1) == " ") 
@@ -72,11 +77,11 @@ class TextView extends DocumentView
                 lineWidth -= 10;
             }
             
-            var quad : Quad = new Quad(m_textField.width, lineThinkness, shade(m_textField.color, .5));
-            quad.x = m_textField.x;
-            quad.y = m_textField.y + m_textField.height * 0.5;
-            addChild(quad);
-            m_textDecorationDisplay = quad;
+			var bitmap = new Bitmap(new BitmapData(Std.int(m_textField.width), Std.int(lineThickness), false, shade(m_textField.textColor, .5)));
+            bitmap.x = m_textField.x;
+            bitmap.y = m_textField.y + m_textField.height * 0.5;
+            addChild(bitmap);
+            m_textDecorationDisplay = bitmap;
         }
     }
     
@@ -85,9 +90,9 @@ class TextView extends DocumentView
         return m_textField;
     }
     
-    override public function hitTestPoint(globalPoint : Point, ignoreNonSelectable : Bool = true) : DocumentView
+    override public function customHitTestPoint(globalPoint : Point, ignoreNonSelectable : Bool = true) : DocumentView
     {
-        var hitView : Bool = this.hitTest(this.globalToLocal(globalPoint)) != null;
+        var hitView : Bool = this.hitTestPoint(globalPoint.x, globalPoint.y);
         var viewToReturn : DocumentView = null;
         if (hitView && (this.node.getSelectable() || !ignoreNonSelectable)) 
         {

@@ -1,24 +1,21 @@
 package wordproblem.scripts.deck;
 
 
-import flash.geom.Rectangle;
-import flash.text.TextFormat;
-
-import cgs.internationalization.StringTable;
-
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.ui.MouseState;
 import dragonbox.common.util.XColor;
 
-import starling.display.Button;
-import starling.display.DisplayObject;
-import starling.display.DisplayObjectContainer;
-import starling.display.Image;
-import starling.display.Quad;
-import starling.events.Event;
-import starling.text.TextField;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
+import openfl.events.MouseEvent;
+import openfl.geom.Rectangle;
+import openfl.text.TextField;
+import openfl.text.TextFormat;
 
+import wordproblem.display.LabelButton;
 import wordproblem.display.Layer;
 import wordproblem.engine.IGameEngine;
 import wordproblem.engine.expression.SymbolData;
@@ -77,7 +74,7 @@ class EnterNewCard extends BaseGameScript
     /**
      * Need a button that triggers the close of the number pad
      */
-    private var m_closeButton : Button;
+    private var m_closeButton : LabelButton;
     
     /**
      * A description of what the created widget should do
@@ -130,17 +127,17 @@ class EnterNewCard extends BaseGameScript
     {
         super(gameEngine, expressionCompiler, assetManager, id, isActive);
         
-        var screenWidth : Float = 800;
-        var screenHeight : Float = 600;
+        var screenWidth : Int = 800;
+        var screenHeight : Int = 600;
         m_canvas = new Layer();
-        var disablingQuad : Quad = new Quad(screenWidth, screenHeight, 0x000000);
+        var disablingQuad : Bitmap = new Bitmap(new BitmapData(screenWidth, screenHeight, false, 0x000000));
         disablingQuad.alpha = 0.5;
         m_canvas.addChild(disablingQuad);
         
         m_numberpadWidget = new NumberpadWidget(assetManager, 
                 function(value : Float) : Void
                 {
-                    m_canvas.removeFromParent();
+                    if (m_canvas.parent != null) m_canvas.parent.removeChild(m_canvas);
                     
                     // Do not allow adding of zero, it will have no effect on any equation
                     if (value != 0) 
@@ -152,7 +149,7 @@ class EnterNewCard extends BaseGameScript
         m_keyboardWidget = new KeyboardWidget(assetManager, 
                 function() : Void
                 {
-                    m_canvas.removeFromParent();
+                    if (m_canvas.parent != null) m_canvas.parent.removeChild(m_canvas);
                     attemptAddNewValueToDeck(m_keyboardWidget.getText());
                 });
         
@@ -180,16 +177,20 @@ class EnterNewCard extends BaseGameScript
                         null
                         );
         var closeDimensions : Float = 50;
-        var closeIcon : Image = new Image(assetManager.getTexture("wrong"));
+        var closeIcon : Bitmap = new Bitmap(assetManager.getBitmapData("wrong"));
         closeIcon.scaleX = closeIcon.scaleY = (closeDimensions * 0.8) / closeIcon.width;
-        m_closeButton.upState = closeIcon.texture;
+        m_closeButton.upState = closeIcon;
         m_closeButton.width = m_closeButton.height = closeDimensions;
         m_closeButton.x = uiToUse.x + uiToUse.width - m_closeButton.width;
         m_closeButton.y = uiToUse.y;
         m_canvas.addChild(m_closeButton);
         
 		// TODO: uncomment when cgs library is finished
-        m_description = new TextField(450, 60, "" /*StringTable.lookup("create_number")*/, GameFonts.DEFAULT_FONT_NAME, 32, 0xFFFFFF);
+        m_description = new TextField();
+		m_description.width = 450;
+		m_description.height = 60;
+		m_description.text = ""; /*StringTable.lookup("create_number")*/
+		m_description.setTextFormat(new TextFormat(GameFonts.DEFAULT_FONT_NAME, 32, 0xFFFFFF));
         m_description.x = (screenWidth - m_description.width) * 0.5;
         m_description.y = uiToUse.y - m_description.height;
         m_canvas.addChild(m_description);
@@ -248,7 +249,7 @@ class EnterNewCard extends BaseGameScript
             }
             else if (mouseState.leftMouseReleasedThisFrame && m_termWidgetPressedOn != null) 
             {
-                m_termWidgetPressedOn.getBounds(m_termWidgetPressedOn.stage, m_globalBoundsBuffer);
+                m_globalBoundsBuffer = m_termWidgetPressedOn.getBounds(m_termWidgetPressedOn.stage);
                 if (m_globalBoundsBuffer.contains(mouseState.mousePositionThisFrame.x, mouseState.mousePositionThisFrame.y)) 
                 {
                     var baseTermWidget = m_termWidgetPressedOn;
@@ -298,14 +299,16 @@ class EnterNewCard extends BaseGameScript
         
         m_numberpadWidget.dispose();
         m_keyboardWidget.dispose();
-        m_canvas.removeFromParent(true);
+		if (m_canvas.parent != null) m_canvas.parent.removeChild(m_canvas);
+		m_canvas.removeChildren();
+		m_canvas = null;
         m_deckWidget.removeEventListener(DeckWidget.EVENT_REFRESH, onDeckBoundsRefresh);
-        m_closeButton.removeEventListener(Event.TRIGGERED, onCloseClicked);
+        m_closeButton.removeEventListener(MouseEvent.CLICK, onCloseClicked);
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         // HACK: Special rendering parameters for the card used to add additional values to the deck
         // We reserve a value for the card adding portion
@@ -328,7 +331,7 @@ class EnterNewCard extends BaseGameScript
         m_deckWidget.addEventListener(DeckWidget.EVENT_REFRESH, onDeckBoundsRefresh);
         
         // Bind a listener to the button to trigger adding new card
-        m_closeButton.addEventListener(Event.TRIGGERED, onCloseClicked);
+        m_closeButton.addEventListener(MouseEvent.CLICK, onCloseClicked);
         
         // We need to maintain the correct order of the expressions as they are shown to the player
         // The only way to do this is to look at how the display objects are ordered
@@ -351,9 +354,9 @@ class EnterNewCard extends BaseGameScript
         m_gameEngine.setDeckAreaContent(deckExpressionsToSetTo, isHiddenToSetTo, true);
     }
     
-    private function onCloseClicked() : Void
+    private function onCloseClicked(event : Dynamic) : Void
     {
-        m_canvas.removeFromParent();
+        if (m_canvas.parent != null) m_canvas.parent.removeChild(m_canvas);
     }
     
     private function attemptAddNewValueToDeck(value : String) : Void
@@ -367,10 +370,9 @@ class EnterNewCard extends BaseGameScript
             m_addedCardValues.length > 0 && m_existingValueToEdit == null) 
         {
             m_existingValueToEdit = m_addedCardValues[0];
-        }  // If the value is already there, then we have no need to add it again  
-        
-        
-        
+        } 
+		
+		// If the value is already there, then we have no need to add it again  
         var currentValuesInDeck : Array<String> = new Array<String>();
         var currentHiddenValuesInDeck : Array<Bool> = new Array<Bool>();
         var renderComponents : Array<DisplayObject> = m_deckWidget.getObjects();
@@ -413,10 +415,9 @@ class EnterNewCard extends BaseGameScript
                 currentValuesInDeck.push(newData);
                 currentHiddenValuesInDeck.push(false);
                 m_addedCardValues.push(newData);
-            }  // Add the back the button that creates new cards at the very end  
-            
-            
-            
+            } 
+			
+			// Add the back the button that creates new cards at the very end  
             currentValuesInDeck.push("NEW");
             currentHiddenValuesInDeck.push(false);
             
@@ -424,7 +425,7 @@ class EnterNewCard extends BaseGameScript
         }
     }
     
-    private function onDeckBoundsRefresh() : Void
+    private function onDeckBoundsRefresh(event : Dynamic) : Void
     {
     }
 }

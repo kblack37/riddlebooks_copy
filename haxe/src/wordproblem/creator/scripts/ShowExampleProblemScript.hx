@@ -6,7 +6,7 @@ import flash.text.TextFormat;
 import starling.animation.Transitions;
 import starling.animation.Tween;
 import starling.core.Starling;
-import starling.display.Button;
+import wordproblem.display.LabelButton;
 import starling.display.DisplayObject;
 import starling.display.Sprite;
 import starling.events.Event;
@@ -82,9 +82,9 @@ class ShowExampleProblemScript extends BaseProblemCreateScript
         }
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         setIsActive(m_isActive);
         
         // When the level is ready, need to bind a listener to the
@@ -95,7 +95,7 @@ class ShowExampleProblemScript extends BaseProblemCreateScript
         var stylePropertiesForBarModelType : Dynamic = m_barModelTypeDrawer.getStyleObjectForType(barModelType);
         
         var showExampleButton : Button = try cast(m_createState.getWidgetFromId("showExampleButton"), Button) catch(e:Dynamic) null;
-        showExampleButton.addEventListener(Event.TRIGGERED, onShowExampleClicked);
+        showExampleButton.addEventListener(MouseEvent.CLICK, onShowExampleClicked);
         
         // Go through the xml and extract id and value pairings
         var exampleHighlightDataList : Array<Dynamic> = new Array<Dynamic>();
@@ -199,21 +199,21 @@ class ShowExampleProblemScript extends BaseProblemCreateScript
             
             redraw();
             
-            m_createState.dispatchEventWith(ProblemCreateEvent.SHOW_EXAMPLE_START, false, null);
+            m_createState.dispatchEvent(ProblemCreateEvent.SHOW_EXAMPLE_START, false, null);
         }
         else 
         {
             textAreaToFadeout = exampleTextArea;
             textAreaToFadein = editableTextArea;
             
-            m_exampleBarModelView.removeFromParent();
+            if (m_exampleBarModelView.parent != null) m_exampleBarModelView.parent.removeChild(m_exampleBarModelView);
             
             realBarModelView.visible = true;
             submitButton.visible = true;
             
             showExampleButton.text = "Show Example";
             
-            m_createState.dispatchEventWith(ProblemCreateEvent.SHOW_EXAMPLE_END, false, null);
+            m_createState.dispatchEvent(ProblemCreateEvent.SHOW_EXAMPLE_END, false, null);
         }  // Figure out which parts to fade in or fade out    // Smoothly animate the text areas fading in or fading out  
         
         
@@ -227,7 +227,7 @@ class ShowExampleProblemScript extends BaseProblemCreateScript
         fadeout.fadeTo(0.0);
         fadeout.onComplete = function() : Void
                 {
-                    textAreaToFadeout.removeFromParent();
+                    if (textAreaToFadeout.parent != null) textAreaToFadeout.parent.removeChild(textAreaToFadeout);
                     
                     m_createState.addChild(textAreaToFadein);
                     

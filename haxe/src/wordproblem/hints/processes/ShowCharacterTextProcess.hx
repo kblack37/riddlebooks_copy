@@ -1,7 +1,7 @@
 package wordproblem.hints.processes;
 
-import starling.display.DisplayObject;
-import starling.textures.Texture;
+import openfl.display.BitmapData;
+import openfl.display.DisplayObject;
 
 import wordproblem.characters.HelperCharacterController;
 import wordproblem.engine.component.CalloutComponent;
@@ -57,7 +57,7 @@ class ShowCharacterTextProcess extends ScriptNode
         // However, imagine a box inside the thought bubble where content should actually go
         // to avoid overflowing the oval shaped edges. The is padding to the thought bubble
         // that must be accounted for.
-        var measuringTexture : Texture = m_assetManager.getTexture(calloutBackgroundName);
+        var measuringBitmapData : BitmapData = m_assetManager.getBitmapData(calloutBackgroundName);
         var paddingSide : Float = 10;
         
         calloutComponent.display = m_calloutContent;

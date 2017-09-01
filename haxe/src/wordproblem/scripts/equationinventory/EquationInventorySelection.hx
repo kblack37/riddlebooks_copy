@@ -79,9 +79,9 @@ class EquationInventorySelection extends BaseGameScript
         super(gameEngine, expressionCompiler, assetManager, id, isActive);
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         var inventoryWidget : EquationInventoryWidget = try cast(m_gameEngine.getUiEntity("inventoryArea"), EquationInventoryWidget) catch(e:Dynamic) null;
         m_inventoryArea = ((inventoryWidget != null)) ? inventoryWidget.getScrollArea() : null;
@@ -169,7 +169,7 @@ class EquationInventorySelection extends BaseGameScript
             
             if (m_draggedItem != null) 
             {
-                m_gameEngine.dispatchEventWith(GameEvent.ITEM_RELEASED_ON_DOCUMENT, false, [m_textArea, m_draggedItem, m_selectedEntityId]);
+                m_gameEngine.dispatchEvent(GameEvent.ITEM_RELEASED_ON_DOCUMENT, false, [m_textArea, m_draggedItem, m_selectedEntityId]);
                 m_draggedItem.removeFromParent(true);
                 m_draggedItem = null;
             }
@@ -253,7 +253,7 @@ class EquationInventorySelection extends BaseGameScript
             
         }
         
-        m_gameEngine.dispatchEventWith(GameEvent.SELECT_INVENTORY_AREA, false, [entry.entityId]);
+        m_gameEngine.dispatchEvent(GameEvent.SELECT_INVENTORY_AREA, false, [entry.entityId]);
     }
     
     private function onStartDragFromSubstitution(entry : RenderableComponent, point : Point) : Void
@@ -270,11 +270,11 @@ class EquationInventorySelection extends BaseGameScript
             m_draggedItem.pivotY = m_draggedItem.height / 2;
             entry.view.stage.addChild(m_draggedItem);
             
-            m_gameEngine.dispatchEventWith(GameEvent.START_DRAG_INVENTORY_AREA, false, [entry, point]);
+            m_gameEngine.dispatchEvent(GameEvent.START_DRAG_INVENTORY_AREA, false, [entry, point]);
         }
         else 
         {
-            m_gameEngine.dispatchEventWith(GameEvent.START_DRAG_INVENTORY_AREA, false, [entry, point]);
+            m_gameEngine.dispatchEvent(GameEvent.START_DRAG_INVENTORY_AREA, false, [entry, point]);
         }
     }
     

@@ -1,14 +1,14 @@
 package wordproblem.engine.text;
 
-import flash.errors.Error;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.display.DisplayObject;
+import openfl.errors.Error;
+import openfl.geom.Rectangle;
+import openfl.text.TextFormat;
+import wordproblem.display.Scale9Image;
 
-import flash.geom.Rectangle;
-import flash.text.TextFormat;
-
-import starling.display.DisplayObject;
-import starling.display.Image;
-import starling.textures.Texture;
-
+import wordproblem.display.PivotSprite;
 import wordproblem.engine.constants.Alignment;
 import wordproblem.engine.expression.ExpressionSymbolMap;
 import wordproblem.engine.text.model.DivNode;
@@ -23,6 +23,9 @@ import wordproblem.engine.text.view.ImageView;
 import wordproblem.engine.text.view.SpanView;
 import wordproblem.engine.text.view.TextView;
 import wordproblem.resource.AssetManager;
+
+
+
 
 /**
  * Factory responsible for converting the document node model into concrete views and
@@ -200,7 +203,7 @@ class TextViewFactory
             divContainer.addChildView(divChildView);
         } 
 		
-		// Handle padding with the div itself  
+		// Handle padding with the div itself
         divContainer.pivotX -= divNode.paddingLeft;
         divContainer.pivotY -= divNode.paddingTop;
         
@@ -244,68 +247,51 @@ class TextViewFactory
         var type : String = imageProperties.type;
         if (type == "symbol") 
         {
-            image = m_expressionSymbolMap.getCardFromSymbolValue(name);
+            var castedImage : PivotSprite = try cast(m_expressionSymbolMap.getCardFromSymbolValue(name), PivotSprite) catch (e : Dynamic) null;
             
             // Move registration point back to top-left
-            image.pivotX = 0;
-            image.pivotY = 0;
+            castedImage.pivotX = 0;
+            castedImage.pivotY = 0;
+			
+			image = castedImage;
         }
         else 
         {
-            var originalTexture : Texture = m_assetManager.getTexture(name);
-            
+            var originalBitmapData : BitmapData = m_assetManager.getBitmapData(name);
+			
             if (nineSlicePadding != null) 
             {
-                var scale9Object : Dynamic = imageProperties.nineSlice;
-                
                 // Create nine-slice texture and use that as the image
                 // Note nine-slice breaks if the width to change to is less than the width of the original
                 // texture. Same goes for height.
                 // If both height and width are smaller, don't use any slicing
-                var targetWidthSmaller : Bool = (width < originalTexture.width);
-                var targetHeightSmaller : Bool = (height < originalTexture.height);
+                var targetWidthSmaller : Bool = (width < originalBitmapData.width);
+                var targetHeightSmaller : Bool = (height < originalBitmapData.height);
                 
-                if (targetWidthSmaller && targetHeightSmaller) 
+                if (targetHeightSmaller) 
                 {
-                    image = new Image(originalTexture);
-                }
-				// TODO: these were replaced from the feathers library straight to the starling library;
-				// images will probably need to be fixed later
-                else if (targetHeightSmaller) 
-                {
-					// note: replaced from Scale3Texture from the feathers library
-                    var starlingTexture : Texture = Texture.fromTexture(originalTexture, new Rectangle(
-						0,
+					image = new Scale9Image(originalBitmapData, new Rectangle(0,
 						nineSlicePadding[0],
-						originalTexture.width,
-						originalTexture.height - nineSlicePadding[0] - nineSlicePadding[2]));
-                    image = new Image(starlingTexture);
+						originalBitmapData.width,
+						originalBitmapData.height - nineSlicePadding[0] - nineSlicePadding[2]
+					));
                 }
                 else if (targetWidthSmaller) 
                 {
-					// note: replaced from scale3Texture from the feathers library
-                    var starlingTexture : Texture = Texture.fromTexture(originalTexture, new Rectangle(
-						nineSlicePadding[3],
+					image = new Scale9Image(originalBitmapData, new Rectangle(nineSlicePadding[3],
 						0,
-						originalTexture.width - nineSlicePadding[1] - nineSlicePadding[3],
-						originalTexture.height));
-                    image = new Image(starlingTexture);
+						originalBitmapData.width - nineSlicePadding[1] - nineSlicePadding[3],
+						originalBitmapData.height
+					));
                 }
                 else 
                 {
-					// note: replaced from scale9Texture from the feathers library
-                    var starlingTexture : Texture = Texture.fromTexture(originalTexture, new Rectangle(
-                    nineSlicePadding[0], 
-                    nineSlicePadding[1], 
-                    originalTexture.width - nineSlicePadding[1] - nineSlicePadding[3], 
-                    originalTexture.height - nineSlicePadding[0] - nineSlicePadding[2]
-                    ));
-                    image = new Image(starlingTexture);
+					image = new Scale9Image(originalBitmapData, new Rectangle(nineSlicePadding[0],
+						nineSlicePadding[1],
+						originalBitmapData.width - nineSlicePadding[1] - nineSlicePadding[3],
+						originalBitmapData.height - nineSlicePadding[0] - nineSlicePadding[2]
+					));
                 }
-            }
-            else 
-            {
-                image = new Image(originalTexture);
             }
         }
 		

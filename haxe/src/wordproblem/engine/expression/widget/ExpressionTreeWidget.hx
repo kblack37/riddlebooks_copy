@@ -1,11 +1,14 @@
 package wordproblem.engine.expression.widget;
 
 import dragonbox.common.math.vectorspace.RealsVectorSpace;
-import flash.errors.Error;
+import openfl.display.Bitmap;
+import openfl.errors.Error;
+import wordproblem.display.DisposableSprite;
+import wordproblem.display.PivotSprite;
 
-import flash.geom.Point;
-import flash.geom.Rectangle;
-import flash.geom.Vector3D;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
+import openfl.geom.Vector3D;
 
 import dragonbox.common.dispose.IDisposable;
 import dragonbox.common.expressiontree.ExpressionNode;
@@ -14,9 +17,8 @@ import dragonbox.common.expressiontree.WildCardNode;
 import dragonbox.common.math.util.MathUtil;
 import dragonbox.common.math.vectorspace.IVectorSpace;
 
-import starling.display.DisplayObject;
-import starling.display.Image;
-import starling.display.Sprite;
+import openfl.display.DisplayObject;
+import openfl.display.Sprite;
 
 import wordproblem.engine.expression.ExpressionSymbolMap;
 import wordproblem.engine.expression.tree.ExpressionTree;
@@ -41,7 +43,7 @@ import wordproblem.resource.AssetManager;
  * (Extending classes will need to figure out mouse interaction on their own)
  * 
  */
-class ExpressionTreeWidget extends Sprite implements IDisposable
+class ExpressionTreeWidget extends DisposableSprite
 {
     /**
      * A bit of a hack, in a few rare instances we don't even want things labeled as wild
@@ -196,7 +198,7 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
         setConstraints(constraintWidth, constraintHeight, allowConstraintPadding, false);
         setTree(tree);
         
-        this.touchable = false;
+		this.mouseEnabled = false;
         this.showWildCards = showWildCards;
     }
     
@@ -254,7 +256,7 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
         {
             if (widget.parent != null) 
             {
-                widget.parent.removeChild(widget);
+                if (widget.parent != null) widget.parent.removeChild(widget);
             }
         }
         m_nodeIdToWidgetMap = new Map();
@@ -297,7 +299,7 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
             widgetToRemove.removeChildWidgets();
             
             if (widgetToRemove.parent != null) {
-                widgetToRemove.parent.removeChild(widgetToRemove);
+                if (widgetToRemove.parent != null) widgetToRemove.parent.removeChild(widgetToRemove);
 			}
             m_nodeIdToWidgetMap.remove(widgetToRemove.getNode().id);
             widgetToRemove.parentWidget = null;
@@ -393,16 +395,6 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
         }
     }
     
-    override public function dispose() : Void
-    {
-        if (m_widgetRoot != null) 
-        {
-            removeChild(m_widgetRoot);
-        }
-        
-        super.dispose();
-    }
-    
     public function getConstraintsWidth() : Float
     {
         return this.m_contraintsBox.width;
@@ -482,7 +474,7 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
         }
         
         var containsObject : Bool = false;
-        displayObject.getBounds(this, m_boundsBuffer);
+        m_boundsBuffer = displayObject.getBounds(this);
         if (strictlyContained) 
         {
             containsObject = m_contraintsBox.containsRect(m_boundsBuffer);
@@ -501,7 +493,7 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
      */
     public function containsPoint(globalPoint : Point) : Bool
     {
-        this.globalToLocal(globalPoint, m_pointBuffer);
+        m_pointBuffer = this.globalToLocal(globalPoint);
         return this.m_contraintsBox.contains(m_pointBuffer.x, m_pointBuffer.y);
     }
     
@@ -523,7 +515,7 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
         
         if (this.stage != null) 
         {
-            object.getBounds(this, m_boundsBuffer);
+            m_boundsBuffer = object.getBounds(this);
             _pickLeafWidgetsUnderObject(m_widgetRoot, object, m_boundsBuffer, outWidgets, pickParentheses);
         }
         
@@ -576,7 +568,7 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
     public function pickParenthesisUnderPoint(globalX : Float, globalY : Float, outParams : Array<Dynamic>) : Void
     {
         pickedParenthesisGlobalPoint.setTo(globalX, globalY);
-        this.globalToLocal(pickedParenthesisGlobalPoint, pickedParenthesisLocalPoint);
+        pickedParenthesisLocalPoint = this.globalToLocal(pickedParenthesisGlobalPoint);
         
         return _pickParenthesisUnderPoint(m_widgetRoot, pickedParenthesisLocalPoint, outParams);
     }
@@ -599,7 +591,7 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
                 var i : Int = 0;
                 for (i in 0...numParenthesisChildren){
                     var parenthesisImage : DisplayObject = widget.m_parenthesesCanvas.getChildAt(i);
-                    parenthesisImage.getBounds(this, pickedParenthesisBounds);
+                    pickedParenthesisBounds = parenthesisImage.getBounds(this);
                     
                     if (pickedParenthesisBounds.containsPoint(localPoint)) 
                     {
@@ -642,7 +634,7 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
     {
         // Set the local coodinates within the frame of reference of this widget
         pickedWidgetGlobalPoint.setTo(x, y);
-        this.globalToLocal(pickedWidgetGlobalPoint, pickedWidgetLocalPoint);
+        pickedWidgetLocalPoint = this.globalToLocal(pickedWidgetGlobalPoint);
         
         // Look through all widgets
         return _pickWidgetUnderPoint(m_widgetRoot, pickedWidgetLocalPoint, allowPickOperator);
@@ -670,25 +662,24 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
             // point lies within JUST THE GRAPHIC representing the operator
             if (allowPickOperator && Std.is(widget, GroupTermWidget)) 
             {
-                (try cast(widget, GroupTermWidget) catch(e:Dynamic) null).groupImage.getBounds(this, pickedWidgetRectangle);
+                pickedWidgetRectangle = (try cast(widget, GroupTermWidget) catch(e:Dynamic) null).groupImage.getBounds(this);
                 
                 // Add buffering around the operator so it is easier to pick out,
                 // use a fixed dimension box
                 var fixedDimension : Float = 28;
                 var dx : Float = ((pickedWidgetRectangle.width < fixedDimension)) ? 
-                (fixedDimension - pickedWidgetRectangle.width) * 0.5 : 0;
+					(fixedDimension - pickedWidgetRectangle.width) * 0.5 : 0;
                 var dy : Float = ((pickedWidgetRectangle.height < fixedDimension)) ? 
-                (fixedDimension - pickedWidgetRectangle.height) * 0.5 : 0;
+					(fixedDimension - pickedWidgetRectangle.height) * 0.5 : 0;
                 pickedWidgetRectangle.inflate(dx, dy);
                 
                 if (pickedWidgetRectangle.containsPoint(pickedWidgetLocalPoint)) 
                 {
                     pickedWidget = widget;
                 }
-            }  // Check children if the widget is still not found  
-            
-            
-            
+            }
+			
+			// Check children if the widget is still not found  
             if (pickedWidget == null) 
             {
                 pickedWidget = _pickWidgetUnderPoint(widget.leftChildWidget, localPoint, allowPickOperator);
@@ -905,7 +896,7 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
 		// intelligent fashion 
 		// This is the final step to the layout. For inline we just center the root and for groups
         // apply repulsive forces for each group to figure out the final position 
-        rootWidget.getBounds(this, rootRectangle);
+        rootRectangle = rootWidget.getBounds(this);
         rootWidget.x -= rootRectangle.left;
         rootWidget.x += (m_contraintsBox.width - rootWidget.width) / 2;
         rootWidget.y = rootRectangle.height / 2 + (m_contraintsBox.height - rootWidget.height) / 2;
@@ -972,14 +963,14 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
                 rightWidget.y = rightRect.height / 2 + yOffset;
                 
                 // Re-adjust the bounding body size of this group
-                leftWidget.getBounds(this, leftWidget.rigidBodyComponent.boundingRectangle);
-                rightWidget.getBounds(this, rightWidget.rigidBodyComponent.boundingRectangle);
-                groupWidget.getBounds(this, groupWidget.rigidBodyComponent.boundingRectangle);
+                leftWidget.rigidBodyComponent.boundingRectangle = leftWidget.getBounds(this);
+                rightWidget.rigidBodyComponent.boundingRectangle = rightWidget.getBounds(this);
+                groupWidget.rigidBodyComponent.boundingRectangle = groupWidget.getBounds(this);
                 
                 // For division, we need to scale the division bar up from its default width
                 // if the numerator or denominator are too large
                 // Need to first fetch a reference to the main graphic of the term widget
-                var divisionImage : DisplayObject = groupWidget.groupImage;
+                var divisionImage : PivotSprite = groupWidget.groupImage;
                 divisionImage.width = Math.max(
                                 leftWidget.rigidBodyComponent.boundingRectangle.width,
                                 rightWidget.rigidBodyComponent.boundingRectangle.width
@@ -1011,20 +1002,22 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
             var topOffset : Float = centralPointInLocal.y - currentRectangle.top;
             var parenPadding : Float = 5;
             
-            var leftParen : DisplayObject = new Image(m_assetManager.getTexture("parentheses_left"));
+            var leftParen : PivotSprite = new PivotSprite();
+			leftParen.addChild(new Bitmap(m_assetManager.getBitmapData("parentheses_left")));
             leftParen.pivotX = leftParen.width / 2.0;
             leftParen.pivotY = leftParen.height / 2.0;
             leftParen.x = -leftOffset - parenPadding;
             rootWidget.m_parenthesesCanvas.addChild(leftParen);
             
-            var rightParen : DisplayObject = new Image(m_assetManager.getTexture("parentheses_right"));
+            var rightParen : PivotSprite = new PivotSprite();
+			rightParen.addChild(new Bitmap(m_assetManager.getBitmapData("parentheses_right")));
             rightParen.pivotX = rightParen.width / 2.0;
             rightParen.pivotY = rightParen.height / 2.0;
             rightParen.x = currentRectangle.right - centralPointInLocal.x + parenPadding;
             rootWidget.m_parenthesesCanvas.addChild(rightParen);
         }
         
-        rootWidget.getBounds(this, rootWidget.rigidBodyComponent.boundingRectangle);
+        rootWidget.rigidBodyComponent.boundingRectangle = rootWidget.getBounds(this);
     }
     
     private function layoutHorizontally(root : BaseTermWidget, left : BaseTermWidget, right : BaseTermWidget) : Void
@@ -1049,9 +1042,9 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
         right.y = 0;
         
         // recalculate the bounding box of this term
-        left.getBounds(this, left.rigidBodyComponent.boundingRectangle);
-        right.getBounds(this, right.rigidBodyComponent.boundingRectangle);
-        root.getBounds(this, root.rigidBodyComponent.boundingRectangle);
+        left.rigidBodyComponent.boundingRectangle = left.getBounds(this);
+        right.rigidBodyComponent.boundingRectangle = right.getBounds(this);
+        root.rigidBodyComponent.boundingRectangle = root.getBounds(this);
     }
     
     /**
@@ -1067,7 +1060,7 @@ class ExpressionTreeWidget extends Sprite implements IDisposable
     {
         if (widget != null) 
         {
-            widget.getBounds(this, widget.rigidBodyComponent.boundingRectangle);
+            widget.rigidBodyComponent.boundingRectangle = widget.getBounds(this);
             _setRigidBodyBounds(widget.leftChildWidget);
             _setRigidBodyBounds(widget.rightChildWidget);
         }

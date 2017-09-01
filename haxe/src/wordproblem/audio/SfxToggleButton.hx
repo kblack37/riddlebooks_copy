@@ -2,6 +2,7 @@ package wordproblem.audio;
 
 
 import flash.text.TextFormat;
+import wordproblem.engine.events.DataEvent;
 
 import cgs.audio.Audio;
 import cgs.internationalization.StringTable;
@@ -41,7 +42,7 @@ class SfxToggleButton extends AudioButton
             toggleState : (audioDriver.sfxOn) ? "On" : "Off",
 
         };
-        this.dispatchEventWith(AlgebraAdventureLoggingConstants.BUTTON_PRESSED_EVENT, false, loggingDetails);
+        this.dispatchEvent(new DataEvent(AlgebraAdventureLoggingConstants.BUTTON_PRESSED_EVENT, loggingDetails));
         
         this.redrawLabel(Audio.instance.sfxOn);
         

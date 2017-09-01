@@ -1,9 +1,11 @@
 package wordproblem.engine.text;
 
-import flash.errors.Error;
-import haxe.xml.Fast;
 
 import dragonbox.common.util.XString;
+
+import openfl.errors.Error;
+
+import haxe.xml.Fast;
 
 import wordproblem.engine.text.model.DivNode;
 import wordproblem.engine.text.model.DocumentNode;
@@ -11,6 +13,8 @@ import wordproblem.engine.text.model.ImageNode;
 import wordproblem.engine.text.model.ParagraphNode;
 import wordproblem.engine.text.model.SpanNode;
 import wordproblem.engine.text.model.TextNode;
+
+
 
 /**
  * The text parser creates a DOM-like tree structure formatted xml.

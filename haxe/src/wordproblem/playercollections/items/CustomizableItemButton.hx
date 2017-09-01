@@ -1,16 +1,15 @@
 package wordproblem.playercollections.items;
 
 
-import flash.geom.Rectangle;
-import starling.textures.Texture;
-
 import dragonbox.common.util.XColor;
 
-import starling.display.DisplayObject;
-import starling.display.Image;
-import starling.display.Sprite;
-import starling.text.TextField;
+import openfl.display.DisplayObject;
+import openfl.display.Sprite;
+import openfl.geom.Rectangle;
+import openfl.text.TextField;
 
+import wordproblem.display.DisposableSprite;
+import wordproblem.display.Scale9Image;
 import wordproblem.engine.component.EquippableComponent;
 import wordproblem.engine.component.ItemIdComponent;
 import wordproblem.engine.component.PriceComponent;
@@ -25,7 +24,7 @@ import wordproblem.resource.AssetManager;
  * Button composed of a name at the top, an icon in the middle, and then
  * some indicator or price or whether the item is equipped
  */
-class CustomizableItemButton extends Sprite
+class CustomizableItemButton extends DisposableSprite
 {
     // HACK:
     // This button knows how to redraw itself for all different cases
@@ -42,12 +41,12 @@ class CustomizableItemButton extends Sprite
      * The main rectangle background for the button keep a reference so it is easy to color
      * it depending on state changes on the item
      */
-    private var m_mainBackground : Image;
+    private var m_mainBackground : Scale9Image;
     
     /**
      * Display component showing the price of an item. (Only used in some cases)
      */
-    private var m_priceContainer : Sprite;
+    private var m_priceContainer : DisposableSprite;
     
     /**
      * Display component showing if item is equipped. (Only used in some cases)
@@ -79,11 +78,7 @@ class CustomizableItemButton extends Sprite
         setDefaultColor(defaultColor);
         setSelectedColor(selectedColor);
         
-        var upBackgroundTexture : Texture = Texture.fromTexture(
-			assetManager.getTexture("button_white"),
-			new Rectangle(8, 8, 16, 16)
-        );
-        var backgroundImage : Image = new Image(upBackgroundTexture);
+        var backgroundImage : Scale9Image = new Scale9Image(assetManager.getBitmapData("button_white"), new Rectangle(8, 8, 16, 16));
         backgroundImage.width = totalWidth;
         backgroundImage.height = totalHeight;
         addChild(backgroundImage);
@@ -118,12 +113,12 @@ class CustomizableItemButton extends Sprite
         var backgroundColor : Int = m_defaultColor;
         if (m_priceContainer != null) 
         {
-            m_priceContainer.removeFromParent();
+            if (m_priceContainer.parent != null) m_priceContainer.parent.removeChild(m_priceContainer);
         }
         
         if (m_equippedNotice != null) 
         {
-            m_equippedNotice.removeFromParent();
+            if (m_equippedNotice.parent != null) m_equippedNotice.parent.removeChild(m_equippedNotice);
         }
         
         var playerHasItemAlready : Bool = m_playerItemInventory.componentManager.getComponentFromEntityIdAndType(m_itemId, ItemIdComponent.TYPE_ID) != null;
@@ -191,8 +186,11 @@ class CustomizableItemButton extends Sprite
         // Custom cleanup here if necessary
         if (m_priceContainer != null) 
         {
-            m_priceContainer.removeFromParent(true);
+			m_priceContainer.parent.removeChild(m_priceContainer);
+			m_priceContainer.dispose();
         }
+		
+		m_mainBackground.dispose();
     }
     
     public function createItemIcon() : DisplayObject

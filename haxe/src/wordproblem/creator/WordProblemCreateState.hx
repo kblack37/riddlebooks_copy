@@ -12,7 +12,7 @@ import dragonbox.common.state.IStateMachine;
 import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
 
-import starling.display.Button;
+import wordproblem.display.LabelButton;
 import starling.display.DisplayObject;
 import starling.display.Image;
 import starling.display.Sprite;
@@ -360,7 +360,7 @@ class WordProblemCreateState extends BaseState
         
         lowerUiContainer.addChild(testProblemButton);
         
-        this.dispatchEventWith(ProblemCreateEvent.PROBLEM_CREATE_INIT);
+        this.dispatchEvent(ProblemCreateEvent.PROBLEM_CREATE_INIT);
     }
     
     override public function exit(toState : Dynamic) : Void
@@ -435,7 +435,7 @@ class WordProblemCreateState extends BaseState
             buttonName : "ResumeButton"
 
         };
-        dispatchEventWith(AlgebraAdventureLoggingConstants.BUTTON_PRESSED_EVENT, false, loggingDetails);
+        dispatchEvent(AlgebraAdventureLoggingConstants.BUTTON_PRESSED_EVENT, false, loggingDetails);
         
         closeOptions();
     }
@@ -450,12 +450,12 @@ class WordProblemCreateState extends BaseState
     
     private function forwardEvent(event : Event, params : Dynamic) : Void
     {
-        dispatchEventWith(event.type, params);
+        dispatchEvent(event.type, params);
     }
     
     private function onExitToMainMenu() : Void
     {
-        dispatchEventWith(CommandEvent.LEVEL_QUIT_BEFORE_COMPLETION);
+        dispatchEvent(CommandEvent.LEVEL_QUIT_BEFORE_COMPLETION);
     }
     
     private function onOptionsClicked() : Void
@@ -465,7 +465,7 @@ class WordProblemCreateState extends BaseState
             buttonName : "OptionsButton"
 
         };
-        dispatchEventWith(AlgebraAdventureLoggingConstants.BUTTON_PRESSED_EVENT, false, loggingDetails);
+        dispatchEvent(AlgebraAdventureLoggingConstants.BUTTON_PRESSED_EVENT, false, loggingDetails);
         
         // One important caveat since we have flash text fields that always appear on top, must make
         // sure the text areas are set to non-edit mode while the options screen is displayed
@@ -476,6 +476,6 @@ class WordProblemCreateState extends BaseState
     private function closeOptions() : Void
     {
         m_editableTextArea.toggleEditMode(true);
-        m_optionsScreen.removeFromParent();
+        if (m_optionsScreen.parent != null) m_optionsScreen.parent.removeChild(m_optionsScreen);
     }
 }

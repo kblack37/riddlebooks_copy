@@ -1,9 +1,10 @@
 package wordproblem.engine.widget;
 
 
-import dragonbox.common.dispose.IDisposable;
+import openfl.display.Sprite;
 
-import starling.display.Sprite;
+import wordproblem.display.DisposableSprite;
+import wordproblem.display.Scale9Image;
 
 /**
  * The widget attempts to treat multiple screens like the pages in a book.
@@ -16,7 +17,7 @@ import starling.display.Sprite;
  * One important config setting is whether one or two pages are visible at the start. The case of one would
  * be like having a front cover, the left side has nothing in this case.
  */
-class BookWidget extends Sprite implements IDisposable
+class BookWidget extends DisposableSprite
 {
     /**
      * Stack of screens on the left side. Only the very top is visible.
@@ -120,14 +121,11 @@ class BookWidget extends Sprite implements IDisposable
             if (requestedPageIsOdd && !m_firstPageOnLeft || !requestedPageIsOdd && m_firstPageOnLeft) 
             {
                 pageIndex += 1;
-            }  // positive value indicates the number of times to flip right    // A negative value indicates the number of times to flip left and    // Due to the above increment, delta is always a multiple of two.  
-            
-            
-            
-            
-            
-            
-            
+            }  
+			
+			// Due to the above increment, delta is always a multiple of two.  
+			// A negative value indicates the number of times to flip left and 
+            // positive value indicates the number of times to flip right   
             var delta : Int = Std.int((pageIndex - m_currentPageIndexVisibleOnRight) / 2);
             
             // Re-arrange the stacks such that new pages are on top and visible
@@ -205,16 +203,6 @@ class BookWidget extends Sprite implements IDisposable
         return m_leftPageStack.length >= 2;
     }
     
-    override public function dispose() : Void
-    {
-        while (this.numChildren > 0)
-        {
-            this.removeChildAt(0, true);
-        }
-        
-        super.dispose();
-    }
-    
     /**
      * Draw whatever the visible pages, which are convienently at the top of the
      * left and right stacks.
@@ -227,7 +215,7 @@ class BookWidget extends Sprite implements IDisposable
             var page : Sprite = null;
             for (page in pageStack)
             {
-                page.removeFromParent();
+                if (page.parent != null) page.parent.removeChild(page);
             }
         };
 		

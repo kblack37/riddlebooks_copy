@@ -1,12 +1,13 @@
 package wordproblem.display;
 
+import dragonbox.common.dispose.IDisposable;
+import openfl.display.Bitmap;
+import openfl.display.DisplayObject;
+import openfl.display.Sprite;
 
-import starling.display.DisplayObject;
-import starling.display.Sprite;
-
-class Scale9CompositeImage extends Sprite
+class Scale9CompositeImage extends DisposableSprite
 {
-    public function new(args : Array<Dynamic>)
+    public function new(args : Array<DisplayObject>)
     {
         super();
         

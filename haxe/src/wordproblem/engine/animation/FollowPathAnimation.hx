@@ -108,7 +108,7 @@ class FollowPathAnimation extends EventDispatcher implements IAnimatable
             // After some amount of time has passed, kill the resource
             dispose();
             
-            this.dispatchEventWith(Event.REMOVE_FROM_JUGGLER);
+            this.dispatchEvent(Event.REMOVE_FROM_JUGGLER);
             
             if (m_onComplete != null) 
             {
@@ -126,7 +126,7 @@ class FollowPathAnimation extends EventDispatcher implements IAnimatable
     public function pause() : Void
     {
         m_emitter.reset();
-        m_renderer.removeFromParent();
+        if (m_renderer.parent != null) m_renderer.parent.removeChild(m_renderer);
     }
     
     public function dispose() : Void

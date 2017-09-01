@@ -1,18 +1,20 @@
 package wordproblem.playercollections.items;
 
 
-import flash.geom.Rectangle;
-import flash.text.TextFormat;
-import flash.text.TextFormatAlign;
-import starling.textures.Texture;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.geom.Rectangle;
+import openfl.text.TextFormat;
+import openfl.text.TextFormatAlign;
+import wordproblem.display.DisposableSprite;
+import wordproblem.display.Scale9Image;
 
 import dragonbox.common.util.XColor;
 import dragonbox.common.util.XTextField;
 
-import starling.display.DisplayObject;
-import starling.display.Image;
-import starling.display.Sprite;
-import starling.text.TextField;
+import openfl.display.DisplayObject;
+import openfl.display.Sprite;
+import openfl.text.TextField;
 
 import wordproblem.engine.text.GameFonts;
 import wordproblem.resource.AssetManager;
@@ -20,14 +22,14 @@ import wordproblem.resource.AssetManager;
 /**
  * Simple button representing a cateogry for a collection item.
  */
-class PlayerCollectionCategoryButton extends Sprite
+class PlayerCollectionCategoryButton extends DisposableSprite
 {
     public var selected(never, set) : Bool;
 
     private var m_categoryInformationObject : Dynamic;
     
-    private var m_normalBackground : Image;
-    private var m_selectedBackground : Image;
+    private var m_normalBackground : Scale9Image;
+    private var m_selectedBackground : Scale9Image;
     
     public function new(categoryInformationObject : Dynamic,
             assetManager : AssetManager,
@@ -39,15 +41,13 @@ class PlayerCollectionCategoryButton extends Sprite
         
         m_categoryInformationObject = categoryInformationObject;
         
-        var scale9Texture : Texture = Texture.fromTexture(
-			assetManager.getTexture("button_white"), 
-			new Rectangle(8, 8, 16, 16)
-        );
-        m_normalBackground = new Image(scale9Texture);
-        m_normalBackground.color = upColor;
+		var scale9Rect = new Rectangle(8, 8, 16, 16);
+        var bitmapData : BitmapData = assetManager.getBitmapData("button_white");
+        m_normalBackground = new Scale9Image(bitmapData, scale9Rect);
+		m_normalBackground.transform.colorTransform = XColor.rgbToColorTransform(upColor);
         
-        m_selectedBackground = new Image(scale9Texture);
-        m_selectedBackground.color = XColor.shadeColor(upColor, 0.3);
+        m_selectedBackground = new Bitmap(bitmapData, scale9Rect);
+		m_selectedBackground.transform.colorTransform = XColor.rgbToColorTransform(XColor.shadeColor(upColor, 0.3));
         
         var totalWidth : Float = width;
         var totalHeight : Float = height;
@@ -57,7 +57,7 @@ class PlayerCollectionCategoryButton extends Sprite
         m_selectedBackground.height = totalHeight;
         this.selected = false;
         
-        var categoryNameImage : Image = XTextField.createWordWrapTextfield(
+        var categoryNameImage : DisplayObject = XTextField.createWordWrapTextfield(
                 new TextFormat(GameFonts.DEFAULT_FONT_NAME, 28, 0xFFFFFF, null, null, null, null, null, TextFormatAlign.CENTER),
                 categoryInformationObject.id,
                 width * 0.5, height, true
@@ -66,7 +66,11 @@ class PlayerCollectionCategoryButton extends Sprite
         
         var itemsEarned : Int = categoryInformationObject.numItemsEarned;
         var itemsTotal : Int = categoryInformationObject.itemIds.length;
-        var categoryProgressTextfield : TextField = new TextField(170, Std.int(height), itemsEarned + "/" + itemsTotal, GameFonts.DEFAULT_FONT_NAME, 32, 0xFFFFFF);
+        var categoryProgressTextfield : TextField = new TextField();
+		categoryProgressTextfield.width = 170;
+		categoryProgressTextfield.height = height;
+		categoryProgressTextfield.text = itemsEarned + "/" + itemsTotal;
+		categoryProgressTextfield.setTextFormat(new TextFormat(GameFonts.DEFAULT_FONT_NAME, 32, 0xFFFFFF));
         categoryProgressTextfield.x = categoryNameImage.x + categoryNameImage.width;
         addChild(categoryProgressTextfield);
     }
@@ -78,20 +82,11 @@ class PlayerCollectionCategoryButton extends Sprite
     
     private function set_selected(value : Bool) : Bool
     {
-        m_normalBackground.removeFromParent();
-        m_selectedBackground.removeFromParent();
+        if (m_normalBackground.parent != null) m_normalBackground.parent.removeChild(m_normalBackground);
+        if (m_selectedBackground.parent != null) m_selectedBackground.parent.removeChild(m_selectedBackground);
         
         var backgroundToUse : DisplayObject = ((value)) ? m_selectedBackground : m_normalBackground;
         addChildAt(backgroundToUse, 0);
         return value;
-    }
-    
-    override public function dispose() : Void
-    {
-        // Clear out the background textures
-        m_normalBackground.removeFromParent(true);
-        m_selectedBackground.removeFromParent(true);
-        
-        super.dispose();
     }
 }

@@ -1,20 +1,21 @@
 package wordproblem.credits;
 
 
-import flash.text.TextFormat;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.events.MouseEvent;
+import openfl.text.TextFormat;
+import wordproblem.display.DisposableSprite;
 
 import cgs.audio.Audio;
 import cgs.internationalization.StringTable;
 
 import haxe.Constraints.Function;
 
-import starling.display.Button;
-import starling.display.Image;
-import starling.display.Quad;
-import starling.display.Sprite;
-import starling.events.Event;
-import starling.text.TextField;
-import starling.textures.Texture;
+import wordproblem.display.LabelButton;
+import openfl.display.Sprite;
+import openfl.events.Event;
+import openfl.text.TextField;
 
 import wordproblem.engine.text.GameFonts;
 import wordproblem.engine.text.MeasuringTextField;
@@ -24,8 +25,12 @@ import wordproblem.resource.AssetManager;
 /**
  * A screen used to give credits to various parties for using their resources
  */
-class CreditsWidget extends Sprite
+class CreditsWidget extends DisposableSprite
 {
+	
+	private var m_backgroundQuad : Bitmap;
+	private var m_backButton : LabelButton;
+	
     private var m_onCloseCallback : Function;
     
     public function new(width : Float,
@@ -39,8 +44,9 @@ class CreditsWidget extends Sprite
         m_onCloseCallback = onCloseCallback;
         
         // Add darkened background sprite
-        var backgroundQuad : Quad = new Quad(width, height, 0x000000);
+        var backgroundQuad : Bitmap = new Bitmap(new BitmapData(Std.int(width), Std.int(height), false, 0x000000));
         backgroundQuad.alpha = 0.5;
+		m_backgroundQuad = backgroundQuad;
         addChild(backgroundQuad);
         
         // Add actual background image
@@ -51,7 +57,7 @@ class CreditsWidget extends Sprite
         backgroundContainer.y = (height - backgroundContainerHeight) * 0.5;
         addChild(backgroundContainer);
         
-        var backgroundImage : Image = new Image(assetManager.getTexture("summary_background"));
+        var backgroundImage : Bitmap = new Bitmap(assetManager.getBitmapData("summary_background"));
         backgroundImage.width = backgroundContainerWidth;
         backgroundImage.height = backgroundContainerHeight;
         backgroundContainer.addChild(backgroundImage);
@@ -62,47 +68,41 @@ class CreditsWidget extends Sprite
         
 		// TODO: uncomment once cgs library is finished
         var titleText : String = ""; // StringTable.lookup("credits");
-        var titleTextField : TextField = new TextField(
-			300, 
-			70, 
-			titleText, 
-			textFormat.font, 
-			36, 
-			0x3399FF
-        );
-        titleTextField.underline = true;
+        var titleTextField : TextField = new TextField();
+		titleTextField.width = 300;
+		titleTextField.height = 70;
+		titleTextField.text = titleText;
+		titleTextField.setTextFormat(new TextFormat(textFormat.font, 36, 0x3399FF, null, null, true));
         titleTextField.x = (backgroundContainerWidth - titleTextField.width) * 0.5;
         titleTextField.y = 10;
         backgroundContainer.addChild(titleTextField);
         
         var centerForGameScienceText : String = "Produced by the Center for Game Science at the University of Washington";
-        var centerForGameScienceTextField : TextField = new TextField(
-			450, 
-			100, 
-			centerForGameScienceText, 
-			textFormat.font, 
-			22, 
-			try cast(textFormat.color, Int) catch(e:Dynamic) 0
-        );
+        var centerForGameScienceTextField : TextField = new TextField();
+		centerForGameScienceTextField.width = 450;
+		centerForGameScienceTextField.height = 100; 
+		centerForGameScienceTextField.text = centerForGameScienceText; 
+		centerForGameScienceTextField.setTextFormat(new TextFormat(textFormat.font, 22, textFormat.color));
         centerForGameScienceTextField.x = (backgroundContainerWidth - centerForGameScienceTextField.width) * 0.5;
         centerForGameScienceTextField.y = 50;
         backgroundContainer.addChild(centerForGameScienceTextField);
         
-        var cgsLogoTexture : Texture = assetManager.getTexture("cgs_logo");
-        var cgsLogo : Image = new Image(cgsLogoTexture);
-        cgsLogo.x = (backgroundContainerWidth - cgsLogoTexture.width) * 0.5;
+        var cgsLogoBitmapData : BitmapData = assetManager.getBitmapData("cgs_logo");
+        var cgsLogo : Bitmap = new Bitmap(cgsLogoBitmapData);
+        cgsLogo.x = (backgroundContainerWidth - cgsLogoBitmapData.width) * 0.5;
         cgsLogo.y = centerForGameScienceTextField.y + centerForGameScienceTextField.height;
         backgroundContainer.addChild(cgsLogo);
         
         // Add button to close this screen
-        var backButton : Button = WidgetUtil.createGenericColoredButton(
+        var backButton : LabelButton = WidgetUtil.createGenericColoredButton(
                 assetManager, buttonColor,
 				// TODO: uncomment once cgs library is finished
                 "", //StringTable.lookup("back"),
                 new TextFormat(GameFonts.DEFAULT_FONT_NAME, 24, 0xFFFFFF),
                 new TextFormat(GameFonts.DEFAULT_FONT_NAME, 24, 0xFFFFFF)
                 );
-        backButton.addEventListener(Event.TRIGGERED, onTriggered);
+        backButton.addEventListener(MouseEvent.CLICK, onTriggered);
+		m_backButton = backButton;
         
         var backButtonWidth : Float = 200;
         backButton.width = backButtonWidth;
@@ -110,12 +110,20 @@ class CreditsWidget extends Sprite
         backButton.y = backgroundContainerHeight - 70;
         backgroundContainer.addChild(backButton);
     }
+	
+	override public function dispose() {
+		super.dispose();
+		
+		m_backButton.removeEventListener(MouseEvent.CLICK, onTriggered);
+		
+		m_backgroundQuad.bitmapData.dispose();
+	}
     
-    private function onTriggered() : Void
+    private function onTriggered(event : Dynamic) : Void
     {
         Audio.instance.playSfx("button_click");
         
-        this.removeFromParent();
+        if (this.parent != null) this.parent.removeChild(this);
         
         if (m_onCloseCallback != null) 
         {

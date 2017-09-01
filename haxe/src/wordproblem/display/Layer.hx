@@ -1,8 +1,8 @@
 package wordproblem.display;
 
 
-import starling.display.DisplayObject;
-import starling.display.Sprite;
+import openfl.display.DisplayObject;
+import openfl.display.Sprite;
 
 /**
  * A layer represents a special display object container that help fields to keep
@@ -10,7 +10,7 @@ import starling.display.Sprite;
  * 
  * This is useful if we choose to do custom click detection using rectangle hit tests.
  */
-class Layer extends Sprite
+class Layer extends DisposableSprite
 {
     /**
      * Flag that is toggled to indicate whether the components contained in this

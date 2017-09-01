@@ -1,27 +1,30 @@
 package wordproblem.scripts.barmodel;
 
-import wordproblem.scripts.barmodel.ICardOnSegmentScript;
-import wordproblem.scripts.barmodel.RadialMenuControl;
-
-import flash.geom.Rectangle;
-
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
+import dragonbox.common.math.util.MathUtil;
 import dragonbox.common.ui.MouseState;
+import dragonbox.common.util.XColor;
+import wordproblem.display.Scale9Image;
 
-import starling.display.DisplayObject;
-import starling.display.DisplayObjectContainer;
-import starling.display.Image;
-import starling.display.Sprite;
-import starling.extensions.textureutil.TextureUtil;
-import starling.filters.ColorMatrixFilter;
-import starling.text.TextField;
-import starling.textures.Texture;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
+import openfl.display.Sprite;
+import openfl.events.Event;
+import openfl.filters.BitmapFilter;
+import openfl.geom.Rectangle;
+import openfl.text.TextField;
+import openfl.text.TextFormat;
 
+import wordproblem.display.PivotSprite;
+import wordproblem.display.util.BitmapUtil;
 import wordproblem.engine.IGameEngine;
 import wordproblem.engine.barmodel.model.BarWhole;
 import wordproblem.engine.component.BlinkComponent;
 import wordproblem.engine.component.RenderableComponent;
+import wordproblem.engine.events.DataEvent;
 import wordproblem.engine.events.GameEvent;
 import wordproblem.engine.expression.SymbolData;
 import wordproblem.engine.expression.widget.term.BaseTermWidget;
@@ -29,6 +32,8 @@ import wordproblem.engine.expression.widget.term.SymbolTermWidget;
 import wordproblem.engine.scripting.graph.ScriptStatus;
 import wordproblem.resource.AssetManager;
 import wordproblem.scripts.BaseGameScript;
+import wordproblem.scripts.barmodel.ICardOnSegmentScript;
+import wordproblem.scripts.barmodel.RadialMenuControl;
 
 /**
  * This script controls showing all the valid gestures possible when the user drops a card on top of a bar
@@ -105,7 +110,7 @@ class CardOnSegmentRadialOptions extends BaseBarModelScript
         {
             var mouseState : MouseState = m_gameEngine.getMouseState();
             m_globalMouseBuffer.setTo(mouseState.mousePositionThisFrame.x, mouseState.mousePositionThisFrame.y);
-            m_barModelArea.globalToLocal(m_globalMouseBuffer, m_localMouseBuffer);
+            m_localMouseBuffer = m_barModelArea.globalToLocal(m_globalMouseBuffer);
             
             iterateThroughBufferedEvents();
             
@@ -228,7 +233,7 @@ class CardOnSegmentRadialOptions extends BaseBarModelScript
             // HACK: Doesn't fire at the right time
             // Override needs to be called after the nodes are added to the graph since some of the ready function trace up the
             // parent pointers to find other script nodes.
-            (try cast(gestureScript, BaseGameScript) catch(e:Dynamic) null).overrideLevelReady();
+            (try cast(gestureScript, BaseGameScript) catch(e:Dynamic) null).overrideLevelReady({ });
         }
         
         m_gestures.push(gestureScript);
@@ -250,9 +255,9 @@ class CardOnSegmentRadialOptions extends BaseBarModelScript
         return matchingGestureScript;
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         // Set up controls for the radial menu
         m_radialMenuControl = new RadialMenuControl(
@@ -292,10 +297,9 @@ class CardOnSegmentRadialOptions extends BaseBarModelScript
                     {
                         numValidGestures++;
                     }
-                }  // Open the radial menu only if there are enough gestures  
-                
-                
-                
+                } 
+				
+				// Open the radial menu only if there are enough gestures  
                 if (numValidGestures > 0) 
                 {
                     // Special case, if there is only one valid gesture then just execute that gesture directly
@@ -344,9 +348,9 @@ class CardOnSegmentRadialOptions extends BaseBarModelScript
                         termWidget.scaleX = termWidget.scaleY = Math.min(targetScaleX, targetScaleY);
                         m_radialMenuControl.getRadialMenuContainer().addChildAt(termWidget, 0);
                         
-                        m_gameEngine.dispatchEventWith(GameEvent.OPEN_RADIAL_OPTIONS, false, {
+                        m_gameEngine.dispatchEvent(new DataEvent(GameEvent.OPEN_RADIAL_OPTIONS, {
                                     display : m_radialMenuControl.getRadialMenuContainer()
-                                });
+                                }));
                     }
                 }
             }
@@ -364,36 +368,38 @@ class CardOnSegmentRadialOptions extends BaseBarModelScript
         
         // Map index to the gesture to get the icon name
         var radiusDelta : Float = outerRadius - innerRadius;
-        var icon : DisplayObject = getIconAtSegmentIndex(optionIndex);
+        var icon : PivotSprite = new PivotSprite();
+		icon.addChild(getIconAtSegmentIndex(optionIndex));
         icon.pivotX = icon.width * 0.5;
         icon.pivotY = icon.height * 0.5;
         icon.scaleX = icon.scaleY = (radiusDelta - 8) / Math.max(icon.width, icon.height);
         icon.x = Math.cos(rotation + arcLength * 0.5) * (outerRadius - radiusDelta * 0.5);
         icon.y = Math.sin(rotation + arcLength * 0.5) * (outerRadius - radiusDelta * 0.5);
         
-        var outerTexture : Texture = null;
+        var outerBitmapData : BitmapData = null;
         var outlineThickness : Float = 2;
         if (mode == "up") 
         {
-            outerTexture = TextureUtil.getRingSegmentTexture(30, outerRadius, 0, arcLength, true, null, 0x6AA2C8, true, outlineThickness, 0x000000);
+            outerBitmapData = BitmapUtil.getRingSegmentBitmapData(30, outerRadius, 0, arcLength, true, null, 0x6AA2C8, true, outlineThickness, 0x000000);
         }
         else if (mode == "over") 
         {
-            outerTexture = TextureUtil.getRingSegmentTexture(30, outerRadius, 0, arcLength, true, null, 0xF7A028, true, outlineThickness, 0x000000);
+            outerBitmapData = BitmapUtil.getRingSegmentBitmapData(30, outerRadius, 0, arcLength, true, null, 0xF7A028, true, outlineThickness, 0x000000);
         }
         else 
         {
-            outerTexture = TextureUtil.getRingSegmentTexture(30, outerRadius, 0, arcLength, true, null, 0xCCCCCC, true, outlineThickness, 0x000000);
+            outerBitmapData = BitmapUtil.getRingSegmentBitmapData(30, outerRadius, 0, arcLength, true, null, 0xCCCCCC, true, outlineThickness, 0x000000);
             
             // Set icon to grey scale
-            var colorMatrixFilter : ColorMatrixFilter = new ColorMatrixFilter();
-            colorMatrixFilter.adjustSaturation(-1);
-            icon.filter = colorMatrixFilter;
+			var filters = new Array<BitmapFilter>();
+			filters.push(XColor.getGrayscaleFilter());
+			icon.filters = filters;
         }
         
-        var segmentImage : Image = new Image(outerTexture);
+        var segmentImage : PivotSprite = new PivotSprite();
+		segmentImage.addChild(new Bitmap(outerBitmapData));
         segmentImage.pivotX = segmentImage.pivotY = outerRadius;
-        segmentImage.rotation = rotation;
+        segmentImage.rotation = MathUtil.radsToDegrees(rotation);
         
         if (mode == "disabled") 
         {
@@ -409,9 +415,23 @@ class CardOnSegmentRadialOptions extends BaseBarModelScript
     private function disposeMenuSegment(segment : DisplayObject,
             mode : String) : Void
     {
-        // Assume the ring texture is the bottom most child
-        var ringImage : Image = try cast((try cast(segment, DisplayObjectContainer) catch(e:Dynamic) null).getChildAt(0), Image) catch(e:Dynamic) null;
-        ringImage.texture.dispose();
+		var segmentAsContainer : DisplayObjectContainer = try cast(segment, DisplayObjectContainer) catch (e : Dynamic) null;
+		
+		if (segmentAsContainer != null) {
+			// Assume the ring texture is the bottom most child
+			var ringImage : Bitmap = try cast((try cast(segmentAsContainer.getChildAt(0), DisplayObjectContainer) catch(e:Dynamic) null).getChildAt(0), Bitmap) catch (e : Dynamic) null;
+			ringImage.bitmapData.dispose();
+			
+			// We need to know if the second child is a display object container; if so, it contains a Scale9Image, which must be disposed
+			var iconAsContainer : DisplayObjectContainer = try cast(segmentAsContainer.getChildAt(1), DisplayObjectContainer) catch (e : Dynamic) null;
+			if (iconAsContainer != null) {
+				var iconAsContainerAsContainer : DisplayObjectContainer = try cast(iconAsContainer.getChildAt(0), DisplayObjectContainer) catch (e : Dynamic) null;
+				if (iconAsContainerAsContainer != null) {
+					// The Scale9Image is the first child, so we dispose it
+					(try cast(iconAsContainerAsContainer.getChildAt(0), Scale9Image) catch (e : Dynamic) null).dispose();
+				}
+			}
+		}
         
         if (mode == "up") 
             { }
@@ -438,24 +458,24 @@ class CardOnSegmentRadialOptions extends BaseBarModelScript
         {
             var symbolData : SymbolData = m_gameEngine.getExpressionSymbolResources().getSymbolDataFromValue(m_savedDraggedValue);
             
-            var barBackgroundTexture : Texture = m_assetManager.getTexture("card_background_square");
+            var barBackgroundBitmapData : BitmapData = m_assetManager.getBitmapData("card_background_square");
             var scale9Offset : Float = 8;
-            var barBackground : Image = new Image(Texture.fromTexture(
-				barBackgroundTexture, 
-				new Rectangle(scale9Offset,
-					scale9Offset,
-					barBackgroundTexture.width - 2 * scale9Offset,
-					barBackgroundTexture.height - 2 * scale9Offset)
-				)
-            );
-            barBackground.color = ((symbolData.useCustomBarColor)) ? symbolData.customBarColor : 0xFFFFFF;
+            var barBackground : Scale9Image = new Scale9Image(barBackgroundBitmapData, new Rectangle(scale9Offset,
+				scale9Offset,
+				barBackgroundBitmapData.width - 2 * scale9Offset,
+				barBackgroundBitmapData.height - 2 * scale9Offset));
+            barBackground.transform.colorTransform = XColor.rgbToColorTransform(symbolData.useCustomBarColor ? symbolData.customBarColor : 0xFFFFFF);
             
             var nameOnBar : String = symbolData.name;
             if (nameOnBar == null) 
             {
                 nameOnBar = m_savedDraggedValue;
             }
-            var nameTextfield : TextField = new TextField(Std.int(barBackground.width), Std.int(barBackground.height), nameOnBar, symbolData.fontName, 12, symbolData.fontColor);
+            var nameTextfield : TextField = new TextField();
+			nameTextfield.width = barBackground.width;
+			nameTextfield.height = barBackground.height;
+			nameTextfield.text = nameOnBar;
+			nameTextfield.setTextFormat(new TextFormat(symbolData.fontName, 12, symbolData.fontColor));
             var nameIconContainer : Sprite = new Sprite();
             nameIconContainer.addChild(barBackground);
             nameIconContainer.addChild(nameTextfield);
@@ -463,7 +483,7 @@ class CardOnSegmentRadialOptions extends BaseBarModelScript
         }
         else if (Std.is(gestureScript, SplitBarSegment)) 
         {
-            var divideIcon : Image = new Image(m_assetManager.getTexture("divide_obelus"));
+            var divideIcon : Bitmap = new Bitmap(m_assetManager.getBitmapData("divide_obelus"));
             icon = divideIcon;
         }
         
@@ -497,15 +517,13 @@ class CardOnSegmentRadialOptions extends BaseBarModelScript
         {
             var gestureToExecute : ICardOnSegmentScript = m_gestures[optionIndex];
             gestureToExecute.performAction(m_savedDraggedValue, m_savedSelectedSegmentId);
-        }  // Close the menu on click  
-        
-        
-        
+        } 
+		
+		// Close the menu on click  
         m_radialMenuControl.close();
-        
         // On close, discard the blink
         m_barModelArea.componentManager.removeComponentFromEntity(m_savedSelectedSegmentId, BlinkComponent.TYPE_ID);
         
-        m_gameEngine.dispatchEventWith(GameEvent.CLOSE_RADIAL_OPTIONS);
+        m_gameEngine.dispatchEvent(new Event(GameEvent.CLOSE_RADIAL_OPTIONS));
     }
 }

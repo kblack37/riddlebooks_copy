@@ -91,9 +91,9 @@ class ChangeMouseOnHighlightActive extends BaseProblemCreateScript
         return super.visit();
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         setIsActive(m_isActive);
         
         var padding : Float = 4;
@@ -140,7 +140,7 @@ class ChangeMouseOnHighlightActive extends BaseProblemCreateScript
     private function onHighlightFinished() : Void
     {
         m_highlightActive = false;
-        m_highlightIndicatorImage.removeFromParent();
+        if (m_highlightIndicatorImage.parent != null) m_highlightIndicatorImage.parent.removeChild(m_highlightIndicatorImage);
         
         Starling.juggler.remove(m_highlightIndicatorTween);
     }

@@ -1,22 +1,20 @@
 package wordproblem.engine.animation;
 
 
-import dragonbox.common.math.vectorspace.RealsVectorSpace;
-import flash.geom.Point;
-import flash.geom.Rectangle;
-
 import dragonbox.common.expressiontree.ExpressionNode;
-import dragonbox.common.math.vectorspace.IVectorSpace;
+import dragonbox.common.math.vectorspace.RealsVectorSpace;
+import motion.Actuate;
+import wordproblem.display.PivotSprite;
+import wordproblem.display.util.BitmapUtil;
 
 import haxe.Constraints.Function;
 
-import starling.animation.Tween;
-import starling.core.Starling;
-import starling.display.DisplayObject;
-import starling.display.DisplayObjectContainer;
-import starling.display.Image;
-import starling.display.Sprite;
-import starling.extensions.textureutil.TextureUtil;
+import openfl.display.Bitmap;
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
+import openfl.display.Sprite;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
 
 import wordproblem.engine.expression.ExpressionSymbolMap;
 import wordproblem.engine.expression.widget.term.SymbolTermWidget;
@@ -42,6 +40,11 @@ class DocumentViewToCardAnimation extends Sprite
      * A copy of the view
      */
     public var viewCopy : DisplayObject;
+	
+	/**
+	 * References to the running tween object
+	 */
+	public var m_shrinkTweenObject : DisplayObject;
     
     /**
      * Resource to create the the final views related to a term
@@ -55,15 +58,12 @@ class DocumentViewToCardAnimation extends Sprite
     
     private var m_vectorSpace : RealsVectorSpace;
     
-    private var m_textShrinkTween : Tween;
-    private var m_termExpandTween : Tween;
-    
     public function new(expressionSymbolMap : ExpressionSymbolMap,
             assetManager : AssetManager,
             vectorSpace : RealsVectorSpace)
     {
         super();
-        
+		
         m_expressionSymbolMap = expressionSymbolMap;
         m_assetManager = assetManager;
         m_vectorSpace = vectorSpace;
@@ -81,33 +81,33 @@ class DocumentViewToCardAnimation extends Sprite
     {
         if (this.viewCopy != null) 
         {
-            this.viewCopy.removeFromParent(true);
+			if (this.viewCopy.parent != null) viewCopy.parent.removeChild(this.viewCopy);
             this.removeChildren();
             
-            this.parent.removeChild(this);
+            if (this.parent != null) this.parent.removeChild(this);
             
             // Delete the custom rendered texture
-            if (Std.is(this.viewCopy, Image)) 
+            if (Std.is(this.viewCopy, Bitmap)) 
             {
-                (try cast(this.viewCopy, Image) catch(e:Dynamic) null).texture.dispose();
+                (try cast(this.viewCopy, Bitmap) catch(e:Dynamic) null).bitmapData.dispose();
             }
         }
         
         this.term = null;
-        this.viewCopy = null;
         
         // Kill any playing tweens
-        if (m_textShrinkTween != null) 
+        if (m_shrinkTweenObject != null) 
         {
-            Starling.current.juggler.remove(m_textShrinkTween);
-            m_textShrinkTween = null;
+			Actuate.stop(m_shrinkTweenObject);
+            m_shrinkTweenObject = null;
         }
         
-        if (m_termExpandTween != null) 
+        if (viewCopy != null) 
         {
-            Starling.current.juggler.remove(m_termExpandTween);
-            m_termExpandTween = null;
+			Actuate.stop(viewCopy);
         }
+		
+		this.viewCopy = null;
     }
     
     // The original view can be composed of several visual elements, we want to perform the
@@ -131,7 +131,8 @@ class DocumentViewToCardAnimation extends Sprite
         // to that of the parent container.
         // NOTE that the drawn copy gets rebounded to a tight box
         var localPoint : Point = originalView.globalToLocal(mousePoint);
-        var drawnCopy : DisplayObject = TextureUtil.getImageFromDisplayObject(originalView);
+        var drawnCopy : PivotSprite = new PivotSprite();
+		drawnCopy.addChild(BitmapUtil.getImageFromDisplayObject(originalView));
         drawnCopy.pivotX = localPoint.x - tightBounds.left;
         drawnCopy.pivotY = localPoint.y - tightBounds.top;
         addChild(drawnCopy);
@@ -146,31 +147,26 @@ class DocumentViewToCardAnimation extends Sprite
             );
             
             var tweenDuration : Float = 0.2;
-            var textShrinkTween : Tween = new Tween(drawnCopy, tweenDuration);
-            textShrinkTween.scaleTo(0);
-            textShrinkTween.onComplete = function() : Void
+			Actuate.tween(drawnCopy, tweenDuration, { scaleX: 0, scaleY: 0 }).onComplete(function() : Void
                     {
                         termImage.scaleX = termImage.scaleY = 0;
                         addChild(termImage);
-                        drawnCopy.removeFromParent(true);
-                        (try cast(drawnCopy, Image) catch(e:Dynamic) null).texture.dispose();
+						
+						if (drawnCopy.parent != null) drawnCopy.parent.removeChild(drawnCopy);
+                        (try cast(drawnCopy.getChildAt(0), Bitmap) catch (e:Dynamic) null).bitmapData.dispose();
+						drawnCopy.dispose();
+						m_shrinkTweenObject = null;
                         
                         // Using gtween because for some reason linking multiple starling tweens together causes
                         // stuttering with particle system rendering when we try to reuse emitters
-                        var termExpandTween : Tween = new Tween(termImage, tweenDuration);
-                        termExpandTween.scaleTo(1.0);
-						function onExpandComplete() : Void
-                        {
-                            termImage.visible = false;
-                            onAnimationComplete();
-                        };
-                        termExpandTween.onComplete = onExpandComplete;
-                        Starling.current.juggler.add(termExpandTween);
-                        m_termExpandTween = termExpandTween;
+						Actuate.tween(termImage, tweenDuration, { scaleX: 1, scaleY: 1 }).onComplete(function() : Void
+							{
+								termImage.visible = false;
+								onAnimationComplete();
+							});
                         viewCopy = termImage;
-                    };
-            Starling.current.juggler.add(textShrinkTween);
-            m_textShrinkTween = textShrinkTween;
+                    });
+			m_shrinkTweenObject = drawnCopy;
         }
         
         parentContainer.addChild(this);

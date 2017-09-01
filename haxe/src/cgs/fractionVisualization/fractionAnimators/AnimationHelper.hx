@@ -151,7 +151,7 @@ class AnimationHelper
             var aDisplay : DisplayObject = m_currentDisplays.pop();
             if (aDisplay.parent != null)
             {
-                aDisplay.parent.removeChild(aDisplay);
+                if (aDisplay.parent != null) aDisplay.parent.removeChild(aDisplay);
             }
         }
         
@@ -163,7 +163,7 @@ class AnimationHelper
             {
                 if (aFracView.parent != null)
                 {
-                    aFracView.parent.removeChild(aFracView);
+                    if (aFracView.parent != null) aFracView.parent.removeChild(aFracView);
                 }
                 aFracView.destroy();
             }
@@ -175,7 +175,7 @@ class AnimationHelper
             var aNumRenderer : NumberRenderer = m_numberRenderers.pop();
             if (aNumRenderer.parent != null)
             {
-                aNumRenderer.parent.removeChild(aNumRenderer);
+                if (aNumRenderer.parent != null) aNumRenderer.parent.removeChild(aNumRenderer);
             }
             NumberRendererFactory.getInstance().recycleNumberRendererInstance(aNumRenderer);
         }
@@ -747,7 +747,7 @@ class AnimationHelper
             m_currentDisplays.splice(Lambda.indexOf(m_currentDisplays, value), 1);
             if (value.parent != null)
             {
-                value.parent.removeChild(value);
+                if (value.parent != null) value.parent.removeChild(value);
             }
         }
     }
@@ -780,7 +780,7 @@ class AnimationHelper
             value.visible = false;
             if (value.parent != null)
             {
-                value.parent.removeChild(value);
+                if (value.parent != null) value.parent.removeChild(value);
             }
             value.destroy();
         }
@@ -813,7 +813,7 @@ class AnimationHelper
             value.visible = false;
             if (value.parent != null)
             {
-                value.parent.removeChild(value);
+                if (value.parent != null) value.parent.removeChild(value);
             }
             NumberRendererFactory.getInstance().recycleNumberRendererInstance(value);
         }

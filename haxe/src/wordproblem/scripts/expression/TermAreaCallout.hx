@@ -1,12 +1,11 @@
 package wordproblem.scripts.expression;
 
 
-import flash.text.TextFormat;
-
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.ui.MouseState;
 
-import starling.text.TextField;
+import openfl.text.TextField;
+import openfl.text.TextFormat;
 
 import wordproblem.engine.IGameEngine;
 import wordproblem.engine.component.CalloutComponent;
@@ -109,14 +108,12 @@ class TermAreaCallout extends BaseTermAreaScript
 							// TODO: this was replaced from the feathers Callout.DIRECTION_ and will
 							// need to be replaced when the callout system is
                             calloutComponent.directionFromOrigin = "up";
-                            calloutComponent.display = new TextField(
-                                    Std.int(m_measuringTextfield.textWidth + 10), 
-                                    Std.int(m_measuringTextfield.textHeight + 10), 
-                                    name, 
-                                    m_measuringTextFormat.font, 
-                                    m_measuringTextFormat.size, 
-                                    try cast(m_measuringTextFormat.color, Int) catch(e:Dynamic) 0
-                                    );
+							var calloutComponentDisplay : TextField = new TextField();
+							calloutComponentDisplay.width = m_measuringTextfield.textWidth + 10;
+							calloutComponentDisplay.height = m_measuringTextfield.textHeight + 10;
+							calloutComponentDisplay.text = name;
+							calloutComponentDisplay.setTextFormat(m_measuringTextFormat);
+							calloutComponent.display = calloutComponentDisplay;
                             termArea.componentManager.addComponentToEntity(calloutComponent);
                             
                             m_lastPickedEntityId = entityId;
@@ -126,12 +123,10 @@ class TermAreaCallout extends BaseTermAreaScript
                     }
                     break;
                 }
-            }  // Make sure that the callout in question was created by this script    // If didn't hit anything then don't show the callout anymore  
-            
-            
-            
-            
-            
+            }  
+			
+			// If didn't hit anything then don't show the callout anymore  
+            // Make sure that the callout in question was created by this script  
             if (pickedWidget == null && m_lastPickedEntityId != null &&
                 Reflect.hasField(m_calloutCreatedInternallyMap, m_lastPickedEntityId) && Reflect.field(m_calloutCreatedInternallyMap, m_lastPickedEntityId)) 
             {

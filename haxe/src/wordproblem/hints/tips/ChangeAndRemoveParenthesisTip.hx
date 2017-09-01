@@ -2,8 +2,8 @@ package wordproblem.hints.tips;
 
 import wordproblem.hints.tips.TermAreaTip;
 
-import flash.geom.Point;
-import flash.geom.Rectangle;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
 
 import dragonbox.common.eventsequence.CustomSequenceEvent;
 import dragonbox.common.eventsequence.EventSequencer;
@@ -16,9 +16,9 @@ import dragonbox.common.math.vectorspace.RealsVectorSpace;
 import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
 
-import starling.display.DisplayObject;
-import starling.display.DisplayObjectContainer;
-import starling.display.Sprite;
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
+import openfl.display.Sprite;
 
 import wordproblem.engine.expression.ExpressionSymbolMap;
 import wordproblem.engine.expression.tree.ExpressionTree;
@@ -153,7 +153,7 @@ class ChangeAndRemoveParenthesisTip extends TermAreaTip
         super.hide();
         
         m_addAndChangeParenthesis.setIsActive(false);
-        m_containerForParenthesisButton.removeFromParent();
+        if (m_containerForParenthesisButton.parent != null) m_containerForParenthesisButton.parent.removeChild(m_containerForParenthesisButton);
         m_widgetDragSystem.manuallyEndDrag();
         m_playbackEvents.dispose();
     }
@@ -165,7 +165,7 @@ class ChangeAndRemoveParenthesisTip extends TermAreaTip
         m_widgetDragSystem.dispose();
         m_termAreaMouseScript.dispose();
         m_addAndChangeParenthesis.dispose();
-        m_containerForParenthesisButton.removeFromParent();
+        if (m_containerForParenthesisButton.parent != null) m_containerForParenthesisButton.parent.removeChild(m_containerForParenthesisButton);
     }
     
     private function setUpExpression() : Void

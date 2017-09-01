@@ -2,6 +2,7 @@ package wordproblem.scripts.text;
 
 
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
+import wordproblem.engine.events.DataEvent;
 
 import starling.events.Event;
 
@@ -31,9 +32,9 @@ class StrikeTextAfterDrop extends BaseGameScript
     /**
 		 * When the level starts add eventlisteners and call up the super
 		 */
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         m_textAreaWidget = try cast(super.m_gameEngine.getUiEntity("textArea"), TextAreaWidget) catch(e:Dynamic) null;
         super.m_gameEngine.addEventListener(GameEvent.EXPRESSION_REVEALED, onExpressionRevealed);
     }
@@ -43,10 +44,10 @@ class StrikeTextAfterDrop extends BaseGameScript
 		 * @param	event: the event 
 		 * @param	param: passed in with the envent
 		 */
-    private function onExpressionRevealed(event : Event, param : Dynamic) : Void
+    private function onExpressionRevealed(event : Dynamic) : Void
     {
         var components : Array<Component> = m_textAreaWidget.componentManager.getComponentListForType(ExpressionComponent.TYPE_ID);
-        var component : ExpressionComponent = param.component;
+        var component : ExpressionComponent = (try cast(event, DataEvent) catch (e : Dynamic) null).getData().component;
         for (i in 0...components.length){
             var documentId : ExpressionComponent = try cast(components[i], ExpressionComponent) catch(e:Dynamic) null;
             if (documentId.expressionString == component.expressionString) 

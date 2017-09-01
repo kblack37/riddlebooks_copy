@@ -1,21 +1,21 @@
 package wordproblem.scripts.deck;
 
 
-import dragonbox.common.util.XString;
-import flash.geom.Point;
-
 import cgs.audio.Audio;
 
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.math.util.MathUtil;
 import dragonbox.common.ui.MouseState;
+import dragonbox.common.util.XString;
 
-import starling.core.Starling;
-import starling.display.DisplayObject;
+import motion.Actuate;
+
+import openfl.display.DisplayObject;
+import openfl.geom.Point;
 
 import wordproblem.display.Layer;
 import wordproblem.engine.IGameEngine;
-import wordproblem.engine.animation.SnapBackAnimation;
+import wordproblem.engine.events.DataEvent;
 import wordproblem.engine.events.GameEvent;
 import wordproblem.engine.expression.widget.term.BaseTermWidget;
 import wordproblem.engine.expression.widget.term.SymbolTermWidget;
@@ -25,6 +25,8 @@ import wordproblem.log.AlgebraAdventureLoggingConstants;
 import wordproblem.resource.AssetManager;
 import wordproblem.scripts.BaseGameScript;
 import wordproblem.scripts.drag.WidgetDragSystem;
+
+import wordproblem.engine.animation.SnapBackAnimation;
 
 /**
  * Manages all the interactions the player has exclusively with the deck.
@@ -112,7 +114,7 @@ class DeckController extends BaseGameScript
             var hitObject : BaseTermWidget = try cast(m_deckArea.getObjectUnderPoint(m_globalMouseBuffer.x, m_globalMouseBuffer.y), BaseTermWidget) catch(e:Dynamic) null;
             if (hitObject != null && !hitObject.getIsHidden() && hitObject.getIsEnabled()) 
             {
-                m_gameEngine.dispatchEventWith(GameEvent.SELECT_DECK_AREA, false, hitObject);
+                m_gameEngine.dispatchEvent(new DataEvent(GameEvent.SELECT_DECK_AREA, hitObject));
                 
                 m_currentEntryPressed = hitObject;
                 m_lastMousePressPoint.setTo(m_globalMouseBuffer.x, m_globalMouseBuffer.y);
@@ -120,9 +122,8 @@ class DeckController extends BaseGameScript
                 var params : Dynamic = {
                     termWidget : m_currentEntryPressed,
                     location : m_globalMouseBuffer,
-
                 };
-                m_gameEngine.dispatchEventWith(GameEvent.START_DRAG_DECK_AREA, false, params);
+                m_gameEngine.dispatchEvent(new DataEvent(GameEvent.START_DRAG_DECK_AREA, params));
                 Audio.instance.playSfx("pickup_card_deck");
             }
         }
@@ -153,14 +154,13 @@ class DeckController extends BaseGameScript
         
         if (m_snapBackAnimation != null) 
         {
-            Starling.current.juggler.remove(m_snapBackAnimation);
             m_snapBackAnimation.dispose();
         }
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         m_deckArea = try cast(m_gameEngine.getUiEntity("deckArea"), DeckWidget) catch(e:Dynamic) null;
         m_widgetDragSystem = try cast(this.getNodeById("WidgetDragSystem"), WidgetDragSystem) catch(e:Dynamic) null;
@@ -180,7 +180,6 @@ class DeckController extends BaseGameScript
                 this.snapWidgetBackToDeck({
                             widget : param.widget,
                             origin : param.origin,
-
                         });
             }
         }
@@ -202,8 +201,8 @@ class DeckController extends BaseGameScript
             var widgetToSnap : BaseTermWidget = m_deckArea.getWidgetFromSymbol(data);
 			function onAnimationDone() : Void
             {
-                widget.removeFromParent();
-                Starling.current.juggler.remove(m_snapBackAnimation);
+                if (widget.parent != null) widget.parent.removeChild(widget);
+				m_snapBackAnimation.stop();
                 
                 if (m_originalOfDraggedWidget != null) 
                 {
@@ -217,19 +216,17 @@ class DeckController extends BaseGameScript
                 {
                     widgetToSnap.stage.addChild(widget);
                     m_snapBackAnimation.setParameters(widget, widgetToSnap, 800, onAnimationDone);
-                    Starling.current.juggler.add(m_snapBackAnimation);
+					m_snapBackAnimation.start();
                 }
             }
             else 
             {
-                Starling.current.juggler.tween(widget, 0.5, {
-                            alpha : 0.0
-                        });
+				Actuate.tween(widget, 0.5, { alpha: 0 });
             }
         }
         else 
         {
-            widget.removeFromParent();
+            if (widget.parent != null) widget.parent.removeChild(widget);
             if (m_originalOfDraggedWidget != null) 
             {
                 m_originalOfDraggedWidget.alpha = ((m_originalOfDraggedWidget.getIsEnabled())) ? 1.0 : m_originalOfDraggedWidget.alpha;
@@ -252,7 +249,7 @@ class DeckController extends BaseGameScript
                 locationX : m_globalMouseBuffer.x,
                 locationY : m_globalMouseBuffer.y,
             };
-            m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.NEGATE_EXPRESSION_EVENT, false, loggingDetails);
+            m_gameEngine.dispatchEvent(new DataEvent(AlgebraAdventureLoggingConstants.NEGATE_EXPRESSION_EVENT, loggingDetails));
             
             // Flip card
             m_deckArea.reverseValue(pickedWidget);
@@ -272,9 +269,8 @@ class DeckController extends BaseGameScript
             regionPickup : uiComponentName,
             locationX : currLoc.x,
             locationY : currLoc.y,
-
         };
-        m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.EXPRESSION_PICKUP_EVENT, false, loggingDetails_pickup);
+        m_gameEngine.dispatchEvent(new DataEvent(AlgebraAdventureLoggingConstants.EXPRESSION_PICKUP_EVENT, loggingDetails_pickup));
         
         // We first check that the given card is valid for dragging
         // If it is then we set is as the active object being dragged.

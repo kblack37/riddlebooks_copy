@@ -174,9 +174,9 @@ class LSAddVerticalLabelA extends BaseCustomLevelScript
         m_temporaryTextureControl.dispose();
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         disablePrevNextTextButtons();
         

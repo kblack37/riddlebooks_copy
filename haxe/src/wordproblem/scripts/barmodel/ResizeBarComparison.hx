@@ -1,8 +1,9 @@
 package wordproblem.scripts.barmodel;
 
 
-import flash.geom.Point;
-import flash.geom.Rectangle;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
+import wordproblem.engine.events.DataEvent;
 
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.ui.MouseState;
@@ -78,7 +79,7 @@ class ResizeBarComparison extends BaseBarModelScript
         {
             var mouseState : MouseState = m_gameEngine.getMouseState();
             m_globalMouseBuffer.setTo(mouseState.mousePositionThisFrame.x, mouseState.mousePositionThisFrame.y);
-            m_barModelArea.globalToLocal(m_globalMouseBuffer, m_localMouseBuffer);
+            m_localMouseBuffer = m_barModelArea.globalToLocal(m_globalMouseBuffer);
 			m_outParamsBuffer = new Array<Dynamic>();
             
             if (mouseState.leftMousePressedThisFrame) 
@@ -152,15 +153,15 @@ class ResizeBarComparison extends BaseBarModelScript
                     {
                         barComparison.barWholeIdComparedTo = closestBarWholeView.data.id;
                         barComparison.segmentIndexComparedTo = closestBarSegmentIndex;
-                        m_gameEngine.dispatchEventWith(GameEvent.BAR_MODEL_AREA_CHANGE, false, {
+                        m_gameEngine.dispatchEvent(new DataEvent(GameEvent.BAR_MODEL_AREA_CHANGE, {
                                     previousSnapshot : previousModelDataSnapshot
-                                });
+                                }));
                         m_barModelArea.redraw();
                         
                         // Log resizing of a bar comparison
-                        m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.RESIZE_BAR_COMPARISON, false, {
+                        m_gameEngine.dispatchEvent(new DataEvent(AlgebraAdventureLoggingConstants.RESIZE_BAR_COMPARISON, {
                                     barModel : m_barModelArea.getBarModelData().serialize()
-                                });
+                                }));
                     }
                     // Make sure if no change occured, the comparison view is restored to its original width
                     else 

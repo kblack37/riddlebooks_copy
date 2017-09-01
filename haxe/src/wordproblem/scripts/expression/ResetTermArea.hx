@@ -1,17 +1,17 @@
 package wordproblem.scripts.expression;
 
-import wordproblem.scripts.expression.UndoTermArea;
 
 import cgs.audio.Audio;
+import wordproblem.engine.events.DataEvent;
 
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 
-import starling.display.Button;
-import starling.display.DisplayObject;
-import starling.events.Event;
+import openfl.display.DisplayObject;
+import openfl.events.MouseEvent;
 
 import wordproblem.callouts.TooltipControl;
+import wordproblem.display.LabelButton;
 import wordproblem.engine.IGameEngine;
 import wordproblem.engine.expression.tree.ExpressionTree;
 import wordproblem.engine.scripting.graph.ScriptStatus;
@@ -19,10 +19,11 @@ import wordproblem.engine.widget.TermAreaWidget;
 import wordproblem.log.AlgebraAdventureLoggingConstants;
 import wordproblem.resource.AssetManager;
 import wordproblem.scripts.BaseGameScript;
+import wordproblem.scripts.expression.UndoTermArea;
 
 class ResetTermArea extends BaseGameScript
 {
-    private var m_resetButton : Button;
+    private var m_resetButton : LabelButton;
     
     /**
      * If null, starting expressions are empty for each term area
@@ -67,12 +68,12 @@ class ResetTermArea extends BaseGameScript
         {
             if (m_resetButton != null) 
             {
-                m_resetButton.removeEventListener(Event.TRIGGERED, resetTerm);
+                m_resetButton.removeEventListener(MouseEvent.CLICK, resetTerm);
             }
             
             if (value) 
             {
-                m_resetButton.addEventListener(Event.TRIGGERED, resetTerm);
+                m_resetButton.addEventListener(MouseEvent.CLICK, resetTerm);
             }
         }
     }
@@ -86,10 +87,10 @@ class ResetTermArea extends BaseGameScript
         return ScriptStatus.SUCCESS;
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
-        m_resetButton = try cast(m_gameEngine.getUiEntity("resetButton"), Button) catch(e:Dynamic) null;
+        super.onLevelReady(event);
+        m_resetButton = try cast(m_gameEngine.getUiEntity("resetButton"), LabelButton) catch(e:Dynamic) null;
         
         m_toolTipControl = new TooltipControl(m_gameEngine, "resetButton", "Reset");
         
@@ -97,7 +98,7 @@ class ResetTermArea extends BaseGameScript
         setIsActive(m_isActive);
     }
     
-    private function resetTerm() : Void
+    private function resetTerm(event : Dynamic) : Void
     {
         Audio.instance.playSfx("button_click");
         
@@ -144,16 +145,14 @@ class ResetTermArea extends BaseGameScript
             var termArea : TermAreaWidget = try cast(termAreas[i], TermAreaWidget) catch(e:Dynamic) null;
             termArea.setTree(new ExpressionTree(m_expressionCompiler.getVectorSpace(), expressionRoot));
             termArea.redrawAfterModification();
-        }  // Signal that a reset was triggered  
-        
-        
-        
+        }
+		
+		// Signal that a reset was triggered  
         var loggingDetails : Dynamic = {
             buttonName : "ResetButton"
-
         };
-        m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.BUTTON_PRESSED_EVENT, false, loggingDetails);
-        m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.RESET_EQUATION, false, loggingDetails);
+        m_gameEngine.dispatchEvent(new DataEvent(AlgebraAdventureLoggingConstants.BUTTON_PRESSED_EVENT, loggingDetails));
+        m_gameEngine.dispatchEvent(new DataEvent(AlgebraAdventureLoggingConstants.RESET_EQUATION, loggingDetails));
         
         if (undoTermArea != null && undoWasActive) 
         {

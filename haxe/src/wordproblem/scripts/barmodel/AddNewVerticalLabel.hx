@@ -1,16 +1,17 @@
 package wordproblem.scripts.barmodel;
 
+import wordproblem.engine.events.DataEvent;
 import wordproblem.scripts.barmodel.BaseBarModelScript;
 import wordproblem.scripts.barmodel.IHitAreaScript;
 
-import flash.geom.Point;
-import flash.geom.Rectangle;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
 
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 
-import starling.display.DisplayObjectContainer;
-import starling.textures.Texture;
+import openfl.display.BitmapData;
+import openfl.display.DisplayObjectContainer;
 
 import wordproblem.engine.IGameEngine;
 import wordproblem.engine.barmodel.model.BarLabel;
@@ -76,7 +77,7 @@ class AddNewVerticalLabel extends BaseBarModelScript implements IHitAreaScript
         if (m_ready && m_isActive) 
         {
             m_globalMouseBuffer.setTo(m_mouseState.mousePositionThisFrame.x, m_mouseState.mousePositionThisFrame.y);
-            m_barModelArea.globalToLocal(m_globalMouseBuffer, m_localMouseBuffer);
+            m_localMouseBuffer = m_barModelArea.globalToLocal(m_globalMouseBuffer);
             
             if (m_eventTypeBuffer.length > 0) 
             {
@@ -92,18 +93,16 @@ class AddNewVerticalLabel extends BaseBarModelScript implements IHitAreaScript
                     // If the value is a number use it directly, for variables check if there is a more descriptive name
                     var previousModelDataSnapshot : BarModelData = m_barModelArea.getBarModelData().clone();
                     addNewVerticalBracket(m_barModelArea.getBarModelData().verticalBarLabels, releasedExpressionNode.data, m_barModelArea.getBarModelData().barWholes.length - 1);
-                    m_eventDispatcher.dispatchEventWith(GameEvent.BAR_MODEL_AREA_CHANGE, false, {
+                    m_eventDispatcher.dispatchEvent(new DataEvent(GameEvent.BAR_MODEL_AREA_CHANGE, {
                                 previousSnapshot : previousModelDataSnapshot
-
-                            });
+                            }));
                     m_barModelArea.redraw();
                     
                     // Log addition to new label spanning whole bars
-                    m_eventDispatcher.dispatchEventWith(AlgebraAdventureLoggingConstants.ADD_NEW_VERTICAL_LABEL, false, {
+                    m_eventDispatcher.dispatchEvent(new DataEvent(AlgebraAdventureLoggingConstants.ADD_NEW_VERTICAL_LABEL, {
                                 barModel : m_barModelArea.getBarModelData().serialize(),
                                 value : releasedExpressionNode.data,
-
-                            });
+                            }));
                     
                     status = ScriptStatus.SUCCESS;
                 }
@@ -172,17 +171,17 @@ class AddNewVerticalLabel extends BaseBarModelScript implements IHitAreaScript
     
     public function postProcessHitAreas(hitAreas : Array<Rectangle>, hitAreaGraphics : Array<DisplayObjectContainer>) : Void
     {
-        var leftBracketTexture : Texture = m_assetManager.getTexture("bracket_left_edge");
-        var rightBracketTexture : Texture = m_assetManager.getTexture("bracket_right_edge");
-        var middleBracketTexture : Texture = m_assetManager.getTexture("bracket_middle");
-        var fullBracketTexture : Texture = m_assetManager.getTexture("bracket_full");
+        var leftBracketBitmapData : BitmapData = m_assetManager.getBitmapData("bracket_left_edge");
+        var rightBracketBitmapData : BitmapData = m_assetManager.getBitmapData("bracket_right_edge");
+        var middleBracketBitmapData : BitmapData = m_assetManager.getBitmapData("bracket_middle");
+        var fullBracketBitmapData : BitmapData = m_assetManager.getBitmapData("bracket_full");
         var i : Int = 0;
         var numHitAreas : Int = hitAreas.length;
         for (i in 0...numHitAreas){
             var hitArea : Rectangle = hitAreas[i];
             var dummyBarLabel : BarLabel = new BarLabel(null, 0, 0, false, false, BarLabel.BRACKET_STRAIGHT, null);
             var bracketView : BarLabelView = new BarLabelView(dummyBarLabel, "Verdana", 0xFFFFFF, 
-            leftBracketTexture, rightBracketTexture, middleBracketTexture, fullBracketTexture, 
+            leftBracketBitmapData, rightBracketBitmapData, middleBracketBitmapData, fullBracketBitmapData, 
             null, null, false, null);
             
             var verticalPadding : Float = 4;

@@ -1,22 +1,25 @@
 package wordproblem.scripts.expression;
 
+import dragonbox.common.util.XColor;
+import motion.Actuate;
+import motion.easing.Expo;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.events.Event;
+import wordproblem.display.PivotSprite;
+import wordproblem.display.Scale9Image;
 import wordproblem.scripts.expression.BaseTermAreaScript;
 
-import flash.geom.Point;
-import flash.geom.Rectangle;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
 
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.ExpressionUtil;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 
-import starling.animation.Transitions;
-import starling.animation.Tween;
-import starling.core.Starling;
-import starling.display.DisplayObject;
-import starling.display.DisplayObjectContainer;
-import starling.display.Image;
-import starling.display.Sprite;
-import starling.textures.Texture;
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
+import openfl.display.Sprite;
 
 import wordproblem.display.Layer;
 import wordproblem.engine.IGameEngine;
@@ -46,7 +49,7 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
     private var m_parenthesisButton : Layer;
     
     // Stuff related to the drawing of the button
-    private var m_buttonBackground : Image;
+    private var m_buttonBackground : Scale9Image;
     
     /**
      * A copy of the left paren to show when the player is dragging an edge
@@ -135,10 +138,10 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
         m_draggedRightParenthesisImage = createParenthesisImage("parentheses_right");
         
         m_draggedWholeParenthesis = new Sprite();
-        var leftParenImage : Image = createParenthesisImage("parentheses_left");
+        var leftParenImage : DisplayObject = createParenthesisImage("parentheses_left");
         m_draggedWholeParenthesis.addChild(leftParenImage);
         leftParenImage.x = -leftParenImage.width;
-        var rightParenImage : Image = createParenthesisImage("parentheses_right");
+        var rightParenImage : DisplayObject = createParenthesisImage("parentheses_right");
         m_draggedWholeParenthesis.addChild(rightParenImage);
         rightParenImage.x = rightParenImage.width;
         
@@ -158,9 +161,10 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
         this.setIsActive(m_isActive);
     }
     
-    private function createParenthesisImage(textureName : String) : Image
+    private function createParenthesisImage(bitmapDataName : String) : DisplayObject
     {
-        var parenthesisImage : Image = new Image(m_assetManager.getTexture(textureName));
+        var parenthesisImage : PivotSprite = new PivotSprite();
+		parenthesisImage.addChild(new Bitmap(m_assetManager.getBitmapData(bitmapDataName)));
         parenthesisImage.pivotX = parenthesisImage.width * 0.5;
         parenthesisImage.pivotY = parenthesisImage.height * 0.5;
         return parenthesisImage;
@@ -170,10 +174,15 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
     {
         super.dispose();
         
-        m_draggedLeftParenthesisImage.removeFromParent(true);
-        m_draggedRightParenthesisImage.removeFromParent(true);
-        m_draggedWholeParenthesis.removeFromParent(true);
-        m_parenthesisButton.removeFromParent(true);
+		if (m_draggedLeftParenthesisImage.parent != null) m_draggedLeftParenthesisImage.parent.removeChild(m_draggedLeftParenthesisImage);
+		m_draggedLeftParenthesisImage = null;
+		if (m_draggedRightParenthesisImage.parent != null) m_draggedRightParenthesisImage.parent.removeChild(m_draggedRightParenthesisImage);
+		m_draggedRightParenthesisImage = null;
+		if (m_draggedWholeParenthesis.parent != null) m_draggedWholeParenthesis.parent.removeChild(m_draggedWholeParenthesis);
+		m_draggedWholeParenthesis = null;
+		if (m_parenthesisButton.parent != null) m_parenthesisButton.parent.removeChild(m_parenthesisButton);
+		m_parenthesisButton.dispose();
+		m_parenthesisButton = null;
     }
     
     override public function setIsActive(value : Bool) : Void
@@ -192,13 +201,13 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
                 // Make sure the dragged paren images are removed when deactivated
                 if (m_draggedParenImage != null) 
                 {
-                    m_draggedParenImage.removeFromParent();
+					if (m_draggedParenImage.parent != null) m_draggedParenImage.parent.removeChild(m_draggedParenImage);
                     m_draggedParenImage = null;
                 }
-                m_draggedWholeParenthesis.removeFromParent();
+				if (m_draggedWholeParenthesis.parent != null) m_draggedWholeParenthesis.parent.removeChild(m_draggedWholeParenthesis);
                 
                 // Make sure the paren button is deactived as well
-                m_buttonBackground.color = m_inactiveColor;
+				m_buttonBackground.transform.colorTransform = XColor.rgbToColorTransform(m_inactiveColor);
                 m_parenthesisButton.alpha = 1.0;
             }
         }
@@ -223,7 +232,7 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
 				m_outParamsBuffer = new Array<Dynamic>();
                 if (m_mouseState.leftMouseReleasedThisFrame) 
                 {
-                    m_draggedWholeParenthesis.removeFromParent();
+					if (m_draggedWholeParenthesis.parent != null) m_draggedWholeParenthesis.parent.removeChild(m_draggedWholeParenthesis);
                     
                     if (this.getTermWidgetUnderPoint(m_globalPointBuffer, m_outParamsBuffer)) 
                     {
@@ -233,12 +242,11 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
                         widgetToAddParenthesisTo.getNode().wrapInParentheses = true;
                         termArea.redrawAfterModification();
                         
-                        m_eventDispatcher.dispatchEventWith(GameEvent.EQUATION_CHANGED);
-                    }  // Revert the color of the button background to inactive state  
-                    
-                    
-                    
-                    m_buttonBackground.color = m_inactiveColor;
+                        m_eventDispatcher.dispatchEvent(new Event(GameEvent.EQUATION_CHANGED));
+                    } 
+					
+					// Revert the color of the button background to inactive state  
+					m_buttonBackground.transform.colorTransform = XColor.rgbToColorTransform(m_inactiveColor);
                     m_parenthesisButton.alpha = 1.0;
                 }
                 else 
@@ -321,18 +329,17 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
                         
                         m_termAreaWithParenthesisToMove.getTree().addParenenthesis(m_widgetAnchoredAtEdge.getNode(), baseTermWidget.getNode());
                         m_termAreaWithParenthesisToMove.redrawAfterModification();
-                        m_eventDispatcher.dispatchEventWith(GameEvent.EQUATION_CHANGED);
-                    }  // Based on horizontal position move the bounds of the parens over  
-                    
-                    
-                    
+                        m_eventDispatcher.dispatchEvent(new Event(GameEvent.EQUATION_CHANGED));
+                    }  
+					
+					// Based on horizontal position move the bounds of the parens over  
                     m_termAreaWithParenthesisToMove = null;
                     m_widgetWithParenthesisToMove = null;
                     
                     // Remove dragged paren
                     if (m_draggedParenImage != null) 
                     {
-                        m_draggedParenImage.removeFromParent();
+						if (m_draggedParenImage.parent != null) m_draggedParenImage.parent.removeChild(m_draggedParenImage);
                         m_draggedParenImage = null;
                         m_draggedParenSourceImage.alpha = 1.0;
                     }
@@ -347,7 +354,7 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
                     {
                         if (m_draggedParenImage != null) 
                         {
-                            m_draggedParenCanvas.globalToLocal(m_globalPointBuffer, m_localPointBuffer);
+                            m_localPointBuffer = m_draggedParenCanvas.globalToLocal(m_globalPointBuffer);
                             var localToGlobalYDelta : Float = m_localPointBuffer.y - m_globalPointBuffer.y;
                             
                             m_draggedParenImage.y = m_fixedYForDraggedParenthesis + localToGlobalYDelta;
@@ -371,25 +378,21 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
                         // Remove dragged paren
                         if (m_draggedParenImage != null) 
                         {
-                            m_draggedParenImage.removeFromParent();
+							if (m_draggedParenImage.parent != null) m_draggedParenImage.parent.removeChild(m_draggedParenImage);
                             m_draggedParenImage = null;
                             m_draggedParenSourceImage.alpha = 1.0;
                         }
                         
-                        m_eventDispatcher.dispatchEventWith(GameEvent.EQUATION_CHANGED);
+                        m_eventDispatcher.dispatchEvent(new Event(GameEvent.EQUATION_CHANGED));
                     }
                 }
                 
                 m_bufferedStatus = ScriptStatus.SUCCESS;
             }
             
-            
-            
-            
-            
             if (m_mouseState.leftMousePressedThisFrame) 
             {
-                m_parenthesisButton.getBounds(m_parenthesisButton.stage, m_hitBoundsBuffer);
+                m_hitBoundsBuffer = m_parenthesisButton.getBounds(m_parenthesisButton.stage);
                 
                 // If the mouse hit the button had started a drag on the parens
                 if (m_hitBoundsBuffer.containsPoint(m_globalPointBuffer)) 
@@ -397,24 +400,19 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
                     m_draggedParenCanvas.addChild(m_draggedWholeParenthesis);
                     
                     // Have short animation of the paren popping in
-                    var parenTween : Tween = new Tween(m_draggedWholeParenthesis, 0.4, Transitions.EASE_OUT);
-                    m_draggedWholeParenthesis.scaleX = m_draggedWholeParenthesis.scaleY = 0.0;
-                    parenTween.scaleTo(1.0);
-                    Starling.current.juggler.add(parenTween);
+					Actuate.tween(m_draggedWholeParenthesis, 0.4, { scaleX: 1.0, scaleY: 1.0 }).ease(Expo.easeOut);
                     
                     // Change color to active
-                    m_buttonBackground.color = m_activeColor;
+					m_buttonBackground.transform.colorTransform = XColor.rgbToColorTransform(m_activeColor);
                     m_parenthesisButton.alpha = 0.7;
                 }
-            }  // to the canvas    // Update position of dragged parens, the coordinates should be relative  
-            
-            
-            
-            
-            
+            }  
+			
+			// Update position of dragged parens, the coordinates should be relative  
+            // to the canvas  
             if (m_draggedWholeParenthesis.parent != null) 
             {
-                m_draggedParenCanvas.globalToLocal(m_globalPointBuffer, m_localPointBuffer);
+                m_localPointBuffer = m_draggedParenCanvas.globalToLocal(m_globalPointBuffer);
                 m_draggedWholeParenthesis.x = m_localPointBuffer.x;
                 m_draggedWholeParenthesis.y = m_localPointBuffer.y;
             }
@@ -490,9 +488,9 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
         }
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         m_draggedParenCanvas = m_gameEngine.getSprite();
         commonInit(try cast(m_gameEngine.getUiEntity("parenthesisButton"), DisplayObjectContainer) catch(e:Dynamic) null);
@@ -509,23 +507,25 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
         var parenthesisButtonWidth : Float = 50;
         var parenthesisButtonHeight : Float = 50;
         
-        var backgroundTexture : Texture = m_assetManager.getTexture("card_background_square");
+        var backgroundBitmapData : BitmapData = m_assetManager.getBitmapData("card_background_square");
         var cornerPadding : Float = 8;
-        m_buttonBackground = new Image(Texture.fromTexture(
-                backgroundTexture, 
-                new Rectangle(cornerPadding, cornerPadding, backgroundTexture.width - 2 * cornerPadding, backgroundTexture.height - 2 * cornerPadding)
-        ));
-        m_buttonBackground.color = m_inactiveColor;
+        m_buttonBackground = new Scale9Image(backgroundBitmapData, new Rectangle(
+			cornerPadding,
+			cornerPadding,
+			backgroundBitmapData.width - 2 * cornerPadding,
+			backgroundBitmapData.height - 2 * cornerPadding
+		));
+		m_buttonBackground.transform.colorTransform = XColor.rgbToColorTransform(m_inactiveColor);
         m_buttonBackground.width = parenthesisButtonWidth;
         m_buttonBackground.height = parenthesisButtonHeight;
         
         var parenthesisButton : Layer = new Layer();
         var iconContainer : Sprite = new Sprite();
-        var leftParenImage : Image = new Image(m_assetManager.getTexture("parentheses_left"));
+        var leftParenImage : Bitmap = new Bitmap(m_assetManager.getBitmapData("parentheses_left"));
         var parenScaleFactor : Float = 0.7;
         leftParenImage.scaleX = leftParenImage.scaleY = parenScaleFactor;
         iconContainer.addChild(leftParenImage);
-        var rightParenImage : Image = new Image(m_assetManager.getTexture("parentheses_right"));
+        var rightParenImage : Bitmap = new Bitmap(m_assetManager.getBitmapData("parentheses_right"));
         rightParenImage.scaleX = rightParenImage.scaleY = parenScaleFactor;
         rightParenImage.x = leftParenImage.x + leftParenImage.width * 2;
         iconContainer.addChild(rightParenImage);
@@ -568,7 +568,7 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
         // Check whether we are moving the left or the right paren, as this determines the side of the bounds
         // we are comparing
         var foundWidget : Bool = false;
-        m_termAreaWithParenthesisToMove.globalToLocal(globalPoint, m_localPointBuffer);
+        m_localPointBuffer = m_termAreaWithParenthesisToMove.globalToLocal(globalPoint);
         
         // TODO:
         // Left paren cannot move to right of original location
@@ -651,12 +651,6 @@ class AddAndChangeParenthesis extends BaseTermAreaScript
                 i--;
             }
         }
-        
-        
-        
-        
-        
-        
         
         return foundWidget;
     }

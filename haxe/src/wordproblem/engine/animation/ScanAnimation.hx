@@ -4,19 +4,15 @@ package wordproblem.engine.animation;
 import openfl.display3D.IndexBuffer3D;
 import openfl.display3D.VertexBuffer3D;
 
-import starling.animation.IAnimatable;
-import starling.core.RenderSupport;
-import starling.core.Starling;
-import starling.display.DisplayObject;
-import starling.filters.ScanLineFilter;
-import starling.textures.Texture;
+import openfl.display.DisplayObject;
 
 /**
  * This animation takes a list of views and animates a colored line scanning over the
  * width of that view.
  * 
  */
-class ScanAnimation implements IAnimatable
+// TODO: this class needs to be redesigned after the removal of starling
+class ScanAnimation 
 {
     /**
      * Keep a list of all the views to apply the scan line to
@@ -43,7 +39,7 @@ class ScanAnimation implements IAnimatable
      * From the set of available scan objects, this is the filter that applies the
      * line to the current display object
      */
-    private var m_scanLineFilter : ScanLineFilter;
+    //private var m_scanLineFilter : ScanLineFilter;
     
     /**
      * The index of the view that has the scan animation
@@ -140,10 +136,9 @@ class ScanAnimation implements IAnimatable
             // Calculate the actual end bound of the texture
             var maxBound : Float = actualWidth / textureWidth;
             m_viewTextureEndRatio.push(maxBound);
-        }  // Pick the first view to draw the scanline onto  
-        
-        
-        
+        } 
+		
+		// Pick the first view to draw the scanline onto  
         m_currentViewIndex = 0;
         
         // The width of the scan line needs to be converted to a ratio
@@ -154,23 +149,20 @@ class ScanAnimation implements IAnimatable
         
         // Apply the filter to the view
         var currentView : DisplayObject = m_views[m_currentViewIndex];
-        m_scanLineFilter = new ScanLineFilter(m_color, -1 * scanWidthRatio, 0.0);
-        currentView.filter = m_scanLineFilter;
+        //m_scanLineFilter = new ScanLineFilter(m_color, -1 * scanWidthRatio, 0.0);
+        //currentView.filter = m_scanLineFilter;
         
-        Starling.current.juggler.add(this);
     }
     
     public function stop() : Void
     {
-        Starling.current.juggler.remove(this);
-        
         // Kill the current filter
         if (m_views != null) 
         {
             var currentView : DisplayObject = m_views[m_currentViewIndex];
-            currentView.filter = null;
+            //currentView.filter = null;
             
-            m_scanLineFilter.dispose();
+            //m_scanLineFilter.dispose();
         }
     }
     
@@ -191,37 +183,36 @@ class ScanAnimation implements IAnimatable
             var ratioToProgress : Float = pixelsToProgress / currentTextureWidth;
             
             // Increment the bounds and clamp them
-            var newMinBound : Float = m_scanLineFilter.getMinBound() + ratioToProgress;
-            var newMaxBound : Float = m_scanLineFilter.getMaxBound() + ratioToProgress;
-            if (newMinBound > m_viewTextureEndRatio[m_currentViewIndex]) 
-            {
-                var previousView : DisplayObject = m_views[m_currentViewIndex];
-                previousView.filter = null;
-                
-                // Remove the filter from the view and add it to the next one in the list
-                m_currentViewIndex++;
-                if (m_currentViewIndex >= m_views.length) 
-                {
-                    m_currentViewIndex = 0;
-                    
-                    // Might need to activate the delay
-                    m_delayCounter = 0.0;
-                }
-                
-                var nextView : DisplayObject = m_views[m_currentViewIndex];
-                nextView.filter = m_scanLineFilter;
-                
-                var textureWidth : Float = m_viewTextureWidths[m_currentViewIndex];
-                var scanWidthRatio : Float = m_scanWidth / textureWidth;
-                
-                newMinBound = -1 * scanWidthRatio;
-                newMaxBound = 0.0;
-            }  // Update the bounds of the scan line  
-            
-            
-            
-            m_scanLineFilter.setMinBound(newMinBound);
-            m_scanLineFilter.setMaxBound(newMaxBound);
+            //var newMinBound : Float = m_scanLineFilter.getMinBound() + ratioToProgress;
+            //var newMaxBound : Float = m_scanLineFilter.getMaxBound() + ratioToProgress;
+            //if (newMinBound > m_viewTextureEndRatio[m_currentViewIndex]) 
+            //{
+                //var previousView : DisplayObject = m_views[m_currentViewIndex];
+                //previousView.filter = null;
+                //
+                //// Remove the filter from the view and add it to the next one in the list
+                //m_currentViewIndex++;
+                //if (m_currentViewIndex >= m_views.length) 
+                //{
+                    //m_currentViewIndex = 0;
+                    //
+                    //// Might need to activate the delay
+                    //m_delayCounter = 0.0;
+                //}
+                //
+                //var nextView : DisplayObject = m_views[m_currentViewIndex];
+                //nextView.filter = m_scanLineFilter;
+                //
+                //var textureWidth : Float = m_viewTextureWidths[m_currentViewIndex];
+                //var scanWidthRatio : Float = m_scanWidth / textureWidth;
+                //
+                //newMinBound = -1 * scanWidthRatio;
+                //newMaxBound = 0.0;
+            //} 
+			
+			// Update the bounds of the scan line  
+            //m_scanLineFilter.setMinBound(newMinBound);
+            //m_scanLineFilter.setMaxBound(newMaxBound);
         }
         else 
         {

@@ -1,8 +1,13 @@
 package wordproblem.levelselect;
 
 
-import flash.geom.Rectangle;
-import flash.text.TextFormat;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.events.MouseEvent;
+import openfl.geom.Rectangle;
+import openfl.text.TextFormat;
+import openfl.text.TextFormatAlign;
+import wordproblem.display.PivotSprite;
 
 import cgs.audio.Audio;
 
@@ -10,15 +15,11 @@ import dragonbox.common.ui.MouseState;
 
 import haxe.Constraints.Function;
 
-import starling.display.Button;
-import starling.display.DisplayObject;
-import starling.display.Image;
-import starling.display.Quad;
-import starling.display.Sprite;
-import starling.events.Event;
-import starling.text.TextField;
-import starling.textures.Texture;
-import starling.utils.HAlign;
+import wordproblem.display.LabelButton;
+import openfl.display.DisplayObject;
+import openfl.display.Sprite;
+import openfl.events.Event;
+import openfl.text.TextField;
 
 import wordproblem.engine.text.GameFonts;
 import wordproblem.engine.widget.WidgetUtil;
@@ -41,8 +42,8 @@ class LevelSetSelector extends Sprite
     
     private var m_background : DisplayObject;
     private var m_backgroundBoundsBuffer : Rectangle;
-    private var m_prevPageButton : Button;
-    private var m_nextPageButton : Button;
+    private var m_prevPageButton : LabelButton;
+    private var m_nextPageButton : LabelButton;
     
     private var m_assetManager : AssetManager;
     private var m_onLevelSelectedCallback : Function;
@@ -73,11 +74,12 @@ class LevelSetSelector extends Sprite
         m_onLevelSelectedCallback = onLevelSelectedCallback;
         m_onDismissCallback = onDismissCallback;
         
-        var arrowTexture : Texture = assetManager.getTexture("arrow_short");
-        var disablingQuad : Quad = new Quad(screenWidth, screenHeight, 0x000000);
+        var arrowBitmapData : BitmapData = assetManager.getBitmapData("arrow_short");
+        var disablingQuad : Bitmap = new Bitmap(new BitmapData(screenWidth, screenHeight, false, 0x000000));
         disablingQuad.alpha = 0.5;
         addChild(disablingQuad);
-        var background : Image = new Image(assetManager.getTexture("summary_background"));
+		
+        var background : Bitmap = new Bitmap(assetManager.getBitmapData("summary_background"));
         background.scaleX = background.scaleY = 0.75;
         background.x = (screenWidth - background.width) * 0.5;
         background.y = (screenHeight - background.height) * 0.5;
@@ -85,24 +87,31 @@ class LevelSetSelector extends Sprite
         m_background = background;
         m_backgroundBoundsBuffer = new Rectangle();
         
-        m_selectorTitle = new TextField(screenWidth, 50, "", GameFonts.DEFAULT_FONT_NAME, 24, 0xFFFFFF);
-        m_selectorTitle.hAlign = HAlign.CENTER;
+        m_selectorTitle = new TextField();
+		m_selectorTitle.width = screenWidth;
+		m_selectorTitle.height = 50;
+		m_selectorTitle.text = "";
+		m_selectorTitle.setTextFormat(new TextFormat(GameFonts.DEFAULT_FONT_NAME, 24, 0xFFFFFF));
         m_selectorTitle.y = background.y + 15;  // extra space because of border around background image  
         addChild(m_selectorTitle);
+		
         m_buttonCanvas = new Sprite();
         addChild(m_buttonCanvas);
-        m_buttonCanvasBounds = new Rectangle(0, 0, background.width - (5 * arrowTexture.width), background.height - m_selectorTitle.height);
+        m_buttonCanvasBounds = new Rectangle(0, 0, background.width - (5 * arrowBitmapData.width), background.height - m_selectorTitle.height);
         m_buttonCanvas.x = background.x + (background.width - m_buttonCanvasBounds.width) * 0.5;
         m_buttonCanvas.y = m_selectorTitle.y + m_selectorTitle.height;
         
-        m_progressIndicator = new TextField(screenWidth, 50, "", GameFonts.DEFAULT_FONT_NAME, 18, 0xFFFFFF);
-        m_progressIndicator.hAlign = HAlign.CENTER;
+        m_progressIndicator = new TextField();
+		m_progressIndicator.width = screenWidth;
+		m_progressIndicator.height = 50;
+		m_progressIndicator.text = "";
+		m_progressIndicator.setTextFormat(new TextFormat(GameFonts.DEFAULT_FONT_NAME, 18, 0xFFFFFF, null, null, null, null, null, TextFormatAlign.CENTER));
         m_progressIndicator.y = background.y + background.height - (m_progressIndicator.height + 5);
         addChild(m_progressIndicator);
         
         var pageChangeButtonScaleFactor : Float = 1.25;
-        var leftUpImage : Image = WidgetUtil.createPointingArrow(arrowTexture, true, pageChangeButtonScaleFactor);
-        var leftOverImage : Image = WidgetUtil.createPointingArrow(arrowTexture, true, pageChangeButtonScaleFactor, 0xCCCCCC);
+        var leftUpImage : DisplayObject = WidgetUtil.createPointingArrow(arrowBitmapData, true, pageChangeButtonScaleFactor);
+        var leftOverImage : DisplayObject = WidgetUtil.createPointingArrow(arrowBitmapData, true, pageChangeButtonScaleFactor, 0xCCCCCC);
         m_prevPageButton = WidgetUtil.createButtonFromImages(
                         leftUpImage,
                         leftOverImage,
@@ -112,13 +121,13 @@ class LevelSetSelector extends Sprite
                         null,
                         null
                         );
-        m_prevPageButton.scaleWhenDown = 0.9;
-        m_prevPageButton.addEventListener(Event.TRIGGERED, onPrevTriggered);
-        m_prevPageButton.x = background.x + arrowTexture.width * 0.5;
-        m_prevPageButton.y = background.y + (background.height - arrowTexture.height) * 0.5;
+		m_prevPageButton.scaleWhenDown = 0.9;
+        m_prevPageButton.addEventListener(MouseEvent.CLICK, onPrevTriggered);
+        m_prevPageButton.x = background.x + arrowBitmapData.width * 0.5;
+        m_prevPageButton.y = background.y + (background.height - arrowBitmapData.height) * 0.5;
         
-        var rightUpImage : Image = WidgetUtil.createPointingArrow(arrowTexture, false, pageChangeButtonScaleFactor, 0xFFFFFF);
-        var rightOverImage : Image = WidgetUtil.createPointingArrow(arrowTexture, false, pageChangeButtonScaleFactor, 0xCCCCCC);
+        var rightUpImage : DisplayObject = WidgetUtil.createPointingArrow(arrowBitmapData, false, pageChangeButtonScaleFactor, 0xFFFFFF);
+        var rightOverImage : DisplayObject = WidgetUtil.createPointingArrow(arrowBitmapData, false, pageChangeButtonScaleFactor, 0xCCCCCC);
         m_nextPageButton = WidgetUtil.createButtonFromImages(
                         rightUpImage,
                         rightOverImage,
@@ -129,8 +138,8 @@ class LevelSetSelector extends Sprite
                         null
                         );
         m_nextPageButton.scaleWhenDown = m_prevPageButton.scaleWhenDown;
-        m_nextPageButton.addEventListener(Event.TRIGGERED, onNextTriggered);
-        m_nextPageButton.x = background.x + background.width - arrowTexture.width * 1.5;
+        m_nextPageButton.addEventListener(MouseEvent.CLICK, onNextTriggered);
+        m_nextPageButton.x = background.x + background.width - arrowBitmapData.width * 1.5;
         m_nextPageButton.y = m_prevPageButton.y;
         
 		// TODO: uncomment once layout replacement is designed
@@ -152,7 +161,7 @@ class LevelSetSelector extends Sprite
         // If clicked outside the background area, close the selector
         if (mouseState.leftMousePressedThisFrame) 
         {
-            m_background.getBounds(this.stage, m_backgroundBoundsBuffer);
+            m_backgroundBoundsBuffer = m_background.getBounds(this.stage);
             if (!m_backgroundBoundsBuffer.contains(mouseState.mousePositionThisFrame.x, mouseState.mousePositionThisFrame.y) &&
                 m_onDismissCallback != null) 
             {
@@ -193,11 +202,11 @@ class LevelSetSelector extends Sprite
     public function close() : Void
     {
         clearPage();
-        m_prevPageButton.removeFromParent();
-        m_nextPageButton.removeFromParent();
+        if (m_prevPageButton.parent != null) m_prevPageButton.parent.removeChild(m_prevPageButton);
+        if (m_nextPageButton.parent != null) m_nextPageButton.parent.removeChild(m_nextPageButton);
     }
     
-    private function onPrevTriggered() : Void
+    private function onPrevTriggered(event : Dynamic) : Void
     {
         Audio.instance.playSfx("button_click");
         
@@ -216,7 +225,7 @@ class LevelSetSelector extends Sprite
         fillPageWithButtons(m_currentPageIndex);
     }
     
-    private function onNextTriggered() : Void
+    private function onNextTriggered(event : Dynamic) : Void
     {
         Audio.instance.playSfx("button_click");
         
@@ -248,8 +257,8 @@ class LevelSetSelector extends Sprite
         var i : Int = 0;
         for (i in startingLevelIndex...endLevelIndex){
             // Draw button for this level
-            var levelButton : Button = WidgetUtil.createButtonFromImages(
-                    new Image(m_assetManager.getTexture("fantasy_button_up")),
+            var levelButton : LabelButton = WidgetUtil.createButtonFromImages(
+                    new Bitmap(m_assetManager.getBitmapData("fantasy_button_up")),
                     null,
                     null,
                     null,
@@ -259,14 +268,15 @@ class LevelSetSelector extends Sprite
                     );
             levelButton.scaleWhenDown = 0.9;
             levelButton.scaleWhenOver = 1.1;
-            levelButton.addEventListener(Event.TRIGGERED, onLevelSelected);
+            levelButton.addEventListener(MouseEvent.CLICK, onLevelSelected);
             
             // Draw the star or lock icon
             var levelNode : WordProblemLevelLeaf = m_currentLevelNodes[i];
             if (levelNode.isComplete) 
             {
                 // If the level is completed, draw a star at the top left corner
-                var starImage : Image = new Image(m_assetManager.getTexture("level_button_star"));
+                var starImage : PivotSprite = new PivotSprite();
+				starImage.addChild(new Bitmap(m_assetManager.getBitmapData("level_button_star")));
                 starImage.pivotX = starImage.width * 0.5;
                 starImage.pivotY = starImage.height * 0.5;
                 starImage.x = 6;
@@ -287,23 +297,24 @@ class LevelSetSelector extends Sprite
         while (m_buttonCanvas.numChildren > 0)
         {
             var child : DisplayObject = m_buttonCanvas.getChildAt(0);
-            if (Std.is(child, Button)) 
+            if (Std.is(child, LabelButton)) 
             {
-                child.removeEventListener(Event.TRIGGERED, onLevelSelected);
+                child.removeEventListener(MouseEvent.CLICK, onLevelSelected);
             }
             
-            child.removeFromParent(true);
+			if (child.parent != null) child.parent.removeChild(child);
+			child = null;
         }
     }
     
-    private function onLevelSelected(event : Event) : Void
+    private function onLevelSelected(event : Dynamic) : Void
     {
         // Assum the label on the button will give us the index of the node to use
-        var target : Button = try cast(event.target, Button) catch(e:Dynamic) null;
+        var target : LabelButton = try cast(event.target, LabelButton) catch(e:Dynamic) null;
         if (target != null) 
         {
             Audio.instance.playSfx("button_click");
-            var levelIndex : Int = Std.parseInt(target.text) - 1;
+            var levelIndex : Int = Std.parseInt(target.label) - 1;
             if (levelIndex >= 0 && levelIndex < m_currentLevelNodes.length && m_onLevelSelectedCallback != null) 
             {
                 m_onLevelSelectedCallback(m_currentLevelNodes[levelIndex]);

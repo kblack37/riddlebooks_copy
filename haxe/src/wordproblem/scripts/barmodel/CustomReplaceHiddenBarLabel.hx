@@ -90,7 +90,7 @@ class CustomReplaceHiddenBarLabel extends BaseBarModelScript
                     
                     var previousModelDataSnapshot : BarModelData = m_barModelArea.getBarModelData().clone();
                     m_applyReplacementCallback(hitLabelId, isVertical, dataToAdd, m_barModelArea.getBarModelData());
-                    m_gameEngine.dispatchEventWith(GameEvent.BAR_MODEL_AREA_CHANGE, false, {
+                    m_gameEngine.dispatchEvent(GameEvent.BAR_MODEL_AREA_CHANGE, false, {
                                 previousSnapshot : previousModelDataSnapshot
 
                             });
@@ -168,7 +168,7 @@ class CustomReplaceHiddenBarLabel extends BaseBarModelScript
                 
                 if (barLabelView.data.hiddenValue != null) 
                 {
-                    barLabelView.getDescriptionDisplay().getBounds(m_barModelArea, m_labelDescriptionBounds);
+                    m_labelDescriptionBounds = barLabelView.getDescriptionDisplay().getBounds(m_barModelArea);
                     if (m_labelDescriptionBounds.containsPoint(m_localMouseBuffer)) 
                     {
                         outParams.push(barLabelView.data.id);
@@ -197,7 +197,7 @@ class CustomReplaceHiddenBarLabel extends BaseBarModelScript
                 
                 if (barLabelView.data.hiddenValue != null) 
                 {
-                    barLabelView.getDescriptionDisplay().getBounds(m_barModelArea, m_labelDescriptionBounds);
+                    m_labelDescriptionBounds = barLabelView.getDescriptionDisplay().getBounds(m_barModelArea);
                     if (m_labelDescriptionBounds.containsPoint(m_localMouseBuffer)) 
                     {
                         outParams.push(barLabelView.data.id);

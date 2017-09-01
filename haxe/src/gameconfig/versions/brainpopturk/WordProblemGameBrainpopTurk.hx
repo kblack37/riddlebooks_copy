@@ -51,7 +51,7 @@ import wordproblem.level.LevelNodeSaveKeys;
 import wordproblem.level.controller.WordProblemCgsLevelManager;
 import wordproblem.level.nodes.WordProblemLevelLeaf;
 import wordproblem.level.nodes.WordProblemLevelPack;
-import wordproblem.levelselect.scripts.DrawItemsOnShelves;
+//import wordproblem.levelselect.scripts.DrawItemsOnShelves;
 import wordproblem.player.ButtonColorData;
 import wordproblem.player.ChangeButtonColorScript;
 import wordproblem.player.ChangeCursorScript;
@@ -67,18 +67,19 @@ import wordproblem.scripts.items.DefaultGiveRewardScript;
 import wordproblem.scripts.level.save.UpdateAndSaveLevelDataScript;
 import wordproblem.scripts.performance.PerformanceAndStatsScript;
 import wordproblem.state.ChallengeTitleScreenState;
-import wordproblem.state.ExternalLoginTitleScreenState;
-import wordproblem.state.TOSState;
+//import wordproblem.state.ExternalLoginTitleScreenState;
+//import wordproblem.state.TOSState;
 import wordproblem.state.WordProblemGameState;
 import wordproblem.state.WordProblemLoadingState;
 import wordproblem.state.WordProblemSelectState;
-import wordproblem.summary.scripts.SummaryScript;
+//import wordproblem.summary.scripts.SummaryScript;
 import wordproblem.xp.PlayerXpModel;
 import wordproblem.xp.scripts.RevisedPlayerXPScript;
 
 /**
  * Main application for challenge type events using the word problem game.
  */
+// TODO: revisit animation when more basic elements are displayed properly
 class WordProblemGameBrainpopTurk extends WordProblemGameBase
 {
     private static var USE_LOGIN_SCREEN : Bool = true;
@@ -364,33 +365,33 @@ class WordProblemGameBrainpopTurk extends WordProblemGameBase
         // to detect this will need to look at the url.
         if (USE_LOGIN_SCREEN) 
         {
-            var titleScreenState : ExternalLoginTitleScreenState = new ExternalLoginTitleScreenState(
-            m_stateMachine, 
-            m_assetManager, 
-            m_config.getTeacherCode(), 
-            m_config.getSaveDataKey(), 
-            m_config.getSaveDataToServer(), 
-            m_logger, 
-            onContinueUserSelected, 
-            onNewUserSelected, 
-            ""
-            );
-            titleScreenState.addEventListener(CommandEvent.WAIT_HIDE, onWaitHide);
-            titleScreenState.addEventListener(CommandEvent.WAIT_SHOW, onWaitShow);
-            titleScreenState.addEventListener(CommandEvent.USER_AUTHENTICATED, onUserAuthenticated);
-            
-            m_stateMachine.register(titleScreenState);
-            
-            // Automatically go to the problem selection state
-            m_stateMachine.changeState(titleScreenState);
+            //var titleScreenState : ExternalLoginTitleScreenState = new ExternalLoginTitleScreenState(
+            //m_stateMachine, 
+            //m_assetManager, 
+            //m_config.getTeacherCode(), 
+            //m_config.getSaveDataKey(), 
+            //m_config.getSaveDataToServer(), 
+            //m_logger, 
+            //onContinueUserSelected, 
+            //onNewUserSelected, 
+            //""
+            //);
+            //titleScreenState.addEventListener(CommandEvent.WAIT_HIDE, onWaitHide);
+            //titleScreenState.addEventListener(CommandEvent.WAIT_SHOW, onWaitShow);
+            //titleScreenState.addEventListener(CommandEvent.USER_AUTHENTICATED, onUserAuthenticated);
+            //
+            //m_stateMachine.register(titleScreenState);
+            //
+            //// Automatically go to the problem selection state
+            //m_stateMachine.changeState(titleScreenState);
         }
         
-        var tosState : TOSState = new TOSState(m_stateMachine, m_assetManager, m_nativeFlashStage, function() : Void
-        {
-            // When the tos is completed, we start the game for the user
-            setupAndStartGameForUser();
-        });
-        m_stateMachine.register(tosState);
+        //var tosState : TOSState = new TOSState(m_stateMachine, m_assetManager, m_nativeFlashStage, function() : Void
+        //{
+            //// When the tos is completed, we start the game for the user
+            //setupAndStartGameForUser();
+        //});
+        //m_stateMachine.register(tosState);
         
         // HACK: Since edmodo and brainpop release versions are running the exact same experiments
         // and they have very slightly different external login procedures we need an extra flag to switch between them.
@@ -727,13 +728,13 @@ class WordProblemGameBrainpopTurk extends WordProblemGameBase
         // Link logging events to game engine
         m_logger.setGameEngine(gameEngine, wordProblemGameState);
         
-        m_fixedGlobalScript.pushChild(new DrawItemsOnShelves(
-                wordProblemSelectState, 
-                m_playerItemInventory, 
-                m_itemDataSource, 
-                m_assetManager, 
-                m_mainJuggler
-                ));
+        //m_fixedGlobalScript.pushChild(new DrawItemsOnShelves(
+                //wordProblemSelectState, 
+                //m_playerItemInventory, 
+                //m_itemDataSource, 
+                //m_assetManager, 
+                //m_mainJuggler
+                //));
         
         // Add scripts that have logic that operate across several levels.
         // This deals with things like handing out rewards or modifying rewards
@@ -747,10 +748,11 @@ class WordProblemGameBrainpopTurk extends WordProblemGameBase
         m_fixedGlobalScript.pushChild(new BaseAdvanceItemStageScript(gameEngine, playerItemInventory, itemDataSource, m_levelManager, "AdvanceStageScript"));
         m_fixedGlobalScript.pushChild(new BaseRevealItemScript(gameEngine, playerItemInventory, m_levelManager, null, "RevealItemScript"));
         m_fixedGlobalScript.pushChild(new CurrencyAwardedScript(gameEngine, playerCurrencyModel, m_playerXpModel));
-        m_fixedGlobalScript.pushChild(new SummaryScript(
-                wordProblemGameState, gameEngine, m_levelManager, 
-                m_assetManager, playerItemInventory, itemDataSource, m_playerXpModel, playerCurrencyModel, 
-                true, buttonColorData, "SummaryScript"));
+		// TODO: revisit summary screen when more basic elements are working
+        //m_fixedGlobalScript.pushChild(new SummaryScript(
+                //wordProblemGameState, gameEngine, m_levelManager, 
+                //m_assetManager, playerItemInventory, itemDataSource, m_playerXpModel, playerCurrencyModel, 
+                //true, buttonColorData, "SummaryScript"));
         
         m_fixedGlobalScript.pushChild(new UpdateAndSavePlayerStatsAndDataScript(wordProblemGameState, gameEngine, m_playerXpModel, m_playerStatsAndSaveData, playerItemInventory));
         

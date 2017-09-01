@@ -293,9 +293,9 @@ class IntroMultiplication extends BaseCustomLevelScript
         m_gameEngine.removeEventListener(GameEvent.EQUATION_MODEL_SUCCESS, bufferEvent);
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         super.disablePrevNextTextButtons();
         

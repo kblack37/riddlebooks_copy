@@ -2,8 +2,11 @@ package wordproblem.engine.expression.widget.manager;
 
 
 import dragonbox.common.math.vectorspace.RealsVectorSpace;
-import flash.geom.Point;
-import flash.geom.Rectangle;
+import motion.Actuate;
+import motion.actuators.GenericActuator;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
+import wordproblem.engine.events.DataEvent;
 
 import dragonbox.common.dispose.IDisposable;
 import dragonbox.common.expressiontree.ExpressionNode;
@@ -13,10 +16,8 @@ import dragonbox.common.math.util.MathUtil;
 import dragonbox.common.math.vectorspace.IVectorSpace;
 import dragonbox.common.ui.MouseState;
 
-import starling.animation.Tween;
-import starling.core.Starling;
-import starling.display.DisplayObject;
-import starling.events.Event;
+import openfl.display.DisplayObject;
+import openfl.events.Event;
 
 import wordproblem.engine.events.GameEvent;
 import wordproblem.engine.expression.ExpressionSymbolMap;
@@ -119,13 +120,13 @@ class SnapManager implements IDisposable
      * For multiply and divide previews, we create a blink animation to make it clear what card
      * is being added
      */
-    private var m_blinkTween : Tween;
+    private var m_blinkObject : DisplayObject;
     
     /**
      * For multiply and divide previews, we animate the operators to make clearer the modification to the terms
      */
-    private var m_operatorTween : Tween;
-    
+    private var m_operatorObject : DisplayObject;
+
     /**
      * Seconds for each repitition of a tween.
      */
@@ -146,15 +147,13 @@ class SnapManager implements IDisposable
         m_widgetCandidates = new Array<BaseTermWidget>();
         m_widgetCandidateBounds = new Array<Rectangle>();
         m_widgetCandidateParenthesisBounds = new Array<Rectangle>();
-        onTermAreaChanged();
+        onTermAreaChanged(null);
         
         m_vectorSpace = vectorSpace;
         m_assetManager = assetManager;
         m_expressionResourceMap = expressionResourceMap;
         m_widgetToSnapLocalBounds = new Rectangle();
         m_widgetToSnapStartDrag = false;
-        m_blinkTween = new Tween(null, 0);
-        m_operatorTween = new Tween(null, 0);
         m_tweenRepeatDuration = 0.4;
     }
     
@@ -194,10 +193,10 @@ class SnapManager implements IDisposable
             if (!m_widgetToSnapStartDrag) 
             {
                 m_widgetToSnapStartDrag = true;
-                termWidgetToSnap.getBounds(m_termArea, m_widgetToSnapLocalBounds);
+                m_widgetToSnapLocalBounds = termWidgetToSnap.getBounds(m_termArea);
             }
             m_globalMouseBuffer.setTo(mouseState.mousePositionThisFrame.x, mouseState.mousePositionThisFrame.y);
-            m_termArea.globalToLocal(m_globalMouseBuffer, m_localTermAreaMouseBuffer);
+            m_localTermAreaMouseBuffer = m_termArea.globalToLocal(m_globalMouseBuffer);
             
             var widgetBoundsHalfWidth : Float = m_widgetToSnapLocalBounds.width * 0.5;
             var widgetBoundsHalfHeight : Float = m_widgetToSnapLocalBounds.height * 0.5;
@@ -426,7 +425,7 @@ class SnapManager implements IDisposable
         m_termArea.removeEventListener(GameEvent.TERM_AREA_CHANGED, onTermAreaChanged);
     }
     
-    private function onTermAreaChanged() : Void
+    private function onTermAreaChanged(event : Dynamic) : Void
     {
         // Reset the list of available widget and their bounding rectangles
 		m_widgetCandidates = new Array<BaseTermWidget>();
@@ -521,7 +520,7 @@ class SnapManager implements IDisposable
         var vectorspace : RealsVectorSpace = m_vectorSpace;
         var previewTree : ExpressionTreeWidget = m_termArea.getPreviewView(true);
         var previewExpressionTree : ExpressionTree = previewTree.getTree();
-		function onNodeAddedToPreview(event : Event, params : Dynamic) : Void
+		function onNodeAddedToPreview(event : Dynamic) : Void
         {
             // Timing issue:
             // Only redraw the preview after the new node has been added to the expression tree
@@ -529,29 +528,22 @@ class SnapManager implements IDisposable
             previewExpressionTree.removeEventListener(ExpressionTreeEvent.ADD, onNodeAddedToPreview);
             
             // Use the added node id to find the new widgets created for the preview
-            var nodeAdded : ExpressionNode = params.nodeAdded;
+            var nodeAdded : ExpressionNode = (try cast(event, DataEvent) catch (e : Dynamic) null).getData().nodeAdded;
             
             var snappedSymbolCopy : BaseTermWidget = previewTree.getWidgetFromNodeId(nodeAdded.id);
             var snappedOperatorCopy : BaseTermWidget = snappedSymbolCopy.parentWidget;
             
             // Blink the new card in the preview
-            m_blinkTween.reset(snappedSymbolCopy, m_tweenRepeatDuration);
-            m_blinkTween.scaleTo(1.1);
-            m_blinkTween.repeatCount = 0;
-            m_blinkTween.reverse = true;
-            Starling.current.juggler.add(m_blinkTween);
+			m_blinkObject = snappedOperatorCopy;
+			Actuate.tween(m_blinkObject, m_tweenRepeatDuration, { scaleX: 1.1, scaleY: 1.1 }).repeat().reflect();
             
             // For division, the bar spills over horizontally after some amount so width should be capped to some max amount
             var operatorImage : DisplayObject = (try cast(snappedOperatorCopy, GroupTermWidget) catch(e:Dynamic) null).groupImage;
             var scaleXValue : Float = ((operator == vectorspace.getDivisionOperator())) ? 
-            1 + (25.0 / operatorImage.width) : 1.5;
+				1 + (25.0 / operatorImage.width) : 1.5;
             
-            m_operatorTween.reset(operatorImage, m_tweenRepeatDuration);
-            m_operatorTween.animate("scaleX", scaleXValue);
-            m_operatorTween.animate("scaleY", 1.5);
-            m_operatorTween.repeatCount = 0;
-            m_operatorTween.reverse = true;
-            Starling.current.juggler.add(m_operatorTween);
+			m_operatorObject = operatorImage;
+			Actuate.tween(m_operatorObject, m_tweenRepeatDuration, { scaleX: scaleXValue, scaleY: 1.5 }).repeat().reflect();
         };
         previewExpressionTree.addEventListener(ExpressionTreeEvent.ADD, onNodeAddedToPreview);
         var matchingNode : ExpressionNode = ExpressionUtil.getNodeById(widgetAcceptingSnap.getNode().id, previewExpressionTree.getRoot());
@@ -563,10 +555,12 @@ class SnapManager implements IDisposable
         if (m_termArea.getPreviewShowing()) 
         {
             // Kill the blink tween on the preview card
-            Starling.current.juggler.remove(m_blinkTween);
+			Actuate.stop(m_blinkObject);
+			m_blinkObject = null;
             
             // Kill the operator tween on the preview operator
-            Starling.current.juggler.remove(m_operatorTween);
+			Actuate.stop(m_operatorObject);
+			m_operatorObject = null;
             
             m_termArea.showPreview(false);
         }

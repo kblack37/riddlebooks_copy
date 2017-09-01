@@ -1,18 +1,21 @@
 package wordproblem.engine.expression;
 
+
+import dragonbox.common.util.XColor;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.display.BlendMode;
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
+import openfl.display.Sprite;
+import openfl.geom.Rectangle;
+import openfl.text.TextField;
+import openfl.text.TextFormat;
+import openfl.text.TextFormatAlign;
+import wordproblem.display.Scale9Image;
+
+import wordproblem.display.PivotSprite;
 import wordproblem.engine.expression.SymbolData;
-
-import flash.geom.Rectangle;
-import flash.text.TextFormat;
-
-import starling.display.DisplayObject;
-import starling.display.Image;
-import starling.display.Sprite;
-import starling.text.TextField;
-import starling.textures.RenderTexture;
-import starling.textures.Texture;
-import starling.utils.HAlign;
-
 import wordproblem.engine.level.CardAttributes;
 import wordproblem.engine.text.GameFonts;
 import wordproblem.engine.text.MeasuringTextField;
@@ -40,7 +43,7 @@ class ExpressionSymbolMap
      * Key: symbol value
      * Value: the texture for that value
      */
-    private var m_idToDynamicTextureMap : Map<String, Texture>;
+    private var m_idToDynamicBitmapDataMap : Map<String, BitmapData>;
     
     /**
      * Name of the positive background texture to use for cards
@@ -58,7 +61,7 @@ class ExpressionSymbolMap
         m_assetManager = assetManager;
         
         m_idToSymbolDataMap = new Map();
-        m_idToDynamicTextureMap = new Map();
+        m_idToDynamicBitmapDataMap = new Map();
         
         m_measuringTextField = new MeasuringTextField();
         m_measuringTextField.defaultTextFormat = new TextFormat();
@@ -97,18 +100,18 @@ class ExpressionSymbolMap
         var operatorNames : Array<String> = ["+", "/", "=", "*", "-"];
         
         // Dispose the dynamic textures
-        var dynamicTextureKeys = m_idToDynamicTextureMap.keys();
-        for (key in dynamicTextureKeys)
+        var dynamicBitmapDataKeys = m_idToDynamicBitmapDataMap.keys();
+        for (key in dynamicBitmapDataKeys)
         {
-            var texture : Texture = m_idToDynamicTextureMap.get(key);
+            var bitmapData : BitmapData = m_idToDynamicBitmapDataMap.get(key);
             
             // Do not dispose texture if its part of the asset manager since other things might be using it
             // This is only for the operators
             if (Lambda.indexOf(operatorNames, key) == -1) 
             {
-                texture.dispose();
+                bitmapData.dispose();
             }
-            m_idToDynamicTextureMap.remove(key);
+            m_idToDynamicBitmapDataMap.remove(key);
         }
         
         m_idToSymbolDataMap = new Map();
@@ -198,14 +201,12 @@ class ExpressionSymbolMap
      */
     public function getCardFromSymbolValue(value : String) : DisplayObject
     {
-        var cardObject : DisplayObject = null;
-        
         // First check if the value was dynamically created as the level was running
         // it would be present in the special reserved texture map
-        var cardTexture : Texture = null;
-        if (m_idToDynamicTextureMap.exists(value)) 
+        var cardBitmapData : BitmapData = null;
+        if (m_idToDynamicBitmapDataMap.exists(value)) 
         {
-            cardTexture = try cast(m_idToDynamicTextureMap.get(value), Texture) catch(e:Dynamic) null;
+            cardBitmapData = m_idToDynamicBitmapDataMap.get(value);
         }
         // Next check if the level file had defined specific parameters for the symbol
         // These symbols are created at the start of the level
@@ -218,23 +219,26 @@ class ExpressionSymbolMap
             }
             
             var symbolData : SymbolData = m_idToSymbolDataMap.get(value);
-            cardObject = this.createCard(symbolData, m_measuringTextField);
+            var cardObject = this.createCard(symbolData, m_measuringTextField);
             
             // Create the new texture and immediately add it to the map
-            var renderTexture : RenderTexture = new RenderTexture(
-            Std.int(cardObject.width), 
-            Std.int(cardObject.height)
+            var renderBitmapData : BitmapData = new BitmapData(
+				Std.int(cardObject.width), 
+				Std.int(cardObject.height),
+				true,
+				0x00000000
             );
 			
-            renderTexture.draw(cardObject);
-			// TODO: this caching is commented out because of issues with RenderTexture
-			// so that cards with duplicate values will not return null
-            //m_idToDynamicTextureMap.set(value, renderTexture);
-            cardTexture = renderTexture;
+            renderBitmapData.draw(cardObject, null, null, BlendMode.NORMAL);
+            m_idToDynamicBitmapDataMap.set(value, renderBitmapData);
+            cardBitmapData = renderBitmapData;
+			
+			// TODO: need to dispose of the scale9Image in the cardObject
         }
-        //cardObject = new Image(cardTexture);
-        cardObject.pivotX = cardObject.width / 2;
-        cardObject.pivotY = cardObject.height / 2;
+        var cardObject = new PivotSprite();
+		cardObject.addChild(new Bitmap(cardBitmapData));
+        cardObject.pivotX = cardBitmapData.width / 2;
+        cardObject.pivotY = cardBitmapData.height / 2;
         
         return cardObject;
     }
@@ -285,15 +289,21 @@ class ExpressionSymbolMap
             measuringTextField.embedFonts = GameFonts.getFontIsEmbedded(symbolData.fontName);
             measuringTextField.text = symbolData.abbreviatedName;
             
-            symbolTextField = new TextField(
-				Std.int(measuringTextField.textWidth + 20), 
-				Std.int(measuringTextField.textHeight + 10), 
-				symbolData.abbreviatedName, 
-				symbolData.fontName, 
-				symbolData.fontSize, 
-				symbolData.fontColor
-            );
-            symbolTextField.hAlign = HAlign.CENTER;
+            symbolTextField = new TextField();
+			symbolTextField.width = Std.int(measuringTextField.textWidth + 20);
+			symbolTextField.height = Std.int(measuringTextField.textHeight + 10); 
+			symbolTextField.text = symbolData.abbreviatedName;
+			symbolTextField.setTextFormat(new TextFormat(
+				symbolData.fontName,
+				symbolData.fontSize,
+				symbolData.fontColor,
+				null,
+				null,
+				null,
+				null,
+				null,
+				TextFormatAlign.CENTER
+			));
             
             cardContainer.addChild(symbolTextField);
             scaleBackgroundToFitTextWidth = symbolTextField.width;
@@ -302,34 +312,26 @@ class ExpressionSymbolMap
 		// Draw the background  
         if (symbolData.backgroundTextureName != null) 
         {
-            var backgroundTexture : Texture = m_assetManager.getTexture(symbolData.backgroundTextureName);
-            var backgroundOriginalWidth : Float = backgroundTexture.width;
-            var backgroundOriginalHeight : Float = backgroundTexture.height;
+            var backgroundBitmapData : BitmapData = m_assetManager.getBitmapData(symbolData.backgroundTextureName);
+            var backgroundOriginalWidth : Float = backgroundBitmapData.width;
+            var backgroundOriginalHeight : Float = backgroundBitmapData.height;
             var backgroundImage : DisplayObject = null;
             if (scaleBackgroundToFitTextWidth > backgroundOriginalWidth) 
             {
-				// TODO: these were replaced from the feathers library straight to the starling library;
-				// images will probably need to be fixed later
                 // If the background needs to be expanded, then we need to do a nine-slice on the background
                 var nineScalePadding : Float = 8;
-                var scale9Background : Image = new Image(Texture.fromTexture(
-					backgroundTexture, 
-					new Rectangle(nineScalePadding,
-						nineScalePadding,
-						backgroundOriginalWidth - 2 * nineScalePadding,
-						backgroundOriginalHeight - 2 * nineScalePadding
-					)
-                ));
-                scale9Background.color = symbolData.backgroundColor;
-                scale9Background.width = scaleBackgroundToFitTextWidth;
-                backgroundImage = scale9Background;
-            }
-            else 
-            {
-                var unScaledBackground : Image = new Image(backgroundTexture);
-                unScaledBackground.color = symbolData.backgroundColor;
-                backgroundImage = unScaledBackground;
-            }
+				backgroundImage = new Scale9Image(backgroundBitmapData, new Rectangle(nineScalePadding,
+					nineScalePadding,
+					backgroundOriginalWidth - 2 * nineScalePadding,
+					backgroundOriginalHeight - 2 * nineScalePadding
+				));
+                backgroundImage.width = scaleBackgroundToFitTextWidth;
+            } 
+			else 
+			{
+				backgroundImage = new Bitmap(backgroundBitmapData);
+			}
+			backgroundImage.transform.colorTransform = XColor.rgbToColorTransform(symbolData.backgroundColor);
             cardContainer.addChildAt(backgroundImage, 0);
             
             // Reposition the text base on the background size
@@ -347,20 +349,20 @@ class ExpressionSymbolMap
             // IMPORTANT: The symbol atlas if more for prototype levels
             // We assume all symbols are part of a special symbol atlas.
             // The texture name passed in the level must match the kay in the atlas xml
-            var symbolTexture : Texture = m_assetManager.getTexture(symbolData.symbolTextureName);
-            var symbolImage : Image = new Image(symbolTexture);
+            var symbolBitmapData : BitmapData = m_assetManager.getBitmapData(symbolData.symbolTextureName);
+            var symbolImage : Bitmap = new Bitmap(symbolBitmapData);
             
             // Attempt to center on top of the background if it exists
             if (symbolData.backgroundTextureName != null) 
             {
-                symbolImage.x = Math.floor((cardContainer.width - symbolTexture.width) * 0.5);
-                symbolImage.y = Math.floor((cardContainer.height - symbolTexture.height) * 0.5);
+                symbolImage.x = Math.floor((cardContainer.width - symbolBitmapData.width) * 0.5);
+                symbolImage.y = Math.floor((cardContainer.height - symbolBitmapData.height) * 0.5);
             }  
 			
 			// Apply tint to the symbol image if specified  
             if (symbolData.useSymbolTextureColor) 
             {
-                symbolImage.color = symbolData.symbolTextureColor;
+				symbolImage.transform.colorTransform = XColor.rgbToColorTransform(symbolData.symbolTextureColor);
             }
             
             cardContainer.addChild(symbolImage);
@@ -389,13 +391,13 @@ class ExpressionSymbolMap
      */
     public function resetTextureForValue(value : String) : Void
     {
-        if (m_idToDynamicTextureMap.exists(value)) 
+        if (m_idToDynamicBitmapDataMap.exists(value)) 
         {
             // Need to be very careful with disposing textures, possible the game still
             // has this image displayed somewhere. Need to be sure no extra display parts
             // are still trying to use this texture.
-            (try cast(m_idToDynamicTextureMap.get(value), Texture) catch(e:Dynamic) null).dispose();
-            m_idToDynamicTextureMap.remove(value);
+            m_idToDynamicBitmapDataMap.get(value).dispose();
+            m_idToDynamicBitmapDataMap.remove(value);
         }
     }
     
@@ -405,7 +407,7 @@ class ExpressionSymbolMap
         // For the symbol check if the background image is first needed
         // at all. This is done on a per symbol basis or can be specified
         var isNegative : Bool = (value.charAt(0) == "-");
-        var backgroundToUse : String = ((isNegative)) ? m_defaultCardAttributes.defaultNegativeCardBgId : m_defaultCardAttributes.defaultPositiveCardBgId;
+        var backgroundToUse : String = isNegative ? m_defaultCardAttributes.defaultNegativeCardBgId : m_defaultCardAttributes.defaultPositiveCardBgId;
         
         // Create new symbol data for the dummy object
         var symbolData : SymbolData = new SymbolData(
@@ -417,7 +419,7 @@ class ExpressionSymbolMap
 			0xFFFFFF, 
 			m_defaultCardAttributes.defaultFontName
         );
-        symbolData.fontColor = ((isNegative)) ? m_defaultCardAttributes.defaultNegativeTextColor : m_defaultCardAttributes.defaultPositiveTextColor;
+        symbolData.fontColor = isNegative ? m_defaultCardAttributes.defaultNegativeTextColor : m_defaultCardAttributes.defaultPositiveTextColor;
         symbolData.fontSize = m_defaultCardAttributes.defaultFontSize;
         m_idToSymbolDataMap.set(value, symbolData);
     }

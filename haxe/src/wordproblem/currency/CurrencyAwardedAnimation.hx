@@ -21,6 +21,7 @@ import wordproblem.resource.AssetManager;
  * A glow and spiral eminate from it.
  * A bunch of smaller coin overflow from the center.
  */
+// TODO: revisit animation when more basic display elements are working properly
 class CurrencyAwardedAnimation extends Sprite
 {
     private var m_juggler : Juggler;

@@ -2,17 +2,15 @@ package wordproblem.engine.widget;
 
 
 import dragonbox.common.math.vectorspace.RealsVectorSpace;
-import flash.geom.Rectangle;
-import starling.display.Image;
 
-import dragonbox.common.dispose.IDisposable;
-import dragonbox.common.math.vectorspace.IVectorSpace;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.display.DisplayObject;
+import openfl.display.Sprite;
+import openfl.geom.Rectangle;
 
-import starling.display.DisplayObject;
-import starling.display.Quad;
-import starling.display.Sprite;
-import starling.textures.Texture;
-
+import wordproblem.display.DisposableSprite;
+import wordproblem.display.Scale9Image;
 import wordproblem.engine.component.ExpressionComponent;
 import wordproblem.engine.expression.ExpressionSymbolMap;
 import wordproblem.engine.expression.tree.ExpressionTree;
@@ -25,7 +23,7 @@ import wordproblem.resource.AssetManager;
  * 
  * It shows the equation itself as well as some indication that it is selected.
  */
-class ExpressionContainer extends Sprite implements IDisposable
+class ExpressionContainer extends DisposableSprite
 {
     private var m_isSelected : Bool;
     
@@ -49,7 +47,7 @@ class ExpressionContainer extends Sprite implements IDisposable
     private var m_vectorSpace : RealsVectorSpace;
     private var m_expressionResources : ExpressionSymbolMap;
     
-    private var m_bgLayer : Sprite;
+    private var m_bgLayer : DisposableSprite;
     
     public function new(vectorSpace : RealsVectorSpace,
             assetManager : AssetManager,
@@ -75,7 +73,7 @@ class ExpressionContainer extends Sprite implements IDisposable
         m_unselectedUpImage = createBackgroundImage(backgroundImageUnselectedUp, assetManager);
         m_unselectedOverImage = createBackgroundImage(backgroundImageUnselectedOver, assetManager);
         m_selectedUpImage = createBackgroundImage(backgroundImageSelectedUp, assetManager);
-        m_bgLayer = new Sprite();
+        m_bgLayer = new DisposableSprite();
         addChild(m_bgLayer);
         
         // Create a brand new copy of the view, note that it is possible to create
@@ -151,28 +149,39 @@ class ExpressionContainer extends Sprite implements IDisposable
     
     override public function dispose() : Void
     {
-        while (numChildren > 0)
-        {
-            removeChildAt(0);
-        }
-        
-        super.dispose();
+		super.dispose();
+		
+		if (Std.is(m_unselectedUpImage, Scale9Image)) {
+			cast(m_unselectedUpImage, Scale9Image).dispose();
+		} else {
+			cast(m_unselectedUpImage, Bitmap).bitmapData.dispose();
+		}
+		
+		if (Std.is(m_unselectedOverImage, Scale9Image)) {
+			cast(m_unselectedOverImage, Scale9Image).dispose();
+		} else {
+			cast(m_unselectedOverImage, Bitmap).bitmapData.dispose();
+		}
+		
+		if (Std.is(m_selectedUpImage, Scale9Image)) {
+			cast(m_selectedUpImage, Scale9Image).dispose();
+		} else {
+			cast(m_selectedUpImage, Bitmap).bitmapData.dispose();
+		}
     }
     
-    private function createBackgroundImage(textureName : String, assetManager : AssetManager) : DisplayObject
+    private function createBackgroundImage(bitmapDataName : String, assetManager : AssetManager) : DisplayObject
     {
         var backgroundImage : DisplayObject = null;
-        if (textureName != null) 
+        if (bitmapDataName != null) 
         {
-            var texture : Texture = assetManager.getTexture(textureName);
+            var bitmapData : BitmapData = assetManager.getBitmapData(bitmapDataName);
             var bgPadding : Float = 15;
-			// TODO: these were textures from the feathers library and may need to be fixed
-            var scale9Texture : Texture = Texture.fromTexture(texture, new Rectangle(bgPadding, bgPadding, texture.width - 2 * bgPadding, texture.height - 2 * bgPadding));
-            backgroundImage = new Image(scale9Texture);
+            backgroundImage = new Scale9Image(bitmapData, new Rectangle(bgPadding, bgPadding, bitmapData.width - 2 * bgPadding, bitmapData.height - 2 * bgPadding));
         }
         else 
         {
-            backgroundImage = new Quad(50, 50, 0xFFFFFF);
+			backgroundImage = new Bitmap(new BitmapData(50, 50, false, 0xFFFFFFFF));
         }
         
         return backgroundImage;

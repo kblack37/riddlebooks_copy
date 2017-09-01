@@ -2,12 +2,9 @@ package wordproblem.engine.component;
 
 import wordproblem.engine.component.Component;
 
-//import feathers.controls.Callout;
-
 import haxe.Constraints.Function;
 
-import starling.animation.Tween;
-import starling.display.DisplayObject;
+import openfl.display.DisplayObject;
 
 /**
  * This component keeps track of information for showing a callout/tooltip next to
@@ -68,12 +65,6 @@ class CalloutComponent extends Component
      * must not be direction_any since we need to know which arrow image to tween.
      */
     public var arrowAnimationPeriod : Float;
-    
-    /**
-     * Reference to the tween used to animate the arrow, only used internally by the system
-     * that draws the callout
-     */
-    public var arrowAnimationTween : Tween;
     
     /**
      * Placeholder, the contents to show in the callout. You need to explicitly set this.

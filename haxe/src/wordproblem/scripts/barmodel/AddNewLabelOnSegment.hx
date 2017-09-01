@@ -1,5 +1,6 @@
 package wordproblem.scripts.barmodel;
 
+import wordproblem.engine.events.DataEvent;
 import wordproblem.scripts.barmodel.BaseBarModelScript;
 import wordproblem.scripts.barmodel.ICardOnSegmentScript;
 
@@ -138,20 +139,18 @@ class AddNewLabelOnSegment extends BaseBarModelScript implements ICardOnSegmentS
         
         var color : Int = getColorForTermValue(cardValue);
         addLabelOnTopOfSegment(barModelData, outIndices[0], outIndices[1], cardValue, null, color);
-        m_eventDispatcher.dispatchEventWith(GameEvent.BAR_MODEL_AREA_CHANGE, false, {
+        m_eventDispatcher.dispatchEvent(new DataEvent(GameEvent.BAR_MODEL_AREA_CHANGE, {
                     previousSnapshot : previousModelDataSnapshot
-
-                });
+                }));
         
         // Redraw at the end to refresh
         m_barModelArea.redraw();
         
         // Log splitting on an existing segment
-        m_eventDispatcher.dispatchEventWith(AlgebraAdventureLoggingConstants.ADD_LABEL_ON_BAR_SEGMENT, false, {
+        m_eventDispatcher.dispatchEvent(new DataEvent(AlgebraAdventureLoggingConstants.ADD_LABEL_ON_BAR_SEGMENT, {
                     barModel : m_barModelArea.getBarModelData().serialize(),
                     value : cardValue,
-
-                });
+                }));
     }
     
     public function getName() : String
@@ -165,7 +164,7 @@ class AddNewLabelOnSegment extends BaseBarModelScript implements ICardOnSegmentS
         if (m_ready && m_isActive) 
         {
             m_globalMouseBuffer.setTo(m_mouseState.mousePositionThisFrame.x, m_mouseState.mousePositionThisFrame.y);
-            m_barModelArea.globalToLocal(m_globalMouseBuffer, m_localMouseBuffer);
+            m_localMouseBuffer = m_barModelArea.globalToLocal(m_globalMouseBuffer);
             
 			m_outParamsBuffer = new Array<Dynamic>();
 			var targetBarWholeIndex : Int = 0;
@@ -197,18 +196,18 @@ class AddNewLabelOnSegment extends BaseBarModelScript implements ICardOnSegmentS
                         var previousModelDataSnapshot : BarModelData = m_barModelArea.getBarModelData().clone();
                         var color = getColorForTermValue(value);
                         addLabelOnTopOfSegment(m_barModelArea.getBarModelData(), targetBarWholeIndex, targetBarSegmentIndex, value, null, color);
-                        m_eventDispatcher.dispatchEventWith(GameEvent.BAR_MODEL_AREA_CHANGE, false, {
+                        m_eventDispatcher.dispatchEvent(new DataEvent(GameEvent.BAR_MODEL_AREA_CHANGE, {
 							previousSnapshot : previousModelDataSnapshot
-                        });
+                        }));
                         
                         // Redraw at the end to refresh
                         m_barModelArea.redraw();
                         
                         // Log replace label on an existing segment
-                        m_eventDispatcher.dispatchEventWith(AlgebraAdventureLoggingConstants.ADD_LABEL_ON_BAR_SEGMENT, false, {
+                        m_eventDispatcher.dispatchEvent(new DataEvent(AlgebraAdventureLoggingConstants.ADD_LABEL_ON_BAR_SEGMENT, {
                             barModel : m_barModelArea.getBarModelData().serialize(),
                             value : value
-                        });
+                        }));
                         
                         status = ScriptStatus.SUCCESS;
                     }

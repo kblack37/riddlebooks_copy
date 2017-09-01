@@ -2,6 +2,7 @@ package wordproblem.scripts.expression;
 
 
 import flash.geom.Point;
+import wordproblem.engine.events.DataEvent;
 
 import dragonbox.common.expressiontree.ExpressionUtil;
 import dragonbox.common.expressiontree.WildCardNode;
@@ -169,9 +170,9 @@ class WildCardReplace extends BaseTermAreaScript
         return ScriptStatus.SUCCESS;
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         m_widgetDragSystem = try cast(super.m_gameEngine.getParagraphGameSystemFromId("WidgetDragSystem"), WidgetDragSystem) catch(e:Dynamic) null;
         
@@ -209,33 +210,34 @@ class WildCardReplace extends BaseTermAreaScript
         m_termAreaContainingHitWildCard = null;
     }
     
-    private function onEndDragTermWidget(event : Event, params : Dynamic) : Void
+    private function onEndDragTermWidget(event : Dynamic) : Void
     {
-        var releasedWidget : BaseTermWidget = try cast(params.widget, BaseTermWidget) catch(e:Dynamic) null;
-        var releasedWidgetOrigin : String = params.origin;
-        
-        // We are interested in the case where the player drops a card that was intersecting a wild card.
-        // For this situation, if the drop is valid we perform a replacements in the appropriate term area
-        var addSuccessful : Bool = false;
-        if (m_currentPickedWildCardWidget != null) 
-        {
-            m_termAreaContainingHitWildCard.isReady = false;
-            m_termAreaContainingHitWildCard.getTree().replaceNode(m_currentPickedWildCardWidget.getNode(), ExpressionUtil.copy(releasedWidget.getNode(), m_expressionCompiler.getVectorSpace()));
-            m_termAreaContainingHitWildCard.redrawAfterModification();
-            
-            addSuccessful = true;
-            clearPreviousPickedWildCard();
-        }  // Either snap back the widget to the deck if the add was not successful  
-        
-        
-        
-        if (releasedWidgetOrigin == WidgetDragSystem.DRAG_ORIGIN_DECK) 
-        {
-            m_gameEngine.dispatchEventWith(GameEvent.ADD_TERM_ATTEMPTED, false, {
+		if (Std.is(event, DataEvent)) {
+			var data = (try cast (event, DataEvent) catch (e : Dynamic) null).getData();
+			var releasedWidget : BaseTermWidget = try cast(data.widget, BaseTermWidget) catch(e:Dynamic) null;
+			var releasedWidgetOrigin : String = data.origin;
+			
+			// We are interested in the case where the player drops a card that was intersecting a wild card.
+			// For this situation, if the drop is valid we perform a replacements in the appropriate term area
+			var addSuccessful : Bool = false;
+			if (m_currentPickedWildCardWidget != null) 
+			{
+				m_termAreaContainingHitWildCard.isReady = false;
+				m_termAreaContainingHitWildCard.getTree().replaceNode(m_currentPickedWildCardWidget.getNode(), ExpressionUtil.copy(releasedWidget.getNode(), m_expressionCompiler.getVectorSpace()));
+				m_termAreaContainingHitWildCard.redrawAfterModification();
+				
+				addSuccessful = true;
+				clearPreviousPickedWildCard();
+			} 
+			
+			// Either snap back the widget to the deck if the add was not successful  
+			if (releasedWidgetOrigin == WidgetDragSystem.DRAG_ORIGIN_DECK) 
+			{
+				m_gameEngine.dispatchEvent(new DataEvent(GameEvent.ADD_TERM_ATTEMPTED, {
                         widget : releasedWidgit,
                         success : addSuccessful,
-
-                    });
-        }
+                    }));
+			}
+		}
     }
 }

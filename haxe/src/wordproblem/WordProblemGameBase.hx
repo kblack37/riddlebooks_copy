@@ -1,13 +1,16 @@
 package wordproblem;
 
-import flash.errors.Error;
+import openfl.Lib;
+import openfl.display.Bitmap;
+import openfl.errors.Error;
 import haxe.xml.Fast;
+import wordproblem.engine.events.DataEvent;
 //import wordproblem.PREDEFINEDLAYOUTS;
 
-import flash.display.DisplayObjectContainer;
-import flash.display.Sprite;
-import flash.display.Stage;
-import flash.geom.Rectangle;
+import openfl.display.DisplayObjectContainer;
+import openfl.display.Sprite;
+import openfl.display.Stage;
+import openfl.geom.Rectangle;
 
 import cgs.audio.Audio;
 import cgs.cache.ICgsUserCache;
@@ -31,12 +34,8 @@ import dragonbox.common.ui.LoadingSpinner;
 import dragonbox.common.ui.MouseState;
 import dragonbox.common.util.XString;
 
-import starling.core.Starling;
-import starling.display.Quad;
-import starling.display.Sprite;
-import starling.display.Stage;
-import starling.events.Event;
-import starling.textures.Texture;
+import openfl.display.Sprite;
+import openfl.events.Event;
 
 import wordproblem.engine.GameEngine;
 import wordproblem.engine.IGameEngine;
@@ -71,7 +70,7 @@ import wordproblem.state.WordProblemLoadingState;
  * The main difference for each target is just the configuration settings that is loads and
  * the resources it should use.
  */
-class WordProblemGameBase extends starling.display.Sprite implements IDisposable implements IConsoleInterfacable
+class WordProblemGameBase extends Sprite implements IDisposable implements IConsoleInterfacable
 {
     @:meta(Embed(source="/../assets/fonts/Immortal.ttf",fontName="Immortal",mimeType="application/x-font-truetype",embedAsCFF="false"))
 
@@ -179,7 +178,7 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
      * This quad is used to block out mouse events on the stage3d layer.
      * The reason is that the block sprite on the flash layer still allows the options button to be clicked
      */
-    private var m_disablingStage3dQuad : Quad;
+    private var m_disablingStage3dQuad : Bitmap;
     
     /**
      * For logging to Server. This is an updatable script that must be added to the m_fixedGlobalScript
@@ -258,7 +257,7 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
         switch (alias)
         {
             case "start":
-                this.onGoToLevel(null, args[0]);
+                this.onGoToLevel(args[0]);
             case "createUsers":
                 var numUsers : Int = Std.parseInt(args[0]);
                 var usernamePrefix : String = args[1];
@@ -278,7 +277,7 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
             case "logout":
                 onSignOut();
             case "load":
-                this.onGoToLevel(null, args[0]);
+                this.onGoToLevel(args[0]);
         }
     }
     
@@ -607,8 +606,15 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
     /**
      * Intended to be a callback to catch a CommandEvent.GO_TO_LEVEL event
      */
-    private function onGoToLevel(event : Event, levelId : String) : Void
+    private function onGoToLevel(event : Dynamic) : Void
     {
+		var levelId = null;
+		if (Std.is(event, DataEvent)) {
+			levelId = (try cast(event, DataEvent) catch (e : Dynamic) null).getData();
+		} else {
+			// We call this not as an event callback in places, so we must safeguard that
+			levelId = event;
+		}
         // Let the controller determine what the contents to play are
         m_levelManager.goToLevelById(levelId);
     }
@@ -757,12 +763,10 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
             {
                 objectives = extraLevelProgressionData.objectives;
             }
-        }  // level before starting the game    // When a level has been selected, we parse the data and load any resources needed by that  
-        
-        
-        
-        
-        
+        }
+		
+		// When a level has been selected, we parse the data and load any resources needed by that  
+		// level before starting the game 
         var problemData : WordProblemLevelData = m_levelCompiler.compileWordProblemLevel(
                 levelXml,
                 id,
@@ -784,16 +788,11 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
             if (Reflect.hasField(extraLevelProgressionData, "skippable")) 
             {
                 problemData.skippable = extraLevelProgressionData.skippable;
-            }  // different rules that the original ones    // bar model type. However, we may have one-off levels where it has slightly    // Consider scenarios where levels by default have a rule set depending on    // Override some of the rules  
-            
-            
-            
-            
-            
-            
-            
-            
-            
+            }  
+			
+			// Override some of the rules  
+			// Consider scenarios where levels by default have a rule set depending on  
+            // different rules that the original ones   
             if (Reflect.hasField(extraLevelProgressionData, "rules")) 
             {
                 var levelRules : LevelRules = problemData.getLevelRules();
@@ -812,10 +811,9 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
             if (Reflect.hasField(extraLevelProgressionData, "difficulty")) 
             {
                 problemData.difficulty = Reflect.field(extraLevelProgressionData, "difficulty");
-            }  // Get whether this level should pre-populate some of the data for the equation  
-            
-            
-            
+            } 
+			
+			// Get whether this level should pre-populate some of the data for the equation  
             if (Reflect.hasField(extraLevelProgressionData, "prepopulateEquation")) 
             {
                 problemData.prepopulateEquationData = Reflect.field(extraLevelProgressionData, "prepopulateEquation");
@@ -825,14 +823,11 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
             {
                 problemData.statistics.deserialize(Reflect.field(extraLevelProgressionData, "performanceState"));
             }
-        }  // If several levels share common images it might be a good idea just to keep the textures cached.    // Note that these images need to be later cleared out on the exit of a level    // Load the images specific to this problem into the asset manager.  
-        
-        
-        
-        
-        
-        
-        
+        }  
+		
+		// Load the images specific to this problem into the asset manager.  
+		// Note that these images need to be later cleared out on the exit of a level 
+        // If several levels share common images it might be a good idea just to keep the textures cached.   
         var extraResourcesLoaded : Bool = false;
         var numExtraResources : Int = 0;
         var imagesToLoad : Array<String> = problemData.getImagesToLoad();
@@ -857,7 +852,7 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
             {
                 var audioUrl : String = audioDataPart.src;
                 numExtraResources++;
-                //m_assetManager.enqueue(audioUrl);
+                m_assetManager.enqueue(audioUrl);
             }
         }
 		
@@ -874,7 +869,7 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
         for (atlasList in problemData.getTextureAtlasesToLoad())
         {
             numExtraResources++;
-            //m_assetManager.enqueue(atlasList[0], atlasList[1]);
+            m_assetManager.enqueue(atlasList[0], atlasList[1]);
         }
         
         if (numExtraResources > 0) 
@@ -947,7 +942,7 @@ class WordProblemGameBase extends starling.display.Sprite implements IDisposable
             
             m_loadingScreen = null;
             
-            m_disablingStage3dQuad.removeFromParent();
+            if (m_disablingStage3dQuad.parent != null) m_disablingStage3dQuad.parent.removeChild(m_disablingStage3dQuad);
         }
     }
     

@@ -67,7 +67,7 @@ class NewItemScreen extends Sprite
 		function showItem() : Void
 		{
 			// From the id of the item, get the name of the item and create an image
-			var rewardIconTexture : Texture = assetManager.getTextureWithReferenceCount(m_itemTextureName);
+			var rewardIconTexture : Texture = assetManager.getBitmapDataWithReferenceCount(m_itemTextureName);
 			var itemImage : Image = new Image(rewardIconTexture);
 			itemImage.pivotX = rewardIconTexture.width * 0.5;
 			itemImage.pivotY = rewardIconTexture.height * 0.5;
@@ -194,7 +194,7 @@ class NewItemScreen extends Sprite
         super.removeChildren(0, -1, true);
         
         // Delete the texture of the item
-        m_assetManager.releaseTextureWithReferenceCount(m_itemTextureName);
+        m_assetManager.releaseBitmapDataWithReferenceCount(m_itemTextureName);
     }
     
     private function addRewardDetailTween(tween : Tween) : Void

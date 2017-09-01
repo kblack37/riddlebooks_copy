@@ -4,7 +4,7 @@ package wordproblem.creator.scripts;
 import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
 
-import starling.display.Button;
+import wordproblem.display.LabelButton;
 import starling.events.Event;
 
 import wordproblem.AlgebraAdventureConfig;
@@ -25,7 +25,7 @@ class TestProblemScript extends BaseProblemCreateScript
     private var m_mouseState : MouseState;
     private var m_time : Time;
     
-    private var m_testProblemButton : Button;
+    private var m_testProblemButton : LabelButton;
     
     /**
      * Screen for the user to play their just created level.
@@ -56,11 +56,11 @@ class TestProblemScript extends BaseProblemCreateScript
         if (m_isReady) 
         {
             m_testCreatedLevelScreen.removeEventListener(ProblemCreateEvent.TEST_LEVEL_EXIT, bufferEvent);
-            m_testProblemButton.removeEventListener(Event.TRIGGERED, onTestProblemClicked);
+            m_testProblemButton.removeEventListener(MouseEvent.CLICK, onTestProblemClicked);
             if (value) 
             {
                 m_testCreatedLevelScreen.addEventListener(ProblemCreateEvent.TEST_LEVEL_EXIT, bufferEvent);
-                m_testProblemButton.addEventListener(Event.TRIGGERED, onTestProblemClicked);
+                m_testProblemButton.addEventListener(MouseEvent.CLICK, onTestProblemClicked);
             }
         }
     }
@@ -80,9 +80,9 @@ class TestProblemScript extends BaseProblemCreateScript
         return ScriptStatus.FAIL;
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         // Bind listener to the button
         m_testProblemButton = try cast(m_createState.getWidgetFromId("testProblemButton"), Button) catch(e:Dynamic) null;
@@ -95,7 +95,7 @@ class TestProblemScript extends BaseProblemCreateScript
         if (eventType == ProblemCreateEvent.TEST_LEVEL_EXIT) 
         {
             m_testCreatedLevelScreen.stopLevel();
-            m_testCreatedLevelScreen.removeFromParent();
+            if (m_testCreatedLevelScreen.parent != null) m_testCreatedLevelScreen.parent.removeChild(m_testCreatedLevelScreen);
             
             var editableTextArea : EditableTextArea = try cast(m_createState.getWidgetFromId("editableTextArea"), EditableTextArea) catch(e:Dynamic) null;
             editableTextArea.toggleEditMode(true);

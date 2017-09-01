@@ -75,7 +75,7 @@ class EmphasizeAnimation implements IAnimatable
     public function stop() : Void
     {
         m_emphasizeRenderer.removeAndDisposeAllEmitters();
-        m_emphasizeRenderer.removeFromParent();
+        if (m_emphasizeRenderer.parent != null) m_emphasizeRenderer.parent.removeChild(m_emphasizeRenderer);
     }
     
     public function advanceTime(time : Float) : Void

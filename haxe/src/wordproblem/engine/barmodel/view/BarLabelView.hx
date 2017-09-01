@@ -1,16 +1,18 @@
 package wordproblem.engine.barmodel.view;
 
+import dragonbox.common.math.util.MathUtil;
+import dragonbox.common.util.XColor;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import wordproblem.display.PivotSprite;
 import wordproblem.engine.barmodel.view.ResizeableBarPieceView;
 
-import flash.text.TextFormat;
+import openfl.text.TextFormat;
 
-import starling.display.DisplayObject;
-import starling.display.DisplayObjectContainer;
-import starling.display.Image;
-import starling.display.Quad;
-import starling.display.Sprite;
-import starling.text.TextField;
-import starling.textures.Texture;
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
+import openfl.display.Sprite;
+import openfl.text.TextField;
 
 import wordproblem.display.DottedRectangle;
 import wordproblem.engine.barmodel.model.BarLabel;
@@ -54,15 +56,15 @@ class BarLabelView extends ResizeableBarPieceView
     /**
      * Container to store all the pieces of a bracket
      */
-    private var m_bracketContainer : Sprite;
+    private var m_bracketContainer : PivotSprite;
     
     /**
      * Used to display the name of the label as plain text
      */
     private var m_descriptionTextfield : DisplayObject;
     
-    private var m_edgeAResizeButton : Image;
-    private var m_edgeBResizeButton : Image;
+    private var m_edgeAResizeButton : Bitmap;
+    private var m_edgeBResizeButton : Bitmap;
     
     private var m_fontName : String;
     private var m_fontColor : Int;
@@ -71,7 +73,7 @@ class BarLabelView extends ResizeableBarPieceView
      * Used if we want to show an image rather than text when describing the label
      * (Maybe use this is combination)
      */
-    private var m_descriptionImage : DisplayObject;
+    private var m_descriptionImage : PivotSprite;
     
     /**
      * The image to use if the label is marked as hidden.
@@ -98,10 +100,10 @@ class BarLabelView extends ResizeableBarPieceView
     public function new(barLabel : BarLabel,
             fontName : String,
             fontColor : Int,
-            bracketEdgeLeftTexture : Texture,
-            bracketEdgeRightTexture : Texture,
-            bracketMiddleTexture : Texture,
-            unscaledBracketTexture : Texture,
+            bracketEdgeLeftBitmapData : BitmapData,
+            bracketEdgeRightBitmapData : BitmapData,
+            bracketMiddleBitmapData : BitmapData,
+            unscaledBracketBitmapData : BitmapData,
             name : String,
             descriptionImage : DisplayObject,
             useImageInsteadOfTextForNoBracket : Bool,
@@ -111,13 +113,13 @@ class BarLabelView extends ResizeableBarPieceView
 		
         // If the label length is below some threshold, use the unscaled texture
         var bracketColor : Int = barLabel.color;
-        m_unscaledBracketImage = new Image(unscaledBracketTexture);
-        (try cast(m_unscaledBracketImage, Image) catch(e:Dynamic) null).color = bracketColor;
+        m_unscaledBracketImage = new Bitmap(unscaledBracketBitmapData);
+		m_unscaledBracketImage.transform.colorTransform = XColor.rgbToColorTransform(bracketColor);
         
         this.data = barLabel;
         this.rigidBody = new RigidBodyComponent(barLabel.id);
         this.lineGraphicDisplayContainer = new Sprite();
-        m_bracketContainer = new Sprite();
+        m_bracketContainer = new PivotSprite();
         this.lineGraphicDisplayContainer.addChild(m_bracketContainer);
         addChild(lineGraphicDisplayContainer);
         
@@ -128,16 +130,16 @@ class BarLabelView extends ResizeableBarPieceView
         {
             // The default orientation of the textures has the bracket going horizontally with
             // the open end on the bottom
-            var edgeAImage : Image = new Image(bracketEdgeLeftTexture);
-            edgeAImage.color = bracketColor;
-            var edgeBImage : Image = new Image(bracketEdgeRightTexture);
-            edgeBImage.color = bracketColor;
-            var midImage : Image = new Image(bracketMiddleTexture);
-            midImage.color = bracketColor;
+            var edgeAImage : Bitmap = new Bitmap(bracketEdgeLeftBitmapData);
+			edgeAImage.transform.colorTransform = XColor.rgbToColorTransform(bracketColor);
+            var edgeBImage : Bitmap = new Bitmap(bracketEdgeRightBitmapData);
+			edgeBImage.transform.colorTransform = XColor.rgbToColorTransform(bracketColor);
+            var midImage : Bitmap = new Bitmap(bracketMiddleBitmapData);
+			midImage.transform.colorTransform = XColor.rgbToColorTransform(bracketColor);
             
             // For now we draw a very thin line
-            var lineA : Quad = new Quad(1, 5, bracketColor);
-            var lineB : Quad = new Quad(1, 5, bracketColor);
+			var lineA : Bitmap = new Bitmap(new BitmapData(1, 5, false, bracketColor));
+			var lineB : Bitmap = new Bitmap(new BitmapData(1, 5, false, bracketColor));
             
             m_bracketEdgeA = edgeAImage;
             m_bracketEdgeB = edgeBImage;
@@ -146,15 +148,23 @@ class BarLabelView extends ResizeableBarPieceView
             m_bracketLineB = lineB;
         }  
 		
-		// Determine whether an image should be used instead of text to mark the label  
-        m_descriptionImage = descriptionImage;
-        if (descriptionImage != null) 
-        {
-            // Make sure pivot is set to zero so that positioning of the
-            // text and image are consistent
-            m_descriptionImage.pivotX = m_descriptionImage.pivotY = 0.0;
-        }
+		// The description image is a pivot sprite or a collection of pivot sprites,
+		// either way we need to set the pivots to 0 to align the label
+		if (Std.is(descriptionImage, PivotSprite)) {
+			var castedDescriptionImage : PivotSprite = try cast(descriptionImage, PivotSprite) catch (e : Dynamic) null;
+			castedDescriptionImage.pivotX = castedDescriptionImage.pivotY = 0;
+			m_descriptionImage = castedDescriptionImage;
+		} else if (Std.is(descriptionImage, Sprite)) {
+			var castedDescriptionImage : Sprite = try cast(descriptionImage, Sprite) catch (e : Dynamic) null;
+			for (i in 0...castedDescriptionImage.numChildren) {
+				var castedChild = cast(castedDescriptionImage.getChildAt(i), PivotSprite);
+				castedChild.pivotX = castedChild.pivotY = 0;
+			}
+			m_descriptionImage = new PivotSprite();
+			m_descriptionImage.addChild(descriptionImage);
+		}
         
+		// Determine whether an image should be used instead of text to mark the label
         m_useImageInsteadOfTextForNoBracket = useImageInsteadOfTextForNoBracket;
         m_hiddenImage = hiddenImage;
         
@@ -267,7 +277,7 @@ class BarLabelView extends ResizeableBarPieceView
                 if (data.isAboveSegment) 
                 {
                     // rotate each of the edges by pi radians and swap them
-                    m_bracketContainer.rotation = Math.PI;
+                    m_bracketContainer.rotation = MathUtil.radsToDegrees(Math.PI);
                     m_bracketContainer.pivotX = this.lineGraphicDisplayContainer.width;
                     m_bracketContainer.pivotY = this.lineGraphicDisplayContainer.height;
                     
@@ -277,10 +287,9 @@ class BarLabelView extends ResizeableBarPieceView
                 else 
                 {
                     labelDescriptionDisplayObject.y = this.lineGraphicDisplayContainer.height;
-                }  // Resize the scaling lines and reposition the pieces of the bracket  
-                
-                
-                
+                } 
+				
+				// Resize the scaling lines and reposition the pieces of the bracket  
                 labelDescriptionDisplayObject.x = (newLength - labelDescriptionDisplayObject.width) * 0.5;
             }
             else 
@@ -288,7 +297,7 @@ class BarLabelView extends ResizeableBarPieceView
                 // rotate by -pi/2 radians and shift over by the width
                 // (Remember some of the properties of the image DO NOT re-align with
                 // the axis on rotate, an exception is x,y)
-                m_bracketContainer.rotation = Math.PI * -0.5;
+                m_bracketContainer.rotation = MathUtil.radsToDegrees(Math.PI * -0.5);
                 m_bracketContainer.y = m_bracketContainer.height;
                 
                 labelDescriptionDisplayObject.x = this.lineGraphicDisplayContainer.width;
@@ -337,11 +346,13 @@ class BarLabelView extends ResizeableBarPieceView
     {
         if (m_descriptionTextfield != null) 
         {
-            m_descriptionTextfield.removeFromParent(true);
+			if (m_descriptionTextfield.parent != null) m_descriptionTextfield.parent.removeChild(m_descriptionTextfield);
             m_descriptionTextfield = null;
         }
         
-        m_hiddenImage.removeFromParent();
+		if (m_hiddenImage.parent != null) {
+			if (m_hiddenImage.parent != null) m_hiddenImage.parent.removeChild(m_hiddenImage);
+		}
         
         // The orientation of the bar determines which of the parameters are useful.
         // For example, a horizontal bar does not care about scaleX since it length should
@@ -493,14 +504,16 @@ class BarLabelView extends ResizeableBarPieceView
                 }
                 
                 descriptionTextFieldWidth = m_measuringTextfield.textWidth + hackExtraWidthPadding;
-                var descriptionTextField : TextField = new TextField(
-                Std.int(descriptionTextFieldWidth + 6), 
-                Std.int(m_measuringTextfield.textHeight + 5), 
-                nameToShow, 
-                m_measuringTextfield.defaultTextFormat.font, 
-                fontSize, 
-                try cast(m_measuringTextfield.defaultTextFormat.color, Int) catch(e:Dynamic) 0
-                );
+                var descriptionTextField : TextField = new TextField();
+                descriptionTextField.width = descriptionTextFieldWidth + 6;
+                descriptionTextField.height = m_measuringTextfield.textHeight + 5;
+                descriptionTextField.text = nameToShow;
+                descriptionTextField.setTextFormat(new TextFormat(
+					m_measuringTextfield.defaultTextFormat.font, 
+					fontSize, 
+					m_measuringTextfield.defaultTextFormat.color
+                ));
+				descriptionTextField.selectable = false;
                 m_descriptionTextfield = descriptionTextField;
                 m_descriptionTextfield.x = (boundingWidth - m_descriptionTextfield.width) * 0.5;
                 m_descriptionTextfield.y = (boundingHeight - m_descriptionTextfield.height) * 0.5;
@@ -534,13 +547,13 @@ class BarLabelView extends ResizeableBarPieceView
     /**
      * A hacky way to add the resize buttons to the label after they have been drawn
      */
-    public function addButtonImagesToEdges(buttonTexture : Texture) : Void
+    public function addButtonImagesToEdges(buttonBitmapData : BitmapData) : Void
     {
         // Add two button images to the edges
         // Need to add the button on the edges of the label
-        var edgeAButton : Image = getButtonImageFromPool(buttonTexture);
+        var edgeAButton : Bitmap = getButtonImageFromPool(buttonBitmapData);
         m_edgeAResizeButton = edgeAButton;
-        var edgeBButton : Image = getButtonImageFromPool(buttonTexture);
+        var edgeBButton : Bitmap = getButtonImageFromPool(buttonBitmapData);
         m_edgeBResizeButton = edgeBButton;
         repositionButtons();
     }
@@ -549,14 +562,14 @@ class BarLabelView extends ResizeableBarPieceView
     {
         if (m_edgeAResizeButton != null) 
         {
-            m_edgeAResizeButton.removeFromParent();
+            if (m_edgeAResizeButton.parent != null) m_edgeAResizeButton.parent.removeChild(m_edgeAResizeButton);
             m_resizeEdgeButtonPool.push(m_edgeAResizeButton);
             m_edgeAResizeButton = null;
         }
         
         if (m_edgeBResizeButton != null) 
         {
-            m_edgeBResizeButton.removeFromParent();
+            if (m_edgeBResizeButton.parent != null) m_edgeBResizeButton.parent.removeChild(m_edgeBResizeButton);
             m_resizeEdgeButtonPool.push(m_edgeBResizeButton);
             m_edgeBResizeButton = null;
         }
@@ -569,7 +582,7 @@ class BarLabelView extends ResizeableBarPieceView
      * @param getEdgeA
      *      If true get the left/top resize button depending on the label orientation
      */
-    public function getButtonImage(getEdgeA : Bool) : Image
+    public function getButtonImage(getEdgeA : Bool) : Bitmap
     {
         return ((getEdgeA)) ? m_edgeAResizeButton : m_edgeBResizeButton;
     }
@@ -579,10 +592,10 @@ class BarLabelView extends ResizeableBarPieceView
      */
     public function colorEdgeButton(edgeA : Bool, color : Int, alpha : Float) : Void
     {
-        var edgeButtonToUse : Image = ((edgeA)) ? m_edgeAResizeButton : m_edgeBResizeButton;
+        var edgeButtonToUse : Bitmap = ((edgeA)) ? m_edgeAResizeButton : m_edgeBResizeButton;
         if (edgeButtonToUse != null) 
         {
-            edgeButtonToUse.color = color;
+			edgeButtonToUse.transform.colorTransform = XColor.rgbToColorTransform(color);
             edgeButtonToUse.alpha = alpha;
         }
     }
@@ -625,21 +638,26 @@ class BarLabelView extends ResizeableBarPieceView
         }
     }
     
-    private var m_resizeEdgeButtonPool : Array<Image> = new Array<Image>();
-    private function getButtonImageFromPool(buttonTexture : Texture) : Image
+    private var m_resizeEdgeButtonPool : Array<Bitmap> = new Array<Bitmap>();
+    private function getButtonImageFromPool(buttonBitmapData : BitmapData) : Bitmap
     {
         // TODO: On discard return the image to the pool
-        var buttonImage : Image = null;
+        var buttonImage : Bitmap = null;
         if (m_resizeEdgeButtonPool.length == 0) 
         {
-            buttonImage = new Image(buttonTexture);
+            buttonImage = new Bitmap(buttonBitmapData);
             buttonImage.scaleX = buttonImage.scaleY = 0.4;
             buttonImage.alpha = 0.5;
             m_resizeEdgeButtonPool.push(buttonImage);
         }
         
         buttonImage = m_resizeEdgeButtonPool.pop();
-        buttonImage.color = 0xFFFFFF;
+		buttonImage.transform.colorTransform = XColor.rgbToColorTransform(0xFFFFFF);
         return buttonImage;
     }
+	
+	override public function dispose() {
+		if (m_hiddenImage != null) m_hiddenImage.dispose();
+		if (m_bracketContainer != null) m_bracketContainer.dispose();
+	}
 }

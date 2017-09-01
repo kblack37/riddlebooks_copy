@@ -11,7 +11,7 @@ import haxe.Constraints.Function;
 import starling.animation.Juggler;
 import starling.animation.Transitions;
 import starling.animation.Tween;
-import starling.display.Button;
+import wordproblem.display.LabelButton;
 import starling.display.Image;
 import starling.display.Sprite;
 import starling.events.Event;
@@ -27,12 +27,13 @@ import wordproblem.resource.AssetManager;
  * This screen is used to display messages like the player has achieved a new level of mastery
  * or they have finished with all the regular levels.
  */
+// TODO: revisit when more basic display elements are working
 class NewNotificationScreen extends Sprite
 {
     /**
      * Button to dismiss the screen
      */
-    private var m_continueButton : Button;
+    private var m_continueButton : LabelButton;
     
     /**
      * Callback that should be triggered when the continue button is pressed
@@ -92,7 +93,7 @@ class NewNotificationScreen extends Sprite
         m_continueButton.height = 70;
         m_continueButton.x = (totalScreenWidth - m_continueButton.width) * 0.5;
         m_continueButton.y = totalScreenHeight - m_continueButton.height * 1.5;
-        m_continueButton.addEventListener(Event.TRIGGERED, onContinueClick);
+        m_continueButton.addEventListener(MouseEvent.CLICK, onContinueClick);
         m_continueButton.enabled = false;
         addChild(m_continueButton);
         
@@ -254,7 +255,7 @@ class NewNotificationScreen extends Sprite
     
     override public function dispose() : Void
     {
-        m_continueButton.removeEventListener(Event.TRIGGERED, onContinueClick);
+        m_continueButton.removeEventListener(MouseEvent.CLICK, onContinueClick);
         
         // Make sure all tweens are killed
         m_juggler.purge();

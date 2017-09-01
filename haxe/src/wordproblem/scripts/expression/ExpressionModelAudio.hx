@@ -2,7 +2,7 @@ package wordproblem.scripts.expression;
 
 import cgs.audio.Audio;
 
-import starling.events.EventDispatcher;
+import openfl.events.EventDispatcher;
 
 import wordproblem.engine.events.GameEvent;
 import wordproblem.scripts.BaseBufferEventScript;
@@ -36,17 +36,17 @@ class ExpressionModelAudio extends BaseBufferEventScript
         m_eventDispatcher.removeEventListener(GameEvent.REMOVE_TERM, onRemoveTerm);
     }
     
-    private function onChangedOperator() : Void
+    private function onChangedOperator(event : Dynamic) : Void
     {
         Audio.instance.playSfx("button_click");
     }
     
-    private function onAddTermAttempted() : Void
+    private function onAddTermAttempted(event : Dynamic) : Void
     {
         Audio.instance.playSfx("carddrop");
     }
     
-    private function onRemoveTerm() : Void
+    private function onRemoveTerm(event : Dynamic) : Void
     {
         Audio.instance.playSfx("text2card");
     }

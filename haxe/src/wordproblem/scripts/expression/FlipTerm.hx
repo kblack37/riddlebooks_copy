@@ -1,12 +1,13 @@
 package wordproblem.scripts.expression;
 
 
-import flash.geom.Point;
-
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.ui.MouseState;
 
+import openfl.geom.Point;
+
 import wordproblem.engine.IGameEngine;
+import wordproblem.engine.events.DataEvent;
 import wordproblem.engine.events.GameEvent;
 import wordproblem.engine.expression.widget.term.BaseTermWidget;
 import wordproblem.engine.expression.widget.term.SymbolTermWidget;
@@ -76,9 +77,9 @@ class FlipTerm extends BaseTermAreaScript
         return status;
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         // HACK: Need to find more consistent way to activate scripts
         this.setIsActive(m_isActive);
@@ -105,7 +106,7 @@ class FlipTerm extends BaseTermAreaScript
                 locationX : mousePoint.x,
                 locationY : mousePoint.y,
             };
-            m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.NEGATE_EXPRESSION_EVENT, false, loggingDetails);
+            m_gameEngine.dispatchEvent(new DataEvent(AlgebraAdventureLoggingConstants.NEGATE_EXPRESSION_EVENT, loggingDetails));
             
             // Flip card
             if (Std.is(targetWidget, SymbolTermWidget) && targetTermArea.isReady) 

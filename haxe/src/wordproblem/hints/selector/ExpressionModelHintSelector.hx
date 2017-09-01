@@ -22,6 +22,7 @@ import wordproblem.hints.scripts.TipsViewer;
 import wordproblem.resource.AssetManager;
 import wordproblem.scripts.model.ModelSpecificEquation;
 
+
 /**
  * These hints are intended to show up when the player presses the hint button
  * during the equation modeling portion of a problem and displays help information
@@ -724,7 +725,7 @@ class ExpressionModelHintSelector extends HintSelectorNode
         return hintData;
     }
     
-    private function onEquationChanged() : Void
+    private function onEquationChanged(event : Dynamic) : Void
     {
         var currentEquation : ExpressionNode = m_gameEngine.getExpressionFromTermAreas();
         if (expressionContainsValue(currentEquation, m_expressionCompiler.getVectorSpace().getSubtractionOperator())) 

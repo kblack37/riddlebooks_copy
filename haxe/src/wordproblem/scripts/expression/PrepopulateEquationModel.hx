@@ -24,9 +24,9 @@ class PrepopulateEquationModel extends BaseTermAreaScript
         super(gameEngine, expressionCompiler, assetManager, id, isActive);
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         // TODO: The correct time to add this should be when we first transition to the bar model mode
         

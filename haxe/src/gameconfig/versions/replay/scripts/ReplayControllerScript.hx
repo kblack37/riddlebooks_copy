@@ -73,9 +73,9 @@ class ReplayControllerScript extends BaseGameScript
         trace("Replaying: qid=" + questId + ", dqid=" + dqid + ", num actions=" + numActions);
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         // Set the bar model area
         var barModelWidgets : Array<DisplayObject> = m_gameEngine.getUiEntitiesByClass(BarModelAreaWidget);
@@ -100,7 +100,7 @@ class ReplayControllerScript extends BaseGameScript
         {
             // Allow user to drag the replay controls away
             var mouseState : MouseState = m_gameEngine.getMouseState();
-            m_replayWidget.getBounds(m_replayWidget.parent, m_replayWidgetBoundsBuffer);
+            m_replayWidgetBoundsBuffer = m_replayWidget.getBounds(m_replayWidget.parent);
             if (mouseState.leftMousePressedThisFrame && m_replayWidgetBoundsBuffer.contains(mouseState.mousePositionThisFrame.x, mouseState.mousePositionThisFrame.y)) 
             {
                 m_isDraggingWidget = true;

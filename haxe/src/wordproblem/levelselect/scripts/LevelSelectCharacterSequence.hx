@@ -19,7 +19,7 @@ import wordproblem.engine.scripting.graph.action.CustomVisitNode;
 import wordproblem.engine.scripting.graph.selector.SequenceSelector;
 import wordproblem.engine.systems.CalloutSystem;
 import wordproblem.engine.systems.FreeTransformSystem;
-import wordproblem.engine.systems.HelperCharacterRenderSystem;
+//import wordproblem.engine.systems.HelperCharacterRenderSystem;
 import wordproblem.engine.text.TextParser;
 import wordproblem.engine.text.TextViewFactory;
 import wordproblem.event.LevelSelectEvent;
@@ -30,6 +30,7 @@ import wordproblem.state.WordProblemSelectState;
 /**
  * This script controls the actions of the helper characters while in the level selection screen.
  */
+// TODO: revisit animation once more basic elements display properly
 class LevelSelectCharacterSequence extends ScriptNode
 {
     private var m_characterComponentManager : ComponentManager;
@@ -42,7 +43,7 @@ class LevelSelectCharacterSequence extends ScriptNode
     /*
     Systems needed to draw the characters appropriately
     */
-    private var m_helpRenderSystem : HelperCharacterRenderSystem;
+    //private var m_helpRenderSystem : HelperCharacterRenderSystem;
     private var m_calloutSystem : CalloutSystem;
     private var m_freeTransformSystem : FreeTransformSystem;
     
@@ -70,7 +71,7 @@ class LevelSelectCharacterSequence extends ScriptNode
         m_levelManager = levelManager;
         
         // Create systems to execute
-        m_helpRenderSystem = new HelperCharacterRenderSystem(assetManager, spriteSheetJuggler, m_wordProblemSelectState.getRewardLayer());
+        //m_helpRenderSystem = new HelperCharacterRenderSystem(assetManager, spriteSheetJuggler, m_wordProblemSelectState.getRewardLayer());
         m_calloutSystem = new CalloutSystem(assetManager, wordProblemSelectState.getRewardLayer(), new MouseState(null, null));
         m_freeTransformSystem = new FreeTransformSystem();
         
@@ -184,7 +185,7 @@ class LevelSelectCharacterSequence extends ScriptNode
                 
                 if (textureAtlasComponent.view != null) 
                 {
-                    textureAtlasComponent.view.removeFromParent();
+                    textureAtlasComponent.if (view.parent != null) view.parent.removeChild(view);
                 }
             }
         }
@@ -193,25 +194,24 @@ class LevelSelectCharacterSequence extends ScriptNode
     override public function visit() : Int
     {
         // Execute the script logic
-        for (childScriptNode/* AS3HX WARNING could not determine type for var: childScriptNode exp: EIdent(m_children) type: null */ in m_children)
+        for (childScriptNode in m_children)
         {
             childScriptNode.visit();
-        }  // Update systems that read data to draw the characters  
-        
-        
-        
+        } 
+		
+		// Update systems that read data to draw the characters  
         m_calloutSystem.update(m_characterComponentManager);
         m_freeTransformSystem.update(m_characterComponentManager);
-        m_helpRenderSystem.update(m_characterComponentManager);
+        //m_helpRenderSystem.update(m_characterComponentManager);
         
         return ScriptStatus.SUCCESS;
     }
     
-    private function onOpenGenre() : Void
+    private function onOpenGenre(event : Dynamic) : Void
     {
     }
     
-    private function onCloseGenre() : Void
+    private function onCloseGenre(event : Dynamic) : Void
     {
     }
 }

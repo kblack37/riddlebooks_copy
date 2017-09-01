@@ -10,7 +10,7 @@ import haxe.Constraints.Function;
 import starling.animation.Juggler;
 import starling.animation.Transitions;
 import starling.animation.Tween;
-import starling.display.Button;
+import wordproblem.display.LabelButton;
 import starling.display.DisplayObject;
 import starling.display.Image;
 import starling.display.Quad;
@@ -26,6 +26,7 @@ import wordproblem.resource.AssetManager;
 /**
  * This probably contains too much logic that should instead be handled by the script
  */
+// TODO: revisit animation when more basic display elements are working
 class SummaryWidget extends Layer
 {
     public var totalScreenWidth : Float;
@@ -34,13 +35,13 @@ class SummaryWidget extends Layer
     /**
      * Button for the player to go to the next level
      */
-    public var nextButton : Button;
+    public var nextButton : LabelButton;
     
     /**
      * Button for the player to exit the game screen and return to either a level select
      * or waiting screen.
      */
-    public var exitButton : Button;
+    public var exitButton : LabelButton;
     
     private var m_assetManager : AssetManager;
     
@@ -121,7 +122,7 @@ class SummaryWidget extends Layer
             exitButton.height = 30;
             exitButton.pivotX = exitButton.width * 0.5;
             exitButton.scaleWhenDown = 0.9;
-            exitButton.addEventListener(Event.TRIGGERED, onExitClicked);
+            exitButton.addEventListener(MouseEvent.CLICK, onExitClicked);
         }
         
         nextButton = WidgetUtil.createGenericColoredButton(
@@ -142,7 +143,7 @@ class SummaryWidget extends Layer
         nextButton.height = 70;
         nextButton.pivotX = nextButton.width * 0.5;
         nextButton.scaleWhenDown = 0.9;
-        nextButton.addEventListener(Event.TRIGGERED, onNextClicked);
+        nextButton.addEventListener(MouseEvent.CLICK, onNextClicked);
     }
     
     public function show(onSlideComplete : Function) : Void
@@ -208,10 +209,10 @@ class SummaryWidget extends Layer
         
         if (exitButton != null) 
         {
-            exitButton.removeEventListener(Event.TRIGGERED, onExitClicked);
+            exitButton.removeEventListener(MouseEvent.CLICK, onExitClicked);
             exitButton.removeFromParent(true);
         }
-        nextButton.removeEventListener(Event.TRIGGERED, onNextClicked);
+        nextButton.removeEventListener(MouseEvent.CLICK, onNextClicked);
         nextButton.removeFromParent(true);
         
         m_onNextPressedCallback = null;

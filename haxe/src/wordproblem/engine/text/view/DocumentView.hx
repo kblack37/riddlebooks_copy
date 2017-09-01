@@ -1,12 +1,13 @@
 package wordproblem.engine.text.view;
 
 
-import flash.geom.Point;
-import flash.geom.Rectangle;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import wordproblem.display.PivotSprite;
 
-import starling.display.DisplayObject;
-import starling.display.Quad;
-import starling.display.Sprite;
+import openfl.display.DisplayObject;
 
 import wordproblem.engine.text.model.DocumentNode;
 
@@ -16,7 +17,7 @@ import wordproblem.engine.text.model.DocumentNode;
  * 
  * (Note that this base class represents the views for paragraph, page, and div tags)
  */
-class DocumentView extends Sprite
+class DocumentView extends PivotSprite
 {
     public var node : DocumentNode;
     
@@ -94,7 +95,7 @@ class DocumentView extends Sprite
             // visible
             if (!view.node.getIsVisible() && view.parent != null) 
             {
-                view.parent.removeChild(view);
+                if (view.parent != null) view.parent.removeChild(view);
             }
             
             view.node.visibleDirty = false;
@@ -153,7 +154,7 @@ class DocumentView extends Sprite
      *      The lowest level document view in this display heirarchy, null if none
      *      of the children of this node hit or the hit view is not visible
      */
-    public function hitTestPoint(globalPoint : Point, ignoreNonSelectable : Bool = true) : DocumentView
+    public function customHitTestPoint(globalPoint : Point, ignoreNonSelectable : Bool = true) : DocumentView
     {
         var targetChildView : DocumentView = null;
         
@@ -168,7 +169,7 @@ class DocumentView extends Sprite
             while (i >= 0){
                 // Assumes no overlap between view terms
                 var childView : DocumentView = this.childViews[i];
-                targetChildView = childView.hitTestPoint(globalPoint, ignoreNonSelectable);
+                targetChildView = childView.customHitTestPoint(globalPoint, ignoreNonSelectable);
                 
                 if (targetChildView != null) 
                 {
@@ -326,11 +327,12 @@ class DocumentView extends Sprite
         }
         
         removeBoxesAroundSegment();
-        this.getBounds(stageReference, bounds);
+        var bounds = this.getBounds(stageReference);
+		
+		var bitmap = new Bitmap(new BitmapData(Std.int(bounds.width), Std.int(bounds.height), false, color));
         
-        var quad : Quad = new Quad(bounds.width, bounds.height, color);
-        this.addChildAt(quad, 0);
-        m_backgroundImages.push(quad);
+        this.addChildAt(bitmap, 0);
+        m_backgroundImages.push(bitmap);
     }
     
     private function removeBoxesAroundSegment() : Void
@@ -340,7 +342,7 @@ class DocumentView extends Sprite
             var image : DisplayObject = m_backgroundImages.pop();
             if (image.parent != null) 
             {
-                image.parent.removeChild(image);
+                if (image.parent != null) image.parent.removeChild(image);
             }
         }
     }

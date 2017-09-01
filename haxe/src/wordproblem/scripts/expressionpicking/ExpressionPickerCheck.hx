@@ -8,7 +8,7 @@ import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import starling.animation.Transitions;
 import starling.animation.Tween;
 import starling.core.Starling;
-import starling.display.Button;
+import wordproblem.display.LabelButton;
 import starling.display.DisplayObject;
 import starling.display.DisplayObjectContainer;
 import starling.display.Image;
@@ -29,7 +29,7 @@ import wordproblem.scripts.BaseGameScript;
  */
 class ExpressionPickerCheck extends BaseGameScript
 {
-    private var m_modelEquationButton : Button;
+    private var m_modelEquationButton : LabelButton;
     private var m_pickerIds : Array<String>;
     private var m_expressions : Array<String>;
     
@@ -69,14 +69,14 @@ class ExpressionPickerCheck extends BaseGameScript
     {
         super.dispose();
         
-        m_modelEquationButton.removeEventListener(Event.TRIGGERED, onModelSelected);
+        m_modelEquationButton.removeEventListener(MouseEvent.CLICK, onModelSelected);
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
         // Get the model button and check whenever it is selected
         m_modelEquationButton = try cast(m_gameEngine.getUiEntity("modelEquationButton"), Button) catch(e:Dynamic) null;
-        m_modelEquationButton.addEventListener(Event.TRIGGERED, onModelSelected);
+        m_modelEquationButton.addEventListener(MouseEvent.CLICK, onModelSelected);
     }
     
     /**
@@ -154,7 +154,7 @@ class ExpressionPickerCheck extends BaseGameScript
             
             var eventType : String = ((m_allExpressionsSatisfied)) ? 
             GameEvent.EXPRESSION_PICKER_CORRECT : GameEvent.EXPRESSION_PICKER_INCORRECT;
-            m_gameEngine.dispatchEventWith(eventType);
+            m_gameEngine.dispatchEvent(eventType);
             
             // If no animations are playing we can immediately fire events
             checkAnimationCompleteAndFireCallback();
@@ -177,8 +177,8 @@ class ExpressionPickerCheck extends BaseGameScript
                             success : true,
 
                         };
-                m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.BUTTON_PRESSED_EVENT, false, loggingDetails);
-                m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.EQUALS_CLICKED_EVENT, false, loggingDetails);
+                m_gameEngine.dispatchEvent(AlgebraAdventureLoggingConstants.BUTTON_PRESSED_EVENT, false, loggingDetails);
+                m_gameEngine.dispatchEvent(AlgebraAdventureLoggingConstants.EQUALS_CLICKED_EVENT, false, loggingDetails);
             }
             else 
             {
@@ -190,8 +190,8 @@ class ExpressionPickerCheck extends BaseGameScript
                             success : false,
 
                         };
-                m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.BUTTON_PRESSED_EVENT, false, loggingDetails);
-                m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.EQUALS_CLICKED_EVENT, false, loggingDetails);
+                m_gameEngine.dispatchEvent(AlgebraAdventureLoggingConstants.BUTTON_PRESSED_EVENT, false, loggingDetails);
+                m_gameEngine.dispatchEvent(AlgebraAdventureLoggingConstants.EQUALS_CLICKED_EVENT, false, loggingDetails);
             }
             
             var i : Int = 0;

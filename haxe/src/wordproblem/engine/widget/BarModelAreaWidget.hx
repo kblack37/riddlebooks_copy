@@ -1,12 +1,13 @@
 package wordproblem.engine.widget;
 
-import starling.display.Image;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import wordproblem.display.Scale9Image;
 import wordproblem.engine.widget.IBaseWidget;
 
-import flash.geom.Rectangle;
+import openfl.geom.Rectangle;
 
-import starling.display.DisplayObject;
-import starling.textures.Texture;
+import openfl.display.DisplayObject;
 
 import wordproblem.engine.barmodel.model.BarModelData;
 import wordproblem.engine.barmodel.view.BarLabelView;
@@ -70,10 +71,13 @@ class BarModelAreaWidget extends BarModelView implements IBaseWidget
         
         var horizontalPadding : Float = 20;
         var verticalPadding : Float = 30;
-        var backgroundImageTexture : Texture = assetManager.getTexture("term_area_left");
-        var bgImage : Image = new Image(Texture.fromTexture(backgroundImageTexture, new Rectangle(
-        horizontalPadding, verticalPadding, backgroundImageTexture.width - 2 * horizontalPadding, backgroundImageTexture.height - 2 * verticalPadding))
-        );
+        var backgroundImageBitmapData : BitmapData = assetManager.getBitmapData("term_area_left");
+        var bgImage : Scale9Image = new Scale9Image(backgroundImageBitmapData, new Rectangle(
+			horizontalPadding,
+			verticalPadding, 
+			backgroundImageBitmapData.width - 2 * horizontalPadding,
+			backgroundImageBitmapData.height - 2 * verticalPadding
+        ));
         m_background = bgImage;
     }
     
@@ -83,7 +87,7 @@ class BarModelAreaWidget extends BarModelView implements IBaseWidget
         
         if (m_background != null) 
         {
-            m_background.removeFromParent(true);
+			if (m_background.parent != null) m_background.parent.removeChild(m_background);
         }
         m_background.width = width;
         m_background.height = height;
@@ -265,4 +269,8 @@ class BarModelAreaWidget extends BarModelView implements IBaseWidget
             }
         }
     }
+	
+	public function dispose() {
+		
+	}
 }

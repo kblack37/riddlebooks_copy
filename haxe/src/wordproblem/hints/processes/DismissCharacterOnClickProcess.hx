@@ -1,14 +1,13 @@
 package wordproblem.hints.processes;
 
 
-import flash.geom.Point;
+import openfl.geom.Point;
 
 import dragonbox.common.ui.MouseState;
 
-import haxe.Constraints.Function;
-
-import starling.display.DisplayObject;
-import starling.events.Event;
+import openfl.display.DisplayObject;
+import openfl.events.Event;
+import openfl.events.MouseEvent;
 
 import wordproblem.characters.HelperCharacterController;
 import wordproblem.engine.component.CalloutComponent;
@@ -42,7 +41,7 @@ class DismissCharacterOnClickProcess extends ScriptNode
     private var m_mouseInCalloutBoundsLastFrame : Bool;
     
     private var m_extraButtonOnCallout : DisplayObject;
-    private var m_extraButtonClickCallback : Function;
+    private var m_extraButtonClickCallback : Dynamic->Void;
     
     // For some reason the character callout appears at the top left of the screen at the start.
     // This causes this hit to be immediately triggered.
@@ -55,7 +54,7 @@ class DismissCharacterOnClickProcess extends ScriptNode
             characterId : String,
             mouseState : MouseState,
             extraButtonOnCallout : DisplayObject,
-            extraButtonClickCallback : Function,
+            extraButtonClickCallback : Dynamic->Void,
             id : String = null,
             isActive : Bool = true)
     {
@@ -75,7 +74,7 @@ class DismissCharacterOnClickProcess extends ScriptNode
             m_extraButtonOnCallout = extraButtonOnCallout;
             m_extraButtonClickCallback = extraButtonClickCallback;
             
-            m_extraButtonOnCallout.addEventListener(Event.TRIGGERED, m_extraButtonClickCallback);
+            m_extraButtonOnCallout.addEventListener(MouseEvent.CLICK, m_extraButtonClickCallback);
         }
     }
     
@@ -85,7 +84,7 @@ class DismissCharacterOnClickProcess extends ScriptNode
         
         if (m_extraButtonOnCallout != null) 
         {
-            m_extraButtonOnCallout.removeEventListener(Event.TRIGGERED, m_extraButtonClickCallback);
+            m_extraButtonOnCallout.removeEventListener(MouseEvent.CLICK, m_extraButtonClickCallback);
         }
     }
     

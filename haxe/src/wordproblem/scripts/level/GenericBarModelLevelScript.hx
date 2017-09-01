@@ -1,16 +1,17 @@
 package wordproblem.scripts.level;
 
-import haxe.xml.Fast;
-
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.time.Time;
 import dragonbox.common.util.PMPRNG;
 import dragonbox.common.util.XColor;
 
 import haxe.Constraints.Function;
+import haxe.xml.Fast;
 
-import starling.core.Starling;
-import starling.display.DisplayObject;
+import motion.Actuate;
+
+import openfl.display.DisplayObject;
+import openfl.events.Event;
 
 import wordproblem.callouts.CalloutCreator;
 import wordproblem.characters.HelperCharacterController;
@@ -456,9 +457,9 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
         }
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         // Map custom card rendering data to terms
         var currentLevel : WordProblemLevelData = m_gameEngine.getCurrentLevel();
@@ -556,11 +557,11 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
         
         var helpController : HelpController = new HelpController(m_gameEngine, m_expressionCompiler, m_assetManager);
         super.pushChild(helpController);
-        helpController.overrideLevelReady();
+        helpController.overrideLevelReady({ });
         
         var highlightHintButton : HighlightHintButtonScript = new HighlightHintButtonScript(m_gameEngine, m_expressionCompiler, m_assetManager, helpController, m_time);
         super.pushChild(highlightHintButton);
-        highlightHintButton.overrideLevelReady();
+        highlightHintButton.overrideLevelReady({ });
         
         var hintSelector : HintSelectorNode = new HintSelectorNode();
 		
@@ -705,7 +706,7 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
         // After level initialization, we add special script to block logic in the bar model press event from
         // executing if they are in a disabled layer (for example another screen is on top of it)
         var disableInLayer : DisableInLayer = new DisableInLayer(barModelWidget, m_gameEngine, m_expressionCompiler, m_assetManager);
-        disableInLayer.overrideLevelReady();
+        disableInLayer.overrideLevelReady({ });
         this.getNodeById("ModifyExistingBarGestures").pushChild(disableInLayer, 0);
         
         // Modeling the actual equation ends the game
@@ -732,7 +733,7 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
             var splitBarSegment : SplitBarSegment = new SplitBarSegment(m_gameEngine, m_expressionCompiler, m_assetManager, "SplitBarSegment");
             (try cast(getNodeById("CardOnSegmentRadialOptions"), CardOnSegmentRadialOptions) catch(e:Dynamic) null).addGesture(addNewLabelOnSegment);
             (try cast(getNodeById("CardOnSegmentRadialOptions"), CardOnSegmentRadialOptions) catch(e:Dynamic) null).addGesture(splitBarSegment);
-            splitBarSegment.overrideLevelReady();
+            splitBarSegment.overrideLevelReady({ });
         }
         else 
         {
@@ -740,7 +741,7 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
             // Just add the label script directly
             this.getNodeById("BarModelDragGestures").pushChild(addNewLabelOnSegment, 1);
         }
-        addNewLabelOnSegment.overrideLevelReady();
+        addNewLabelOnSegment.overrideLevelReady({ });
         
         this.getNodeById("ResizeHorizontalBarLabel").setIsActive(levelRules.allowResizeBrackets);
         this.getNodeById("ResizeVerticalBarLabel").setIsActive(levelRules.allowResizeBrackets);
@@ -756,14 +757,14 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
         {
             var addNewBarSegment : AddNewBarSegment = new AddNewBarSegment(m_gameEngine, m_expressionCompiler, m_assetManager, "AddNewBarSegment");
             (try cast(getNodeById("CardOnSegmentEdgeRadialOptions"), CardOnSegmentEdgeRadialOptions) catch(e:Dynamic) null).addGesture(addNewBarSegment);
-            addNewBarSegment.overrideLevelReady();
+            addNewBarSegment.overrideLevelReady({ });
         }
         
         if (levelRules.allowAddBarComparison) 
         {
             var addNewBarComparison : AddNewBarComparison = new AddNewBarComparison(m_gameEngine, m_expressionCompiler, m_assetManager, "AddNewBarComparison");
             (try cast(getNodeById("CardOnSegmentEdgeRadialOptions"), CardOnSegmentEdgeRadialOptions) catch(e:Dynamic) null).addGesture(addNewBarComparison);
-            addNewBarComparison.overrideLevelReady();
+            addNewBarComparison.overrideLevelReady({ });
         }
         
         this.getNodeById("AddNewHorizontalLabel").setIsActive(levelRules.allowAddHorizontalLabels);
@@ -806,9 +807,7 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
                 }));
         otherSequence.pushChild(new CustomVisitNode(function(param : Dynamic) : Int
                 {
-                    Starling.current.juggler.tween(uiContainer, 0.3, {
-                                y : startingUiContainerY
-                            });
+					Actuate.tween(uiContainer, 0.3, { y: startingUiContainerY });
                     deleteChild(otherSequence);
                     return ScriptStatus.SUCCESS;
                 }, { }));
@@ -823,7 +822,7 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
                     {
                         getNodeById("RestrictCardsInBarModel").setIsActive(false);
                         getNodeById("ModelSpecificEquation").setIsActive(true);
-                        m_switchModelScript.onSwitchModelClicked();
+                        m_switchModelScript.onSwitchModelClicked({ });
                         m_shiftResetAndUndo.shift();
                     });
         }
@@ -841,14 +840,13 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
                 this.getNodeById("ResetTermArea").setIsActive(false);
                 this.getNodeById("BarToCard").setIsActive(false);
                 
-                m_gameEngine.dispatchEventWith(GameEvent.LEVEL_SOLVED);
+                m_gameEngine.dispatchEvent(new Event(GameEvent.LEVEL_SOLVED));
                 
                 // Wait for some short time before marking the level as totally complete
-                Starling.current.juggler.delayCall(function() : Void
+				Actuate.timer(1).onComplete(function() : Void
                         {
-                            m_gameEngine.dispatchEventWith(GameEvent.LEVEL_COMPLETE);
-                        },
-                        1.0
+                            m_gameEngine.dispatchEvent(new Event(GameEvent.LEVEL_COMPLETE));
+                        }
                         );
             }
         }
@@ -895,13 +893,10 @@ class GenericBarModelLevelScript extends BaseCustomLevelScript
         {
             var cardCreator : EnterNewCard = new EnterNewCard(m_gameEngine, m_expressionCompiler, m_assetManager, false, 3, "EnterNewCard");
             this.getNodeById("DeckGestures").pushChild(cardCreator, 0);
-            cardCreator.overrideLevelReady();
+            cardCreator.overrideLevelReady({ });
         }
-        
-        Starling.current.juggler.delayCall(
-                delayFunction,
-                0.2
-                );
+		
+		Actuate.timer(0.2).onComplete(delayFunction);
     }
     
     private function onSwitchModelClicked(inBarModelMode : Bool) : Void

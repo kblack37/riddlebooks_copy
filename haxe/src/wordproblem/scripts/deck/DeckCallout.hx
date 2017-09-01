@@ -1,15 +1,14 @@
 package wordproblem.scripts.deck;
 
 
-import flash.geom.Point;
-import flash.geom.Rectangle;
-import flash.text.TextFormat;
-
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.ui.MouseState;
 
-import starling.display.DisplayObject;
-import starling.text.TextField;
+import openfl.display.DisplayObject;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
+import openfl.text.TextField;
+import openfl.text.TextFormat;
 
 import wordproblem.display.Layer;
 import wordproblem.engine.IGameEngine;
@@ -96,16 +95,21 @@ class DeckCallout extends BaseGameScript
                         // Additional case to make sure objects that are not part of the layering system but that are still above the card
                         // will prevent the callout from showing up. This is needed for a case like a character hint and callout appearing above the deck.
                         // We cannot add the character callout to the layer system so we have no choice but to add this work around
-                        var topmostHitObject : DisplayObject = hitObject.stage.hitTest(m_globalMouseBuffer);
-                        while (topmostHitObject != hitObject && topmostHitObject != null)
-                        {
-                            topmostHitObject = topmostHitObject.parent;
-                        }
-                        
-                        if (topmostHitObject != hitObject) 
-                        {
-                            continue;
-                        }  
+						// TODO: not sure if this is a correct conversion of the commented code below (hitTestPoint returns a bool, not a DisplayObject)
+						var hitObjectsUnderPoint : Array<DisplayObject> = hitObject.stage.getObjectsUnderPoint(m_globalMouseBuffer);
+						if (Lambda.indexOf(hitObjectsUnderPoint, hitObject) < 0) {
+							continue;
+						}
+                        //var topmostHitObject : DisplayObject = hitObject.stage.hitTestPoint(m_globalMouseBuffer.x, m_globalMouseBuffer.y);
+                        //while (topmostHitObject != hitObject && topmostHitObject != null)
+                        //{
+                            //topmostHitObject = topmostHitObject.parent;
+                        //}
+                        //
+                        //if (topmostHitObject != hitObject) 
+                        //{
+                            //continue;
+                        //}  
 						
 						// Possible for a card to take a new value that no longer matches the text in the callout  
                         // Occurs during card flip. In this case we discard the old callout  
@@ -138,7 +142,7 @@ class DeckCallout extends BaseGameScript
 							// Checked if hit object is clipped by edge of view port, this will affect positioning  
 							// of callout as the callout should point only to visible portion.  
                             // Callout should point to middle of the VISIBLE portion only.  
-                            hitObject.getBounds(m_deckArea, m_localBoundsBuffer);
+                            m_localBoundsBuffer = hitObject.getBounds(m_deckArea);
                             var calloutXOffset : Float = 0;
                             
                             // Check if hit object was clipped by view port edge
@@ -160,14 +164,12 @@ class DeckCallout extends BaseGameScript
                             m_measuringTextField.text = symbolName;
                             var backgroundPadding : Float = 8;
                             var textFormat : TextFormat = m_measuringTextField.defaultTextFormat;
-                            var textField : TextField = new TextField(
-								Std.int(m_measuringTextField.textWidth + backgroundPadding * 2), 
-								Std.int(m_measuringTextField.textHeight * 2), 
-								symbolName, 
-								textFormat.font, 
-								textFormat.size, 
-								try cast(textFormat.color, Int) catch(e:Dynamic) 0
-                            );
+                            var textField : TextField = new TextField();
+							textField.width = m_measuringTextField.textWidth + backgroundPadding * 2;
+							textField.height = m_measuringTextField.textHeight * 2; 
+							textField.text = symbolName; 
+							textField.setTextFormat(new TextFormat(textFormat.font, textFormat.size, textFormat.color));
+							
                             var calloutComponent : CalloutComponent = new CalloutComponent(deckEntityId);
                             calloutComponent.backgroundTexture = "button_white";
                             calloutComponent.backgroundColor = 0x000000;
@@ -197,9 +199,9 @@ class DeckCallout extends BaseGameScript
         return ScriptStatus.SUCCESS;
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         m_deckArea = try cast(m_gameEngine.getUiEntity("deckArea"), DeckWidget) catch(e:Dynamic) null;
         m_measuringTextField = new MeasuringTextField();

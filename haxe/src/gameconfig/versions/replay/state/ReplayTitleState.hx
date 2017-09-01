@@ -67,7 +67,7 @@ class ReplayTitleState extends BaseState
         submitDqidButton.width = 120;
         submitDqidButton.height = 42;
         submitDqidButton.label = "Submit DQID";
-        submitDqidButton.addEventListener(Event.TRIGGERED, onSubmitDqidClicked);
+        submitDqidButton.addEventListener(MouseEvent.CLICK, onSubmitDqidClicked);
         submitDqidButton.x = dqidInput.x + (dqidInput.width - submitDqidButton.width) * 0.5;
         submitDqidButton.y = dqidInput.y + dqidInput.height;
         addChild(submitDqidButton);
@@ -76,7 +76,7 @@ class ReplayTitleState extends BaseState
     private function onSubmitDqidClicked() : Void
     {
         var dqid : String = m_dqidInput.text;
-        dispatchEventWith(ReplayEvents.GO_TO_REPLAY_FOR_DQID, false, {
+        dispatchEvent(ReplayEvents.GO_TO_REPLAY_FOR_DQID, false, {
                     dqid : dqid
 
                 });

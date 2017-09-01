@@ -6,7 +6,7 @@ import dragonbox.common.ui.MouseState;
 
 import haxe.Constraints.Function;
 
-import starling.display.Sprite;
+import openfl.display.Sprite;
 
 /**
 	 * This state machine is responsible for managing the various game screens visible
@@ -113,7 +113,7 @@ class StateMachine extends Sprite implements IStateMachine
         return this.currentState;
     }
     
-    override public function dispose() : Void
+    public function dispose() : Void
     {
         if (this.currentState != null) 
         {
@@ -121,7 +121,7 @@ class StateMachine extends Sprite implements IStateMachine
             currentState.exit(null);
         }
         
-        for (state/* AS3HX WARNING could not determine type for var: state exp: EField(EIdent(this),states) type: null */ in this.states)
+        for (state in this.states)
         {
             state.dispose();
         }

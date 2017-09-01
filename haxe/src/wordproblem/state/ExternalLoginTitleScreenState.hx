@@ -24,7 +24,7 @@ import dragonbox.common.util.XColor;
 import haxe.Constraints.Function;
 
 import starling.animation.Juggler;
-import starling.display.Button;
+import wordproblem.display.LabelButton;
 import starling.display.DisplayObject;
 import starling.display.Image;
 import starling.events.Event;
@@ -60,8 +60,8 @@ class ExternalLoginTitleScreenState extends BaseState
     
     private var m_logger : AlgebraAdventureLogger;
     
-    private var m_continueGameButton : Button;
-    private var m_newGameButton : Button;
+    private var m_continueGameButton : LabelButton;
+    private var m_newGameButton : LabelButton;
     
     /**
      * Have a custom juggler that animates all spritesheets in this screen
@@ -253,7 +253,7 @@ class ExternalLoginTitleScreenState extends BaseState
                         );
         m_continueGameButton.width = 250;
         m_continueGameButton.height = baseContinueGameButtonTexture.height;
-        m_continueGameButton.addEventListener(Event.TRIGGERED, onContinueGameClick);
+        m_continueGameButton.addEventListener(MouseEvent.CLICK, onContinueGameClick);
         
         if (allowContinue) 
         {
@@ -284,7 +284,7 @@ class ExternalLoginTitleScreenState extends BaseState
             nineSliceGrid
         );
         m_newGameButton.width = 330;
-        m_newGameButton.addEventListener(Event.TRIGGERED, onNewGameClick);
+        m_newGameButton.addEventListener(MouseEvent.CLICK, onNewGameClick);
         
         if (allowContinue) 
         {
@@ -311,8 +311,8 @@ class ExternalLoginTitleScreenState extends BaseState
     
     override public function exit(toState : Dynamic) : Void
     {
-        m_continueGameButton.removeEventListener(Event.TRIGGERED, onContinueGameClick);
-        m_newGameButton.removeEventListener(Event.TRIGGERED, onNewGameClick);
+        m_continueGameButton.removeEventListener(MouseEvent.CLICK, onContinueGameClick);
+        m_newGameButton.removeEventListener(MouseEvent.CLICK, onNewGameClick);
         
         while (numChildren > 0)
         {
@@ -347,7 +347,7 @@ class ExternalLoginTitleScreenState extends BaseState
             
             var cgsApi : CgsApi = m_logger.getCgsApi();
             cgsApi.authenticateStudent(m_logger.getCgsUserProperties(m_saveDataToServer, m_saveCacheKey), username, m_teacherCode, password, 0, onAuthenticateStudent);
-            dispatchEventWith(CommandEvent.WAIT_SHOW);
+            dispatchEvent(CommandEvent.WAIT_SHOW);
         }
     }
     
@@ -362,10 +362,10 @@ class ExternalLoginTitleScreenState extends BaseState
         cgsUserProperties.completeCallback = onAnonymousUserInitialized;
         
         m_logger.getCgsApi().initializeUser(cgsUserProperties);
-        dispatchEventWith(CommandEvent.WAIT_SHOW);
+        dispatchEvent(CommandEvent.WAIT_SHOW);
         */
         
-        dispatchEventWith(CommandEvent.WAIT_SHOW);
+        dispatchEvent(CommandEvent.WAIT_SHOW);
         
         // Save user id to the local cache
         var userId : String = createGuid("");
@@ -412,7 +412,7 @@ class ExternalLoginTitleScreenState extends BaseState
     {
         if (userResponse.success) 
         {
-            dispatchEventWith(CommandEvent.USER_AUTHENTICATED);
+            dispatchEvent(CommandEvent.USER_AUTHENTICATED);
         }
         else 
         {
@@ -420,7 +420,7 @@ class ExternalLoginTitleScreenState extends BaseState
             
         }
         
-        dispatchEventWith(CommandEvent.WAIT_HIDE);
+        dispatchEvent(CommandEvent.WAIT_HIDE);
     }
     
     private function onAnonymousUserInitialized(userResponse : CgsUserResponse) : Void
@@ -445,8 +445,8 @@ class ExternalLoginTitleScreenState extends BaseState
     
     private function onCreateAnonymousUserAccount(response : CgsResponseStatus) : Void
     {
-        dispatchEventWith(CommandEvent.USER_AUTHENTICATED);
-        dispatchEventWith(CommandEvent.WAIT_HIDE);
+        dispatchEvent(CommandEvent.USER_AUTHENTICATED);
+        dispatchEvent(CommandEvent.WAIT_HIDE);
     }
     
     private function createGuid(prefix : String, value : Array<Dynamic> = null) : String

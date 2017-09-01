@@ -8,7 +8,7 @@ import flash.display.BitmapData;
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
 import flash.display.MovieClip;
-import flash.display.SimpleButton;
+import flash.display.LabelButton;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.geom.ColorTransform;
@@ -110,7 +110,7 @@ class XSprite
 		 * @param	hitTestState If true, button's hitTestState is included in the list, otherwise, it's not.
 		 * @param	func Callback function, called with each button state.
 		 */
-    public static function forEachButtonState(btn : SimpleButton, hitTestState : Bool, func : Function) : Void
+    public static function forEachButtonState(btn : LabelButton, hitTestState : Bool, func : Function) : Void
     {
         var states : Array<Dynamic> = null;
         if (hitTestState) {

@@ -71,17 +71,17 @@ class TosUi extends Sprite
     //private var m_button_format : TextFormat = new TextFormat(FONT_DEFAULT, 28, 
         //0x0, true, null, null, null, null, TextFormatAlign.LEFT);
     //
-    //private var _agreeButton : Button;
-    //private var _disagreeButton : Button;
+    //private var _agreeButton : LabelButton;
+    //private var _disagreeButton : LabelButton;
     //
     //private var m_disagree_screen_text : TextField;
     //private var _disagreeTextBackground : Sprite;
-    //private var _backTosButton : Button;
+    //private var _backTosButton : LabelButton;
     //
     ////private var m_under_13_instructions:TextField;
     ////private var m_under_13_instructions_background:Sprite;
     //private var _showLinkButton : Bool;
-    //private var _linkTosButton : Button;
+    //private var _linkTosButton : LabelButton;
     //
     ////Variables used to determine what text and components should be displayed.
     ////private var m_show_13_under_button:Boolean;

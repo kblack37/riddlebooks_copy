@@ -1,21 +1,17 @@
 package wordproblem.scripts.barmodel;
 
-import wordproblem.scripts.barmodel.BaseBarModelScript;
-import wordproblem.scripts.barmodel.ICardOnSegmentEdgeScript;
-import wordproblem.scripts.barmodel.IHitAreaScript;
-
-import flash.geom.Rectangle;
-
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.ui.MouseState;
 
 import haxe.Constraints.Function;
 
-import starling.display.DisplayObject;
-import starling.display.DisplayObjectContainer;
-import starling.display.Image;
+import openfl.display.Bitmap;
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
+import openfl.geom.Rectangle;
 
+import wordproblem.display.PivotSprite;
 import wordproblem.engine.IGameEngine;
 import wordproblem.engine.barmodel.BarModelDataUtil;
 import wordproblem.engine.barmodel.model.BarComparison;
@@ -28,12 +24,16 @@ import wordproblem.engine.barmodel.view.BarSegmentView;
 import wordproblem.engine.barmodel.view.BarWholeView;
 import wordproblem.engine.component.BlinkComponent;
 import wordproblem.engine.component.RenderableComponent;
+import wordproblem.engine.events.DataEvent;
 import wordproblem.engine.events.GameEvent;
 import wordproblem.engine.expression.widget.term.BaseTermWidget;
 import wordproblem.engine.expression.widget.term.SymbolTermWidget;
 import wordproblem.engine.scripting.graph.ScriptStatus;
 import wordproblem.log.AlgebraAdventureLoggingConstants;
 import wordproblem.resource.AssetManager;
+import wordproblem.scripts.barmodel.BaseBarModelScript;
+import wordproblem.scripts.barmodel.ICardOnSegmentEdgeScript;
+import wordproblem.scripts.barmodel.IHitAreaScript;
 
 /**
  * This script handles the adding of a new bar segments at the end of an existing whole bar
@@ -108,7 +108,7 @@ class AddNewBarSegment extends BaseBarModelScript implements IHitAreaScript impl
             
             var mouseState : MouseState = m_gameEngine.getMouseState();
             m_globalMouseBuffer.setTo(mouseState.mousePositionThisFrame.x, mouseState.mousePositionThisFrame.y);
-            m_barModelArea.globalToLocal(m_globalMouseBuffer, m_localMouseBuffer);
+            m_localMouseBuffer = m_barModelArea.globalToLocal(m_globalMouseBuffer);
             
             if (m_eventTypeBuffer.length > 0) 
             {
@@ -240,7 +240,8 @@ class AddNewBarSegment extends BaseBarModelScript implements IHitAreaScript impl
     public function postProcessHitAreas(hitAreas : Array<Rectangle>, hitAreaGraphics : Array<DisplayObjectContainer>) : Void
     {
         for (i in 0...hitAreas.length){
-            var icon : Image = new Image(m_assetManager.getTexture("plus"));
+            var icon : PivotSprite = new PivotSprite();
+			icon.addChild(new Bitmap(m_assetManager.getBitmapData("plus")));
             var hitArea : Rectangle = hitAreas[i];
             icon.pivotX = icon.width * 0.5;
             icon.pivotY = icon.height * 0.5;
@@ -284,10 +285,9 @@ class AddNewBarSegment extends BaseBarModelScript implements IHitAreaScript impl
                 hitAreaY = lastSegmentViewBounds.top - (maxHeight - lastSegmentViewBounds.height) * 0.5;
                 hitAreaWidth = rightOffsetXFromAnchor + xInsetIntoSegment;
                 hitAreaHeight = maxHeight;
-            }  // Grab a rectangle from the pool  
-            
-            
-            
+            }
+			
+			// Grab a rectangle from the pool  
             var segmentHitArea : Rectangle = ((m_hitAreaPool.length > 0)) ? m_hitAreaPool.pop() : new Rectangle();
             segmentHitArea.setTo(hitAreaX, hitAreaY, hitAreaWidth, hitAreaHeight);
             m_addNewBarSegmentHitAreas.push(segmentHitArea);
@@ -332,18 +332,13 @@ class AddNewBarSegment extends BaseBarModelScript implements IHitAreaScript impl
             var newBarSegmentIndex : Int = targetBarWhole.barSegments.length - 1;
             var newBarLabel : BarLabel = new BarLabel(labelOnTop, newBarSegmentIndex, newBarSegmentIndex, true, false, BarLabel.BRACKET_NONE, null);
             targetBarWhole.barLabels.push(newBarLabel);
-        }  // is always attached to the shorter bar.    // If this is detected than the comparison must be removed because we are under the assumption the comparison    // To do this we check if the value of the target bar exceed the value of the other one    // it must be deleted OR comparison no longer is attached to a single bar    // If the addition of the new segment causes the comparison to no longer be correct,  
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        }  
+		
+		// If the addition of the new segment causes the comparison to no longer be correct,  
+		// it must be deleted OR comparison no longer is attached to a single bar
+		// To do this we check if the value of the target bar exceed the value of the other one 
+		// If this is detected than the comparison must be removed because we are under the assumption the comparison 
+        // is always attached to the shorter bar.  
         if (targetBarWhole.barComparison != null) 
         {
             var barComparison : BarComparison = targetBarWhole.barComparison;
@@ -376,10 +371,9 @@ class AddNewBarSegment extends BaseBarModelScript implements IHitAreaScript impl
             if (targetBarWhole != null) 
             {
                 var previousModelDataSnapshot : BarModelData = m_barModelArea.getBarModelData().clone();
-                m_eventDispatcher.dispatchEventWith(GameEvent.BAR_MODEL_AREA_CHANGE, false, {
+                m_eventDispatcher.dispatchEvent(new DataEvent(GameEvent.BAR_MODEL_AREA_CHANGE, {
                             previousSnapshot : previousModelDataSnapshot
-
-                        });
+                        }));
                 
                 var labelOnTop : String = null;
                 if (Std.is(draggedWidget, SymbolTermWidget)) 
@@ -396,18 +390,16 @@ class AddNewBarSegment extends BaseBarModelScript implements IHitAreaScript impl
                 if (m_gameEngine.getCurrentLevel().getLevelRules().autoResizeHorizontalBrackets) 
                 {
                     BarModelDataUtil.stretchHorizontalBrackets(m_barModelArea.getBarModelData());
-                }  // Redraw at the end to refresh  
-                
-                
-                
+                } 
+				
+				// Redraw at the end to refresh  
                 m_barModelArea.redraw();
                 
                 // Log action
-                m_eventDispatcher.dispatchEventWith(AlgebraAdventureLoggingConstants.ADD_NEW_BAR_SEGMENT, false, {
+                m_eventDispatcher.dispatchEvent(new DataEvent(AlgebraAdventureLoggingConstants.ADD_NEW_BAR_SEGMENT, {
                             barModel : m_barModelArea.getBarModelData().serialize(),
                             value : cardValue,
-
-                        });
+                        }));
             }
         }
     }

@@ -1,22 +1,25 @@
 package wordproblem.engine.systems;
 
-import starling.display.Image;
-import wordproblem.engine.systems.BaseSystemScript;
+import motion.Actuate;
+import wordproblem.display.Scale9Image;
 
-import flash.geom.Point;
+import openfl.display.Bitmap;
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
 
-import starling.animation.Tween;
-import starling.core.Starling;
-import starling.display.DisplayObject;
-import starling.display.DisplayObjectContainer;
-import starling.textures.Texture;
-
+import wordproblem.display.PivotSprite;
 import wordproblem.engine.component.ArrowComponent;
 import wordproblem.engine.component.Component;
 import wordproblem.engine.component.ComponentManager;
 import wordproblem.engine.component.RenderableComponent;
 import wordproblem.engine.component.RenderableListComponent;
+import wordproblem.engine.systems.BaseSystemScript;
 import wordproblem.resource.AssetManager;
+
+
+
 
 /**
  * This system handles drawing arrows pointing at a particular component.
@@ -45,13 +48,11 @@ class ArrowDrawingSystem extends BaseSystemScript
             
             if (arrowComponent.arrowView != null) 
             {
-                arrowComponent.arrowView.removeFromParent();
-            }  // it does not exist then it does not make sense for the arrow to exist    // The target view is the associated render component bound to the entity, if  
-            
-            
-            
-            
-            
+                if (arrowComponent.arrowView.parent != null) arrowComponent.arrowView.parent.removeChild(arrowComponent.arrowView);
+            }  
+			
+			// The target view is the associated render component bound to the entity, if  
+            // it does not exist then it does not make sense for the arrow to exist 
             if (componentManager.hasComponentType(RenderableComponent.TYPE_ID)) 
             {
                 var renderComponent : RenderableComponent = try cast(componentManager.getComponentFromEntityIdAndType(
@@ -85,18 +86,18 @@ class ArrowDrawingSystem extends BaseSystemScript
         // If an arrow has not been drawn then add it to the display
         if (arrowComponent.arrowView == null) 
         {
-			// TODO: this image will likely need to be fixed
-            var arrowTexture : Texture = m_assetManager.getTexture("arrow_short");
-            var arrowImage : Image = new Image(Texture.fromTexture(arrowTexture));
+			var arrowBitmapData = m_assetManager.getBitmapData("arrow_short");
+            var arrowBitmap : Scale9Image = new Scale9Image(arrowBitmapData, new Rectangle(20, 0, 30, arrowBitmapData.height));
+            var arrowImage : PivotSprite = new PivotSprite();
+			arrowImage.addChild(arrowBitmap);
             
             arrowImage.pivotX = arrowImage.width * 0.5;
             arrowImage.pivotY = arrowImage.height * 0.5;
             arrowImage.rotation = arrowComponent.rotation;
             arrowComponent.arrowView = arrowImage;
-        }  // Depending on whether the view to attach to is present we add or remove the arrow  
-        
-        
-        
+        } 
+		
+		// Depending on whether the view to attach to is present we add or remove the arrow  
         if (targetView != null) 
         {
             // Only need to reposition if the position of the target view has been modified
@@ -115,10 +116,9 @@ class ArrowDrawingSystem extends BaseSystemScript
                     if (lastTargetPosition == null) 
                     {
                         arrowComponent.lastTargetPosition = new Point();
-                    }  // Position the arrow  
-                    
-                    
-                    
+                    }  
+					
+					// Position the arrow  
                     arrowComponent.lastTargetPosition.setTo(targetView.x, targetView.y);
                     arrowView.x = midX + targetView.x;
                     arrowView.y = midY + targetView.y;
@@ -127,7 +127,7 @@ class ArrowDrawingSystem extends BaseSystemScript
                     arrowView.width = arrowComponent.length;
                 }
                 
-                if (arrowComponent.animate && arrowComponent.animation == null) 
+                if (arrowComponent.animate) 
                 {
                     var angleRadians : Float = Math.atan2(
                             arrowComponent.endPoint.y - arrowComponent.startPoint.y,
@@ -136,28 +136,20 @@ class ArrowDrawingSystem extends BaseSystemScript
                     var animX : Float = Math.cos(angleRadians) * 50;
                     var animY : Float = Math.sin(angleRadians) * 50;
                     
-                    var arrowTween : Tween = new Tween(arrowView, 0.6);
-                    arrowTween.moveTo(midX + targetView.x - animX, midY + targetView.y - animY);
-                    arrowTween.repeatCount = 0;
-                    arrowTween.reverse = true;
-                    Starling.current.juggler.add(arrowTween);
-                    
-                    arrowComponent.animation = arrowTween;
-                }  // If it hasn't no need to do any repositioning    // Check if the position of the target view has changed.  
-                
-                
-                
-                
-                
+					Actuate.tween(arrowView, 0.6, { x: midX + targetView.x - animX, y: midY + targetView.y - animY }).repeat().reflect();
+					arrowComponent.animate = false;
+                }  
+				
+				// Check if the position of the target view has changed.  
+                // If it hasn't no need to do any repositioning  
                 canvasToAddArrow.addChild(arrowComponent.arrowView);
             }
             else 
             {
-                arrowView.removeFromParent();
-                if (arrowComponent.animation != null) 
+                if (arrowView.parent != null) arrowView.parent.removeChild(arrowView);
+                if (!arrowComponent.animate) 
                 {
-                    Starling.current.juggler.remove(arrowComponent.animation);
-                    arrowComponent.animation = null;
+					Actuate.stop(arrowView);
                 }
             }
         }

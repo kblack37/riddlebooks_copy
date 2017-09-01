@@ -1,17 +1,19 @@
 package wordproblem.scripts.barmodel;
 
+import openfl.display.Bitmap;
+import wordproblem.display.PivotSprite;
+import wordproblem.engine.events.DataEvent;
 import wordproblem.scripts.barmodel.BaseBarModelScript;
 import wordproblem.scripts.barmodel.ICardOnSegmentEdgeScript;
 import wordproblem.scripts.barmodel.IHitAreaScript;
 
-import flash.geom.Rectangle;
+import openfl.geom.Rectangle;
 
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 
-import starling.display.DisplayObject;
-import starling.display.DisplayObjectContainer;
-import starling.display.Image;
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
 
 import wordproblem.engine.IGameEngine;
 import wordproblem.engine.barmodel.model.BarComparison;
@@ -81,7 +83,7 @@ class AddNewBarComparison extends BaseBarModelScript implements IHitAreaScript i
         if (m_ready && m_isActive) 
         {
             m_globalMouseBuffer.setTo(m_mouseState.mousePositionThisFrame.x, m_mouseState.mousePositionThisFrame.y);
-            m_barModelArea.globalToLocal(m_globalMouseBuffer, m_localMouseBuffer);
+            m_localMouseBuffer = m_barModelArea.globalToLocal(m_globalMouseBuffer);
 			m_outParamsBuffer = new Array<Dynamic>();
             
             if (m_eventTypeBuffer.length > 0) 
@@ -103,18 +105,16 @@ class AddNewBarComparison extends BaseBarModelScript implements IHitAreaScript i
                     var previousModelDataSnapshot : BarModelData = m_barModelArea.getBarModelData().clone();
                     addNewBarComparison(targetBarWholeView.data, releasedExpressionNode.data, barToCompareAgainst.data, barToCompareAgainst.segmentViews.length - 1);
                     
-                    m_eventDispatcher.dispatchEventWith(GameEvent.BAR_MODEL_AREA_CHANGE, false, {
+                    m_eventDispatcher.dispatchEvent(new DataEvent(GameEvent.BAR_MODEL_AREA_CHANGE, {
                                 previousSnapshot : previousModelDataSnapshot
-
-                            });
+                            }));
                     m_barModelArea.redraw();
                     
-                    m_eventDispatcher.dispatchEventWith(AlgebraAdventureLoggingConstants.ADD_NEW_BAR_COMPARISON, false,
+                    m_eventDispatcher.dispatchEvent(new DataEvent(AlgebraAdventureLoggingConstants.ADD_NEW_BAR_COMPARISON,
                             {
                                 barModel : m_barModelArea.getBarModelData().serialize(),
                                 value : releasedExpressionNode.data,
-
-                            });
+                            }));
                     
                     m_currentTargetBarId = null;
                     m_currentCompareToBarId = null;
@@ -201,7 +201,8 @@ class AddNewBarComparison extends BaseBarModelScript implements IHitAreaScript i
     public function postProcessHitAreas(hitAreas : Array<Rectangle>, hitAreaGraphics : Array<DisplayObjectContainer>) : Void
     {
         for (i in 0...hitAreas.length){
-            var icon : Image = new Image(m_assetManager.getTexture("subtract"));
+            var icon : PivotSprite = new PivotSprite();
+			icon.addChild(new Bitmap(m_assetManager.getBitmapData("subtract")));
             var hitArea : Rectangle = hitAreas[i];
             icon.pivotX = icon.width * 0.5;
             icon.pivotY = icon.height * 0.5;
@@ -372,20 +373,18 @@ class AddNewBarComparison extends BaseBarModelScript implements IHitAreaScript i
                 var previousModelDataSnapshot : BarModelData = m_barModelArea.getBarModelData().clone();
                 this.addNewBarComparison(matchingBarWholeView.data, cardValue, otherBarWhole, otherBarWhole.barSegments.length - 1);
                 
-                m_eventDispatcher.dispatchEventWith(GameEvent.BAR_MODEL_AREA_CHANGE, false, {
+                m_eventDispatcher.dispatchEvent(new DataEvent(GameEvent.BAR_MODEL_AREA_CHANGE, {
                             previousSnapshot : previousModelDataSnapshot
-
-                        });
+                        }));
                 
                 // Redraw at the end to refresh
                 m_barModelArea.redraw();
                 
                 // Log splitting on an existing segment
-                m_eventDispatcher.dispatchEventWith(AlgebraAdventureLoggingConstants.ADD_NEW_BAR_COMPARISON, false, {
+                m_eventDispatcher.dispatchEvent(new DataEvent(AlgebraAdventureLoggingConstants.ADD_NEW_BAR_COMPARISON, {
                             barModel : m_barModelArea.getBarModelData().serialize(),
                             value : cardValue,
-
-                        });
+                        }));
             }
         }
     }
@@ -400,7 +399,7 @@ class AddNewBarComparison extends BaseBarModelScript implements IHitAreaScript i
             // we pick the longest one
             var valueOfCurrentBarWhole : Float = matchingBarWholeView.data.getValue();
             var otherBarWholeViewToCompare : BarWholeView = null;
-            for (otherBarWholeView/* AS3HX WARNING could not determine type for var: otherBarWholeView exp: ECall(EField(EIdent(m_barModelArea),getBarWholeViews),[]) type: null */ in m_barModelArea.getBarWholeViews())
+            for (otherBarWholeView in m_barModelArea.getBarWholeViews())
             {
                 if (otherBarWholeView != matchingBarWholeView) 
                 {

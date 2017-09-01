@@ -1,8 +1,15 @@
 package wordproblem.scripts.text;
 
+import dragonbox.common.util.XColor;
+import motion.Actuate;
+import openfl.display.Bitmap;
+import wordproblem.display.Scale9Image;
+import wordproblem.display.util.BitmapUtil;
+import wordproblem.engine.events.DataEvent;
 
-import flash.geom.Point;
-import flash.geom.Rectangle;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
+import openfl.display.BitmapData;
 
 import cgs.audio.Audio;
 
@@ -12,17 +19,11 @@ import dragonbox.common.ui.MouseState;
 
 import haxe.Constraints.Function;
 
-import starling.animation.Tween;
-import starling.core.Starling;
-import starling.display.DisplayObject;
-import starling.display.DisplayObjectContainer;
-import starling.display.Image;
-import starling.display.Sprite;
-import starling.events.Event;
-import starling.extensions.textureutil.TextureUtil;
-import starling.text.TextField;
-import starling.textures.Texture;
-import starling.utils.Color;
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
+import openfl.display.Sprite;
+import openfl.events.Event;
+import openfl.text.TextField;
 
 import wordproblem.engine.IGameEngine;
 import wordproblem.engine.animation.DocumentViewToCardAnimation;
@@ -97,7 +98,7 @@ class TextToCard extends BaseGameScript
      * Need to keep track of the image representing the text as a button because we
      * need to dispose of to free up texture memory.
      */
-    private var m_currentTextAsLineTexture : Texture;
+    private var m_currentTextAsLineBitmapData : BitmapData;
     
     /**
      * This function contains the logic that should be executed at the moment a dragged piece of
@@ -107,9 +108,6 @@ class TextToCard extends BaseGameScript
     
     // These are used when you click on a selectable object in the text and it wiggle.
     // We need a reference to properly interuppt this animation
-    private var m_wiggleLeftTween : Tween = new Tween(null, 0);
-    private var m_wiggleRightTween : Tween = new Tween(null, 0);
-    private var m_wiggleOriginalX : Float;
     private var m_currentMouseGlobalBuffer : Point = new Point();
     
     public function new(gameEngine : IGameEngine,
@@ -159,13 +157,14 @@ class TextToCard extends BaseGameScript
                 // Make sure the visual elements are disposed of propery
                 if (m_currentHitTextAsButton != null) 
                 {
-                    m_currentHitTextAsButton.removeFromParent(true);
+					if (m_currentHitTextAsButton.parent != null) m_currentHitTextAsButton.parent.removeChild(m_currentHitTextAsButton);
+					m_currentHitTextAsButton = null;
                 }
                 
-                if (m_currentTextAsLineTexture != null) 
+                if (m_currentTextAsLineBitmapData != null) 
                 {
-                    m_currentTextAsLineTexture.dispose();
-                    m_currentTextAsLineTexture = null;
+                    m_currentTextAsLineBitmapData.dispose();
+                    m_currentTextAsLineBitmapData = null;
                 }
             }
         }
@@ -199,13 +198,13 @@ class TextToCard extends BaseGameScript
                 // the blank space or button-like appearance when they click or drag the text
                 if (m_currentHitTextAsButton != null) 
                 {
-                    m_currentHitTextAsButton.removeFromParent(true);
+					if (m_currentHitTextAsButton.parent != null) m_currentHitTextAsButton.parent.removeChild(m_currentHitTextAsButton);
                     m_currentHitTextAsButton = null;
                 }
                 
                 if (m_currentHitTextAsBlank != null) 
                 {
-                    m_currentHitTextAsBlank.removeFromParent(true);
+					if (m_currentHitTextAsBlank.parent != null) m_currentHitTextAsBlank.parent.removeChild(m_currentHitTextAsBlank);
                     m_currentHitTextAsBlank = null;
                 }
                 
@@ -225,9 +224,9 @@ class TextToCard extends BaseGameScript
         return ScriptStatus.FAIL;
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         m_textArea = try cast(m_gameEngine.getUiEntity("textArea"), TextAreaWidget) catch(e:Dynamic) null;
         m_widgetDragSystem = try cast(this.getNodeById("WidgetDragSystem"), WidgetDragSystem) catch(e:Dynamic) null;
@@ -249,14 +248,17 @@ class TextToCard extends BaseGameScript
             var releasedWidgetOrigin : DisplayObject = param.origin;
             if (releasedWidgetOrigin == m_textArea) 
             {
-                releasedWidget.removeFromParent();
+				if (releasedWidget.parent != null) releasedWidget.parent.removeChild(releasedWidget);
             }
         }
     }
     
-    private function onPressText(event : Event, params : Dynamic) : Void
+    private function onPressText(event : Dynamic) : Void
     {
-        var view : DocumentView = Reflect.field(params, "view");
+		var view : DocumentView = null;
+		if (Std.is(event, DataEvent)) {
+			view = (try cast(event, DataEvent) catch (e : Dynamic) null).getData().view;
+		}
         // We mark when we have hit an area and remember it when the drag starts
         // Do not do anything if something it snapping back though
         if (view != null && m_currentHitDocumentView == null) 
@@ -285,18 +287,13 @@ class TextToCard extends BaseGameScript
                     
                     break;
                 }
-            }  // We want to take the view contents and draw them onto a button background    // continuous pattern    // if they are then graphic needs to join the separate views in one    // We need to check whether the views are part of the same line of text    // Need to apply effects to each of the child views  
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
+            }  
+			
+			// Need to apply effects to each of the child views  
+			// We need to check whether the views are part of the same line of text 
+			// if they are then graphic needs to join the separate views in one  
+			// continuous pattern   
+            // We want to take the view contents and draw them onto a button background  
             var outChildViews : Array<DocumentView> = new Array<DocumentView>();
             view.getDocumentViewLeaves(outChildViews);
             
@@ -320,10 +317,9 @@ class TextToCard extends BaseGameScript
                     if (currentLineBounds != null) 
                     {
                         lines.push(currentLineBounds);
-                    }  // Start a new line with the current contents  
-                    
-                    
-                    
+                    }  
+					
+					// Start a new line with the current contents  
                     currentLineBounds = resultBounds;
                     currentLineNumber = childView.lineNumber;
                 }
@@ -331,39 +327,33 @@ class TextToCard extends BaseGameScript
                 {
                     // Create a union of all the bounds on the same line
                     currentLineBounds = currentLineBounds.union(resultBounds);
-                }  // Since we are locked into the white card back we can just always make text black.    // In this case we may want to change the color of it    // Ex.) White text on white background is unreadable    // If the child view is text, it's color may blend in with the background  
-                
-                
-                
-                
-                
-                
-                
-                
-                
+                }  
+				
+				// If the child view is text, it's color may blend in with the background  
+				// Ex.) White text on white background is unreadable   
+				// In this case we may want to change the color of it 
+                // Since we are locked into the white card back we can just always make text black. 
                 var alteredTextColor : Bool = false;
                 var originalTextColor : Int = 0;
                 if (Std.is(childView, TextView)) 
                 {
                     var childTextField : TextField = (try cast(childView, TextView) catch(e:Dynamic) null).getTextField();
-                    originalTextColor = childTextField.color;
-                    var blue : Int = Color.getBlue(originalTextColor);
-                    var green : Int = Color.getGreen(originalTextColor);
-                    var red : Int = Color.getRed(originalTextColor);
+                    originalTextColor = childTextField.textColor;
+                    var blue : Int = XColor.extractBlue(originalTextColor);
+                    var green : Int = XColor.extractGreen(originalTextColor);
+                    var red : Int = XColor.extractRed(originalTextColor);
                     var colorThreshold : Int = 100;
                     if (blue > colorThreshold && green > colorThreshold && red > colorThreshold) 
                     {
-                        childTextField.color = 0x000000;
+						childTextField.textColor = 0x000000;
                         alteredTextColor = true;
                     }
-                }  // of the button background texture.    // Create a copy of the child view, paste this on top  
-                
-                
-                
-                
-                
-                var textAsLine : Image = TextureUtil.getImageFromDisplayObject(childView);
-                m_currentTextAsLineTexture = textAsLine.texture;
+                }  
+				
+				// Create a copy of the child view, paste this on top  
+                // of the button background texture.  
+                var textAsLine : Bitmap = BitmapUtil.getImageFromDisplayObject(childView);
+                m_currentTextAsLineBitmapData = textAsLine.bitmapData;
                 
                 var copyView : DisplayObject = textAsLine;
                 copyView.x = resultBounds.x;
@@ -373,21 +363,18 @@ class TextToCard extends BaseGameScript
                 // If we changed the color of the text, we need to switch it back
                 if (alteredTextColor) 
                 {
-                    (try cast(childView, TextView) catch(e:Dynamic) null).getTextField().color = originalTextColor;
+                    (try cast(childView, TextView) catch(e:Dynamic) null).getTextField().textColor = originalTextColor;
                 }
             }
             
             if (currentLineBounds != null) 
             {
                 lines.push(currentLineBounds);
-            }  // to indicate where a view was initially located)    // it nor play the animation where it transforms into a card. (Still create a blank background in any case    // If the selected view is already a card image there is no need to create a button background underneath  
-            
-            
-            
-            
-            
-            
-            
+            }  
+			
+			// If the selected view is already a card image there is no need to create a button background underneath  
+			// it nor play the animation where it transforms into a card. (Still create a blank background in any case  
+            // to indicate where a view was initially located) 
             var selectedCard : Bool = false;
             var doNotDrawButtonBackground : Bool = (Std.is(view.node, ImageNode) && (try cast(view.node, ImageNode) catch(e:Dynamic) null).src.type == "symbol");
             if (!doNotDrawButtonBackground) 
@@ -398,16 +385,13 @@ class TextToCard extends BaseGameScript
                     currentLineBounds = lines[i];
                     
                     var padding : Float = 10;
-                    var buttonTexture : Texture = m_assetManager.getTexture("card_background_square");
-                    var nineTextureButton : Texture = Texture.fromTexture(
-						buttonTexture, 
-						new Rectangle(padding,
-							padding,
-							buttonTexture.width - 2 * padding,
-							buttonTexture.height - 2 * padding
-						)
-                    );
-                    var nineImageButton : Image = new Image(nineTextureButton);
+					var buttonBitmapData : BitmapData = m_assetManager.getBitmapData("card_background_square");
+					var nineImageButton : Scale9Image = new Scale9Image(buttonBitmapData, new Rectangle(padding,
+						padding,
+						buttonBitmapData.width - 2 * padding,
+						buttonBitmapData.height - 2 * padding
+					));
+                    
                     nineImageButton.x = currentLineBounds.x - padding * 0.5;
                     nineImageButton.y = currentLineBounds.y;
                     nineImageButton.width = currentLineBounds.width + padding * 0.5;
@@ -426,17 +410,14 @@ class TextToCard extends BaseGameScript
             for (i in 0...lines.length){
                 currentLineBounds = lines[i];
                 
-                var backgroundTexture : Texture = m_assetManager.getTexture("wildcard");
-                var padding = 10;
-                var nineTextureBackground : Texture = Texture.fromTexture(
-					backgroundTexture, 
-					new Rectangle(padding,
-						padding,
-						backgroundTexture.width - 2 * padding,
-						backgroundTexture.height - 2 * padding
-					)
-                );
-                var nineImageBackground : Image = new Image(nineTextureBackground);
+				var padding = 10;
+                var backgroundBitmapData : BitmapData = m_assetManager.getBitmapData("wildcard");
+				var nineImageBackground : Scale9Image = new Scale9Image(backgroundBitmapData, new Rectangle(padding,
+					padding,
+					backgroundBitmapData.width - 2 * padding,
+					backgroundBitmapData.height - 2 * padding
+				));
+				
                 nineImageBackground.x = currentLineBounds.x - padding * 0.5;
                 nineImageBackground.y = currentLineBounds.y - padding * 0.5;
                 nineImageBackground.width = currentLineBounds.width + padding;
@@ -451,44 +432,34 @@ class TextToCard extends BaseGameScript
             
             m_currentHitDocumentView.visible = false;
             
-            Starling.current.juggler.remove(m_wiggleLeftTween);
-            Starling.current.juggler.remove(m_wiggleRightTween);
-            if (m_wiggleLeftTween.target != null) 
-            {
-                (try cast(m_wiggleLeftTween.target, DisplayObject) catch(e:Dynamic) null).x = m_wiggleOriginalX;
-            }
+			// This should reset the button to its original position
+			Actuate.stop(m_currentHitTextAsButton);
 			
 			// Quickly wiggle the selected view (used to help indicate there is something special about it)  
 			// Kill previous tweens if they were playing, need to reset the moved view to its original position
             // (This is only a problem for text pieces that area already cards)
-            var wiggleDelta : Float = 8;
-            m_wiggleOriginalX = m_currentHitTextAsButton.x;
-            
-            m_wiggleLeftTween.reset(m_currentHitTextAsButton, 0.07);
-            m_wiggleLeftTween.reverse = true;
-            m_wiggleLeftTween.repeatCount = 2;
-            m_wiggleLeftTween.animate("x", m_currentHitTextAsButton.x - wiggleDelta);
-            m_wiggleLeftTween.onComplete = function() : Void
-                    {
-                        Starling.current.juggler.add(m_wiggleRightTween);
-                    };
-            m_wiggleRightTween.reset(m_currentHitTextAsButton, 0.07);
-            m_wiggleRightTween.reverse = true;
-            m_wiggleRightTween.repeatCount = 2;
-            m_wiggleRightTween.animate("x", m_currentHitTextAsButton.x + wiggleDelta);
-            Starling.current.juggler.add(m_wiggleLeftTween);
+			var wiggleDelta : Float = 8;
+			function startNextTween() {
+				if (m_currentHitTextAsButton != null)
+					Actuate.tween(m_currentHitTextAsButton, 0.07, { x: m_currentHitTextAsButton.x - wiggleDelta }).repeat(2).reflect();
+			}
+			
+			Actuate.tween(m_currentHitTextAsButton, 0.07, { x: m_currentHitTextAsButton.x - wiggleDelta }).repeat(2).reflect().onComplete(startNextTween);
             
             // Gather all possible document ids that the given is part of
             this.toggleMouseSelectedForView(view, true);
         }
     }
     
-    private function onStartDragFromText(event : Event, args : Dynamic) : Void
+    private function onStartDragFromText(event : Dynamic) : Void
     {
         // Ignore attempts to drag text if current dragged text has not been cleared,
         // occurs when it has not finished its animation
         // Otherwise the old text gets stuck on screen
-        var view : DocumentView = args.documentView;
+		var view : DocumentView = null;
+		if (Std.is(event, DataEvent)) {
+			view = (try cast(event, DataEvent) catch (e : Dynamic) null).getData().documentView;
+		}
         
         // Once drag starts we pull the document view that was selected
         // If the dragged view is not already a card then we want to have an animation
@@ -554,9 +525,9 @@ class TextToCard extends BaseGameScript
             m_currentHitTextAsButton.parent.addChildAt(m_currentHitTextAsBlank, indexToAddBlankTo);
             
             // Remove the image of the text as a button, it is no longer needed in any case
-            m_currentHitTextAsButton.removeFromParent();
-            m_currentTextAsLineTexture.dispose();
-            m_currentTextAsLineTexture = null;
+			if (m_currentHitTextAsButton.parent != null) m_currentHitTextAsButton.parent.removeChild(m_currentHitTextAsButton);
+            m_currentTextAsLineBitmapData.dispose();
+            m_currentTextAsLineBitmapData = null;
         }
         
         if (m_currentHitDocumentView != null) 
@@ -566,9 +537,12 @@ class TextToCard extends BaseGameScript
         }
     }
     
-    private function onReleaseText(event : Event, params : Dynamic) : Void
+    private function onReleaseText(event : Dynamic) : Void
     {
-        var view : DocumentView = Reflect.field(params, "view");
+		var view : DocumentView = null;
+		if (Std.is(event, DataEvent)) {
+			view = (try cast(event, DataEvent) catch (e : Dynamic) null).getData().view;
+		}
         // Clear data in the mouse interaction component
         this.toggleMouseSelectedForView(view, false);
         
@@ -581,26 +555,24 @@ class TextToCard extends BaseGameScript
         if (m_draggedContentFromParagraph.viewCopy != null) 
         {
             m_draggedContentFromParagraph.reset();
-        }  // On release without a drag, we remove the button background on the selected text  
-        
-        
-        
+        } 
+		
+		// On release without a drag, we remove the button background on the selected text  
         if (m_currentHitDocumentView != null) 
         {
             m_onReleaseCallback(m_currentHitTextAsButton, m_currentHitTextAsBlank, m_currentHitDocumentView);
-        }  // Kill the global member variables, external scripts are responsible for maintaining  
-        
-        
-        
+        } 
+		
+		// Kill the global member variables, external scripts are responsible for maintaining  
         m_currentHitDocumentView = null;
         m_currentHitTextAsBlank = null;
         m_currentHitTextAsButton = null;
         m_currentHitExpressionValue = null;
         
-        if (m_currentTextAsLineTexture != null) 
+        if (m_currentTextAsLineBitmapData != null) 
         {
-            m_currentTextAsLineTexture.dispose();
-            m_currentTextAsLineTexture = null;
+            m_currentTextAsLineBitmapData.dispose();
+            m_currentTextAsLineBitmapData = null;
         }
     }
     
@@ -615,8 +587,10 @@ class TextToCard extends BaseGameScript
             originalView : DocumentView) : Void
     {
         originalView.visible = true;
-        buttonDisplay.removeFromParent(true);
-        blankIndentDisplay.removeFromParent(true);
+        if (buttonDisplay.parent != null) buttonDisplay.parent.removeChild(buttonDisplay);
+		buttonDisplay = null;
+        if (blankIndentDisplay.parent != null) blankIndentDisplay.parent.removeChild(blankIndentDisplay);
+		blankIndentDisplay = null;
     }
     
     /**

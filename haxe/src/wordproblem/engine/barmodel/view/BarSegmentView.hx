@@ -1,21 +1,23 @@
 package wordproblem.engine.barmodel.view;
 
 
-import dragonbox.common.dispose.IDisposable;
+import dragonbox.common.util.XColor;
 
-import starling.display.DisplayObject;
-import starling.display.Image;
-import starling.display.Sprite;
-import starling.textures.Texture;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.display.DisplayObject;
+import openfl.geom.Rectangle;
 
+import wordproblem.display.DisposableSprite;
+import wordproblem.display.DottedRectangle;
+import wordproblem.display.Scale9Image;
 import wordproblem.engine.barmodel.model.BarSegment;
 import wordproblem.engine.component.RigidBodyComponent;
-import wordproblem.display.DottedRectangle;
 
 /**
  * The most basic unit for drawing a segment
  */
-class BarSegmentView extends Sprite implements IDisposable
+class BarSegmentView extends DisposableSprite
 {
     public var data : BarSegment;
     
@@ -24,12 +26,10 @@ class BarSegmentView extends Sprite implements IDisposable
      */
     public var rigidBody : RigidBodyComponent;
     
-	// TODO: these were scaled image classes from the feathers library and
-	// will probably have to be fixed
-    private var m_nineSliceImage : Image;
-    private var m_threeSliceHorizontalImage : Image;
-    private var m_threeSliceVerticalImage : Image;
-    private var m_originalImage : Image;
+    private var m_nineSliceImage : Scale9Image;
+    private var m_threeSliceHorizontalImage : Scale9Image;
+    private var m_threeSliceVerticalImage : Scale9Image;
+    private var m_originalImage : Bitmap;
     
     /**
      * The image to use if the segment is supposed to be hidden
@@ -37,8 +37,7 @@ class BarSegmentView extends Sprite implements IDisposable
     private var m_hiddenImage : DottedRectangle;
     
     public function new(barSegment : BarSegment,
-            nineSliceTexture : Texture,
-            regularTexture : Texture,
+            segmentBitmapData : BitmapData,
             hiddenImage : DottedRectangle)
     {
         super();
@@ -51,12 +50,31 @@ class BarSegmentView extends Sprite implements IDisposable
         // However this fails if one of the dimensions is LESS than the padding we start the slice from
         // (i.e. if non-scaling parts exceeds the desired width)
         // In this instance we need to fall back to drawing the unsliced image
-		// TODO: these images were replaced from the feathers library and will need
-		// to be fixed later
-        m_nineSliceImage = new Image(nineSliceTexture);
-        m_threeSliceHorizontalImage = new Image(Texture.fromTexture(regularTexture));
-        m_threeSliceVerticalImage = new Image(Texture.fromTexture(regularTexture));
-        m_originalImage = new Image(regularTexture);
+		var nineSlicePadding : Float = 8;
+		var nineSliceGrid : Rectangle = new Rectangle(
+			nineSlicePadding, 
+			nineSlicePadding, 
+			segmentBitmapData.width - 2 * nineSlicePadding, 
+			segmentBitmapData.height - 2 * nineSlicePadding
+		);
+		
+        m_nineSliceImage = new Scale9Image(segmentBitmapData, nineSliceGrid);
+		
+        m_threeSliceHorizontalImage = new Scale9Image(segmentBitmapData, new Rectangle(
+			nineSliceGrid.left,
+			0,
+			nineSliceGrid.width,
+			segmentBitmapData.height
+		));
+		
+        m_threeSliceVerticalImage = new Scale9Image(segmentBitmapData, new Rectangle(
+			0,
+			nineSliceGrid.top,
+			segmentBitmapData.width,
+			nineSliceGrid.height
+		));
+		
+        m_originalImage = new Bitmap(segmentBitmapData);
         
         m_hiddenImage = hiddenImage;
     }
@@ -65,10 +83,9 @@ class BarSegmentView extends Sprite implements IDisposable
     {
         this.removeChildren();
         
-        var nineSliceTexture : Texture = m_nineSliceImage.texture;
         var targetWidth : Float = unitWidth * data.getValue();
-        var minimumWidthForNineSlice : Float = 2 * nineSliceTexture.width;  // Assume padding on left and right are the same  
-        var minimumHeightForNineSlice : Float = 2 * nineSliceTexture.height;
+        var minimumWidthForNineSlice : Float = 2 * m_nineSliceImage.width;  // Assume padding on left and right are the same  
+        var minimumHeightForNineSlice : Float = 2 * m_nineSliceImage.height;
         
         // HACK: To avoid having invisible segments we push up the width of a segment to one even
         // if it causes things to lose proportionality
@@ -89,22 +106,22 @@ class BarSegmentView extends Sprite implements IDisposable
         {
             if (targetWidth >= minimumWidthForNineSlice && height >= minimumHeightForNineSlice) 
             {
-                m_nineSliceImage.color = data.color;
+				m_nineSliceImage.transform.colorTransform = XColor.rgbToColorTransform(data.color);
                 segmentImage = m_nineSliceImage;
             }
             else if (targetWidth >= minimumWidthForNineSlice && height < minimumHeightForNineSlice) 
             {
-                m_threeSliceHorizontalImage.color = data.color;
+				m_threeSliceHorizontalImage.transform.colorTransform = XColor.rgbToColorTransform(data.color);
                 segmentImage = m_threeSliceHorizontalImage;
             }
             else if (targetWidth < minimumWidthForNineSlice && height >= minimumHeightForNineSlice) 
             {
-                m_threeSliceVerticalImage.color = data.color;
+				m_threeSliceVerticalImage.transform.colorTransform = XColor.rgbToColorTransform(data.color);
                 segmentImage = m_threeSliceVerticalImage;
             }
             else 
             {
-                m_originalImage.color = data.color;
+				m_originalImage.transform.colorTransform = XColor.rgbToColorTransform(data.color);
                 segmentImage = m_originalImage;
             }
             
@@ -117,8 +134,8 @@ class BarSegmentView extends Sprite implements IDisposable
     
     override public function dispose() : Void
     {
-        this.removeChildren();
-        
-        super.dispose();
+		super.dispose();
+		
+		if (m_hiddenImage != null) m_hiddenImage.dispose();
     }
 }

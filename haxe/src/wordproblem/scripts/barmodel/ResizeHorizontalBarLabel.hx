@@ -1,14 +1,14 @@
 package wordproblem.scripts.barmodel;
 
 
-import flash.geom.Point;
-import flash.geom.Rectangle;
+import openfl.display.BitmapData;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
+import wordproblem.engine.events.DataEvent;
 
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 
-import starling.core.Starling;
-import starling.events.Event;
-import starling.textures.Texture;
+import openfl.events.Event;
 
 import wordproblem.engine.IGameEngine;
 import wordproblem.engine.animation.RingPulseAnimation;
@@ -95,7 +95,7 @@ class ResizeHorizontalBarLabel extends BaseBarModelScript
     {
         super(gameEngine, expressionCompiler, assetManager, id, isActive);
         m_outParamsBuffer = new Array<Dynamic>();
-        m_ringPulseAnimation = new RingPulseAnimation(assetManager.getTexture("ring"), onRingPulseAnimationComplete);
+        m_ringPulseAnimation = new RingPulseAnimation(assetManager.getBitmapData("ring"), onRingPulseAnimationComplete);
     }
     
     override public function visit() : Int
@@ -107,7 +107,7 @@ class ResizeHorizontalBarLabel extends BaseBarModelScript
             // The horizontal labels have priority over the verical labels
 			m_outParamsBuffer = new Array<Dynamic>();
             m_globalMouseBuffer.setTo(m_mouseState.mousePositionThisFrame.x, m_mouseState.mousePositionThisFrame.y);
-            m_barModelArea.globalToLocal(m_globalMouseBuffer, m_localMouseBuffer);
+            m_localMouseBuffer = m_barModelArea.globalToLocal(m_globalMouseBuffer);
             var segmentViews : Array<BarSegmentView> = null;
 			var localX : Float = 0;
 			
@@ -163,11 +163,10 @@ class ResizeHorizontalBarLabel extends BaseBarModelScript
                         
                         // Show a small pulse on hit of the label
                         m_ringPulseAnimation.reset(m_localMouseBuffer.x, m_localMouseBuffer.y, m_barModelArea, 0x00FF00);
-                        Starling.current.juggler.add(m_ringPulseAnimation);
                         
-                        m_previewBarLabelView.addButtonImagesToEdges(m_assetManager.getTexture("card_background_circle"));
+                        m_previewBarLabelView.addButtonImagesToEdges(m_assetManager.getBitmapData("card_background_circle"));
                         m_previewBarLabelView.colorEdgeButton(m_draggingLeftEdge, 0x00FF00, 1.0);
-                        m_eventDispatcher.dispatchEventWith(GameEvent.START_RESIZE_HORIZONTAL_LABEL);
+                        m_eventDispatcher.dispatchEvent(new Event(GameEvent.START_RESIZE_HORIZONTAL_LABEL));
                         break;
                     }
                 }
@@ -314,26 +313,23 @@ class ResizeHorizontalBarLabel extends BaseBarModelScript
                     // On a release we need to check the final edge the drag stopped at and update the label index
                     var previousModelDataSnapshot : BarModelData = m_barModelArea.getBarModelData().clone();
                     resizeHorizontalBarLabel(originalTargetBarLabelView.data, m_previewBarLabelView.data.startSegmentIndex, m_previewBarLabelView.data.endSegmentIndex);
-                    m_eventDispatcher.dispatchEventWith(GameEvent.BAR_MODEL_AREA_CHANGE, false, {
+                    m_eventDispatcher.dispatchEvent(new DataEvent(GameEvent.BAR_MODEL_AREA_CHANGE, {
                                 previousSnapshot : previousModelDataSnapshot
-
-                            });
+                            }));
                     m_barModelArea.redraw();
                     
                     // Log resizing of a label on the bar segments
-                    m_eventDispatcher.dispatchEventWith(AlgebraAdventureLoggingConstants.RESIZE_HORIZONTAL_LABEL, false, {
+                    m_eventDispatcher.dispatchEvent(new DataEvent(AlgebraAdventureLoggingConstants.RESIZE_HORIZONTAL_LABEL, {
                                 barModel : m_barModelArea.getBarModelData().serialize()
-
-                            });
-                }  // Remove the preview  
-                
-                
-                
+                            }));
+                } 
+				
+				// Remove the preview  
                 m_barModelArea.showPreview(false);
                 m_previewBarLabelView = null;
                 m_targetBarWholeView = null;
                 
-                m_eventDispatcher.dispatchEventWith(GameEvent.END_RESIZE_HORIZONTAL_LABEL);
+                m_eventDispatcher.dispatchEvent(new Event(GameEvent.END_RESIZE_HORIZONTAL_LABEL));
             }
         }
         
@@ -359,9 +355,9 @@ class ResizeHorizontalBarLabel extends BaseBarModelScript
         }
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         // Due to timing issue, the first redraw event is not caught,
         // so if the bar model area initially has object we need to process the initial set
@@ -515,7 +511,7 @@ class ResizeHorizontalBarLabel extends BaseBarModelScript
     private function onRingPulseAnimationComplete() : Void
     {
         // Make sure animation isn't showing
-        Starling.current.juggler.remove(m_ringPulseAnimation);
+		m_ringPulseAnimation.stop();
     }
     
     private function onBarModelRedrawn(event : Event) : Void
@@ -528,7 +524,7 @@ class ResizeHorizontalBarLabel extends BaseBarModelScript
             showButtons : Bool) : Void
     {
         // Look through all horizontal labels and add buttons to the edges
-        var buttonTexture : Texture = m_assetManager.getTexture("card_background_circle");
+        var buttonBitmapData : BitmapData = m_assetManager.getBitmapData("card_background_circle");
         var barWholeViews : Array<BarWholeView> = barModelView.getBarWholeViews();
         var numBarWholeViews : Int = barWholeViews.length;
         var i : Int = 0;
@@ -547,7 +543,7 @@ class ResizeHorizontalBarLabel extends BaseBarModelScript
                         // Do not add button is a restriction is placed
                         if (m_restrictedElementIds.length == 0 || Lambda.indexOf(m_restrictedElementIds, barLabelView.data.value) > -1) 
                         {
-                            barLabelView.addButtonImagesToEdges(buttonTexture);
+                            barLabelView.addButtonImagesToEdges(buttonBitmapData);
                         }
                     }
                     else 

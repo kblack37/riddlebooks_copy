@@ -37,7 +37,7 @@ class TextureUtil
         // Its possible that visible portions of the view flow into negative coordinates,
         // in which case they would be cut off when drawn.
         // By getting the object bounds in terms of itself we can find how
-        displayObject.getBounds(displayObject, m_rectangleBuffer);
+        m_rectangleBuffer = displayObject.getBounds(displayObject);
         var tx : Float = -1 * m_rectangleBuffer.left;
         var ty : Float = -1 * m_rectangleBuffer.top;
         

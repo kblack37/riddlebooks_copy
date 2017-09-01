@@ -1,7 +1,7 @@
 package dragonbox.common.display;
 
 
-import starling.display.Sprite;
+import openfl.display.Sprite;
 
 interface ISprite
 {

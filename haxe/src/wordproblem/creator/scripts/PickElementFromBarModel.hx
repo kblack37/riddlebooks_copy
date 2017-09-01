@@ -116,7 +116,7 @@ class PickElementFromBarModel extends BaseProblemCreateScript
             if (targetElementId != null && m_mouseState.leftMousePressedThisFrame) 
             {
                 var matchingPartName : String = getPartIdFromElementId(targetElementId);
-                m_createState.dispatchEventWith(ProblemCreateEvent.SELECT_BAR_ELEMENT, false, {
+                m_createState.dispatchEvent(ProblemCreateEvent.SELECT_BAR_ELEMENT, false, {
                             id : matchingPartName
 
                         });
@@ -131,7 +131,7 @@ class PickElementFromBarModel extends BaseProblemCreateScript
                         elementId : m_elementIdMouseIsOverLastFrame,
 
                     };
-                    m_createState.dispatchEventWith(ProblemCreateEvent.MOUSE_OUT_BAR_ELEMENT, false, data);
+                    m_createState.dispatchEvent(ProblemCreateEvent.MOUSE_OUT_BAR_ELEMENT, false, data);
                 }
                 
                 if (targetElementId != null) 
@@ -141,7 +141,7 @@ class PickElementFromBarModel extends BaseProblemCreateScript
                                 elementId : targetElementId,
 
                             };
-                    m_createState.dispatchEventWith(ProblemCreateEvent.MOUSE_OVER_BAR_ELEMENT, false, data);
+                    m_createState.dispatchEvent(ProblemCreateEvent.MOUSE_OVER_BAR_ELEMENT, false, data);
                 }
             }
             
@@ -151,9 +151,9 @@ class PickElementFromBarModel extends BaseProblemCreateScript
         return super.visit();
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         m_barModelArea = try cast(m_createState.getWidgetFromId("barModelArea"), BarModelAreaWidget) catch(e:Dynamic) null;
         

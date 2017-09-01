@@ -1,13 +1,13 @@
 package wordproblem.hints.scripts;
 
 
-import flash.geom.Point;
-import flash.geom.Rectangle;
-
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.time.Time;
 
-import starling.display.DisplayObject;
+import openfl.display.DisplayObject;
+import openfl.events.Event;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
 
 import wordproblem.callouts.CalloutCreator;
 import wordproblem.engine.IGameEngine;
@@ -160,17 +160,16 @@ class HighlightHintButtonScript extends BaseGameScript
                 {
                     // Ignore time elapse in the edge case where the hint button is not visible (i.e. is it outside the view bounds
                     var hintButton : DisplayObject = m_gameEngine.getUiEntity("hintButton");
-                    hintButton.localToGlobal(m_localPointBuffer, m_globalPointBuffer);
+                    m_globalPointBuffer = hintButton.localToGlobal(m_localPointBuffer);
                     if (m_globalPointBuffer.y <= m_screenBounds.bottom && m_globalPointBuffer.y >= m_screenBounds.top &&
                         m_globalPointBuffer.x >= m_screenBounds.left && m_globalPointBuffer.x <= m_screenBounds.right) 
                     {
                         m_secondsBetweenAnswerSubmitCounter += secondsElapsed;
                         m_secondsBetweenModificationCounter += secondsElapsed;
                     }
-                }  // Once any trigger has been fired at least once do not fire it again  
-                
-                
-                
+                } 
+				
+				// Once any trigger has been fired at least once do not fire it again  
                 if (m_secondsBetweenAnswerSubmitCounter >= m_secondsBetweenAnswerSubmit) 
                 {
                     addHighlightToButton();
@@ -194,9 +193,9 @@ class HighlightHintButtonScript extends BaseGameScript
         return ScriptStatus.SUCCESS;
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         m_secondsBetweenAnswerSubmitCounter = 0;
         m_secondsBetweenModificationCounter = 0;
@@ -258,12 +257,11 @@ class HighlightHintButtonScript extends BaseGameScript
                             animationPeriod : 1,
                             closeOnTouchInside : true,
                             closeCallback : removeHighlightFromButton,
-
                         }));
         uiComponentManager.addComponentToEntity(new HighlightComponent("hintButton", 0x00FF00, 1));
         
         // Log that the highlight prompt is showing
-        m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.HINT_BUTTON_HIGHLIGHTED);
+        m_gameEngine.dispatchEvent(new Event(AlgebraAdventureLoggingConstants.HINT_BUTTON_HIGHLIGHTED));
     }
     
     private function removeHighlightFromButton() : Void

@@ -273,9 +273,9 @@ class IntroCreateEquation extends BaseCustomLevelScript
         return 3;
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         super.disablePrevNextTextButtons();
         

@@ -4,7 +4,7 @@ import wordproblem.playercollections.scripts.PlayerCollectionViewer;
 
 import dragonbox.common.ui.MouseState;
 
-import starling.display.DisplayObjectContainer;
+import openfl.display.DisplayObjectContainer;
 
 import wordproblem.achievements.PlayerAchievementButton;
 import wordproblem.achievements.PlayerAchievementsModel;
@@ -164,7 +164,8 @@ class PlayerCollectionsAchievementsViewer extends PlayerCollectionViewer
         var numButtons : Int = m_activeAchievementButtons.length;
         for (i in 0...numButtons){
             var achievementButton : PlayerAchievementButton = m_activeAchievementButtons[i];
-            achievementButton.removeFromParent(true);
+			achievementButton.parent.removeChild(achievementButton);
+			achievementButton.dispose();
         }
         
 		m_activeAchievementButtons = new Array<PlayerAchievementButton>();

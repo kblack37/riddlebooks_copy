@@ -1,23 +1,17 @@
 package wordproblem.engine.scripting;
 
+import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import flash.errors.Error;
 import haxe.xml.Fast;
-//import wordproblem.engine.scripting.ScriptClass;
-
-
-import gameconfig.versions.brainpopturk.WordProblemGameBrainpopTurk;
-import wordproblem.level.controller.WordProblemCgsLevelManager;
-
-import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
-
 import wordproblem.engine.IGameEngine;
 import wordproblem.engine.scripting.graph.ScriptNode;
 import wordproblem.engine.scripting.graph.selector.ConcurrentSelector;
 import wordproblem.engine.scripting.graph.selector.SequenceSelector;
+import wordproblem.level.controller.WordProblemCgsLevelManager;
 import wordproblem.player.PlayerStatsAndSaveData;
 import wordproblem.resource.AssetManager;
-import wordproblem.scripts.level.GenericBarModelLevelScript;
 import wordproblem.scripts.level.GenericModelLevelScript;
+//import wordproblem.engine.scripting.ScriptClass;
 
 class ScriptParser
 {
@@ -59,7 +53,7 @@ class ScriptParser
         {
             rootScript = createNode(nodeElement);
         }
-        
+		
         return rootScript;
     }
     
@@ -103,7 +97,7 @@ class ScriptParser
                 if (nodeElement.elements.hasNext()) 
                 {
 					var list = nodeElement.elements;
-					if (rootNode != null) rootNode.setExtraData(list);
+					rootNode.setExtraData(list);
                 }
             }
             else 

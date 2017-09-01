@@ -156,6 +156,20 @@ class MathUtil
         
         return Math.acos(cosineRadian);
     }
+	
+	/**
+	 * Convert from radians to degrees
+	 */
+	public static function radsToDegrees(rads : Float) : Float {
+		return (rads * 180.0) / Math.PI;
+	}
+	
+	/**
+	 * Convert from degrees to radians
+	 */
+	public static function degreesToRads(degrees : Float) : Float {
+		return (degrees * Math.PI) / 180.0;
+	}
     
     /**
      * Function returns whether two circles intersect each other

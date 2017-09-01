@@ -1,21 +1,26 @@
 package wordproblem.scripts.barmodel;
 
 
-import flash.geom.Rectangle;
+import dragonbox.common.util.XColor;
+import motion.Actuate;
+import motion.easing.Back;
+import motion.easing.Expo;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.events.MouseEvent;
+import openfl.filters.BitmapFilter;
+import openfl.geom.Rectangle;
+import wordproblem.display.PivotSprite;
+import wordproblem.engine.events.DataEvent;
 
 import cgs.audio.Audio;
 
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 
-import starling.animation.Transitions;
-import starling.animation.Tween;
-import starling.core.Starling;
-import starling.display.Button;
-import starling.display.DisplayObject;
-import starling.display.Image;
-import starling.events.Event;
-import starling.filters.ColorMatrixFilter;
-import starling.textures.Texture;
+import wordproblem.display.LabelButton;
+import openfl.display.DisplayObject;
+import openfl.events.Event;
+import openfl.filters.ColorMatrixFilter;
 
 import wordproblem.engine.IGameEngine;
 import wordproblem.engine.animation.ColorChangeAnimation;
@@ -147,9 +152,9 @@ class ValidateBarModelArea extends BaseBarModelScript
             m_decomposedReferenceBarModels.push(new DecomposedBarModelData(modelData[i]));
         }
         
-        m_gameEngine.dispatchEventWith(GameEvent.ADD_NEW_BAR_MODEL, false, {
+        m_gameEngine.dispatchEvent(new DataEvent(GameEvent.ADD_NEW_BAR_MODEL, {
             referenceModels : modelData
-        });
+        }));
     }
     
     /**
@@ -182,18 +187,18 @@ class ValidateBarModelArea extends BaseBarModelScript
         {
             if (m_validateButton != null) 
             {
-                m_validateButton.removeEventListener(Event.TRIGGERED, validate);
-                (try cast(m_validateButton, Button) catch(e:Dynamic) null).enabled = value;
+                m_validateButton.removeEventListener(MouseEvent.CLICK, validate);
+                (try cast(m_validateButton, LabelButton) catch(e:Dynamic) null).enabled = value;
                 if (value) 
                 {
-                    m_validateButton.addEventListener(Event.TRIGGERED, validate);
-                    m_validateButton.filter = null;
+                    m_validateButton.addEventListener(MouseEvent.CLICK, validate);
+					m_validateButton.filters = new Array<BitmapFilter>();
                 }
-                else if (m_validateButton.filter == null) 
+                else if (m_validateButton.filters.length == 0) 
                 {
-                    var colorMatrixFilter : ColorMatrixFilter = new ColorMatrixFilter();
-                    colorMatrixFilter.adjustSaturation(-1);
-                    m_validateButton.filter = colorMatrixFilter;
+					var filters = m_validateButton.filters.copy();
+					filters.push(XColor.getGrayscaleFilter());
+					m_validateButton.filters = filters;
                 }
             }
         }
@@ -204,9 +209,9 @@ class ValidateBarModelArea extends BaseBarModelScript
         super.dispose();
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         m_validateButton = m_gameEngine.getUiEntity("validateButton");
         setIsActive(m_isActive);
@@ -228,7 +233,7 @@ class ValidateBarModelArea extends BaseBarModelScript
             // Always go through every model even if we detect success in case we want to know how other
             // models failed
             var currentModelDecomposed : DecomposedBarModelData = new DecomposedBarModelData(currentModelSnapshot);
-            if (currentModelDecomposed.detectedLabelValueConflict.length == 0) 
+            if (currentModelDecomposed.detectedLabelValueConflict.length == 0 && currentModelDecomposed.labelValueProportionsAreConsistent()) 
             {
                 var i : Int = 0;
                 var numModels : Int = m_referenceBarModels.length;
@@ -250,12 +255,13 @@ class ValidateBarModelArea extends BaseBarModelScript
         return matched;
     }
     
-    private function validate() : Void
+    private function validate(event : Dynamic) : Void
     {
         // Need to detect all changes in the bar model data. On each change need to create a snapshot
         // of the model data and save it for later
         var matchedReferenceIndices : Array<Int> = new Array<Int>();
         var isValidModel : Bool = getCurrentModelMatchesReference(matchedReferenceIndices);
+		var backgroundColorToFadeTo : Int = 0;
         if (isValidModel) 
         {
             for (matchedIndex in matchedReferenceIndices)
@@ -263,22 +269,19 @@ class ValidateBarModelArea extends BaseBarModelScript
                 m_referenceBarModelValidated[matchedIndex] = true;
             }
             
-            var backgroundColorToFadeTo : Int = 0x00FF00;
-            if (!isValidModel) 
-            {
-                backgroundColorToFadeTo = 0xFF0000;
-            }
-            m_colorChangeAnimation.play(backgroundColorToFadeTo, 0xFFFFFF, 1.0, m_barModelArea.getBackgroundImage());
-            Starling.current.juggler.add(m_colorChangeAnimation);
+            backgroundColorToFadeTo = 0x00FF00;
             
-            m_gameEngine.dispatchEventWith(GameEvent.BAR_MODEL_CORRECT);
+            m_gameEngine.dispatchEvent(new Event(GameEvent.BAR_MODEL_CORRECT));
             Audio.instance.playSfx("find_correct_equation");
         }
         else 
         {
-            m_gameEngine.dispatchEventWith(GameEvent.BAR_MODEL_INCORRECT);
+			backgroundColorToFadeTo = 0xFF0000;
+			
+            m_gameEngine.dispatchEvent(new Event(GameEvent.BAR_MODEL_INCORRECT));
             Audio.instance.playSfx("wrong");
         }  
+		m_colorChangeAnimation.play(backgroundColorToFadeTo, 0xFFFFFF, 1.0, m_barModelArea.getBackgroundImage());
 		
 		// The serialized object is used mainly for logging purposes  
         // We replace the values in the labels with the name visible to the player in case they are different
@@ -292,14 +295,12 @@ class ValidateBarModelArea extends BaseBarModelScript
             refModel : targetReferenceModel.serialize(),
             studentModel : modelDataSnapshot.serialize(),
             showReference : false,
-
         };
         
-        m_gameEngine.dispatchEventWith(AlgebraAdventureLoggingConstants.VALIDATE_BAR_MODEL, false, {
+        m_gameEngine.dispatchEvent(new DataEvent(AlgebraAdventureLoggingConstants.VALIDATE_BAR_MODEL, {
                     barModel : serializedObject,
                     isCorrect : isValidModel,
-
-                });
+                }));
         
         animateSolutionValid(isValidModel);
     }
@@ -312,37 +313,30 @@ class ValidateBarModelArea extends BaseBarModelScript
     {
         var barModelAreaConstraints : Rectangle = m_barModelArea.getConstraints();
         var maxEdgeLength : Float = Math.min(barModelAreaConstraints.width, barModelAreaConstraints.height);
-        var targetTexture : Texture = ((isValid)) ? m_assetManager.getTexture("correct") : m_assetManager.getTexture("wrong");
+        var targetBitmapData : BitmapData = ((isValid)) ? m_assetManager.getBitmapData("correct") : m_assetManager.getBitmapData("wrong");
         
         // Tween in the icon
-        var targetIcon : Image = new Image(targetTexture);
-        targetIcon.pivotX = targetTexture.width * 0.5;
-        targetIcon.pivotY = targetTexture.height * 0.5;
+        var targetIcon : PivotSprite = new PivotSprite();
+		targetIcon.addChild(new Bitmap(targetBitmapData));
+        targetIcon.pivotX = targetBitmapData.width * 0.5;
+        targetIcon.pivotY = targetBitmapData.height * 0.5;
         targetIcon.x = m_barModelArea.x + barModelAreaConstraints.width * 0.5;
         targetIcon.y = m_barModelArea.y;
-        targetIcon.touchable = false;
+        targetIcon.mouseEnabled = false;
         
-        var startingScaleFactor : Float = maxEdgeLength / targetTexture.width;
+        var startingScaleFactor : Float = maxEdgeLength / targetBitmapData.width;
         var endingScaleFactor : Float = startingScaleFactor * 0.5;
         targetIcon.scaleX = targetIcon.scaleY = startingScaleFactor;
         targetIcon.alpha = 0.7;
         m_barModelArea.addChild(targetIcon);
-        
-        var fadeInTween : Tween = new Tween(targetIcon, 0.7, Transitions.EASE_OUT_BACK);
-        fadeInTween.animate("scaleX", endingScaleFactor);
-        fadeInTween.animate("scaleY", endingScaleFactor);
-        fadeInTween.animate("alpha", 1.0);
-        fadeInTween.onComplete = function() : Void
+		
+		Actuate.tween(targetIcon, 0.7, { scaleX: endingScaleFactor, scaleY: endingScaleFactor, alpha: 1 }).ease(Back.easeOut).onComplete(function() : Void
                 {
-                    var fadeOutTween : Tween = new Tween(targetIcon, 0.3);
-                    fadeOutTween.animate("alpha", 0.0);
-                    fadeOutTween.delay = 0.4;
-                    fadeOutTween.onComplete = function() : Void
+					Actuate.tween(targetIcon, 0.3, { alpha: 0 }).delay(0.4).onComplete(function() : Void
                             {
-                                targetIcon.removeFromParent(true);
-                            };
-                    Starling.current.juggler.add(fadeOutTween);
-                };
-        Starling.current.juggler.add(fadeInTween);
+								if (targetIcon.parent != null) targetIcon.parent.removeChild(targetIcon);
+								targetIcon.dispose();
+                            });
+                });
     }
 }

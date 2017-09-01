@@ -106,7 +106,7 @@ class ModalButtonControl implements IDisposable
         var mouseState : MouseState = m_gameEngine.getMouseState();
         m_globalPointBuffer.x = mouseState.mousePositionThisFrame.x;
         m_globalPointBuffer.y = mouseState.mousePositionThisFrame.y;
-        m_modalButton.getBounds(m_modalButton.stage, m_modalButtonBounds);
+        m_modalButtonBounds = m_modalButton.getBounds(m_modalButton.stage);
         if (m_modalButtonBounds.containsPoint(m_globalPointBuffer)) 
         {
             if (mouseState.leftMousePressedThisFrame) 

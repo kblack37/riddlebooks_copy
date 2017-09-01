@@ -77,9 +77,9 @@ class RestrictCardAmount extends BaseGameScript
         as3hx.Compat.setArrayLength(m_values, 0);
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         // Get all term areas and listen for changes in their contents
         var termAreaDisplays : Array<DisplayObject> = m_gameEngine.getUiEntitiesByClass(TermAreaWidget);

@@ -16,7 +16,7 @@ import wordproblem.engine.component.StageChangeAnimationComponent;
 import wordproblem.engine.component.TextureCollectionComponent;
 import wordproblem.engine.text.GameFonts;
 import wordproblem.items.ItemDataSource;
-import wordproblem.levelselect.scripts.DrawItemsOnShelves;
+//import wordproblem.levelselect.scripts.DrawItemsOnShelves;
 import wordproblem.resource.AssetManager;
 
 /**
@@ -24,6 +24,7 @@ import wordproblem.resource.AssetManager;
  * The item in question must have the GrowInStagesComponent
  * 
  */
+// TODO: revisit animation when more basic elements are displaying properly
 class ChangedItemScreen extends Sprite
 {
     /**
@@ -63,7 +64,7 @@ class ChangedItemScreen extends Sprite
         if (stageChangeAnimationComponent != null) 
         {
             var spriteSheetDataObject : Dynamic = stageChangeAnimationComponent.animationObjectCollection[previousStageIndex];
-            var rewardMovieClip : MovieClip = DrawItemsOnShelves.createSpriteSheetAnimatedView(spriteSheetDataObject, assetManager, 30, true);
+            //var rewardMovieClip : MovieClip = DrawItemsOnShelves.createSpriteSheetAnimatedView(spriteSheetDataObject, assetManager, 30, true);
             // m_itemTextureNamesUsedBuffer[spriteSheetDataObject.textureName] = true;
             
             // Need to take into account cropping if applicable, hidden dependency of the texture collection class
@@ -76,14 +77,14 @@ class ChangedItemScreen extends Sprite
                 offset = previousDataObject.crop.x * -0.5;
             }
             
-            rewardMovieClip.loop = false;
-            rewardMovieClip.x = 400 + offset;
-            rewardMovieClip.y = 265;
-            rewardMovieClip.pause();
-            addChild(rewardMovieClip);
-            
-            rewardMovieClip.play();
-            addRewardDetailTween(rewardMovieClip);
+            //rewardMovieClip.loop = false;
+            //rewardMovieClip.x = 400 + offset;
+            //rewardMovieClip.y = 265;
+            //rewardMovieClip.pause();
+            //addChild(rewardMovieClip);
+            //
+            //rewardMovieClip.play();
+            //addRewardDetailTween(rewardMovieClip);
         }
         else 
         {
@@ -117,7 +118,7 @@ class ChangedItemScreen extends Sprite
                 showNewImage.animate("alpha", 1.0);
                 showNewImage.animate("scaleX", 1.0);
                 showNewImage.animate("scaleY", 1.0);
-                previousStageImage.removeFromParent();
+                if (previousStageImage.parent != null) previousStageImage.parent.removeChild(previousStageImage);
                 addChild(newStageImage);
                 addRewardDetailTween(showNewImage);
             };

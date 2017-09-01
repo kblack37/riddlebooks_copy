@@ -63,7 +63,7 @@ class NewItemButton extends BaseRewardButton
                     itemId,
                     RewardIconComponent.TYPE_ID
                     ), RewardIconComponent) catch(e:Dynamic) null;
-            var rewardIconTexture : Texture = assetManager.getTextureWithReferenceCount(rewardIconComponent.textureName);
+            var rewardIconTexture : Texture = assetManager.getBitmapDataWithReferenceCount(rewardIconComponent.textureName);
             mainDisplayObject = new Image(rewardIconTexture);
         }
         
@@ -83,6 +83,6 @@ class NewItemButton extends BaseRewardButton
     {
         super.dispose();
         
-        m_assetManager.releaseTextureWithReferenceCount(this.data.textureName);
+        m_assetManager.releaseBitmapDataWithReferenceCount(this.data.textureName);
     }
 }

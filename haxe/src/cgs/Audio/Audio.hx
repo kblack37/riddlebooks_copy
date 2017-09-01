@@ -269,9 +269,9 @@ class Audio
 		**/
     private function findMusicType(musicType : String) : MusicType
     {
-        for (mt/* AS3HX WARNING could not determine type for var: mt exp: EField(EIdent(_musicTypes),types) type: null */ in _musicTypes.types)
+        for (mt in _musicTypes.types)
         {
-            if (mt.type == musicType)
+            if (cast(mt, MusicType).type == musicType)
             {
                 return mt;
             }
@@ -314,8 +314,8 @@ class Audio
             for (sound in sounds)
             {
                 var soundName : String = sound.att.name;
-                var url : String = sound.att.url;
-                var loadAtStart : Bool = sound.att.loadAtStart == "true";
+                var url : String = sound.has.url ? sound.att.url : "";
+                var loadAtStart : Bool = sound.has.loadAtStart ? sound.att.loadAtStart == "true" : true;
                 if (soundName != null)
                 {
                     // Get the sound resource through the provided IAudioResource

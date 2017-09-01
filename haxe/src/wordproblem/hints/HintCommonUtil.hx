@@ -1,21 +1,22 @@
 package wordproblem.hints;
 
 import haxe.xml.Fast;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import wordproblem.engine.events.DataEvent;
 import wordproblem.hints.HintScript;
 import wordproblem.hints.HintScriptWithProcesses;
 
-import flash.geom.Point;
-import flash.text.TextFormat;
+import openfl.geom.Point;
+import openfl.text.TextFormat;
 
 import dragonbox.common.ui.MouseState;
 import dragonbox.common.util.XColor;
 
-import starling.display.Button;
-import starling.display.DisplayObject;
-import starling.display.DisplayObjectContainer;
-import starling.display.Image;
-import starling.display.Sprite;
-import starling.textures.Texture;
+import wordproblem.display.LabelButton;
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
+import openfl.display.Sprite;
 
 import wordproblem.characters.HelperCharacterController;
 import wordproblem.engine.IGameEngine;
@@ -433,11 +434,11 @@ class HintCommonUtil
         // Create the description
         // Add callout to the character
         var calloutBackgroundName : String = "thought_bubble";
-        var measuringTexture : Texture = assetManager.getTexture(calloutBackgroundName);
+        var measuringBitmapData : BitmapData = assetManager.getBitmapData(calloutBackgroundName);
         var paddingSide : Float = 20;
-        var maxTextWidth : Float = measuringTexture.width - 2 * paddingSide;
+        var maxTextWidth : Float = measuringBitmapData.width - 2 * paddingSide;
         var paddingTop : Float = 50;
-        var maxTextHeight : Float = measuringTexture.height - 2 * paddingTop;
+        var maxTextHeight : Float = measuringBitmapData.height - 2 * paddingTop;
         var contentXML : Xml = Xml.parse("<p></p>").firstElement();
         contentXML.addChild(Xml.createPCData(pickedMismatch.descriptionContent));
         
@@ -476,29 +477,27 @@ class HintCommonUtil
         
         // If the hint data has been marked that it should link to a tip replay, we'll
         // need to add an extra button to the callout that goes to the tip
-        var helpButton : Button = null;
+        var helpButton : LabelButton = null;
 		var tipName : String = null;
         if (Reflect.hasField(pickedMismatch, "linkToTip")) 
         {
             tipName = pickedMismatch.linkToTip;
             
-            var helpButtonTexture : Texture = assetManager.getTexture("help_icon");
-            helpButton = new Button(helpButtonTexture);
-            helpButton.scaleWhenOver = 1.1;
-            helpButton.scaleWhenDown = 0.9;
-            helpButton.x = (calloutContent.width - helpButtonTexture.width) * 0.5;
+            var helpButtonBitmapData : BitmapData = assetManager.getBitmapData("help_icon");
+            helpButton = new LabelButton(new Bitmap(helpButtonBitmapData));
+			helpButton.scaleWhenOver = 1.1;
+			helpButton.scaleWhenDown = 0.9;
+            helpButton.x = (calloutContent.width - helpButtonBitmapData.width) * 0.5;
             helpButton.y = calloutContent.height;
             (try cast(calloutContent, DisplayObjectContainer) catch(e:Dynamic) null).addChild(helpButton);
         }
-        
-        function onLinkToTip() : Void
+		
+        function onLinkToTip(event : Dynamic) : Void
         {
-            gameEngine.dispatchEventWith(GameEvent.LINK_TO_TIP, false, {
-                        tipName : tipName
-                    });
+            gameEngine.dispatchEvent(new DataEvent(GameEvent.LINK_TO_TIP, { tipName : tipName }));
         };
         
-        var outAnswerButtons : Array<Button> = new Array<Button>();
+        var outAnswerButtons : Array<LabelButton> = new Array<LabelButton>();
         if (showQuestion) 
         {
             calloutContent = HintCommonUtil.bindAnswersButtonsToCallout(
@@ -506,10 +505,9 @@ class HintCommonUtil
                             assetManager,
                             calloutContent,
                             outAnswerButtons);
-        }  // All hints show the character  
-        
-        
-        
+        } 
+		
+		// All hints show the character  
         var pixelPerSecondVelocity : Float = 600;
         var characterId : String = ((Math.random() > 0.5)) ? "Cookie" : "Taco";
         var characterStopPoint : Point = new Point(characterStopX, characterStopY);
@@ -636,7 +634,7 @@ class HintCommonUtil
     private static function bindAnswersButtonsToCallout(answersData : Array<Dynamic>,
             assetManager : AssetManager,
             originalDisplayContent : DisplayObject,
-            outButtons : Array<Button>) : DisplayObject
+            outButtons : Array<LabelButton>) : DisplayObject
     {
         var wrapper : Sprite = new Sprite();
         wrapper.addChild(originalDisplayContent);
@@ -660,7 +658,7 @@ class HintCommonUtil
             buttonWidth = measuringTextField.textWidth + 2 * sidePadding;
             buttonHeight = measuringTextField.textHeight + sidePadding;
             
-            var button : Button = WidgetUtil.createGenericColoredButton(assetManager, XColor.ROYAL_BLUE, answer.name,
+            var button : LabelButton = WidgetUtil.createGenericColoredButton(assetManager, XColor.ROYAL_BLUE, answer.name,
                     buttonTextFormat);
             button.x = buttonXOffset;
             button.y = 0;

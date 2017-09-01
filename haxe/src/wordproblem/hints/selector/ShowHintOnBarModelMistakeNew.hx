@@ -1,5 +1,6 @@
 package wordproblem.hints.selector;
 
+import wordproblem.engine.events.DataEvent;
 import wordproblem.hints.selector.DefaultBarmodelHints;
 
 import starling.display.DisplayObject;
@@ -328,10 +329,9 @@ class ShowHintOnBarModelMistake extends HintSelectorNode
     
     private function smoothlyRemovePreviousHint() : Void
     {
-        m_gameEngine.dispatchEventWith(GameEvent.REMOVE_HINT, false, {
+        m_gameEngine.dispatchEvent(new DataEvent(GameEvent.REMOVE_HINT, {
                     smoothlyRemove : true
-
-                });
+                }));
     }
     
     private function onBarModelIncorrect() : Void

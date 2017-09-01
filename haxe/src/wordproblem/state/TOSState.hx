@@ -99,7 +99,7 @@ class TOSState extends BaseState
     {
         if (m_tosUi != null && m_tosUi.parent != null) 
         {
-            m_tosUi.parent.removeChild(m_tosUi);
+            if (m_tosUi.parent != null) m_tosUi.parent.removeChild(m_tosUi);
             m_tosUi = null;
         }
         

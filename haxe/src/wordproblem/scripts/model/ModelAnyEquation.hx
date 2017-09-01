@@ -6,7 +6,7 @@ import dragonbox.common.expressiontree.ExpressionUtil;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
 import dragonbox.common.math.vectorspace.IVectorSpace;
 
-import starling.display.Button;
+import wordproblem.display.LabelButton;
 import starling.events.Event;
 
 import wordproblem.engine.IGameEngine;
@@ -23,7 +23,7 @@ import wordproblem.scripts.BaseGameScript;
  */
 class ModelAnyEquation extends BaseGameScript
 {
-    private var m_modelButton : Button;
+    private var m_modelButton : LabelButton;
     
     private var m_clickCounter : Int = 0;
     
@@ -33,9 +33,9 @@ class ModelAnyEquation extends BaseGameScript
         m_id = "ModelAnyEquation";
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         // Listen for when the player tries to model an equation
         m_modelButton = try cast(super.m_gameEngine.getUiEntity("modelEquationButton"), Button) catch(e:Dynamic) null;
@@ -48,10 +48,10 @@ class ModelAnyEquation extends BaseGameScript
         
         if (super.m_ready) 
         {
-            m_modelButton.removeEventListener(Event.TRIGGERED, onClickModel);
+            m_modelButton.removeEventListener(MouseEvent.CLICK, onClickModel);
             if (value) 
             {
-                m_modelButton.addEventListener(Event.TRIGGERED, onClickModel);
+                m_modelButton.addEventListener(MouseEvent.CLICK, onClickModel);
             }
         }
     }
@@ -77,7 +77,7 @@ class ModelAnyEquation extends BaseGameScript
                     modeledRight,
                     vectorSpace,
                     vectorSpace.getEqualityOperator());
-            m_gameEngine.dispatchEventWith(GameEvent.EQUATION_MODEL_SUCCESS, false, {
+            m_gameEngine.dispatchEvent(GameEvent.EQUATION_MODEL_SUCCESS, false, {
                         id : m_clickCounter + "",
                         equation : super.m_expressionCompiler.decompileAtNode(givenEquation),
 

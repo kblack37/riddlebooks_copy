@@ -1,26 +1,27 @@
 package wordproblem.hints.scripts;
 
+import motion.Actuate;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.events.MouseEvent;
+import openfl.filters.BitmapFilter;
+import openfl.text.TextFormat;
+import openfl.text.TextFormatAlign;
+import wordproblem.display.PivotSprite;
+import wordproblem.engine.events.DataEvent;
 import wordproblem.hints.scripts.IShowableScript;
 
-import flash.geom.Rectangle;
+import openfl.geom.Rectangle;
 
 import cgs.internationalization.StringTable;
 
-import starling.animation.Tween;
-import starling.core.Starling;
-import starling.display.Button;
-import starling.display.DisplayObject;
-import starling.display.DisplayObjectContainer;
-import starling.display.Image;
-import starling.display.Sprite;
-import starling.events.Event;
-import starling.events.Touch;
-import starling.events.TouchEvent;
-import starling.events.TouchPhase;
-import starling.filters.ColorMatrixFilter;
-import starling.text.TextField;
-import starling.textures.Texture;
-import starling.utils.HAlign;
+import wordproblem.display.LabelButton;
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
+import openfl.display.Sprite;
+import openfl.events.Event;
+import openfl.filters.ColorMatrixFilter;
+import openfl.text.TextField;
 
 import wordproblem.engine.IGameEngine;
 import wordproblem.engine.events.GameEvent;
@@ -91,22 +92,22 @@ class HintsViewer extends ScriptNode implements IShowableScript
      * Button to request that the current hint contents be shown/executed while the
      * level contents are visible
      */
-    private var m_showHintButton : Button;
+    private var m_showHintButton : LabelButton;
     
     /**
      * Button to unlock a new hint
      */
-    private var m_newHintButton : Button;
+    private var m_newHintButton : LabelButton;
     
     /**
      * Button to scroll to the left if multiple hints available
      */
-    private var m_leftScrollButton : Button;
+    private var m_leftScrollButton : LabelButton;
     
     /**
      * Button to scroll to the right if multiple hints available
      */
-    private var m_rightScrollButton : Button;
+    private var m_rightScrollButton : LabelButton;
     
     /**
      * Text to show if no hint is available to display
@@ -117,18 +118,17 @@ class HintsViewer extends ScriptNode implements IShowableScript
     All visible hints re-use the same background assets so we can hold onto the same images
     to create the thought bubbles
     */
-    private var m_thoughtBubbleA : Image;
-    private var m_thoughtBubbleB : Image;
-    private var m_thoughtBubbleMain : Image;
+    private var m_thoughtBubbleA : DisplayObject;
+    private var m_thoughtBubbleB : DisplayObject;
+    private var m_thoughtBubbleMain : DisplayObject;
     
     private var m_thoughtBubbleWidth : Float = 510;
     private var m_thoughtBubbleHeight : Float = 330;
-    
-    /*
-    Animations to make the screen appear less dull
-    */
-    private var m_expandContractThoughtBubble : Tween;
-    private var m_newHintStarBurstTween : Tween;
+	
+	/**
+	 * Used to track if a tween is running
+	 */
+	private var m_isStarBurstAnimating : Bool;
     
     public function new(gameEngine : IGameEngine,
             assetManager : AssetManager,
@@ -151,75 +151,79 @@ class HintsViewer extends ScriptNode implements IShowableScript
         m_lockedHints = new Array<HintScript>();
         m_unlockedHints = new Array<HintScript>();
         
-        var whiteButtonTexture : Texture = assetManager.getTexture("button_white");
-        var whiteScale9Texture : Texture = Texture.fromTexture(whiteButtonTexture, new Rectangle(8, 8, 16, 16));
-        
         var lightbulbIconMaxHeight : Float = 60;
         
         // The star burst should play a spin animation when the mouse is over it
 		// TODO: previously this was Art_Starburst, however that asset is missing at the moment
-        var starBurst : DisplayObject = new Image(assetManager.getTexture("burst_purple"));
+        var starBurst : PivotSprite = new PivotSprite();
+		starBurst.addChild(new Bitmap(assetManager.getBitmapData("burst_purple")));
         starBurst.pivotX = starBurst.width * 0.5;
         starBurst.pivotY = starBurst.height * 0.5;
         starBurst.scaleX = starBurst.scaleY = (lightbulbIconMaxHeight * 1.7 / starBurst.height);
         starBurst.x = starBurst.width * 0.5;
         starBurst.y = starBurst.height * 0.5;
         
-        var lightbulbTexture : Texture = assetManager.getTexture("light");
-        var lightbulbIcon : Image = new Image(lightbulbTexture);
-        lightbulbIcon.scaleX = lightbulbIcon.scaleY = lightbulbIconMaxHeight * 0.9 / lightbulbTexture.height;
+        var lightbulbBitmapData : BitmapData = assetManager.getBitmapData("light");
+        var lightbulbIcon : Bitmap = new Bitmap(lightbulbBitmapData);
+        lightbulbIcon.scaleX = lightbulbIcon.scaleY = lightbulbIconMaxHeight * 0.9 / lightbulbBitmapData.height;
         lightbulbIcon.x = (starBurst.width - lightbulbIcon.width) * 0.5;
         lightbulbIcon.y = (starBurst.height - lightbulbIcon.height) * 0.5;
         
 		// TODO: uncomment once cgs library is ported
-        var newHintText : TextField = new TextField(Std.int(starBurst.width), 30, /*StringTable.lookup("new_hint")*/ "", GameFonts.DEFAULT_FONT_NAME, 20, 0xFFFFFF);
-        newHintText.hAlign = HAlign.RIGHT;
+        var newHintText : TextField = new TextField();
+		newHintText.width = starBurst.width;
+		newHintText.height = 30;
+		newHintText.text = /*StringTable.lookup("new_hint")*/ "";
+		newHintText.setTextFormat(new TextFormat(GameFonts.DEFAULT_FONT_NAME, 20, 0xFFFFFF, null, null, null, null, null, TextFormatAlign.RIGHT));
         newHintText.y = lightbulbIcon.y + lightbulbIcon.height;
         newHintText.x = 0;
         
         var newHintSkinContainer : Sprite = new Sprite();
         newHintSkinContainer.addChild(starBurst);
         newHintSkinContainer.addChild(lightbulbIcon);
-        //newHintSkinContainer.addChild(newHintText);
+        newHintSkinContainer.addChild(newHintText);
         
-		// TODO: this image will likely need to be fixed
-        m_newHintButton = new Button(lightbulbTexture);
+        m_newHintButton = new LabelButton(newHintSkinContainer);
         m_newHintButton.width = newHintSkinContainer.width;
         m_newHintButton.height = newHintSkinContainer.height;
-        m_newHintButton.scaleWhenDown = 0.9;
-        m_newHintButton.addEventListener(Event.TRIGGERED, onNewHintClicked);
-        m_newHintButton.addEventListener(TouchEvent.TOUCH, onNewHintTouched);
+		m_newHintButton.scaleWhenDown = 0.9;
+        m_newHintButton.addEventListener(MouseEvent.CLICK, onNewHintClicked);
+        m_newHintButton.addEventListener(MouseEvent.MOUSE_OVER, onNewHintMouseover);
+		m_newHintButton.addEventListener(MouseEvent.MOUSE_OUT, onNewHintMouseout);
         
         var showHintWidth : Float = 60;
-        var showIconTexture : Texture = assetManager.getTexture("help_icon");
-        var showIcon : Image = new Image(showIconTexture);
-        showIcon.scaleX = showIcon.scaleY = showHintWidth * 0.9 / showIconTexture.height;
+        var showIconBitmapData : BitmapData = assetManager.getBitmapData("help_icon");
+        var showIcon : Bitmap = new Bitmap(showIconBitmapData);
+        showIcon.scaleX = showIcon.scaleY = showHintWidth * 0.9 / showIconBitmapData.height;
         
-        m_showHintButton = new Button(showIconTexture);
+        m_showHintButton = new LabelButton(showIcon);
         m_showHintButton.width = m_showHintButton.height = showHintWidth;
-        m_showHintButton.scaleWhenOver = 1.1;
-        m_showHintButton.scaleWhenDown = 0.9;
-        m_showHintButton.addEventListener(Event.TRIGGERED, onShowHintClicked);
+		m_showHintButton.scaleWhenOver = 1.1;
+		m_showHintButton.scaleWhenDown = 0.9;
+        m_showHintButton.addEventListener(MouseEvent.CLICK, onShowHintClicked);
         
-        var thoughtBubbleSmallTexture : Texture = m_assetManager.getTexture("thought_bubble_small");
-        var thoughtBubbleSmallA : Image = new Image(thoughtBubbleSmallTexture);
+        var thoughtBubbleSmallBitmapData : BitmapData = m_assetManager.getBitmapData("thought_bubble_small");
+        var thoughtBubbleSmallA : PivotSprite = new PivotSprite();
+		thoughtBubbleSmallA.addChild(new Bitmap(thoughtBubbleSmallBitmapData));
         thoughtBubbleSmallA.scaleX = thoughtBubbleSmallA.scaleY = 0.8;
-        thoughtBubbleSmallA.pivotX = thoughtBubbleSmallTexture.width * 0.5;
-        thoughtBubbleSmallA.pivotY = thoughtBubbleSmallTexture.height * 0.5;
+        thoughtBubbleSmallA.pivotX = thoughtBubbleSmallBitmapData.width * 0.5;
+        thoughtBubbleSmallA.pivotY = thoughtBubbleSmallBitmapData.height * 0.5;
         m_thoughtBubbleA = thoughtBubbleSmallA;
         
-        var thoughtBubbleSmallB : Image = new Image(thoughtBubbleSmallTexture);
+        var thoughtBubbleSmallB : PivotSprite = new PivotSprite();
+		thoughtBubbleSmallB.addChild(new Bitmap(thoughtBubbleSmallBitmapData));
         thoughtBubbleSmallB.scaleX = thoughtBubbleSmallB.scaleY = 0.5;
-        thoughtBubbleSmallB.pivotX = thoughtBubbleSmallTexture.width * 0.5;
-        thoughtBubbleSmallB.pivotY = thoughtBubbleSmallTexture.height * 0.5;
+        thoughtBubbleSmallB.pivotX = thoughtBubbleSmallBitmapData.width * 0.5;
+        thoughtBubbleSmallB.pivotY = thoughtBubbleSmallBitmapData.height * 0.5;
         m_thoughtBubbleB = thoughtBubbleSmallB;
         
-        var thoughtBubbleTexture : Texture = m_assetManager.getTexture("thought_bubble");
-        var thoughtBubble : Image = new Image(thoughtBubbleTexture);
-        thoughtBubble.pivotX = thoughtBubbleTexture.width * 0.5;
-        thoughtBubble.pivotY = thoughtBubbleTexture.height * 0.5;
-        thoughtBubble.scaleX = m_thoughtBubbleWidth / thoughtBubbleTexture.width;
-        thoughtBubble.scaleY = m_thoughtBubbleHeight / thoughtBubbleTexture.height;
+        var thoughtBubbleBitmapData : BitmapData = m_assetManager.getBitmapData("thought_bubble");
+        var thoughtBubble : PivotSprite = new PivotSprite();
+		thoughtBubble.addChild(new Bitmap(thoughtBubbleBitmapData));
+        thoughtBubble.pivotX = thoughtBubbleBitmapData.width * 0.5;
+        thoughtBubble.pivotY = thoughtBubbleBitmapData.height * 0.5;
+        thoughtBubble.scaleX = m_thoughtBubbleWidth / thoughtBubbleBitmapData.width;
+        thoughtBubble.scaleY = m_thoughtBubbleHeight / thoughtBubbleBitmapData.height;
         thoughtBubble.x = m_width * 0.5;
         thoughtBubble.y = thoughtBubble.height * 0.5;
         m_thoughtBubbleMain = thoughtBubble;
@@ -228,38 +232,39 @@ class HintsViewer extends ScriptNode implements IShowableScript
         m_descriptionContainer.x = (m_thoughtBubbleMain.x - m_thoughtBubbleWidth * 0.5) + m_thoughtBubbleWidth * 0.121;
         m_descriptionContainer.y = (m_thoughtBubbleMain.y - m_thoughtBubbleHeight * 0.5) + m_thoughtBubbleHeight * 0.215;
         
-        var arrowTexture : Texture = assetManager.getTexture("arrow_short");
+        var arrowBitmapData : BitmapData = assetManager.getBitmapData("arrow_short");
         var arrowScale : Float = 1.5;
-        var leftUpArrow : Image = WidgetUtil.createPointingArrow(arrowTexture, true, arrowScale, 0xFFFFFF);
-        var leftDownArrow : Image = WidgetUtil.createPointingArrow(arrowTexture, true, arrowScale, 0xCCCCCC);
+        var leftUpArrow : DisplayObject = WidgetUtil.createPointingArrow(arrowBitmapData, true, arrowScale, 0xFFFFFF);
+        var leftDownArrow : DisplayObject = WidgetUtil.createPointingArrow(arrowBitmapData, true, arrowScale, 0xCCCCCC);
         m_leftScrollButton = WidgetUtil.createButtonFromImages(leftUpArrow, leftDownArrow, null, leftDownArrow, null, null);
-        m_leftScrollButton.scaleWhenDown = 0.9;
-        m_leftScrollButton.addEventListener(Event.TRIGGERED, onLeftScrollClick);
+		m_leftScrollButton.scaleWhenDown = 0.9;
+        m_leftScrollButton.addEventListener(MouseEvent.CLICK, onLeftScrollClick);
         
-        var rightUpArrow : Image = WidgetUtil.createPointingArrow(arrowTexture, false, arrowScale, 0xFFFFFF);
-        var rightDownArrow : Image = WidgetUtil.createPointingArrow(arrowTexture, false, arrowScale, 0xCCCCCC);
+        var rightUpArrow : DisplayObject = WidgetUtil.createPointingArrow(arrowBitmapData, false, arrowScale, 0xFFFFFF);
+        var rightDownArrow : DisplayObject = WidgetUtil.createPointingArrow(arrowBitmapData, false, arrowScale, 0xCCCCCC);
         m_rightScrollButton = WidgetUtil.createButtonFromImages(rightUpArrow, rightDownArrow, null, rightDownArrow, null, null);
-        m_rightScrollButton.scaleWhenDown = m_leftScrollButton.scaleWhenDown;
-        m_rightScrollButton.addEventListener(Event.TRIGGERED, onRightScrollClick);
+		m_rightScrollButton.scaleWhenDown = m_leftScrollButton.scaleWhenDown;
+        m_rightScrollButton.addEventListener(MouseEvent.CLICK, onRightScrollClick);
         
-        m_pageIndicatorText = new TextField(200, 80, "1/1", GameFonts.DEFAULT_FONT_NAME, 32, 0xFFFFFF);
+        m_pageIndicatorText = new TextField();
+		m_pageIndicatorText.width = 200;
+		m_pageIndicatorText.height = 80;
+		m_pageIndicatorText.text = "1/1";
+		m_pageIndicatorText.setTextFormat(new TextFormat(GameFonts.DEFAULT_FONT_NAME, 32, 0xFFFFFF));
         
-        m_expandContractThoughtBubble = new Tween(m_thoughtBubbleMain, 2);
-        m_expandContractThoughtBubble.animate("scaleX", m_thoughtBubbleMain.scaleX * 1.05);
-        m_expandContractThoughtBubble.animate("scaleY", m_thoughtBubbleMain.scaleY * 1.05);
-        m_expandContractThoughtBubble.repeatCount = 0;
-        m_expandContractThoughtBubble.reverse = true;
+		Actuate.tween(m_thoughtBubbleMain, 2, { scaleX: m_thoughtBubbleMain.scaleX * 1.05, scaleY: m_thoughtBubbleMain.scaleY * 1.05}).repeat().reflect();
     }
     
     override public function dispose() : Void
     {
         super.dispose();
         
-        m_leftScrollButton.removeEventListener(Event.TRIGGERED, onLeftScrollClick);
-        m_rightScrollButton.removeEventListener(Event.TRIGGERED, onRightScrollClick);
-        m_newHintButton.removeEventListener(Event.TRIGGERED, onNewHintClicked);
-        m_newHintButton.removeEventListener(TouchEvent.TOUCH, onNewHintTouched);
-        m_showHintButton.removeEventListener(Event.TRIGGERED, onShowHintClicked);
+        m_leftScrollButton.removeEventListener(MouseEvent.CLICK, onLeftScrollClick);
+        m_rightScrollButton.removeEventListener(MouseEvent.CLICK, onRightScrollClick);
+        m_newHintButton.removeEventListener(MouseEvent.CLICK, onNewHintClicked);
+        m_newHintButton.removeEventListener(MouseEvent.MOUSE_OVER, onNewHintMouseover);
+		m_newHintButton.removeEventListener(MouseEvent.MOUSE_OUT, onNewHintMouseout);
+        m_showHintButton.removeEventListener(MouseEvent.CLICK, onShowHintClicked);
     }
     
     /**
@@ -289,11 +294,12 @@ class HintsViewer extends ScriptNode implements IShowableScript
         // Randomly pick one of the characters
         var targetCharacterHeight : Float = 130;
         var characterStillName : String = ((Math.random() > 0.5)) ? "cookie_happy_still" : "taco_happy_still";
-        var characterStillTexture : Texture = m_assetManager.getTexture(characterStillName);
-        var characterImage : Image = new Image(characterStillTexture);
-        characterImage.pivotX = characterStillTexture.width * 0.5;
-        characterImage.pivotY = characterStillTexture.height * 0.5;
-        characterImage.scaleX = characterImage.scaleY = (targetCharacterHeight / characterStillTexture.height);
+        var characterStillBitmapData : BitmapData = m_assetManager.getBitmapData(characterStillName);
+        var characterImage : PivotSprite = new PivotSprite();
+		characterImage.addChild(new Bitmap(characterStillBitmapData));
+        characterImage.pivotX = characterStillBitmapData.width * 0.5;
+        characterImage.pivotY = characterStillBitmapData.height * 0.5;
+        characterImage.scaleX = characterImage.scaleY = (targetCharacterHeight / characterStillBitmapData.height);
         characterImage.x = characterImage.width * 0.5;
         characterImage.y = m_thoughtBubbleB.y + characterImage.height * 0.5 + 10;
         m_canvas.addChild(characterImage);
@@ -338,9 +344,11 @@ class HintsViewer extends ScriptNode implements IShowableScript
             {
                 var contentWidth : Float = m_thoughtBubbleMain.width * 0.75;
                 var contentHeight : Float = m_thoughtBubbleMain.height * 0.64;
-                m_noHintDescription = new TextField(Std.int(contentWidth), Std.int(contentHeight), 
-                        "", GameFonts.DEFAULT_FONT_NAME, 28, 0
-                );
+                m_noHintDescription = new TextField();
+				m_noHintDescription.width = contentWidth;
+				m_noHintDescription.height = contentHeight;
+				m_noHintDescription.text = "";
+				m_noHintDescription.setTextFormat(new TextFormat(GameFonts.DEFAULT_FONT_NAME, 28, 0));
             }
             
             m_noHintDescription.text = ((m_availableHints.length > 0)) ? NO_HINTS_UNLOCKED : NO_HINTS_AVAILABLE;
@@ -355,19 +363,18 @@ class HintsViewer extends ScriptNode implements IShowableScript
             }
             
             showHintAtIndex(m_currentHintIndex);
-        }  // Start up the tweens  
-        
-        
-        
-        Starling.current.juggler.add(m_expandContractThoughtBubble);
+        }
+		
+		// Start up the tweens  
+		Actuate.tween(m_thoughtBubbleMain, 2, { scaleX: m_thoughtBubbleMain.scaleX * 1.05, scaleY: m_thoughtBubbleMain.scaleY * 1.05}).repeat().reflect();
     }
     
     public function hide() : Void
     {
-        m_newHintButton.removeFromParent();
+        if (m_newHintButton.parent != null) m_newHintButton.parent.removeChild(m_newHintButton);
         
-        m_leftScrollButton.removeFromParent();
-        m_rightScrollButton.removeFromParent();
+        if (m_leftScrollButton.parent != null) m_leftScrollButton.parent.removeChild(m_leftScrollButton);
+        if (m_rightScrollButton.parent != null) m_rightScrollButton.parent.removeChild(m_rightScrollButton);
         
         // Clear the canvas completely
         m_canvas.removeChildren();
@@ -376,14 +383,13 @@ class HintsViewer extends ScriptNode implements IShowableScript
         if (m_currentHintShown != null) 
         {
             m_currentHintShown.disposeDescription(m_currentDescriptionViewShown);
-            m_currentDescriptionViewShown.removeFromParent(true);
+			if (m_currentDescriptionViewShown.parent != null) m_currentDescriptionViewShown.parent.removeChild(m_currentDescriptionViewShown);
             m_currentHintShown = null;
             m_currentDescriptionViewShown = null;
-        }  // Remove the tweens  
-        
-        
-        
-        Starling.current.juggler.remove(m_expandContractThoughtBubble);
+        } 
+		
+		// Remove the tweens  
+		Actuate.stop(m_thoughtBubbleMain);
     }
     
     private function showHintAtIndex(index : Int) : Void
@@ -394,7 +400,8 @@ class HintsViewer extends ScriptNode implements IShowableScript
             if (m_currentHintShown != null) 
             {
                 m_currentHintShown.disposeDescription(m_currentDescriptionViewShown);
-                m_currentDescriptionViewShown.removeFromParent(true);
+				if (m_currentDescriptionViewShown.parent != null) m_currentDescriptionViewShown.parent.removeChild(m_currentDescriptionViewShown);
+				m_currentDescriptionViewShown = null;
             }
             m_descriptionContainer.removeChildren();
             
@@ -436,25 +443,29 @@ class HintsViewer extends ScriptNode implements IShowableScript
         if (newHintEnabled) 
         {
             m_newHintButton.alpha = 1.0;
-            m_newHintButton.filter = null;
+			m_newHintButton.filters = new Array<BitmapFilter>();
         }
         else 
         {
             m_newHintButton.alpha = 0.5;
-            var colorMatrixFilter : ColorMatrixFilter = new ColorMatrixFilter();
-            colorMatrixFilter.adjustSaturation(-1);
-            m_newHintButton.filter = colorMatrixFilter;
+			// TODO: this greyscale matrix is probably not correct
+			var matrix : Array<Float> = new Array<Float>();
+			for (i in 0...3) matrix = matrix.concat([1 / 3, 1 / 3, 1 / 3, 0, 0]);
+			matrix = matrix.concat([0, 0, 0, 1, 0]);
+            var colorMatrixFilter : ColorMatrixFilter = new ColorMatrixFilter(matrix);
+            var filters = m_newHintButton.filters;
+			filters.push(colorMatrixFilter);
+			m_newHintButton.filters = filters;
             
             // Kill the animation on the button if playing
-            if (m_newHintStarBurstTween != null) 
+            if (m_isStarBurstAnimating) 
             {
-                Starling.current.juggler.remove(m_newHintStarBurstTween);
-                m_newHintStarBurstTween = null;
+				Actuate.stop(m_newHintButton);
+				m_isStarBurstAnimating = false;
             }
-        }  // If more than one hint unlocked then show the scroll button.  
-        
-        
-        
+        } 
+		
+		// If more than one hint unlocked then show the scroll button.  
         if (m_unlockedHints.length > 1) 
         {
             m_canvas.addChild(m_leftScrollButton);
@@ -462,12 +473,12 @@ class HintsViewer extends ScriptNode implements IShowableScript
         }
         else 
         {
-            m_leftScrollButton.removeFromParent();
-            m_rightScrollButton.removeFromParent();
+            if (m_leftScrollButton.parent != null) m_leftScrollButton.parent.removeChild(m_leftScrollButton);
+            if (m_rightScrollButton.parent != null) m_rightScrollButton.parent.removeChild(m_rightScrollButton);
         }
     }
     
-    private function onNewHintClicked() : Void
+    private function onNewHintClicked(event : Dynamic) : Void
     {
         // Making several assumptions:
         // -the list of locked hints is ordered so the first ones are more important to show
@@ -492,7 +503,7 @@ class HintsViewer extends ScriptNode implements IShowableScript
             bestNextHint.unlocked = true;
             
             // New hint is just for logging/stats
-            m_gameEngine.dispatchEventWith(GameEvent.GET_NEW_HINT, false, null);
+            m_gameEngine.dispatchEvent(new Event(GameEvent.GET_NEW_HINT));
             
             // Redraw the screen so that the new hint is used
             m_currentHintIndex = m_unlockedHints.length - 1;
@@ -500,35 +511,31 @@ class HintsViewer extends ScriptNode implements IShowableScript
         }
     }
     
-    private function onNewHintTouched(event : TouchEvent) : Void
+    private function onNewHintMouseover(event : Dynamic) : Void
     {
-        var hoverTouch : Touch = event.getTouch(m_newHintButton, TouchPhase.HOVER);
-        var iconToAnimate : DisplayObject = (try cast(m_newHintButton.upState, Sprite) catch(e:Dynamic) null).getChildAt(0);
-        if (m_newHintStarBurstTween == null && m_newHintButton.enabled) 
+        var iconToAnimate : DisplayObject = m_newHintButton;
+        if (!m_isStarBurstAnimating && m_newHintButton.enabled) 
         {
-            m_newHintStarBurstTween = new Tween(iconToAnimate, 3);
-            m_newHintStarBurstTween.animate("rotation", Math.PI * 2);
-            m_newHintStarBurstTween.repeatCount = 0;
-            Starling.current.juggler.add(m_newHintStarBurstTween);
-        }
-        else if (hoverTouch == null && m_newHintStarBurstTween != null) 
-        {
-            iconToAnimate.rotation = 0.0;
-            Starling.current.juggler.remove(m_newHintStarBurstTween);
-            m_newHintStarBurstTween = null;
+			Actuate.tween(iconToAnimate, 3, { rotation: 360 }).smartRotation().repeat();
         }
     }
+	
+	private function onNewHintMouseout(event : Dynamic) : Void {
+		var iconToAnimate : DisplayObject = m_newHintButton;
+		if (m_isStarBurstAnimating) {
+			Actuate.stop(iconToAnimate);
+		}
+	}
     
-    private function onShowHintClicked() : Void
+    private function onShowHintClicked(event : Dynamic) : Void
     {
         var params : Dynamic = {
             hint : m_currentHintShown
-
         };
-        m_gameEngine.dispatchEventWith(GameEvent.SHOW_HINT, false, params);
+        m_gameEngine.dispatchEvent(new DataEvent(GameEvent.SHOW_HINT, params));
     }
     
-    private function onLeftScrollClick() : Void
+    private function onLeftScrollClick(event : Dynamic) : Void
     {
         // Change index and show new unlocked hint
         var newHintIndex : Int = m_currentHintIndex - 1;
@@ -544,7 +551,7 @@ class HintsViewer extends ScriptNode implements IShowableScript
         }
     }
     
-    private function onRightScrollClick() : Void
+    private function onRightScrollClick(event : Dynamic) : Void
     {
         // Change index and show new unlocked hint
         var newHintIndex : Int = m_currentHintIndex + 1;

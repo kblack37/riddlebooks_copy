@@ -1,35 +1,34 @@
 package wordproblem.engine;
 
-import dragonbox.common.math.vectorspace.RealsVectorSpace;
-import starling.display.Image;
-import wordproblem.engine.IGameEngine;
-
-import flash.geom.Point;
-import flash.geom.Rectangle;
-import flash.text.TextFormat;
-
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.ExpressionUtil;
 import dragonbox.common.expressiontree.WildCardNode;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
-import dragonbox.common.math.vectorspace.IVectorSpace;
+import dragonbox.common.math.vectorspace.RealsVectorSpace;
 import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
+import wordproblem.display.DisposableSprite;
+import wordproblem.display.Scale9Image;
 
-import starling.animation.Juggler;
-import starling.display.Button;
-import starling.display.DisplayObject;
-import starling.display.DisplayObjectContainer;
-import starling.display.Sprite;
-import starling.events.Event;
-import starling.textures.Texture;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
+import openfl.display.Sprite;
+import openfl.events.Event;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
+import openfl.text.TextFormat;
 
+import wordproblem.display.LabelButton;
 import wordproblem.display.Layer;
+import wordproblem.engine.IGameEngine;
 import wordproblem.engine.component.Component;
 import wordproblem.engine.component.ComponentManager;
 import wordproblem.engine.component.ExpressionComponent;
 import wordproblem.engine.component.RenderableComponent;
 import wordproblem.engine.component.WidgetAttributesComponent;
+import wordproblem.engine.events.DataEvent;
 import wordproblem.engine.events.GameEvent;
 import wordproblem.engine.expression.ExpressionSymbolMap;
 import wordproblem.engine.expression.tree.ExpressionTree;
@@ -44,7 +43,6 @@ import wordproblem.engine.systems.BlinkSystem;
 import wordproblem.engine.systems.BounceSystem;
 import wordproblem.engine.systems.CalloutSystem;
 import wordproblem.engine.systems.FreeTransformSystem;
-import wordproblem.engine.systems.HelperCharacterRenderSystem;
 import wordproblem.engine.systems.HighlightSystem;
 import wordproblem.engine.systems.ScanSystem;
 import wordproblem.engine.text.TextViewFactory;
@@ -131,7 +129,7 @@ class GameEngine extends Sprite implements IGameEngine
     /**
      * Animate sprite sheets that are using the starling movieclip class
      */
-    private var m_spriteSheetJuggler : Juggler;
+    //private var m_spriteSheetJuggler : Juggler;
     
     public function new(compiler : IExpressionTreeCompiler,
             assetManager : AssetManager,
@@ -147,7 +145,7 @@ class GameEngine extends Sprite implements IGameEngine
         m_height = height;
         m_assetManager = assetManager;
         m_mouseState = mouseState;
-        m_spriteSheetJuggler = new Juggler();
+        //m_spriteSheetJuggler = new Juggler();
         
         // Initialize the component managers, they are re-used for every level
         m_itemComponentManager = new ComponentManager();
@@ -157,15 +155,16 @@ class GameEngine extends Sprite implements IGameEngine
         m_uiComponentManager = new ComponentManager();
         
         // Construct the systems that are re-usable across all levels
+		// TODO: revisit some of these animations once more basic display elements are working
         m_systems = new ConcurrentSelector(-1);
         m_systems.pushChild(new ArrowDrawingSystem(m_assetManager));
         m_systems.pushChild(new BounceSystem());
         m_systems.pushChild(new ScanSystem());
         m_systems.pushChild(new HighlightSystem(m_assetManager));
-        m_systems.pushChild(new HelperCharacterRenderSystem(m_assetManager, m_spriteSheetJuggler, this.getSprite()));
+        //m_systems.pushChild(new HelperCharacterRenderSystem(m_assetManager, m_spriteSheetJuggler, this.getSprite()));
         m_systems.pushChild(new CalloutSystem(m_assetManager, this.getSprite(), mouseState));
         m_systems.pushChild(new FreeTransformSystem());
-        m_systems.pushChild(new BlinkSystem());
+        //m_systems.pushChild(new BlinkSystem());
     }
     
     /**
@@ -296,7 +295,7 @@ class GameEngine extends Sprite implements IGameEngine
     public function getUiEntity(entityId : String) : DisplayObject
     {
         var component : Component = m_uiComponentManager.getComponentFromEntityIdAndType(entityId, RenderableComponent.TYPE_ID);
-        return ((component != null)) ? (try cast(component, RenderableComponent) catch(e:Dynamic) null).view : null;
+        return component != null ? (try cast(component, RenderableComponent) catch(e:Dynamic) null).view : null;
     }
     
     public function getUiEntitiesByClass(classDefinition : Class<Dynamic>,
@@ -479,7 +478,9 @@ class GameEngine extends Sprite implements IGameEngine
         if (index < currentPageViews.length) 
         {
             // Remove and dispose previous view at the given index and replace with the new one
-            currentPageViews[index].removeFromParent(true);
+			var currentPageView = currentPageViews[index];
+			if (currentPageView.parent != null) currentPageView.parent.removeChild(currentPageView);
+			currentPageView = null;
             currentPageViews[index] = pageView;
         }
         else 
@@ -609,7 +610,7 @@ class GameEngine extends Sprite implements IGameEngine
             // an object that is no longer visible will have its width and height treated as zero.
             else if (!visible && renderComponent.view.parent != null) 
             {
-                renderComponent.view.removeFromParent();
+				if (renderComponent.view.parent != null) renderComponent.view.parent.removeChild(renderComponent.view);
             }
         }
         
@@ -697,19 +698,19 @@ class GameEngine extends Sprite implements IGameEngine
         
         var scanSystem : BaseSystemScript = try cast(m_systems.getNodeById("ScanSystem"), BaseSystemScript) catch(e:Dynamic) null;
         var highlightSystem : BaseSystemScript = try cast(m_systems.getNodeById("HighlightSystem"), BaseSystemScript) catch(e:Dynamic) null;
-        var blinkSystem : BaseSystemScript = try cast(m_systems.getNodeById("BlinkSystem"), BaseSystemScript) catch(e:Dynamic) null;
+        //var blinkSystem : BaseSystemScript = try cast(m_systems.getNodeById("BlinkSystem"), BaseSystemScript) catch(e:Dynamic) null;
         
         // TODO:
         // We don't know what component managers will actually be available
         var textComponentManager : ComponentManager = (try cast(this.getUiEntity("textArea"), TextAreaWidget) catch(e:Dynamic) null).componentManager;
-        blinkSystem.addComponentManager(textComponentManager);
+        //blinkSystem.addComponentManager(textComponentManager);
         
         var barModelAreas : Array<DisplayObject> = this.getUiEntitiesByClass(BarModelAreaWidget);
         for (barModelArea in barModelAreas)
         {
 			var barModelAreaComponentManager = (try cast(barModelArea, BarModelAreaWidget) catch (e : Dynamic) null).componentManager;
             calloutSystem.addComponentManager(barModelAreaComponentManager);
-            blinkSystem.addComponentManager(barModelAreaComponentManager);
+            //blinkSystem.addComponentManager(barModelAreaComponentManager);
             highlightSystem.addComponentManager(barModelAreaComponentManager);
         }
         
@@ -737,14 +738,13 @@ class GameEngine extends Sprite implements IGameEngine
         
         if (m_characterComponentManager != null) 
         {
-            (try cast(m_systems.getNodeById("HelperCharacterRenderSystem"), BaseSystemScript) catch(e:Dynamic) null).addComponentManager(m_characterComponentManager);
+            //(try cast(m_systems.getNodeById("HelperCharacterRenderSystem"), BaseSystemScript) catch(e:Dynamic) null).addComponentManager(m_characterComponentManager);
             (try cast(m_systems.getNodeById("FreeTransformSystem"), BaseSystemScript) catch(e:Dynamic) null).addComponentManager(m_characterComponentManager);
             (try cast(m_systems.getNodeById("CalloutSystem"), BaseSystemScript) catch(e:Dynamic) null).addComponentManager(m_characterComponentManager);
-        }  // Dispatch indication that this level is ready  
-        
-        
-        
-        this.dispatchEventWith(GameEvent.LEVEL_READY);
+        } 
+		
+		// Dispatch indication that this level is ready  
+        this.dispatchEvent(new Event(GameEvent.LEVEL_READY));
     }
     
     /**
@@ -769,26 +769,24 @@ class GameEngine extends Sprite implements IGameEngine
                 renderComponent = try cast(m_uiComponentManager.getComponentFromEntityIdAndType(
                                 widgetAttributes.entityId,
                                 RenderableComponent.TYPE_ID
-                                ), RenderableComponent) catch(e:Dynamic) null;
-                renderComponent.view.removeEventListeners();
-                renderComponent.view.dispose();
-                renderComponent.view.removeFromParent();
+                                ), RenderableComponent) catch (e:Dynamic) null;
+				if (renderComponent.view.parent != null) renderComponent.view.parent.removeChild(renderComponent.view);
+				if (Std.is(renderComponent.view, DisposableSprite)) {
+					(try cast(renderComponent.view, DisposableSprite) catch (e : Dynamic) null).dispose();
+				}
             }
-        }  // Clear the component list for each of the systems  
-        
-        
-        
+        }  
+		
+		// Clear the component list for each of the systems  
         for (i in 0...m_systems.getChildren().length){
             (try cast(m_systems.getChildren()[i], BaseSystemScript) catch(e:Dynamic) null).clear();
-        }  // TODO: The corresponding widget each is a part of should clear these    // Clear out the data in the component managers  
-        
-        
-        
-        
-        
+        }  
+		
+		// TODO: The corresponding widget each is a part of should clear these    // Clear out the data in the component managers  
         m_uiComponentManager.clear();
-        m_itemComponentManager.clear();  // Clear temp items on exit  
-        
+        m_itemComponentManager.clear(); 
+		
+		// Clear temp items on exit  
         while (this.numChildren > 0)
         {
             removeChildAt(0);
@@ -801,7 +799,7 @@ class GameEngine extends Sprite implements IGameEngine
         // TODO: Need to update the contents of the text view if they change
         
         // Advance juggler time so items added to it animate
-        m_spriteSheetJuggler.advanceTime(time.currentDeltaSeconds);
+        //m_spriteSheetJuggler.advanceTime(time.currentDeltaSeconds);
         
         // Only some of the added widgets are updateable
         // Note that we have a problem where some of these widgets may not be present
@@ -877,7 +875,7 @@ class GameEngine extends Sprite implements IGameEngine
             }
             else if (widgetType == "barModelArea") 
             {
-                (try cast(renderComponent.view, BarModelAreaWidget) catch(e:Dynamic) null).setDimensions(targetWidth, targetHeight);
+                (try cast(renderComponent.view, BarModelAreaWidget) catch (e:Dynamic) null).setDimensions(targetWidth, targetHeight);
             }
             else if (widgetType == "group") 
             {
@@ -888,11 +886,8 @@ class GameEngine extends Sprite implements IGameEngine
                 if (group.numChildren > 0) 
                 {
                     var firstChild : DisplayObject = group.getChildAt(0);
-                    if (Std.is(firstChild, Image)) 
-                    {
-                        firstChild.width = targetWidth;
-                        firstChild.height = targetHeight;
-                    }
+                    firstChild.width = targetWidth;
+                    firstChild.height = targetHeight;
                 }
             }
             // Seting the x,y can be done using the DisplayObject interface
@@ -900,7 +895,7 @@ class GameEngine extends Sprite implements IGameEngine
             {
                 // If a button does not have a width and height value set then do not set the values
                 // Otherwise it sets the dimension to a zero value
-                var button : Button = try cast(renderComponent.view, Button) catch(e:Dynamic) null;
+                var button : LabelButton = try cast(renderComponent.view, LabelButton) catch(e:Dynamic) null;
                 if (targetWidth > 0) 
                 {
                     button.width = targetWidth;
@@ -1027,8 +1022,8 @@ class GameEngine extends Sprite implements IGameEngine
             var widgetType : String = widgetAttributeRoot.widgetType;
             var resourceList : Array<Dynamic> = widgetAttributeRoot.getResourceSourceList();
             var numberResources : Int = resourceList.length;
-            var texture : Texture = ((numberResources > 0)) ? 
-            m_assetManager.getTexture(widgetAttributeRoot.getResourceSourceList()[0].name) : null;
+            var bitmapData : BitmapData = numberResources > 0 ? 
+				m_assetManager.getBitmapData(widgetAttributeRoot.getResourceSourceList()[0].name) : null;
             
             // HACK: The 'topmost' layer in the composition of the widgets forming the game screen is called
             // layout. It should appear at the bottom of this screen
@@ -1042,13 +1037,10 @@ class GameEngine extends Sprite implements IGameEngine
                 
                 // The background texture needs to be able to scale properly, this requires using
                 // either a scale3 or scale9 image
-                if (texture != null) 
+                if (bitmapData != null) 
                 {
                     var imagePadding : Float = 10;
-					// TODO: this was replaced from a Scale3Texture from the feathers library and
-					// will probably need to be fixed
-                    var scaledTexture : Texture = Texture.fromTexture(texture, new Rectangle(0, imagePadding, texture.width, texture.height - imagePadding * 2));
-                    var scaledImage : Image = new Image(scaledTexture);
+                    var scaledImage : Scale9Image = new Scale9Image(bitmapData, new Rectangle(0, imagePadding, bitmapData.width, bitmapData.height - imagePadding * 2));
                     groupWidget.addChild(scaledImage);
                 }
                 
@@ -1059,12 +1051,12 @@ class GameEngine extends Sprite implements IGameEngine
                 // Create term areas
                 var vectorSpace : RealsVectorSpace = m_compiler.getVectorSpace();
                 var termAreaWidget : TermAreaWidget = new TermAreaWidget(
-                new ExpressionTree(vectorSpace, null), 
-                m_expressionSymbolMap, 
-                m_assetManager, 
-                texture, 
-                0, 
-                0
+					new ExpressionTree(vectorSpace, null), 
+					m_expressionSymbolMap, 
+					m_assetManager, 
+					bitmapData, 
+					0, 
+					0
                 );
                 
                 termAreaWidget.addEventListener(GameEvent.TERM_AREA_CHANGED, onTermAreaChanged);
@@ -1082,7 +1074,7 @@ class GameEngine extends Sprite implements IGameEngine
                 var extraData : Dynamic = widgetAttributeRoot.extraData;
                 m_textArea = new TextAreaWidget(
                         m_assetManager, 
-                        texture, 
+                        bitmapData, 
                         extraData.backgroundAttachment, 
                         extraData.backgroundRepeat, 
                         extraData.autoCenterPages, 
@@ -1107,14 +1099,14 @@ class GameEngine extends Sprite implements IGameEngine
                             );
                 }
                 
-                var button : Button = this.createPlainButton(
+                var button : LabelButton = this.createPlainButton(
                         numberResources,
                         resourceList,
                         extraData.label,
-                        ((extraData.label != null)) ? new TextFormat(extraData.fontName, extraData.fontSize, extraData.fontColor) : null,
+                        extraData.label != null ? new TextFormat(extraData.fontName, extraData.fontSize, extraData.fontColor) : null,
                         nineSlice
                 );
-                
+				
                 widget = button;
             }
             else if (widgetType == "equationToText") 
@@ -1150,8 +1142,6 @@ class GameEngine extends Sprite implements IGameEngine
                         );
             }
             
-            
-            
             var uiRenderComponent : RenderableComponent = new RenderableComponent(widgetAttributeRoot.entityId);
             uiRenderComponent.view = widget;
             m_uiComponentManager.addComponentToEntity(uiRenderComponent);
@@ -1178,18 +1168,18 @@ class GameEngine extends Sprite implements IGameEngine
             resourceList : Array<Dynamic>,
             label : String,
             textFormat : TextFormat,
-            nineSlice : Rectangle) : Button
+            nineSlice : Rectangle) : LabelButton
     {
         var buttonImageNormal : String = ((numberResources > 0)) ? 
-        resourceList[0].name : null;
-        var buttonImageClick : String = ((numberResources > 1)) ? 
-        resourceList[1].name : null;
+			resourceList[0].name : null;
+		var buttonImageClick : String = ((numberResources > 1)) ? 
+			resourceList[1].name : null;
         var buttonImageOver : String = ((numberResources > 2)) ? 
-        resourceList[2].name : null;
+			resourceList[2].name : null;
         var buttonImageInactive : String = ((numberResources > 3)) ? 
-        resourceList[3].name : null;
-        
-        var button : Button = WidgetUtil.createButton(
+			resourceList[3].name : null;
+		
+        var button : LabelButton = WidgetUtil.createButton(
                 m_assetManager,
                 buttonImageNormal,
                 buttonImageClick,
@@ -1203,8 +1193,12 @@ class GameEngine extends Sprite implements IGameEngine
         return button;
     }
     
-    private function onTermAreaChanged(event : Event) : Void
+    private function onTermAreaChanged(event : Dynamic) : Void
     {
+		var data : Dynamic = null;
+		if (Std.is(event, DataEvent)) {
+			data = (try cast(event, DataEvent) catch (e : Dynamic) null).getData();
+		}
         // We bubble up an event indicating the term area values have been modified
         // This fires an event only when both term areas are in a ready state
         var termAreas : Array<DisplayObject> = this.getUiEntitiesByClass(TermAreaWidget);
@@ -1222,7 +1216,7 @@ class GameEngine extends Sprite implements IGameEngine
         
         if (termAreasReady) 
         {
-            dispatchEventWith(GameEvent.TERM_AREAS_CHANGED);
+            dispatchEvent(new Event(GameEvent.TERM_AREAS_CHANGED));
         }
     }
 }

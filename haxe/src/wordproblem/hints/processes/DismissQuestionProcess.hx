@@ -1,13 +1,15 @@
 package wordproblem.hints.processes;
 
-import starling.animation.Tween;
-import starling.core.Starling;
-import starling.display.Button;
-import starling.display.Image;
-import starling.display.Quad;
-import starling.display.Sprite;
-import starling.events.Event;
-import starling.filters.ColorMatrixFilter;
+import dragonbox.common.util.XColor;
+import motion.Actuate;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import wordproblem.display.LabelButton;
+import openfl.display.Sprite;
+import openfl.events.Event;
+import openfl.events.MouseEvent;
+import openfl.filters.ColorMatrixFilter;
+import wordproblem.display.PivotSprite;
 
 import wordproblem.display.Layer;
 import wordproblem.engine.scripting.graph.ScriptNode;
@@ -22,7 +24,7 @@ class DismissQuestionProcess extends ScriptNode
 {
     private var m_assetManager : AssetManager;
     private var m_parentStage : Sprite;
-    private var m_answerButtons : Array<Button>;
+    private var m_answerButtons : Array<LabelButton>;
     private var m_potentialAnswers : Array<String>;
     private var m_answerCorrect : Array<Bool>;
     
@@ -39,7 +41,7 @@ class DismissQuestionProcess extends ScriptNode
     public function new(assetManager : AssetManager,
             parentStage : Sprite,
             questionData : Dynamic,
-            answerButtons : Array<Button>,
+            answerButtons : Array<LabelButton>,
             id : String = null,
             isActive : Bool = true)
     {
@@ -63,7 +65,7 @@ class DismissQuestionProcess extends ScriptNode
         m_initialized = false;
         m_correctAnswerSelected = false;
         m_blockingLayer = new Layer();
-        var blockingQuad : Quad = new Quad(800, 600, 0);
+        var blockingQuad : Bitmap = new Bitmap(new BitmapData(800, 600, false, 0));
         blockingQuad.alpha = 0.3;
         m_blockingLayer.addChild(blockingQuad);
     }
@@ -78,10 +80,10 @@ class DismissQuestionProcess extends ScriptNode
         else if (m_blockingLayer.parent != null) 
         {
             // Remove display objects
-            m_blockingLayer.removeFromParent(true);
+			if (m_blockingLayer.parent != null) m_blockingLayer.parent.removeChild(m_blockingLayer);
             for (button in m_answerButtons)
             {
-                button.removeEventListener(Event.TRIGGERED, onAnswerClicked);
+                button.removeEventListener(MouseEvent.CLICK, onAnswerClicked);
             }
         }
     }
@@ -95,10 +97,9 @@ class DismissQuestionProcess extends ScriptNode
             {
                 initializeView();
                 m_initialized = true;
-            }  // Return success only if they anwer the question correctly  
-            
-            
-            
+            } 
+			
+			// Return success only if they anwer the question correctly  
             if (m_correctAnswerSelected) 
             {
                 // Exit condition if they picked the right response
@@ -116,11 +117,11 @@ class DismissQuestionProcess extends ScriptNode
         
         for (button in m_answerButtons)
         {
-            button.addEventListener(Event.TRIGGERED, onAnswerClicked);
+            button.addEventListener(MouseEvent.CLICK, onAnswerClicked);
         }
     }
     
-    private function onAnswerClicked(event : Event) : Void
+    private function onAnswerClicked(event : Dynamic) : Void
     {
         if (m_enableAnswerClick) 
         {
@@ -129,26 +130,25 @@ class DismissQuestionProcess extends ScriptNode
         else 
         {
             return;
-        }  // On clicking an answer, disable it and show icon whether it was correct  
-        
-        
-        
-        var targetButton : Button = try cast(event.target, Button) catch(e:Dynamic) null;
-        var answer : String = targetButton.text;
+        } 
+		
+		// On clicking an answer, disable it and show icon whether it was correct  
+        var targetButton : LabelButton = try cast(event.relatedObject, LabelButton) catch (e:Dynamic) null;
+        var answer : String = targetButton.label;
         var indexOfAnswer : Int = Lambda.indexOf(m_potentialAnswers, answer);
         if (indexOfAnswer > -1) 
         {
             var isCorrect : Bool = m_answerCorrect[indexOfAnswer];
-            var icon : Image = null;
+            var icon : PivotSprite = new PivotSprite();
             if (isCorrect) 
             {
                 // Make button look correct (change color to green and add a check)
-                icon = new Image(m_assetManager.getTexture("correct"));
+                icon.addChild(new Bitmap(m_assetManager.getBitmapData("correct")));
             }
             else 
             {
                 // Make button look incorrect (change color to red and add an x)
-                icon = new Image(m_assetManager.getTexture("wrong"));
+                icon.addChild(new Bitmap(m_assetManager.getBitmapData("wrong")));
             }
             
             icon.pivotX = icon.width * 0.5;
@@ -163,19 +163,15 @@ class DismissQuestionProcess extends ScriptNode
             icon.alpha = 0.0;
             targetButton.parent.addChild(icon);
             
-            var tween : Tween = new Tween(icon, 1);
-            tween.fadeTo(1.0);
-            tween.scaleTo(finalIconScale);
             // If correct answer selected have a short delay before it is dismissed
-            tween.onComplete = function() : Void
+			Actuate.tween(icon, 1, { alpha: 1, scaleX: finalIconScale, scaleY: finalIconScale }).onComplete(function() : Void
                     {
-                        var greyScaleFilter : ColorMatrixFilter = new ColorMatrixFilter();
-                        greyScaleFilter.adjustSaturation(-1);
-                        targetButton.filter = greyScaleFilter;
+						var filters = targetButton.filters.copy();
+						filters.push(XColor.getGrayscaleFilter());
+						targetButton.filters = filters;
                         m_correctAnswerSelected = isCorrect;
                         m_enableAnswerClick = true;
-                    };
-            Starling.current.juggler.add(tween);
+                    });
         }
     }
 }

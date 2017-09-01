@@ -57,9 +57,9 @@ class ChangeBarModelArea extends BaseProblemCreateScript
         }
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         m_barModelTypeDrawer = new BarModelTypeDrawer();
         

@@ -1,15 +1,15 @@
 package wordproblem.engine.widget;
 
 
-import flash.geom.Rectangle;
-
-import dragonbox.common.dispose.IDisposable;
 import dragonbox.common.expressiontree.ExpressionNode;
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
+import dragonbox.common.util.XColor;
 
-import starling.display.Sprite;
-import starling.filters.ColorMatrixFilter;
+import openfl.filters.BitmapFilter;
+import openfl.filters.ColorMatrixFilter;
+import openfl.geom.Rectangle;
 
+import wordproblem.display.DisposableSprite;
 import wordproblem.engine.component.ExpressionComponent;
 import wordproblem.engine.expression.ExpressionSymbolMap;
 import wordproblem.resource.AssetManager;
@@ -20,7 +20,7 @@ import wordproblem.resource.AssetManager;
  * 
  * This widget is mainly just a container for equations or expressions
  */
-class ExpressionPickerWidget extends Sprite implements IDisposable
+class ExpressionPickerWidget extends DisposableSprite
 {
     private var m_totalWidth : Float;
     private var m_totalHeight : Float;
@@ -89,9 +89,9 @@ class ExpressionPickerWidget extends Sprite implements IDisposable
     
     override public function dispose() : Void
     {
+		super.dispose(); 
+		
         this.removeAllExpressions();
-        
-        super.dispose();
     }
     
     public function setDimensions(width : Float, height : Float) : Void
@@ -161,7 +161,7 @@ class ExpressionPickerWidget extends Sprite implements IDisposable
             
             if (expressionContainer.stage != null) 
             {
-                expressionContainer.getBounds(expressionContainer.stage, m_hitBoundsBuffer);
+                m_hitBoundsBuffer = expressionContainer.getBounds(expressionContainer.stage);
                 if (m_hitBoundsBuffer.contains(globalX, globalY)) 
                 {
                     expressionContainerUnderPoint = expressionContainer;
@@ -178,8 +178,8 @@ class ExpressionPickerWidget extends Sprite implements IDisposable
         while (m_expressionContainers.length > 0)
         {
             var expressionContainer : ExpressionContainer = m_expressionContainers.pop();
-            expressionContainer.dispose();
-            expressionContainer.removeFromParent();
+            if (expressionContainer.parent != null) expressionContainer.parent.removeChild(expressionContainer);
+			expressionContainer.dispose();
         }
         
         m_selectedExpressionContainersBuffer = new Array<ExpressionContainer>();
@@ -208,9 +208,7 @@ class ExpressionPickerWidget extends Sprite implements IDisposable
         {
             if (!expressionContainer.getIsSelected()) 
             {
-                var colorMatrixFilter : ColorMatrixFilter = new ColorMatrixFilter();
-                colorMatrixFilter.adjustSaturation(-1);
-                expressionContainer.filter = colorMatrixFilter;
+				expressionContainer.filters = [XColor.getGrayscaleFilter()];
             }
         }
     }
@@ -223,7 +221,7 @@ class ExpressionPickerWidget extends Sprite implements IDisposable
     {
         for (expressionContainer in m_expressionContainers)
         {
-            expressionContainer.filter = null;
+			expressionContainer.filters = new Array<BitmapFilter>();
         }
     }
     

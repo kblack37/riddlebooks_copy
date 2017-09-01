@@ -1,26 +1,25 @@
 package wordproblem.summary;
 
 
-import starling.animation.Tween;
-import starling.core.Starling;
-import starling.display.Image;
-import starling.display.Sprite;
-import starling.textures.Texture;
+import motion.Actuate;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.display.Sprite;
+import wordproblem.display.DisposableSprite;
+import wordproblem.display.PivotSprite;
 
 import wordproblem.resource.AssetManager;
 
 /**
  * Base display representing a single reward shown on the summary screen
  */
-class BaseRewardButton extends Sprite
+class BaseRewardButton extends DisposableSprite
 {
     public var data : Dynamic;
     
     private var m_assetManager : AssetManager;
     
-    private var m_backgroundGlowImage : Image;
-    
-    private var m_glowTween : Tween;
+    private var m_backgroundGlowImage : PivotSprite;
     
     public function new(maxEdgeLength : Float, rewardData : Dynamic, assetManager : AssetManager)
     {
@@ -30,26 +29,20 @@ class BaseRewardButton extends Sprite
         m_assetManager = assetManager;
         
         // Create a general glow background for every button
-        var backgroundGlowTexture : Texture = assetManager.getTexture("Art_YellowGlow");
-        var backgroundGlowImage : Image = new Image(backgroundGlowTexture);
-        backgroundGlowImage.pivotX = backgroundGlowTexture.width * 0.5;
-        backgroundGlowImage.pivotY = backgroundGlowTexture.height * 0.5;
+        var backgroundGlowBitmapData : BitmapData = assetManager.getBitmapData("Art_YellowGlow");
+        var backgroundGlowImage : PivotSprite = new PivotSprite();
+		backgroundGlowImage.addChild(new Bitmap(backgroundGlowBitmapData));
+        backgroundGlowImage.pivotX = backgroundGlowBitmapData.width * 0.5;
+        backgroundGlowImage.pivotY = backgroundGlowBitmapData.height * 0.5;
         backgroundGlowImage.width = backgroundGlowImage.height = maxEdgeLength;
         backgroundGlowImage.x = maxEdgeLength * 0.5;
         backgroundGlowImage.y = maxEdgeLength * 0.5;
         addChild(backgroundGlowImage);
         m_backgroundGlowImage = backgroundGlowImage;
         
-        m_glowTween = new Tween(backgroundGlowImage, 2);
-        m_glowTween.repeatCount = 0;
-        m_glowTween.reverse = true;
-        
         var originalScale : Float = m_backgroundGlowImage.scaleX;
         var newScale : Float = originalScale * 1.1;
-        m_glowTween.animate("scaleX", newScale);
-        m_glowTween.animate("scaleY", newScale);
-        m_glowTween.animate("alpha", 0.8);
-        Starling.current.juggler.add(m_glowTween);
+		Actuate.tween(m_backgroundGlowImage, 2, { scaleX: newScale, scaleY: newScale, alpha: 0.8 }).repeat().reflect();
     }
     
     /**
@@ -65,8 +58,8 @@ class BaseRewardButton extends Sprite
     
     override public function dispose() : Void
     {
-        super.dispose();
-        
-        Starling.current.juggler.remove(m_glowTween);
+		super.dispose();
+		
+		Actuate.stop(m_backgroundGlowImage);
     }
 }

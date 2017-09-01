@@ -1,13 +1,13 @@
 package wordproblem.scripts.level.util;
 
 
-import flash.geom.Rectangle;
+import dragonbox.common.util.XColor;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.geom.Rectangle;
 import haxe.xml.Fast;
 
-import starling.display.DisplayObject;
-import starling.display.Image;
-import starling.display.Quad;
-import starling.textures.Texture;
+import openfl.display.DisplayObject;
 
 import wordproblem.engine.IGameEngine;
 import wordproblem.engine.text.TextParser;
@@ -68,7 +68,7 @@ class TextReplacementControl
             var documentView : DocumentView = m_outDocumentViewBuffer[i];
             if (Std.is(documentView, ImageView)) 
             {
-                (try cast((try cast(documentView, ImageView) catch(e:Dynamic) null).getChildAt(0), Image) catch(e:Dynamic) null).color = color;
+                (try cast((try cast(documentView, ImageView) catch (e:Dynamic) null).getChildAt(0), Bitmap) catch (e:Dynamic) null).transform.colorTransform = XColor.rgbToColorTransform(color);
             }
         }
     }
@@ -143,7 +143,7 @@ class TextReplacementControl
                     }
                     
                     
-                    terminalView.getBounds(blankSpace, boundsBuffer);
+                    boundsBuffer = terminalView.getBounds(blankSpace);
                     
                     // Unadd the non visible views
                     if (tempAddNonVisibleViews) 
@@ -171,7 +171,7 @@ class TextReplacementControl
                 
                 var underlineThickness : Float = boundsForLine.height * 0.1;
                 var underlineWidth : Float = boundsForLine.width * 0.9;
-                var underline : Quad = new Quad(underlineWidth, underlineThickness, 0x000000);
+				var underline : Bitmap = new Bitmap(new BitmapData(Std.int(underlineWidth), Std.int(underlineThickness), false, 0xFF000000));
                 
                 underline.x = boundsForLine.left;
                 underline.y = boundsForLine.bottom - underlineThickness;
@@ -226,17 +226,17 @@ class TextReplacementControl
         var image : DisplayObject = null;
         if (textureName != null) 
         {
-            var texture : Texture = texureControl.getDisposableTexture(textureName);
-            image = new Image(texture);
+            var bitmapData : BitmapData = texureControl.getDisposableTexture(textureName);
+            image = new Bitmap(bitmapData);
             
             var scaleFactor : Float = 1.0;
             if (maxWidth > 0) 
             {
-                scaleFactor = maxWidth / texture.width;
+                scaleFactor = maxWidth / bitmapData.width;
             }
             else if (maxHeight > 0) 
             {
-                scaleFactor = maxHeight / texture.height;
+                scaleFactor = maxHeight / bitmapData.height;
             }
             image.scaleX = image.scaleY = scaleFactor;
             
@@ -245,14 +245,14 @@ class TextReplacementControl
         else 
         {
             var containerViews : Array<DocumentView> = textArea.getDocumentViewsAtPageIndexById(docId, null, pageIndex);
-            containerViews[0].removeChildren(0, -1, true);
+            containerViews[0].removeChildren(0, -1);
         }
     }
     
     public function addImageAtDocumentId(image : DisplayObject, textArea : TextAreaWidget, docId : String, pageIndex : Int) : Void
     {
         var containerViews : Array<DocumentView> = textArea.getDocumentViewsAtPageIndexById(docId, null, pageIndex);
-        containerViews[0].removeChildren(0, -1, true);
+        containerViews[0].removeChildren(0, -1);
         containerViews[0].addChild(image);
     }
     

@@ -1,16 +1,19 @@
 package wordproblem.xp;
 
 
-import flash.geom.Rectangle;
+import dragonbox.common.util.XColor;
+import motion.Actuate;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.filters.BitmapFilter;
+import openfl.geom.Rectangle;
+import wordproblem.display.DisposableSprite;
+import wordproblem.display.PivotSprite;
+import wordproblem.display.Scale9Image;
 
-import starling.animation.Juggler;
-import starling.animation.Tween;
-import starling.core.Starling;
-import starling.display.DisplayObject;
-import starling.display.Image;
-import starling.display.Sprite;
-import starling.filters.ColorMatrixFilter;
-import starling.textures.Texture;
+import openfl.display.DisplayObject;
+import openfl.display.Sprite;
+import openfl.filters.ColorMatrixFilter;
 
 import wordproblem.engine.text.OutlinedTextField;
 import wordproblem.resource.AssetManager;
@@ -19,19 +22,19 @@ import wordproblem.resource.AssetManager;
  * This is the ui component to represent how much the player has filled
  * up an experience bar to reach a certain level.
  */
-class PlayerXPBar extends Sprite
+class PlayerXPBar extends DisposableSprite
 {
     /**
      * Other classes need to access the fill bar so it gets set to the correct ratio
      */
-    private var m_xpBarFillImageSliced : Image;
+    private var m_xpBarFillImageSliced : Bitmap;
     
     /**
      * The unsliced version should only be used for very small ratios
      */
     private var m_xpBarFillImageUnsliced : Sprite;
     
-    private var m_xpBackgroundFillSliced : Image;
+    private var m_xpBackgroundFillSliced : Bitmap;
     private var m_xpBackgroundFillUnsliced : Sprite;
     
     /**
@@ -52,7 +55,7 @@ class PlayerXPBar extends Sprite
     /**
      * Have an icon of a brain to act as the text background
      */
-    private var m_brainImage : DisplayObject;
+    private var m_brainImage : PivotSprite;
     
     /**
      * This is the container canvas that holds a description of the player level
@@ -71,13 +74,6 @@ class PlayerXPBar extends Sprite
     private var m_brainBackgroundContainer : Sprite;
     
     /**
-     * List of tweens that create an animated background behind the brain text
-     */
-    private var m_cycleTweens : Array<Tween>;
-    
-    private var m_juggler : Juggler;
-    
-    /**
      * @param maxBarLength
      *      The maximum pixel length of the xp bar
      */
@@ -87,20 +83,14 @@ class PlayerXPBar extends Sprite
         
         var fillContainer : Sprite = new Sprite();
         m_fillContainer = fillContainer;
-        m_juggler = Starling.current.juggler;
         
         var padding : Float = 10;
-        var xpBarBackTexture : Texture = assetManager.getTexture("xp_bar_back");
+        var xpBarBackBitmapData : BitmapData = assetManager.getBitmapData("xp_bar_back");
 		
-		// TODO: this was replaced from a Scale3Texture and may need to be fixed
-        var xpBarBackImage : Image = new Image(Texture.fromTexture(
-			xpBarBackTexture,
-			new Rectangle(padding,
-				0,
-				xpBarBackTexture.width - 2 * padding,
-				xpBarBackTexture.height
-			)
-		));
+        var xpBarBackImage : Scale9Image = new Scale9Image(xpBarBackBitmapData, new Rectangle(padding,
+			0,
+			xpBarBackBitmapData.width - 2 * padding,
+			xpBarBackBitmapData.height));
         xpBarBackImage.width = maxBarLength;
         fillContainer.addChild(xpBarBackImage);
         
@@ -108,21 +98,16 @@ class PlayerXPBar extends Sprite
         var fillPaddingTop : Float = 5;
         var fillPaddingLeft : Float = 4;
         m_fillWidthWhenFull = maxBarLength - fillPaddingLeft * 2;
-        var xpBarFillTexture : Texture = assetManager.getTexture("xp_bar_fill");
+        var xpBarFillBitmapData : BitmapData = assetManager.getBitmapData("xp_bar_fill");
         
-		// TODO: this was replaced from a Scale3Texture and may need to be fixed
-        m_xpBarFillImageSliced = new Image(Texture.fromTexture(
-			xpBarFillTexture,
-			new Rectangle(padding,
-				0,
-				xpBarFillTexture.width - 2 * padding,
-				xpBarFillTexture.height
-			)
-		));
+        m_xpBarFillImageSliced = new Scale9Image(xpBarFillBitmapData, new Rectangle(padding,
+			0,
+			xpBarFillBitmapData.width - 2 * padding,
+			xpBarFillBitmapData.height));
         m_xpBarFillImageSliced.x = fillPaddingLeft;
         m_xpBarFillImageSliced.y = fillPaddingTop;
         
-        var xpBarFillImageUnsliced : Image = new Image(xpBarFillTexture);
+        var xpBarFillImageUnsliced : Bitmap = new Bitmap(xpBarFillBitmapData);
         xpBarFillImageUnsliced.x = fillPaddingLeft;
         xpBarFillImageUnsliced.y = fillPaddingTop;
         
@@ -131,25 +116,22 @@ class PlayerXPBar extends Sprite
         m_xpBarFillImageUnsliced = clippableContainer;
         
         // Add grayscale filter to make the fill look white
-        var colorMatrixFilter : ColorMatrixFilter = new ColorMatrixFilter();
-        colorMatrixFilter.adjustSaturation( -1);
-		// TODO: this was replaced from a Scale3Texture and may need to be fixed
-        m_xpBackgroundFillSliced = new Image(Texture.fromTexture(
-			xpBarFillTexture,
-			new Rectangle(padding,
-				0,
-				xpBarFillTexture.width - 2 * padding,
-				xpBarFillTexture.height
-			)
-		));
+        var colorMatrixFilter : ColorMatrixFilter = XColor.getGrayscaleFilter();
+		
+        m_xpBackgroundFillSliced = new Scale9Image(xpBarFillBitmapData, new Rectangle(padding,
+			0,
+			xpBarFillBitmapData.width - 2 * padding,
+			xpBarFillBitmapData.height));
         m_xpBackgroundFillSliced.x = fillPaddingLeft;
         m_xpBackgroundFillSliced.y = fillPaddingTop;
-        m_xpBackgroundFillSliced.filter = colorMatrixFilter;
+		var filters = new Array<BitmapFilter>();
+		filters.push(colorMatrixFilter);
+        m_xpBackgroundFillSliced.filters = filters;
         
-        var unslicedBackgroundImage : Image = new Image(xpBarFillTexture);
+        var unslicedBackgroundImage : Bitmap = new Bitmap(xpBarFillBitmapData);
         unslicedBackgroundImage.x = fillPaddingLeft;
         unslicedBackgroundImage.y = fillPaddingTop;
-        unslicedBackgroundImage.filter = colorMatrixFilter;
+        unslicedBackgroundImage.filters = filters;
         m_xpBackgroundFillUnsliced = new Sprite();
         m_xpBackgroundFillUnsliced.addChild(unslicedBackgroundImage);
         
@@ -163,7 +145,8 @@ class PlayerXPBar extends Sprite
         var backgroundNames : Array<String> = ["Art_BrainFrontBgA", "Art_BrainFrontBgB", "Art_BrainFrontBgC"];
         for (backgroundName in backgroundNames)
         {
-            var brainBackground : DisplayObject = new Image(assetManager.getTexture(backgroundName));
+            var brainBackground : PivotSprite = new PivotSprite();
+			brainBackground.addChild(new Bitmap(assetManager.getBitmapData(backgroundName)));
             brainBackground.pivotX = brainBackground.width * 0.5;
             brainBackground.pivotY = brainBackground.height * 0.5;
             m_brainBackgroundLayers.push(brainBackground);
@@ -186,7 +169,8 @@ class PlayerXPBar extends Sprite
         m_brainImageContainer.y = 0;
         m_brainImageContainer.x = xpBarBackImage.width;
         
-        m_brainImage = new Image(assetManager.getTexture("Art_BrainLargeFront"));
+        m_brainImage = new PivotSprite();
+		m_brainImage.addChild(new Bitmap(assetManager.getBitmapData("Art_BrainLargeFront")));
         m_brainImage.scaleX = m_brainImage.scaleY = 0.4;
         m_brainImage.pivotX = m_brainImage.width * 0.5;
         m_brainImage.pivotY = m_brainImage.height * 0.5;
@@ -201,8 +185,6 @@ class PlayerXPBar extends Sprite
         m_playerLevelTextField.x = 50;
         m_playerLevelTextField.y = 10;
         m_brainImageContainer.addChild(m_playerLevelTextField);
-        
-        m_cycleTweens = new Array<Tween>();
     }
     
     public function startCycleAnimation() : Void
@@ -218,17 +200,10 @@ class PlayerXPBar extends Sprite
         var startScale : Float = getTargetScale(layerA, targetBackgroundStartWidth);
         layerA.scaleX = layerA.scaleY = startScale;
         var endScale : Float = getTargetScale(layerA, targetBackgroundEndWidth);
-        var layerATween : Tween = new Tween(layerA, cycleDuration);
-        layerATween.repeatCount = 0;
-        layerATween.animate("scaleX", endScale);
-        layerATween.animate("scaleY", endScale);
-        layerATween.animate("alpha", 0.55);
-        layerATween.onRepeat = function() : Void
+		Actuate.tween(layerA, cycleDuration, { scaleX: endScale, scaleY: endScale, alpha: 0.55 }).repeat().onRepeat(function() : Void
                 {
                     m_brainBackgroundContainer.addChild(layerA);
-                };
-        m_juggler.add(layerATween);
-        m_cycleTweens.push(layerATween);
+                });
         
         var layerB : DisplayObject = m_brainBackgroundLayers[1];
         layerB.x = startingX;
@@ -236,19 +211,11 @@ class PlayerXPBar extends Sprite
         startScale = getTargetScale(layerB, targetBackgroundStartWidth);
         layerB.scaleX = layerB.scaleY = startScale;
         endScale = getTargetScale(layerB, targetBackgroundEndWidth);
-        var layerBTween : Tween = new Tween(layerB, cycleDuration);
-        layerBTween.repeatCount = 0;
-        layerBTween.delay = 0.5;
-        layerBTween.animate("scaleX", endScale);
-        layerBTween.animate("scaleY", endScale);
-        layerBTween.animate("alpha", 0.55);
-        layerBTween.onRepeat = function() : Void
+		Actuate.tween(layerB, cycleDuration, { scaleX: endScale, scaleY: endScale, alpha: 0.55 }).repeat().delay(0.5).onRepeat(function() : Void
                 {
                     m_brainBackgroundContainer.addChild(layerB);
-                };
+                });
         m_brainBackgroundContainer.addChild(layerB);
-        m_juggler.add(layerBTween);
-        m_cycleTweens.push(layerBTween);
         
         var layerC : DisplayObject = m_brainBackgroundLayers[2];
         layerC.x = startingX;
@@ -256,30 +223,21 @@ class PlayerXPBar extends Sprite
         startScale = getTargetScale(layerC, targetBackgroundStartWidth);
         layerC.scaleX = layerC.scaleY = startScale;
         endScale = getTargetScale(layerC, targetBackgroundEndWidth);
-        var layerCTween : Tween = new Tween(layerC, cycleDuration);
-        layerCTween.repeatCount = 0;
-        layerCTween.delay = 1.0;
-        layerCTween.animate("scaleX", endScale);
-        layerCTween.animate("scaleY", endScale);
-        layerCTween.animate("alpha", 0.55);
-        layerCTween.onRepeat = function() : Void
+		Actuate.tween(layerC, cycleDuration, { scaleX: endScale, scaleY: endScale, alpha: 0.55 }).repeat().delay(1.0).onRepeat(function() : Void
                 {
                     m_brainBackgroundContainer.addChild(layerC);
-                };
+                });
         m_brainBackgroundContainer.addChild(layerC);
-        m_juggler.add(layerCTween);
-        m_cycleTweens.push(layerCTween);
     }
     
     public function endCycleAnimation() : Void
     {
-        for (tween in m_cycleTweens)
+        for (layer in m_brainBackgroundLayers)
         {
-            m_juggler.remove(tween);
-        }  // Restore the background to it's previous state  
-        
-        
-        
+			Actuate.stop(layer);
+        }
+		
+		// Restore the background to it's previous state  
         var startingX : Float = 50;
         var startingY : Float = 12;
         var startingScale : Float = 0.8;
@@ -288,11 +246,9 @@ class PlayerXPBar extends Sprite
         layerA.y = startingY;
         layerA.scaleX = layerA.scaleY = startingScale;
         var layerB : DisplayObject = m_brainBackgroundLayers[1];
-        layerB.removeFromParent();
+        if (layerB.parent != null) layerB.parent.removeChild(layerB);
         var layerC : DisplayObject = m_brainBackgroundLayers[2];
-        layerC.removeFromParent();
-        
-		m_cycleTweens = new Array<Tween>();
+        if (layerC.parent != null) layerC.parent.removeChild(layerC);
     }
     
     private function getTargetScale(layer : DisplayObject, desiredWidth : Float) : Float
@@ -311,24 +267,24 @@ class PlayerXPBar extends Sprite
     
     public function setFillRatio(ratio : Float) : Void
     {
-        m_xpBarFillImageSliced.removeFromParent();
-        m_xpBarFillImageUnsliced.removeFromParent();
+        if (m_xpBarFillImageSliced.parent != null) m_xpBarFillImageSliced.parent.removeChild(m_xpBarFillImageSliced);
+        if (m_xpBarFillImageUnsliced.parent != null) m_xpBarFillImageUnsliced.parent.removeChild(m_xpBarFillImageUnsliced);
         
         var newFillWidth : Float = m_fillWidthWhenFull * ratio;
         var imageToUse : DisplayObject = m_xpBarFillImageSliced;
-        if (newFillWidth < m_xpBarFillImageSliced.texture.width) 
+        if (newFillWidth < m_xpBarFillImageSliced.bitmapData.width) 
         {
             imageToUse = m_xpBarFillImageUnsliced;
             
             // If the width is too small for the 3-slice image to work, we instead
             // use a mask on the fill. This keeps the smooth rounded edge that gets lost
             // if just using scaling.
-            var unslicedImage : Image = (try cast(m_xpBarFillImageUnsliced.getChildAt(0), Image) catch(e:Dynamic) null);
-            m_xpBarFillImageUnsliced.clipRect = new Rectangle(
+            var unslicedImage : Bitmap = (try cast(m_xpBarFillImageUnsliced.getChildAt(0), Bitmap) catch(e:Dynamic) null);
+            m_xpBarFillImageUnsliced.scrollRect = new Rectangle(
                 unslicedImage.x,
 				unslicedImage.y,
 				newFillWidth,
-				unslicedImage.texture.height
+				unslicedImage.bitmapData.height
             );
         }
         else 
@@ -346,19 +302,19 @@ class PlayerXPBar extends Sprite
     {
         var newFillWidth : Float = m_fillWidthWhenFull * ratio;
         var imageToUse : DisplayObject = m_xpBackgroundFillSliced;
-        if (newFillWidth < m_xpBarFillImageSliced.texture.width) 
+        if (newFillWidth < m_xpBarFillImageSliced.bitmapData.width) 
         {
             imageToUse = m_xpBackgroundFillUnsliced;
             
             // If the width is too small for the 3-slice image to work, we instead
             // use a mask on the fill. This keeps the smooth rounded edge that gets lost
             // if just using scaling.
-            var unslicedImage : Image = (try cast(m_xpBackgroundFillUnsliced.getChildAt(0), Image) catch(e:Dynamic) null);
-            m_xpBackgroundFillUnsliced.clipRect = new Rectangle(
+            var unslicedImage : Bitmap = (try cast(m_xpBackgroundFillUnsliced.getChildAt(0), Bitmap) catch(e:Dynamic) null);
+            m_xpBackgroundFillUnsliced.scrollRect = new Rectangle(
                 unslicedImage.x,
 				unslicedImage.y,
 				newFillWidth,
-				unslicedImage.texture.height
+				unslicedImage.bitmapData.height
             );
         }
         else 
@@ -372,7 +328,7 @@ class PlayerXPBar extends Sprite
     
     public function removeBackgroundFill() : Void
     {
-        m_xpBackgroundFillSliced.removeFromParent();
-        m_xpBackgroundFillUnsliced.removeFromParent();
+        if (m_xpBackgroundFillSliced.parent != null) m_xpBackgroundFillSliced.parent.removeChild(m_xpBackgroundFillSliced);
+        if (m_xpBackgroundFillUnsliced.parent != null) m_xpBackgroundFillUnsliced.parent.removeChild(m_xpBackgroundFillUnsliced);
     }
 }

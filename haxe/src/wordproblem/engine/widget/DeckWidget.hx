@@ -1,19 +1,19 @@
 package wordproblem.engine.widget;
 
+import motion.Actuate;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.events.MouseEvent;
 import wordproblem.engine.widget.IBaseWidget;
 import wordproblem.engine.widget.ScrollGridWidget;
 
-import flash.geom.Point;
+import openfl.geom.Point;
 
 import dragonbox.common.dispose.IDisposable;
 
-import starling.animation.Tween;
-import starling.core.Starling;
-import starling.display.Button;
-import starling.display.DisplayObject;
-import starling.display.Image;
-import starling.events.Event;
-import starling.textures.Texture;
+import wordproblem.display.LabelButton;
+import openfl.display.DisplayObject;
+import openfl.events.Event;
 
 import wordproblem.engine.component.Component;
 import wordproblem.engine.component.ComponentManager;
@@ -25,14 +25,14 @@ import wordproblem.engine.expression.widget.term.SymbolTermWidget;
 import wordproblem.resource.AssetManager;
 
 /**
-	 * This is a tool box type widget that is restricted to dragging and flipping cards
+ * This is a tool box type widget that is restricted to dragging and flipping cards
  * only representing expressions.
-	 * 
-	 * Given a set of symbols, it will create a deck of cards that can be picked up
-	 * and dragged. Usually it should just not be making changes to the component manager,
+ * 
+ * Given a set of symbols, it will create a deck of cards that can be picked up
+ * and dragged. Usually it should just not be making changes to the component manager,
  * it simply reads in the data that was modified by some of the systems.
-	 */
-class DeckWidget extends ScrollGridWidget implements IDisposable implements IBaseWidget
+ */
+class DeckWidget extends ScrollGridWidget implements IBaseWidget
 {
     public var componentManager(get, never) : ComponentManager;
 
@@ -52,8 +52,8 @@ class DeckWidget extends ScrollGridWidget implements IDisposable implements IBas
     /**
      * Button to scroll the left side
      */
-    private var m_leftScrollButton : Button;
-    private var m_rightScrollButton : Button;
+    private var m_leftScrollButton : LabelButton;
+    private var m_rightScrollButton : LabelButton;
     
     private var m_background : DisplayObject;
     
@@ -96,20 +96,20 @@ class DeckWidget extends ScrollGridWidget implements IDisposable implements IBas
         m_entitiesToAddQueue = new Array<Array<DisplayObject>>();
         m_entitiesToRemoveQueue = new Array<Array<DisplayObject>>();
         
-        var arrowTexture : Texture = assetManager.getTexture("arrow_short");
+        var arrowBitmapData : BitmapData = assetManager.getBitmapData("arrow_short");
         var arrowScale : Float = 1.0;
-        m_scrollButtonWidth = arrowTexture.width * arrowScale;
-        var leftUpArrow : Image = WidgetUtil.createPointingArrow(arrowTexture, true, arrowScale, 0xFFFFFF);
+        m_scrollButtonWidth = arrowBitmapData.width * arrowScale;
+        var leftUpArrow : DisplayObject = WidgetUtil.createPointingArrow(arrowBitmapData, true, arrowScale, 0xFFFFFF);
         m_leftScrollButton = WidgetUtil.createButtonFromImages(leftUpArrow, null, null, null, null, null);
-        m_leftScrollButton.scaleWhenOver = m_leftScrollButton.scaleX * 1.1;
-        m_leftScrollButton.scaleWhenDown = m_leftScrollButton.scaleX * 0.9;
-        m_leftScrollButton.addEventListener(Event.TRIGGERED, onLeftScrollClick);
+		m_leftScrollButton.scaleWhenOver = m_leftScrollButton.scaleX * 1.1;
+		m_leftScrollButton.scaleWhenDown = m_leftScrollButton.scaleX * 0.9;
+        m_leftScrollButton.addEventListener(MouseEvent.CLICK, onLeftScrollClick);
         
-        var rightUpArrow : Image = WidgetUtil.createPointingArrow(arrowTexture, false, arrowScale, 0xFFFFFF);
+        var rightUpArrow : DisplayObject = WidgetUtil.createPointingArrow(arrowBitmapData, false, arrowScale, 0xFFFFFF);
         m_rightScrollButton = WidgetUtil.createButtonFromImages(rightUpArrow, null, null, null, null, null);
-        m_rightScrollButton.scaleWhenOver = m_leftScrollButton.scaleWhenOver;
-        m_rightScrollButton.scaleWhenDown = m_leftScrollButton.scaleWhenDown;
-        m_rightScrollButton.addEventListener(Event.TRIGGERED, onRightScrollClick);
+		m_rightScrollButton.scaleWhenOver = m_leftScrollButton.scaleWhenOver;
+		m_rightScrollButton.scaleWhenDown = m_leftScrollButton.scaleWhenDown;
+        m_rightScrollButton.addEventListener(MouseEvent.CLICK, onRightScrollClick);
     }
     
     private function get_componentManager() : ComponentManager
@@ -121,8 +121,8 @@ class DeckWidget extends ScrollGridWidget implements IDisposable implements IBas
     {
         if (m_background != null) 
         {
-            m_background.scaleX = maxWidth / m_background.width;
-            m_background.scaleY = maxHeight / m_background.height;
+			m_background.width = maxWidth;
+			m_background.height = maxHeight;
         }
         
         m_leftScrollButton.x = 0;
@@ -130,7 +130,7 @@ class DeckWidget extends ScrollGridWidget implements IDisposable implements IBas
         
         // View port shrinks slightly to accomadate possible scroll buttons
         maxWidth -= (m_scrollButtonWidth * 2);
-        super.setViewport(m_scrollButtonWidth, 0, maxWidth, maxHeight);
+        super.setViewport(m_scrollButtonWidth / 2, 0, maxWidth, maxHeight);
     }
     
     /**
@@ -181,14 +181,11 @@ class DeckWidget extends ScrollGridWidget implements IDisposable implements IBas
 		componentsToAddBuffer = new Array<DisplayObject>();
         for (i in 0...numEntitiesToAdd){
             componentsToAddBuffer.push(entitiesToAdd[i]);
-        }  // We assume the disposal of a render component does not automatically remove it from the display list    // to fetch the render components from the scroll widget.    // Since at this point the components have already been removed we have no choice but  
-        
-        
-        
-        
-        
-        
-        
+        }  
+		
+		// Since at this point the components have already been removed we have no choice but  
+		// to fetch the render components from the scroll widget. 
+        // We assume the disposal of a render component does not automatically remove it from the display list  
         var existingObjects : Array<DisplayObject> = super.getObjects();
         var numExistingObjects : Int = existingObjects.length;
         var numEntitiesToRemove : Int = entitiesToRemove.length;
@@ -228,17 +225,14 @@ class DeckWidget extends ScrollGridWidget implements IDisposable implements IBas
             var duration : Float = 0.25;
             for (i in 0...numEntitiesToRemove){
                 var existingObject = componentsToRemoveBuffer[i];
-                var tween : Tween = new Tween(existingObject, duration);
-                tween.scaleTo(0);
-                tween.onComplete = function() : Void
+				Actuate.tween(existingObject, duration, { scaleX: 0, scaleY: 0 }).onComplete(function() : Void
                         {
                             animationsToPlay--;
                             if (animationsToPlay == 0) 
                             {
                                 onRemoveTweensComplete();
                             }
-                        };
-                Starling.current.juggler.add(tween);
+                        });
                 m_animationPlaying = true;
             }
         }
@@ -350,8 +344,8 @@ class DeckWidget extends ScrollGridWidget implements IDisposable implements IBas
                 }
                 else 
                 {
-                    m_leftScrollButton.removeFromParent();
-                    m_rightScrollButton.removeFromParent();
+                    if (m_leftScrollButton.parent != null) m_leftScrollButton.parent.removeChild(m_leftScrollButton);
+                    if (m_rightScrollButton.parent != null) m_rightScrollButton.parent.removeChild(m_rightScrollButton);
                 }
             }
         };
@@ -361,32 +355,28 @@ class DeckWidget extends ScrollGridWidget implements IDisposable implements IBas
             previousCoordinate = previousCoordinates[i];
             newCoordinate = newCoordinates[i];
             
-            var tween : Tween = null;
+			function onTweenComplete() {
+				animationsToPlay--;
+				checkAnimationsCompleted();
+			}
+			
             if (previousCoordinate == null) 
             {
                 var scaleDuration : Float = 0.25;
                 renderView.scaleX = renderView.scaleY = 0.0;
-                tween = new Tween(renderView, scaleDuration);
-                tween.scaleTo(1.0);
-                Starling.current.juggler.add(tween);
+				Actuate.tween(renderView, scaleDuration, { scaleX: 1, scaleY: 1 }).onComplete(onTweenComplete);
             }
             else 
             {
                 var shiftDuration : Float = 0.25;
                 renderView.x = previousCoordinate.x;
                 renderView.y = previousCoordinate.y;
-                tween = new Tween(renderView, shiftDuration);
-                tween.moveTo(newCoordinate.x, newCoordinate.y);
-                Starling.current.juggler.add(tween);
+				Actuate.tween(renderView, shiftDuration, { x: newCoordinate.x, y: newCoordinate.y }).onComplete(onTweenComplete);
             }
-            tween.onComplete = function() : Void
-                    {
-                        animationsToPlay--;
-                        checkAnimationsCompleted();
-                    };
             m_animationPlaying = true;
-        }  // For the case where there is nothing to animate  
-        
+        } 
+		
+		// For the case where there is nothing to animate  
         checkAnimationsCompleted();
     }
     
@@ -431,9 +421,9 @@ class DeckWidget extends ScrollGridWidget implements IDisposable implements IBas
     
     /**
      * @param x
-		 * 		global x coordinate
-		 * @param y
-		 * 		global y coordinate
+	 * 		global x coordinate
+	 * @param y
+	 * 		global y coordinate
      * @param allowHidden
      *      if true then we allow for widgets that are hidden to be picked
      */
@@ -493,10 +483,12 @@ class DeckWidget extends ScrollGridWidget implements IDisposable implements IBas
     override public function dispose() : Void
     {
         super.dispose();
-        m_leftScrollButton.removeEventListener(Event.TRIGGERED, onLeftScrollClick);
-        m_leftScrollButton.removeFromParent(true);
-        m_rightScrollButton.removeEventListener(Event.TRIGGERED, onRightScrollClick);
-        m_rightScrollButton.removeFromParent(true);
+        m_leftScrollButton.removeEventListener(MouseEvent.CLICK, onLeftScrollClick);
+		if (m_leftScrollButton.parent != null) m_leftScrollButton.parent.removeChild(m_leftScrollButton);
+		m_leftScrollButton.dispose();
+        m_rightScrollButton.removeEventListener(MouseEvent.CLICK, onRightScrollClick);
+		if (m_rightScrollButton.parent != null) m_rightScrollButton.parent.removeChild(m_rightScrollButton);
+		m_rightScrollButton.dispose();
     }
     
     override private function scrollButtonsEnabled(leftEnabled : Bool, rightEnabled : Bool) : Void
@@ -507,13 +499,13 @@ class DeckWidget extends ScrollGridWidget implements IDisposable implements IBas
         m_rightScrollButton.enabled = rightEnabled;
     }
     
-    private function onLeftScrollClick() : Void
+    private function onLeftScrollClick(event : Dynamic) : Void
     {
         this.scrollByObjectAmount(1);
         refreshHitAreaBounds();
     }
     
-    private function onRightScrollClick() : Void
+    private function onRightScrollClick(event : Dynamic) : Void
     {
         this.scrollByObjectAmount(-1);
         refreshHitAreaBounds();
@@ -529,14 +521,11 @@ class DeckWidget extends ScrollGridWidget implements IDisposable implements IBas
         if (this.parent == null || this.stage == null) 
         {
             return;
-        }  // Note the rigid body is relative to this widget    // of the object is refreshed as it is what is used to check hits    // After layout is completed for each object we need to make sure the rigid body component  
-        
-        
-        
-        
-        
-        
-        
+        }  
+		
+		// After layout is completed for each object we need to make sure the rigid body component  
+		// of the object is refreshed as it is what is used to check hits 
+        // Note the rigid body is relative to this widget 
         var rigidBodyComponents : Array<Component> = m_componentManager.getComponentListForType(RigidBodyComponent.TYPE_ID);
         var rigidBodyComponent : RigidBodyComponent = null;
         var i : Int = 0;
@@ -546,10 +535,10 @@ class DeckWidget extends ScrollGridWidget implements IDisposable implements IBas
             renderComponent = try cast(m_componentManager.getComponentFromEntityIdAndType(rigidBodyComponent.entityId, RenderableComponent.TYPE_ID), RenderableComponent) catch(e:Dynamic) null;
             if (renderComponent.view.parent != null) 
             {
-                renderComponent.view.getBounds(this, rigidBodyComponent.boundingRectangle);
+                rigidBodyComponent.boundingRectangle = renderComponent.view.getBounds(this);
             }
         }
         
-        dispatchEventWith(DeckWidget.EVENT_REFRESH);
+        dispatchEvent(new Event(DeckWidget.EVENT_REFRESH));
     }
 }

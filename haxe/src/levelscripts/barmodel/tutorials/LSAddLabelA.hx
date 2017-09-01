@@ -174,9 +174,9 @@ class LSAddLabelA extends BaseCustomLevelScript
         m_barModelArea.removeEventListener(GameEvent.BAR_MODEL_AREA_REDRAWN, bufferEvent);
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         super.disablePrevNextTextButtons();
         

@@ -8,10 +8,10 @@ import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
 import openfl.ui.Keyboard;
 
-import starling.events.EventDispatcher;
-import starling.events.KeyboardEvent;
-import starling.display.Sprite;
-import starling.text.TextField;
+import openfl.events.EventDispatcher;
+import openfl.events.KeyboardEvent;
+import openfl.display.Sprite;
+import openfl.text.TextField;
 
 class InputWindow extends Sprite
 {
@@ -28,9 +28,11 @@ class InputWindow extends Sprite
     public function new()
     {
         super();
-        m_inputField = new TextField(0, 0, "");
-		// TODO: Starling TextFields don't have this field
-        //m_inputField.wordWrap = false;
+        m_inputField = new TextField();
+		m_inputField.width = 0;
+		m_inputField.height = 0;
+		m_inputField.text = "";
+        m_inputField.wordWrap = false;
         addChild(m_inputField);
     }
     
@@ -40,8 +42,7 @@ class InputWindow extends Sprite
         {
             removeChild(m_inputField);
             m_inputField.text = " ";
-			// TODO: Starling TextFields don't have this field
-            //m_inputField.setTextFormat(UNKNOWN_FORMAT);
+            m_inputField.setTextFormat(UNKNOWN_FORMAT);
             m_inputField.height = m_inputField.height + 2;
             m_inputField.text = "";
             addChild(m_inputField);
@@ -53,17 +54,8 @@ class InputWindow extends Sprite
         
         m_inputField.width = stage.stageWidth;
         
-		// TODO: this is likely not the intended result of the commented
-		// out code below, but a Starling solution would require much
-		// more refactoring
 		m_inputField.border = true;
-		m_inputField.redraw();
-		
-        //this.graphics.clear();
-        //this.graphics.lineStyle(1, 0xffffff, 0.8);
-        //this.graphics.beginFill(0x444444, 0.65);
-        //this.graphics.drawRect(1, 1, m_inputField.width - 2, m_inputField.height - 2);
-        //this.graphics.endFill();
+		m_inputField.borderColor = 0x444444;
     }
     
     public function getCurrentExpression() : MethodExpression
@@ -108,8 +100,7 @@ class InputWindow extends Sprite
                 dispatchEvent(dynamicInvokeEvent);
                 
                 m_inputField.text = "";
-				// TODO: Starling TextFields don't have this method
-                //m_inputField.setTextFormat(UNKNOWN_FORMAT);
+                m_inputField.setTextFormat(UNKNOWN_FORMAT);
             }
             case Keyboard.BACKSPACE:
             {
@@ -133,26 +124,25 @@ class InputWindow extends Sprite
         var methodExpression : MethodExpression = parseStatement(m_inputField.text);
         if (methodExpression.wellFormed) 
         {
-			// TODO: Starling TextFields don't have this method
-            //m_inputField.setTextFormat(UNKNOWN_FORMAT);
+            m_inputField.setTextFormat(UNKNOWN_FORMAT);
             if (methodExpression.objectAlias.length > 0) 
             {
-                //m_inputField.setTextFormat(OBJECT_ALIAS, methodExpression.startAliasIndex, methodExpression.endAliasIndex);
+                m_inputField.setTextFormat(OBJECT_ALIAS, methodExpression.startAliasIndex, methodExpression.endAliasIndex);
                 if (methodExpression.methodAlias.length > 0) 
                 {
-                    //m_inputField.setTextFormat(METHOD_FORMAT, methodExpression.startMethodIndex, methodExpression.endMethodIndex);
+                    m_inputField.setTextFormat(METHOD_FORMAT, methodExpression.startMethodIndex, methodExpression.endMethodIndex);
                     var numArguments : Int = methodExpression.arguments.length;
                     for (i in 0...numArguments){
                         var argumentStartIndex : Int = methodExpression.startArgumentIndices[i];
                         var argumentEndIndex : Int = methodExpression.endArgumentIndices[i];
-                        //m_inputField.setTextFormat(ARGUMENT_FORMAT, argumentStartIndex, argumentEndIndex);
+                        m_inputField.setTextFormat(ARGUMENT_FORMAT, argumentStartIndex, argumentEndIndex);
                     }
                 }
             }
         }
         else 
         {
-            //m_inputField.setTextFormat(MALFORMED_EXPRESSION, 0, m_inputField.text.length);
+            m_inputField.setTextFormat(MALFORMED_EXPRESSION, 0, m_inputField.text.length);
         }
     }
     

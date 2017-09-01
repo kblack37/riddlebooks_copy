@@ -127,7 +127,7 @@ class RenderSpriteSheetSystem
                 }
                 else 
                 {
-                    imageContainer.removeFromParent();
+                    if (imageContainer.parent != null) imageContainer.parent.removeChild(imageContainer);
                 }
             }
         }

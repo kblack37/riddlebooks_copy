@@ -1,21 +1,21 @@
 package wordproblem.callouts;
 
 
-import flash.geom.Rectangle;
-import flash.text.TextFormat;
-
 import dragonbox.common.dispose.IDisposable;
 import dragonbox.common.ui.MouseState;
 
-import starling.display.DisplayObject;
-import starling.text.TextField;
+import openfl.display.DisplayObject;
+import openfl.geom.Rectangle;
+import openfl.text.TextField;
+import openfl.text.TextFormat;
 
 import wordproblem.display.Layer;
 import wordproblem.engine.IGameEngine;
 import wordproblem.engine.component.CalloutComponent;
 import wordproblem.engine.component.Component;
 import wordproblem.engine.component.ComponentManager;
-import wordproblem.engine.text.GameFonts;
+
+
 
 /**
  * Class contains basic logic to get a tooltip to appear over a ui part on mouse hover
@@ -101,7 +101,7 @@ class TooltipControl implements IDisposable
         }
         
         var mouseState : MouseState = m_gameEngine.getMouseState();
-        m_objectToGetTooltip.getBounds(m_objectToGetTooltip.stage, m_displayHitArea);
+        m_displayHitArea = m_objectToGetTooltip.getBounds(m_objectToGetTooltip.stage);
         
         // If tooltip is visible and mouse is not in bounds then remove it
         // If the tooltip is not visible and mouse is in the bounds then add it
@@ -114,8 +114,12 @@ class TooltipControl implements IDisposable
             if (calloutComponent == null && !Layer.getDisplayObjectIsInInactiveLayer(m_objectToGetTooltip) && m_objectToGetTooltip.visible) 
             {
                 var newCalloutComponent : CalloutComponent = new CalloutComponent(m_uiEntityId);
-                newCalloutComponent.display = new TextField(Std.int(textWidth), Std.int(textHeight), m_toolTipText, 
-                        m_textStyle.font, m_textStyle.size, try cast(m_textStyle.color, Int) catch(e:Dynamic) 0);
+				var calloutComponentDisplay = new TextField();
+				calloutComponentDisplay.width = textWidth;
+				calloutComponentDisplay.height = textHeight;
+				calloutComponentDisplay.text = m_toolTipText;
+                calloutComponentDisplay.setTextFormat(new TextFormat(m_textStyle.font, m_textStyle.size, m_textStyle.color));
+				newCalloutComponent.display = calloutComponentDisplay;
                 newCalloutComponent.backgroundTexture = "button_white";
                 newCalloutComponent.arrowTexture = "";
                 newCalloutComponent.backgroundColor = 0x000000;

@@ -2,20 +2,22 @@ package wordproblem.scripts.barmodel;
 
 
 import cgs.audio.Audio;
+import dragonbox.common.math.util.MathUtil;
 
 import dragonbox.common.expressiontree.compile.IExpressionTreeCompiler;
+import dragonbox.common.util.XColor;
 
 import haxe.Constraints.Function;
 
-import starling.animation.Tween;
-import starling.core.Starling;
-import starling.display.Button;
-import starling.display.DisplayObject;
-import starling.display.DisplayObjectContainer;
-import starling.events.Event;
-import starling.filters.ColorMatrixFilter;
+import motion.Actuate;
+
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
+import openfl.events.MouseEvent;
+import openfl.filters.BitmapFilter;
 
 import wordproblem.callouts.TooltipControl;
+import wordproblem.display.LabelButton;
 import wordproblem.engine.IGameEngine;
 import wordproblem.engine.scripting.graph.ScriptStatus;
 import wordproblem.engine.widget.WidgetUtil;
@@ -28,7 +30,7 @@ import wordproblem.scripts.BaseGameScript;
  */
 class SwitchBetweenBarAndEquationModel extends BaseGameScript
 {
-    private var m_switchModelButton : Button;
+    private var m_switchModelButton : LabelButton;
     
     /**
      * Need to remember if the ui is in a down state or an up state.
@@ -89,21 +91,21 @@ class SwitchBetweenBarAndEquationModel extends BaseGameScript
         {
             // Set whether the button is enabled
             m_switchModelButton.enabled = value;
-            m_switchModelButton.removeEventListener(Event.TRIGGERED, onSwitchModelClicked);
+            m_switchModelButton.removeEventListener(MouseEvent.CLICK, onSwitchModelClicked);
             if (value) 
             {
-                m_switchModelButton.addEventListener(Event.TRIGGERED, onSwitchModelClicked);
+                m_switchModelButton.addEventListener(MouseEvent.CLICK, onSwitchModelClicked);
                 
                 // Set color to normal
-                m_switchModelButton.filter = null;
+				m_switchModelButton.filters = new Array<BitmapFilter>();
                 m_switchModelButton.alpha = 1.0;
             }
             else 
             {
                 // Set color to grey scale
-                var colorMatrixFilter : ColorMatrixFilter = new ColorMatrixFilter();
-                colorMatrixFilter.adjustSaturation(-1);
-                m_switchModelButton.filter = colorMatrixFilter;
+				var filters = new Array<BitmapFilter>();
+				filters.push(XColor.getGrayscaleFilter());
+				m_switchModelButton.filters = filters;
                 m_switchModelButton.alpha = 0.5;
             }
         }
@@ -125,13 +127,13 @@ class SwitchBetweenBarAndEquationModel extends BaseGameScript
         m_tooltipControl.dispose();
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         // We perform the drawing of the button here since it's graphics require some special drawing
         var switchModelCanvas : DisplayObjectContainer = try cast(m_gameEngine.getUiEntity("switchModelButton"), DisplayObjectContainer) catch(e:Dynamic) null;
-        var switchModelButton : Button = WidgetUtil.createButton(
+        var switchModelButton : LabelButton = WidgetUtil.createButton(
                 m_assetManager,
                 "button_sidebar_maximize",
                 "button_sidebar_maximize_click",
@@ -146,7 +148,7 @@ class SwitchBetweenBarAndEquationModel extends BaseGameScript
         
         // Initial graphic has arrow pointing to the right
         // Make it point down
-        switchModelButton.rotation = Math.PI * 0.5;
+        switchModelButton.rotation = MathUtil.radsToDegrees(Math.PI * 0.5);
         m_inSlideDownState = true;
         
         switchModelButton.x += switchModelButton.pivotX;
@@ -161,7 +163,7 @@ class SwitchBetweenBarAndEquationModel extends BaseGameScript
         this.setIsActive(m_isActive);
     }
     
-    public function onSwitchModelClicked() : Void
+    public function onSwitchModelClicked(event : Dynamic) : Void
     {
         Audio.instance.playSfx("page_flip");
         
@@ -171,13 +173,13 @@ class SwitchBetweenBarAndEquationModel extends BaseGameScript
         var targetY : Float = 0.0;
         if (m_inSlideDownState) 
         {
-            targetRotation = Math.PI * -0.5;
+            targetRotation = -90;
             targetY = this.targetY;
             m_tooltipControl.setText(TOOLTIP_SHOW_TEXT);
         }
         else 
         {
-            targetRotation = Math.PI * 0.5;
+            targetRotation = 90;
             targetY = m_deckAndTermContainerOriginalY;
             m_tooltipControl.setText(TOOLTIP_SHOW_EQUATION);
         }
@@ -189,12 +191,8 @@ class SwitchBetweenBarAndEquationModel extends BaseGameScript
         }
         
         var rotateDuration : Float = 0.2;
-        var rotateTween : Tween = new Tween(m_switchModelButton, rotateDuration);
-        rotateTween.animate("rotation", targetRotation);
-        Starling.current.juggler.add(rotateTween);
-        
-        var slideTween : Tween = new Tween(uiContainer, rotateDuration);
-        slideTween.animate("y", targetY);
-        Starling.current.juggler.add(slideTween);
+		Actuate.tween(m_switchModelButton, rotateDuration, { rotation: targetRotation }).smartRotation();
+		
+		Actuate.tween(uiContainer, rotateDuration, { y: targetY });
     }
 }

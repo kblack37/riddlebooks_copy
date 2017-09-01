@@ -937,7 +937,7 @@ class StripScalingMultiplyAnimator implements IFractionAnimator
         function startExtend_reverse() : Void
         {
             extensionView.visible = false;
-            extensionMask.parent.removeChild(extensionMask);
+            if (extensionMask.parent != null) extensionMask.parent.removeChild(extensionMask);
         }  // Removes the extension clone and updates the first fraction view to be extended  ;
         
         
@@ -947,7 +947,7 @@ class StripScalingMultiplyAnimator implements IFractionAnimator
             // Remove extension
             extensionView.visible = false;
             extensionMask.visible = false;
-            extensionMask.parent.removeChild(extensionMask);
+            if (extensionMask.parent != null) extensionMask.parent.removeChild(extensionMask);
             
             // Extend first
             firstModule.numExtensionUnits = numExtensionUnits;
@@ -1237,7 +1237,7 @@ class StripScalingMultiplyAnimator implements IFractionAnimator
         function startReduce_reverse() : Void
         {
             reductionView.visible = false;
-            reductionMask.parent.removeChild(reductionMask);
+            if (reductionMask.parent != null) reductionMask.parent.removeChild(reductionMask);
             
             // Reduce first
             firstModule.numExtensionUnits = numReductionUnits;
@@ -1252,7 +1252,7 @@ class StripScalingMultiplyAnimator implements IFractionAnimator
             // Remove extension
             reductionView.visible = false;
             reductionMask.visible = false;
-            reductionMask.parent.removeChild(reductionMask);
+            if (reductionMask.parent != null) reductionMask.parent.removeChild(reductionMask);
         }
         
         function finishReduce_reverse() : Void

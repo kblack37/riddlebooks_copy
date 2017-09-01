@@ -1,6 +1,6 @@
 package wordproblem.creator;
 
-import starling.display.Button;
+import wordproblem.display.LabelButton;
 import starling.display.Image;
 import starling.display.Sprite;
 import starling.events.Event;
@@ -22,8 +22,8 @@ class ScrollOptionsPicker extends Sprite
 {
     private var m_options : Array<Dynamic>;
     
-    private var m_scrollLeftButton : Button;
-    private var m_scrollRightButton : Button;
+    private var m_scrollLeftButton : LabelButton;
+    private var m_scrollRightButton : LabelButton;
     
     /**
      * Shows the name of the current selection
@@ -57,7 +57,7 @@ class ScrollOptionsPicker extends Sprite
                         null,
                         null
                         );
-        m_scrollLeftButton.addEventListener(Event.TRIGGERED, onLeftClicked);
+        m_scrollLeftButton.addEventListener(MouseEvent.CLICK, onLeftClicked);
         m_scrollLeftButton.scaleWhenDown = 0.9;
         m_scrollLeftButton.scaleWhenOver = 1.1;
         addChild(m_scrollLeftButton);
@@ -73,7 +73,7 @@ class ScrollOptionsPicker extends Sprite
                         null,
                         null
                         );
-        m_scrollRightButton.addEventListener(Event.TRIGGERED, onRightClicked);
+        m_scrollRightButton.addEventListener(MouseEvent.CLICK, onRightClicked);
         m_scrollRightButton.scaleWhenDown = 0.9;
         m_scrollRightButton.scaleWhenOver = 1.1;
         addChild(m_scrollRightButton);
@@ -104,8 +104,8 @@ class ScrollOptionsPicker extends Sprite
     {
         super.dispose();
         
-        m_scrollLeftButton.removeEventListener(Event.TRIGGERED, onLeftClicked);
-        m_scrollRightButton.removeEventListener(Event.TRIGGERED, onRightClicked);
+        m_scrollLeftButton.removeEventListener(MouseEvent.CLICK, onLeftClicked);
+        m_scrollRightButton.removeEventListener(MouseEvent.CLICK, onRightClicked);
     }
     
     public function setOptions(options : Array<Dynamic>) : Void

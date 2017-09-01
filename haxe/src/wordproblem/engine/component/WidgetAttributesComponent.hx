@@ -173,10 +173,9 @@ class WidgetAttributesComponent extends Component
             {
                 sourceResult = sourceObjectToString;
             }
-        }  // Clone custom object properties  
-        
-        
-        
+        }
+		
+		// Clone custom object properties  
         var clonedExtraData : Dynamic = { };
         for (key in Reflect.fields(this.extraData))
         {

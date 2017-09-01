@@ -29,7 +29,7 @@ import wordproblem.AlgebraAdventureConfig;
 import wordproblem.engine.text.GameFonts;
 import wordproblem.state.TitleScreenState;
 
-import starling.display.Button;
+import wordproblem.display.LabelButton;
 
 /**
  * This object encapsulates all the different screens used to display the register account
@@ -433,7 +433,7 @@ class RegisterAccountState extends Sprite implements IDisposable
 				removeChild(m_registerTosScreen);
 			}  // Hide the registration screen and show the reward screen    // We rely on the word problem game to know when rewards should be given for dragonbox milestones    // where the reward is given to the player.    // When registration is successfully completed then transition to the screen
 
-			m_registerAccountScreen.parent.removeChild(m_registerAccountScreen);
+			if (m_registerAccountScreen.parent != null) m_registerAccountScreen.parent.removeChild(m_registerAccountScreen);
 
 			m_onCompleteCallback(user);
 		};

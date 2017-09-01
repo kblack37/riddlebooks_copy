@@ -1,16 +1,16 @@
 package wordproblem.engine.expression.widget.term;
 
+import motion.Actuate;
+
 import cgs.audio.Audio;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
 
 import dragonbox.common.expressiontree.ExpressionNode;
 
 import haxe.Constraints.Function;
 
-import starling.animation.Tween;
-import starling.core.Starling;
-import starling.display.DisplayObject;
-import starling.display.Image;
-import starling.textures.Texture;
+import openfl.display.DisplayObject;
 
 import wordproblem.engine.expression.ExpressionSymbolMap;
 import wordproblem.resource.AssetManager;
@@ -62,8 +62,8 @@ class SymbolTermWidget extends BaseTermWidget
         {
             if (m_hiddenGraphic == null) 
             {
-                var hiddenGraphicTexture : Texture = m_assetManager.getTexture(Resources.CARD_BLANK);
-                m_hiddenGraphic = new Image(hiddenGraphicTexture);
+                var hiddenGraphicTexture : BitmapData = m_assetManager.getBitmapData(Resources.CARD_BLANK);
+                m_hiddenGraphic = new Bitmap(hiddenGraphicTexture);
                 m_hiddenGraphic.x -= m_hiddenGraphic.width / 2;
                 m_hiddenGraphic.y -= m_hiddenGraphic.height / 2;
             }
@@ -72,18 +72,18 @@ class SymbolTermWidget extends BaseTermWidget
             
             if (m_regularImage.parent != null) 
             {
-                m_regularImage.parent.removeChild(m_regularImage);
+                if (m_regularImage.parent != null) m_regularImage.parent.removeChild(m_regularImage);
             }
             
             if (m_negativeImage.parent != null) 
             {
-                m_negativeImage.parent.removeChild(m_negativeImage);
+                if (m_negativeImage.parent != null) m_negativeImage.parent.removeChild(m_negativeImage);
             }
         }
         // Remove the hidden graphic if it has been placed
         else if (m_hiddenGraphic != null && m_hiddenGraphic.parent != null) 
         {
-            m_hiddenGraphic.parent.removeChild(m_hiddenGraphic);
+            if (m_hiddenGraphic.parent != null) m_hiddenGraphic.parent.removeChild(m_hiddenGraphic);
             if (this.m_node.isNegative()) 
             {
                 addChild(m_negativeImage);
@@ -105,10 +105,7 @@ class SymbolTermWidget extends BaseTermWidget
         Audio.instance.playSfx("card_flip");
         m_reverseOnComplete = onComplete;
         
-        var collapseTween : Tween = new Tween(this, 0.3);
-        collapseTween.animate("scaleX", 0);
-        collapseTween.onComplete = onCollapseComplete;
-        Starling.current.juggler.add(collapseTween);
+		Actuate.tween(this, 0.3, { scaleX: 0 }).onComplete(onCollapseComplete);
     }
     
     private function onCollapseComplete() : Void
@@ -127,15 +124,12 @@ class SymbolTermWidget extends BaseTermWidget
             removeChild(m_regularImage);
             addChildAt(m_negativeImage, 0);
         }
-        var expandTween : Tween = new Tween(this, 0.3);
-        expandTween.animate("scaleX", 1);
-        expandTween.onComplete = function onExpandComplete() : Void
-                {
-                    if (m_reverseOnComplete != null) 
-                    {
-                        m_reverseOnComplete();
-                    }
-                };
-        Starling.current.juggler.add(expandTween);
+		
+		Actuate.tween(this, 0.3, { scaleX: 1}).onComplete(
+			function onExpandComplete() : Void {
+				if (m_reverseOnComplete != null) {
+					m_reverseOnComplete();
+				}
+			});
     }
 }

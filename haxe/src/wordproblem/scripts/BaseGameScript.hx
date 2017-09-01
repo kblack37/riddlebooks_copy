@@ -59,15 +59,15 @@ class BaseGameScript extends BaseBufferEventScript
      * 
      * Thus we need to manually call this function to initialize all that code.
      */
-    public function overrideLevelReady() : Void
+    public function overrideLevelReady(event : Dynamic) : Void
     {
-        onLevelReady();
+        onLevelReady(event);
     }
     
     /**
      * Override this function to place all initialization code for the script
      */
-    private function onLevelReady() : Void
+    private function onLevelReady(event : Dynamic) : Void
     {
         m_ready = true;
     }

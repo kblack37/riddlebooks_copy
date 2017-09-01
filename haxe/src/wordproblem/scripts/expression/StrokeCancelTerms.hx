@@ -43,9 +43,9 @@ class StrokeCancelTerms extends BaseTermAreaScript
         return ScriptStatus.SUCCESS;
     }
     
-    override private function onLevelReady() : Void
+    override private function onLevelReady(event : Dynamic) : Void
     {
-        super.onLevelReady();
+        super.onLevelReady(event);
         
         m_cancelManagers = new Array<CancelManager>();
         for (i in 0...m_termAreas.length){

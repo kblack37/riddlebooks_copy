@@ -1,17 +1,19 @@
 package wordproblem.engine.widget;
 
 
-import flash.geom.Rectangle;
-import flash.text.TextFormat;
-import flash.text.TextFormatAlign;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.geom.Rectangle;
+import openfl.text.TextFormat;
+import openfl.text.TextFormatAlign;
+import wordproblem.display.PivotSprite;
+import wordproblem.display.Scale9Image;
 
 import dragonbox.common.util.XColor;
 
-import starling.display.Button;
-import starling.display.DisplayObject;
-import starling.display.Image;
-import starling.display.Sprite;
-import starling.textures.Texture;
+import wordproblem.display.LabelButton;
+import openfl.display.DisplayObject;
+import openfl.display.Sprite;
 
 import wordproblem.display.Scale9CompositeImage;
 import wordproblem.engine.text.GameFonts;
@@ -29,35 +31,30 @@ class WidgetUtil
             label : String,
             textFormatDefault : TextFormat,
             textFormatHover : TextFormat = null,
-            isToggle : Bool = false) : Button
+            isToggle : Bool = false) : LabelButton
     {
         var scaleNineRect : Rectangle = new Rectangle(8, 8, 16, 16);
-        var buttonBackground : Texture = assetManager.getTexture("button_white");
-        var buttonOutline : Texture = assetManager.getTexture("button_outline_white");
-        var defaultSkin : Image = new Image(Texture.fromTexture(buttonBackground, scaleNineRect));
+        var buttonBackground : BitmapData = assetManager.getBitmapData("button_white");
+        var buttonOutline : BitmapData = assetManager.getBitmapData("button_outline_white");
+        var defaultSkin : Scale9Image = new Scale9Image(buttonBackground, scaleNineRect);
         
-		// TODO: Starling button skins are Textures, not Images or Sprites, so these
-		// routines for combining Images will have to be redesigned or replaced when 
-		// Starling is. the code below the comment is just placeholder
-		//var compositeArray = new Array<Image>();
-        //var hoverBackground : Image = new Image(Texture.fromTexture(buttonBackground, scaleNineRect));
-        //var hoverOutline : Image = new Image(Texture.fromTexture(buttonOutline, scaleNineRect));
-		//compositeArray.push(hoverBackground);
-		//compositeArray.push(hoverOutline);
-        //var hoverSkin : Sprite = new Scale9CompositeImage(compositeArray);
-		//
-		//compositeArray = new Array<Image>();
-        //
-        //var downBackground : Image = new Image(Texture.fromTexture(buttonBackground, scaleNineRect));
-        //var downOutline : Image = new Image(Texture.fromTexture(buttonOutline, scaleNineRect));
-        //downOutline.color = 0x000000;
-		//compositeArray.push(downBackground);
-		//compositeArray.push(downOutline);
-        //var downSkin : Sprite = new Scale9CompositeImage(compositeArray);
-		var hoverSkin : Image = defaultSkin;
-		var downSkin : Image = defaultSkin;
+		var compositeArray = new Array<DisplayObject>();
+        var hoverBackground : Scale9Image = new Scale9Image(buttonBackground, scaleNineRect);
+        var hoverOutline : Scale9Image = new Scale9Image(buttonOutline, scaleNineRect);
+		compositeArray.push(hoverBackground);
+		compositeArray.push(hoverOutline);
+        var hoverSkin : Sprite = new Scale9CompositeImage(compositeArray);
+		
+		compositeArray = new Array<DisplayObject>();
         
-        var button : Button = WidgetUtil.createButtonFromImages(defaultSkin,
+        var downBackground : Scale9Image = new Scale9Image(buttonBackground, scaleNineRect);
+        var downOutline : Scale9Image = new Scale9Image(buttonOutline, scaleNineRect);
+		downOutline.transform.colorTransform = XColor.rgbToColorTransform(0x000000);
+		compositeArray.push(downBackground);
+		compositeArray.push(downOutline);
+        var downSkin : Sprite = new Scale9CompositeImage(compositeArray);
+        
+        var button : LabelButton = WidgetUtil.createButtonFromImages(defaultSkin,
                 downSkin, null, hoverSkin, label, textFormatDefault, textFormatHover, isToggle);
         changeColorForGenericButton(button, color);
         return button;
@@ -66,22 +63,16 @@ class WidgetUtil
     /**
      * Change the color of any button created with a call to createGenericColoredButton
      */
-    public static function changeColorForGenericButton(genericButton : Button, color : Int) : Void
+    public static function changeColorForGenericButton(genericButton : LabelButton, color : Int) : Void
     {
-        var defaultSkin : Texture = try cast(genericButton.upState, Texture) catch(e:Dynamic) null;
-        var defaultSkinImage : Image = new Image(defaultSkin);
-		defaultSkinImage.color = color;
-		genericButton.upState = defaultSkinImage.texture;
+        var defaultSkin : DisplayObject = try cast(genericButton.upState, DisplayObject) catch (e:Dynamic) null;
+		defaultSkin.transform.colorTransform = XColor.rgbToColorTransform(color);
         
-        var hoverSkin : Texture = try cast(genericButton.overState, Texture) catch (e:Dynamic) null;
-		var hoverSkinImage : Image = new Image(hoverSkin);
-        hoverSkinImage.color = XColor.shadeColor(color, 0.2);
-		genericButton.overState = hoverSkinImage.texture;
+        var hoverSkin : DisplayObject = try cast(genericButton.overState, DisplayObject) catch (e:Dynamic) null;
+		hoverSkin.transform.colorTransform = XColor.rgbToColorTransform(XColor.shadeColor(color, 0.2));
         
-        var downSkin : Texture = try cast(genericButton.downState, Texture) catch (e:Dynamic) null;
-		var downSkinImage : Image = new Image(downSkin);
-        downSkinImage.color = XColor.shadeColor(color, -0.2);
-		genericButton.downState = downSkinImage.texture;
+        var downSkin : DisplayObject = try cast(genericButton.downState, DisplayObject) catch (e:Dynamic) null;
+		downSkin.transform.colorTransform = XColor.rgbToColorTransform(XColor.shadeColor(color, -0.2));
     }
     
     /**
@@ -98,21 +89,18 @@ class WidgetUtil
             textFormatDefault : TextFormat,
             textFormatHover : TextFormat = null,
             nineSlice : Rectangle = null,
-            isToggle : Bool = false) : Button
+            isToggle : Bool = false) : LabelButton
     {
-		function createSkin(textureName : String, nineSlice : Rectangle) : DisplayObject
+		function createSkin(bitmapDataName : String, nineSlice : Rectangle) : DisplayObject
         {
             var useNineSlice : Bool = (nineSlice != null);
-            var skin : DisplayObject = null;
-            var texture : Texture = assetManager.getTexture(textureName);
-            if (useNineSlice) 
-            {
-                skin = new Image(Texture.fromTexture(texture, nineSlice));
-            }
-            else 
-            {
-                skin = new Image(texture);
-            }
+            var bitmapData : BitmapData = assetManager.getBitmapData(bitmapDataName);
+			var skin :DisplayObject = null;
+			if (nineSlice != null) {
+				skin = new Scale9Image(bitmapData, nineSlice);
+			} else {
+				skin = new Bitmap(bitmapData);
+			}
             
             return skin;
         };
@@ -147,49 +135,29 @@ class WidgetUtil
             label : String,
             textFormatDefault : TextFormat,
             textFormatHover : TextFormat = null,
-            isToggle : Bool = false) : Button
+            isToggle : Bool = false) : LabelButton
     {
 		// TODO: uncomment once ToggleButton is designed
-		//
-        var button : Button = /*((isToggle)) ? new ToggleButton() : */new Button(
-			try cast(defaultSkin, Image).texture catch (e : Dynamic) null,
-			label,
-			try cast(downSkin, Image).texture catch (e : Dynamic) null,
-			try cast(hoverSkin, Image).texture catch (e : Dynamic) null,
-			try cast(disabledSkin, Image).texture catch (e : Dynamic) null
+		// TODO: replace with a better button class; we can't add labels unless we
+		// merge the skins with a text field object somewhere
+        var button : LabelButton = /*((isToggle)) ? new ToggleButton() : */new LabelButton(
+			defaultSkin,
+			hoverSkin,
+			downSkin,
+			disabledSkin
 		);
+		
+		if (label != null) button.label = label;
         
-		// TODO: uncomment once buttons need to be figured out
         if (textFormatDefault != null) 
         {
-            //button.defaultLabelProperties.textFormat = textFormatDefault;
-            //button.defaultLabelProperties.wordWrap = true;
-            
-            //button.labelFactory = function() : ITextRenderer
-                    //{
-                        //var textRenderer : TextFieldTextRenderer = new TextFieldTextRenderer();
-                        //textRenderer.embedFonts = GameFonts.getFontIsEmbedded(textFormatDefault.font);
-                        //if (textFormatDefault.align == null) 
-                        //{
-                            //textFormatDefault.align = TextFormatAlign.CENTER;
-                        //}
-                        //textRenderer.textFormat = textFormatDefault;
-                        //
-                        //// Need to set the width otherwise the label is set to some small value
-                        //if (button.width > 0) 
-                        //{
-                            //textRenderer.width = button.width;
-                        //}
-                        //
-                        //return textRenderer;
-                    //};
+			button.textFormatDefault = textFormatDefault;
         }
 		
 		// Have an optional text format for over
         if (textFormatHover != null) 
         {
-            //button.hoverLabelProperties.textFormat = textFormatHover;
-            //button.downLabelProperties.textFormat = textFormatHover;
+			button.textFormatHover = textFormatHover;
         }
         
         return button;
@@ -198,19 +166,24 @@ class WidgetUtil
     /**
      * Create arrow pointing left or right, used as a button skin
      */
-    public static function createPointingArrow(arrowTexture : Texture,
+    public static function createPointingArrow(arrowBitmapData : BitmapData,
             pointLeft : Bool,
             scaleFactor : Float,
-            color : Int = 0xFFFFFF) : Image
+            color : Int = 0xFFFFFF) : DisplayObject
     {
-        var arrowImage : Image = new Image(arrowTexture);
+        var arrowImage : PivotSprite = new PivotSprite();
+		arrowImage.addChild(new Bitmap(arrowBitmapData));
         arrowImage.scaleX = arrowImage.scaleY = scaleFactor;
         if (pointLeft) 
         {
-            arrowImage.scaleX *= -1;
-            arrowImage.pivotX = arrowTexture.width;
+			arrowImage.pivotX = arrowImage.width / 2;
+			arrowImage.pivotY = arrowImage.height / 2;
+			arrowImage.rotation = 180;
+			// Have to subtract instead of add because of the rotation
+			arrowImage.x -= arrowImage.width / 2;
+			arrowImage.y += arrowImage.height / 2;
         }
-        arrowImage.color = color;
+		arrowImage.transform.colorTransform = XColor.rgbToColorTransform(color);
         return arrowImage;
     }
     
@@ -290,8 +263,4 @@ class WidgetUtil
         //verticalLayout.useVirtualLayout = false;
         //verticalLayout.layout(displayObjects, viewportBounds);
     //}
-
-    public function new()
-    {
-    }
 }

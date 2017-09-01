@@ -19,7 +19,7 @@ import dragonbox.common.ui.LoadingSpinner;
 
 import haxe.Constraints.Function;
 
-import starling.display.Button;
+import wordproblem.display.LabelButton;
 
 import wordproblem.AlgebraAdventureConfig;
 
@@ -279,12 +279,12 @@ class RegisterAnonymousAccountScreen extends Sprite implements IDisposable
     /**
      * Button to submit credentials
      */
-    private var m_registerButton : Button;
+    private var m_registerButton : LabelButton;
     
     /**
      * Button to cancel and exit this screen without registering.
      */
-    private var m_cancelButton : Button;
+    private var m_cancelButton : LabelButton;
     
     /**
      * Textfield explaining the account failed to be created
@@ -482,7 +482,7 @@ class RegisterAnonymousAccountScreen extends Sprite implements IDisposable
         {
             if (iconToRemove.parent != null) 
             {
-                iconToRemove.parent.removeChild(iconToRemove);
+                if (iconToRemove.parent != null) iconToRemove.parent.removeChild(iconToRemove);
             }
         }
 		

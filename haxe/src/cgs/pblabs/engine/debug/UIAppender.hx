@@ -46,7 +46,7 @@ class UIAppender implements ILogAppender
         {
             if (_logViewer.parent)
             {
-                _logViewer.parent.removeChild(_logViewer);
+                if (_logViewer.parent != null) _logViewer.parent.removeChild(_logViewer);
                 _logViewer.deactivate();
             }
             else

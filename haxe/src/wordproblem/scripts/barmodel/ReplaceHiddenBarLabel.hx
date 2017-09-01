@@ -71,7 +71,7 @@ class ReplaceHiddenBarLabel extends BaseBarModelScript
                     var hitBarLabel : BarLabel = try cast(m_outParamsBuffer[0], BarLabel) catch(e:Dynamic) null;
                     var previousModelDataSnapshot : BarModelData = m_barModelArea.getBarModelData().clone();
                     unhideBarLabel(m_barModelArea.getBarModelData(), hitBarLabel.id);
-                    m_gameEngine.dispatchEventWith(GameEvent.BAR_MODEL_AREA_CHANGE, false, {
+                    m_gameEngine.dispatchEvent(GameEvent.BAR_MODEL_AREA_CHANGE, false, {
                                 previousSnapshot : previousModelDataSnapshot
 
                             });
@@ -159,7 +159,7 @@ class ReplaceHiddenBarLabel extends BaseBarModelScript
                     // The hit area for a hidden label does not include the bracket so the ridgid body
                     // property is not usable in this instance
                     var labelDescriptionDisplay : DisplayObject = barLabelView.getDescriptionDisplay();
-                    labelDescriptionDisplay.getBounds(m_barModelArea, m_labelDescriptionBounds);
+                    m_labelDescriptionBounds = labelDescriptionDisplay.getBounds(m_barModelArea);
                     if (m_labelDescriptionBounds.containsPoint(m_localMouseBuffer) && barLabelView.data.hiddenValue == dataToMatch) 
                     {
                         outParams.push(barLabelView.data);

@@ -8,7 +8,7 @@ import cgs.ui.AlertDialog;
 import cgs.user.ICgsUserProperties;
 import cgs.user.ICgsUser;
 import openfl.display.DisplayObject;
-import openfl.display.SimpleButton;
+import wordproblem.display.LabelButton;
 import openfl.display.Sprite;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
@@ -102,8 +102,8 @@ class LoginPopup extends Sprite
     //
     //// Accesors to the individual components
     //private var m_titleText : TextField;
-    //private var m_loginButton : SimpleButton;
-    //private var m_cancelButton : SimpleButton;
+    //private var m_loginButton : LabelButton;
+    //private var m_cancelButton : LabelButton;
     //private var m_logo : DisplayObject;
     //private var m_usernameInput : TextField;
     //private var m_usernameText : TextField;
@@ -859,7 +859,7 @@ class LoginPopup extends Sprite
     //{
         //if (this.parent != null)
         //{
-            //this.parent.removeChild(this);
+            //if (this.parent != null) this.parent.removeChild(this);
         //}
         //m_loginCallback = null;
         //m_cancelCallback = null;
