@@ -458,7 +458,17 @@ class AssetManager extends EventDispatcher implements ICgsLevelResourceManager i
     /** Returns a sound with a certain name, or null if it's not found. */
     public function getSound(name : String) : Sound
     {
-		return mSounds.get(name);
+		var sound : Sound = null;
+		if (mSounds.exists(name)) {
+			sound = mSounds.get(name);
+		} else {
+			if (m_assetNameToPathMap.hasPathForName(name)) {
+				sound = Assets.getSound(m_assetNameToPathMap.getPathForName(name));
+			} else {
+				sound = Assets.getSound(name);
+			}
+		}
+		return sound;
     }
     
     /** Returns all sound names that start with a certain string, sorted alphabetically.

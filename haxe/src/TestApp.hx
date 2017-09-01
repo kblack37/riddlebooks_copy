@@ -1,6 +1,5 @@
 package;
 
-import cgs.audio.Audio;
 import dragonbox.common.console.Console;
 import dragonbox.common.expressiontree.compile.LatexCompiler;
 import dragonbox.common.math.vectorspace.RealsVectorSpace;
@@ -17,13 +16,11 @@ import wordproblem.engine.expression.ExpressionSymbolMap;
 import wordproblem.engine.level.LevelCompiler;
 import wordproblem.engine.scripting.ScriptParser;
 import wordproblem.engine.text.TextParser;
-import wordproblem.engine.text.TextViewFactory;
 import wordproblem.player.ButtonColorData;
 import wordproblem.player.PlayerStatsAndSaveData;
 import wordproblem.resource.AssetManager;
 import wordproblem.saves.DummyCache;
 import wordproblem.state.WordProblemGameState;
-import wordproblem.scripts.level.GenericBarModelLevelScript;
 
 /**
  * ...
