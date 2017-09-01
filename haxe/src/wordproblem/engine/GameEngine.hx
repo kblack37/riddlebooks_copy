@@ -1022,8 +1022,8 @@ class GameEngine extends Sprite implements IGameEngine
             var widgetType : String = widgetAttributeRoot.widgetType;
             var resourceList : Array<Dynamic> = widgetAttributeRoot.getResourceSourceList();
             var numberResources : Int = resourceList.length;
-            var bitmapData : BitmapData = ((numberResources > 0)) ? 
-            m_assetManager.getBitmapData(widgetAttributeRoot.getResourceSourceList()[0].name) : null;
+            var bitmapData : BitmapData = numberResources > 0 ? 
+				m_assetManager.getBitmapData(widgetAttributeRoot.getResourceSourceList()[0].name) : null;
             
             // HACK: The 'topmost' layer in the composition of the widgets forming the game screen is called
             // layout. It should appear at the bottom of this screen
@@ -1106,8 +1106,6 @@ class GameEngine extends Sprite implements IGameEngine
                         extraData.label != null ? new TextFormat(extraData.fontName, extraData.fontSize, extraData.fontColor) : null,
                         nineSlice
                 );
-				
-				if (widgetAttributeRoot.entityId == "hintButton") trace(button.width);
 				
                 widget = button;
             }

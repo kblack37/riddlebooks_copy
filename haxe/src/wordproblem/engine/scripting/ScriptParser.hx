@@ -97,7 +97,7 @@ class ScriptParser
                 if (nodeElement.elements.hasNext()) 
                 {
 					var list = nodeElement.elements;
-					if (rootNode != null) rootNode.setExtraData(list);
+					rootNode.setExtraData(list);
                 }
             }
             else 

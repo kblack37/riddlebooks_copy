@@ -1,24 +1,15 @@
 package;
 
+import cgs.audio.Audio;
 import dragonbox.common.console.Console;
 import dragonbox.common.expressiontree.compile.LatexCompiler;
 import dragonbox.common.math.vectorspace.RealsVectorSpace;
-import gameconfig.commonresource.EmbeddedBarModelResources;
-import gameconfig.commonresource.EmbeddedBundle1X;
-import openfl.display.Bitmap;
-import openfl.display.SimpleButton;
-import openfl.events.MouseEvent;
-import wordproblem.display.LabelButton;
-import wordproblem.engine.barmodel.model.BarModelData;
-import wordproblem.engine.barmodel.view.BarModelView;
-import wordproblem.engine.expression.tree.ExpressionTree;
-import wordproblem.engine.expression.widget.ExpressionTreeWidget;
 import dragonbox.common.state.StateMachine;
 import dragonbox.common.time.Time;
 import dragonbox.common.ui.MouseState;
-import openfl.events.Event;
 
 import openfl.display.Sprite;
+import openfl.events.Event;
 
 import wordproblem.AlgebraAdventureConfig;
 import wordproblem.engine.GameEngine;
@@ -32,7 +23,6 @@ import wordproblem.player.PlayerStatsAndSaveData;
 import wordproblem.resource.AssetManager;
 import wordproblem.saves.DummyCache;
 import wordproblem.state.WordProblemGameState;
-
 import wordproblem.scripts.level.GenericBarModelLevelScript;
 
 /**
@@ -54,11 +44,10 @@ class TestApp extends Sprite {
 		removeEventListener(Event.ADDED_TO_STAGE, run);
 		
 		var assetManager = new AssetManager();
-		assetManager.loadResourceBundles([ new EmbeddedBundle1X(), new EmbeddedBarModelResources() ], null, null);
 		var vectorSpace = new RealsVectorSpace();
 		var latexCompiler = new LatexCompiler(vectorSpace);
 		var levelCompiler = new LevelCompiler(latexCompiler,
-			assetManager.getXml("layout/predefined_layouts.xml").toString());
+			assetManager.getXml("assets/layout/predefined_layouts.xml").toString());
 		var algebraConfig = new AlgebraAdventureConfig();
 		var expressionSymbolMap = new ExpressionSymbolMap(assetManager);
 		mouseState = new MouseState(stage);
@@ -76,7 +65,6 @@ class TestApp extends Sprite {
 			assetManager,
 			new PlayerStatsAndSaveData(new DummyCache())
 		);
-		var textViewFactory = new TextViewFactory(assetManager, expressionSymbolMap);
 		
 		// running the game state
 		gameState = new WordProblemGameState(
@@ -90,26 +78,36 @@ class TestApp extends Sprite {
 			new ButtonColorData()
 		);
 		
-		//compiling levels from the xml, testing that text is parsed correctly
-		var xml = assetManager.getXml("levels/bar_model/turk_brainpop/856.xml");
-		var wordProblemLevelData = levelCompiler.compileWordProblemLevel(xml.firstElement(),
-			"levelTest",
-			0,
-			-1,
-			"genreTest",
-			algebraConfig,
-			scriptParser,
-			new TextParser()
-		);
-		
-		addChild(gameState);
-		
-		this.addEventListener(Event.ENTER_FRAME, traceLoop);
-		
-		gameState.enter(null, [wordProblemLevelData]);
+		assetManager.enqueue(["assets/levels/bar_model/turk_brainpop/856.xml"]);
+		assetManager.loadQueue(function(ratio : Float) {
+			if (ratio >= 1.0) {
+				var xml = assetManager.getXml("856");
+				
+				var wordProblemLevelData = levelCompiler.compileWordProblemLevel(xml.firstElement(),
+					"levelTest",
+					0,
+					-1,
+					"genreTest",
+					algebraConfig,
+					scriptParser,
+					new TextParser()
+				);
+				
+				assetManager.enqueue(wordProblemLevelData.getImagesToLoad());
+				assetManager.loadQueue(function(ratio : Float) {
+					if (ratio >= 1.0) {
+						addChild(gameState);
+						
+						this.addEventListener(Event.ENTER_FRAME, gameLoop);
+						
+						gameState.enter(null, [wordProblemLevelData]);
+					}
+				});
+			}
+		});
 	}
 	
-	private function traceLoop(e : Dynamic) {
+	private function gameLoop(e : Dynamic) {
 		gameState.update(time, mouseState);
 		mouseState.onEnterFrame(null);
 	}

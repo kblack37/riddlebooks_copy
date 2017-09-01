@@ -20,9 +20,14 @@
 	
 	<!-- assets -->
 	<icon path="assets/openfl.svg" />
-	<assets path="assets/layout" rename="layout" />
-	<assets path="assets/levels" rename="levels" />
-	<assets path="assets/strings" rename="strings" />
+	<assets path="assets/audio" />
+	<assets path="assets/card" />
+	<assets path="assets/layout"  />
+	<assets path="assets/level_images" embed="false" />
+	<assets path="assets/levels" embed="false" />
+	<assets path="assets/operators" />
+	<assets path="assets/strings" />
+	<assets path="assets/ui" />
 	
 	<!-- optimize output
 	<haxeflag name="-dce full" /> -->

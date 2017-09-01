@@ -12,7 +12,7 @@ class AssetNameToPathMap {
 	/**
 	 * The asset path where the initialization data lies
 	 */
-	private inline static var INITIALIZE_DATA_PATH : String = "strings/asset_name_paths.txt";
+	private inline static var INITIALIZE_DATA_PATH : String = "assets/strings/asset_name_paths.txt";
 	
 	/**
 	 * The backing map structure
