@@ -401,7 +401,7 @@ class DrawItemsOnShelves extends ScriptNode
     
     public static function createImageStaticView(textureDataObject : Dynamic, assetManager : AssetManager) : DisplayObject
     {
-        var texture : Texture = assetManager.getTextureWithReferenceCount(textureDataObject.textureName);
+        var texture : Texture = assetManager.getBitmapDataWithReferenceCount(textureDataObject.textureName);
         return new Image(texture);
     }
 }

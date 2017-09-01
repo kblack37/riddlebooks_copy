@@ -65,6 +65,7 @@ class EquationToTextWidget extends Sprite
 		m_textField.height = m_maxHeight;
 		m_textField.text = text;
 		m_textField.setTextFormat(new TextFormat(m_defaultTextFormat.font, Std.int(targetFontSize), m_defaultTextFormat.color));
+		m_textField.selectable = false;
         addChild(m_textField);
         
         m_currentEquationRoot = root;

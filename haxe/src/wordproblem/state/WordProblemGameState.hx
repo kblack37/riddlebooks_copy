@@ -545,7 +545,7 @@ class WordProblemGameState extends BaseState implements IConsoleInterfacable
         var imagesLoaded : Array<String> = level.getImagesToLoad();
         for (imageLoaded in imagesLoaded)
         {
-            m_assetManager.removeTexture(imageLoaded, true);
+            m_assetManager.removeBitmapData(imageLoaded, true);
         }
     }
     

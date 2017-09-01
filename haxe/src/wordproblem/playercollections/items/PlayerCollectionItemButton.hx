@@ -131,7 +131,7 @@ class PlayerCollectionItemButton extends DisposableSprite
     {
 		super.dispose();
 		
-        m_assetManager.releaseTextureWithReferenceCount(m_itemTextureName);
+        m_assetManager.releaseBitmapDataWithReferenceCount(m_itemTextureName);
 		
 		m_normalBackground.dispose();
 		
