@@ -1,0 +1,52 @@
+{
+    "charactersTitle":[
+        {"entityId":"Cookie", "components":[
+            {"typeId":"TextureCollectionComponent", "data":{"objects":[{"type":"SpriteSheetAnimated", "textureName":"cookie_still_spritesheet", "subtexturePrefix":"CritterCookieStill", "totalFrames":55, "delay":0}]}},
+            {"typeId":"AnimatedTextureAtlasStateComponent", "data":{}},
+            {"typeId":"TransformComponent", "data":{"x":131, "y":342, "scale":0.9}},
+            {"typeId":"RenderableComponent", "data":{}}
+        ]},
+        {"entityId":"Taco", "components":[
+            {"typeId":"TextureCollectionComponent", "data":{"objects":[{"type":"SpriteSheetAnimated", "textureName":"taco_still_spritesheet", "subtexturePrefix":"CritterTacoStill", "totalFrames":80, "delay":0}]}},
+            {"typeId":"AnimatedTextureAtlasStateComponent", "data":{}},
+            {"typeId":"TransformComponent", "data":{"x":615, "y":236, "scale":0.8}},
+            {"typeId":"RenderableComponent", "data":{}}
+        ]}
+    ],
+    "charactersLevelSelect":[
+        {"entityId":"Cookie", "components":[
+            {"typeId":"TextureCollectionComponent", "data":{"objects":[{"type":"SpriteSheetAnimated", "textureName":"cookie_idle_spritesheet", "subtexturePrefix":"CritterCookieIdle", "totalFrames":60, "delay":0}]}},
+            {"typeId":"AnimatedTextureAtlasStateComponent", "data":{}},
+            {"typeId":"TransformComponent", "data":{"x":40, "y":372, "scale":0.6}},
+            {"typeId":"MoveableComponent", "data":{}},
+            {"typeId":"RotatableComponent", "data":{}},
+            {"typeId":"RenderableComponent", "data":{}}
+        ]},
+        {"entityId":"Taco", "components":[
+            {"typeId":"TextureCollectionComponent", "data":{"objects":[{"type":"SpriteSheetAnimated", "textureName":"taco_idle_spritesheet", "subtexturePrefix":"CritterTacoIdle", "totalFrames":80, "delay":0}]}},
+            {"typeId":"AnimatedTextureAtlasStateComponent", "data":{}},
+            {"typeId":"TransformComponent", "data":{"x":285, "y":480, "scale":0.5}},
+            {"typeId":"MoveableComponent", "data":{}},
+            {"typeId":"RotatableComponent", "data":{}},
+            {"typeId":"RenderableComponent", "data":{}}
+        ]}
+    ],
+    "charactersGame":[
+        {"entityId":"Cookie", "components":[
+            {"typeId":"TextureCollectionComponent", "data":{"objects":[{"type":"SpriteSheetAnimated", "textureName":"cookie_idle_spritesheet", "subtexturePrefix":"CritterCookieIdle", "totalFrames":60, "delay":0}]}},
+            {"typeId":"AnimatedTextureAtlasStateComponent", "data":{}},
+            {"typeId":"TransformComponent", "data":{"x":0, "y":0, "scale":0.6}},
+            {"typeId":"MoveableComponent", "data":{}},
+            {"typeId":"RotatableComponent", "data":{}},
+            {"typeId":"RenderableComponent", "data":{"isVisible":false}}
+        ]},
+        {"entityId":"Taco", "components":[
+            {"typeId":"TextureCollectionComponent", "data":{"objects":[{"type":"SpriteSheetAnimated", "textureName":"taco_idle_spritesheet", "subtexturePrefix":"CritterTacoIdle", "totalFrames":80, "delay":0}]}},
+            {"typeId":"AnimatedTextureAtlasStateComponent", "data":{}},
+            {"typeId":"TransformComponent", "data":{"x":0, "y":0, "scale":0.5}},
+            {"typeId":"MoveableComponent", "data":{}},
+            {"typeId":"RotatableComponent", "data":{}},
+            {"typeId":"RenderableComponent", "data":{"isVisible":false}}
+        ]}
+    ]
+}
